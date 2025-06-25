@@ -1,0 +1,23 @@
+@charset "UTF-8";
+
+/**暗黑主题*/
+html.dark {
+  color-scheme: dark;
+  //全局样式
+  --xht-text-color: #e5eaf3;
+  --xht-bg-color: #141414;
+  --xht-main-bg-color: #1f1f1f;
+  --xht-border-color: #333333;
+  --xht-card-bg-color: rgba(16, 13, 13, 0.68);
+  --xht-card-border-color: #333333;
+  --xht-button-hover-bg-color: var(--xht-hover-bg-color);
+  --xht-bg-header-color: #141414 !important;
+  --xht-hover-bg-color: #262727;
+  // 菜单相关
+  --xht-menu-background: #304156;
+  --xht-menu-text: #bfcbd9;
+  --xht-menu-active-text: var(--el-color-primary);
+  --xht-menu-hover: #263445;
+  --sidebar-logo-background: #2d3748;
+
+}

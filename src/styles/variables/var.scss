@@ -1,0 +1,28 @@
+:root {
+  // border 相关
+  --xht-border-radius-base: 4px;
+  --xht-border-radius-small: 2px;
+  --xht-border-radius-round: 20px;
+  --xht-border-radius-circle: 100%;
+}
+
+:root {
+  color-scheme: light;
+
+  //全局样式
+  --xht-text-color: #303133;
+  --xht-bg-color: #ffffff;
+  --xht-main-bg-color: #f8f8f8;
+  --xht-border-color: #e4e7ed;
+  --xht-card-bg-color: #ffffff;
+  --xht-card-border-color: #e4e7ed;
+  --xht-button-hover-bg-color: rgb(0 0 0 / 10%);
+  --xht-bg-header-color: #ffffff !important;
+  --xht-hover-bg-color: #f5f7fa;
+  // 菜单相关
+  --xht-menu-background: #ffffff;
+  --xht-menu-text: #fff;
+  --xht-menu-active-text: var(--el-color-primary);
+  --xht-menu-hover: rgb(0 0 0 / 20%);
+  --xht-sidebar-logo-background: rgb(0 0 0 / 20%);
+}

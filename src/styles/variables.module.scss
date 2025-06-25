@@ -1,0 +1,17 @@
+/* stylelint-disable property-no-unknown */
+:export {
+  headerHeight: $header-height;
+  tagsHeight: $tags-height;
+  footerHeight: $footer-height;
+  menuWidth64: $menu-width-64;
+  menuWidth200: $menu-width-200;
+  logoTitleColor: $base-logo-title-color;
+  logoLightTitleColor: $base-logo-light-title-color;
+  xhtMenuBackground: $xht-menu-background;
+  xhtMenuText: $xht-menu-text;
+  xhtMenuActiveText: $xht-menu-active-text;
+  xhtMenuHover: $xht-menu-hover;
+  xhtSidebarLogoBackground: $xht-sidebar-logo-background;
+}
+
+/* stylelint-enable property-no-unknown */
