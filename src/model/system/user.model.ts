@@ -1,4 +1,6 @@
 import type { BasicResponse, ModeIdType, PageQueryRequest } from '@/model/base.model'
+import { SysDeptResponse } from '@/model/system/dept.model'
+import { SysDeptPostResponse } from '@/model/system/dept.post.model'
 
 /**
  * 用户状态枚举
@@ -19,10 +21,13 @@ export enum UserStatusEnums {
 export interface SysUserOperationRequest {
   id?: ModeIdType
   nickName: string // 用户昵称
+  leaderName: string
   userStatus: UserStatusEnums // 用户状态
   deptId: ModeIdType
   postId: ModeIdType
   profile: UserProfilesCreateRequest // 用户信息
+  dept: SysDeptResponse
+  post: SysDeptPostResponse
   [key: string]: any
 }
 
@@ -74,11 +79,20 @@ export interface SysUserProfileResponse extends BasicResponse {
  */
 export interface SysUserResponse extends BasicResponse {
   id: ModeIdType
+  userType: any
+  userAccount: string
   userName: string
-  nickName: string
-  avatarUrl: string
+  passWord: string
+  passWordSalt: string
+  phoneNumber: string
+  avatarUrl: any
   userStatus: UserStatusEnums
+  deptId: string
+  postId: any
   profile: SysUserProfileResponse
+  positionNature: any
+  dept: SysDeptResponse
+  post: SysDeptPostResponse
 }
 
 /**

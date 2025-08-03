@@ -124,59 +124,103 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-divider>原职位信息</el-divider>
+      <el-divider>职位信息</el-divider>
       <el-row>
         <el-col :xs="24" :sm="24" :lg="12">
-          <el-form-item label="职位编码" prop="postCode">
-            <el-input v-model="addUpdateForm.postCode" disabled placeholder="请输入职位编码" />
+          <el-form-item label="部门编码" prop="dept.deptCode">
+            <el-input v-model="addUpdateForm.dept.deptCode" disabled placeholder="请输入部门编码" />
           </el-form-item>
         </el-col>
         <el-col :xs="24" :sm="24" :lg="12">
-          <el-form-item label="职位名称" prop="postName">
-            <el-input v-model="addUpdateForm.postName" disabled placeholder="请输入职位名称" />
-          </el-form-item>
-        </el-col>
-      </el-row>
-
-      <el-row>
-        <el-col :xs="24" :sm="24" :lg="12">
-          <el-form-item label="部门编码" prop="deptCode">
-            <el-input v-model="addUpdateForm.deptCode" disabled placeholder="请输入部门编码" />
-          </el-form-item>
-        </el-col>
-        <el-col :xs="24" :sm="24" :lg="12">
-          <el-form-item label="部门名称" prop="deptName">
-            <el-input v-model="addUpdateForm.deptName" disabled placeholder="请输入部门名称" />
+          <el-form-item label="部门名称" prop="dept.deptName">
+            <el-input v-model="addUpdateForm.dept.deptName" disabled placeholder="请输入部门名称" />
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :xs="24" :sm="24" :lg="12">
-          <el-form-item label="职位状态" prop="postStatus">
-            <el-select v-model="addUpdateForm.postStatus" disabled placeholder="请选择职位状态">
+          <el-form-item label="部门状态" prop="dept.deptStatus">
+            <el-select
+              v-model="addUpdateForm.dept.deptStatus"
+              disabled
+              placeholder="请选择部门状态"
+            >
               <el-option :value="0" label="启用" />
               <el-option :value="1" label="禁用" />
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :xs="24" :sm="24" :lg="12">
-          <el-form-item label="部门状态" prop="deptStatus">
-            <el-select v-model="addUpdateForm.deptStatus" disabled placeholder="请选择部门状态">
-              <el-option :value="0" label="启用" />
-              <el-option :value="1" label="禁用" />
-            </el-select>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-divider>修改职位信息</el-divider>
-      <el-row>
-        <el-col :span="24">
-          <el-form-item label="职位信息" prop="postId">
-            <dept-post-select
-              class="w100"
-              v-model:deptId="addUpdateForm.deptId"
-              v-model:postId="addUpdateForm.postId"
+          <el-form-item label="部门主管" prop="dept.leaderName">
+            <el-input
+              disabled
+              v-model="addUpdateForm.dept.leaderName"
+              maxlength="11"
+              show-word-limit
+              placeholder="暂无主管"
             />
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :xs="24" :sm="24" :lg="12">
+          <el-form-item label="联系电话" prop="dept.phone">
+            <el-input
+              disabled
+              v-model="addUpdateForm.dept.phone"
+              maxlength="11"
+              show-word-limit
+              placeholder="请输入联系电话"
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :xs="24" :sm="24" :lg="12">
+          <el-form-item label="联系邮箱" prop="dept.email">
+            <el-input
+              disabled
+              v-model="addUpdateForm.dept.email"
+              maxlength="50"
+              show-word-limit
+              placeholder="请输入联系邮箱"
+            />
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :xs="24" :sm="24" :lg="12">
+          <el-form-item label="职位编码" prop="post.postCode">
+            <el-input v-model="addUpdateForm.dept.deptName" disabled placeholder="请输入职位编码" />
+          </el-form-item>
+        </el-col>
+        <el-col :xs="24" :sm="24" :lg="12">
+          <el-form-item label="职位名称" prop="post.postName">
+            <el-input v-model="addUpdateForm.post.postName" disabled placeholder="请输入职位名称" />
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :xs="24" :sm="24" :lg="12">
+          <el-form-item label="职位状态" prop="post.postStatus">
+            <el-select
+              v-model="addUpdateForm.post.postStatus"
+              disabled
+              placeholder="请选择职位状态"
+            >
+              <el-option :value="0" label="启用" />
+              <el-option :value="1" label="禁用" />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :xs="24" :sm="24" :lg="12">
+          <el-form-item label="岗位限制" prop="post.postLimit">
+            <el-input
+              disabled
+              class="w100"
+              :input-style="{ 'text-align': 'center' }"
+              v-model="postHave"
+              placeholder="请输入岗位限制人数"
+            >
+            </el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -212,7 +256,10 @@ const state = reactive<AddUpdateOption<SysUserOperationRequest>>({
 const addUpdateFormRef = ref<FormInstance>()
 const { addUpdateForm } = toRefs(state)
 const emits = defineEmits(['success'])
-
+const postHave = computed<string>(
+  () =>
+    `${addUpdateForm.value.post.postHave ? addUpdateForm.value.post.postHave : 0}/${addUpdateForm.value.post.postLimit}`,
+)
 /**
  * 打开显示
  */
@@ -287,7 +334,7 @@ const submitForm = () => {
  */
 const close = () => {
   addUpdateForm.value = { ...SysUserOperationForm }
- state.visibleStatus = false
+  state.visibleStatus = false
   state.operationStatus = 'add'
   state.loadingStatus = false
   addUpdateFormRef.value?.resetFields()

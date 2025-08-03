@@ -1,6 +1,6 @@
 <template>
   <el-watermark :content="watermarkContent" class="w100 h100" :font="font">
-    <el-config-provider :locale="zhCn" :size="sizeType">
+    <el-config-provider :locale="zhCn" :size="sizeType" a11y>
       <router-view />
     </el-config-provider>
   </el-watermark>

@@ -46,7 +46,7 @@ export const loginInPassWord = (data: any): AxiosPromise<TokenInfoType> => {
       captchaKey: captchaKey,
     },
     headers: {
-      skipToken: true,
+      auth: true,
       Authorization: basicAuth,
       'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
     },

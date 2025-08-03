@@ -1,25 +1,28 @@
-import type { SysUserOperationRequest } from '@/model/system/user.model'
-import { UserStatusEnums } from '@/model/system/user.model'
+import {
+  SysUserOperationRequest,
+  UserProfilesCreateRequest,
+  UserStatusEnums
+} from '@/model/system/user.model'
 import type { FormRules } from 'element-plus'
 import type { ColumnOption } from '@/components/table-tool-bar/types'
+import type { SysDeptResponse } from '@/model/system/dept.model'
+import type { SysDeptPostResponse } from '@/model/system/dept.post.model'
 
 /**
  * 增改页面 表单类型 默认值
  */
 export const SysUserOperationForm: SysUserOperationRequest = {
+  dept: {} as SysDeptResponse,
+  post: {} as SysDeptPostResponse,
   nickName: '', //用户昵称
   deptId: null,
   postId: null,
   userStatus: UserStatusEnums.NORMAL, //用户状态
   profile: {
-    realName: '', //真实姓名
-    idCardNumber: '', //身份证号
     gender: 1, //性别1-男，2-女，3-其他
     birthDate: '2000-01-01', //出生日期
     age: 25, //年龄
-    address: '', //地址
-    postalCode: '', //邮政编码
-  },
+  } as UserProfilesCreateRequest,
 }
 
 /**

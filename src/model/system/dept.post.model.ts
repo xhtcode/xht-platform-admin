@@ -55,6 +55,7 @@ export interface SysDeptPostResponse extends BasicResponse {
   postCode: string //  岗位编码
   postName: string // 岗位名称
   postSort: number // 岗位排序
+  postHave: number // 岗位人员已有人数
   postLimit: number // 岗位人员限制
   remark: string // 岗位描述
   postStatus: SysDeptPostStatusEnums // 岗位状态
