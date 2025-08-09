@@ -1,7 +1,7 @@
 import {
   SysUserOperationRequest,
   UserProfilesCreateRequest,
-  UserStatusEnums
+  UserStatusEnums,
 } from '@/model/system/user.model'
 import type { FormRules } from 'element-plus'
 import type { ColumnOption } from '@/components/table-tool-bar/types'

@@ -14,7 +14,7 @@
               <el-input v-model="queryParams.keyWord" placeholder="请输入关键字" />
             </el-form-item>
           </el-col>
-          <el-col  :xs="24" :sm="12" :md="8" :lg="6" :xl="4" class="text-center">
+          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" class="text-center">
             <el-space>
               <el-button icon="Search" type="primary" @click="handleQuery()"> 查询</el-button>
               <el-button icon="Refresh" @click="resetQuery">重置</el-button>

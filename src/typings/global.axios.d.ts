@@ -1,5 +1,4 @@
 import type { AxiosResponse as Response } from 'axios'
-import { BasicResponse } from '@/model/base.model'
 
 /**
  * 扩展 axios 数据返回类型，可自行扩展

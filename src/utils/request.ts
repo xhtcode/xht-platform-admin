@@ -33,7 +33,7 @@ service.interceptors.request.use(
     if (!config.headers.auth && userInfoStore.hasToken) {
       config.headers.set(HEADER_AUTHORIZATION, `Bearer ${userInfoStore.getToken}`)
     }
-    config.headers.set(HEADER_TRACE_ID,"1123")
+    config.headers.set(HEADER_TRACE_ID, '1123')
     config.headers.set(HEADER_USER_ACCOUNT, userInfoStore.getUserId)
     config.headers.set(HEADER_USER_ID, userInfoStore.getUserName)
     return config

@@ -1,6 +1,6 @@
 <template>
   <div class="menu-search layout-header-top-item" @click="show">
-    <svg-icon name="search" :size="18"/>
+    <svg-icon name="search" :size="18" />
     <el-dialog
       v-model="state.visibleStatus"
       :before-close="close"

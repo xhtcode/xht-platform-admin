@@ -1,9 +1,8 @@
 @use '@/styles/variables.scss';
-@use "@/styles/common/common.scss";
+@use '@/styles/common/common.scss';
 
 $header-height: variables.$header-height !default;
 $header-item-width: 40px !default;
-
 
 .layout-container {
   width: 100%;
@@ -49,8 +48,9 @@ $header-item-width: 40px !default;
     justify-content: space-between;
     align-items: center;
     padding: 0;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12),
-    0 0 3px 0 rgba(0, 0, 0, 0.06);
+    box-shadow:
+      0 1px 3px 0 rgba(0, 0, 0, 0.12),
+      0 0 3px 0 rgba(0, 0, 0, 0.06);
     height: auto !important;
 
     .layout-header-container {
@@ -96,10 +96,8 @@ $header-item-width: 40px !default;
         background: var(--xht-bg-header-color);
         position: relative;
         height: 37px;
-
       }
     }
-
   }
 
   .header-container-tags {
@@ -107,8 +105,9 @@ $header-item-width: 40px !default;
     position: relative;
     display: flex;
     border-bottom: 1px solid var(--xht-border-color);
-    box-shadow: 6px 2px 3px 0 rgb(0 0 0 / 12%),
-    0 0 3px 0 rgb(0 0 0 / 6%);
+    box-shadow:
+      6px 2px 3px 0 rgb(0 0 0 / 12%),
+      0 0 3px 0 rgb(0 0 0 / 6%);
 
     .tags-container {
       position: relative;

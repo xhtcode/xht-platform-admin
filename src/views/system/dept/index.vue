@@ -79,7 +79,13 @@
 
         <el-table-column label="部门主管" prop="leaderName" width="160" align="center" />
         <el-table-column label="联系电话" prop="phone" width="160" align="center" />
-        <el-table-column label="联系邮箱" prop="email" width="160" align="center" show-overflow-tooltip>
+        <el-table-column
+          label="联系邮箱"
+          prop="email"
+          width="160"
+          align="center"
+          show-overflow-tooltip
+        >
           <template #default="{ row }">
             <ElLink>{{ row.email }}</ElLink>
           </template>
@@ -97,7 +103,13 @@
           </template>
         </el-table-column>
         <el-table-column label="显示顺序" prop="deptSort" width="80" align="center" />
-        <el-table-column label="部门描述" prop="remark" width="220" align="center" show-overflow-tooltip/>
+        <el-table-column
+          label="部门描述"
+          prop="remark"
+          width="220"
+          align="center"
+          show-overflow-tooltip
+        />
         <el-table-column label="创建时间" prop="createTime" width="160" align="center" />
         <el-table-column label="更新时间" prop="updateTime" width="160" align="center" />
         <el-table-column label="创建人" prop="createBy" width="160" align="center" />

@@ -3,7 +3,7 @@ import type { AxiosPromise } from 'axios'
 import type {
   SysRoleOperationRequest,
   SysRoleQueryRequest,
-  SysRoleResponse
+  SysRoleResponse,
 } from '@/model/system/role.model'
 import type { ModeIdType, PageResponse } from '@/model/base.model'
 

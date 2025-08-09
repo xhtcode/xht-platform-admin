@@ -19,11 +19,9 @@ import path from 'path-browserify'
 import DynamicRouter from '@/router/modules/dynamic'
 import { useThemeStore } from '@/store'
 import { storeToRefs } from 'pinia'
-import {useThemeHooks} from '@/hooks/use-theme-hooks'
+import { useThemeHooks } from '@/hooks/use-theme-hooks'
 
 defineOptions({ name: 'MenuMain' })
-const themeStore = useThemeStore()
-const { menuStatus } = storeToRefs(themeStore)
 const { menuCollapse } = useThemeHooks()
 const route = useRoute()
 const routeStore = useRouteStore()

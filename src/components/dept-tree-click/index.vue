@@ -60,7 +60,7 @@ const defaultProps: any = {
 
 const emits = defineEmits<{
   (e: 'clickNode', data: SysDeptResponse): void
-  (e: 'update:modelValue',  value: any): void
+  (e: 'update:modelValue', value: any): void
 }>()
 const modelValue = useVModel(props, 'modelValue', emits)
 const loading = ref<boolean>(false)

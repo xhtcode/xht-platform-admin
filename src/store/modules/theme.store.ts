@@ -26,7 +26,7 @@ export const useThemeStore = defineStore(
     /**
      * 菜单状态
      */
-    const menuStatus = ref<boolean>(true)
+    const menuStatus = ref<boolean>(false)
 
     /**
      * 面包屑显示状态

@@ -107,7 +107,6 @@
       </el-row>
     </el-form>
     <template #footer>
-
       <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>
       <el-button @click="close">取 消</el-button>
     </template>

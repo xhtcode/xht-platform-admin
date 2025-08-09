@@ -3,7 +3,7 @@ import type {
   EditUpdateRequest,
   INodeResponse,
   ModeIdType,
-  PageQueryRequest
+  PageQueryRequest,
 } from '@/model/base.model'
 
 /**

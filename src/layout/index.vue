@@ -15,6 +15,4 @@ onMounted(() => {})
     <component :is="LayoutComponents[layout]" />
   </div>
 </template>
-<style lang="scss">
-
-</style>
+<style lang="scss"></style>

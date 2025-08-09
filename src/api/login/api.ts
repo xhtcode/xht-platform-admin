@@ -29,14 +29,12 @@ export const generateCaptcha = (captchaKey: any): AxiosPromise<CaptchaResponseTy
 export const loginInPassWord = (data: any): AxiosPromise<TokenInfoType> => {
   const encPassword = data.password
   // 密码加密
-  const { username, uuid, captchaCode,captchaKey } = data
+  const { username, uuid, captchaCode, captchaKey } = data
   return request({
     url: '/oauth2/token',
     method: 'post',
     baseURL: baseAuthURL,
-    params: {
-
-    },
+    params: {},
     data: {
       username: username,
       password: encPassword,

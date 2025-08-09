@@ -102,12 +102,22 @@
             />
           </el-form-item>
         </el-col>
-        <el-col :xs="24" :sm="24" :lg="12" v-if="isC && addUpdateForm.menuHidden === MenuHiddenEnums.HIDE">
+        <el-col
+          :xs="24"
+          :sm="24"
+          :lg="12"
+          v-if="isC && addUpdateForm.menuHidden === MenuHiddenEnums.HIDE"
+        >
           <el-form-item label="高亮菜单" prop="activeMenuPath">
             <el-input v-model="addUpdateForm.activeMenuPath" placeholder="请输入高亮菜单" />
           </el-form-item>
         </el-col>
-        <el-col :xs="24" :sm="24" :lg="12" v-if="isC && addUpdateForm.frameFlag === MenuLinkEnums.NO">
+        <el-col
+          :xs="24"
+          :sm="24"
+          :lg="12"
+          v-if="isC && addUpdateForm.frameFlag === MenuLinkEnums.NO"
+        >
           <el-form-item label="缓存状态" prop="menuCache">
             <el-switch
               inline-prompt

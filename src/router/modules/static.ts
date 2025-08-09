@@ -11,16 +11,6 @@ const StaticRouter: RouteRecordRaw[] = [
     meta: { hiddenStatus: true, authStatus: true },
   },
   {
-    path: '/oauth2/authorize',
-    component: () => import('@/views/oauth2/index.vue'),
-  },
-
-  {
-    path: '/oauth2/pkce',
-    name: 'PkceRedirect',
-    component: () => import('@/views/oauth2/pkce-redirect.vue'),
-  },
-  {
     path: '/redirect/:path(.*)',
     name: 'RedirectViewIndex',
     component: () => import('@/views/other/redirect.vue'),

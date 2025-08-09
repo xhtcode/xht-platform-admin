@@ -12,7 +12,7 @@ import type { ColumnOption } from '@/components/table-tool-bar/types'
  * 增改页面 表单类型 默认值
  */
 export const SysMenuOperationForm: SysMenuOperationRequest = {
-  id: '0',
+  id: null,
   parentId: '0', // 父菜单ID
   menuType: MenuTypeEnums.M, // 类型，默认为目录
   menuName: '', // 菜单名称，默认为空

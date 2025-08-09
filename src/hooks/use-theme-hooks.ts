@@ -93,7 +93,7 @@ const useThemeColorHooks = () => {
  */
 export const useThemeDeviceHooks = () => {
   const themeStore = useThemeStore()
-  const { device, sidebarStatus, menuStatus, sizeType } = storeToRefs(themeStore)
+  const { device, menuStatus } = storeToRefs(themeStore)
   const { width } = useWindowSize()
   const WIDTH_DESKTOP = 768 // 响应式布局容器固定宽度（大屏 >=1200px，中屏 >=992px，小屏 >=768px）
   // 监听窗口宽度变化，调整设备类型和侧边栏状态
@@ -103,7 +103,7 @@ export const useThemeDeviceHooks = () => {
     (val) => {
       const isDesktop = val >= WIDTH_DESKTOP
       device.value = isDesktop ? DeviceEnums.DESKTOP : DeviceEnums.MOBILE
-      menuStatus.value = !isDesktop
+      menuStatus.value = isDesktop
     },
     {
       immediate: true,

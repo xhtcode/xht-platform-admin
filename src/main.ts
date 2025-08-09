@@ -12,7 +12,7 @@ import { Pane, Splitpanes } from 'splitpanes'
 import 'splitpanes/dist/splitpanes.css'
 import 'element-plus/theme-chalk/dark/css-vars.css'
 // 全局引入 animate.css
-import "animate.css";
+import 'animate.css'
 
 const app = createApp(App)
 app.use(i18n)

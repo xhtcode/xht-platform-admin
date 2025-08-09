@@ -1,6 +1,10 @@
 <template>
   <div class="xht-card-container">
-    <div v-if="$slots.footer" class="xht-card-tool flex-center cursor-pointer" @click="handlerToolChange()">
+    <div
+      v-if="$slots.footer"
+      class="xht-card-tool flex-center cursor-pointer"
+      @click="handlerToolChange()"
+    >
       <svg-icon name="ep-Operation" />
     </div>
     <div class="xht-card-default">

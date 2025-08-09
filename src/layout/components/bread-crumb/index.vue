@@ -12,7 +12,10 @@
             {{ item.meta.title }}
           </span>
           <span v-else class="layout-breadcrumb-container-span flex-center cursor-default">
-            <svg-icon :name="item.meta.icon" class="layout-breadcrumb-container-icon flex-center mr-5" />
+            <svg-icon
+              :name="item.meta.icon"
+              class="layout-breadcrumb-container-icon flex-center mr-5"
+            />
             {{ item.meta.title }}
           </span>
         </el-breadcrumb-item>
@@ -68,7 +71,6 @@ watch(
 @use '@/styles/variables.scss' as *;
 
 .layout-breadcrumb-container {
-
   .layout-breadcrumb-container-span {
     height: $header-height;
     opacity: 0.7;

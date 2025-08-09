@@ -3,7 +3,7 @@ import type { AxiosPromise } from 'axios'
 import type {
   SysDeptPostOperationRequest,
   SysDeptPostQueryRequest,
-  SysDeptPostResponse
+  SysDeptPostResponse,
 } from '@/model/system/dept.post.model'
 import type { ModeIdArrayType, ModeIdType, PageResponse } from '@/model/base.model'
 

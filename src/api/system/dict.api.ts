@@ -3,7 +3,7 @@ import type { AxiosPromise } from 'axios'
 import type {
   SysDictOperationRequest,
   SysDictQueryRequest,
-  SysDictResponse
+  SysDictResponse,
 } from '@/model/system/dict.model'
 import type { ModeIdType, PageResponse } from '@/model/base.model'
 

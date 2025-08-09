@@ -4,7 +4,7 @@ import type {
   SysMenuOperationRequest,
   SysMenuQueryRequest,
   SysMenuResponse,
-  SysMenuTreeResponse
+  SysMenuTreeResponse,
 } from '@/model/system/menu.model'
 import type { ModeIdType } from '@/model/base.model'
 

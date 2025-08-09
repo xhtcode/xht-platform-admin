@@ -35,7 +35,7 @@
             :data="columnData"
             :props="{
               key: 'value',
-              label: 'name'
+              label: 'name',
             }"
             filterable
             :titles="['隐藏列', '显示列']"

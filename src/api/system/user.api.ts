@@ -3,7 +3,7 @@ import type { AxiosPromise } from 'axios'
 import type {
   SysUserOperationRequest,
   SysUserQueryRequest,
-  SysUserResponse
+  SysUserResponse,
 } from '@/model/system/user.model'
 import type { ModeIdArrayType, ModeIdType, PageResponse } from '@/model/base.model'
 

@@ -24,6 +24,10 @@ interface ImportMetaEnv {
    * 后台管理服务前缀
    */
   VITE_ADMIN_API_PREFIX: string
+  /**
+   * 代码生成器服务前缀
+   */
+  VITE_GENERATE_API_PREFIX: string
 }
 
 interface ImportMeta {
