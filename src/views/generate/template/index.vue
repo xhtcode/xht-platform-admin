@@ -9,22 +9,6 @@
         label-width="120px"
       >
         <el-row>
-          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
-            <el-form-item label="数据库" prop="dbType">
-              <el-select v-model="queryParams.dbType" placeholder="请选择数据库类型">
-                <el-option :value="DataBaseTypeEnums.MYSQL" label="MySql" />
-                <el-option :value="DataBaseTypeEnums.ORACLE" label="Oracle" />
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
-            <el-form-item label="编程语言" prop="targetLanguage">
-              <el-select v-model="queryParams.targetLanguage" placeholder="请选择编程语言类型">
-                <el-option :value="LanguageTypeEnums.JAVA" label="Java" />
-                <el-option :value="LanguageTypeEnums.TYPESCRIPT" label="TypeScript" />
-              </el-select>
-            </el-form-item>
-          </el-col>
           <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24" class="text-center">
             <el-button icon="Search" type="primary" @click="handleQuery()"> 查询</el-button>
             <el-button icon="Refresh" @click="resetQuery">重置</el-button>
@@ -64,16 +48,11 @@
         :data="state.tableList"
         :header-cell-style="headerCellStyle"
         class="flex-1"
-        empty-text="系统相关字段类型映射！"
+        empty-text="系统相关模板信息！"
         @selection-change="handleSelectionChange"
       >
         <el-table-column align="center" type="selection" width="55" />
         <el-table-column :index="createTableIndex" label="序号" type="index" width="55" />
-        <el-table-column align="center" label="数据库类型" prop="dbType" />
-        <el-table-column align="center" label="数据库数据类型" prop="dbDataType" />
-        <el-table-column align="center" label="目标编程语言" prop="targetLanguage" />
-        <el-table-column align="center" label="目标语言数据类型" prop="targetDataType" />
-        <el-table-column align="center" label="导入包路径" prop="importPackage" />
         <el-table-column align="center" label="操作" width="220px">
           <template #default="{ row }">
             <el-button icon="edit" link type="success" @click="handleEdit(row)">修改</el-button>
@@ -101,18 +80,14 @@ import {
   useTableToolHooks,
 } from '@/hooks/use-crud-hooks'
 import AddOrUpdate from './components/add-or-update.vue'
-import type {
-  GenTypeMappingQueryRequest,
-  GenTypeMappingResponse,
-} from '@/model/generate/type.mapping.model'
-import { queryGenTypeMappingPage, removeGenTypeMappingByIds } from '@/api/generate/type.mapping.api'
+import type { GenTemplateQueryRequest, GenTemplateResponse } from '@/model/generate/template.model'
+import { queryGenTemplatePage, removeGenTemplateByIds } from '@/api/generate/template.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { ModeIdArrayType } from '@/model/base.model'
-import { DataBaseTypeEnums, LanguageTypeEnums } from '@/model/generate/common.model'
 
-defineOptions({ name: 'GenTypeMappingViewIndex' })
+defineOptions({ name: 'GenTemplateViewIndex' })
 
-const state = reactive<TableQueryPageState<GenTypeMappingQueryRequest, GenTypeMappingResponse>>({
+const state = reactive<TableQueryPageState<GenTemplateQueryRequest, GenTemplateResponse>>({
   queryParams: {
     current: 1,
     size: 10,
@@ -126,9 +101,9 @@ const state = reactive<TableQueryPageState<GenTypeMappingQueryRequest, GenTypeMa
   multipleStatus: true, // 多个禁用
 })
 const { createTableIndex, handleQuery, handleSelectionChange } = useTableQueryPageHooks<
-  GenTypeMappingQueryRequest,
-  GenTypeMappingResponse
->(state, queryGenTypeMappingPage)
+  GenTemplateQueryRequest,
+  GenTemplateResponse
+>(state, queryGenTemplatePage)
 const { queryParams } = toRefs(state)
 
 const queryFormRef = ref<FormInstance>()
@@ -152,14 +127,14 @@ const handleAdd = () => {
 /**
  * 处理编辑
  */
-const handleEdit = (row: GenTypeMappingResponse) => {
+const handleEdit = (row: GenTemplateResponse) => {
   addUpdateRef.value?.show('update', row.id)
 }
 
 /**
  * 处理删除
  */
-const handleDelete = async (row?: GenTypeMappingResponse) => {
+const handleDelete = async (row?: GenTemplateResponse) => {
   state.loadingStatus = true
   let ids: ModeIdArrayType = []
   if (row) {
@@ -168,14 +143,14 @@ const handleDelete = async (row?: GenTypeMappingResponse) => {
     ids = state.selectedRows.map((item) => item.id)
   }
   if (!ids || ids.length <= 0) {
-    useMessage().error('请选择字段类型映射数据')
+    useMessage().error('请选择模板信息数据')
     return
   }
   await useMessageBox()
-    .confirm('此操作将永久删除字段类型映射, 是否继续?')
+    .confirm('此操作将永久删除模板信息, 是否继续?')
     .then(() => {
-      removeGenTypeMappingByIds(ids).then(async () => {
-        useMessage().success('删除字段类型映射成功!')
+      removeGenTemplateByIds(ids).then(async () => {
+        useMessage().success('删除模板信息成功!')
         await handleQuery()
       })
     })

@@ -21,7 +21,7 @@ enum Api {
 }
 
 /**
- * 保存字典
+ * 保存字段映射
  */
 export const saveGenTypeMapping = (data: GenTypeMappingOperationRequest): AxiosPromise<boolean> => {
   return request({
@@ -33,7 +33,7 @@ export const saveGenTypeMapping = (data: GenTypeMappingOperationRequest): AxiosP
 }
 
 /**
- * 修改字典数据
+ * 修改字段映射数据
  */
 export const updateGenTypeMapping = (
   data: GenTypeMappingOperationRequest,
@@ -47,7 +47,7 @@ export const updateGenTypeMapping = (
 }
 
 /**
- * 删除字典
+ * 删除字段映射
  */
 export const removeGenTypeMappingByIds = (ids: ModeIdType[]): AxiosPromise<boolean> => {
   return request({
@@ -59,7 +59,7 @@ export const removeGenTypeMappingByIds = (ids: ModeIdType[]): AxiosPromise<boole
 }
 
 /**
- * 查询单个字典
+ * 查询单个字段映射
  */
 export const queryGenTypeMappingById = (id: ModeIdType): AxiosPromise<GenTypeMappingResponse> => {
   return request({
@@ -70,7 +70,7 @@ export const queryGenTypeMappingById = (id: ModeIdType): AxiosPromise<GenTypeMap
 }
 
 /**
- * 查询全部字典
+ * 查询全部字段映射
  */
 export const queryGenTypeMappingPage = (
   data?: GenTypeMappingQueryRequest,

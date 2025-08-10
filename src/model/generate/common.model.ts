@@ -1,5 +1,6 @@
 /**
  * 数据库类型枚举
+
  */
 export enum DataBaseTypeEnums {
   MYSQL = 'MySql',
@@ -8,6 +9,7 @@ export enum DataBaseTypeEnums {
 
 /**
  * 目标编程语言枚举
+
  */
 export enum LanguageTypeEnums {
   JAVA = 'Java',

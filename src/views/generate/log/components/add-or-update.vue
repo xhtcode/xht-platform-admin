@@ -25,33 +25,26 @@
 
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
-import {
-  queryGenTypeMappingById,
-  saveGenTypeMapping,
-  updateGenTypeMapping,
-} from '@/api/generate/type.mapping.api'
+import { queryGenLogById, saveGenLog, updateGenLog } from '@/api/generate/log.api'
 import { AddUpdateOption } from '@/hooks/use-crud-hooks'
-import type { GenTypeMappingOperationRequest } from '@/model/generate/type.mapping.model'
-import {
-  GenTypeMappingOperationForm,
-  GenTypeMappingOperationRules,
-} from '@/views/generate/type-mapping/type.mapping.data'
+import type { GenLogOperationRequest } from '@/model/generate/log.model'
+import { GenLogOperationForm, GenLogOperationRules } from '@/views/generate/log/log.data'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { errorFormParams } from '@/utils/moudle/element'
 import type { ModeIdType } from '@/model/base.model'
 
-defineOptions({ name: 'GenTypeMappingAddOrUpdate' })
-const state = reactive<AddUpdateOption<GenTypeMappingOperationRequest>>({
-  title: '增加字段类型映射',
+defineOptions({ name: 'GenLogAddOrUpdate' })
+const state = reactive<AddUpdateOption<GenLogOperationRequest>>({
+  title: '增加日志',
   visibleStatus: false,
   operationStatus: 'add',
   loadingStatus: false,
-  addUpdateForm: { ...GenTypeMappingOperationForm },
+  addUpdateForm: { ...GenLogOperationForm },
 })
 const addUpdateFormRef = ref<FormInstance>()
 const { addUpdateForm } = toRefs(state)
 const emits = defineEmits(['success'])
-const rules: FormRules = GenTypeMappingOperationRules
+const rules: FormRules = GenLogOperationRules
 /**
  * 打开显示
  */
@@ -63,8 +56,8 @@ const show = async (type: 'add' | 'update', id: ModeIdType) => {
   state.operationStatus = type
   if (type === 'update') {
     state.loadingStatus = true
-    state.title = '修改字段类型映射'
-    await queryGenTypeMappingById(id)
+    state.title = '修改日志'
+    await queryGenLogById(id)
       .then((response) => {
         const { data } = JSON.parse(JSON.stringify(response))
         addUpdateForm.value = { ...data }
@@ -86,7 +79,7 @@ const submitForm = () => {
     if (valid) {
       if (state.operationStatus === 'add') {
         //增加
-        await saveGenTypeMapping(addUpdateForm.value)
+        await saveGenLog(addUpdateForm.value)
           .then((_) => {
             useMessage().success('新增数据成功')
             emits('success')
@@ -100,7 +93,7 @@ const submitForm = () => {
           })
       } else {
         //修改
-        await updateGenTypeMapping({ ...addUpdateForm.value })
+        await updateGenLog({ ...addUpdateForm.value })
           .then((_) => {
             useMessage().success('修改数据成功')
             emits('success')
@@ -124,7 +117,7 @@ const submitForm = () => {
  * 关闭
  */
 const close = () => {
-  addUpdateForm.value = { ...GenTypeMappingOperationForm }
+  addUpdateForm.value = { ...GenLogOperationForm }
   state.visibleStatus = false
   state.operationStatus = 'add'
   state.loadingStatus = false
