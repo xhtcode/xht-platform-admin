@@ -77,7 +77,7 @@ const getMenuTree = async () => {
 const handleChange = () => {
   if (!modelValue.value) return
   if (!props.multiple) {
-    let menuNode = menuSelectTreeRef.value.getNode(modelValue.value)?.data
+    const menuNode = menuSelectTreeRef.value.getNode(modelValue.value)?.data
     emits('change', menuNode)
   } else {
     emits('change', JSON.stringify(menuSelectTreeRef.value.getCheckedNodes()))

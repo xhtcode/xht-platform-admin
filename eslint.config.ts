@@ -28,12 +28,48 @@ export default defineConfigWithVueTs(
 
   {
     rules: {
-      '@typescript-eslint/no-explicit-any': 'off', // 禁用@typescript-eslint/no-explicit-any规则，以支持any类型
-      '@typescript-eslint/no-unused-expressions': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-unused-expressions': [
+        'error',
+        {
+          allowShortCircuit: true,
+          allowTernary: true,
+        },
+      ],
       '@typescript-eslint/no-unsafe-function-type': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
-      '@typescript-eslint/no-empty-object-type': 'off', // 禁用@typescript-eslint/no-empty-object-type规则，以支持空对象类型
-      'prefer-const': 'off',
+      '@typescript-eslint/no-empty-object-type': 'off',
+      // JavaScript规则调整
+      'prefer-const': [
+        'warn',
+        {
+          destructuring: 'any',
+          ignoreReadBeforeAssign: true,
+        },
+      ],
+      'no-console': 'off',
+      'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'warn',
+      // Vue规则调整
+      'vue/multi-word-component-names': [
+        'warn',
+        {
+          ignores: ['index', 'App'], // 允许常见的单字组件名
+        },
+      ],
+      'vue/no-v-model-argument': 'off', // 允许v-model带参数（适用于Vue 3）
+      'vue/require-default-prop': 'off', // 不强制要求props设置默认值
+      'vue/html-self-closing': [
+        'warn',
+        {
+          html: {
+            void: 'always',
+            normal: 'always',
+            component: 'always',
+          },
+          svg: 'always',
+          math: 'always',
+        },
+      ],
     },
   },
 )

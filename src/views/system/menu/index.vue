@@ -105,7 +105,7 @@
         />
         <el-table-column label="菜单图标" prop="menuIcon" width="80" align="center">
           <template #default="{ row }">
-            <svg-icon :name="row.menuIcon" :size="20" color="var(--xht-svg-color)"></svg-icon>
+            <svg-icon :name="row.menuIcon" :size="20" color="var(--xht-svg-color)" />
           </template>
         </el-table-column>
         <el-table-column label="显示状态" prop="menuHidden" width="80" align="center">

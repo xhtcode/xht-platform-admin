@@ -1,6 +1,6 @@
 <template>
   <div class="main-container-scrollbar">
-    <div class="main-container-auto main-container-view"></div>
+    <div class="main-container-auto main-container-view" />
   </div>
 </template>
 <script setup lang="ts">

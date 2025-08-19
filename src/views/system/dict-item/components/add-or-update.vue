@@ -23,7 +23,7 @@
               :maxlength="50"
               show-word-limit
               placeholder="请输入字典项标签"
-            ></el-input>
+            />
           </el-form-item>
         </el-col>
         <el-col :xs="24" :sm="24" :lg="12">
@@ -33,7 +33,7 @@
               :maxlength="50"
               show-word-limit
               placeholder="请输入字典项值"
-            ></el-input>
+            />
           </el-form-item>
         </el-col>
         <el-col :xs="24" :sm="24" :lg="12">

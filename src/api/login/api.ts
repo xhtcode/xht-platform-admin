@@ -3,7 +3,6 @@ import { CaptchaResponseType } from './type'
 import { AxiosPromise } from 'axios'
 
 const baseAuthURL = import.meta.env.VITE_AUTH_API_PREFIX
-const baseAdminURL = import.meta.env.VITE_ADMIN_API_PREFIX
 const basicAuth = 'Basic ' + window.btoa('oidc-client:secret')
 
 /**
@@ -29,7 +28,7 @@ export const generateCaptcha = (captchaKey: any): AxiosPromise<CaptchaResponseTy
 export const loginInPassWord = (data: any): AxiosPromise<TokenInfoType> => {
   const encPassword = data.password
   // 密码加密
-  const { username, uuid, captchaCode, captchaKey } = data
+  const { username, captchaCode, captchaKey } = data
   return request({
     url: '/oauth2/token',
     method: 'post',
@@ -48,16 +47,5 @@ export const loginInPassWord = (data: any): AxiosPromise<TokenInfoType> => {
       Authorization: basicAuth,
       'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
     },
-  })
-}
-
-/**
- * 获取用户信息
- */
-export const getUserInfo = (): AxiosPromise<any> => {
-  return request({
-    url: '/authority/user/profile/info',
-    baseURL: baseAdminURL,
-    method: 'get',
   })
 }

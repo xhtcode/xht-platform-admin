@@ -64,8 +64,8 @@
         <el-table-column fixed="right" label="操作" width="120px">
           <template #default="{ row }">
             <el-button icon="delete" link type="danger" @click="handleForceLogout(row)"
-              >强退</el-button
-            >
+              >强退
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -82,7 +82,6 @@
 
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
-import { TableStyle } from '@/hooks/use-crud-hooks'
 import { useMessageBox } from '@/hooks/use-message'
 
 defineOptions({ name: 'SysUserOnlineViewIndex' })
@@ -158,7 +157,7 @@ const handleSelectionChange = (selection: any[]) => {
  */
 const handleForceLogout = (row: any) => {
   useMessageBox()
-    .confirm('是否确认强退该用户?', '警告')
+    .confirm('是否确认强退该用户?')
     .then(() => {
       // TODO: 调用强退接口
       console.log('强退', row)
@@ -171,7 +170,7 @@ const handleForceLogout = (row: any) => {
  */
 const handleBatchForceLogout = () => {
   useMessageBox()
-    .confirm('是否确认强退选中的用户?', '警告')
+    .confirm('是否确认强退选中的用户?')
     .then(() => {
       // TODO: 调用批量强退接口
       console.log('批量强退', state.selectedRows)

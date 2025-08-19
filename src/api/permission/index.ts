@@ -14,3 +14,14 @@ export const getRouters = (): AxiosPromise<RouteRecordRaw[]> => {
     method: 'get',
   })
 }
+
+/**
+ * 获取用户信息
+ */
+export const getUserInfo = (): AxiosPromise<any> => {
+  return request({
+    url: '/authority/user/profile/info',
+    baseURL: baseAdminURL,
+    method: 'get',
+  })
+}

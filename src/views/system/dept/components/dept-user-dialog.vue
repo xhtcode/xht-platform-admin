@@ -99,7 +99,7 @@ const show = (deptId: ModeIdType) => {
   getBindUser(deptId)
     .then((res) => {
       state.userList = res.data
-      for (let item of res.data) {
+      for (const item of res.data) {
         if (item.userId === props.modelValue) {
           tableRef.value?.setCurrentRow(item)
           break

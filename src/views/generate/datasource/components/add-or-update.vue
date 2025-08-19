@@ -14,8 +14,7 @@
       :rules="rules"
       element-loading-text="拼命加载中"
       label-width="100px"
-    >
-    </el-form>
+    />
     <template #footer>
       <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>
       <el-button @click="close">取 消</el-button>

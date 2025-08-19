@@ -219,8 +219,7 @@
               :input-style="{ 'text-align': 'center' }"
               v-model="postHave"
               placeholder="请输入岗位限制人数"
-            >
-            </el-input>
+            />
           </el-form-item>
         </el-col>
       </el-row>

@@ -1,10 +1,11 @@
 import { defineStore } from 'pinia'
 import type { LoginRequestType } from '@/api/login/type'
-import { getUserInfo, loginInPassWord } from '@/api/login/api'
+import { loginInPassWord } from '@/api/login/api'
 import type { AxiosResponse } from 'axios'
 import { resetRouter } from '@/router'
 import { useMessageBox } from '@/hooks/use-message'
 import pInIaPersistConfig from '@/store/pinia-persist'
+import { getUserInfo } from '@/api/permission'
 
 const defaultState: UserInfoStoreType = {
   userId: null, // 用户id
@@ -35,8 +36,6 @@ export const useUserInfoStore = defineStore('user_info', {
         loginInPassWord(data)
           .then((res: AxiosResponse<TokenInfoType>) => {
             this.token = { ...res.data }
-            console.log(res.data)
-            console.log(this.token)
             resolve(res.data)
           })
           .catch(() => {

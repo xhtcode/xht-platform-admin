@@ -37,7 +37,7 @@ const router = useRouter()
 const { currentRoute } = useRouter()
 const initBreadCrumb = (to: any) => {
   const currentRoute = to ? to : route
-  let breadcrumbListEmp = currentRoute.matched
+  const breadcrumbListEmp = currentRoute.matched
     .filter((item: RouteLocationNormalizedLoaded) => !['/', '/home'].includes(item.path))
     .filter((item: RouteLocationNormalizedLoaded) => !item.meta?.breadcrumb)
   if (breadcrumbListEmp.length > 0) {

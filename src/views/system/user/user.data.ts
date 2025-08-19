@@ -23,7 +23,7 @@ export const SysUserOperationForm: SysUserOperationRequest = {
     gender: 1, //性别1-男，2-女，3-其他
     birthDate: '2000-01-01', //出生日期
     age: 25, //年龄
-  } as UserProfilesCreateRequest
+  } as UserProfilesCreateRequest,
 }
 
 /**

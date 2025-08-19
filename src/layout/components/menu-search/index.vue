@@ -74,7 +74,6 @@ const filterRef = useTemplateRef('filterRef')
  * 搜索
  */
 const querySearch = (queryString: string, cb: any) => {
-  console.log(queryString)
   const results = queryString
     ? state.restaurants.filter(createFilter(queryString))
     : state.restaurants

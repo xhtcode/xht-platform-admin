@@ -120,6 +120,7 @@ const closeDialog = () => {
 /**
  * 选中图标
  * @param item
+ * @param collapse
  */
 const selectIcon = (item: IconItemOptions, collapse: boolean) => {
   modelValue.value = item.iconName
@@ -132,7 +133,7 @@ const selectIcon = (item: IconItemOptions, collapse: boolean) => {
  */
 const iconsList = computed<IconItemOptions[]>(() => {
   if (!inputValue.value) return iconItems.value
-  let result: IconItemOptions[] = []
+  const result: IconItemOptions[] = []
   iconItems.value.forEach((item: IconItemOptions) => {
     if (item.iconName.toLowerCase().indexOf(inputValue.value!.toLowerCase()) > -1) {
       result.push({ ...item })

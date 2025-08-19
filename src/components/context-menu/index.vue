@@ -7,7 +7,7 @@
     popper-class="v-context-menu-popper"
     @command="commandTrigger"
   >
-    <slot></slot>
+    <slot />
     <template #dropdown>
       <el-dropdown-menu>
         <el-dropdown-item
@@ -19,7 +19,7 @@
         >
           <div class="user-select-none flex-center">
             <el-icon>
-              <component :is="item.icon"></component>
+              <component :is="item.icon" />
             </el-icon>
             <span>{{ item.label }}</span>
           </div>

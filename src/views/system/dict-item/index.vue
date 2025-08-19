@@ -27,7 +27,7 @@
                 :maxlength="50"
                 show-word-limit
                 placeholder="请输入字典项标签"
-              ></el-input>
+              />
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
@@ -37,7 +37,7 @@
                 :maxlength="50"
                 show-word-limit
                 placeholder="请输入字典项值"
-              ></el-input>
+              />
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
@@ -106,7 +106,7 @@
                 border-radius: 5px;
               "
               :style="{ background: row.itemColor }"
-            ></div>
+            />
           </template>
         </el-table-column>
         <el-table-column label="排序" prop="sortOrder" width="55" />
