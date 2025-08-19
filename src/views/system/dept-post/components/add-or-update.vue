@@ -106,7 +106,7 @@
 
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
-import { AddUpdateOption } from '@/hooks/use-crud-hooks'
+
 import type { SysDeptPostOperationRequest } from '@/model/system/dept.post.model'
 import { SysDeptPostStatusEnums } from '@/model/system/dept.post.model'
 import {
@@ -114,7 +114,7 @@ import {
   SysDeptPostOperationRules,
 } from '@/views/system/dept-post/dept.post.data'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import { errorFormParams } from '@/utils/moudle/element'
+import { handleFormErrors } from '@/utils/moudle/element'
 import {
   querySysDeptPostById,
   saveSysDeptPost,
@@ -172,7 +172,7 @@ const submitForm = () => {
             close()
           })
           .catch((err: any) => {
-            errorFormParams(err, addUpdateFormRef, addUpdateForm)
+            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
           })
           .finally(() => {
             state.loadingStatus = false
@@ -186,7 +186,7 @@ const submitForm = () => {
             close()
           })
           .catch((err: any) => {
-            errorFormParams(err, addUpdateFormRef, addUpdateForm)
+            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
           })
           .finally(() => {
             state.loadingStatus = false

@@ -305,11 +305,7 @@
 
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
-import {
-  type TableQueryPageState,
-  useTableQueryPageHooks,
-  useTableToolHooks,
-} from '@/hooks/use-crud-hooks'
+import { useTableQueryPageHooks, useTableToolHooks } from '@/hooks/use-crud-hooks'
 import AddOrUpdate from '@/views/system/user/components/add-or-update.vue'
 import type { SysUserQueryRequest, SysUserResponse } from '@/model/system/user.model'
 import { UserStatusEnums } from '@/model/system/user.model'
@@ -330,7 +326,7 @@ import {
 } from '@element-plus/icons-vue'
 import type { SysDeptResponse } from '@/model/system/dept.model'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import { disabledBeforeDate } from '@/utils/moudle/element'
+import { disabledTodayAndFuture } from '@/utils/moudle/element'
 import UserRole from '@/views/system/user/components/user-role.vue'
 import UserStatusDict from '@/components/system-dict/user-status.vue'
 
@@ -393,7 +389,7 @@ const superDisabledBeforeDate = (time: Date) => {
     return formatData(queryParams.value.birthDateEnd).getTime() <= time1
   }
   // 4. 默认情况下使用基础禁用规则
-  return disabledBeforeDate(time)
+  return disabledTodayAndFuture(time)
 }
 /**
  * YYYY-MM-DD 转化成Data类型

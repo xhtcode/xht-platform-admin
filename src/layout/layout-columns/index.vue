@@ -1,5 +1,10 @@
-<script setup lang="ts"></script>
-
-<template></template>
+<template>
+  <div></div>
+</template>
+<script setup lang="ts">
+defineOptions({
+  name: 'LayoutColumns',
+})
+</script>
 
 <style scoped></style>

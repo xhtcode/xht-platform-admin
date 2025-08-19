@@ -4,7 +4,7 @@ import type { ModeIdType } from '@/model/base.model'
 import type {
   GenDataSourceOperationRequest,
   GenDataSourceQueryRequest,
-  GenDataSourceResponse
+  GenDataSourceResponse,
 } from '@/model/generate/datasource.model'
 
 /**

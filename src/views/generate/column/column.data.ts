@@ -23,9 +23,9 @@ export const GenColumnInfoOperationForm: GenColumnInfoOperationRequest = {
     gridSort: '',
     queryItem: '',
     queryType: '',
-    queryFormType: ''
+    queryFormType: '',
   },
-  sortOrder: 0
+  sortOrder: 0,
 }
 
 /**

@@ -74,11 +74,7 @@
 
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
-import {
-  type TableQueryPageState,
-  useTableQueryPageHooks,
-  useTableToolHooks,
-} from '@/hooks/use-crud-hooks'
+import { useTableQueryPageHooks, useTableToolHooks } from '@/hooks/use-crud-hooks'
 import AddOrUpdate from './components/add-or-update.vue'
 import type { GenTemplateQueryRequest, GenTemplateResponse } from '@/model/generate/template.model'
 import { queryGenTemplatePage, removeGenTemplateByIds } from '@/api/generate/template.api'

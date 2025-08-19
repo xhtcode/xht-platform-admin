@@ -49,18 +49,3 @@ export function base64URL(str: CryptoJS.lib.WordArray) {
 export function base64Str(str: string) {
   return CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(str))
 }
-
-export const generateCodeVerifierAndChallenge = () => {
-  // 生成CodeVerifier
-  let codeVerifier: string = generateCodeVerifier()
-  // codeChallenge
-  let codeChallenge: string = generateCodeChallenge(codeVerifier)
-  // 生成state
-  let state: string = generateCodeVerifier()
-
-  return {
-    codeChallenge,
-    codeVerifier,
-    state,
-  }
-}

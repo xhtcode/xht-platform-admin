@@ -133,11 +133,7 @@
 
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
-import {
-  type TableQueryPageState,
-  useTableQueryPageHooks,
-  useTableToolHooks,
-} from '@/hooks/use-crud-hooks'
+import { useTableQueryPageHooks, useTableToolHooks } from '@/hooks/use-crud-hooks'
 import AddOrUpdate from './components/add-or-update.vue'
 import type { SysRoleQueryRequest, SysRoleResponse } from '@/model/system/role.model'
 import { RoleStatusEnums } from '@/model/system/role.model'

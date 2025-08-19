@@ -41,7 +41,6 @@
 </template>
 
 <script setup lang="ts">
-import { AddUpdateOption } from '@/hooks/use-crud-hooks'
 import { queryToolsMenuTree } from '@/api/tools.api'
 import { CheckboxValueType } from 'element-plus'
 import { roleMenuBind, selectMenuIdByRoleId } from '@/api/system/role.api'

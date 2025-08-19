@@ -30,14 +30,14 @@ import {
   saveGenColumnInfo,
   updateGenColumnInfo,
 } from '@/api/generate/column.api'
-import { AddUpdateOption } from '@/hooks/use-crud-hooks'
+
 import type { GenColumnInfoOperationRequest } from '@/model/generate/column.model'
 import {
   GenColumnInfoOperationForm,
   GenColumnInfoOperationRules,
 } from '@/views/generate/column/column.data'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import { errorFormParams } from '@/utils/moudle/element'
+import { handleFormErrors } from '@/utils/moudle/element'
 import type { ModeIdType } from '@/model/base.model'
 
 defineOptions({ name: 'GenColumnInfoAddOrUpdate' })
@@ -93,7 +93,7 @@ const submitForm = () => {
             close()
           })
           .catch((err: any) => {
-            errorFormParams(err, addUpdateFormRef, addUpdateForm)
+            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
           })
           .finally(() => {
             state.loadingStatus = false
@@ -107,7 +107,7 @@ const submitForm = () => {
             close()
           })
           .catch((err: any) => {
-            errorFormParams(err, addUpdateFormRef, addUpdateForm)
+            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
           })
           .finally(() => {
             state.loadingStatus = false

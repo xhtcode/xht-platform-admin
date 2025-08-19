@@ -12,6 +12,7 @@ import type { SysDeptPostResponse } from '@/model/system/dept.post.model'
  * 增改页面 表单类型 默认值
  */
 export const SysUserOperationForm: SysUserOperationRequest = {
+  leaderName: '',
   dept: {} as SysDeptResponse,
   post: {} as SysDeptPostResponse,
   nickName: '', //用户昵称
@@ -22,7 +23,7 @@ export const SysUserOperationForm: SysUserOperationRequest = {
     gender: 1, //性别1-男，2-女，3-其他
     birthDate: '2000-01-01', //出生日期
     age: 25, //年龄
-  } as UserProfilesCreateRequest,
+  } as UserProfilesCreateRequest
 }
 
 /**

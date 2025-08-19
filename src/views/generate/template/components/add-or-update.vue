@@ -30,14 +30,14 @@ import {
   saveGenTemplate,
   updateGenTemplate,
 } from '@/api/generate/template.api'
-import { AddUpdateOption } from '@/hooks/use-crud-hooks'
+
 import type { GenTemplateOperationRequest } from '@/model/generate/template.model'
 import {
   GenTemplateOperationForm,
   GenTemplateOperationRules,
 } from '@/views/generate/template/template.data'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import { errorFormParams } from '@/utils/moudle/element'
+import { handleFormErrors } from '@/utils/moudle/element'
 import type { ModeIdType } from '@/model/base.model'
 
 defineOptions({ name: 'GenTemplateAddOrUpdate' })
@@ -93,7 +93,7 @@ const submitForm = () => {
             close()
           })
           .catch((err: any) => {
-            errorFormParams(err, addUpdateFormRef, addUpdateForm)
+            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
           })
           .finally(() => {
             state.loadingStatus = false
@@ -107,7 +107,7 @@ const submitForm = () => {
             close()
           })
           .catch((err: any) => {
-            errorFormParams(err, addUpdateFormRef, addUpdateForm)
+            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
           })
           .finally(() => {
             state.loadingStatus = false

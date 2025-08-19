@@ -30,14 +30,14 @@ import {
   saveGenDataSource,
   updateGenDataSource,
 } from '@/api/generate/datasource.api'
-import { AddUpdateOption } from '@/hooks/use-crud-hooks'
+
 import type { GenDataSourceOperationRequest } from '@/model/generate/datasource.model'
 import {
   GenDataSourceOperationForm,
   GenDataSourceOperationRules,
 } from '@/views/generate/datasource/datasource.data'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import { errorFormParams } from '@/utils/moudle/element'
+import { handleFormErrors } from '@/utils/moudle/element'
 import type { ModeIdType } from '@/model/base.model'
 
 defineOptions({ name: 'GenDataSourceAddOrUpdate' })
@@ -93,7 +93,7 @@ const submitForm = () => {
             close()
           })
           .catch((err: any) => {
-            errorFormParams(err, addUpdateFormRef, addUpdateForm)
+            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
           })
           .finally(() => {
             state.loadingStatus = false
@@ -107,7 +107,7 @@ const submitForm = () => {
             close()
           })
           .catch((err: any) => {
-            errorFormParams(err, addUpdateFormRef, addUpdateForm)
+            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
           })
           .finally(() => {
             state.loadingStatus = false

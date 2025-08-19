@@ -1,89 +1,75 @@
-import type { CellStyle } from 'element-plus'
 import type { AxiosPromise, AxiosResponse } from 'axios'
-import {
-  BasicResponse,
-  EditUpdateRequest,
-  PageQueryRequest,
-  PageResponse,
-} from '@/model/base.model'
-import type { Reactive } from 'vue'
+import { BasicResponse, PageQueryRequest, PageResponse } from '@/model/base.model'
+import type { Reactive, Ref } from 'vue'
+import { toRef } from 'vue'
 
 /**
- * 表格样式。
+ * 表格查询分页Hooks
+ * @param options 响应式状态对象
+ * @param queryPageApi 分页查询接口
  */
-export interface TableStyle {
-  cellStyle: CellStyle<any>
-  headerCellStyle: CellStyle<any>
-}
-
-export interface TableQueryPageState<req extends PageQueryRequest, Response extends BasicResponse> {
-  queryParams: req // 查询参数
-  total: number // 	总条目数
-  pages: number // 总页数
-  searchStatus?: boolean // 是否显示搜索
-  tableList: Response[] // 表格数据
-  selectedRows: Response[] // 选中行数据
-  loadingStatus: boolean // 加载状态
-  singleStatus: boolean // 单个禁用
-  multipleStatus: boolean // 多个禁用
-}
-
-export const useTableQueryPageHooks = <
-  Request extends PageQueryRequest,
-  Response extends BasicResponse,
->(
-  options: Reactive<TableQueryPageState<Request, Response>>,
-  queryPageApi: (req: Request) => AxiosPromise<PageResponse<Response>>,
+export const useTableQueryPageHooks = <Req extends PageQueryRequest, Res extends BasicResponse>(
+  options: Reactive<TableQueryPageState<Req, Res>>,
+  queryPageApi: (req: Req) => AxiosPromise<PageResponse<Res>>,
 ) => {
-  const defaultOptions: TableQueryPageState<Request, Response> = {
+  // 默认配置
+  const defaultOptions: TableQueryPageState<Req, Res> = {
     queryParams: {
       current: 1,
       size: 10,
-    } as Request,
-    singleStatus: true, // 单个禁用
-    multipleStatus: true, // 多个禁用
+    } as Req,
+    singleStatus: true,
+    multipleStatus: true,
     loadingStatus: false,
     total: 0,
     pages: 0,
     tableList: [],
     selectedRows: [],
   }
+
+  // 合并默认配置与用户配置
   const state = mergeDefaultOptions(defaultOptions, options)
-  const { queryParams } = toRefs(state)
+  const queryParams: Ref<Req> = toRef(state, 'queryParams')
+
   /**
    * 查询数据列表
+   * @returns 数据查询Promise
    */
-  const handleQuery = async () => {
+  const handleQuery = async (): Promise<void> => {
     state.loadingStatus = true
-    await queryPageApi(queryParams.value)
-      .then((response: AxiosResponse<PageResponse<Response>>) => {
-        state.tableList = response.data.records || []
-        state.total = response.data?.total || 0
-        state.pages = response.data?.pages || 0
-      })
-      .catch((err) => {
-        console.error(err)
-      })
-      .finally(() => {
-        state.loadingStatus = false
-      })
+    try {
+      const response: AxiosResponse<PageResponse<Res>> = await queryPageApi(queryParams.value)
+      const { records = [], total = 0, pages = 0 } = response.data
+      state.tableList = records
+      state.total = total
+      state.pages = pages
+    } catch (err) {
+      console.error('数据查询失败:', err)
+      throw err // 抛出错误供外部处理
+    } finally {
+      state.loadingStatus = false
+    }
   }
 
   /**
-   * 自定义表格索引生成
+   * 生成表格索引
+   * @param index 当前页内行索引
+   * @returns 全局索引值
    */
-  const createTableIndex = (index: number) => {
-    return ((queryParams.value.current || 1) - 1) * (queryParams.value.size || 0) + index + 1
+  const createTableIndex = (index: number): number => {
+    const current = queryParams.value.current ?? 1
+    const size = queryParams.value.size ?? 0
+    return (current - 1) * size + index + 1
   }
 
   /**
-   * 多选框选中数据
-   * @param selection 选中信息
+   * 处理选中行变化
+   * @param selection 选中的行数据
    */
-  const handleSelectionChange = (selection: Response[]) => {
+  const handleSelectionChange = (selection: Res[]): void => {
     state.selectedRows = selection
     state.singleStatus = selection.length !== 1
-    state.multipleStatus = !selection.length
+    state.multipleStatus = selection.length === 0
   }
 
   return {
@@ -94,10 +80,10 @@ export const useTableQueryPageHooks = <
 }
 
 /**
- * 合并默认属性配置和自定义属性配置
- * @param options 默认属性配置对象
- * @param props 自定义属性配置对象
- * @returns 合并后的属性配置对象
+ * 合并默认配置与自定义配置
+ * @param options 默认配置
+ * @param props 自定义配置
+ * @returns 合并后的配置
  */
 const mergeDefaultOptions = (options: any, props: any): TableQueryPageState<any, any> => {
   for (const key in options) {
@@ -107,12 +93,14 @@ const mergeDefaultOptions = (options: any, props: any): TableQueryPageState<any,
   }
   return props
 }
+
 /**
- * 表格工具栏样式
+ * 表格样式Hooks
+ * @returns 统一的表格样式配置
  */
 export const useTableToolHooks = (): TableStyle => {
   return {
-    cellStyle: { 'text-align': 'center' },
+    cellStyle: { textAlign: 'center' },
     headerCellStyle: {
       textAlign: 'center',
       background: 'var(--el-table-row-hover-bg-color)',
@@ -120,14 +108,4 @@ export const useTableToolHooks = (): TableStyle => {
       userSelect: 'none',
     },
   }
-}
-
-export interface AddUpdateOption<Request extends EditUpdateRequest> {
-  title: string // 组件的标题
-  visibleStatus: boolean // 控制组件是否可见的状态
-  operationStatus: 'add' | 'update' //表示组件是否处于操作状态
-  loadingStatus: boolean // 表示组件是否处于加载状态。`true`表示组件正在加载数据或资源，`false`表示加载已完成。
-  addUpdateForm: Request
-
-  [key: string]: any
 }

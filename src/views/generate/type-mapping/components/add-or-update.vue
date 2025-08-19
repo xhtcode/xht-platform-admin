@@ -30,14 +30,14 @@ import {
   saveGenTypeMapping,
   updateGenTypeMapping,
 } from '@/api/generate/type.mapping.api'
-import { AddUpdateOption } from '@/hooks/use-crud-hooks'
+
 import type { GenTypeMappingOperationRequest } from '@/model/generate/type.mapping.model'
 import {
   GenTypeMappingOperationForm,
   GenTypeMappingOperationRules,
 } from '@/views/generate/type-mapping/type.mapping.data'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import { errorFormParams } from '@/utils/moudle/element'
+import { handleFormErrors } from '@/utils/moudle/element'
 import type { ModeIdType } from '@/model/base.model'
 
 defineOptions({ name: 'GenTypeMappingAddOrUpdate' })
@@ -93,7 +93,7 @@ const submitForm = () => {
             close()
           })
           .catch((err: any) => {
-            errorFormParams(err, addUpdateFormRef, addUpdateForm)
+            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
           })
           .finally(() => {
             state.loadingStatus = false
@@ -107,7 +107,7 @@ const submitForm = () => {
             close()
           })
           .catch((err: any) => {
-            errorFormParams(err, addUpdateFormRef, addUpdateForm)
+            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
           })
           .finally(() => {
             state.loadingStatus = false

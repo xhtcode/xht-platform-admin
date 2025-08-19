@@ -26,11 +26,11 @@
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
 import { queryGenLogById, saveGenLog, updateGenLog } from '@/api/generate/log.api'
-import { AddUpdateOption } from '@/hooks/use-crud-hooks'
+
 import type { GenLogOperationRequest } from '@/model/generate/log.model'
 import { GenLogOperationForm, GenLogOperationRules } from '@/views/generate/log/log.data'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import { errorFormParams } from '@/utils/moudle/element'
+import { handleFormErrors } from '@/utils/moudle/element'
 import type { ModeIdType } from '@/model/base.model'
 
 defineOptions({ name: 'GenLogAddOrUpdate' })
@@ -86,7 +86,7 @@ const submitForm = () => {
             close()
           })
           .catch((err: any) => {
-            errorFormParams(err, addUpdateFormRef, addUpdateForm)
+            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
           })
           .finally(() => {
             state.loadingStatus = false
@@ -100,7 +100,7 @@ const submitForm = () => {
             close()
           })
           .catch((err: any) => {
-            errorFormParams(err, addUpdateFormRef, addUpdateForm)
+            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
           })
           .finally(() => {
             state.loadingStatus = false

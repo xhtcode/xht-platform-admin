@@ -40,7 +40,6 @@
 </template>
 
 <script setup lang="ts">
-import { AddUpdateOption } from '@/hooks/use-crud-hooks'
 import { queryToolsRoleList } from '@/api/tools.api'
 import { CheckboxValueType } from 'element-plus'
 import { useMessage } from '@/hooks/use-message'

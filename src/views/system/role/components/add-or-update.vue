@@ -73,12 +73,12 @@
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
 import { querySysRoleById, saveSysRole, updateSysRole } from '@/api/system/role.api'
-import { AddUpdateOption } from '@/hooks/use-crud-hooks'
+
 import type { SysRoleOperationRequest } from '@/model/system/role.model'
 import { RoleStatusEnums } from '@/model/system/role.model'
 import { SysRoleOperationForm, SysRoleOperationRules } from '@/views/system/role/role.data'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import { errorFormParams } from '@/utils/moudle/element'
+import { handleFormErrors } from '@/utils/moudle/element'
 import type { ModeIdType } from '@/model/base.model'
 
 defineOptions({ name: 'SysRoleAddOrUpdate' })
@@ -134,7 +134,7 @@ const submitForm = () => {
             close()
           })
           .catch((err: any) => {
-            errorFormParams(err, addUpdateFormRef, addUpdateForm)
+            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
           })
           .finally(() => {
             state.loadingStatus = false
@@ -148,7 +148,7 @@ const submitForm = () => {
             close()
           })
           .catch((err: any) => {
-            errorFormParams(err, addUpdateFormRef, addUpdateForm)
+            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
           })
           .finally(() => {
             state.loadingStatus = false

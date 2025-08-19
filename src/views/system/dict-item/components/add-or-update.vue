@@ -95,7 +95,7 @@ import {
   saveSysDictItem,
   updateSysDictItem,
 } from '@/api/system/dict.item.api'
-import { AddUpdateOption } from '@/hooks/use-crud-hooks'
+
 import type { SysDictItemOperationRequest } from '@/model/system/dict.item.model'
 import { DictItemStatusEnums } from '@/model/system/dict.item.model'
 import {
@@ -103,7 +103,7 @@ import {
   SysDictItemOperationRules,
 } from '@/views/system/dict-item/dict.item.data'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import { errorFormParams } from '@/utils/moudle/element'
+import { handleFormErrors } from '@/utils/moudle/element'
 import { useRoute } from 'vue-router'
 import type { ModeIdType } from '@/model/base.model'
 
@@ -174,7 +174,7 @@ const submitForm = () => {
             close()
           })
           .catch((err: any) => {
-            errorFormParams(err, addUpdateFormRef, addUpdateForm)
+            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
           })
           .finally(() => {
             state.loadingStatus = false
@@ -188,7 +188,7 @@ const submitForm = () => {
             close()
           })
           .catch((err: any) => {
-            errorFormParams(err, addUpdateFormRef, addUpdateForm)
+            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
           })
           .finally(() => {
             state.loadingStatus = false

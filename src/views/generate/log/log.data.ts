@@ -13,7 +13,7 @@ export const GenLogOperationForm: GenLogOperationRequest = {
   id: null,
   projectId: null,
   status: '',
-  tableIds: ''
+  tableIds: '',
 }
 
 /**

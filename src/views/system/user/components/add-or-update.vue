@@ -238,9 +238,9 @@
 import type { FormInstance, FormRules } from 'element-plus'
 import { querySysUserById, saveSysUser, updateSysUser } from '@/api/system/user.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import { errorFormParams } from '@/utils/moudle/element'
+import { handleFormErrors } from '@/utils/moudle/element'
 import { SysUserOperationForm, SysUserOperationRules } from '@/views/system/user/user.data'
-import { AddUpdateOption } from '@/hooks/use-crud-hooks'
+
 import type { SysUserOperationRequest } from '@/model/system/user.model'
 import { UserStatusEnums } from '@/model/system/user.model'
 import type { ModeIdType } from '@/model/base.model'
@@ -302,7 +302,7 @@ const submitForm = () => {
             close()
           })
           .catch((err: any) => {
-            errorFormParams(err, addUpdateFormRef, addUpdateForm)
+            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
           })
           .finally(() => {
             state.loadingStatus = false
@@ -316,7 +316,7 @@ const submitForm = () => {
             close()
           })
           .catch((err: any) => {
-            errorFormParams(err, addUpdateFormRef, addUpdateForm)
+            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
           })
           .finally(() => {
             state.loadingStatus = false

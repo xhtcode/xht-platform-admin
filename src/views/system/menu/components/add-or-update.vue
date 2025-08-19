@@ -156,7 +156,7 @@
 import type { FormInstance, FormRules } from 'element-plus'
 import { querySysMenuById, saveSysMenu, updateSysMenu } from '@/api/system/menu.api'
 import { useMessageBox } from '@/hooks/use-message'
-import { errorFormParams } from '@/utils/moudle/element'
+import { handleFormErrors } from '@/utils/moudle/element'
 import {
   MenuCacheEnums,
   MenuHiddenEnums,
@@ -167,7 +167,7 @@ import {
 } from '@/model/system/menu.model'
 import MenuTreeSelect from '@/components/menu-tree-select/index.vue'
 import { SysMenuOperationForm, SysMenuOperationRules } from '@/views/system/menu/menu.data'
-import { AddUpdateOption } from '@/hooks/use-crud-hooks'
+
 import { SysDeptOperationForm } from '@/views/system/dept/dept.data'
 import type { ModeIdType } from '@/model/base.model'
 
@@ -224,7 +224,7 @@ const submitForm = () => {
             close()
           })
           .catch((err: any) => {
-            errorFormParams(err, addUpdateFormRef, addUpdateForm)
+            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
           })
           .finally(() => {
             state.loadingStatus = false
@@ -238,7 +238,7 @@ const submitForm = () => {
             close()
           })
           .catch((err: any) => {
-            errorFormParams(err, addUpdateFormRef, addUpdateForm)
+            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
           })
           .finally(() => {
             state.loadingStatus = false

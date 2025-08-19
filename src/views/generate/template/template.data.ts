@@ -12,7 +12,7 @@ export const GenTemplateOperationForm: GenTemplateOperationRequest = {
   fileType: '',
   groupId: null,
   id: null,
-  name: ''
+  name: '',
 }
 
 /**

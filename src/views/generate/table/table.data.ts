@@ -15,7 +15,7 @@ export const GenTableInfoOperationForm: GenTableInfoOperationRequest = {
   tableComment: '',
   tableCreateTime: '',
   tableName: '',
-  tableUpdateTime: ''
+  tableUpdateTime: '',
 }
 
 /**
