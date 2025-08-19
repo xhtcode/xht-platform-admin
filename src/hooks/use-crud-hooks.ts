@@ -1,6 +1,5 @@
 import type { CellStyle } from 'element-plus'
 import type { AxiosPromise, AxiosResponse } from 'axios'
-import { useMessage } from '@/hooks/use-message'
 import {
   BasicResponse,
   EditUpdateRequest,
@@ -23,7 +22,7 @@ export interface TableQueryPageState<req extends PageQueryRequest, Response exte
   pages: number // 总页数
   searchStatus?: boolean // 是否显示搜索
   tableList: Response[] // 表格数据
-  selectedRows: any[] // 选中行数据
+  selectedRows: Response[] // 选中行数据
   loadingStatus: boolean // 加载状态
   singleStatus: boolean // 单个禁用
   multipleStatus: boolean // 多个禁用
@@ -81,7 +80,7 @@ export const useTableQueryPageHooks = <
    * 多选框选中数据
    * @param selection 选中信息
    */
-  const handleSelectionChange = (selection: any[]) => {
+  const handleSelectionChange = (selection: Response[]) => {
     state.selectedRows = selection
     state.singleStatus = selection.length !== 1
     state.multipleStatus = !selection.length

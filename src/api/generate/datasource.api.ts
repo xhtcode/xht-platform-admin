@@ -1,10 +1,10 @@
 import request from '@/utils/request'
 import type { AxiosPromise } from 'axios'
-import type { ModeIdType, PageResponse } from '@/model/base.model'
+import type { ModeIdType } from '@/model/base.model'
 import type {
   GenDataSourceOperationRequest,
   GenDataSourceQueryRequest,
-  GenDataSourceResponse,
+  GenDataSourceResponse
 } from '@/model/generate/datasource.model'
 
 /**
@@ -17,7 +17,8 @@ enum Api {
   UPDATE = '/gen/datasource/update',
   DELETE = '/gen/datasource/delete',
   QUERY_ONE = '/gen/datasource/get/',
-  QUERY_PAGE = '/gen/datasource/page',
+  QUERY_LIST = '/gen/datasource/list',
+  CONNECTION_TEST = '/gen/datasource/connection/',
 }
 
 /**
@@ -70,13 +71,24 @@ export const queryGenDataSourceById = (id: ModeIdType): AxiosPromise<GenDataSour
 /**
  * 查询全部数据源配置
  */
-export const queryGenDataSourcePage = (
+export const queryGenDataSourceList = (
   data?: GenDataSourceQueryRequest,
-): AxiosPromise<PageResponse<GenDataSourceResponse>> => {
+): AxiosPromise<GenDataSourceResponse[]> => {
   return request({
-    url: Api.QUERY_PAGE,
+    url: Api.QUERY_LIST,
     baseURL,
     method: 'get',
     params: { ...data },
+  })
+}
+
+/**
+ * 查询单个数据源配置
+ */
+export const connectionTest = (id: ModeIdType): AxiosPromise<boolean> => {
+  return request({
+    url: Api.CONNECTION_TEST + `${id}`,
+    baseURL,
+    method: 'get',
   })
 }

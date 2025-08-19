@@ -95,7 +95,7 @@ export interface GenColumnInfoQueryRequest extends PageQueryRequest {
   /**
    *表ID
    */
-  tableId: ModeIdType
+  tableId?: ModeIdType
 }
 
 /**

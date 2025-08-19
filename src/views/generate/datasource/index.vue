@@ -9,6 +9,26 @@
         label-width="120px"
       >
         <el-row>
+          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
+            <el-form-item label="数据源名称">
+              <el-input
+                v-model="queryParams.name"
+                clearable
+                placeholder="请输入数据源名称"
+                prefix-icon="Search"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
+            <el-form-item label="数据库类型">
+              <el-select v-model="queryParams.dbType" placeholder="请选择数据库类型">
+                <el-option :value="DataBaseTypeEnums.MYSQL" label="MySql" />
+                <el-option :value="DataBaseTypeEnums.ORACLE" label="Oracle" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
           <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24" class="text-center">
             <el-button icon="Search" type="primary" @click="handleQuery()"> 查询</el-button>
             <el-button icon="Refresh" @click="resetQuery">重置</el-button>
@@ -52,21 +72,15 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column align="center" type="selection" width="55" />
-        <el-table-column :index="createTableIndex" label="序号" type="index" width="55" />
+        <el-table-column :index="(index) => index + 1" label="序号" type="index" width="55" />
         <el-table-column align="center" label="操作" width="220px">
           <template #default="{ row }">
             <el-button icon="edit" link type="success" @click="handleEdit(row)">修改</el-button>
             <el-button icon="delete" link type="danger" @click="handleDelete(row)">删除</el-button>
+            <el-button icon="delete" link type="primary" @click="handleTest(row)">测试</el-button>
           </template>
         </el-table-column>
       </el-table>
-      <xht-pagination
-        v-model:current-page="state.queryParams.current"
-        v-model:page-size="state.queryParams.size"
-        :page-count="state.pages"
-        :total="state.total"
-        @pagination="handleQuery"
-      />
     </div>
     <add-or-update ref="addUpdateRef" @success="handleQuery()" />
   </div>
@@ -74,45 +88,64 @@
 
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
-import {
-  type TableQueryPageState,
-  useTableQueryPageHooks,
-  useTableToolHooks,
-} from '@/hooks/use-crud-hooks'
+import { useTableToolHooks } from '@/hooks/use-crud-hooks'
 import AddOrUpdate from './components/add-or-update.vue'
 import type {
   GenDataSourceQueryRequest,
   GenDataSourceResponse,
 } from '@/model/generate/datasource.model'
-import { queryGenDataSourcePage, removeGenDataSourceByIds } from '@/api/generate/datasource.api'
+import {
+  connectionTest,
+  queryGenDataSourceList,
+  removeGenDataSourceByIds,
+} from '@/api/generate/datasource.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import { ModeIdArrayType } from '@/model/base.model'
+import { BasicResponse, ModeIdArrayType, PageQueryRequest } from '@/model/base.model'
+import { DataBaseTypeEnums } from '@/model/generate/common.model'
+import { AxiosResponse } from 'axios'
 
 defineOptions({ name: 'GenDataSourceViewIndex' })
 
-const state = reactive<TableQueryPageState<GenDataSourceQueryRequest, GenDataSourceResponse>>({
-  queryParams: {
-    current: 1,
-    size: 10,
-  },
+interface TableQueryState<req extends PageQueryRequest, Response extends BasicResponse> {
+  queryParams: GenDataSourceQueryRequest // 查询参数
+  searchStatus?: boolean // 是否显示搜索
+  tableList: GenDataSourceResponse[] // 表格数据
+  selectedRows: GenDataSourceResponse[] // 选中行数据
+  loadingStatus: boolean // 加载状态
+  singleStatus: boolean // 单个禁用
+  multipleStatus: boolean // 多个禁用
+}
+
+const state = reactive<TableQueryState<GenDataSourceQueryRequest, GenDataSourceResponse>>({
+  queryParams: {},
   loadingStatus: false,
-  total: 0,
-  pages: 0,
   tableList: [],
   selectedRows: [],
   singleStatus: true, // 单个禁用
   multipleStatus: true, // 多个禁用
 })
-const { createTableIndex, handleQuery, handleSelectionChange } = useTableQueryPageHooks<
-  GenDataSourceQueryRequest,
-  GenDataSourceResponse
->(state, queryGenDataSourcePage)
 const { queryParams } = toRefs(state)
 
 const queryFormRef = ref<FormInstance>()
 const addUpdateRef = ref()
 const { cellStyle, headerCellStyle } = useTableToolHooks()
-
+/**
+ * 查询表单提交
+ */
+const handleQuery = async () => {
+  queryGenDataSourceList().then((res) => {
+    state.tableList = res.data
+  })
+}
+/**
+ * 多选框选中数据
+ * @param selection 选中信息
+ */
+const handleSelectionChange = (selection: any[]) => {
+  state.selectedRows = selection
+  state.singleStatus = selection.length !== 1
+  state.multipleStatus = !selection.length
+}
 /**
  * 重置表单
  */
@@ -162,7 +195,22 @@ const handleDelete = async (row?: GenDataSourceResponse) => {
       state.loadingStatus = false
     })
 }
-
+/**
+ * 测试链接
+ */
+const handleTest = (row: GenDataSourceResponse) => {
+  connectionTest(row.id)
+    .then(async (res: AxiosResponse<boolean>) => {
+      if (res.data) {
+        useMessage().success('数据库链接正常！')
+      } else {
+        useMessage().error('数据库链接异常！')
+      }
+    })
+    .catch(async () => {
+      useMessage().error('数据库链接异常！')
+    })
+}
 onMounted(async () => {
   await handleQuery()
 })
