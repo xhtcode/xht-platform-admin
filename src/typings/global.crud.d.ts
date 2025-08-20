@@ -1,4 +1,4 @@
-import { EditUpdateRequest } from '@/model/base.model'
+import { BasicFormRequest } from '@/model/base.model'
 
 /**
  * 增删改查 基础字段设置
@@ -20,7 +20,7 @@ declare global {
   /**
    * 新增/编辑操作配置
    */
-  interface AddUpdateOption<Req extends EditUpdateRequest> {
+  interface AddUpdateOption<Req extends BasicFormRequest> {
     title: string // 弹窗标题
     visibleStatus: boolean // 弹窗可见状态
     operationStatus: 'add' | 'update' // 操作类型

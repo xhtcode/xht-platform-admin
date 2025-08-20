@@ -10,7 +10,10 @@ export interface PageQueryRequest {
   [key: string]: any
 }
 
-export interface EditUpdateRequest {
+/**
+ * 列表页面 表单查询参数
+ */
+export interface BasicFormRequest {
   [key: string]: any
 }
 
@@ -34,6 +37,7 @@ export interface INodeResponse<T> {
   path: string
   parentId: T | null
   children?: INodeResponse<T>[]
+  [key: string]: any
 }
 
 /**

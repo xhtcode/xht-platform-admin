@@ -1,9 +1,14 @@
-import type { BasicResponse, ModeIdType, PageQueryRequest } from '@/model/base.model'
+import type {
+  BasicResponse,
+  BasicFormRequest,
+  ModeIdType,
+  PageQueryRequest,
+} from '@/model/base.model'
 
 /**
  * 操作类型
  */
-export interface GenTableInfoOperationRequest {
+export interface GenTableInfoOperationRequest extends BasicFormRequest {
   /**
    *表ID
    */

@@ -1,6 +1,6 @@
 import type {
   BasicResponse,
-  EditUpdateRequest,
+  BasicFormRequest,
   INodeResponse,
   ModeIdType,
   PageQueryRequest,
@@ -50,7 +50,7 @@ export enum MenuLinkEnums {
 /**
  * 菜单操作类型
  */
-export interface SysMenuOperationRequest extends EditUpdateRequest {
+export interface SysMenuOperationRequest extends BasicFormRequest {
   id: ModeIdType // 菜单ID
   parentId: ModeIdType // 父菜单ID
   menuType?: MenuTypeEnums // 类型

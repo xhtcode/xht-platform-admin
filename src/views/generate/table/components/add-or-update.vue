@@ -14,7 +14,38 @@
       :rules="rules"
       element-loading-text="拼命加载中"
       label-width="100px"
-    />
+    >
+      <el-form-item label="表ID" prop="id">
+        <el-input v-model="addUpdateForm.id" placeholder="请输入表ID" />
+      </el-form-item>
+      <el-form-item label="分组id" prop="groupId">
+        <el-input v-model="addUpdateForm.groupId" placeholder="请输入分组id" />
+      </el-form-item>
+      <el-form-item label="数据源ID" prop="dataSourceId">
+        <el-input v-model="addUpdateForm.dataSourceId" placeholder="请输入数据源ID" />
+      </el-form-item>
+      <el-form-item label="引擎名称" prop="engineName">
+        <el-input v-model="addUpdateForm.engineName" placeholder="请输入引擎名称" />
+      </el-form-item>
+      <el-form-item label="数据库表名" prop="tableName">
+        <el-input v-model="addUpdateForm.tableName" placeholder="请输入数据库表名" />
+      </el-form-item>
+      <el-form-item label="表注释" prop="tableComment">
+        <el-input v-model="addUpdateForm.tableComment" placeholder="请输入表注释" />
+      </el-form-item>
+      <el-form-item label="生成的类名" prop="codeName">
+        <el-input v-model="addUpdateForm.codeName" placeholder="请输入生成的类名" />
+      </el-form-item>
+      <el-form-item label="代码的注释" prop="codeComment">
+        <el-input v-model="addUpdateForm.codeComment" placeholder="请输入代码的注释" />
+      </el-form-item>
+      <el-form-item label="创建时间" prop="tableCreateTime">
+        <el-input v-model="addUpdateForm.tableCreateTime" placeholder="请输入创建时间" />
+      </el-form-item>
+      <el-form-item label="更新时间" prop="tableUpdateTime">
+        <el-input v-model="addUpdateForm.tableUpdateTime" placeholder="请输入更新时间" />
+      </el-form-item>
+    </el-form>
     <template #footer>
       <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>
       <el-button @click="close">取 消</el-button>

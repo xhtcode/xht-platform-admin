@@ -14,7 +14,29 @@
       :rules="rules"
       element-loading-text="拼命加载中"
       label-width="100px"
-    />
+    >
+      <el-form-item label="模板ID" prop="id">
+        <el-input v-model="addUpdateForm.id" placeholder="请输入模板ID" />
+      </el-form-item>
+      <el-form-item label="分组id" prop="groupId">
+        <el-input v-model="addUpdateForm.groupId" placeholder="请输入分组id" />
+      </el-form-item>
+      <el-form-item label="模板名称" prop="name">
+        <el-input v-model="addUpdateForm.name" placeholder="请输入模板名称" />
+      </el-form-item>
+      <el-form-item label="模板内容（Velocity语法）" prop="content">
+        <el-input v-model="addUpdateForm.content" placeholder="请输入模板内容（Velocity语法）" />
+      </el-form-item>
+      <el-form-item label="文件类型" prop="fileType">
+        <el-input v-model="addUpdateForm.fileType" placeholder="请输入文件类型" />
+      </el-form-item>
+      <el-form-item label="文件路径模板" prop="filePathTemplate">
+        <el-input v-model="addUpdateForm.filePathTemplate" placeholder="请输入文件路径模板" />
+      </el-form-item>
+      <el-form-item label="文件名模板" prop="fileNameTemplate">
+        <el-input v-model="addUpdateForm.fileNameTemplate" placeholder="请输入文件名模板" />
+      </el-form-item>
+    </el-form>
     <template #footer>
       <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>
       <el-button @click="close">取 消</el-button>

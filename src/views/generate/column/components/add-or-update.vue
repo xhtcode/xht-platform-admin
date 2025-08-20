@@ -15,6 +15,55 @@
       element-loading-text="拼命加载中"
       label-width="100px"
     />
+    <el-form-item label="数据库字段名" prop="columnName">
+      <el-input v-model="addUpdateForm.columnName" />
+    </el-form-item>
+    <el-form-item label="数据库字段类型,可用值:MySql,Oracle" prop="dbDataType">
+      <el-input v-model="addUpdateForm.dbDataType" />
+    </el-form-item>
+    <el-form-item label="字段注释" prop="columnComment">
+      <el-input v-model="addUpdateForm.columnComment" />
+    </el-form-item>
+    <el-form-item label="字段默认值" prop="defaultValue">
+      <el-input v-model="addUpdateForm.defaultValue" />
+    </el-form-item>
+    <el-form-item label="是否必填" prop="isRequired">
+      <el-input v-model="addUpdateForm.isRequired" />
+    </el-form-item>
+    <el-form-item label="是否主键" prop="isPrimary">
+      <el-input v-model="addUpdateForm.isPrimary" />
+    </el-form-item>
+
+    <el-form-item label="表单项 0：否 1：是" prop="extConfig.formItem">
+      <el-input v-model="addUpdateForm.extConfig.formItem" />
+    </el-form-item>
+    <el-form-item label="表单必填 0：否 1：是" prop="extConfig.formRequired">
+      <el-input v-model="addUpdateForm.extConfig.formRequired" />
+    </el-form-item>
+    <el-form-item label="表单类型" prop="extConfig.formType">
+      <el-input v-model="addUpdateForm.extConfig.formType" />
+    </el-form-item>
+    <el-form-item label="表单效验" prop="extConfig.formValidator">
+      <el-input v-model="addUpdateForm.extConfig.formValidator" />
+    </el-form-item>
+    <el-form-item label="列表项 0：否 1：是" prop="extConfig.gridItem">
+      <el-input v-model="addUpdateForm.extConfig.gridItem" />
+    </el-form-item>
+    <el-form-item label="列表排序 0：否 1：是" prop="extConfig.gridSort">
+      <el-input v-model="addUpdateForm.extConfig.gridSort" />
+    </el-form-item>
+    <el-form-item label="查询项 0：否 1：是" prop="extConfig.queryItem">
+      <el-input v-model="addUpdateForm.extConfig.queryItem" />
+    </el-form-item>
+    <el-form-item label="查询方式" prop="extConfig.queryType">
+      <el-input v-model="addUpdateForm.extConfig.queryType" />
+    </el-form-item>
+    <el-form-item label="查询表单类型" prop="extConfig.queryFormType">
+      <el-input v-model="addUpdateForm.extConfig.queryFormType" />
+    </el-form-item>
+    <el-form-item label="字段排序" prop="sortOrder">
+      <el-input v-model="addUpdateForm.sortOrder" />
+    </el-form-item>
     <template #footer>
       <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>
       <el-button @click="close">取 消</el-button>

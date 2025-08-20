@@ -22,26 +22,7 @@
         refresh-status
         search-status
         @refresh="handleQuery"
-      >
-        <el-button icon="Plus" size="small" type="primary" @click="handleAdd">新增</el-button>
-        <el-button
-          :disabled="state.singleStatus"
-          icon="Edit"
-          size="small"
-          type="success"
-          @click="handleEdit(state.selectedRows[0])"
-          >修改
-        </el-button>
-        <el-button
-          :disabled="state.multipleStatus"
-          icon="Delete"
-          size="small"
-          type="danger"
-          @click="handleDelete(undefined)"
-        >
-          批量删除
-        </el-button>
-      </table-tool-bar>
+      />
       <el-table
         v-loading="state.loadingStatus"
         :cell-style="cellStyle"
@@ -53,12 +34,6 @@
       >
         <el-table-column align="center" type="selection" width="55" />
         <el-table-column :index="createTableIndex" label="序号" type="index" width="55" />
-        <el-table-column align="center" label="操作" width="220px">
-          <template #default="{ row }">
-            <el-button icon="edit" link type="success" @click="handleEdit(row)">修改</el-button>
-            <el-button icon="delete" link type="danger" @click="handleDelete(row)">删除</el-button>
-          </template>
-        </el-table-column>
       </el-table>
       <xht-pagination
         v-model:current-page="state.queryParams.current"
@@ -68,18 +43,14 @@
         @pagination="handleQuery"
       />
     </div>
-    <add-or-update ref="addUpdateRef" @success="handleQuery()" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
 import { useTableQueryPageHooks, useTableToolHooks } from '@/hooks/use-crud-hooks'
-import AddOrUpdate from './components/add-or-update.vue'
 import type { GenLogQueryRequest, GenLogResponse } from '@/model/generate/log.model'
-import { queryGenLogPage, removeGenLogByIds } from '@/api/generate/log.api'
-import { useMessage, useMessageBox } from '@/hooks/use-message'
-import { ModeIdArrayType } from '@/model/base.model'
+import { queryGenLogPage } from '@/api/generate/log.api'
 
 defineOptions({ name: 'GenLogViewIndex' })
 
@@ -103,7 +74,6 @@ const { createTableIndex, handleQuery, handleSelectionChange } = useTableQueryPa
 const { queryParams } = toRefs(state)
 
 const queryFormRef = ref<FormInstance>()
-const addUpdateRef = ref()
 const { cellStyle, headerCellStyle } = useTableToolHooks()
 
 /**
@@ -112,48 +82,6 @@ const { cellStyle, headerCellStyle } = useTableToolHooks()
 const resetQuery = async () => {
   queryFormRef.value?.resetFields()
   await handleQuery()
-}
-/**
- * 处理新增
- */
-const handleAdd = () => {
-  addUpdateRef.value?.show('add')
-}
-
-/**
- * 处理编辑
- */
-const handleEdit = (row: GenLogResponse) => {
-  addUpdateRef.value?.show('update', row.id)
-}
-
-/**
- * 处理删除
- */
-const handleDelete = async (row?: GenLogResponse) => {
-  state.loadingStatus = true
-  let ids: ModeIdArrayType = []
-  if (row) {
-    ids = [row.id]
-  } else {
-    ids = state.selectedRows.map((item) => item.id)
-  }
-  if (!ids || ids.length <= 0) {
-    useMessage().error('请选择日志数据')
-    return
-  }
-  await useMessageBox()
-    .confirm('此操作将永久删除日志, 是否继续?')
-    .then(() => {
-      removeGenLogByIds(ids).then(async () => {
-        useMessage().success('删除日志成功!')
-        await handleQuery()
-      })
-    })
-    .catch((_) => {})
-    .finally(() => {
-      state.loadingStatus = false
-    })
 }
 
 onMounted(async () => {

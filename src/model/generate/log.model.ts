@@ -45,11 +45,11 @@ export interface GenLogQueryRequest extends PageQueryRequest {
   /**
    *生成批次号
    */
-  batchNo: string
+  batchNo?: string
   /**
    *生成时间
    */
-  generateTime: Record<string, unknown>
+  generateTime?: Record<string, unknown>
 }
 
 /**

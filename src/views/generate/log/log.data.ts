@@ -17,11 +17,6 @@ export const GenLogOperationForm: GenLogOperationRequest = {
 }
 
 /**
- * 增改页面 表单类型 表单校验
- */
-export const GenLogOperationRules: FormRules<GenLogOperationRequest> = {}
-
-/**
  * 列表显示配置
  */
 export const GenLogColumnOption: ColumnOption[] = []

@@ -14,7 +14,29 @@
       :rules="rules"
       element-loading-text="拼命加载中"
       label-width="100px"
-    />
+    >
+      <el-form-item label="数据库数据类型" prop="dbDataType">
+        <el-input v-model="addUpdateForm.dbDataType"/>
+      </el-form-item>
+      <el-form-item label="数据库类型" prop="dbType">
+        <el-select v-model="addUpdateForm.dbType" placeholder="请选择数据库类型">
+          <el-option :value="DataBaseTypeEnums.MYSQL" label="MySql" />
+          <el-option :value="DataBaseTypeEnums.ORACLE" label="Oracle" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="导入包路径" prop="importPackage">
+        <el-input v-model="addUpdateForm.importPackage"/>
+      </el-form-item>
+      <el-form-item label="目标编程语言" prop="targetLanguage">
+        <el-select v-model="addUpdateForm.targetLanguage" placeholder="请选择目标编程语言">
+          <el-option :value="LanguageTypeEnums.JAVA" label="Java" />
+          <el-option :value="LanguageTypeEnums.TYPESCRIPT" label="TypeScript" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="目标语言数据类型" prop="targetDataType">
+        <el-input v-model="addUpdateForm.targetDataType"/>
+      </el-form-item>
+    </el-form>
     <template #footer>
       <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>
       <el-button @click="close">取 消</el-button>
@@ -38,6 +60,7 @@ import {
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { handleFormErrors } from '@/utils/moudle/element'
 import type { ModeIdType } from '@/model/base.model'
+import { DataBaseTypeEnums, LanguageTypeEnums } from '@/model/generate/common.model'
 
 defineOptions({ name: 'GenTypeMappingAddOrUpdate' })
 const state = reactive<AddUpdateOption<GenTypeMappingOperationRequest>>({
