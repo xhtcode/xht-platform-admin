@@ -158,7 +158,7 @@ const resetQuery = async () => {
  * 处理新增
  */
 const handleAdd = () => {
-  addUpdateRef.value?.show('add')
+  addUpdateRef.value?.show('add',null)
 }
 
 /**

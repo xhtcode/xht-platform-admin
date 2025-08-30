@@ -164,8 +164,8 @@ const { createTableIndex, handleQuery, handleSelectionChange } = useTableQueryPa
 >(state, querySysDictPage)
 const { queryParams } = toRefs(state)
 
-const queryFormRef = ref<FormInstance>()
-const addUpdateRef = ref()
+const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
+const addUpdateRef = useTemplateRef('addUpdateRef')
 const { cellStyle, headerCellStyle } = useTableToolHooks()
 
 /**
@@ -179,7 +179,7 @@ const resetQuery = async () => {
  * 处理新增
  */
 const handleAdd = () => {
-  addUpdateRef.value?.show('add')
+  addUpdateRef.value?.show('add',null)
 }
 
 /**
