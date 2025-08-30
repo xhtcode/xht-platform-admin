@@ -13,13 +13,13 @@ export const useThemeHooks = () => {
    *  DeviceEnums.DESKTOP 侧边栏状态 true 显示，false 隐藏
    */
   const desktopShowStatus = computed(
-    () => !sidebarStatus.value && device.value === DeviceEnums.DESKTOP,
+    () => !sidebarStatus.value && device.value === DeviceEnums.DESKTOP
   )
   /**
    *  DeviceEnums.MOBILE 侧边栏状态 true 显示，false 隐藏
    */
   const mobileShowStatus = computed(
-    () => sidebarStatus.value && device.value === DeviceEnums.MOBILE,
+    () => sidebarStatus.value && device.value === DeviceEnums.MOBILE
   )
 
   /**
@@ -79,7 +79,7 @@ const useThemeColorHooks = () => {
     },
     {
       immediate: true,
-    },
+    }
   )
   onMounted(() => {
     changeThemeColor(colorType.value)
@@ -107,7 +107,7 @@ export const useThemeDeviceHooks = () => {
     },
     {
       immediate: true,
-    },
+    }
   )
   return {
     WIDTH_DESKTOP,

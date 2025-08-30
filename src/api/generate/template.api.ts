@@ -71,7 +71,7 @@ export const queryGenTemplateById = (id: ModeIdType): AxiosPromise<GenTemplateRe
  * 查询全部模板信息
  */
 export const queryGenTemplatePage = (
-  data?: GenTemplateQueryRequest,
+  data?: GenTemplateQueryRequest
 ): AxiosPromise<PageResponse<GenTemplateResponse>> => {
   return request({
     url: Api.QUERY_PAGE,

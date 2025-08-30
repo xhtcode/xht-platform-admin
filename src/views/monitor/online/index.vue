@@ -63,8 +63,8 @@
         <el-table-column label="登录时间" prop="loginTime" min-width="180" />
         <el-table-column fixed="right" label="操作" width="120px">
           <template #default="{ row }">
-            <el-button icon="delete" link type="danger" @click="handleForceLogout(row)"
-              >强退
+            <el-button icon="delete" link type="danger" @click="handleForceLogout(row)">
+              强退
             </el-button>
           </template>
         </el-table-column>

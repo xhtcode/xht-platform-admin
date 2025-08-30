@@ -10,7 +10,7 @@ import { toRef } from 'vue'
  */
 export const useTableQueryPageHooks = <Req extends PageQueryRequest, Res extends BasicResponse>(
   options: Reactive<TableQueryPageState<Req, Res>>,
-  queryPageApi: (req: Req) => AxiosPromise<PageResponse<Res>>,
+  queryPageApi: (req: Req) => AxiosPromise<PageResponse<Res>>
 ) => {
   // 默认配置
   const defaultOptions: TableQueryPageState<Req, Res> = {

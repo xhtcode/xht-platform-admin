@@ -85,7 +85,7 @@ export const querySysUserById = (id: number): AxiosPromise<SysUserResponse> => {
  * 查询全部
  */
 export const querySysUserPage = (
-  data?: SysUserQueryRequest,
+  data?: SysUserQueryRequest
 ): AxiosPromise<PageResponse<SysUserResponse>> => {
   return request({
     url: Api.QUERY_PAGE,

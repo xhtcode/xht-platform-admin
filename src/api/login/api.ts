@@ -1,6 +1,6 @@
 import request from '@/utils/request'
-import { CaptchaResponseType } from './type'
-import { AxiosPromise } from 'axios'
+import type { CaptchaResponseType } from './type'
+import type { AxiosPromise } from 'axios'
 
 const baseAuthURL = import.meta.env.VITE_AUTH_API_PREFIX
 const basicAuth = 'Basic ' + window.btoa('oidc-client:secret')

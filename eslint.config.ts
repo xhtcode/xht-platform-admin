@@ -25,51 +25,34 @@ export default defineConfigWithVueTs(
 
   // 跳过Prettier格式化相关规则
   skipFormatting,
-
+  {
+    languageOptions: {
+      parserOptions: {
+        tsconfigRootDir: import.meta.dirname, // 👈
+      },
+    },
+  },
   {
     rules: {
-      '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/no-unused-expressions': [
-        'error',
-        {
-          allowShortCircuit: true,
-          allowTernary: true,
-        },
-      ],
-      '@typescript-eslint/no-unsafe-function-type': 'off',
-      '@typescript-eslint/no-unused-vars': 'off',
+      '@typescript-eslint/no-explicit-any': 'off', // 允许使用any类型，方便开发
+      '@typescript-eslint/no-empty-function': 'off',
       '@typescript-eslint/no-empty-object-type': 'off',
-      // JavaScript规则调整
-      'prefer-const': [
-        'warn',
-        {
-          destructuring: 'any',
-          ignoreReadBeforeAssign: true,
-        },
-      ],
+      '@typescript-eslint/ban-ts-comment': 'off',
+      '@typescript-eslint/no-non-null-assertion': 'off',
+      '@typescript-eslint/no-unused-vars': 'off', // 关闭未使用变量警告
+      '@typescript-eslint/no-unused-expressions': 'warn', // 降级为警告
+      '@typescript-eslint/no-import-type-side-effects': 'error',
+      '@typescript-eslint/no-unsafe-function-type': 'off',
+      'no-unused-vars': 'off', // 关闭未使用变量警告
       'no-console': 'off',
       'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'warn',
-      // Vue规则调整
-      'vue/multi-word-component-names': [
-        'warn',
-        {
-          ignores: ['index', 'App'], // 允许常见的单字组件名
-        },
-      ],
-      'vue/no-v-model-argument': 'off', // 允许v-model带参数（适用于Vue 3）
-      'vue/require-default-prop': 'off', // 不强制要求props设置默认值
-      'vue/html-self-closing': [
-        'warn',
-        {
-          html: {
-            void: 'always',
-            normal: 'always',
-            component: 'always',
-          },
-          svg: 'always',
-          math: 'always',
-        },
-      ],
+      'vue/multi-word-component-names': 'off', // Vue 组件的名称应该是多词的，以提高可读性和维护性
+      'vue/no-reserved-component-names': 'error', // 禁止在组件定义中使用保留名称。
+      'vue/require-name-property': 'error', // 确保组件有name属性
+      'vue/require-prop-types': 'error', // props设置类型
+      'vue/require-default-prop': 'error', // props设置默认值
+      'vue/operator-linebreak': 'off', //关闭操作符换行规则的检查。
+      'vue/html-self-closing': 'error', //强制自闭样式
     },
   },
 )

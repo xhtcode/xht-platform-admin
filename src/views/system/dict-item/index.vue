@@ -69,7 +69,8 @@
           type="success"
           :disabled="state.singleStatus"
           @click="handleEdit(state.selectedRows[0])"
-          >修改
+        >
+          修改
         </el-button>
         <el-button
           icon="Delete"

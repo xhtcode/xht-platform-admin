@@ -59,7 +59,8 @@
           type="success"
           :disabled="state.singleStatus"
           @click="handleEdit(state.selectedRows[0])"
-          >修改
+        >
+          修改
         </el-button>
         <el-button
           icon="Delete"
@@ -96,8 +97,8 @@
             <el-tag v-if="row.dataScope === 1" type="primary" effect="dark">全部数据权限</el-tag>
             <el-tag v-if="row.dataScope === 2" type="success" effect="dark">自定数据权限</el-tag>
             <el-tag v-if="row.dataScope === 3" type="info" effect="dark">本部门数据权限</el-tag>
-            <el-tag v-if="row.dataScope === 4" type="warning" effect="dark"
-              >本部门及以下数据权限
+            <el-tag v-if="row.dataScope === 4" type="warning" effect="dark">
+              本部门及以下数据权限
             </el-tag>
             <el-tag v-if="row.dataScope === 5" type="danger" effect="dark">本岗位数据权限</el-tag>
             <el-tag v-if="row.dataScope === 6" color="#F2F6FC" effect="dark">仅本人数据权限</el-tag>
@@ -112,8 +113,8 @@
           <template #default="{ row }">
             <el-button icon="edit" link type="success" @click="handleEdit(row)">修改</el-button>
             <el-button icon="delete" link type="danger" @click="handleDelete(row)">删除</el-button>
-            <el-button icon="setting" link type="warning" @click="handleAuth(row)"
-              >分配权限
+            <el-button icon="setting" link type="warning" @click="handleAuth(row)">
+              分配权限
             </el-button>
           </template>
         </el-table-column>

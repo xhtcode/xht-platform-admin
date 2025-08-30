@@ -14,11 +14,8 @@
 <script lang="ts" setup>
 import { useRouteStore } from '@/store/modules/routes.store'
 import MenuItem from '@/layout/components/menu-item/index.vue'
-import { RouteRecordRaw, useRoute } from 'vue-router'
-import path from 'path-browserify'
+import { type RouteRecordRaw, useRoute } from 'vue-router'
 import DynamicRouter from '@/router/modules/dynamic'
-import { useThemeStore } from '@/store'
-import { storeToRefs } from 'pinia'
 import { useThemeHooks } from '@/hooks/use-theme-hooks'
 
 defineOptions({ name: 'MenuMain' })
@@ -70,7 +67,7 @@ function convertRouteToMenuRecursive(routes: RouteRecordRaw[], basePath = ''): a
   routes.forEach((item) => {
     if (!item.meta?.hiddenStatus) {
       const menuItem: any = {
-        path: resolveRoutePath(basePath, item.path),
+        path: item.path,
         meta: {
           title: item?.meta?.title,
           icon: item?.meta?.icon,
@@ -87,10 +84,6 @@ function convertRouteToMenuRecursive(routes: RouteRecordRaw[], basePath = ''): a
     }
   })
   return returnMenus
-}
-
-function resolveRoutePath(basePath?: string, routePath?: string) {
-  return basePath ? path.resolve(basePath, routePath ?? '') : (routePath ?? '')
 }
 </script>
 

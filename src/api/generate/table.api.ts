@@ -71,7 +71,7 @@ export const queryGenTableInfoById = (id: ModeIdType): AxiosPromise<GenTableInfo
  * 查询全部表信息
  */
 export const queryGenTableInfoPage = (
-  data?: GenTableInfoQueryRequest,
+  data?: GenTableInfoQueryRequest
 ): AxiosPromise<PageResponse<GenTableInfoResponse>> => {
   return request({
     url: Api.QUERY_PAGE,

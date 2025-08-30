@@ -57,7 +57,7 @@ export const handlePageParams = (queryParams: CrudQueryFrom, sortInfo?: SortInfo
 export const handleFormErrors = (
   response: AxiosResponse<any>,
   formRef: Ref<FormInstance | undefined>,
-  formData: Ref<Record<string, any>>,
+  formData: Ref<Record<string, any>>
 ): void => {
   if (!response?.data || !formRef.value) return
 

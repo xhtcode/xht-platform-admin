@@ -2,7 +2,7 @@
   <div class="main-container-none">
     <split-panes :push-other-panes="false">
       <split-pane-item min-size="20" size="20">
-        <div class="w100 h100"></div>
+        <div class="w100 h100" />
       </split-pane-item>
       <split-pane-item min-size="80" size="80">
         <div class="main-container-auto main-container-view">
@@ -15,7 +15,7 @@
           >
             <el-row>
               <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24" class="text-center">
-                <el-button icon="Search" type="primary" @click="handleQuery()"> 查询</el-button>
+                <el-button icon="Search" type="primary" @click="handleQuery()">查询</el-button>
                 <el-button icon="Refresh" @click="resetQuery">重置</el-button>
               </el-col>
             </el-row>
@@ -35,7 +35,8 @@
               size="small"
               type="success"
               @click="handleEdit(state.selectedRows[0])"
-              >修改
+            >
+              修改
             </el-button>
             <el-button
               :disabled="state.multipleStatus"
@@ -61,8 +62,8 @@
             <el-table-column align="center" label="操作" width="220px">
               <template #default="{ row }">
                 <el-button icon="edit" link type="success" @click="handleEdit(row)">修改</el-button>
-                <el-button icon="delete" link type="danger" @click="handleDelete(row)"
-                  >删除
+                <el-button icon="delete" link type="danger" @click="handleDelete(row)">
+                  删除
                 </el-button>
               </template>
             </el-table-column>

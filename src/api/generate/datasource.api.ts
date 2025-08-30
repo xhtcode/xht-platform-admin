@@ -72,7 +72,7 @@ export const queryGenDataSourceById = (id: ModeIdType): AxiosPromise<GenDataSour
  * 查询全部数据源配置
  */
 export const queryGenDataSourceList = (
-  data?: GenDataSourceQueryRequest,
+  data?: GenDataSourceQueryRequest
 ): AxiosPromise<GenDataSourceResponse[]> => {
   return request({
     url: Api.QUERY_LIST,

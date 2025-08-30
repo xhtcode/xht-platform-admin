@@ -35,7 +35,10 @@ defineOptions({ name: 'DeptPostSelect' })
 const state = reactive({
   loadingStatus: false,
 })
-const props = withDefaults(defineProps<DeptPostSelectTreeProps>(), {})
+const props = withDefaults(defineProps<DeptPostSelectTreeProps>(), {
+  deptId: undefined,
+  postId: undefined,
+})
 const emits = defineEmits<{
   (e: 'update:deptId'): void
   (e: 'update:postId'): void
@@ -71,7 +74,7 @@ watch(
   {
     immediate: true,
     deep: true,
-  },
+  }
 )
 </script>
 

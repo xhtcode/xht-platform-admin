@@ -23,7 +23,7 @@ enum Api {
  * 查询树形结构菜单
  */
 export const queryToolsMenuTree = (
-  type: 'ALL' | 'M' | 'C' | 'B',
+  type: 'ALL' | 'M' | 'C' | 'B'
 ): AxiosPromise<SysMenuTreeResponse> => {
   return request({
     url: Api.QUERY_MENU_TREE + type,

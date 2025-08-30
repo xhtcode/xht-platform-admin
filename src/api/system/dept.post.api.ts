@@ -82,7 +82,7 @@ export const querySysDeptPostById = (id: ModeIdType): AxiosPromise<SysDeptPostRe
  * 分页查询部门岗位信息
  */
 export const querySysDeptPostPage = (
-  data?: SysDeptPostQueryRequest,
+  data?: SysDeptPostQueryRequest
 ): AxiosPromise<PageResponse<SysDeptPostResponse>> => {
   return request({
     url: Api.QUERY_PAGE,

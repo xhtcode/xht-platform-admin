@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { App } from 'vue'
+import type { App } from 'vue'
 import StaticRouter from '@/router/modules/static'
 
 /**

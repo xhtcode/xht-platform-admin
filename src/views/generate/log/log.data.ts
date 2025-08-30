@@ -1,4 +1,3 @@
-import type { FormRules } from 'element-plus'
 import type { ColumnOption } from '@/components/table-tool-bar/types'
 import type { GenLogOperationRequest } from '@/model/generate/log.model'
 

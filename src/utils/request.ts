@@ -72,7 +72,7 @@ service.interceptors.request.use(
     useMessage().error('请求准备失败，请稍后重试')
     console.error('请求拦截器错误:', error)
     return Promise.reject(error)
-  },
+  }
 )
 
 /**
@@ -125,7 +125,7 @@ service.interceptors.response.use(
     useMessage().error(errorMsg)
     console.error('响应错误:', error)
     return Promise.reject(error)
-  },
+  }
 )
 
 export default service

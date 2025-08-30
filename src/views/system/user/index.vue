@@ -153,7 +153,8 @@
               type="success"
               @click="handleEdit(state.selectedRows[0])"
               :disabled="state.singleStatus"
-              >修改
+            >
+              修改
             </el-button>
             <el-button
               icon="Delete"
@@ -272,17 +273,17 @@
             <el-table-column fixed="right" label="操作" width="200px">
               <template #default="{ row }">
                 <el-space wrap>
-                  <el-button icon="edit" link type="success" @click="handleEdit(row)"
-                    >修改用户
+                  <el-button icon="edit" link type="success" @click="handleEdit(row)">
+                    修改用户
                   </el-button>
-                  <el-button icon="delete" link type="danger" @click="handleDelete(row)"
-                    >删除用户
+                  <el-button icon="delete" link type="danger" @click="handleDelete(row)">
+                    删除用户
                   </el-button>
-                  <el-button icon="key" link type="warning" @click="handleResetPwd(row)"
-                    >重置密码
+                  <el-button icon="key" link type="warning" @click="handleResetPwd(row)">
+                    重置密码
                   </el-button>
-                  <el-button icon="User" link type="primary" @click="handleUserRole(row)"
-                    >用户授权
+                  <el-button icon="User" link type="primary" @click="handleUserRole(row)">
+                    用户授权
                   </el-button>
                 </el-space>
               </template>

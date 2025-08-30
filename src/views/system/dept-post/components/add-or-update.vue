@@ -68,8 +68,8 @@
                 <span>
                   {{ addUpdateForm.postHave ? addUpdateForm.postHave : 0 }}/{{
                     addUpdateForm.postLimit
-                  }}</span
-                >
+                  }}
+                </span>
               </template>
             </el-input-number>
           </el-form-item>

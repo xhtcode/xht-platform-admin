@@ -36,7 +36,7 @@
             <el-icon>
               <switch-button />
             </el-icon>
-            <span class="user-select-none"> 退出登录</span>
+            <span class="user-select-none">退出登录</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </template>

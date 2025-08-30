@@ -15,7 +15,7 @@ const useTagsStore = defineStore(
      * 缓存视图列表
      */
     const cachedViews = computed<string[] | any>(() =>
-      visitedViews.value.filter((item) => item.cacheStatus).map((item) => item.name),
+      visitedViews.value.filter((item) => item.cacheStatus).map((item) => item.name)
     )
     /**
      * 添加已访问视图到已访问视图列表中
@@ -71,7 +71,7 @@ const useTagsStore = defineStore(
         return
       }
       visitedViews.value = visitedViews.value.filter(
-        (item, index) => !!(index >= currIndex || item?.affixStatus),
+        (item, index) => !!(index >= currIndex || item?.affixStatus)
       )
     }
 
@@ -84,7 +84,7 @@ const useTagsStore = defineStore(
         return
       }
       visitedViews.value = visitedViews.value.filter(
-        (item, index) => !!(index <= currIndex || item?.affixStatus),
+        (item, index) => !!(index <= currIndex || item?.affixStatus)
       )
     }
 
@@ -99,6 +99,6 @@ const useTagsStore = defineStore(
       removeOtherVisitedViews,
     }
   },
-  { persist: pInIaPersistConfig('tags', ['visitedViews']) },
+  { persist: pInIaPersistConfig('tags', ['visitedViews']) }
 )
 export default useTagsStore

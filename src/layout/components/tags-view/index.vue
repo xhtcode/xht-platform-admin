@@ -295,7 +295,7 @@ const moveToTarget = (currentTag: TagsViewType) => {
     }).start()
   } else {
     const currentIndex: number = tagList.findIndex(
-      (item) => (item?.to as RouteLocationNormalized).path === currentTag.path,
+      (item) => (item?.to as RouteLocationNormalized).path === currentTag.path
     )
     const tgsRefs = document.getElementsByClassName(`tags-view-item`)
     const prevTag = tgsRefs[currentIndex - 1] as HTMLElement
@@ -365,6 +365,6 @@ watch(
   },
   {
     immediate: true,
-  },
+  }
 )
 </script>

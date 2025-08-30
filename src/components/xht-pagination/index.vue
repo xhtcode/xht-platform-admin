@@ -61,6 +61,11 @@ const props = withDefaults(defineProps<PropsType>(), {
   disabled: false, //是否禁用分页
   teleported: true, //是否将下拉菜单teleport至 body
   hideOnSinglePage: true, //只有一页时是否隐藏
+  prevText: undefined, //	替代图标显示的上一页文字
+  prevIcon: undefined,
+  nextText: undefined,
+  nextIcon: undefined,
+  pageCount: undefined,
 })
 
 const emits = defineEmits(['update:pageSize', 'update:currentPage', 'pagination'])

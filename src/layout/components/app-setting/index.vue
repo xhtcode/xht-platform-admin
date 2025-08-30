@@ -149,7 +149,7 @@ const predefineColors = ref([
  * 禁用 颜色选择器
  */
 const displayColorPicker = computed(
-  () => darkStatus.value || mournModeStatus.value || colorWeaknessModeStatus.value,
+  () => darkStatus.value || mournModeStatus.value || colorWeaknessModeStatus.value
 )
 /**
  * 恢复默认配置

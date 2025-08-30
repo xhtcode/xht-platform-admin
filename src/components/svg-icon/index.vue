@@ -14,6 +14,7 @@ interface PropsType {
 
 const props = withDefaults(defineProps<PropsType>(), {
   prefix: 'icon',
+  color: undefined,
   size: 14,
 })
 /**

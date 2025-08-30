@@ -93,5 +93,5 @@ export const useThemeStore = defineStore(
       'sizeType',
       'colorType',
     ]),
-  },
+  }
 )

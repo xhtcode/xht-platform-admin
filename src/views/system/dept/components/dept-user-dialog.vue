@@ -8,11 +8,11 @@
   >
     <template #header>
       <div class="flex justify-between items-center">
-        <el-text tag="b" size="large"> 部门主管筛选</el-text>
+        <el-text tag="b" size="large">部门主管筛选</el-text>
         <div v-if="state.currentRow" class="h100 items-center flex">
-          <el-text size="small"> 已选择:</el-text>
-          <el-tag effect="dark" size="small"
-            >{{ state.currentRow?.userName }}:{{ state.currentRow?.nickName }}
+          <el-text size="small">已选择:</el-text>
+          <el-tag effect="dark" size="small">
+            {{ state.currentRow?.userName }}:{{ state.currentRow?.nickName }}
           </el-tag>
         </div>
       </div>
@@ -83,7 +83,9 @@ interface DeptUserProps {
   modelValue?: any
 }
 
-const props = withDefaults(defineProps<DeptUserProps>(), {})
+const props = withDefaults(defineProps<DeptUserProps>(), {
+  modelValue: undefined,
+})
 
 const { cellStyle, headerCellStyle } = useTableToolHooks()
 const tableRef = useTemplateRef('tableRef')

@@ -94,7 +94,8 @@
               type="success"
               :disabled="state.singleStatus"
               @click="handleEdit(state.selectedRows[0])"
-              >修改
+            >
+              修改
             </el-button>
             <el-button
               icon="Delete"
@@ -149,11 +150,9 @@
             <el-table-column label="更新人" prop="updateBy" width="160" />
             <el-table-column fixed="right" label="操作" width="260px">
               <template #default="{ row }">
-                <el-button icon="edit" link type="success" @click="handleEdit(row)"
-                  >修改
-                </el-button>
-                <el-button icon="delete" link type="danger" @click="handleDelete(row)"
-                  >删除
+                <el-button icon="edit" link type="success" @click="handleEdit(row)">修改</el-button>
+                <el-button icon="delete" link type="danger" @click="handleDelete(row)">
+                  删除
                 </el-button>
               </template>
             </el-table-column>

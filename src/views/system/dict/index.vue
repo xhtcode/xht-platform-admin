@@ -69,7 +69,8 @@
           type="success"
           :disabled="state.singleStatus"
           @click="handleEdit(state.selectedRows[0])"
-          >修改
+        >
+          修改
         </el-button>
         <el-button
           icon="Delete"
@@ -95,8 +96,8 @@
         <el-table-column label="字典名称" prop="dictName" width="120" />
         <el-table-column label="字典编码" prop="dictCode" width="120">
           <template #default="{ row }">
-            <router-link :to="`/system/dict/${row.id}`" class="link-type"
-              >{{ row.dictCode }}
+            <router-link :to="`/system/dict/${row.id}`" class="link-type">
+              {{ row.dictCode }}
             </router-link>
           </template>
         </el-table-column>

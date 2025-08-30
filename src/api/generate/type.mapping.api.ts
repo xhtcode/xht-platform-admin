@@ -37,7 +37,7 @@ export const saveGenTypeMapping = (data: GenTypeMappingOperationRequest): AxiosP
  * 修改字段映射数据
  */
 export const updateGenTypeMapping = (
-  data: GenTypeMappingOperationRequest,
+  data: GenTypeMappingOperationRequest
 ): AxiosPromise<boolean> => {
   return request({
     url: Api.UPDATE,
@@ -74,7 +74,7 @@ export const queryGenTypeMappingById = (id: ModeIdType): AxiosPromise<GenTypeMap
  * 分页查询字段映射
  */
 export const queryGenTypeMappingPage = (
-  data?: GenTypeMappingQueryRequest,
+  data?: GenTypeMappingQueryRequest
 ): AxiosPromise<PageResponse<GenTypeMappingResponse>> => {
   return request({
     url: Api.QUERY_PAGE,
@@ -88,7 +88,7 @@ export const queryGenTypeMappingPage = (
  * 查询全部字段映射
  */
 export const queryGenTypeMappingList = (
-  data?: GenTypeMappingQueryRequest,
+  data?: GenTypeMappingQueryRequest
 ): AxiosPromise<GenTypeMappingResponse[]> => {
   return request({
     url: Api.QUERY_LIST,

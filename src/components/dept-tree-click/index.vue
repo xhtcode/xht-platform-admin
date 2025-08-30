@@ -51,7 +51,9 @@ interface DeptSelectTreeProps {
   modelValue?: any
 }
 
-const props = withDefaults(defineProps<DeptSelectTreeProps>(), {})
+const props = withDefaults(defineProps<DeptSelectTreeProps>(), {
+  modelValue: undefined,
+})
 
 const defaultProps: any = {
   children: 'children',

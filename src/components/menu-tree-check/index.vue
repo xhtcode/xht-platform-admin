@@ -28,8 +28,10 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  modelValue: () => [],
   disabled: false,
   showTopMenu: false,
+  type: 'ALL',
 })
 
 const menuTreeRef = ref<any>()

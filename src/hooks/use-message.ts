@@ -1,7 +1,3 @@
-import i18n from '@/lang'
-
-const { t } = i18n.global
-
 interface MessageImplements {
   info(title: string): void
 
@@ -70,38 +66,38 @@ export function useMessageBox() {
   class MessageBoxClass implements MessageImplements {
     // 普通提示
     info(msg: string): void {
-      ElMessageBox.alert(msg, t('common.message.box.title'), { type: 'info' }).then()
+      ElMessageBox.alert(msg, 'common.message.box.title', { type: 'info' }).then()
     }
 
     // 警告提示
     warning(msg: string): void {
-      ElMessageBox.alert(msg, t('common.message.box.title'), { type: 'warning' }).then()
+      ElMessageBox.alert(msg, 'common.message.box.title', { type: 'warning' }).then()
     }
 
     // 成功提示
     success(msg: string): void {
-      ElMessageBox.alert(msg, t('common.message.box.title'), { type: 'success' }).then()
+      ElMessageBox.alert(msg, 'common.message.box.title', { type: 'success' }).then()
     }
 
     // 错误提示
     error(msg: string): void {
-      ElMessageBox.alert(msg, t('common.message.box.title'), { type: 'error' }).then()
+      ElMessageBox.alert(msg, 'common.message.box.title', { type: 'error' }).then()
     }
 
     // 确认窗体
     confirm(msg: string) {
-      return ElMessageBox.confirm(msg, t('common.message.box.title'), {
-        confirmButtonText: t('common.button.confirmSuccess'),
-        cancelButtonText: t('common.button.confirmError'),
+      return ElMessageBox.confirm(msg, 'common.message.box.title', {
+        confirmButtonText: 'common.button.confirmSuccess',
+        cancelButtonText: 'common.button.confirmError',
         type: 'warning',
       })
     }
 
     // 提交内容
     prompt(msg: string) {
-      return ElMessageBox.prompt(msg, t('common.message.box.title'), {
-        confirmButtonText: t('common.button.confirmSuccess'),
-        cancelButtonText: t('common.button.confirmError'),
+      return ElMessageBox.prompt(msg, 'common.message.box.title', {
+        confirmButtonText: 'common.button.confirmSuccess',
+        cancelButtonText: 'common.button.confirmError',
         type: 'warning',
       })
     }

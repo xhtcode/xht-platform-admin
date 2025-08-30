@@ -26,7 +26,7 @@
             </el-form-item>
           </el-col>
           <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24" class="text-center">
-            <el-button icon="Search" type="primary" @click="handleQuery()"> 查询</el-button>
+            <el-button icon="Search" type="primary" @click="handleQuery()">查询</el-button>
             <el-button icon="Refresh" @click="resetQuery">重置</el-button>
           </el-col>
         </el-row>
@@ -46,7 +46,8 @@
           size="small"
           type="success"
           @click="handleEdit(state.selectedRows[0])"
-          >修改
+        >
+          修改
         </el-button>
         <el-button
           :disabled="state.multipleStatus"

@@ -2,7 +2,7 @@ import type { ColumnOption } from '@/components/table-tool-bar/types'
 import type { Ref } from 'vue'
 
 export const useColumnOptionHooks = (
-  data: ColumnOption[],
+  data: ColumnOption[]
 ): {
   columnOption: ComputedRef<CommonObjValue<boolean>>
   sourceColumnOption: Ref<ColumnOption[]>
@@ -14,7 +14,7 @@ export const useColumnOptionHooks = (
         accumulator[currentValue.value] = currentValue.visible
         return accumulator
       },
-      {},
+      {}
     )
   })
   return {

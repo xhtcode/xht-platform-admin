@@ -84,7 +84,7 @@ export const querySysRoleById = (id: ModeIdType): AxiosPromise<SysRoleResponse> 
  * 查询全部
  */
 export const querySysRolePage = (
-  data?: SysRoleQueryRequest,
+  data?: SysRoleQueryRequest
 ): AxiosPromise<PageResponse<SysRoleResponse>> => {
   return request({
     url: Api.QUERY_PAGE,

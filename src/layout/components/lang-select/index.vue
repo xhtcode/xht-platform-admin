@@ -47,7 +47,7 @@ const langOptions = [
 ]
 
 const languageType = computed<string>(() =>
-  themeStore.languageType === 'zh-cn' ? '简体中文' : 'English',
+  themeStore.languageType === 'zh-cn' ? '简体中文' : 'English'
 )
 /**
  * 语言切换

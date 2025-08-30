@@ -71,7 +71,7 @@ export const queryGenColumnInfoById = (id: ModeIdType): AxiosPromise<GenColumnIn
  * 查询全部字段信息
  */
 export const queryGenColumnInfoPage = (
-  data?: GenColumnInfoQueryRequest,
+  data?: GenColumnInfoQueryRequest
 ): AxiosPromise<PageResponse<GenColumnInfoResponse>> => {
   return request({
     url: Api.QUERY_PAGE,

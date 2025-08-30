@@ -8,7 +8,6 @@ import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import { dependencies, devDependencies, engines, name, version } from './package.json'
-import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 // 平台的名称、版本、运行所需的 node 版本、依赖、构建时间的类型提示
 const __APP_INFO__ = {
   pkg: { name, version, engines, dependencies, devDependencies },
@@ -16,7 +15,6 @@ const __APP_INFO__ = {
 }
 // 路径常量定义
 const pathSrc = resolve(__dirname, 'src')
-const iconDirs = resolve(process.cwd(), 'src/assets/icons')
 
 // Element Plus 预加载组件样式（按需优化）
 const elementPlusPreloadStyles = [
@@ -104,11 +102,6 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
       UnoCSS(),
       // Vue DevTools（仅开发环境启用）
       !isProduction && vueDevTools(),
-      // SVG图标处理
-      createSvgIconsPlugin({
-        iconDirs: [iconDirs], //  指定需要缓存的图标文件夹
-        symbolId: 'icon-[dir]-[name]', // 指定symbolId格式
-      }),
       // 自动导入配置 https://github.com/sxzz/element-plus-best-practices/blob/main/vite.config.ts
       AutoImport({
         imports: ['vue', '@vueuse/core'],

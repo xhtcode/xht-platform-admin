@@ -82,6 +82,8 @@ const props = withDefaults(defineProps<PropsType>(), {
   title: '图标选择器',
   disabled: false, // 禁用
   clearable: false, // 禁用
+  prepend: undefined,
+  size: 'default',
 })
 const emit = defineEmits(['update:modelValue'])
 const modelValue = useVModel(props, 'modelValue', emit)

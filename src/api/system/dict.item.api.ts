@@ -69,7 +69,7 @@ export const querySysDictItemById = (id: ModeIdType): AxiosPromise<SysDictItemRe
  * 查询全部字典项
  */
 export const querySysDictItemPage = (
-  data?: SysDictItemQueryRequest,
+  data?: SysDictItemQueryRequest
 ): AxiosPromise<PageResponse<SysDictItemResponse>> => {
   return request({
     url: Api.QUERY_PAGE,
