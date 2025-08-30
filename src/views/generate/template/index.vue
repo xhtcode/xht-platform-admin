@@ -1,73 +1,82 @@
 <template>
   <div class="main-container-none">
-    <div class="main-container-auto main-container-view">
-      <el-form
-        ref="queryFormRef"
-        :disabled="state.loadingStatus"
-        :model="queryParams"
-        class="user-select-display"
-        label-width="120px"
-      >
-        <el-row>
-          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24" class="text-center">
-            <el-button icon="Search" type="primary" @click="handleQuery()"> 查询</el-button>
-            <el-button icon="Refresh" @click="resetQuery">重置</el-button>
-          </el-col>
-        </el-row>
-      </el-form>
-      <table-tool-bar
-        v-model:show-search="state.searchStatus"
-        :column-data="[]"
-        column-status
-        refresh-status
-        search-status
-        @refresh="handleQuery"
-      >
-        <el-button icon="Plus" size="small" type="primary" @click="handleAdd">新增</el-button>
-        <el-button
-          :disabled="state.singleStatus"
-          icon="Edit"
-          size="small"
-          type="success"
-          @click="handleEdit(state.selectedRows[0])"
-          >修改
-        </el-button>
-        <el-button
-          :disabled="state.multipleStatus"
-          icon="Delete"
-          size="small"
-          type="danger"
-          @click="handleDelete(undefined)"
-        >
-          批量删除
-        </el-button>
-      </table-tool-bar>
-      <el-table
-        v-loading="state.loadingStatus"
-        :cell-style="cellStyle"
-        :data="state.tableList"
-        :header-cell-style="headerCellStyle"
-        class="flex-1"
-        empty-text="系统相关模板信息！"
-        @selection-change="handleSelectionChange"
-      >
-        <el-table-column align="center" type="selection" width="55" />
-        <el-table-column :index="createTableIndex" label="序号" type="index" width="55" />
-        <el-table-column align="center" label="操作" width="220px">
-          <template #default="{ row }">
-            <el-button icon="edit" link type="success" @click="handleEdit(row)">修改</el-button>
-            <el-button icon="delete" link type="danger" @click="handleDelete(row)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <xht-pagination
-        v-model:current-page="state.queryParams.current"
-        v-model:page-size="state.queryParams.size"
-        :page-count="state.pages"
-        :total="state.total"
-        @pagination="handleQuery"
-      />
-    </div>
+    <split-panes :push-other-panes="false">
+      <split-pane-item min-size="20" size="20">
+        <div class="w100 h100"></div>
+      </split-pane-item>
+      <split-pane-item min-size="80" size="80">
+        <div class="main-container-auto main-container-view">
+          <el-form
+            ref="queryFormRef"
+            :disabled="state.loadingStatus"
+            :model="queryParams"
+            class="user-select-display"
+            label-width="120px"
+          >
+            <el-row>
+              <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24" class="text-center">
+                <el-button icon="Search" type="primary" @click="handleQuery()"> 查询</el-button>
+                <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+              </el-col>
+            </el-row>
+          </el-form>
+          <table-tool-bar
+            v-model:show-search="state.searchStatus"
+            :column-data="[]"
+            column-status
+            refresh-status
+            search-status
+            @refresh="handleQuery"
+          >
+            <el-button icon="Plus" size="small" type="primary" @click="handleAdd">新增</el-button>
+            <el-button
+              :disabled="state.singleStatus"
+              icon="Edit"
+              size="small"
+              type="success"
+              @click="handleEdit(state.selectedRows[0])"
+              >修改
+            </el-button>
+            <el-button
+              :disabled="state.multipleStatus"
+              icon="Delete"
+              size="small"
+              type="danger"
+              @click="handleDelete(undefined)"
+            >
+              批量删除
+            </el-button>
+          </table-tool-bar>
+          <el-table
+            v-loading="state.loadingStatus"
+            :cell-style="cellStyle"
+            :data="state.tableList"
+            :header-cell-style="headerCellStyle"
+            class="flex-1"
+            empty-text="系统相关模板信息！"
+            @selection-change="handleSelectionChange"
+          >
+            <el-table-column align="center" type="selection" width="55" />
+            <el-table-column :index="createTableIndex" label="序号" type="index" width="55" />
+            <el-table-column align="center" label="操作" width="220px">
+              <template #default="{ row }">
+                <el-button icon="edit" link type="success" @click="handleEdit(row)">修改</el-button>
+                <el-button icon="delete" link type="danger" @click="handleDelete(row)"
+                  >删除
+                </el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <xht-pagination
+            v-model:current-page="state.queryParams.current"
+            v-model:page-size="state.queryParams.size"
+            :page-count="state.pages"
+            :total="state.total"
+            @pagination="handleQuery"
+          />
+        </div>
+      </split-pane-item>
+    </split-panes>
     <add-or-update ref="addUpdateRef" @success="handleQuery()" />
   </div>
 </template>

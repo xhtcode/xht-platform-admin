@@ -23,6 +23,7 @@
         search-status
         @refresh="handleQuery"
       >
+        <el-button>导入</el-button>
         <el-button icon="Plus" size="small" type="primary" @click="handleAdd">新增</el-button>
         <el-button
           :disabled="state.singleStatus"
@@ -55,8 +56,10 @@
         <el-table-column :index="createTableIndex" label="序号" type="index" width="55" />
         <el-table-column align="center" label="操作" width="220px">
           <template #default="{ row }">
+            <el-button>同步</el-button>
             <el-button icon="edit" link type="success" @click="handleEdit(row)">修改</el-button>
             <el-button icon="delete" link type="danger" @click="handleDelete(row)">删除</el-button>
+            <el-button>下载</el-button>
           </template>
         </el-table-column>
       </el-table>

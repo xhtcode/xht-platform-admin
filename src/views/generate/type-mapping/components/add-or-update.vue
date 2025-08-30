@@ -16,7 +16,7 @@
       label-width="100px"
     >
       <el-form-item label="数据库数据类型" prop="dbDataType">
-        <el-input v-model="addUpdateForm.dbDataType"/>
+        <el-input v-model="addUpdateForm.dbDataType" />
       </el-form-item>
       <el-form-item label="数据库类型" prop="dbType">
         <el-select v-model="addUpdateForm.dbType" placeholder="请选择数据库类型">
@@ -25,7 +25,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="导入包路径" prop="importPackage">
-        <el-input v-model="addUpdateForm.importPackage"/>
+        <el-input v-model="addUpdateForm.importPackage" />
       </el-form-item>
       <el-form-item label="目标编程语言" prop="targetLanguage">
         <el-select v-model="addUpdateForm.targetLanguage" placeholder="请选择目标编程语言">
@@ -34,7 +34,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="目标语言数据类型" prop="targetDataType">
-        <el-input v-model="addUpdateForm.targetDataType"/>
+        <el-input v-model="addUpdateForm.targetDataType" />
       </el-form-item>
     </el-form>
     <template #footer>

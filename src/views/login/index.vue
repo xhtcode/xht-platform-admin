@@ -8,6 +8,11 @@
     </div>
     <!-- 登录页内容 -->
     <div class="login-form">
+      <div v-for="item in 10" :key="item">
+        <context-menu2>
+          <el-tag>测试{{ item }}</el-tag>
+        </context-menu2>
+      </div>
       <el-form ref="loginFormRef" :model="loginFormData" :rules="loginRules">
         <div class="form-title">
           <h2>小糊涂管理系统</h2>
@@ -90,6 +95,8 @@ import { useUserInfoStore } from '@/store/modules/user.store'
 import { useMessage } from '@/hooks/use-message'
 import { useRouter } from 'vue-router'
 import { HOME_PAGE_PATH } from '@/common/constant'
+import { toggleDark } from '@/utils/dark'
+import ContextMenu2 from '@/components/context-menu/index2.vue'
 
 const loginFormRef = ref<FormInstance>()
 defineOptions({
@@ -170,7 +177,9 @@ async function handleLoginSubmit() {
 }
 
 // 主题切换
-const toggleTheme = () => {}
+const toggleTheme = () => {
+  toggleDark()
+}
 
 // 检查输入大小写
 function checkCapslock(event: KeyboardEvent) {

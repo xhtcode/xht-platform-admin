@@ -9,6 +9,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     ContextMenu: typeof import('./../components/context-menu/index.vue')['default']
+    DatasourceSelect: typeof import('./../components/generate-components/datasource-select/index.vue')['default']
     DeptPostSelect: typeof import('./../components/dept-post-select/index.vue')['default']
     DeptTreeClick: typeof import('./../components/dept-tree-click/index.vue')['default']
     DeptTreeSelect: typeof import('./../components/dept-tree-select/index.vue')['default']
@@ -76,6 +77,7 @@ declare module 'vue' {
     ElTreeSelect: typeof import('element-plus/es')['ElTreeSelect']
     ElWatermark: typeof import('element-plus/es')['ElWatermark']
     IconSelect: typeof import('./../components/icon-select/index.vue')['default']
+    Index2: typeof import('./../components/context-menu/index2.vue')['default']
     MenuTree: typeof import('./../components/menu-tree/index.vue')['default']
     MenuTreeCheck: typeof import('./../components/menu-tree-check/index.vue')['default']
     MenuTreeSelect: typeof import('./../components/menu-tree-select/index.vue')['default']
@@ -84,6 +86,7 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     SvgIcon: typeof import('./../components/svg-icon/index.vue')['default']
     TableToolBar: typeof import('./../components/table-tool-bar/index.vue')['default']
+    TypeMappingSelect: typeof import('./../components/generate-components/type-mapping-select/index.vue')['default']
     UserStatus: typeof import('./../components/system-dict/user-status.vue')['default']
     XhtCard: typeof import('./../components/xht-card/index.vue')['default']
     XhtPagination: typeof import('./../components/xht-pagination/index.vue')['default']

@@ -16,7 +16,7 @@
       label-width="100px"
     >
       <el-form-item label="数据源名称" prop="name">
-        <el-input v-model="addUpdateForm.name"/>
+        <el-input v-model="addUpdateForm.name" />
       </el-form-item>
       <el-form-item label="数据库类型" prop="dbType">
         <el-select v-model="addUpdateForm.dbType" placeholder="请选择数据库类型">
@@ -25,13 +25,13 @@
         </el-select>
       </el-form-item>
       <el-form-item label="数据库地址" prop="url">
-        <el-input v-model="addUpdateForm.url"/>
+        <el-input v-model="addUpdateForm.url" />
       </el-form-item>
       <el-form-item label="连接测试结果" prop="testResult">
-        <el-input v-model="addUpdateForm.testResult"/>
+        <el-input v-model="addUpdateForm.testResult" />
       </el-form-item>
       <el-form-item label="最后测试时间" prop="lastTestTime">
-        <el-input v-model="addUpdateForm.lastTestTime"/>
+        <el-input v-model="addUpdateForm.lastTestTime" />
       </el-form-item>
     </el-form>
     <template #footer>

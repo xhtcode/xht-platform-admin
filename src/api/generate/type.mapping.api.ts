@@ -18,6 +18,7 @@ enum Api {
   DELETE = '/gen/type/mapping/delete',
   QUERY_ONE = '/gen/type/mapping/get/',
   QUERY_PAGE = '/gen/type/mapping/page',
+  QUERY_LIST = '/gen/type/mapping/list',
 }
 
 /**
@@ -70,13 +71,27 @@ export const queryGenTypeMappingById = (id: ModeIdType): AxiosPromise<GenTypeMap
 }
 
 /**
- * 查询全部字段映射
+ * 分页查询字段映射
  */
 export const queryGenTypeMappingPage = (
   data?: GenTypeMappingQueryRequest,
 ): AxiosPromise<PageResponse<GenTypeMappingResponse>> => {
   return request({
     url: Api.QUERY_PAGE,
+    baseURL,
+    method: 'get',
+    params: { ...data },
+  })
+}
+
+/**
+ * 查询全部字段映射
+ */
+export const queryGenTypeMappingList = (
+  data?: GenTypeMappingQueryRequest,
+): AxiosPromise<GenTypeMappingResponse[]> => {
+  return request({
+    url: Api.QUERY_LIST,
     baseURL,
     method: 'get',
     params: { ...data },
