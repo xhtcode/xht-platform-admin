@@ -1,6 +1,6 @@
 <template>
   <div class="user-info-container layout-header-top-item">
-    <el-dropdown trigger="click">
+    <el-dropdown trigger="click" size="default">
       <div class="avatar-container flex-center">
         <div class="flex-center">
           <el-avatar alt="avatar" class="avatar-image user-select-none" :src="aa" />

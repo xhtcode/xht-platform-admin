@@ -3,9 +3,8 @@
     v-model="state.visibleStatus"
     :before-close="close"
     title="分配角色"
-    width="30vw"
+    size="45%"
     append-to-body
-    :close-on-click-modal="false"
   >
     <template #header>
       <div class="user-role-dialog-title">

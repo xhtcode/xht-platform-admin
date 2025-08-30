@@ -48,7 +48,6 @@
     >
       登录
     </el-button>
-    {{ userInfoStore.token }}
     <!-- 忘记密码 -->
     <div class="text-right">
       <router-link to="/" class="text-14px color-#3b82f6 font-500 decoration-none">

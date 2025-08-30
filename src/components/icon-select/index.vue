@@ -8,7 +8,7 @@
       @click="openDialog"
     >
       <template #prepend>
-        <svg-icon :name="modelValue" @click="openDialog()" />
+        <div :class="`icon-menu-${modelValue}`" @click="openDialog()" />
       </template>
       <template v-if="clearable" #suffix>
         <el-icon class="button-hover" size="1em" @click="clearableValue">
@@ -34,7 +34,7 @@
         size="large"
       >
         <template #append>
-          <svg-icon :name="modelValue" />
+          <div :class="`icon-menu-${modelValue}`" />
         </template>
       </el-input>
       <el-scrollbar height="270px">
@@ -47,7 +47,7 @@
             @click="selectIcon(item, false)"
             @dblclick="selectIcon(item, true)"
           >
-            <svg-icon :name="`${item.iconName}`" :size="18" />
+            <div :class="`icon-menu-${item.iconName}`" />
           </li>
         </ul>
         <el-empty v-if="iconsList.length === 0" description="未搜索到您要找的图标~" />
@@ -60,7 +60,7 @@
 import { useVModel } from '@vueuse/core'
 import { CircleClose } from '@element-plus/icons-vue'
 
-defineOptions({ name: 'SelectIcon' })
+defineOptions({ name: 'SelectIcon', inheritAttrs: false })
 
 interface IconItemOptions {
   itemType: string
@@ -93,8 +93,8 @@ const iconItems = ref<IconItemOptions[]>([])
 
 const initSvg = () => {
   iconItems.value = []
-  for (const icon in import.meta.glob('../../assets/icons/**/*.svg')) {
-    const iconName = icon.split('assets/icons/')[1].split('.svg')[0].replace('/', '-')
+  for (const icon in import.meta.glob('../../assets/icons/menu/*.svg')) {
+    const iconName = icon.split('assets/icons/menu/')[1].split('.svg')[0].replace('/', '-')
     iconItems.value?.push({ itemType: 'svg', iconName: iconName })
   }
 }

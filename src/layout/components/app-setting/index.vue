@@ -1,6 +1,6 @@
 <template>
   <div class="app-setting layout-header-top-item" @click="state.visibleStatus = true">
-    <svg-icon name="theme" :size="20" />
+    <div class="icon-common-theme text-16px" />
     <el-drawer
       v-model="state.visibleStatus"
       :close-on-click-modal="false"

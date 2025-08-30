@@ -105,7 +105,11 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
       // 自动导入配置 https://github.com/sxzz/element-plus-best-practices/blob/main/vite.config.ts
       AutoImport({
         imports: ['vue', '@vueuse/core'],
-        resolvers: [ElementPlusResolver()],
+        resolvers: [
+          ElementPlusResolver({
+            importStyle: 'sass',
+          }),
+        ],
         eslintrc: {
           enabled: true,
           filepath: './.eslintrc-auto-import.json',
@@ -118,7 +122,9 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
       Components({
         resolvers: [
           //导入 Element Plus 组件
-          ElementPlusResolver(),
+          ElementPlusResolver({
+            importStyle: 'sass',
+          }),
         ],
         dirs: ['src/components'], // 指定自定义组件位置(默认:src/components)
         dts: path.resolve(pathSrc, 'typings', 'components.d.ts'), // 导入组件类型声明文件路径 (false:关闭自动生成)

@@ -1,11 +1,5 @@
 <template>
-  <el-dialog
-    v-model="state.visibleStatus"
-    :before-close="close"
-    :close-on-click-modal="false"
-    width="auto"
-    append-to-body
-  >
+  <el-dialog v-model="state.visibleStatus" :before-close="close" width="auto" append-to-body>
     <template #header>
       <div class="flex justify-between items-center">
         <el-text tag="b" size="large">部门主管筛选</el-text>

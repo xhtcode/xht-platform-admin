@@ -148,13 +148,11 @@ svg {
   width: 64px !important;
 }
 
-.el-menu-item .svg-icon,
-.el-sub-menu .svg-icon {
-  font-size: 14px !important;
+.el-menu-item .menu-icon,
+.el-sub-menu .menu-icon {
   display: inline-block;
   vertical-align: middle;
   margin-right: 5px;
-  width: 24px !important;
   text-align: center;
   justify-content: center;
 }

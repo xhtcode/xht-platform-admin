@@ -1,6 +1,6 @@
 <template>
   <div class="collapse-icon flex-center" @click="changeMenuStatus">
-    <el-icon size="20">
+    <el-icon :size="20">
       <expand v-if="menuStatus" />
       <fold v-else />
     </el-icon>

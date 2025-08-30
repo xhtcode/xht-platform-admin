@@ -9,7 +9,6 @@
         <menu-search />
         <template v-if="desktopShowStatus">
           <switch-dark />
-          <size-select />
           <page-full-screen />
         </template>
         <app-setting />
@@ -27,7 +26,6 @@ import BreadCrumb from '@/layout/components/bread-crumb/index.vue'
 import UserAvatar from '@/layout/components/user-avatar/index.vue'
 import PageFullScreen from '@/layout/components/page-full-screen/index.vue'
 import SwitchDark from '@/layout/components/switch-dark/index.vue'
-import SizeSelect from '@/layout/components/size-select/index.vue'
 import TagsViewComponent from '@/layout/components/tags-view/index.vue'
 import { useThemeStore } from '@/store'
 import { storeToRefs } from 'pinia'

@@ -5,7 +5,7 @@
     :close-on-click-modal="false"
     :title="state.title"
     append-to-body
-    size="45vw"
+    size="45%"
   >
     <el-form
       ref="addUpdateFormRef"

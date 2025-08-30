@@ -1,6 +1,6 @@
 <template>
   <div class="menu-search layout-header-top-item" @click="show">
-    <svg-icon name="search" :size="18" />
+    <div class="icon-common-search text-16px" />
     <el-dialog
       v-model="state.visibleStatus"
       :before-close="close"
@@ -36,7 +36,7 @@
                 'menu-search-is-active': activeMenuPath === item.path,
               }"
             >
-              <SvgIcon :name="item.icon" class="mr5" />
+              <div :class="`icon-menu-${item.icon}`" class="mr5" />
               {{ item.title }}
             </div>
           </template>

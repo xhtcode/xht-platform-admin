@@ -2,9 +2,8 @@
   <el-drawer
     v-model="state.visibleStatus"
     :before-close="close"
-    :close-on-click-modal="false"
     :title="state.title"
-    size="45vw"
+    size="45%"
     append-to-body
   >
     <el-form
@@ -93,6 +92,7 @@ import { handleFormErrors } from '@/utils/moudle/element'
 import type { ModeIdType } from '@/model/base.model'
 
 defineOptions({ name: 'SysDictAddOrUpdate' })
+
 const state = reactive<AddUpdateOption<SysDictOperationRequest>>({
   title: '增加字典',
   visibleStatus: false,

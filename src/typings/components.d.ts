@@ -84,7 +84,6 @@ declare module 'vue' {
     RightToolBar: typeof import('./../components/right-tool-bar/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    SvgIcon: typeof import('./../components/svg-icon/index.vue')['default']
     TableToolBar: typeof import('./../components/table-tool-bar/index.vue')['default']
     TypeMappingSelect: typeof import('./../components/generate-components/type-mapping-select/index.vue')['default']
     UserStatus: typeof import('./../components/system-dict/user-status.vue')['default']

@@ -1,6 +1,9 @@
 <template>
   <div @click="toggleFullScreen" class="page-full-screen layout-header-top-item">
-    <svg-icon :name="isFullscreen ? 'fullscreen-exit' : 'fullscreen'" :size="16" />
+    <div
+      :class="isFullscreen ? 'icon-common-fullscreen-exit' : 'icon-common-fullscreen'"
+      class="text-18px"
+    />
   </div>
 </template>
 

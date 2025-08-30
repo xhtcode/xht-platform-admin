@@ -1,27 +1,26 @@
 <template>
-  <div v-if="themeStore.breadcrumb">
-    <el-breadcrumb class="layout-breadcrumb-container user-select-none" separator="/">
-      <transition-group name="breadcrumb">
-        <el-breadcrumb-item v-for="(item, index) in breadcrumbList" :key="item.path">
-          <span
-            v-if="index !== breadcrumbList.length - 1"
-            class="layout-breadcrumb-container-icon cursor-pointer flex-center"
-            @click="handleRedirect(item)"
-          >
-            <svg-icon :name="item.meta.icon" class="mr-5" />
+  <el-breadcrumb separator="/" v-if="themeStore.breadcrumb" class="breadcrumb-container">
+    <transition-group name="breadcrumb">
+      <el-breadcrumb-item v-for="(item, index) in breadcrumbList" :key="item.path">
+        <div
+          v-if="index !== breadcrumbList.length - 1"
+          @click="handleRedirect(item)"
+          class="h-full flex items-center gap-2"
+        >
+          <div :class="`icon-menu-${item.meta.icon}`" class="text-12px" />
+          <div class="text-14px h-full flex items-center" style="line-height: 50px">
             {{ item.meta.title }}
-          </span>
-          <span v-else class="layout-breadcrumb-container-span flex-center cursor-default">
-            <svg-icon
-              :name="item.meta.icon"
-              class="layout-breadcrumb-container-icon flex-center mr-5"
-            />
+          </div>
+        </div>
+        <div v-else class="h-full flex items-center gap-2">
+          <div :class="`icon-menu-${item.meta.icon}`" class="text-12px" />
+          <div class="text-14px h-full flex items-center" style="line-height: 50px">
             {{ item.meta.title }}
-          </span>
-        </el-breadcrumb-item>
-      </transition-group>
-    </el-breadcrumb>
-  </div>
+          </div>
+        </div>
+      </el-breadcrumb-item>
+    </transition-group>
+  </el-breadcrumb>
 </template>
 
 <script lang="ts" setup>
@@ -71,23 +70,14 @@ watch(
 <style lang="scss" scoped>
 @use '@/styles/variables.scss' as *;
 
-.layout-breadcrumb-container {
-  .layout-breadcrumb-container-span {
-    height: $header-height;
-    opacity: 0.7;
-    white-space: nowrap;
-  }
+.breadcrumb-container {
+  height: 100%;
+  display: flex;
+  justify-items: center;
 
-  .layout-breadcrumb-container-icon {
-    height: $header-height;
-    white-space: nowrap;
+  :deep(.el-breadcrumb__inner) {
+    height: 100%;
   }
-}
-
-// 覆盖 element-plus 的样式
-.el-breadcrumb__inner,
-.el-breadcrumb__inner a {
-  font-weight: 400 !important;
 }
 
 /* Breadcrumb 面包屑过渡动画

@@ -2,14 +2,14 @@
   <template v-for="(val, index) in menuLists">
     <el-sub-menu v-if="val.children && val.children.length > 0" :key="val.path" :index="val.path">
       <template #title>
-        <svg-icon :name="val.meta?.icon" color="var(--xht-svg-color)" />
+        <div :class="`icon-menu-${val.meta?.icon}`" class="menu-icon text-12px" />
         <span>{{ val.meta?.title }}</span>
       </template>
       <MenuItem :menuList="val.children" />
     </el-sub-menu>
     <template v-else>
       <el-menu-item :key="index" :index="val.path" @click="handleClickMenu(val)">
-        <svg-icon :name="val.meta?.icon" color="var(--xht-svg-color)" />
+        <div :class="`icon-menu-${val.meta?.icon}`" class="menu-icon text-12px" />
         <template #title>{{ val.meta?.title }}</template>
       </el-menu-item>
     </template>

@@ -80,7 +80,7 @@
                 custom
               >
                 <div class="tags-view-item-container" @click="navigate">
-                  <svg-icon :name="item.icon" :size="12" class="mr-5" />
+                  <div :class="`icon-menu-${item.icon}`" class="mr-5 text-8px" />
                   {{ item.title }}
                   <el-icon
                     :size="14"

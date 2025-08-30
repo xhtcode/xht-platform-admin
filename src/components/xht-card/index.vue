@@ -5,7 +5,9 @@
       class="xht-card-tool flex-center cursor-pointer"
       @click="handlerToolChange()"
     >
-      <svg-icon name="ep-Operation" />
+      <el-icon :size="16">
+        <Operation />
+      </el-icon>
     </div>
     <div class="xht-card-default">
       <slot :footerStatus="state.footerStatus" />
@@ -17,6 +19,8 @@
 </template>
 
 <script lang="ts" setup>
+import { Operation } from '@element-plus/icons-vue'
+
 defineOptions({ name: 'XhtCard' })
 
 const state = reactive({

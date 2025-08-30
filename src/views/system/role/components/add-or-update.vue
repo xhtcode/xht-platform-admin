@@ -2,9 +2,8 @@
   <el-drawer
     v-model="state.visibleStatus"
     :before-close="close"
-    :close-on-click-modal="false"
     :title="state.title"
-    size="600"
+    size="45%"
     append-to-body
   >
     <el-form
