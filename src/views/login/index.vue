@@ -1,311 +1,342 @@
 <template>
-  <div class="login">
-    <!-- 登录页头部 -->
-    <div class="login-header">
-      <div class="flex-y-center">
-        <el-switch inline-prompt active-icon="Moon" inactive-icon="Sunny" @change="toggleTheme" />
-      </div>
-    </div>
-    <!-- 登录页内容 -->
-    <div class="login-form">
-      <div v-for="item in 10" :key="item">
-        <context-menu2>
-          <el-tag>测试{{ item }}</el-tag>
-        </context-menu2>
-      </div>
-      <el-form ref="loginFormRef" :model="loginFormData" :rules="loginRules">
-        <div class="form-title">
-          <h2>小糊涂管理系统</h2>
+  <div class="login-container">
+    <!-- 左侧品牌介绍区域 -->
+    <left-side />
+    <!-- 右侧登录表单区域 -->
+    <div class="login-right">
+      <div class="login-form-container">
+        <!-- 表单描述 -->
+        <div class="mb-[1.25rem]">
+          <div class="mb-8px text-24px color-#1f2329 font-600 dark-color-white">小糊涂・后台管理系统</div>
+          <Transition name="text-fade" mode="out-in">
+            <div class="m-0 text-14px color-#6b7280" :key="activeLoginType">
+              {{
+                activeLoginType === 'password'
+                  ? '密码验证 · 安全登录'
+                  : activeLoginType === 'phone'
+                    ? '手机验证 · 便捷登录'
+                    : '扫码授权 · 快捷登录'
+              }}
+            </div>
+          </Transition>
         </div>
-        <!-- 用户名 -->
-        <el-form-item prop="username">
-          <el-input
-            ref="username"
-            v-model="loginFormData.username"
-            prefix-icon="UserFilled"
-            placeholder="用户名"
-            name="username"
-            size="large"
-            class="h-[48px]"
-          />
-        </el-form-item>
-
-        <!-- 密码 -->
-        <el-tooltip :visible="isCapslock" content="大写锁定已打开" placement="right">
-          <el-form-item prop="password">
-            <el-input
-              v-model="loginFormData.password"
-              prefix-icon="Lock"
-              placeholder="密码"
-              type="password"
-              name="password"
-              size="large"
-              class="h-[48px] pr-2"
-              show-password
-              @keyup="checkCapslock"
-              @keyup.enter="handleLoginSubmit"
-            />
-          </el-form-item>
-        </el-tooltip>
-
-        <!-- 验证码 -->
-        <el-form-item prop="captchaCode">
-          <div class="input-wrapper">
-            <div class="i-svg:captcha mx-2" />
-            <el-input
-              v-model="loginFormData.captchaCode"
-              prefix-icon="Burger"
-              auto-complete="off"
-              size="large"
-              class="flex-1"
-              placeholder="验证码"
-              @keyup.enter="handleLoginSubmit"
-            />
-            <el-image :src="captchaBase64" class="captcha-img" @click="getCaptcha" />
+        <div class="form-container">
+          <Transition name="login-form-fade" mode="in-out">
+            <password-form v-if="activeLoginType === 'password'" key="password" />
+          </Transition>
+          <!-- 手机登录 -->
+          <Transition name="login-form-fade" mode="in-out">
+            <phone-form v-if="activeLoginType === 'phone'" key="phone" />
+          </Transition>
+          <!-- 扫码登录 -->
+          <Transition name="login-form-fade" mode="in-out">
+            <qrcode-form v-if="activeLoginType === 'qrcode'" key="qrcode" />
+          </Transition>
+        </div>
+        <div class="divider">
+          <span>其它登录方式</span>
+        </div>
+      </div>
+      <!-- 其它登录方式  -->
+      <div class="other-party-login">
+        <div class="other-party-icons">
+          <div
+            class="icon-item"
+            :class="{ active: activeLoginType === 'password' }"
+            @click="handleChangeLoginType('password')"
+            title="密码登录"
+          >
+            <div class="icon i-login-password" />
           </div>
-        </el-form-item>
+          <div
+            class="icon-item"
+            :class="{ active: activeLoginType === 'phone' }"
+            @click="handleChangeLoginType('phone')"
+            title="手机号登录"
+          >
+            <div class="icon i-login-phone" />
+          </div>
+          <div
+            class="icon-item"
+            :class="{ active: activeLoginType === 'qrcode' }"
+            @click="handleChangeLoginType('qrcode')"
+            title="扫码登录"
+          >
+            <div class="icon i-login-sm" />
+          </div>
+          <div
+            class="icon-item"
+            :class="{ active: activeLoginType === 'wechat' }"
+            @click="handleChangeLoginType('wechat')"
+            title="微信登录"
+          >
+            <div class="icon i-login-wechat" />
+          </div>
+          <div
+            class="icon-item"
+            :class="{ active: activeLoginType === 'qq' }"
+            @click="handleChangeLoginType('qq')"
+            title="QQ登录"
+          >
+            <div class="icon i-login-qq" />
+          </div>
+          <div
+            class="icon-item"
+            :class="{ active: activeLoginType === 'dinging' }"
+            @click="handleChangeLoginType('dinging')"
+            title="钉钉登录"
+          >
+            <div class="icon i-login-ding-ding" />
+          </div>
+        </div>
+      </div>
 
-        <!-- 登录按钮 -->
-        <el-button
-          :loading="loading"
-          type="primary"
-          size="large"
-          class="w100"
-          @click.prevent="handleLoginSubmit"
-        >
-          登录
-        </el-button>
-      </el-form>
-    </div>
-
-    <!-- 登录页底部 -->
-    <div class="login-footer">
-      <el-text size="small">
-        小糊涂快速开发平台
-        <a href="https://www.baidu.com/" target="_blank">前往官网</a>
-      </el-text>
+      <div class="brand-footer">
+        <span>Copyright © 2099-永久</span>
+      </div>
+      <div class="pos-absolute right-20px top-20px">
+        <switch-dark />
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { FormInstance } from 'element-plus'
-import { generateCaptcha } from '@/api/login/api'
-import { useUserInfoStore } from '@/store/modules/user.store'
-import { useMessage } from '@/hooks/use-message'
-import { useRouter } from 'vue-router'
-import { HOME_PAGE_PATH } from '@/common/constant'
-import { toggleDark } from '@/utils/dark'
-import ContextMenu2 from '@/components/context-menu/index2.vue'
+import PasswordForm from '@/views/login/components/password-form.vue'
+import PhoneForm from '@/views/login/components/phone-form.vue'
+import QrcodeForm from '@/views/login/components/qrcode-form.vue'
+import LeftSide from '@/views/login/components/left-side.vue'
+import SwitchDark from '@/layout/components/switch-dark/index.vue'
 
-const loginFormRef = ref<FormInstance>()
 defineOptions({
-  name: 'LoginIndex',
+  name: 'Login',
+  inheritAttrs: false,
 })
-const loading = ref(false) // 按钮 loading 状态
-const isCapslock = ref(false) // 是否大写锁定
-const captchaBase64 = ref<string | undefined>() // 验证码图片Base64字符串
-const userInfoStore = useUserInfoStore()
-const router = useRouter()
-const loginFormData = ref<any>({
-  username: 'admin',
-  password: '123456',
-  captchaKey: '',
-  captchaCode: '',
-})
+// 当前激活的登录方式
+type LoginType = 'password' | 'qrcode' | 'phone' | 'wechat' | 'qq' | 'dinging'
+const activeTab = ref<LoginType>('password')
 
-const loginRules = computed(() => {
-  return {
-    username: [
-      {
-        required: true,
-        trigger: 'blur',
-        message: '请输入用户名',
-      },
-    ],
-    password: [
-      {
-        required: true,
-        trigger: 'blur',
-        message: '请输入密码',
-      },
-      {
-        min: 6,
-        message: '密码长度不能小于6位',
-        trigger: 'blur',
-      },
-    ],
-    captchaCode: [
-      {
-        required: true,
-        trigger: 'blur',
-        message: '请输入验证码',
-      },
-    ],
+// 第三方登录
+const activeLoginType = ref<LoginType>('password')
+
+/**
+ * 切换登录方式
+ * @param type 登录方式
+ */
+const handleChangeLoginType = (type: LoginType) => {
+  if (type === 'password' || type === 'phone' || type === 'qrcode') {
+    activeLoginType.value = type
   }
-})
-
-// 获取验证码
-function getCaptcha() {
-  generateCaptcha(loginFormData.value.captchaKey).then((res) => {
-    captchaBase64.value = res.data.code
-    loginFormData.value.captchaKey = res.data.key
-  })
 }
 
-// 登录
-async function handleLoginSubmit() {
-  loginFormRef.value?.validate((valid: boolean) => {
-    if (valid) {
-      loading.value = true
-      userInfoStore
-        .login({ ...loginFormData.value })
-        .then(() => {
-          useMessage().success('登录成功')
-          router.push({ path: HOME_PAGE_PATH })
-        })
-        .catch(() => {
-          getCaptcha()
-        })
-        .finally(() => {
-          loading.value = false
-        })
-    } else {
-      useMessage().error('请填写页面提示的内容！')
+// 回车登录
+const handleKeyPress = (event: KeyboardEvent) => {
+  if (event.key === 'Enter') {
+    if (activeTab.value === 'password') {
+    } else if (activeTab.value === 'phone') {
     }
-  })
-}
-
-// 主题切换
-const toggleTheme = () => {
-  toggleDark()
-}
-
-// 检查输入大小写
-function checkCapslock(event: KeyboardEvent) {
-  // 防止浏览器密码自动填充时报错
-  if (event instanceof KeyboardEvent) {
-    isCapslock.value = event.getModifierState('CapsLock')
   }
 }
 
+// 添加键盘监听
 onMounted(() => {
-  getCaptcha()
+  document.addEventListener('keypress', handleKeyPress)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('keypress', handleKeyPress)
 })
 </script>
 
 <style lang="scss" scoped>
-.login {
+.login-container.dark{
+  ---divider-bg-color:  #636466;
+  ---divider-text-color: #8D9095;
+}
+.login-container {
+  user-select: none;
   display: flex;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  ---divider-bg-color:  #cdd0d6;
+  ---divider-text-color:  #a8abb2;
+}
+
+// 右侧登录表单区域
+.login-right {
+  flex: 1;
+  background: var(--el-bg-color);
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 100%;
-  padding: 20px;
-  overflow-y: auto;
+  position: relative;
 
-  .login-header {
-    position: absolute;
-    top: 0;
-    display: flex;
-    justify-content: right;
+  .login-form-container {
     width: 100%;
-    padding: 15px;
+    max-width: 300px;
 
-    .logo {
-      width: 26px;
-      height: 26px;
-    }
+    .divider {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
 
-    .title {
-      margin: auto 5px;
-      font-size: 24px;
-      font-weight: bold;
-      color: #3b82f6;
+      &::before,
+      &::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: var(---divider-bg-color);
+      }
+
+      span {
+        padding: 0 1rem;
+        color: var(---divider-text-color);
+        font-size: 0.8rem;
+      }
     }
   }
 
-  .login-form {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 460px;
-    padding: 40px;
-    overflow: hidden;
-    background-color: #fff;
-    border-radius: 5px;
-    box-shadow: var(--el-box-shadow-light);
+  // 第三方登录样式
+  .other-party-login {
+    width: 100%;
 
-    @media (width <= 460px) {
-      width: 100%;
-      padding: 20px;
-    }
-
-    .form-title {
-      position: relative;
+    .other-party-icons {
       display: flex;
-      align-items: center;
       justify-content: center;
-      padding: 0 0 20px;
-      text-align: center;
-    }
+      gap: 18px;
+      flex-wrap: wrap;
+      padding: 0 10px;
 
-    .input-wrapper {
-      display: flex;
-      align-items: center;
-      width: 100%;
-    }
+      .icon-item {
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: 50%;
+        border: 2px solid transparent;
+        position: relative;
 
-    .captcha-img {
-      height: 48px;
-      cursor: pointer;
-      border-top-right-radius: 6px;
-      border-bottom-right-radius: 6px;
+        &:hover {
+          background: #e8e8e8;
+          transform: scale(1.05);
+          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        &.active {
+          background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+          box-shadow: 0 8px 25px rgba(64, 158, 255, 0.3);
+          transform: scale(1.15);
+          border-color: #3b82f6;
+
+          .icon {
+            width: 12px;
+            height: 12px;
+            color: #0f2044;
+            fill: currentColor;
+            filter: drop-shadow(0 0 6px rgba(59, 130, 246, 0.6));
+            transform: scale(1.1);
+          }
+        }
+
+        .icon {
+          width: 24px;
+          height: 24px;
+          font-size: 18px;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+      }
     }
   }
 
-  .login-footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    padding: 10px 0;
+  .brand-footer {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
     text-align: center;
-  }
-}
 
-:deep(.el-form-item) {
-  background: var(--el-input-bg-color);
-  border: 1px solid var(--xht-border-color);
-  border-radius: 5px;
-}
-
-:deep(.el-input) {
-  .el-input__wrapper {
-    padding: 0;
-    background-color: transparent;
-    box-shadow: none;
-
-    &.is-focus,
-    &:hover {
-      box-shadow: none !important;
-    }
-
-    input:-webkit-autofill {
-      /* 通过延时渲染背景色变相去除背景颜色 */
-      transition: background-color 1000s ease-in-out 0s;
+    span {
+      font-family: Arial, serif;
+      font-size: 12px;
+      letter-spacing: 1px;
+      color: rgba(156, 163, 175, 0.89);
+      font-weight: 500;
     }
   }
 }
 
-html.dark {
-  .login {
-    //background: url('@/assets/images/login-bg-dark.jpg') no-repeat center right;
-    background: #101f1c;
+@media (max-width: 768px) {
+  .login-container {
+    flex-direction: column;
+  }
 
-    .login-form {
-      background: transparent;
-      box-shadow: var(--el-box-shadow);
+  .login-right {
+    height: 100vh;
+    width: 100%;
+
+    .login-form-container {
+      padding: 1.5rem;
+      max-width: 360px;
+
+      .form-header {
+        margin-bottom: 1.5rem;
+
+        .login-title {
+          font-size: 1.6rem;
+        }
+      }
+
+      .brand-footer {
+        bottom: 1.5rem;
+      }
     }
+  }
+}
+
+@media (max-width: 480px) {
+  .login-container {
+    flex-direction: column;
+  }
+  .login-right {
+    height: 100vh;
+    width: 100%;
+
+    .login-form-container {
+      padding: 1rem;
+      max-width: 320px;
+
+      .form-header {
+        margin-bottom: 1.25rem;
+
+        .login-title {
+          font-size: 1.4rem;
+        }
+      }
+
+      .brand-footer {
+        bottom: 1rem;
+      }
+    }
+  }
+}
+
+// 表单容器样式
+.form-container {
+  position: relative;
+  height: 240px;
+  overflow: hidden;
+
+  // 确保表单在容器内正确定位
+  > * {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
   }
 }
 </style>
