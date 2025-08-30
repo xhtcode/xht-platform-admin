@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "moduleResolution": "node",
+    "target": "ES2023",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "lib": [
+      "ES2023",
       "esnext",
       "dom"
     ],
@@ -32,7 +33,7 @@
       ]
     }
   },
-  "extends": "@tsconfig/node22/tsconfig.json",
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
   "include": [
     "vite.config.*",
     "vitest.config.*",

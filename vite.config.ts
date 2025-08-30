@@ -2,6 +2,7 @@ import { type ConfigEnv, defineConfig, loadEnv, type UserConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import path, { resolve } from 'path'
+import UnoCSS from 'unocss/vite'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
@@ -99,6 +100,8 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
       vue(),
       // JSX支持
       vueJsx(),
+      // UnoCSS
+      UnoCSS(),
       // Vue DevTools（仅开发环境启用）
       !isProduction && vueDevTools(),
       // SVG图标处理
@@ -138,7 +141,6 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
     css: {
       preprocessorOptions: {
         scss: {
-          api: 'modern-compiler',
           additionalData: `@use "@/styles/variables.scss" as *;`,
         },
       },
