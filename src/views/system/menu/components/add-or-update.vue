@@ -155,13 +155,13 @@ import type { FormInstance, FormRules } from 'element-plus'
 import { querySysMenuById, saveSysMenu, updateSysMenu } from '@/api/system/menu.api'
 import { useMessageBox } from '@/hooks/use-message'
 import { handleFormErrors } from '@/utils/moudle/element'
+import type { SysMenuOperationRequest } from '@/model/system/menu.model'
 import {
   MenuCacheEnums,
   MenuHiddenEnums,
   MenuLinkEnums,
   MenuStatusEnums,
   MenuTypeEnums,
-  SysMenuOperationRequest,
 } from '@/model/system/menu.model'
 import MenuTreeSelect from '@/components/menu-tree-select/index.vue'
 import { SysMenuOperationForm, SysMenuOperationRules } from '@/views/system/menu/menu.data'

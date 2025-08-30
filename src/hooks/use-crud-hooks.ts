@@ -1,5 +1,5 @@
 import type { AxiosPromise, AxiosResponse } from 'axios'
-import { BasicResponse, PageQueryRequest, PageResponse } from '@/model/base.model'
+import type { BasicResponse, PageQueryRequest, PageResponse } from '@/model/base.model'
 import type { Reactive, Ref } from 'vue'
 import { toRef } from 'vue'
 

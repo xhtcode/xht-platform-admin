@@ -83,7 +83,7 @@ import AddOrUpdate from './components/add-or-update.vue'
 import type { GenTableInfoQueryRequest, GenTableInfoResponse } from '@/model/generate/table.model'
 import { queryGenTableInfoPage, removeGenTableInfoByIds } from '@/api/generate/table.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import { ModeIdArrayType } from '@/model/base.model'
+import type { ModeIdArrayType } from '@/model/base.model'
 
 defineOptions({ name: 'GenTableInfoViewIndex' })
 

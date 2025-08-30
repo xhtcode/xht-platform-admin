@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import App from '@/App.vue'
 import '@/styles/index.scss'
-import router from '@/router'
+import { setupRouter } from '@/router'
 import { setupStore } from '@/store'
 import { setupPermission } from '@/plugin/permission'
 import { setupElIcons } from './plugin/icon'
@@ -16,7 +16,7 @@ import 'virtual:uno.css'
 import 'animate.css/animate.min.css'
 
 const app = createApp(App)
-app.use(router)
+setupRouter(app)
 setupStore(app)
 setupPermission()
 setupElIcons(app)

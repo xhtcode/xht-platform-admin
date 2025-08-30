@@ -89,7 +89,7 @@ import AddOrUpdate from './components/add-or-update.vue'
 import type { GenTemplateQueryRequest, GenTemplateResponse } from '@/model/generate/template.model'
 import { queryGenTemplatePage, removeGenTemplateByIds } from '@/api/generate/template.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import { ModeIdArrayType } from '@/model/base.model'
+import type { ModeIdArrayType } from '@/model/base.model'
 
 defineOptions({ name: 'GenTemplateViewIndex' })
 

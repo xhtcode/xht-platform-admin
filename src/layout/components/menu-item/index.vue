@@ -18,7 +18,8 @@
 
 <script lang="ts" setup>
 import MenuItem from '@/layout/components/menu-item/index.vue'
-import { RouteRecordRaw, useRouter } from 'vue-router'
+import type { RouteRecordRaw } from 'vue-router'
+import { useRouter } from 'vue-router'
 import RegularUtil from '@/utils/RegularUtils'
 import { useMessage } from '@/hooks/use-message'
 

@@ -127,7 +127,6 @@
 
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
-import { TableStyle } from '@/hooks/use-crud-hooks'
 import { useMessageBox } from '@/hooks/use-message'
 
 defineOptions({ name: 'SysOperLogViewIndex' })
@@ -175,7 +174,7 @@ const tableStyle: TableStyle = {
  * 获取操作类型标签
  */
 const getBusinessTypeLabel = (type: number) => {
-  const types = {
+  const types: Record<number, string> = {
     0: '其它',
     1: '新增',
     2: '修改',
@@ -193,8 +192,8 @@ const getBusinessTypeLabel = (type: number) => {
 /**
  * 获取操作类型标签样式
  */
-const getBusinessTypeTag = (type: number) => {
-  const types = {
+const getBusinessTypeTag = (type: number): any => {
+  const types: Record<number, string> = {
     0: 'info',
     1: 'success',
     2: 'warning',
@@ -235,7 +234,7 @@ const resetQuery = async () => {
  */
 const handleClean = () => {
   useMessageBox()
-    .confirm('是否确认清空所有操作日志数据项?', '警告')
+    .confirm('是否确认清空所有操作日志数据项?')
     .then(() => {
       // TODO: 调用清空接口
       console.log('清空日志')

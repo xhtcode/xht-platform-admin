@@ -59,11 +59,11 @@
   </el-dialog>
 </template>
 <script setup lang="ts">
-import { ModeIdType } from '@/model/base.model'
+import type { ModeIdType } from '@/model/base.model'
 import { getBindUser } from '@/api/tools.api'
 import UserStatusDict from '@/components/system-dict/user-status.vue'
 import { useTableToolHooks } from '@/hooks/use-crud-hooks'
-import { UserSimpleVo } from '@/model/system/user.model'
+import type { UserSimpleVo } from '@/model/system/user.model'
 import { useMessage } from '@/hooks/use-message'
 
 defineOptions({ name: 'DeptUserDialog' })
@@ -118,7 +118,7 @@ const show = (deptId: ModeIdType) => {
 const close = () => {
   state.visibleStatus = false
   state.currentRow = null
-  tableRef.value?.setCurrentRow()
+  tableRef.value?.setCurrentRow(null)
 }
 const handleCurrentChange = (val: UserSimpleVo | null) => {
   state.currentRow = val

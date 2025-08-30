@@ -130,7 +130,7 @@ import { handleFormErrors } from '@/utils/moudle/element'
 import type { ModeIdType } from '@/model/base.model'
 import DeptUserDialog from '@/views/system/dept/components/dept-user-dialog.vue'
 import { Search } from '@element-plus/icons-vue'
-import { UserSimpleVo } from '@/model/system/user.model'
+import type { UserSimpleVo } from '@/model/system/user.model'
 
 defineOptions({ name: 'SysDeptAddOrUpdate' })
 

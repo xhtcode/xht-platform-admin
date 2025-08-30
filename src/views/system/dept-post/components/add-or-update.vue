@@ -120,7 +120,8 @@ import {
   saveSysDeptPost,
   updateSysDeptPost,
 } from '@/api/system/dept.post.api'
-import { ModeIdType, SystemFlagEnums } from '@/model/base.model'
+import type { ModeIdType } from '@/model/base.model'
+import { SystemFlagEnums } from '@/model/base.model'
 
 defineOptions({ name: 'SysDeptAddOrUpdate' })
 const state = reactive<AddUpdateOption<SysDeptPostOperationRequest>>({

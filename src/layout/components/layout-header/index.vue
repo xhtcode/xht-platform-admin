@@ -10,7 +10,6 @@
         <template v-if="desktopShowStatus">
           <switch-dark />
           <size-select />
-          <lang-select icon />
           <page-full-screen />
         </template>
         <app-setting />
@@ -29,7 +28,6 @@ import UserAvatar from '@/layout/components/user-avatar/index.vue'
 import PageFullScreen from '@/layout/components/page-full-screen/index.vue'
 import SwitchDark from '@/layout/components/switch-dark/index.vue'
 import SizeSelect from '@/layout/components/size-select/index.vue'
-import LangSelect from '@/layout/components/lang-select/index.vue'
 import TagsViewComponent from '@/layout/components/tags-view/index.vue'
 import { useThemeStore } from '@/store'
 import { storeToRefs } from 'pinia'

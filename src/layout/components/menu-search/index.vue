@@ -47,7 +47,8 @@
 </template>
 <script setup lang="ts">
 import { useRouteStore } from '@/store/modules/routes.store'
-import { RouteRecordRaw, useRoute, useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import type { RouteRecordRaw } from 'vue-router'
 import RegularUtil from '@/utils/RegularUtils'
 import { useMessage } from '@/hooks/use-message'
 

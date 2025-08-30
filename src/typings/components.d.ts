@@ -91,4 +91,7 @@ declare module 'vue' {
     XhtCard: typeof import('./../components/xht-card/index.vue')['default']
     XhtPagination: typeof import('./../components/xht-pagination/index.vue')['default']
   }
+  export interface GlobalDirectives {
+    vLoading: typeof import('element-plus/es')['ElLoadingDirective']
+  }
 }

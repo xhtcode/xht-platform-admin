@@ -128,15 +128,15 @@
 
 <script lang="ts" setup>
 import { querySysDeptTree, removeSysDeptById } from '@/api/system/dept.api'
-import {
-  DeptStatusEnums,
+import type {
   SysDeptQueryRequest,
   SysDeptResponse,
   SysDeptTreeResponse,
 } from '@/model/system/dept.model'
+import { DeptStatusEnums } from '@/model/system/dept.model'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { FormInstance } from 'element-plus'
-import { TableStyle } from '@/hooks/use-crud-hooks'
+
 import AddOrUpdate from '@/views/system/dept/components/add-or-update.vue'
 
 defineOptions({ name: 'SysDeptViewIndex' })

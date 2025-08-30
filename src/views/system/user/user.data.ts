@@ -1,8 +1,5 @@
-import {
-  SysUserOperationRequest,
-  UserProfilesCreateRequest,
-  UserStatusEnums,
-} from '@/model/system/user.model'
+import type { SysUserOperationRequest, UserProfilesCreateRequest } from '@/model/system/user.model'
+import { UserStatusEnums } from '@/model/system/user.model'
 import type { FormRules } from 'element-plus'
 import type { ColumnOption } from '@/components/table-tool-bar/types'
 import type { SysDeptResponse } from '@/model/system/dept.model'

@@ -1,6 +1,6 @@
 import type { BasicResponse, ModeIdType, PageQueryRequest } from '@/model/base.model'
-import { SysDeptResponse } from '@/model/system/dept.model'
-import { SysDeptPostResponse } from '@/model/system/dept.post.model'
+import type { SysDeptResponse } from '@/model/system/dept.model'
+import type { SysDeptPostResponse } from '@/model/system/dept.post.model'
 
 /**
  * 用户状态枚举

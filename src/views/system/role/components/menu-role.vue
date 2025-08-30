@@ -42,7 +42,7 @@
 
 <script setup lang="ts">
 import { queryToolsMenuTree } from '@/api/tools.api'
-import { CheckboxValueType } from 'element-plus'
+import type { CheckboxValueType } from 'element-plus'
 import { roleMenuBind, selectMenuIdByRoleId } from '@/api/system/role.api'
 import { useMessage } from '@/hooks/use-message'
 import type { ModeIdType } from '@/model/base.model'

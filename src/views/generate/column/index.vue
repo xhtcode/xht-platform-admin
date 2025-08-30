@@ -83,7 +83,7 @@ import type {
 } from '@/model/generate/column.model'
 import { queryGenColumnInfoPage, removeGenColumnInfoByIds } from '@/api/generate/column.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import { ModeIdArrayType } from '@/model/base.model'
+import type { ModeIdArrayType } from '@/model/base.model'
 
 defineOptions({ name: 'GenColumnInfoViewIndex' })
 

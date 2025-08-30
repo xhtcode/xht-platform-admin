@@ -7,7 +7,9 @@
       <div class="login-form-container">
         <!-- 表单描述 -->
         <div class="mb-[1.25rem]">
-          <div class="mb-8px text-24px color-#1f2329 font-600 dark-color-white">小糊涂・后台管理系统</div>
+          <div class="mb-8px text-24px color-#1f2329 font-600 dark-color-white">
+            小糊涂・后台管理系统
+          </div>
           <Transition name="text-fade" mode="out-in">
             <div class="m-0 text-14px color-#6b7280" :key="activeLoginType">
               {{
@@ -149,9 +151,9 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
-.login-container.dark{
-  ---divider-bg-color:  #636466;
-  ---divider-text-color: #8D9095;
+.login-container.dark {
+  ---divider-bg-color: #636466;
+  ---divider-text-color: #8d9095;
 }
 .login-container {
   user-select: none;
@@ -159,8 +161,8 @@ onUnmounted(() => {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  ---divider-bg-color:  #cdd0d6;
-  ---divider-text-color:  #a8abb2;
+  ---divider-bg-color: #cdd0d6;
+  ---divider-text-color: #a8abb2;
 }
 
 // 右侧登录表单区域

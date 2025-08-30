@@ -1,4 +1,4 @@
-import type { ISelectProps } from 'element-plus'
+import type { SelectProps } from 'element-plus'
 import type { ModeIdType } from '@/model/base.model'
 import type { GenDataSourceResponse } from '@/model/generate/datasource.model'
 
@@ -20,7 +20,7 @@ export interface DataSourceSelectState {
 /**
  * 数据源选择框组件属性
  */
-export interface DataSourceSelectProps extends Partial<ISelectProps> {
+export interface DataSourceSelectProps extends Partial<SelectProps> {
   /**
    * 数据源ID
    */

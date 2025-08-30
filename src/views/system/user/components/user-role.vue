@@ -41,7 +41,7 @@
 
 <script setup lang="ts">
 import { queryToolsRoleList } from '@/api/tools.api'
-import { CheckboxValueType } from 'element-plus'
+import type { CheckboxValueType } from 'element-plus'
 import { useMessage } from '@/hooks/use-message'
 import { selectRoleIdByUserId, UserRoleBind } from '@/api/system/user.api'
 import type { ModeIdType } from '@/model/base.model'

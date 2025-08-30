@@ -25,7 +25,8 @@
 </template>
 
 <script lang="ts" setup>
-import { RouteLocationNormalizedLoaded, useRoute, useRouter } from 'vue-router'
+import type { RouteLocationNormalizedLoaded } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useThemeStore } from '@/store/modules/theme.store'
 import { HomeDynamicRouter } from '@/router/modules/dynamic'
 

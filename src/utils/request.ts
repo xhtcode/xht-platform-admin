@@ -92,7 +92,7 @@ service.interceptors.response.use(
     const { code, msg, data } = response.data
     // 成功状态码（根据实际业务调整）
     if (code === 200) {
-      return data ?? response.data
+      return response.data
     }
 
     // 业务错误处理

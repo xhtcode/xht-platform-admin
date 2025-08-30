@@ -21,12 +21,10 @@
 <script lang="ts" setup>
 import { useMessage } from '@/hooks/use-message'
 import { useThemeStore } from '@/store/modules/theme.store'
-import { useI18n } from 'vue-i18n'
 
 defineOptions({ name: 'SizeSelect' })
 
 const themeStore = useThemeStore()
-const { t } = useI18n()
 /**
  * 尺寸大小类型
  */
@@ -41,7 +39,7 @@ const langOptions = [
  * @param type 尺寸大小类型
  */
 const handleSizeChange = (type: CommonKeyValue<string, any>) => {
-  useMessage().success(t('theme.changeSizeType'))
+  useMessage().success('组件大小切换成功')
   themeStore.sizeType = type.value
 }
 </script>

@@ -48,6 +48,7 @@ export interface SysDeptResponse extends BasicResponse {
   leader: string //负责人
   phone: string //联系电话
   email: string //邮箱
+  leaderName: string // 负责人名称
   remark?: string //备注
   hashChild?: boolean
 }

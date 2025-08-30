@@ -101,9 +101,9 @@ import {
   removeGenDataSourceByIds,
 } from '@/api/generate/datasource.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import { BasicResponse, ModeIdArrayType, PageQueryRequest } from '@/model/base.model'
+import type { BasicResponse, ModeIdArrayType, PageQueryRequest } from '@/model/base.model'
 import { DataBaseTypeEnums } from '@/model/generate/common.model'
-import { AxiosResponse } from 'axios'
+import type { AxiosResponse } from 'axios'
 
 defineOptions({ name: 'GenDataSourceViewIndex' })
 

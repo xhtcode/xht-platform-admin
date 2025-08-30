@@ -140,7 +140,7 @@ import type { SysDictQueryRequest, SysDictResponse } from '@/model/system/dict.m
 import { DictStatusEnums } from '@/model/system/dict.model'
 import { querySysDictPage, removeSysDictByIds } from '@/api/system/dict.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import { ModeIdArrayType } from '@/model/base.model'
+import type { ModeIdArrayType } from '@/model/base.model'
 
 defineOptions({ name: 'SysDictViewIndex' })
 

@@ -21,7 +21,7 @@ export const getRouters = (): AxiosPromise<RouteRecordRaw[]> => {
 export const getUserInfo = (): AxiosPromise<any> => {
   return request({
     url: '/authority/user/profile/info',
-    baseURL: baseAdminURL,
+    baseURL: baseURL,
     method: 'get',
   })
 }

@@ -104,7 +104,7 @@ import type {
 } from '@/model/generate/type.mapping.model'
 import { queryGenTypeMappingPage, removeGenTypeMappingByIds } from '@/api/generate/type.mapping.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import { ModeIdArrayType } from '@/model/base.model'
+import type { ModeIdArrayType } from '@/model/base.model'
 import { DataBaseTypeEnums, LanguageTypeEnums } from '@/model/generate/common.model'
 
 defineOptions({ name: 'GenTypeMappingViewIndex' })

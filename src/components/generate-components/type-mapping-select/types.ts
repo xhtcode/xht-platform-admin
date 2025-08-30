@@ -1,4 +1,4 @@
-import type { ISelectProps } from 'element-plus'
+import type { SelectProps } from 'element-plus'
 import type { ModeIdType } from '@/model/base.model'
 import type { GenTypeMappingResponse } from '@/model/generate/type.mapping.model'
 import { DataBaseTypeEnums, LanguageTypeEnums } from '@/model/generate/common.model'
@@ -21,7 +21,7 @@ export interface TypeMappingSelectState {
 /**
  * 数据源选择框组件属性
  */
-export interface TypeMappingSelectProps extends Partial<ISelectProps> {
+export interface TypeMappingSelectProps extends Partial<SelectProps> {
   /**
    * 数据源ID
    */

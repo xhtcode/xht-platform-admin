@@ -202,19 +202,20 @@
 
 <script lang="ts" setup>
 import { querySysMenuTree, removeSysMenuById } from '@/api/system/menu.api'
+import type {
+  SysMenuQueryRequest,
+  SysMenuResponse,
+  SysMenuTreeResponse,
+} from '@/model/system/menu.model'
 import {
   MenuCacheEnums,
   MenuHiddenEnums,
   MenuLinkEnums,
   MenuStatusEnums,
   MenuTypeEnums,
-  SysMenuQueryRequest,
-  SysMenuResponse,
-  SysMenuTreeResponse,
 } from '@/model/system/menu.model'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { FormInstance } from 'element-plus'
-import { TableStyle } from '@/hooks/use-crud-hooks'
 import AddOrUpdate from '@/views/system/menu/components/add-or-update.vue'
 import { SysMenuColumnOption } from '@/views/system/menu/menu.data'
 

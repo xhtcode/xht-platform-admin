@@ -1,4 +1,4 @@
-import { UnwrapRef } from 'vue'
+import type { UnwrapRef } from 'vue'
 
 interface StorageType<T> {
   value: UnwrapRef<T>
