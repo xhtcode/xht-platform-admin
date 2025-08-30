@@ -25,7 +25,7 @@
       <div class="captcha-container">
         <el-input v-model="loginForm.code" placeholder="验证码" class="login-input">
           <template #prefix>
-            <div class="i-icon-code h-1rem w-1rem color-[var(--color)]" />
+            <div class="icon-login-code h-1rem w-1rem color-[var(--color)]" />
           </template>
         </el-input>
         <div class="captcha-image" @click="refreshCaptcha">

@@ -3,7 +3,7 @@
     v-model="state.visibleStatus"
     :before-close="close"
     title="分配权限"
-    size="45%"
+    width="45%"
     append-to-body
   >
     <template #header>
@@ -24,11 +24,14 @@
         :check-strictly="!checkStrictly"
         :default-expand-all="true"
         :props="{ children: 'children', label: 'menuName' }"
-        class="filter-tree"
         node-key="id"
         highlight-current
         show-checkbox
-      />
+      >
+        <template #default="{ data }">
+          <div>{{ data.menuName }}</div>
+        </template>
+      </el-tree>
     </el-scrollbar>
     <template #footer>
       <span>
