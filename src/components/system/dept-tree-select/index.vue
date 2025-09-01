@@ -20,10 +20,10 @@
 </template>
 
 <script lang="ts" setup>
-import { querySysDeptTree } from '@/api/system/dept.api'
-import type { SysDeptResponse, SysDeptTreeResponse } from '@/model/system/dept.model'
-import { DeptStatusEnums } from '@/model/system/dept.model'
-import type { ModeIdType } from '@/model/base.model'
+import { querySysDeptTree } from '@/api/system/dept.api.ts'
+import type { SysDeptResponse, SysDeptTreeResponse } from '@/model/system/dept.model.ts'
+import { DeptStatusEnums } from '@/model/system/dept.model.ts'
+import type { ModeIdType } from '@/model/base.model.ts'
 
 defineOptions({ name: 'DeptTreeSelect' })
 

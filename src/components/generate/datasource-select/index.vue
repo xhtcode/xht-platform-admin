@@ -10,7 +10,7 @@ import { queryGenDataSourceList } from '@/api/generate/datasource.api'
 import type {
   DataSourceSelectProps,
   DataSourceSelectState,
-} from '@/components/generate-components/datasource-select/types'
+} from '@/components/generate/datasource-select/types'
 import { useMessage } from '@/hooks/use-message'
 
 /**

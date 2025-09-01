@@ -13,7 +13,7 @@
       :model="addUpdateForm"
       :rules="rules"
       element-loading-text="拼命加载中"
-      label-width="100px"
+      label-width="120px"
     >
       <el-form-item label="数据库数据类型" prop="dbDataType">
         <el-input v-model="addUpdateForm.dbDataType" />
@@ -24,17 +24,17 @@
           <el-option :value="DataBaseTypeEnums.ORACLE" label="Oracle" />
         </el-select>
       </el-form-item>
-      <el-form-item label="导入包路径" prop="importPackage">
-        <el-input v-model="addUpdateForm.importPackage" />
-      </el-form-item>
-      <el-form-item label="目标编程语言" prop="targetLanguage">
+      <el-form-item label="编程语言" prop="targetLanguage">
         <el-select v-model="addUpdateForm.targetLanguage" placeholder="请选择目标编程语言">
           <el-option :value="LanguageTypeEnums.JAVA" label="Java" />
           <el-option :value="LanguageTypeEnums.TYPESCRIPT" label="TypeScript" />
         </el-select>
       </el-form-item>
-      <el-form-item label="目标语言数据类型" prop="targetDataType">
+      <el-form-item label="编程语言类型" prop="targetDataType">
         <el-input v-model="addUpdateForm.targetDataType" />
+      </el-form-item>
+      <el-form-item label="导入包路径" prop="importPackage">
+        <el-input v-model="addUpdateForm.importPackage" />
       </el-form-item>
     </el-form>
     <template #footer>

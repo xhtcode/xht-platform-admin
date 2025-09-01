@@ -55,6 +55,13 @@
       >
         <el-table-column align="center" type="selection" width="55" />
         <el-table-column :index="createTableIndex" label="序号" type="index" width="55" />
+        <el-table-column label="引擎名称" prop="engineName" />
+        <el-table-column label="数据库表名" prop="tableName" />
+        <el-table-column label="表注释" prop="tableComment" />
+        <el-table-column label="生成的类名" prop="codeName" />
+        <el-table-column label="代码的注释" prop="codeComment" />
+        <el-table-column label="表创建时间" prop="tableCreateTime" />
+        <el-table-column label="表更新时间" prop="tableUpdateTime" />
         <el-table-column align="center" label="操作" width="220px">
           <template #default="{ row }">
             <el-button>同步</el-button>

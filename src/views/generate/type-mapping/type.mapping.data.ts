@@ -46,14 +46,7 @@ export const GenTypeMappingOperationRules: FormRules<GenTypeMappingOperationRequ
       message: '请输入目标语言数据类型',
       trigger: ['blur', 'change'],
     },
-  ],
-  importPackage: [
-    {
-      required: true,
-      message: '导入包路径长度不能超过 200 个字符',
-      trigger: ['blur', 'change'],
-    },
-  ],
+  ]
 }
 
 /**

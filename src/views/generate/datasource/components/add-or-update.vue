@@ -27,6 +27,12 @@
       <el-form-item label="数据库地址" prop="url">
         <el-input v-model="addUpdateForm.url" />
       </el-form-item>
+      <el-form-item label="数据库用户名" prop="username">
+        <el-input v-model="addUpdateForm.username" />
+      </el-form-item>
+      <el-form-item label="数据库密码" prop="password">
+        <el-input v-model="addUpdateForm.password" />
+      </el-form-item>
       <el-form-item label="连接测试结果" prop="testResult">
         <el-input v-model="addUpdateForm.testResult" />
       </el-form-item>

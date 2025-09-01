@@ -59,6 +59,15 @@
           >
             <el-table-column align="center" type="selection" width="55" />
             <el-table-column :index="createTableIndex" label="序号" type="index" width="55" />
+            <el-table-column label="模板ID" prop="id" width="100px" />
+            <el-table-column label="分组id" prop="groupId" width="100px" />
+            <el-table-column label="模板名称" prop="name" width="100px" />
+            <el-table-column label="模板内容（Velocity语法）" prop="content" width="100px" />
+            <el-table-column label="文件类型" prop="fileType" width="100px" />
+            <el-table-column label="文件路径模板" prop="filePathTemplate" width="100px" />
+            <el-table-column label="文件名模板" prop="fileNameTemplate" width="100px" />
+            <el-table-column label="创建时间" prop="createTime" width="100px" />
+            <el-table-column label="更新时间" prop="updateTime" width="100px" />
             <el-table-column align="center" label="操作" width="220px">
               <template #default="{ row }">
                 <el-button icon="edit" link type="success" @click="handleEdit(row)">修改</el-button>

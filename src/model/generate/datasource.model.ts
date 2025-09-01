@@ -27,6 +27,14 @@ export interface GenDataSourceOperationRequest extends BasicFormRequest {
    */
   url: string
   /**
+   * 数据库用户名
+   */
+  username: string
+  /**
+   * 数据库密码
+   */
+  password: string
+  /**
    * 连接测试结果
    */
   testResult: string
@@ -70,6 +78,14 @@ export interface GenDataSourceResponse extends BasicResponse {
    * 数据库地址
    */
   url: string
+  /**
+   * 数据库用户名
+   */
+  username: string
+  /**
+   * 数据库密码
+   */
+  password: string
   /**
    * 连接测试结果
    */

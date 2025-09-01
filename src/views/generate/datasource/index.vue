@@ -10,25 +10,18 @@
       >
         <el-row>
           <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
-            <el-form-item label="数据源名称">
-              <el-input
-                v-model="queryParams.name"
-                clearable
-                placeholder="请输入数据源名称"
-                prefix-icon="Search"
-              />
+            <el-form-item label="数据源名称" prop="name">
+              <el-input v-model="queryParams.name" clearable placeholder="请输入数据源名称" />
             </el-form-item>
           </el-col>
           <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
-            <el-form-item label="数据库类型">
+            <el-form-item label="数据库类型" prop="dbType">
               <el-select v-model="queryParams.dbType" placeholder="请选择数据库类型">
                 <el-option :value="DataBaseTypeEnums.MYSQL" label="MySql" />
                 <el-option :value="DataBaseTypeEnums.ORACLE" label="Oracle" />
               </el-select>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24" class="text-center">
             <el-button icon="Search" type="primary" @click="handleQuery()">查询</el-button>
             <el-button icon="Refresh" @click="resetQuery">重置</el-button>
@@ -40,7 +33,6 @@
         :column-data="[]"
         column-status
         refresh-status
-        search-status
         @refresh="handleQuery"
       >
         <el-button icon="Plus" size="small" type="primary" @click="handleAdd">新增</el-button>
@@ -69,12 +61,25 @@
         :data="state.tableList"
         :header-cell-style="headerCellStyle"
         class="flex-1"
-        empty-text="系统相关数据源配置！"
+        empty-text="请添加数据源配置！"
         @selection-change="handleSelectionChange"
       >
         <el-table-column align="center" type="selection" width="55" />
         <el-table-column :index="(index) => index + 1" label="序号" type="index" width="55" />
-        <el-table-column align="center" label="操作" width="220px">
+        <el-table-column label="数据库名称" prop="name" width="120px" />
+        <el-table-column label="数据库类型" prop="dbType" width="120px" />
+        <el-table-column label="数据库地址" prop="url" width="220px" show-overflow-tooltip />
+        <el-table-column label="数据库用户名" prop="username" width="120px" />
+        <el-table-column label="数据库密码" prop="password" width="120px" />
+        <el-table-column label="最后测试时间" prop="lastTestTime" width="220px">
+          <template #default="{ row }">
+            <el-tag v-if="row.testResult === 'SUCCESS'" type="success">
+              {{ row.lastTestTime }}
+            </el-tag>
+            <el-tag v-else type="danger">{{ row.lastTestTime }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" fixed="right" label="操作" >
           <template #default="{ row }">
             <el-button icon="edit" link type="success" @click="handleEdit(row)">修改</el-button>
             <el-button icon="delete" link type="danger" @click="handleDelete(row)">删除</el-button>
@@ -127,14 +132,14 @@ const state = reactive<TableQueryState<GenDataSourceQueryRequest, GenDataSourceR
 })
 const { queryParams } = toRefs(state)
 
-const queryFormRef = ref<FormInstance>()
-const addUpdateRef = ref()
+const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
+const addUpdateRef = useTemplateRef('addUpdateRef')
 const { cellStyle, headerCellStyle } = useTableToolHooks()
 /**
  * 查询表单提交
  */
 const handleQuery = async () => {
-  queryGenDataSourceList().then((res) => {
+  queryGenDataSourceList({ ...queryParams.value }).then((res) => {
     state.tableList = res.data
   })
 }
@@ -152,6 +157,7 @@ const handleSelectionChange = (selection: any[]) => {
  */
 const resetQuery = async () => {
   queryFormRef.value?.resetFields()
+  console.log(queryFormRef.value)
   await handleQuery()
 }
 /**
@@ -200,17 +206,14 @@ const handleDelete = async (row?: GenDataSourceResponse) => {
  * 测试链接
  */
 const handleTest = (row: GenDataSourceResponse) => {
-  connectionTest(row.id)
-    .then(async (res: AxiosResponse<boolean>) => {
-      if (res.data) {
-        useMessage().success('数据库链接正常！')
-      } else {
-        useMessage().error('数据库链接异常！')
-      }
-    })
-    .catch(async () => {
+  connectionTest(row.id).then(async (res: AxiosResponse<boolean>) => {
+    if (res.data) {
+      useMessage().success('数据库链接正常！')
+    } else {
       useMessage().error('数据库链接异常！')
-    })
+    }
+    await handleQuery()
+  })
 }
 onMounted(async () => {
   await handleQuery()

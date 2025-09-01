@@ -47,9 +47,17 @@ export interface GenLogQueryRequest extends PageQueryRequest {
    */
   batchNo?: string
   /**
-   *生成时间
+   * 分组id
    */
-  generateTime?: Record<string, unknown>
+  groupId?: ModeIdType
+  /**
+   * 生成时间
+   */
+  generateTimeStart?: string
+  /**
+   * 生成时间
+   */
+  generateTimeEnd?: string
 }
 
 /**
@@ -71,7 +79,7 @@ export interface GenLogResponse extends BasicResponse {
   /**
    *生成时间
    */
-  generateTime: Record<string, unknown>
+  generateTime: string
   /**
    *生成文件数量
    */

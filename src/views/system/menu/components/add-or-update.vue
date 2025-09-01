@@ -162,7 +162,7 @@ import {
   MenuStatusEnums,
   MenuTypeEnums,
 } from '@/model/system/menu.model'
-import MenuTreeSelect from '@/components/menu-tree-select/index.vue'
+import MenuTreeSelect from '@/components/system/menu-tree-select/index.vue'
 import { SysMenuOperationForm, SysMenuOperationRules } from '@/views/system/menu/menu.data'
 
 import { SysDeptOperationForm } from '@/views/system/dept/dept.data'

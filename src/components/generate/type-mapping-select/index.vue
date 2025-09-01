@@ -14,7 +14,7 @@ import { onMounted, reactive } from 'vue'
 import type {
   TypeMappingSelectProps,
   TypeMappingSelectState,
-} from '@/components/generate-components/type-mapping-select/types'
+} from '@/components/generate/type-mapping-select/types'
 import { useMessage } from '@/hooks/use-message'
 import { DataBaseTypeEnums, LanguageTypeEnums } from '@/model/generate/common.model'
 import { queryGenTypeMappingList } from '@/api/generate/type.mapping.api'
