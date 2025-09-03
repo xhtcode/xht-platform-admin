@@ -35,7 +35,7 @@ const emit = defineEmits<{
 // 2. DOM 引用：编辑器挂载容器
 const editorContainer = useTemplateRef<HTMLDivElement | null>('editorContainer')
 // 3. CodeMirror 实例引用（TypeScript 类型定义）
-let editorView: EditorView | null = null
+const editorView = shallowRef<EditorView | null>()
 const themeCompartment = new Compartment()
 
 // 4. 初始化编辑器（在 DOM 挂载后执行）
@@ -66,7 +66,7 @@ onMounted(() => {
   })
 
   // 4.2 创建编辑器视图（View）：挂载到 DOM 容器
-  editorView = new EditorView({
+  editorView.value = new EditorView({
     state: initialState,
     parent: editorContainer.value,
   })
@@ -74,14 +74,14 @@ onMounted(() => {
 
 // 5. 组件卸载：销毁编辑器实例（避免内存泄漏）
 onUnmounted(() => {
-  editorView?.destroy()
-  editorView = null
+  editorView.value?.destroy()
+  editorView.value = null
 })
 watch(
   () => themeStore.darkStatus,
   (newValue) => {
     console.log('themeStore.darkStatus', newValue)
-    editorView?.dispatch({
+    editorView.value?.dispatch({
       effects: themeCompartment.reconfigure(newValue ? boysAndGirls : espresso),
     })
   },
@@ -94,11 +94,11 @@ watch(
 watch(
   () => modelValue.value,
   (newValue) => {
-    if (!editorView) return
-    const currentValue = editorView.state.doc.toString()
+    if (!editorView.value) return
+    const currentValue = editorView.value.state.doc.toString()
     // 避免循环更新：仅当外部值与编辑器内部值不一致时同步
     if (newValue !== currentValue) {
-      editorView.dispatch({
+      editorView.value.dispatch({
         changes: {
           from: 0,
           to: currentValue.length,
@@ -128,11 +128,11 @@ const getLanguageExtension = (language: string | undefined) => {
 defineExpose({
   // 聚焦编辑器
   focus: () => {
-    editorView?.focus()
+    editorView.value?.focus()
   },
   // 获取当前编辑器内容
   getValue: (): string => {
-    return editorView?.state.doc.toString() || ''
+    return editorView.value?.state.doc.toString() || ''
   },
 })
 </script>

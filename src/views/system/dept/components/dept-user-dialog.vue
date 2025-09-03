@@ -40,7 +40,7 @@
       <el-table-column prop="nickName" label="用户昵称" width="160" />
       <el-table-column prop="userStatus" label="账号状态" width="120">
         <template #default="{ row }">
-          <user-status-dict :status="row.userStatus" />
+          <user-status-tag :status="row.userStatus" />
         </template>
       </el-table-column>
     </el-table>
@@ -55,7 +55,6 @@
 <script setup lang="ts">
 import type { ModeIdType } from '@/model/base.model'
 import { getBindUser } from '@/api/tools.api'
-import UserStatusDict from '@/components/system-dict/user-status.vue'
 import { useTableToolHooks } from '@/hooks/use-crud-hooks'
 import type { UserSimpleVo } from '@/model/system/user.model'
 import { useMessage } from '@/hooks/use-message'

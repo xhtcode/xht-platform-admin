@@ -13,15 +13,15 @@ import type {
 const baseURL: string = import.meta.env.VITE_GENERATE_API_PREFIX
 
 enum Api {
-  SAVE = '/gen/datasource/add',
-  UPDATE = '/gen/datasource/update',
-  DELETE = '/gen/datasource/delete',
-  QUERY_ONE = '/gen/datasource/get/',
-  QUERY_LIST = '/gen/datasource/list',
+  SAVE = '/gen/template/group/add',
+  UPDATE = '/gen/template/group/update',
+  DELETE = '/gen/template/group/delete',
+  QUERY_ONE = '/gen/template/group/get/',
+  QUERY_LIST = '/gen/template/group/list',
 }
 
 /**
- * 保存模板分组
+ * 保存模板信息
  */
 export const saveGenTemplateGroup = (
   data: GenTemplateGroupOperationRequest
@@ -35,7 +35,7 @@ export const saveGenTemplateGroup = (
 }
 
 /**
- * 修改模板分组数据
+ * 修改模板信息数据
  */
 export const updateGenTemplateGroup = (
   data: GenTemplateGroupOperationRequest
@@ -49,7 +49,7 @@ export const updateGenTemplateGroup = (
 }
 
 /**
- * 删除模板分组
+ * 删除模板信息
  */
 export const removeGenTemplateGroupByIds = (ids: ModeIdType[]): AxiosPromise<boolean> => {
   return request({
@@ -61,7 +61,7 @@ export const removeGenTemplateGroupByIds = (ids: ModeIdType[]): AxiosPromise<boo
 }
 
 /**
- * 查询单个模板分组
+ * 查询单个模板信息
  */
 export const queryGenTemplateGroupById = (
   id: ModeIdType
@@ -74,7 +74,7 @@ export const queryGenTemplateGroupById = (
 }
 
 /**
- * 查询全部模板分组
+ * 查询全部模板信息
  */
 export const queryGenTemplateGroupList = (
   data?: GenTemplateGroupQueryRequest

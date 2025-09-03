@@ -265,7 +265,7 @@
             <el-table-column label="昵称" prop="nickName" />
             <el-table-column label="用户状态" prop="userStatus" width="120">
               <template #default="{ row }">
-                <user-status-dict :status="row.userStatus" />
+                <user-status-tag :status="row.userStatus" />
               </template>
             </el-table-column>
             <el-table-column label="创建时间" prop="createTime" width="160" />
@@ -329,7 +329,7 @@ import type { SysDeptResponse } from '@/model/system/dept.model'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { disabledTodayAndFuture } from '@/utils/moudle/element'
 import UserRole from '@/views/system/user/components/user-role.vue'
-import UserStatusDict from '@/components/system-dict/user-status.vue'
+
 
 defineOptions({ name: 'SysUserViewIndex' })
 const state = reactive<TableQueryPageState<SysUserQueryRequest, SysUserResponse>>({
@@ -352,7 +352,7 @@ const { createTableIndex, handleQuery, handleSelectionChange } = useTableQueryPa
 >(state, querySysUserPage)
 const { queryParams } = toRefs(state)
 
-const queryFormRef = ref<FormInstance>()
+const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 const addUpdateRef = ref()
 const deptTreeRef = ref()
 const userRoleRef = useTemplateRef('userRoleRef')

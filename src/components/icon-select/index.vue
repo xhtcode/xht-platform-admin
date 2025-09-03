@@ -2,7 +2,7 @@
   <div class="icon-select-container w100">
     <el-input
       v-model="modelValue"
-      :placeholder="placeholder"
+      :placeholder="props.placeholder"
       class="icon-select-input"
       readonly
       @click="openDialog"
@@ -10,7 +10,7 @@
       <template #prepend>
         <div :class="`icon-menu-${modelValue}`" @click="openDialog()" />
       </template>
-      <template v-if="clearable" #suffix>
+      <template v-if="props.clearable" #suffix>
         <el-icon class="button-hover" size="1em" @click="clearableValue">
           <circle-close />
         </el-icon>
@@ -20,13 +20,13 @@
       v-model="dialogVisible"
       :before-close="closeDialog"
       :close-on-click-modal="true"
-      :title="title"
+      :title="props.title"
       modal-class="icon-select-modal"
       align-center
       width="45%"
     >
       <el-input
-        v-model="inputValue"
+        v-model="modelValue"
         autofocus
         clearable
         :placeholder="modelValue ? modelValue : '请输入要搜索图标的提示'"
@@ -57,40 +57,19 @@
 </template>
 
 <script lang="ts" setup>
-import { useVModel } from '@vueuse/core'
 import { CircleClose } from '@element-plus/icons-vue'
+import type { IconItemOptions, IconSelectProps } from '@/components/icon-select/types.ts'
 
 defineOptions({ name: 'SelectIcon', inheritAttrs: false })
 
-interface IconItemOptions {
-  itemType: string
-  iconName: any
-}
-
-interface PropsType {
-  modelValue: string | null | undefined
-  title?: string
-  prepend?: string // 输入框前置内容
-  placeholder?: string // 输入框占位文本
-  size?: 'default' | 'large' | 'small' // 输入框大小
-  disabled?: boolean // 禁用
-  clearable?: boolean // 清空
-}
-
-const props = withDefaults(defineProps<PropsType>(), {
+const props = withDefaults(defineProps<IconSelectProps>(), {
   placeholder: '请输入内容搜索图标或者选择图标', // 输入框占位文本
   title: '图标选择器',
-  disabled: false, // 禁用
   clearable: false, // 禁用
-  prepend: undefined,
-  size: 'default',
 })
-const emit = defineEmits(['update:modelValue'])
-const modelValue = useVModel(props, 'modelValue', emit)
-const dialogVisible = ref(false)
-const inputValue = ref<string | null | undefined>(modelValue.value)
+const modelValue = defineModel<string>('modelValue')
+const dialogVisible = ref<boolean>(false)
 const iconItems = ref<IconItemOptions[]>([])
-
 const initSvg = () => {
   iconItems.value = []
   for (const icon in import.meta.glob('../../assets/icons/menu/*.svg')) {
@@ -117,7 +96,6 @@ const clearableValue = () => {
  */
 const closeDialog = () => {
   dialogVisible.value = false
-  inputValue.value = ''
 }
 /**
  * 选中图标
@@ -134,10 +112,10 @@ const selectIcon = (item: IconItemOptions, collapse: boolean) => {
  * 初始化图标 并且根据搜索值计算图标有多少
  */
 const iconsList = computed<IconItemOptions[]>(() => {
-  if (!inputValue.value) return iconItems.value
+  if (!modelValue.value) return iconItems.value
   const result: IconItemOptions[] = []
   iconItems.value.forEach((item: IconItemOptions) => {
-    if (item.iconName.toLowerCase().indexOf(inputValue.value!.toLowerCase()) > -1) {
+    if (item.iconName.toLowerCase().indexOf(modelValue.value!.toLowerCase()) > -1) {
       result.push({ ...item })
     }
   })

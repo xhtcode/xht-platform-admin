@@ -158,7 +158,7 @@ const queryParams = reactive<QueryParams>({
   pageSize: 10,
 })
 
-const queryFormRef = ref<FormInstance>()
+const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 
 const tableStyle: TableStyle = {
   cellStyle: { 'text-align': 'center' },

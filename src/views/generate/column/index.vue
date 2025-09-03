@@ -106,7 +106,7 @@ const { createTableIndex, handleQuery, handleSelectionChange } = useTableQueryPa
 >(state, queryGenColumnInfoPage)
 const { queryParams } = toRefs(state)
 
-const queryFormRef = ref<FormInstance>()
+const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 const addUpdateRef = ref()
 const { cellStyle, headerCellStyle } = useTableToolHooks()
 

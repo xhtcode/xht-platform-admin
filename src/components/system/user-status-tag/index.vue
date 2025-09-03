@@ -1,19 +1,22 @@
 <template>
-  <el-tag :color="getTagColor(status)" hit disable-transitions effect="dark" class="no-border">
-    {{ getStatusLabel(status) }}
+  <el-tag
+    :color="getTagColor(props.status)"
+    hit
+    disable-transitions
+    effect="dark"
+    class="no-border"
+  >
+    {{ getStatusLabel(props.status) }}
   </el-tag>
 </template>
 
 <script lang="ts" setup>
 import { UserStatusEnums } from '@/model/system/user.model'
-defineOptions({ name: 'UserStatusDict' })
+import type { UserStatusTagProps } from '@/components/system/user-status-tag/types.ts'
+
+defineOptions({ name: 'UserStatusTag', inheritAttrs: false })
 // 定义组件的 props
-const props = defineProps({
-  status: {
-    type: Number,
-    required: true,
-  },
-})
+const props = withDefaults(defineProps<UserStatusTagProps>(), {})
 // 根据状态值返回对应的标签颜色
 const getTagColor = (status: UserStatusEnums) => {
   switch (status) {

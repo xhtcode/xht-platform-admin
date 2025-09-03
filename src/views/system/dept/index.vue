@@ -178,7 +178,7 @@ const state = reactive<CrudOption>({
 })
 
 const { queryParams } = toRefs(state)
-const queryFormRef = ref<FormInstance>()
+const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 const tableRef = ref()
 
 /**

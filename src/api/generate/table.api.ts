@@ -7,6 +7,8 @@ import type {
   GenTableInfoResponse,
 } from '@/model/generate/table.model'
 
+
+
 /**
  * 后台管理服务前缀
  */
@@ -18,6 +20,7 @@ enum Api {
   DELETE = '/gen/table/info/delete',
   QUERY_ONE = '/gen/table/info/get/',
   QUERY_PAGE = '/gen/table/info/page',
+  SYNC_TABLE = '/gen/table/info/sync',
 }
 
 /**
@@ -78,5 +81,21 @@ export const queryGenTableInfoPage = (
     baseURL,
     method: 'get',
     params: { ...data },
+  })
+}
+
+
+
+export const importTable = (
+  data?: GenTableInfoQueryRequest
+): AxiosPromise<boolean> => {
+  return request({
+  })
+}
+
+export const syncList = (
+  data?: GenTableInfoQueryRequest
+): AxiosPromise<GenTableInfoResponse[]> => {
+  return request({
   })
 }

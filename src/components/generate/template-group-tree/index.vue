@@ -1,40 +1,41 @@
 <template>
-  <el-select v-bind="{ ...$attrs, ...props, loading: state.loading }">
-    <el-option v-for="item in state.tableList" :key="item.id" :label="item.name" :value="item.id" />
-  </el-select>
+  <el-tree t v-bind="{ ...$attrs, ...props, loading: state.loading }" node-key="id">
+    <template #default="{ data }">
+      {{ data.groupName }}
+    </template>
+  </el-tree>
 </template>
 
 <script setup lang="ts">
-import { queryGenDataSourceList } from '@/api/generate/datasource.api'
+import { queryGenTemplateGroupList } from '@/api/generate/template.group.api'
 import type {
-  DataSourceSelectProps,
-  DataSourceSelectState,
-} from '@/components/generate/datasource-select/types'
+  GenTemplateGroupSelectProps,
+  GenTemplateGroupSelectState,
+} from '@/components/generate/template-group-select/types'
 import { useMessage } from '@/hooks/use-message'
 
 /**
  * 定义组件选项
  */
 defineOptions({
-  name: 'DataSourceSelect',
+  name: 'TemplateGroupSelect',
   inheritAttrs: false,
 })
 
 /**
  * 定义组件属性
  */
-const props = withDefaults(defineProps<DataSourceSelectProps>(), {
+const props = withDefaults(defineProps<GenTemplateGroupSelectProps>(), {
   modelValue: null,
-  placeholder: '请选择数据源对象',
+  placeholder: '请选择模板分组名称',
   clearable: true,
   disabled: false,
-  showTopDept: false,
 })
 
 /**
  * 组件状态管理
  */
-const state = reactive<DataSourceSelectState>({
+const state = reactive<GenTemplateGroupSelectState>({
   tableList: [],
   loading: false,
 })
@@ -46,7 +47,7 @@ const handleQuery = async () => {
   // 设置加载状态
   state.loading = true
   try {
-    const res = await queryGenDataSourceList()
+    const res = await queryGenTemplateGroupList()
     state.tableList = res.data || []
     if (state.tableList.length === 0) {
       useMessage().info('未查询到数据源信息')
@@ -65,6 +66,7 @@ const handleQuery = async () => {
 onMounted(() => {
   handleQuery()
 })
+defineExpose({})
 </script>
 
 <style scoped lang="scss"></style>

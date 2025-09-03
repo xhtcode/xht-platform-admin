@@ -2,7 +2,7 @@
   <div class="main-container-none">
     <split-panes :push-other-panes="false">
       <split-pane-item min-size="20" size="20">
-        <div class="w100 h100" />
+        <template-group-tree />
       </split-pane-item>
       <split-pane-item min-size="80" size="80">
         <div class="main-container-auto main-container-view">
@@ -121,7 +121,7 @@ const { createTableIndex, handleQuery, handleSelectionChange } = useTableQueryPa
 >(state, queryGenTemplatePage)
 const { queryParams } = toRefs(state)
 
-const queryFormRef = ref<FormInstance>()
+const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 const addUpdateRef = ref()
 const { cellStyle, headerCellStyle } = useTableToolHooks()
 
