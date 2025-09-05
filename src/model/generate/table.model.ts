@@ -34,11 +34,11 @@ export interface GenTableInfoOperationRequest extends BasicFormRequest {
    */
   tableComment: string
   /**
-   *生成的类名
+   *代码名称
    */
   codeName: string
   /**
-   *代码的注释
+   *代码注释
    */
   codeComment: string
   /**
@@ -112,11 +112,11 @@ export interface GenTableInfoResponse extends BasicResponse {
    */
   tableComment: string
   /**
-   *生成的类名
+   *代码名称
    */
   codeName: string
   /**
-   *代码的注释
+   *代码注释
    */
   codeComment: string
   /**

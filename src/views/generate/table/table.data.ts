@@ -22,92 +22,11 @@ export const GenTableInfoOperationForm: GenTableInfoOperationRequest = {
  * 增改页面 表单类型 表单校验
  */
 export const GenTableInfoOperationRules: FormRules<GenTableInfoOperationRequest> = {
-  // 分组ID验证
-  groupId: [
-    {
-      required: true,
-      message: '请选择分组',
-      trigger: 'change',
-    },
-    {
-      type: 'number',
-      message: '分组ID必须为数字',
-      trigger: 'change',
-    },
-  ],
-  // 数据源ID验证
-  dataSourceId: [
-    {
-      required: true,
-      message: '请选择数据源',
-      trigger: 'change',
-    },
-    {
-      type: 'number',
-      message: '数据源ID必须为数字',
-      trigger: 'change',
-    },
-  ],
-
-  // 引擎名称验证
-  engineName: [
-    {
-      required: true,
-      message: '请输入引擎名称',
-      trigger: 'blur',
-    },
-    {
-      min: 1,
-      max: 50,
-      message: '引擎名称长度限制在1-50个字符',
-      trigger: 'blur',
-    },
-    {
-      pattern: /^[a-zA-Z0-9_]+$/,
-      message: '引擎名称只能包含字母、数字和下划线',
-      trigger: 'blur',
-    },
-  ],
-
-  // 数据库表名验证
-  tableName: [
-    {
-      required: true,
-      message: '请输入数据库表名',
-      trigger: 'blur',
-    },
-    {
-      min: 1,
-      max: 64,
-      message: '表名长度限制在1-64个字符',
-      trigger: 'blur',
-    },
-    {
-      pattern: /^[a-zA-Z_][a-zA-Z0-9_]*$/,
-      message: '表名只能包含字母、数字和下划线，且不能以数字开头',
-      trigger: 'blur',
-    },
-  ],
-
-  // 表注释验证
-  tableComment: [
-    {
-      required: true,
-      message: '请输入表注释',
-      trigger: 'blur',
-    },
-    {
-      max: 255,
-      message: '表注释长度不能超过255个字符',
-      trigger: 'blur',
-    },
-  ],
-
-  // 生成的类名验证
+  // 代码名称验证
   codeName: [
     {
       required: true,
-      message: '请输入生成的类名',
+      message: '请输入代码名称',
       trigger: 'blur',
     },
     {
@@ -123,7 +42,7 @@ export const GenTableInfoOperationRules: FormRules<GenTableInfoOperationRequest>
     },
   ],
 
-  // 代码的注释验证
+  // 代码注释验证
   codeComment: [
     {
       required: true,

@@ -1,4 +1,12 @@
 import type { BasicResponse, ModeIdType, PageQueryRequest } from '@/model/base.model'
+import { LanguageTypeEnums } from '@/model/generate/common.model.ts'
+
+type ColumnInfoTypeMapping = {
+  languageType: LanguageTypeEnums // 语言类型
+  columnType: string // 字段类型
+  importPackage: string //导入包路径（如：java.time.LocalDateTime）
+  defaultValue: string // 默认值
+}
 
 /**
  * 字典扩展配置
@@ -16,10 +24,6 @@ export interface GenColumnInfoExtConfig {
    *表单类型
    */
   formType: string
-  /**
-   *表单效验
-   */
-  formValidator: string
   /**
    *列表项 0：否 1：是
    */
@@ -40,6 +44,10 @@ export interface GenColumnInfoExtConfig {
    *查询表单类型
    */
   queryFormType: string
+  /**
+   * 类型映射
+   */
+  typeMappings: ColumnInfoTypeMapping[]
 }
 
 /**

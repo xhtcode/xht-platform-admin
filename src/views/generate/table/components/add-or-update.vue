@@ -5,7 +5,7 @@
     :close-on-click-modal="false"
     :title="state.title"
     append-to-body
-    size="45%"
+    size="80%"
   >
     <el-form
       ref="addUpdateFormRef"
@@ -15,40 +15,62 @@
       element-loading-text="拼命加载中"
       label-width="100px"
     >
-      <el-form-item label="表ID" prop="id">
-        <el-input v-model="addUpdateForm.id" placeholder="请输入表ID" />
-      </el-form-item>
-      <el-form-item label="分组id" prop="groupId">
-        <el-input v-model="addUpdateForm.groupId" placeholder="请输入分组id" />
-      </el-form-item>
-      <el-form-item label="数据源ID" prop="dataSourceId">
-        <el-input v-model="addUpdateForm.dataSourceId" placeholder="请输入数据源ID" />
-      </el-form-item>
-      <el-form-item label="引擎名称" prop="engineName">
-        <el-input v-model="addUpdateForm.engineName" placeholder="请输入引擎名称" />
-      </el-form-item>
-      <el-form-item label="数据库表名" prop="tableName">
-        <el-input v-model="addUpdateForm.tableName" placeholder="请输入数据库表名" />
-      </el-form-item>
-      <el-form-item label="表注释" prop="tableComment">
-        <el-input v-model="addUpdateForm.tableComment" placeholder="请输入表注释" />
-      </el-form-item>
-      <el-form-item label="生成的类名" prop="codeName">
-        <el-input v-model="addUpdateForm.codeName" placeholder="请输入生成的类名" />
-      </el-form-item>
-      <el-form-item label="代码的注释" prop="codeComment">
-        <el-input v-model="addUpdateForm.codeComment" placeholder="请输入代码的注释" />
-      </el-form-item>
-      <el-form-item label="创建时间" prop="tableCreateTime">
-        <el-input v-model="addUpdateForm.tableCreateTime" placeholder="请输入创建时间" />
-      </el-form-item>
-      <el-form-item label="更新时间" prop="tableUpdateTime">
-        <el-input v-model="addUpdateForm.tableUpdateTime" placeholder="请输入更新时间" />
-      </el-form-item>
+      <el-tabs type="border-card" stretch>
+        <el-tab-pane label="表信息" :name="1">
+          <div class="flex">
+            <div class="flex-1">
+              <el-form-item label="表名" prop="tableName">
+                <el-input
+                  v-model="addUpdateForm.tableName"
+                  placeholder="请输入数据库表名"
+                  disabled
+                />
+              </el-form-item>
+              <el-form-item label="表注释" prop="tableComment">
+                <el-input
+                  v-model="addUpdateForm.tableComment"
+                  placeholder="请输入表注释"
+                  disabled
+                />
+              </el-form-item>
+              <el-form-item label="模板分组" prop="groupId">
+                <el-input v-model="addUpdateForm.groupId" placeholder="请输入分组id" />
+              </el-form-item>
+              <el-form-item label="后端作者" prop="codeName">
+                <el-input v-model="addUpdateForm.codeName" placeholder="请输入代码名称" />
+              </el-form-item>
+              <el-form-item label="前端作者" prop="codeName">
+                <el-input v-model="addUpdateForm.codeName" placeholder="请输入代码名称" />
+              </el-form-item>
+              <el-form-item label="代码名称" prop="codeName">
+                <el-input v-model="addUpdateForm.codeName" placeholder="请输入代码名称" />
+              </el-form-item>
+              <el-form-item label="代码注释" prop="codeComment">
+                <el-input v-model="addUpdateForm.codeComment" placeholder="请输入代码注释" />
+              </el-form-item>
+            </div>
+            <div class="flex-2 p-10px">
+              <div class="preview-title">代码示例</div>
+              <pre class="preview-block user-select-none">
+/**
+ *{{addUpdateForm.codeComment}}
+ **/
+              </pre>
+            </div>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="字段信息" :name="2">
+          <column-add-or-update/>
+        </el-tab-pane>
+        <el-tab-pane label="列表字段" :name="3">123</el-tab-pane>
+        <el-tab-pane label="表单字段" :name="4">123</el-tab-pane>
+        <el-tab-pane label="查询字段" :name="5">123</el-tab-pane>
+        <el-tab-pane label="接口配置" :name="6">123</el-tab-pane>
+      </el-tabs>
     </el-form>
     <template #footer>
-      <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>
       <el-button @click="close">取 消</el-button>
+      <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>
     </template>
   </el-drawer>
 </template>
@@ -69,11 +91,12 @@ import {
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { handleFormErrors } from '@/utils/moudle/element'
 import type { ModeIdType } from '@/model/base.model'
+import ColumnAddOrUpdate from '@/views/generate/table/components/column-add-or-update.vue'
 
 defineOptions({ name: 'GenTableInfoAddOrUpdate' })
 const state = reactive<AddUpdateOption<GenTableInfoOperationRequest>>({
-  title: '增加表信息',
-  visibleStatus: false,
+  title: '代码配置',
+  visibleStatus: true,
   operationStatus: 'add',
   loadingStatus: false,
   addUpdateForm: { ...GenTableInfoOperationForm },
@@ -165,4 +188,15 @@ defineExpose({
 })
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+.preview-title {
+  font-weight: 600;
+  margin: 5px;
+}
+
+.preview-block {
+  width: 100%;
+  font-size: 14px;
+  background: var(--el-bg-color-page);
+}
+</style>

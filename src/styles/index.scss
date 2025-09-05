@@ -3,5 +3,18 @@
 @use '@/styles/common/reset.scss';
 @use '@/styles/variables/var.scss' as *;
 @use '@/styles/variables/var.dark.scss' as *;
-@use '@/styles/theme/element.scss';
+//@use '@/styles/theme/element.scss';
 @use '@/styles/theme/layout.scss';
+
+.el-drawer__header {
+  margin-bottom: 0;
+  padding-bottom: var(--el-drawer-padding-primary);
+  border-bottom: 1px solid var(--el-border-color);
+  @extend .user-select-none;
+}
+
+.el-drawer__footer {
+  padding: 10px 20px;
+  border-top: 1px solid var(--el-border-color);
+  @extend .user-select-none;
+}
