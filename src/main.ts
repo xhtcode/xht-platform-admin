@@ -21,6 +21,6 @@ setupStore(app)
 setupPermission()
 setupElIcons(app)
 // 导入布局插件
-app.component('split-panes', Splitpanes)
-app.component('split-pane-item', Pane)
+app.component('SplitPanes', Splitpanes)
+app.component('SplitPaneItem', Pane)
 app.mount('#app')
