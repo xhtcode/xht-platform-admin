@@ -5,7 +5,7 @@
         <div :class="`icon-menu-${val.meta?.icon}`" class="menu-icon text-12px" />
         <span>{{ val.meta?.title }}</span>
       </template>
-      <MenuItem :menuList="val.children" />
+      <MenuItem :menu-list="val.children" />
     </el-sub-menu>
     <template v-else>
       <el-menu-item :key="index" :index="val.path" @click="handleClickMenu(val)">

@@ -52,10 +52,10 @@
       </el-form>
       <table-tool-bar
         v-model:column-data="SysMenuColumnOption"
+        v-model:show-search="state.searchStatus"
         column-status
         refresh-status
         search-status
-        v-model:show-search="state.searchStatus"
         @refresh="handleQuery"
       >
         <el-button icon="Plus" size="small" type="primary" @click="handleAdd">增加</el-button>
@@ -159,15 +159,15 @@
           show-overflow-tooltip
         >
           <template #default="{ row }">
-            <ElTag type="warning" v-if="row.viewName">{{ row.viewName }}</ElTag>
-            <ElLink type="primary" v-if="row.viewName">{{ row.viewPath }}</ElLink>
+            <ElTag v-if="row.viewName" type="warning">{{ row.viewName }}</ElTag>
+            <ElLink v-if="row.viewName" type="primary">{{ row.viewPath }}</ElLink>
           </template>
         </el-table-column>
         <el-table-column label="外链" width="80" prop="frameFlag" align="center">
           <template #default="{ row }">
             <el-switch
-              inline-prompt
               v-model="row.frameFlag"
+              inline-prompt
               :active-value="MenuLinkEnums.YES"
               :inactive-value="MenuLinkEnums.NO"
               active-text="是"

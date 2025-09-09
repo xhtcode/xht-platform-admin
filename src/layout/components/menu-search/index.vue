@@ -14,15 +14,15 @@
     >
       <template #footer>
         <el-autocomplete
+          ref="filterRef"
+          v-model="state.search"
           size="large"
           class="w100"
-          ref="filterRef"
           :fetch-suggestions="querySearch"
-          @select="handleSelect"
-          v-model="state.search"
           placeholder="菜单搜索：支持菜单名称、路由路径"
           :fit-input-width="true"
           popper-class="menu-search-select"
+          @select="handleSelect"
         >
           <template #prefix>
             <el-icon>

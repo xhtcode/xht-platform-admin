@@ -55,11 +55,11 @@
         </el-row>
       </el-form>
       <table-tool-bar
+        v-model:show-search="state.searchStatus"
         :column-data="[]"
         column-status
         refresh-status
         search-status
-        v-model:show-search="state.searchStatus"
         @refresh="handleQuery"
       >
         <el-button icon="Plus" size="small" type="primary" @click="handleAdd">新增</el-button>
@@ -87,9 +87,9 @@
         :data="state.tableList"
         :header-cell-style="headerCellStyle"
         :cell-style="cellStyle"
-        @selection-change="handleSelectionChange"
         class="flex-1"
         empty-text="系统暂无字典！"
+        @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column :index="createTableIndex" label="序号" type="index" width="55" />

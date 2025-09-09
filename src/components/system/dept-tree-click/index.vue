@@ -3,7 +3,7 @@
     <div class="dept-tree-container-filter">
       <el-input v-model="filterText" placeholder="请输入部门名称">
         <template #append>
-          <el-icon @click="toggleRowExpansionAll(!expandAll)" size="20">
+          <el-icon size="20" @click="toggleRowExpansionAll(!expandAll)">
             <CaretTop v-if="expandAll" />
             <CaretBottom v-else />
           </el-icon>

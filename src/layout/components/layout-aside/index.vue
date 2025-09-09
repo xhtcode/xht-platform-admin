@@ -11,7 +11,7 @@ import Logo from '@/layout/components/logo/index.vue'
 import MenuMainComponent from '@/layout/components/menu-main/index.vue'
 import { useThemeHooks } from '@/hooks/use-theme-hooks'
 
-defineOptions({ name: 'layoutAside' })
+defineOptions({ name: 'LayoutAside' })
 const { asideStyle } = useThemeHooks()
 </script>
 

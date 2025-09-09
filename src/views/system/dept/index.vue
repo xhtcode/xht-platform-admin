@@ -45,11 +45,11 @@
         </el-row>
       </el-form>
       <table-tool-bar
+        v-model:show-search="state.searchStatus"
         :column-data="[]"
         column-status
         refresh-status
         search-status
-        v-model:show-search="state.searchStatus"
         @refresh="handleQuery"
       >
         <el-button icon="Plus" size="small" type="primary" @click="handleAdd">增加</el-button>

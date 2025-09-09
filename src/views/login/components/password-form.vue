@@ -1,5 +1,5 @@
 <template>
-  <el-form size="default" :model="loginForm" :rules="loginRules" ref="loginFormRef">
+  <el-form ref="loginFormRef" size="default" :model="loginForm" :rules="loginRules">
     <el-form-item prop="username">
       <el-input
         v-model="loginForm.username"
@@ -43,8 +43,8 @@
       type="primary"
       size="large"
       class="login-button"
-      @click="handleLogin"
       :loading="loading"
+      @click="handleLogin"
     >
       登录
     </el-button>

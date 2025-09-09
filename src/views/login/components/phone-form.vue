@@ -1,5 +1,5 @@
 <template>
-  <el-form size="default" :model="phoneForm" :rules="phoneRules" ref="phoneFormRef">
+  <el-form ref="phoneFormRef" size="default" :model="phoneForm" :rules="phoneRules">
     <el-form-item prop="phone" :inline-message="false" :show-message="false">
       <el-input
         v-model="phoneForm.phone"
@@ -37,8 +37,8 @@
       type="primary"
       size="large"
       class="login-button"
-      @click="handlePhoneLogin"
       :loading="loading"
+      @click="handlePhoneLogin"
     >
       登录
     </el-button>

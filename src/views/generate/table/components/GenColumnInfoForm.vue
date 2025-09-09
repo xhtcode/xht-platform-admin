@@ -154,7 +154,7 @@
     <!-- 类型映射区域 -->
     <el-divider content-position="left">
       类型映射
-      <el-button type="primary" size="small" @click="addTypeMapping" class="add-mapping-btn">
+      <el-button type="primary" size="small" class="add-mapping-btn" @click="addTypeMapping">
         <el-icon>
           <Plus />
         </el-icon>
@@ -214,8 +214,8 @@
                 type="danger"
                 icon="Delete"
                 size="small"
-                @click="removeTypeMapping(index)"
                 circle
+                @click="removeTypeMapping(index)"
               />
             </el-col>
           </el-row>

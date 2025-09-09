@@ -1,7 +1,7 @@
 <template>
   <el-container class="layout-container">
-    <div class="layout__overlay" @click="handleCloseSidebar" v-if="mobileShowStatus" />
-    <div class="layout__sidebar" v-if="mobileShowStatus">
+    <div v-if="mobileShowStatus" class="layout__overlay" @click="handleCloseSidebar" />
+    <div v-if="mobileShowStatus" class="layout__sidebar">
       <layout-aside />
     </div>
     <layout-aside v-if="desktopShowStatus" />
@@ -19,13 +19,13 @@
                 <template #default="{ Component, route }">
                   <Transition name="main-view-animation" mode="out-in">
                     <keep-alive>
-                      <component :is="Component" class="w100" :key="route.fullPath" />
+                      <component :is="Component" :key="route.fullPath" class="w100" />
                     </keep-alive>
                   </Transition>
                 </template>
               </router-view>
             </div>
-            <el-footer ref="footerRef" v-if="footerStatus" class="layout-footer user-select-none">
+            <el-footer v-if="footerStatus" ref="footerRef" class="layout-footer user-select-none">
               小糊涂后台管理系统
             </el-footer>
           </el-scrollbar>

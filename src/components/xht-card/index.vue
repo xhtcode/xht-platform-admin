@@ -10,7 +10,7 @@
       </el-icon>
     </div>
     <div class="xht-card-default">
-      <slot :footerStatus="state.footerStatus" />
+      <slot :footer-status="state.footerStatus" />
     </div>
     <div v-if="$slots.footer && state.footerStatus" class="xht-card-footer">
       <slot name="footer" />

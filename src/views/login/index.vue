@@ -11,7 +11,7 @@
             小糊涂・后台管理系统
           </div>
           <Transition name="text-fade" mode="out-in">
-            <div class="m-0 text-14px color-#6b7280" :key="activeLoginType">
+            <div :key="activeLoginType" class="m-0 text-14px color-#6b7280">
               {{
                 activeLoginType === 'password'
                   ? '密码验证 · 安全登录'
@@ -45,48 +45,48 @@
           <div
             class="icon-item"
             :class="{ active: activeLoginType === 'password' }"
-            @click="handleChangeLoginType('password')"
             title="密码登录"
+            @click="handleChangeLoginType('password')"
           >
             <div class="icon icon-login-password" />
           </div>
           <div
             class="icon-item"
             :class="{ active: activeLoginType === 'phone' }"
-            @click="handleChangeLoginType('phone')"
             title="手机号登录"
+            @click="handleChangeLoginType('phone')"
           >
             <div class="icon icon-login-phone" />
           </div>
           <div
             class="icon-item"
             :class="{ active: activeLoginType === 'qrcode' }"
-            @click="handleChangeLoginType('qrcode')"
             title="扫码登录"
+            @click="handleChangeLoginType('qrcode')"
           >
             <div class="icon icon-login-sm" />
           </div>
           <div
             class="icon-item"
             :class="{ active: activeLoginType === 'wechat' }"
-            @click="handleChangeLoginType('wechat')"
             title="微信登录"
+            @click="handleChangeLoginType('wechat')"
           >
             <div class="icon icon-login-wechat" />
           </div>
           <div
             class="icon-item"
             :class="{ active: activeLoginType === 'qq' }"
-            @click="handleChangeLoginType('qq')"
             title="QQ登录"
+            @click="handleChangeLoginType('qq')"
           >
             <div class="icon icon-login-qq" />
           </div>
           <div
             class="icon-item"
             :class="{ active: activeLoginType === 'dinging' }"
-            @click="handleChangeLoginType('dinging')"
             title="钉钉登录"
+            @click="handleChangeLoginType('dinging')"
           >
             <div class="icon icon-login-ding-ding" />
           </div>

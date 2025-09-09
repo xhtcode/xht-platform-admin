@@ -30,8 +30,8 @@
               <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="4">
                 <el-form-item label="岗位编码" prop="postCode">
                   <el-input
-                    class="w100"
                     v-model="queryParams.postCode"
+                    class="w100"
                     :maxlength="50"
                     show-word-limit
                     placeholder="请输入岗位编码"
@@ -41,8 +41,8 @@
               <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="4">
                 <el-form-item label="岗位名称" prop="postName">
                   <el-input
-                    class="w100"
                     v-model="queryParams.postName"
+                    class="w100"
                     :maxlength="50"
                     show-word-limit
                     placeholder="请输入岗位名称"
@@ -52,8 +52,8 @@
               <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="4">
                 <el-form-item label="岗位状态" prop="postStatus">
                   <el-select
-                    class="w100"
                     v-model="queryParams.postStatus"
+                    class="w100"
                     placeholder="请选择岗位状态"
                   >
                     <el-option label="正常" :value="SysDeptPostStatusEnums.NORMAL" />
@@ -64,8 +64,8 @@
               <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="4">
                 <el-form-item label="系统内置" prop="systemFlag">
                   <el-select
-                    class="w100"
                     v-model="queryParams.systemFlag"
+                    class="w100"
                     placeholder="请选择系统内置"
                   >
                     <el-option label="正常" :value="SystemFlagEnums.YES" />
@@ -80,11 +80,11 @@
             </el-row>
           </el-form>
           <table-tool-bar
+            v-model:show-search="state.searchStatus"
             :column-data="[]"
             column-status
             refresh-status
             search-status
-            v-model:show-search="state.searchStatus"
             @refresh="queryPostData"
           >
             <el-button icon="Plus" size="small" type="primary" @click="handleAdd">新增</el-button>

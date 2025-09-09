@@ -62,7 +62,7 @@
                 />
               </el-form-item>
             </el-col>
-            <el-col :span="6" class="text-center" v-if="!footerStatus">
+            <el-col v-if="!footerStatus" :span="6" class="text-center">
               <el-button icon="Search" type="primary" @click="handleQuery">查询</el-button>
               <el-button icon="Refresh" @click="resetQuery">重置</el-button>
             </el-col>

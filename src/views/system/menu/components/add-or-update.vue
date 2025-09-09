@@ -59,7 +59,7 @@
       </el-row>
 
       <el-row>
-        <el-col :xs="24" :sm="24" :lg="12" v-if="!isM">
+        <el-col v-if="!isM" :xs="24" :sm="24" :lg="12">
           <el-form-item label="权限标识" prop="menuAuthority">
             <el-input v-model="addUpdateForm.menuAuthority" placeholder="请输入权限标识" />
           </el-form-item>
@@ -89,11 +89,11 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col :xs="24" :sm="24" :lg="12" v-if="isC">
+        <el-col v-if="isC" :xs="24" :sm="24" :lg="12">
           <el-form-item label="显示状态" prop="menuHidden">
             <el-switch
-              inline-prompt
               v-model="addUpdateForm.menuHidden"
+              inline-prompt
               :active-value="MenuHiddenEnums.SHOW"
               :inactive-value="MenuHiddenEnums.HIDE"
               active-text="显示"
@@ -102,25 +102,25 @@
           </el-form-item>
         </el-col>
         <el-col
+          v-if="isC && addUpdateForm.menuHidden === MenuHiddenEnums.HIDE"
           :xs="24"
           :sm="24"
           :lg="12"
-          v-if="isC && addUpdateForm.menuHidden === MenuHiddenEnums.HIDE"
         >
           <el-form-item label="高亮菜单" prop="activeMenuPath">
             <el-input v-model="addUpdateForm.activeMenuPath" placeholder="请输入高亮菜单" />
           </el-form-item>
         </el-col>
         <el-col
+          v-if="isC && addUpdateForm.frameFlag === MenuLinkEnums.NO"
           :xs="24"
           :sm="24"
           :lg="12"
-          v-if="isC && addUpdateForm.frameFlag === MenuLinkEnums.NO"
         >
           <el-form-item label="缓存状态" prop="menuCache">
             <el-switch
-              inline-prompt
               v-model="addUpdateForm.menuCache"
+              inline-prompt
               :active-value="MenuCacheEnums.YES"
               :inactive-value="MenuCacheEnums.NO"
               active-text="是"
@@ -131,8 +131,8 @@
         <el-col v-if="isC" :xs="24" :sm="24" :lg="12">
           <el-form-item label="外链" prop="frameFlag">
             <el-switch
-              inline-prompt
               v-model="addUpdateForm.frameFlag"
+              inline-prompt
               :active-value="MenuLinkEnums.YES"
               :inactive-value="MenuLinkEnums.NO"
               active-text="是"

@@ -12,23 +12,23 @@
       </div>
     </template>
     <el-table
+      ref="tableRef"
       v-loading="state.loadingStatus"
       :header-cell-style="headerCellStyle"
       :cell-style="cellStyle"
       border
       height="65vh"
       row-key="userId"
-      ref="tableRef"
       empty-text="暂无用户数据"
       highlight-current-row
-      @row-dblclick="onSubmit"
-      @current-change="handleCurrentChange"
       :data="state.userList"
       :row-class-name="
         ({ row }) => {
           return row.deptId ? '' : 'no-dept-row'
         }
       "
+      @row-dblclick="onSubmit"
+      @current-change="handleCurrentChange"
     >
       <el-table-column type="index" width="60" label="序号" />
       <el-table-column prop="avatarUrl" label="用户头像" width="100">

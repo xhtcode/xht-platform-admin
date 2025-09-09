@@ -14,7 +14,7 @@
         <app-setting />
         <user-avatar />
       </div>
-      <div class="layout-header-container-bottom" v-if="tagsViewStatus">
+      <div v-if="tagsViewStatus" class="layout-header-container-bottom">
         <tags-view-component />
       </div>
     </div>

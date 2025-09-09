@@ -46,10 +46,10 @@
         <el-col :span="24">
           <el-form-item label="岗位排序" prop="postSort">
             <el-input-number
+              v-model="addUpdateForm.postSort"
               class="w100"
               :min="0"
               :max="999"
-              v-model="addUpdateForm.postSort"
               placeholder="请输入岗位排序"
             />
           </el-form-item>
@@ -57,10 +57,10 @@
         <el-col :span="24">
           <el-form-item label="岗位限制" prop="postLimit">
             <el-input-number
+              v-model="addUpdateForm.postLimit"
               class="w100"
               :min="1"
               :max="999"
-              v-model="addUpdateForm.postLimit"
               placeholder="请输入岗位限制人数"
             >
               <template #suffix>

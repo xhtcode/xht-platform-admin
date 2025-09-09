@@ -58,8 +58,8 @@
         <el-col :xs="24" :sm="24" :lg="12">
           <el-form-item label="显示顺序" prop="deptSort">
             <el-input-number
-              class="w100"
               v-model="addUpdateForm.deptSort"
+              class="w100"
               :min="0"
               :max="999"
               placeholder="请输入显示顺序"
@@ -111,8 +111,8 @@
     </template>
     <dept-user-dialog
       ref="deptUserDialog"
-      @change="handleDeptUser"
       v-model="addUpdateForm.leaderUserId"
+      @change="handleDeptUser"
     />
   </el-drawer>
 </template>

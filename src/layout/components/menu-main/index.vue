@@ -7,7 +7,7 @@
     :unique-opened="true"
     mode="vertical"
   >
-    <menu-item :menuList="menuList" />
+    <menu-item :menu-list="menuList" />
   </el-menu>
 </template>
 

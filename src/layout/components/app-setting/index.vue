@@ -36,8 +36,8 @@
         <el-form-item label="主题颜色">
           <el-color-picker
             id="test"
-            popper-class="custom-color-picker"
             v-model="colorType"
+            popper-class="custom-color-picker"
             :predefine="predefineColors"
             color-format="rgb"
             :disabled="displayColorPicker"

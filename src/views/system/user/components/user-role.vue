@@ -10,14 +10,14 @@
       <div class="user-role-dialog-title">
         <div>分配角色</div>
         <div class="flex mr-16">
-          <el-checkbox label="全选/不全选" v-model="checkStrictly" @change="handleSelectAll" />
+          <el-checkbox v-model="checkStrictly" label="全选/不全选" @change="handleSelectAll" />
         </div>
       </div>
     </template>
     <el-scrollbar class="user-role-dialog-body">
       <el-tree
-        v-loading="state.loadingStatus"
         ref="roleTreeRef"
+        v-loading="state.loadingStatus"
         :data="treeData"
         :default-checked-keys="state.checkedKeys"
         :check-strictly="false"

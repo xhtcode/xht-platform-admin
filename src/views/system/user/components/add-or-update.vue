@@ -24,8 +24,8 @@
         <el-col :xs="24" :sm="24" :lg="12">
           <el-form-item label="注册时间" prop="createTime">
             <el-date-picker
-              disabled
               v-model="addUpdateForm.createTime"
+              disabled
               type="date"
               placeholder="请选择出生日期"
               value-format="YYYY-MM-DD"
@@ -99,8 +99,8 @@
         <el-col :xs="24" :sm="24" :lg="12">
           <el-form-item label="用户年龄" prop="profile.age">
             <el-input-number
-              class="w100"
               v-model="addUpdateForm.profile.age"
+              class="w100"
               :min="0"
               :max="150"
               placeholder="请输入用户年龄"
@@ -112,9 +112,9 @@
         <el-col :span="24">
           <el-form-item label="家庭地址" prop="profile.address">
             <el-input
+              v-model="addUpdateForm.profile.address"
               :rows="5"
               :resize="'none'"
-              v-model="addUpdateForm.profile.address"
               type="textarea"
               placeholder="请输入家庭地址"
               :maxlength="120"
@@ -152,8 +152,8 @@
         <el-col :xs="24" :sm="24" :lg="12">
           <el-form-item label="部门主管" prop="dept.leaderName">
             <el-input
-              disabled
               v-model="addUpdateForm.dept.leaderName"
+              disabled
               maxlength="11"
               show-word-limit
               placeholder="暂无主管"
@@ -165,8 +165,8 @@
         <el-col :xs="24" :sm="24" :lg="12">
           <el-form-item label="联系电话" prop="dept.phone">
             <el-input
-              disabled
               v-model="addUpdateForm.dept.phone"
+              disabled
               maxlength="11"
               show-word-limit
               placeholder="请输入联系电话"
@@ -176,8 +176,8 @@
         <el-col :xs="24" :sm="24" :lg="12">
           <el-form-item label="联系邮箱" prop="dept.email">
             <el-input
-              disabled
               v-model="addUpdateForm.dept.email"
+              disabled
               maxlength="50"
               show-word-limit
               placeholder="请输入联系邮箱"
@@ -213,10 +213,10 @@
         <el-col :xs="24" :sm="24" :lg="12">
           <el-form-item label="岗位限制" prop="post.postLimit">
             <el-input
+              v-model="postHave"
               disabled
               class="w100"
               :input-style="{ 'text-align': 'center' }"
-              v-model="postHave"
               placeholder="请输入岗位限制人数"
             />
           </el-form-item>

@@ -17,8 +17,8 @@
     </template>
     <el-scrollbar class="menu-role-dialog-body">
       <el-tree
-        v-loading="state.loadingStatus"
         ref="menuTree"
+        v-loading="state.loadingStatus"
         :data="treeData"
         :default-checked-keys="state.checkedKeys"
         :check-strictly="!checkStrictly"

@@ -83,8 +83,8 @@
                   <div :class="`icon-menu-${item.icon}`" class="mr-5 text-8px" />
                   {{ item.title }}
                   <el-icon
-                    :size="14"
                     v-if="!item.affixStatus"
+                    :size="14"
                     class="tags-view-item-close"
                     @click.prevent.stop="closeSelectedTag(item)"
                   >
@@ -106,7 +106,7 @@
           <refresh-right />
         </el-icon>
       </span>
-      <ContextMenu :menuList="defaultMenuList" trigger="click" @change="commandTrigger">
+      <ContextMenu :menu-list="defaultMenuList" trigger="click" @change="commandTrigger">
         <span class="tags-container-view-tool flex-center">
           <el-icon class="tags-view-tool-icon-hover">
             <Menu />

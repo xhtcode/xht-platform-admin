@@ -7,27 +7,27 @@
     </div>
     <div class="top-right-btn" :style="style">
       <el-tooltip
+        v-if="searchStatus"
         class="item"
         :content="showSearch ? '快速查询' : '高级查询'"
         placement="top"
-        v-if="searchStatus"
       >
         <el-button circle size="small" icon="Search" @click="toggleSearch" />
       </el-tooltip>
-      <el-tooltip class="item" content="刷新" placement="top" v-if="refreshStatus">
+      <el-tooltip v-if="refreshStatus" class="item" content="刷新" placement="top">
         <el-button type="info" size="small" circle icon="Refresh" @click="refresh" />
       </el-tooltip>
-      <el-tooltip class="item" content="导入" placement="top" v-if="importStatus">
+      <el-tooltip v-if="importStatus" class="item" content="导入" placement="top">
         <el-button type="success" size="small" circle icon="Upload" @click="importData" />
       </el-tooltip>
-      <el-tooltip class="item" content="导出" placement="top" v-if="exportStatus">
+      <el-tooltip v-if="exportStatus" class="item" content="导出" placement="top">
         <el-button type="primary" size="small" circle icon="Download" @click="exportData" />
       </el-tooltip>
-      <el-tooltip class="item" content="显隐列" placement="top" v-if="columnStatus">
+      <el-tooltip v-if="columnStatus" class="item" content="显隐列" placement="top">
         <el-button color="#626aef" size="small" circle icon="Menu" @click="showColumn" />
       </el-tooltip>
       <slot name="column" />
-      <el-dialog title="显示/隐藏" v-model="state.openStatus" append-to-body width="45vw">
+      <el-dialog v-model="state.openStatus" title="显示/隐藏" append-to-body width="45vw">
         <div class="w100 flex-center">
           <el-transfer
             v-model="state.columnValue"
