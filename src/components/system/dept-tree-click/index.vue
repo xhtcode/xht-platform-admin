@@ -34,13 +34,13 @@
 <script lang="ts" setup>
 import type { ElTree } from 'element-plus'
 import { useVModel } from '@vueuse/core'
-import { querySysDeptTree } from '@/api/system/dept.api.ts'
+import { querySysDeptTree } from '@/api/system/dept.api'
 import type {
   SysDeptQueryRequest,
   SysDeptResponse,
   SysDeptTreeResponse,
-} from '@/model/system/dept.model.ts'
-import { DeptStatusEnums } from '@/model/system/dept.model.ts'
+} from '@/model/system/dept.model'
+import { DeptStatusEnums } from '@/model/system/dept.model'
 import type { AxiosResponse } from 'axios'
 import { CaretBottom, CaretTop } from '@element-plus/icons-vue'
 

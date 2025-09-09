@@ -123,7 +123,7 @@ const data = ref(generateData(columns, 200))
   </el-table>
 </template>
 <script lang="ts" setup>
-import type { GenColumnInfoOperationRequest } from '@/model/generate/column.model.ts'
+import type { GenColumnInfoOperationRequest } from '@/model/generate/column.model'
 import { useTableToolHooks } from '@/hooks/use-crud-hooks.ts'
 import columnData from '@/views/generate/table/mock.data.ts'
 

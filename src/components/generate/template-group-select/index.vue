@@ -16,7 +16,7 @@ import type {
   GenTemplateGroupSelectState,
 } from '@/components/generate/template-group-select/types'
 import { useMessage } from '@/hooks/use-message'
-import type { ModeIdType } from '@/model/base.model.ts'
+import type { ModeIdType } from '@/model/base.model'
 
 /**
  * 定义组件选项

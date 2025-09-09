@@ -14,9 +14,9 @@
 </template>
 
 <script lang="ts" setup>
-import type { SysMenuTreeResponse } from '@/model/system/menu.model.ts'
-import { MenuTypeEnums } from '@/model/system/menu.model.ts'
-import { queryToolsMenuTree } from '@/api/tools.api.ts'
+import type { SysMenuTreeResponse } from '@/model/system/menu.model'
+import { MenuTypeEnums } from '@/model/system/menu.model'
+import { queryToolsMenuTree } from '@/api/tools.api'
 
 defineOptions({ name: 'MenuTree' })
 
@@ -24,7 +24,7 @@ interface Props {
   modelValue?: string[]
   disabled?: boolean
   showTopMenu?: boolean
-  type: 'ALL' | 'M' | 'C' | 'B'
+  type?: 'ALL' | 'M' | 'C' | 'B'
 }
 
 const props = withDefaults(defineProps<Props>(), {

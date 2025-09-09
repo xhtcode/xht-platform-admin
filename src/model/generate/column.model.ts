@@ -1,5 +1,5 @@
 import type { BasicResponse, ModeIdType, PageQueryRequest } from '@/model/base.model'
-import { LanguageTypeEnums } from '@/model/generate/common.model.ts'
+import { LanguageTypeEnums } from '@/model/generate/common.model'
 
 type ColumnInfoTypeMapping = {
   languageType: LanguageTypeEnums // 语言类型

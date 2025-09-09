@@ -20,10 +20,10 @@
 </template>
 
 <script lang="ts" setup>
-import { querySysDeptTree } from '@/api/system/dept.api.ts'
-import type { SysDeptResponse, SysDeptTreeResponse } from '@/model/system/dept.model.ts'
-import { DeptStatusEnums } from '@/model/system/dept.model.ts'
-import type { ModeIdType } from '@/model/base.model.ts'
+import { querySysDeptTree } from '@/api/system/dept.api'
+import type { SysDeptResponse, SysDeptTreeResponse } from '@/model/system/dept.model'
+import { DeptStatusEnums } from '@/model/system/dept.model'
+import type { ModeIdType } from '@/model/base.model'
 
 defineOptions({ name: 'DeptTreeSelect' })
 
@@ -36,7 +36,6 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  modelValue: null,
   placeholder: '请选择父部门',
   clearable: true,
   disabled: false,

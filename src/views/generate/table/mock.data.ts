@@ -1,5 +1,5 @@
-import type { GenColumnInfoOperationRequest } from '@/model/generate/column.model.ts'
-import { LanguageTypeEnums } from '@/model/generate/common.model.ts'
+import type { GenColumnInfoOperationRequest } from '@/model/generate/column.model'
+import { LanguageTypeEnums } from '@/model/generate/common.model'
 
 const columnData: GenColumnInfoOperationRequest[] = [
   {

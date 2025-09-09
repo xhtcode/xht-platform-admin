@@ -74,8 +74,8 @@ import { useTableToolHooks } from '@/hooks/use-crud-hooks.ts'
 import type {
   GenTableInfoQueryRequest,
   GenTableInfoResponse,
-} from '@/model/generate/table.model.ts'
-import type { GenDataSourceResponse } from '@/model/generate/datasource.model.ts'
+} from '@/model/generate/table.model'
+import type { GenDataSourceResponse } from '@/model/generate/datasource.model'
 const tableStyle = useTableToolHooks()
 /**
  * 自定义表格索引生成

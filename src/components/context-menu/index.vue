@@ -35,7 +35,7 @@ import type { ContextMenuSchemaType } from '@/components/context-menu/types'
 defineOptions({ name: 'ContextMenu' })
 
 interface PropsTypes {
-  menuList: ContextMenuSchemaType[]
+  menuList?: ContextMenuSchemaType[]
   trigger?: 'click' | 'hover' | 'focus' | 'contextmenu'
   tagItem?: any
   disabled?: boolean

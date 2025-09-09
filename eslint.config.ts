@@ -22,18 +22,9 @@ export default defineConfigWithVueTs(
   ]),
   // 应用Vue.js的基本规则集
   eslintPluginVue.configs['flat/essential'],
-  eslintPluginVue.configs['flat/recommended'],
 
   // 应用Vue+TypeScript的推荐规则集
   vueTsConfigs.recommended,
-  {
-    languageOptions: {
-      parserOptions: {
-        project: "./tsconfig.json",
-        tsconfigRootDir: import.meta.dirname, // 👈
-      },
-    },
-  },
   {
     rules: {
       '@typescript-eslint/no-explicit-any': 'off', // 允许使用any类型，方便开发

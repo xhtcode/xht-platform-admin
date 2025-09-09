@@ -106,8 +106,8 @@
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Delete, Edit, Plus } from '@element-plus/icons-vue'
 import GenColumnInfoForm from './GenColumnInfoForm.vue'
-import type { GenColumnInfoOperationRequest } from '@/model/generate/column.model.ts'
-import type { ModeIdType } from '@/model/base.model.ts'
+import type { GenColumnInfoOperationRequest } from '@/model/generate/column.model'
+import type { ModeIdType } from '@/model/base.model'
 
 const state = reactive<any>({
   visibleStatus: true,

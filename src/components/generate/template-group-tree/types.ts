@@ -1,6 +1,6 @@
 import type { TreeOptionProps } from 'element-plus'
 import type { ModeIdType } from '@/model/base.model'
-import type { GenTemplateGroupResponse } from '@/model/generate/template.group.model.ts'
+import type { GenTemplateGroupResponse } from '@/model/generate/template.group.model'
 
 /**
  * 数据源组件状态
