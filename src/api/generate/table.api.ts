@@ -7,8 +7,6 @@ import type {
   GenTableInfoResponse,
 } from '@/model/generate/table.model'
 
-
-
 /**
  * 后台管理服务前缀
  */
@@ -84,18 +82,10 @@ export const queryGenTableInfoPage = (
   })
 }
 
-
-
-export const importTable = (
-  data?: GenTableInfoQueryRequest
-): AxiosPromise<boolean> => {
-  return request({
-  })
+export const importTable = (data?: GenTableInfoQueryRequest): AxiosPromise<boolean> => {
+  return request({})
 }
 
-export const syncList = (
-  data?: GenTableInfoQueryRequest
-): AxiosPromise<GenTableInfoResponse[]> => {
-  return request({
-  })
+export const syncList = (data?: GenTableInfoQueryRequest): AxiosPromise<GenTableInfoResponse[]> => {
+  return request({})
 }

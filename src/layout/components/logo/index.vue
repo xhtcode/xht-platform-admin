@@ -2,7 +2,7 @@
   <div class="layout-container-logo">
     <transition enter-active-class="animate__animated animate__fadeInLeft">
       <div :key="+menuCollapse" class="wh-100 flex-center">
-        <img alt="logo" class="layout-logo-img" src="@/assets/images/vue.svg" >
+        <img alt="logo" class="layout-logo-img" src="@/assets/images/vue.svg" />
         <div v-if="menuCollapse" class="layout-logo-text">小糊涂后台管理</div>
       </div>
     </transition>

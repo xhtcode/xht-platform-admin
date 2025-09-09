@@ -7,17 +7,17 @@ export interface GenTemplateGroupOperationRequest {
   /**
    * 分组ID
    */
-  id: ModeIdType;
+  id: ModeIdType
 
   /**
    * 分组名称
    */
-  groupName: string;
+  groupName: string
 
   /**
    * 分组描述
    */
-  groupDesc: string;
+  groupDesc: string
 }
 
 /**
@@ -27,7 +27,7 @@ export interface GenTemplateGroupQueryRequest extends PageQueryRequest {
   /**
    * 分组名称
    */
-  groupName?: string;
+  groupName?: string
 }
 
 /**
@@ -37,15 +37,15 @@ export interface GenTemplateGroupResponse extends BasicResponse {
   /**
    * 分组ID
    */
-  id: ModeIdType;
+  id: ModeIdType
 
   /**
    * 分组名称
    */
-  groupName: string;
+  groupName: string
 
   /**
    * 分组描述
    */
-  groupDesc: string;
+  groupDesc: string
 }

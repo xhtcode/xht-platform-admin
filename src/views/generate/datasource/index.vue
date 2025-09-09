@@ -79,7 +79,7 @@
             <el-tag v-else type="danger">{{ row.lastTestTime }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column align="center" fixed="right" label="操作" >
+        <el-table-column align="center" fixed="right" label="操作">
           <template #default="{ row }">
             <el-button icon="edit" link type="success" @click="handleEdit(row)">修改</el-button>
             <el-button icon="delete" link type="danger" @click="handleDelete(row)">删除</el-button>

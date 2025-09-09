@@ -46,7 +46,7 @@ export const GenTypeMappingOperationRules: FormRules<GenTypeMappingOperationRequ
       message: '请输入目标语言数据类型',
       trigger: ['blur', 'change'],
     },
-  ]
+  ],
 }
 
 /**

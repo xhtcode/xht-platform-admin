@@ -5,9 +5,9 @@
 <script setup lang="ts">
 import type { MirrorEditorProps } from '@/components/code-mirror-editor/types.ts'
 import { onMounted, onUnmounted, watch } from 'vue'
-import { EditorView ,keymap} from '@codemirror/view'
+import { EditorView, keymap } from '@codemirror/view'
 import { Compartment, EditorState } from '@codemirror/state'
-import { indentWithTab } from "@codemirror/commands"
+import { indentWithTab } from '@codemirror/commands'
 import { javascript } from '@codemirror/lang-javascript'
 import { java } from '@codemirror/lang-java'
 import { html } from '@codemirror/lang-html'
@@ -61,7 +61,7 @@ onMounted(() => {
           emit('change', newValue) // 自定义变化事件
         }
       }),
-      keymap.of([indentWithTab])
+      keymap.of([indentWithTab]),
     ],
   })
 

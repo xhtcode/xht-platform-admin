@@ -2,20 +2,20 @@
   <div class="pagination-container">
     <el-pagination
       :background="props.background"
-      :currentPage="currentPage"
+      :current-page="currentPage"
       :default-current-page="props.defaultCurrentPage"
       :default-page-size="props.defaultPageSize"
       :disabled="props.disabled"
-      :hideOnSinglePage="props.hideOnSinglePage"
+      :hide-on-single-page="props.hideOnSinglePage"
       :layout="props.layout"
-      :nextIcon="props.nextIcon"
-      :nextText="props.nextText"
+      :next-icon="props.nextIcon"
+      :next-text="props.nextText"
       :page-count="props.pageCount"
       :page-size="pageSize"
-      :pageSizes="props.pageSizes"
+      :page-sizes="props.pageSizes"
       :pager-count="props.pagerCount"
-      :prevIcon="props.prevIcon"
-      :prevText="props.prevText"
+      :prev-icon="props.prevIcon"
+      :prev-text="props.prevText"
       :teleported="props.teleported"
       :total="props.total"
       @size-change="handleSizeChange"
@@ -47,7 +47,7 @@ const props = withDefaults(defineProps<XhtPaginationProps>(), {
   nextIcon: undefined,
   pageCount: undefined,
 })
-const pageSize = defineModel<number| undefined>('pageSize', {
+const pageSize = defineModel<number | undefined>('pageSize', {
   required: true,
 })
 const currentPage = defineModel<number | undefined>('pageSize', {

@@ -6,11 +6,11 @@
     title="字段信息列表"
     destroy-on-close
   >
-    <el-table v-loading="loading" :data="filteredColumns" border >
+    <el-table v-loading="loading" :data="filteredColumns" border>
       <el-table-column>
         <template #header>
           <div class="text-right">
-            <el-button type="primary" @click="addNewColumn" >
+            <el-button type="primary" @click="addNewColumn">
               <el-icon>
                 <Plus />
               </el-icon>
@@ -77,8 +77,8 @@
             <el-button
               type="text"
               size="small"
-              @click="handleDelete(scope.$index, scope.row)"
               :disabled="scope.row.isPrimary === 1 && columns.length <= 1"
+              @click="handleDelete(scope.$index, scope.row)"
             >
               <el-icon>
                 <Delete />

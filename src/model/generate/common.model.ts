@@ -14,4 +14,3 @@ export enum LanguageTypeEnums {
   JAVA = 'Java',
   TYPESCRIPT = 'TypeScript',
 }
-

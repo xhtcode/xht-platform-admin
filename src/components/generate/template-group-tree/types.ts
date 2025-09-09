@@ -20,5 +20,4 @@ export interface GenTemplateGroupSelectState {
 /**
  * 数据源选择框组件属性
  */
-export interface GenTemplateGroupSelectProps extends Partial<TreeOptionProps> {
-}
+export interface GenTemplateGroupSelectProps extends Partial<TreeOptionProps> {}

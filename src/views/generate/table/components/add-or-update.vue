@@ -53,14 +53,14 @@
               <div class="preview-title">代码示例</div>
               <pre class="preview-block user-select-none">
 /**
- *{{addUpdateForm.codeComment}}
+ *{{ addUpdateForm.codeComment }}
  **/
               </pre>
             </div>
           </div>
         </el-tab-pane>
         <el-tab-pane label="字段信息" :name="2">
-          <column-add-or-update/>
+          <column-add-or-update />
         </el-tab-pane>
         <el-tab-pane label="列表字段" :name="3">123</el-tab-pane>
         <el-tab-pane label="表单字段" :name="4">123</el-tab-pane>

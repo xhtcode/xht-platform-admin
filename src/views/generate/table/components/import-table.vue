@@ -18,7 +18,7 @@
       <el-row>
         <el-col :span="8">
           <el-form-item label="表名" prop="tableName">
-            <el-input v-model="queryParams.tableName" placeholder="请输入表名"/>
+            <el-input v-model="queryParams.tableName" placeholder="请输入表名" />
           </el-form-item>
         </el-col>
         <el-col :span="8">

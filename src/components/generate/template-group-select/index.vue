@@ -33,7 +33,7 @@ const props = withDefaults(defineProps<GenTemplateGroupSelectProps>(), {
   modelValue: null,
   placeholder: '请选择模板分组名称',
   clearable: true,
-  disabled: false
+  disabled: false,
 })
 const modelValue = defineModel<ModeIdType>('modelValue')
 /**

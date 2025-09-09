@@ -139,11 +139,11 @@
             </el-row>
           </el-form>
           <table-tool-bar
+            v-model:show-search="state.searchStatus"
             :column-data="[]"
             column-status
             refresh-status
             search-status
-            v-model:show-search="state.searchStatus"
             @refresh="handleQuery"
           >
             <el-button icon="Plus" size="small" type="primary" @click="handleAdd">新增</el-button>
@@ -151,8 +151,8 @@
               icon="Edit"
               size="small"
               type="success"
-              @click="handleEdit(state.selectedRows[0])"
               :disabled="state.singleStatus"
+              @click="handleEdit(state.selectedRows[0])"
             >
               修改
             </el-button>
@@ -329,7 +329,6 @@ import type { SysDeptResponse } from '@/model/system/dept.model'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { disabledTodayAndFuture } from '@/utils/moudle/element'
 import UserRole from '@/views/system/user/components/user-role.vue'
-
 
 defineOptions({ name: 'SysUserViewIndex' })
 const state = reactive<TableQueryPageState<SysUserQueryRequest, SysUserResponse>>({
