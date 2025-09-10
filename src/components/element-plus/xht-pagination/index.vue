@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { XhtPaginationProps } from '@/components/element-plus/xht-pagination/types.ts'
+import type { XhtPaginationProps } from '@/components/element-plus/xht-pagination/types'
 
 defineOptions({ name: 'XhtPagination', inheritAttrs: false })
 

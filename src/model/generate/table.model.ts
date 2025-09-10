@@ -1,54 +1,24 @@
 import type {
-  BasicResponse,
   BasicFormRequest,
+  BasicResponse,
   ModeIdType,
   PageQueryRequest,
 } from '@/model/base.model'
+import { GenColumnInfoResponse } from '@/model/generate/column.model'
 
 /**
  * 操作类型
  */
 export interface GenTableInfoOperationRequest extends BasicFormRequest {
   /**
-   *表ID
+   * 表信息
    */
-  id: ModeIdType
+  tableInfo: GenTableInfoResponse
   /**
-   *分组id
+   * 字段信息
    */
-  groupId: ModeIdType
-  /**
-   *数据源ID
-   */
-  dataSourceId: ModeIdType
-  /**
-   *引擎名称
-   */
-  engineName: string
-  /**
-   *数据库表名
-   */
-  tableName: string
-  /**
-   *表注释
-   */
-  tableComment: string
-  /**
-   *代码名称
-   */
-  codeName: string
-  /**
-   *代码注释
-   */
-  codeComment: string
-  /**
-   *创建时间
-   */
-  tableCreateTime: string
-  /**
-   *更新时间
-   */
-  tableUpdateTime: string
+  columnInfos: GenColumnInfoResponse[]
+  queryColumns: any[]
 }
 
 /**
@@ -120,6 +90,26 @@ export interface GenTableInfoResponse extends BasicResponse {
    */
   codeComment: string
   /**
+   * 后端作者
+   */
+  backEndAuthor: string
+  /**
+   * 前端作者
+   */
+  frontEndAuthor: string
+  /**
+   *页面风格
+   */
+  pageStyle: string
+  /**
+   * 页面宽度
+   */
+  pageStyleWidth: string
+  /**
+   * 每行数量
+   */
+  fromNumber: number
+  /**
    *创建时间
    */
   tableCreateTime: string
@@ -127,4 +117,15 @@ export interface GenTableInfoResponse extends BasicResponse {
    *更新时间
    */
   tableUpdateTime: string
+}
+
+export interface GenTableInfoVo {
+  /**
+   * 表信息
+   */
+  tableInfo: GenTableInfoResponse
+  /**
+   * 字段信息
+   */
+  columnInfos: GenColumnInfoResponse[]
 }

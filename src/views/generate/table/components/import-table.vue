@@ -67,14 +67,11 @@
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
 import { syncList } from '@/api/generate/table.api'
-import { useMessage, useMessageBox } from '@/hooks/use-message.ts'
+import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { queryGenDataSourceList } from '@/api/generate/datasource.api'
 import ImportTableForm from '@/views/generate/table/components/import-table-form.vue'
-import { useTableToolHooks } from '@/hooks/use-crud-hooks.ts'
-import type {
-  GenTableInfoQueryRequest,
-  GenTableInfoResponse,
-} from '@/model/generate/table.model'
+import { useTableToolHooks } from '@/hooks/use-crud-hooks'
+import type { GenTableInfoQueryRequest, GenTableInfoResponse } from '@/model/generate/table.model'
 import type { GenDataSourceResponse } from '@/model/generate/datasource.model'
 const tableStyle = useTableToolHooks()
 /**

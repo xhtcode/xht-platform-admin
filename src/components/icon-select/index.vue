@@ -58,7 +58,7 @@
 
 <script lang="ts" setup>
 import { CircleClose } from '@element-plus/icons-vue'
-import type { IconItemOptions, IconSelectProps } from '@/components/icon-select/types.ts'
+import type { IconItemOptions, IconSelectProps } from '@/components/icon-select/types'
 
 defineOptions({ name: 'SelectIcon', inheritAttrs: false })
 

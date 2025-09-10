@@ -5,7 +5,7 @@
     :close-on-click-modal="false"
     :title="state.title"
     append-to-body
-    size="80%"
+    size="100%"
   >
     <el-form
       ref="addUpdateFormRef"
@@ -15,57 +15,35 @@
       element-loading-text="拼命加载中"
       label-width="100px"
     >
-      <el-tabs type="border-card" stretch>
+      <el-tabs type="card" stretch>
         <el-tab-pane label="表信息" :name="1">
           <div class="flex">
-            <div class="flex-1">
-              <el-form-item label="表名" prop="tableName">
-                <el-input
-                  v-model="addUpdateForm.tableName"
-                  placeholder="请输入数据库表名"
-                  disabled
-                />
-              </el-form-item>
-              <el-form-item label="表注释" prop="tableComment">
-                <el-input
-                  v-model="addUpdateForm.tableComment"
-                  placeholder="请输入表注释"
-                  disabled
-                />
-              </el-form-item>
-              <el-form-item label="模板分组" prop="groupId">
-                <el-input v-model="addUpdateForm.groupId" placeholder="请输入分组id" />
-              </el-form-item>
-              <el-form-item label="后端作者" prop="codeName">
-                <el-input v-model="addUpdateForm.codeName" placeholder="请输入代码名称" />
-              </el-form-item>
-              <el-form-item label="前端作者" prop="codeName">
-                <el-input v-model="addUpdateForm.codeName" placeholder="请输入代码名称" />
-              </el-form-item>
-              <el-form-item label="代码名称" prop="codeName">
-                <el-input v-model="addUpdateForm.codeName" placeholder="请输入代码名称" />
-              </el-form-item>
-              <el-form-item label="代码注释" prop="codeComment">
-                <el-input v-model="addUpdateForm.codeComment" placeholder="请输入代码注释" />
-              </el-form-item>
-            </div>
-            <div class="flex-2 p-10px">
-              <div class="preview-title">代码示例</div>
-              <pre class="preview-block user-select-none">
-/**
- *{{ addUpdateForm.codeComment }}
- **/
-              </pre>
-            </div>
+            <table-from-basic class="flex-1" :table-info="addUpdateForm.tableInfo" />
+            <code-example-view
+              class="flex-2 p-10px"
+              :table-info="addUpdateForm.tableInfo"
+              :column-info="addUpdateForm.columnInfos"
+            />
           </div>
         </el-tab-pane>
         <el-tab-pane label="字段信息" :name="2">
-          <column-add-or-update />
+          <column-from-basic :column-info="addUpdateForm.columnInfos" />
         </el-tab-pane>
-        <el-tab-pane label="列表字段" :name="3">123</el-tab-pane>
-        <el-tab-pane label="表单字段" :name="4">123</el-tab-pane>
-        <el-tab-pane label="查询字段" :name="5">123</el-tab-pane>
-        <el-tab-pane label="接口配置" :name="6">123</el-tab-pane>
+        <el-tab-pane label="字段类型" :name="3">
+          <column-from-type :column-info="addUpdateForm.columnInfos" />
+        </el-tab-pane>
+        <el-tab-pane label="表单字段" :name="4">
+          <column-from-edit :table-info="addUpdateForm" :column-info="addUpdateForm.columnInfos" />
+        </el-tab-pane>
+        <el-tab-pane label="查询字段" :name="5">
+          <column-from-query
+            :column-info="addUpdateForm.columnInfos"
+            :query-columns="addUpdateForm.queryColumns"
+          />
+        </el-tab-pane>
+        <el-tab-pane label="列表字段" :name="6">
+          <column-from-list :column-info="addUpdateForm.columnInfos" />
+        </el-tab-pane>
       </el-tabs>
     </el-form>
     <template #footer>
@@ -91,7 +69,13 @@ import {
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { handleFormErrors } from '@/utils/moudle/element'
 import type { ModeIdType } from '@/model/base.model'
-import ColumnAddOrUpdate from '@/views/generate/table/components/column-add-or-update.vue'
+import ColumnFromBasic from '@/views/generate/table/components/column-from-basic.vue'
+import ColumnFromType from '@/views/generate/table/components/column-from-type.vue'
+import ColumnFromEdit from '@/views/generate/table/components/column-from-edit.vue'
+import ColumnFromQuery from '@/views/generate/table/components/column-from-query.vue'
+import ColumnFromList from '@/views/generate/table/components/column-from-list.vue'
+import TableFromBasic from '@/views/generate/table/components/table-from-basic.vue'
+import CodeExampleView from '@/views/generate/table/components/code-example-view.vue'
 
 defineOptions({ name: 'GenTableInfoAddOrUpdate' })
 const state = reactive<AddUpdateOption<GenTableInfoOperationRequest>>({
@@ -110,9 +94,6 @@ const rules: FormRules = GenTableInfoOperationRules
  */
 const show = async (type: 'add' | 'update', id: ModeIdType) => {
   state.visibleStatus = true
-  await nextTick(() => {
-    addUpdateFormRef.value?.resetFields()
-  })
   state.operationStatus = type
   if (type === 'update') {
     state.loadingStatus = true
@@ -187,16 +168,3 @@ defineExpose({
   show,
 })
 </script>
-
-<style lang="scss" scoped>
-.preview-title {
-  font-weight: 600;
-  margin: 5px;
-}
-
-.preview-block {
-  width: 100%;
-  font-size: 14px;
-  background: var(--el-bg-color-page);
-}
-</style>

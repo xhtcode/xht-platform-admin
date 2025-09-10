@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import type { MirrorEditorProps } from '@/components/code-mirror-editor/types.ts'
+import type { MirrorEditorProps } from '@/components/code-mirror-editor/types'
 import { onMounted, onUnmounted, watch } from 'vue'
 import { EditorView, keymap } from '@codemirror/view'
 import { Compartment, EditorState } from '@codemirror/state'

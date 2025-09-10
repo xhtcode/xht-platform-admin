@@ -41,7 +41,7 @@
 
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
-import { useMessageBox } from '@/hooks/use-message.ts'
+import { useMessageBox } from '@/hooks/use-message'
 import { importTable } from '@/api/generate/table.api'
 
 interface addUpdateOption {

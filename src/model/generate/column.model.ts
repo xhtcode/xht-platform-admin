@@ -54,6 +54,11 @@ export interface GenColumnInfoExtConfig {
  * 操作类型
  */
 export interface GenColumnInfoOperationRequest {
+  listWidth: number | null
+  listOverflowTooltip: number
+  listHidden: number
+  listDisabled: number
+  listShow: number
   /**
    *id
    */
@@ -67,13 +72,25 @@ export interface GenColumnInfoOperationRequest {
    */
   columnName: string
   /**
-   *数据库字段类型,可用值:MySql,Oracle
+   *数据库字段类型
    */
   dbDataType: string
   /**
    *字段注释
    */
   columnComment: string
+  /**
+   * 字段长度
+   */
+  columnLength: number
+  /**
+   * 代码名称
+   */
+  codeName: string
+  /**
+   * 代码注释
+   */
+  codeComment: string
   /**
    *字段默认值
    */

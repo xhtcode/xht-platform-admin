@@ -59,11 +59,11 @@
 <script setup lang="ts">
 import type { FormInstance, FormRules } from 'element-plus'
 import { generateCaptcha } from '@/api/login/api'
-import { useMessage } from '@/hooks/use-message.ts'
-import { useUserInfoStore } from '@/store/modules/user.store.ts'
+import { useMessage } from '@/hooks/use-message'
+import { useUserInfoStore } from '@/store/modules/user.store'
 import { HOME_PAGE_PATH } from '@/common/constant'
 import { useRouter } from 'vue-router'
-import type { LoginRequestType } from '@/api/login/type.ts'
+import type { LoginRequestType } from '@/api/login/type'
 
 defineOptions({ name: 'PasswordForm' })
 
