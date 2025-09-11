@@ -32,6 +32,10 @@ export interface GenTemplateOperationRequest {
    * 文件名模板
    */
   fileNameTemplate: string
+  /**
+   * 执行条件
+   */
+  templateCondition?: string
 }
 
 /**

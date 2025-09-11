@@ -16,7 +16,7 @@ import { boysAndGirls, espresso } from 'thememirror'
 import { useThemeStore } from '@/store'
 
 defineOptions({
-  name: 'CodeMirrorEditorComponents',
+  name: 'CodeMirrorEditor',
 })
 const themeStore = useThemeStore()
 // 1. 响应式数据：编辑器内容、配置

@@ -2,7 +2,14 @@
   <div class="main-container-none">
     <split-panes :push-other-panes="false">
       <split-pane-item min-size="20" size="20">
-        <template-group-tree />
+        <div class="flex-center">
+          <el-button>aaa</el-button>
+          <el-button>aaa</el-button>
+          <el-button>aaa</el-button>
+        </div>
+        <el-scrollbar>
+          <template-group-tree @node-click="handleNodeClick" ref="templateGroupRef" />
+        </el-scrollbar>
       </split-pane-item>
       <split-pane-item min-size="80" size="80">
         <div class="main-container-auto main-container-view">
@@ -54,20 +61,17 @@
             :data="state.tableList"
             :header-cell-style="headerCellStyle"
             class="flex-1"
-            empty-text="系统相关模板信息！"
+            empty-text="系统暂无相关模板信息！"
             @selection-change="handleSelectionChange"
           >
             <el-table-column align="center" type="selection" width="55" />
             <el-table-column :index="createTableIndex" label="序号" type="index" width="55" />
-            <el-table-column label="模板ID" prop="id" width="100px" />
-            <el-table-column label="分组id" prop="groupId" width="100px" />
-            <el-table-column label="模板名称" prop="name" width="100px" />
-            <el-table-column label="模板内容（Velocity语法）" prop="content" width="100px" />
-            <el-table-column label="文件类型" prop="fileType" width="100px" />
-            <el-table-column label="文件路径模板" prop="filePathTemplate" width="100px" />
-            <el-table-column label="文件名模板" prop="fileNameTemplate" width="100px" />
-            <el-table-column label="创建时间" prop="createTime" width="100px" />
-            <el-table-column label="更新时间" prop="updateTime" width="100px" />
+            <el-table-column label="模板名称" prop="name" />
+            <el-table-column label="文件类型" prop="fileType" />
+            <el-table-column label="文件路径模板" prop="filePathTemplate" />
+            <el-table-column label="文件名模板" prop="fileNameTemplate" />
+            <el-table-column label="创建时间" prop="createTime" />
+            <el-table-column label="更新时间" prop="updateTime" />
             <el-table-column align="center" label="操作" width="220px">
               <template #default="{ row }">
                 <el-button icon="edit" link type="success" @click="handleEdit(row)">修改</el-button>
@@ -99,6 +103,8 @@ import type { GenTemplateQueryRequest, GenTemplateResponse } from '@/model/gener
 import { queryGenTemplatePage, removeGenTemplateByIds } from '@/api/generate/template.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { ModeIdArrayType } from '@/model/base.model'
+import TemplateGroupTree from '@/views/generate/template/components/template-group-tree.vue'
+import type { GenTemplateGroupResponse } from '@/model/generate/template.group.model'
 
 defineOptions({ name: 'GenTemplateViewIndex' })
 
@@ -122,13 +128,15 @@ const { createTableIndex, handleQuery, handleSelectionChange } = useTableQueryPa
 const { queryParams } = toRefs(state)
 
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
-const addUpdateRef = ref()
+const templateGroupRef = useTemplateRef('templateGroupRef')
+const addUpdateRef = useTemplateRef('addUpdateRef')
 const { cellStyle, headerCellStyle } = useTableToolHooks()
 
 /**
  * 重置表单
  */
 const resetQuery = async () => {
+  templateGroupRef.value?.resetHighlightCurrent()
   queryFormRef.value?.resetFields()
   await handleQuery()
 }
@@ -174,7 +182,10 @@ const handleDelete = async (row?: GenTemplateResponse) => {
       state.loadingStatus = false
     })
 }
-
+const handleNodeClick = async (data: GenTemplateGroupResponse) => {
+  queryParams.value.groupId = data.id
+  await handleQuery()
+}
 onMounted(async () => {
   await handleQuery()
 })

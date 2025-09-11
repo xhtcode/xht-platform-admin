@@ -15,29 +15,20 @@
       element-loading-text="拼命加载中"
       label-width="100px"
     >
-      <el-form-item label="分组id" prop="groupId">
-        <el-input v-model="addUpdateForm.groupId" placeholder="请输入分组id" />
+      <el-form-item label="分组名称" prop="groupName">
+        <el-input v-model="addUpdateForm.groupName" />
       </el-form-item>
-      <el-form-item label="模板名称" prop="name">
-        <el-input v-model="addUpdateForm.name" placeholder="请输入模板名称" />
+      <el-form-item label="分组排序" prop="groupSort">
+        <el-input-number :min="1" :max="999" v-model="addUpdateForm.groupSort" />
       </el-form-item>
-      <el-form-item label="模板内容（Velocity语法）" prop="content">
-        <code-mirror-editor
-          v-model="addUpdateForm.content"
-          placeholder="请输入模板内容（Velocity语法）"
+      <el-form-item label="分组描述" prop="groupDesc">
+        <el-input
+          v-model="addUpdateForm.groupDesc"
+          type="textarea"
+          :rows="5"
+          resize="none"
+          :maxlength="200"
         />
-      </el-form-item>
-      <el-form-item label="文件类型" prop="fileType">
-        <el-input v-model="addUpdateForm.fileType" placeholder="请输入文件类型" />
-      </el-form-item>
-      <el-form-item label="文件路径模板" prop="filePathTemplate">
-        <el-input v-model="addUpdateForm.filePathTemplate" placeholder="请输入文件路径模板" />
-      </el-form-item>
-      <el-form-item label="文件名模板" prop="fileNameTemplate">
-        <el-input v-model="addUpdateForm.fileNameTemplate" placeholder="请输入文件名模板" />
-      </el-form-item>
-      <el-form-item label="执行条件" prop="templateCondition">
-        <el-input v-model="addUpdateForm.templateCondition" placeholder="请输入文件名模板" />
       </el-form-item>
     </el-form>
     <template #footer>
@@ -50,32 +41,32 @@
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
 import {
-  queryGenTemplateById,
-  saveGenTemplate,
-  updateGenTemplate,
-} from '@/api/generate/template.api'
+  queryGenTemplateGroupById,
+  saveGenTemplateGroup,
+  updateGenTemplateGroup,
+} from '@/api/generate/template.group.api'
 
-import type { GenTemplateOperationRequest } from '@/model/generate/template.model'
+import type { GenTemplateGroupOperationRequest } from '@/model/generate/template.group.model'
 import {
-  GenTemplateOperationForm,
-  GenTemplateOperationRules,
+  GenTemplateGroupOperationForm,
+  GenTemplateGroupOperationRules,
 } from '@/views/generate/template/template.data'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { handleFormErrors } from '@/utils/moudle/element'
 import type { ModeIdType } from '@/model/base.model'
 
-defineOptions({ name: 'GenTemplateAddOrUpdate' })
-const state = reactive<AddUpdateOption<GenTemplateOperationRequest>>({
-  title: '增加模板信息',
+defineOptions({ name: 'TemplateGroupFrom' })
+const state = reactive<AddUpdateOption<GenTemplateGroupOperationRequest>>({
+  title: '增加模板分组',
   visibleStatus: false,
   operationStatus: 'add',
   loadingStatus: false,
-  addUpdateForm: { ...GenTemplateOperationForm },
+  addUpdateForm: { ...GenTemplateGroupOperationForm },
 })
 const addUpdateFormRef = ref<FormInstance>()
 const { addUpdateForm } = toRefs(state)
 const emits = defineEmits(['success'])
-const rules: FormRules = GenTemplateOperationRules
+const rules: FormRules = GenTemplateGroupOperationRules
 /**
  * 打开显示
  */
@@ -87,8 +78,8 @@ const show = async (type: 'add' | 'update', id: ModeIdType) => {
   state.operationStatus = type
   if (type === 'update') {
     state.loadingStatus = true
-    state.title = '修改模板信息'
-    await queryGenTemplateById(id)
+    state.title = '修改模板分组'
+    await queryGenTemplateGroupById(id)
       .then((response) => {
         const { data } = JSON.parse(JSON.stringify(response))
         addUpdateForm.value = { ...data }
@@ -110,7 +101,7 @@ const submitForm = () => {
     if (valid) {
       if (state.operationStatus === 'add') {
         //增加
-        await saveGenTemplate(addUpdateForm.value)
+        await saveGenTemplateGroup(addUpdateForm.value)
           .then((_) => {
             useMessage().success('新增数据成功')
             emits('success')
@@ -124,7 +115,7 @@ const submitForm = () => {
           })
       } else {
         //修改
-        await updateGenTemplate({ ...addUpdateForm.value })
+        await updateGenTemplateGroup({ ...addUpdateForm.value })
           .then((_) => {
             useMessage().success('修改数据成功')
             emits('success')
@@ -148,7 +139,7 @@ const submitForm = () => {
  * 关闭
  */
 const close = () => {
-  addUpdateForm.value = { ...GenTemplateOperationForm }
+  addUpdateForm.value = { ...GenTemplateGroupOperationForm }
   state.visibleStatus = false
   state.operationStatus = 'add'
   state.loadingStatus = false

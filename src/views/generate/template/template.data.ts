@@ -1,6 +1,7 @@
 import type { FormRules } from 'element-plus'
 import type { ColumnOption } from '@/components/table-tool-bar/types'
 import type { GenTemplateOperationRequest } from '@/model/generate/template.model'
+import type { GenTemplateGroupOperationRequest } from '@/model/generate/template.group.model'
 
 /**
  * 增改页面 表单类型 默认值
@@ -129,3 +130,10 @@ export const GenTemplateOperationRules: FormRules<GenTemplateOperationRequest> =
  * 列表显示配置
  */
 export const GenTemplateColumnOption: ColumnOption[] = []
+export const GenTemplateGroupOperationForm: GenTemplateGroupOperationRequest = {
+  groupSort: 0,
+  groupDesc: '',
+  groupName: '',
+  id: undefined,
+}
+export const GenTemplateGroupOperationRules: FormRules<GenTemplateGroupOperationRequest> = {}

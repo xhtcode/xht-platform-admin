@@ -50,7 +50,7 @@ const props = withDefaults(defineProps<XhtPaginationProps>(), {
 const pageSize = defineModel<number | undefined>('pageSize', {
   required: true,
 })
-const currentPage = defineModel<number | undefined>('pageSize', {
+const currentPage = defineModel<number | undefined>('currentPage', {
   required: true,
 })
 const emits = defineEmits(['pagination'])

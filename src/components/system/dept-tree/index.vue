@@ -44,7 +44,7 @@ import { DeptStatusEnums } from '@/model/system/dept.model'
 import type { AxiosResponse } from 'axios'
 import { CaretBottom, CaretTop } from '@element-plus/icons-vue'
 
-defineOptions({ name: 'DeptSelectComponent' })
+defineOptions({ name: 'DeptTree' })
 const expandAll = ref<boolean>(true)
 
 interface DeptSelectTreeProps {
@@ -67,7 +67,7 @@ const emits = defineEmits<{
 const modelValue = useVModel(props, 'modelValue', emits)
 const loading = ref<boolean>(false)
 const filterText = ref<string>('')
-const treeRef = ref<InstanceType<typeof ElTree>>()
+const treeRef = useTemplateRef('treeRef')
 const treeData = ref<SysDeptTreeResponse>([])
 const queryParams = ref<SysDeptQueryRequest>({
   deptStatus: DeptStatusEnums.NORMAL,

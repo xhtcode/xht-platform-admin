@@ -3,7 +3,7 @@
     <split-panes :push-other-panes="false">
       <split-pane-item min-size="20" size="20">
         <div class="h100">
-          <dept-tree-click ref="deptTreeRef" @click-node="handleDeptClick" />
+          <dept-tree ref="deptTreeRef" @click-node="handleDeptClick" />
         </div>
       </split-pane-item>
       <split-pane-item min-size="80" size="80">
@@ -329,6 +329,7 @@ import type { SysDeptResponse } from '@/model/system/dept.model'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { disabledTodayAndFuture } from '@/utils/moudle/element'
 import UserRole from '@/views/system/user/components/user-role.vue'
+import DeptTree from '@/components/system/dept-tree/index.vue'
 
 defineOptions({ name: 'SysUserViewIndex' })
 const state = reactive<TableQueryPageState<SysUserQueryRequest, SysUserResponse>>({

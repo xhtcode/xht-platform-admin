@@ -18,6 +18,11 @@ export interface GenTemplateGroupOperationRequest {
    * 分组描述
    */
   groupDesc: string
+
+  /**
+   * 分组排序
+   */
+  groupSort: number
 }
 
 /**
