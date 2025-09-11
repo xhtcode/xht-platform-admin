@@ -42,8 +42,8 @@ import LayoutAside from '@/layout/components/layout-aside/index.vue'
 import { useThemeHooks } from '@/hooks/use-theme-hooks'
 
 defineOptions({ name: 'LayoutDefaultComponent' })
-const headerRef = ref()
-const footerRef = ref()
+const headerRef = useTemplateRef('headerRef')
+const footerRef = useTemplateRef('footerRef')
 const themeStore = useThemeStore()
 const { footerStatus, sidebarStatus } = storeToRefs(themeStore)
 const { mainStyle, desktopShowStatus, mobileShowStatus } = useThemeHooks()

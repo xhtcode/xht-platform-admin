@@ -79,14 +79,14 @@
         @pagination="handleQuery"
       />
     </div>
-    <add-or-update ref="addUpdateRef" @success="handleQuery()" />
+    <table-from ref="tableFromRef" @success="handleQuery()" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
 import { useTableQueryPageHooks, useTableToolHooks } from '@/hooks/use-crud-hooks'
-import AddOrUpdate from './components/add-or-update.vue'
+import TableFrom from './components/table-from.vue'
 import type { GenTableInfoQueryRequest, GenTableInfoResponse } from '@/model/generate/table.model'
 import { queryGenTableInfoPage, removeGenTableInfoByIds } from '@/api/generate/table.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
@@ -114,7 +114,7 @@ const { createTableIndex, handleQuery, handleSelectionChange } = useTableQueryPa
 const { queryParams } = toRefs(state)
 
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
-const addUpdateRef = ref()
+const tableFromRef = useTemplateRef('tableFromRef')
 const { cellStyle, headerCellStyle } = useTableToolHooks()
 
 /**
@@ -128,14 +128,14 @@ const resetQuery = async () => {
  * 处理新增
  */
 const handleAdd = () => {
-  addUpdateRef.value?.show('add', null)
+  tableFromRef.value?.show('add', null)
 }
 
 /**
  * 处理编辑
  */
 const handleEdit = (row: GenTableInfoResponse) => {
-  addUpdateRef.value?.show('update', row.id)
+  tableFromRef.value?.show('update', row.id)
 }
 
 /**

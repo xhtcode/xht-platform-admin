@@ -122,7 +122,7 @@
         </el-table-column>
       </el-table>
     </div>
-    <add-or-update ref="addUpdateRef" @success="handleQuery()" />
+    <dept-from ref="deptFromRef" @success="handleQuery()" />
   </div>
 </template>
 
@@ -137,23 +137,16 @@ import { DeptStatusEnums } from '@/model/system/dept.model'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { FormInstance } from 'element-plus'
 
-import AddOrUpdate from '@/views/system/dept/components/add-or-update.vue'
+import DeptFrom from '@/views/system/dept/components/dept-from.vue'
+import { useTableToolHooks } from '@/hooks/use-crud-hooks'
 
 defineOptions({ name: 'SysDeptViewIndex' })
-const addUpdateRef = ref()
+const deptFromRef = useTemplateRef('deptFromRef')
 /**
  * 定义表格通用样式
  * @returns  css
  */
-const tableStyle: TableStyle = {
-  cellStyle: { 'text-align': 'center' },
-  headerCellStyle: {
-    textAlign: 'center',
-    background: 'var(--el-table-row-hover-bg-color)',
-    color: 'var(--el-text-color-primary)',
-    userSelect: 'none',
-  },
-}
+const tableStyle = useTableToolHooks()
 
 interface CrudOption {
   total: number
@@ -179,7 +172,7 @@ const state = reactive<CrudOption>({
 
 const { queryParams } = toRefs(state)
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
-const tableRef = ref()
+const tableRef = useTemplateRef('tableRef')
 
 /**
  * 查询数据列表
@@ -206,13 +199,13 @@ const resetQuery = async () => {
  * 处理新增
  */
 const handleAdd = () => {
-  addUpdateRef.value?.show('add', null)
+  deptFromRef.value?.show('add', null)
 }
 /**
  * 处理编辑
  */
 const handleEdit = (row: SysDeptResponse) => {
-  addUpdateRef.value?.show('update', row.id)
+  deptFromRef.value?.show('update', row.id)
 }
 
 /**

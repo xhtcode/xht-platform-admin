@@ -45,7 +45,7 @@ import { useMessage } from '@/hooks/use-message'
 import { selectRoleIdByUserId, UserRoleBind } from '@/api/system/user.api'
 import type { ModeIdType } from '@/model/base.model'
 
-defineOptions({ name: 'UserRole' })
+defineOptions({ name: 'UserRoleFrom' })
 const state = reactive<AddUpdateOption<any>>({
   title: '增加部门',
   visibleStatus: false,
@@ -57,7 +57,7 @@ const state = reactive<AddUpdateOption<any>>({
   userId: '',
 })
 const checkStrictly = ref(true)
-const roleTreeRef = ref()
+const roleTreeRef = useTemplateRef('roleTreeRef')
 const treeData = ref<any[]>([])
 /**
  * 打开显示

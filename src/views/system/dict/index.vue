@@ -128,14 +128,14 @@
         @pagination="handleQuery"
       />
     </div>
-    <add-or-update ref="addUpdateRef" @success="handleQuery" />
+    <dict-from ref="dictFromRef" @success="handleQuery" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
 import { useTableQueryPageHooks, useTableToolHooks } from '@/hooks/use-crud-hooks'
-import AddOrUpdate from './components/add-or-update.vue'
+import DictFrom from './components/dict-from.vue'
 import type { SysDictQueryRequest, SysDictResponse } from '@/model/system/dict.model'
 import { DictStatusEnums } from '@/model/system/dict.model'
 import { querySysDictPage, removeSysDictByIds } from '@/api/system/dict.api'
@@ -165,7 +165,7 @@ const { createTableIndex, handleQuery, handleSelectionChange } = useTableQueryPa
 const { queryParams } = toRefs(state)
 
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
-const addUpdateRef = useTemplateRef('addUpdateRef')
+const dictFromRef = useTemplateRef('dictFromRef')
 const { cellStyle, headerCellStyle } = useTableToolHooks()
 
 /**
@@ -179,14 +179,14 @@ const resetQuery = async () => {
  * 处理新增
  */
 const handleAdd = () => {
-  addUpdateRef.value?.show('add', null)
+  dictFromRef.value?.show('add', null)
 }
 
 /**
  * 处理编辑
  */
 const handleEdit = (row: SysDictResponse) => {
-  addUpdateRef.value?.show('update', row.id)
+  dictFromRef.value?.show('update', row.id)
 }
 
 /**

@@ -299,15 +299,15 @@
         </div>
       </split-pane-item>
     </split-panes>
-    <add-or-update ref="addUpdateRef" @success="handleQuery" />
-    <user-role ref="userRoleRef" />
+    <user-from ref="userFromRef" @success="handleQuery" />
+    <user-role-from ref="userRoleFromRef" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
 import { useTableQueryPageHooks, useTableToolHooks } from '@/hooks/use-crud-hooks'
-import AddOrUpdate from '@/views/system/user/components/add-or-update.vue'
+import UserFrom from '@/views/system/user/components/user-from.vue'
 import type { SysUserQueryRequest, SysUserResponse } from '@/model/system/user.model'
 import { UserStatusEnums } from '@/model/system/user.model'
 import {
@@ -328,7 +328,7 @@ import {
 import type { SysDeptResponse } from '@/model/system/dept.model'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { disabledTodayAndFuture } from '@/utils/moudle/element'
-import UserRole from '@/views/system/user/components/user-role.vue'
+import UserRoleFrom from '@/views/system/user/components/user-role-from.vue'
 import DeptTree from '@/components/system/dept-tree/index.vue'
 
 defineOptions({ name: 'SysUserViewIndex' })
@@ -353,9 +353,9 @@ const { createTableIndex, handleQuery, handleSelectionChange } = useTableQueryPa
 const { queryParams } = toRefs(state)
 
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
-const addUpdateRef = ref()
-const deptTreeRef = ref()
-const userRoleRef = useTemplateRef('userRoleRef')
+const userFromRef = useTemplateRef('userFromRef')
+const deptTreeRef = useTemplateRef('deptTreeRef')
+const userRoleFromRef = useTemplateRef('userRoleFromRef')
 const { cellStyle, headerCellStyle } = useTableToolHooks()
 /**
  * 重置表单
@@ -406,14 +406,14 @@ const formatData = (data?: string): Date => {
  * 处理新增
  */
 const handleAdd = () => {
-  addUpdateRef.value?.show('add', null)
+  userFromRef.value?.show('add', null)
 }
 
 /**
  * 处理编辑
  */
 const handleEdit = (row: SysUserResponse) => {
-  addUpdateRef.value?.show('update', row.id)
+  userFromRef.value?.show('update', row.id)
 }
 
 /**
@@ -480,7 +480,7 @@ const handleResetPwd = async (row: SysUserResponse) => {
  * 处理用户授权
  */
 const handleUserRole = (row: SysUserResponse) => {
-  userRoleRef.value?.show(row.id)
+  userRoleFromRef.value?.show(row.id)
 }
 
 /**

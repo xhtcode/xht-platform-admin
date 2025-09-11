@@ -82,6 +82,10 @@ export interface GenTableInfoResponse extends BasicResponse {
    */
   tableComment: string
   /**
+   *模块名称
+   */
+  moduleName: string
+  /**
    *代码名称
    */
   codeName: string

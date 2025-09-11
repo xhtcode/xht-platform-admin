@@ -49,7 +49,7 @@ import { roleMenuBind, selectMenuIdByRoleId } from '@/api/system/role.api'
 import { useMessage } from '@/hooks/use-message'
 import type { ModeIdType } from '@/model/base.model'
 
-defineOptions({ name: 'MenuRole' })
+defineOptions({ name: 'MenuRoleFrom' })
 const state = reactive<AddUpdateOption<any>>({
   title: '增加部门',
   visibleStatus: false,
@@ -61,7 +61,7 @@ const state = reactive<AddUpdateOption<any>>({
   roleId: '',
 })
 const checkStrictly = ref(true)
-const menuTree = ref()
+const menuTree = useTemplateRef('menuTree')
 const treeData = ref<any[]>([])
 /**
  * 打开显示
@@ -97,7 +97,7 @@ const handleExpand = (check: CheckboxValueType) => {
   const nodes = menuTree.value?.store._getAllNodes()
   if (nodes) {
     for (let i = 0; i < nodes.length; i++) {
-      nodes[i].expanded = check
+      nodes[i].expanded = check as boolean
     }
   }
   state.loadingStatus = false
@@ -113,7 +113,7 @@ const handleSelectAll = (check: CheckboxValueType) => {
 }
 const onSubmit = () => {
   state.loadingStatus = true
-  const menuIds = menuTree.value.getCheckedKeys()
+  const menuIds = menuTree.value?.getCheckedKeys()
   roleMenuBind({ roleId: state.roleId, menuIds })
     .then(() => {
       useMessage().success('当前角色分配菜单权限成功')

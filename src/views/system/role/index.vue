@@ -127,20 +127,20 @@
         @pagination="handleQuery"
       />
     </div>
-    <add-or-update ref="addUpdateRef" @success="handleQuery" />
-    <menu-role ref="menuRoleRef" />
+    <role-from ref="roleFromRef" @success="handleQuery" />
+    <menu-role-from ref="menuRoleFromRef" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
 import { useTableQueryPageHooks, useTableToolHooks } from '@/hooks/use-crud-hooks'
-import AddOrUpdate from './components/add-or-update.vue'
+import RoleFrom from './components/role-from.vue'
 import type { SysRoleQueryRequest, SysRoleResponse } from '@/model/system/role.model'
 import { RoleStatusEnums } from '@/model/system/role.model'
 import { querySysRolePage, removeSysRoleById, removeSysRoleByIds } from '@/api/system/role.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import MenuRole from '@/views/system/role/components/menu-role.vue'
+import MenuRoleFrom from '@/views/system/role/components/menu-role-from.vue'
 
 defineOptions({ name: 'SysRoleViewIndex' })
 
@@ -164,8 +164,8 @@ const { createTableIndex, handleQuery, handleSelectionChange } = useTableQueryPa
 const { queryParams } = toRefs(state)
 
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
-const addUpdateRef = ref()
-const menuRoleRef = ref()
+const roleFromRef = useTemplateRef('roleFromRef')
+const menuRoleFromRef = useTemplateRef('menuRoleFromRef')
 const { cellStyle, headerCellStyle } = useTableToolHooks()
 
 /**
@@ -179,14 +179,14 @@ const resetQuery = async () => {
  * 处理新增
  */
 const handleAdd = () => {
-  addUpdateRef.value?.show('add', null)
+  roleFromRef.value?.show('add', null)
 }
 
 /**
  * 处理编辑
  */
 const handleEdit = (row: SysRoleResponse) => {
-  addUpdateRef.value?.show('update', row.id)
+  roleFromRef.value?.show('update', row.id)
 }
 
 /**
@@ -235,7 +235,7 @@ const handleBatchDelete = async () => {
  * 处理分配权限
  */
 const handleAuth = (row: SysRoleResponse) => {
-  menuRoleRef.value?.show(row.id)
+  menuRoleFromRef.value?.show(row.id)
 }
 
 onMounted(async () => {

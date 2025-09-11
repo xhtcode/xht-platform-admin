@@ -90,14 +90,14 @@
         @pagination="handleQuery"
       />
     </div>
-    <add-or-update ref="addUpdateRef" @success="handleQuery()" />
+    <type-mapping-from ref="typeMappingFromRef" @success="handleQuery()" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
 import { useTableQueryPageHooks, useTableToolHooks } from '@/hooks/use-crud-hooks'
-import AddOrUpdate from './components/add-or-update.vue'
+import TypeMappingFrom from './components/type-mapping-from.vue'
 import type {
   GenTypeMappingQueryRequest,
   GenTypeMappingResponse,
@@ -129,7 +129,7 @@ const { createTableIndex, handleQuery, handleSelectionChange } = useTableQueryPa
 const { queryParams } = toRefs(state)
 
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
-const addUpdateRef = ref()
+const typeMappingFromRef = useTemplateRef('typeMappingFromRef')
 const { cellStyle, headerCellStyle } = useTableToolHooks()
 
 /**
@@ -143,14 +143,14 @@ const resetQuery = async () => {
  * 处理新增
  */
 const handleAdd = () => {
-  addUpdateRef.value?.show('add', null)
+  typeMappingFromRef.value?.show('add', null)
 }
 
 /**
  * 处理编辑
  */
 const handleEdit = (row: GenTypeMappingResponse) => {
-  addUpdateRef.value?.show('update', row.id)
+  typeMappingFromRef.value?.show('update', row.id)
 }
 
 /**

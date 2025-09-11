@@ -166,7 +166,7 @@
           />
         </div>
       </split-pane-item>
-      <add-or-update ref="addUpdateRef" @success="queryPostData" />
+      <dept-post-from ref="deptPostFromRef" @success="queryPostData" />
     </split-panes>
   </div>
 </template>
@@ -174,7 +174,7 @@
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
 import { useTableQueryPageHooks, useTableToolHooks } from '@/hooks/use-crud-hooks'
-import AddOrUpdate from './components/add-or-update.vue'
+import DeptPostFrom from './components/dept-post-from.vue'
 import type { SysDeptPostQueryRequest, SysDeptPostResponse } from '@/model/system/dept.post.model'
 import { SysDeptPostStatusEnums } from '@/model/system/dept.post.model'
 import {
@@ -208,8 +208,8 @@ const { createTableIndex, handleQuery, handleSelectionChange } = useTableQueryPa
 const { queryParams } = toRefs(state)
 
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
-const addUpdateRef = ref()
-const deptTreeRef = ref()
+const deptPostFromRef = useTemplateRef('deptPostFromRef')
+const deptTreeRef = useTemplateRef('deptTreeRef')
 const { cellStyle, headerCellStyle } = useTableToolHooks()
 const queryPostData = async () => {
   await handleQuery()
@@ -227,14 +227,14 @@ const resetQuery = async () => {
  * 处理新增
  */
 const handleAdd = () => {
-  addUpdateRef.value?.show('add', null)
+  deptPostFromRef.value?.show('add', null)
 }
 
 /**
  * 处理编辑
  */
 const handleEdit = (row: any) => {
-  addUpdateRef.value?.show('update', row.id)
+  deptPostFromRef.value?.show('update', row.id)
 }
 
 /**

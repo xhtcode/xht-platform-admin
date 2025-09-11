@@ -9,8 +9,21 @@
     <el-form-item label="模板分组" prop="tableInfo.groupId">
       <el-input v-model="tableInfo.groupId" placeholder="请输入分组id" />
     </el-form-item>
+    <el-form-item label="模块名称" prop="tableInfo.moduleName">
+      <el-input
+        v-model="tableInfo.moduleName"
+        :maxlength="10"
+        show-word-limit
+        placeholder="请输入模块名称"
+      />
+    </el-form-item>
     <el-form-item label="代码名称" prop="tableInfo.codeName">
-      <el-input v-model="tableInfo.codeName" placeholder="请输入代码名称" />
+      <el-input
+        v-model="tableInfo.codeName"
+        :maxlength="15"
+        show-word-limit
+        placeholder="请输入代码名称"
+      />
     </el-form-item>
     <el-form-item label="代码注释" prop="tableInfo.codeComment">
       <el-input v-model="tableInfo.codeComment" placeholder="请输入代码注释" />

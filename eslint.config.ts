@@ -25,8 +25,7 @@ export default defineConfigWithVueTs(
 
   // 应用Vue+TypeScript的推荐规则集
   vueTsConfigs.recommended,
-  // 跳过Prettier格式化相关规则
-  skipFormatting,
+
   {
     rules: {
       '@typescript-eslint/no-explicit-any': 'off', // 允许使用any类型，方便开发
@@ -50,4 +49,6 @@ export default defineConfigWithVueTs(
       'vue/html-self-closing': 'error', //强制自闭样式
     },
   },
+  // 跳过Prettier格式化相关规则
+  skipFormatting,
 )

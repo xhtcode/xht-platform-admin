@@ -59,7 +59,7 @@ import { useTableToolHooks } from '@/hooks/use-crud-hooks'
 import type { UserSimpleVo } from '@/model/system/user.model'
 import { useMessage } from '@/hooks/use-message'
 
-defineOptions({ name: 'DeptUserDialog' })
+defineOptions({ name: 'DeptUserFrom' })
 const state = reactive<{
   visibleStatus: boolean
   loadingStatus: boolean

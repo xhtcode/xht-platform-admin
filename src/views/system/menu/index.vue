@@ -199,7 +199,7 @@
         </el-table-column>
       </el-table>
     </div>
-    <add-or-update ref="addUpdateRef" @success="handleQuery()" />
+    <menu-from ref="menuFromRef" @success="handleQuery()" />
   </div>
 </template>
 
@@ -219,8 +219,9 @@ import {
 } from '@/model/system/menu.model'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { FormInstance } from 'element-plus'
-import AddOrUpdate from '@/views/system/menu/components/add-or-update.vue'
+import MenuFrom from '@/views/system/menu/components/menu-from.vue'
 import { SysMenuColumnOption } from '@/views/system/menu/menu.data'
+import { useTableToolHooks } from '@/hooks/use-crud-hooks'
 
 defineOptions({ name: 'SysMenuViewIndex' })
 
@@ -228,15 +229,7 @@ defineOptions({ name: 'SysMenuViewIndex' })
  * 定义表格通用样式
  * @returns  css
  */
-const tableStyle: TableStyle = {
-  cellStyle: { 'text-align': 'center' },
-  headerCellStyle: {
-    textAlign: 'center',
-    background: 'var(--el-table-row-hover-bg-color)',
-    color: 'var(--el-text-color-primary)',
-    userSelect: 'none',
-  },
-}
+const tableStyle: TableStyle = useTableToolHooks()
 
 interface CrudOption {
   total: number
@@ -262,8 +255,8 @@ const state = reactive<CrudOption>({
 
 const { queryParams } = toRefs(state)
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
-const tableRef = ref()
-const addUpdateRef = ref()
+const tableRef = useTemplateRef('tableRef')
+const menuFromRef = useTemplateRef('menuFromRef')
 /**
  * 查询数据列表
  */
@@ -289,13 +282,13 @@ const resetQuery = async () => {
  * 处理新增
  */
 const handleAdd = () => {
-  addUpdateRef.value?.show('add', null)
+  menuFromRef.value?.show('add', null)
 }
 /**
  * 处理编辑
  */
 const handleEdit = (row: SysMenuResponse) => {
-  addUpdateRef.value?.show('update', row.id)
+  menuFromRef.value?.show('update', row.id)
 }
 
 /**

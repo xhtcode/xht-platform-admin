@@ -91,14 +91,14 @@
         </div>
       </split-pane-item>
     </split-panes>
-    <add-or-update ref="addUpdateRef" @success="handleQuery()" />
+    <template-from ref="templateFromRef" @success="handleQuery()" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
 import { useTableQueryPageHooks, useTableToolHooks } from '@/hooks/use-crud-hooks'
-import AddOrUpdate from './components/add-or-update.vue'
+import TemplateFrom from './components/template-from.vue'
 import type { GenTemplateQueryRequest, GenTemplateResponse } from '@/model/generate/template.model'
 import { queryGenTemplatePage, removeGenTemplateByIds } from '@/api/generate/template.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
@@ -129,7 +129,7 @@ const { queryParams } = toRefs(state)
 
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 const templateGroupRef = useTemplateRef('templateGroupRef')
-const addUpdateRef = useTemplateRef('addUpdateRef')
+const templateFromRef = useTemplateRef('templateFromRef')
 const { cellStyle, headerCellStyle } = useTableToolHooks()
 
 /**
@@ -144,14 +144,14 @@ const resetQuery = async () => {
  * 处理新增
  */
 const handleAdd = () => {
-  addUpdateRef.value?.show('add', null)
+  templateFromRef.value?.show('add', null)
 }
 
 /**
  * 处理编辑
  */
 const handleEdit = (row: GenTemplateResponse) => {
-  addUpdateRef.value?.show('update', row.id)
+  templateFromRef.value?.show('update', row.id)
 }
 
 /**
