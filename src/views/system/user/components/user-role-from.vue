@@ -101,7 +101,7 @@ const handleSelectAll = (check: CheckboxValueType) => {
 }
 const onSubmit = () => {
   state.loadingStatus = true
-  const roleIds = roleTreeRef.value.getCheckedKeys()
+  const roleIds = roleTreeRef.value?.getCheckedKeys()
   UserRoleBind({ userId: state.userId, roleIds: roleIds })
     .then(() => {
       useMessage().success('当前用户分配角色成功')
