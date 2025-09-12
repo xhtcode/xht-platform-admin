@@ -17,6 +17,14 @@
         placeholder="请输入模块名称"
       />
     </el-form-item>
+    <el-form-item label="业务名称" prop="tableInfo.serviceName">
+      <el-input
+        v-model="tableInfo.serviceName"
+        :maxlength="10"
+        show-word-limit
+        placeholder="请输入业务名称"
+      />
+    </el-form-item>
     <el-form-item label="代码名称" prop="tableInfo.codeName">
       <el-input
         v-model="tableInfo.codeName"
