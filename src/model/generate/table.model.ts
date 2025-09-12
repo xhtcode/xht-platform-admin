@@ -123,7 +123,7 @@ export interface GenTableInfoResponse extends BasicResponse {
   /**
    * 上级菜单
    */
-  parentMenu: ModeIdType
+  parentMenuId: ModeIdType
   /**
    *创建时间
    */
