@@ -1,44 +1,6 @@
 import type { BasicResponse, ModeIdType, PageQueryRequest } from '@/model/base.model'
 
 /**
- * 操作类型
- */
-export interface GenLogOperationRequest {
-  /**
-   *历史记录ID
-   */
-  id: ModeIdType
-  /**
-   *项目ID
-   */
-  projectId: ModeIdType
-  /**
-   *生成批次号
-   */
-  batchNo: string
-  /**
-   *生成时间
-   */
-  generateTime: string
-  /**
-   *生成文件数量
-   */
-  fileCount: number
-  /**
-   *生成的表ID
-   */
-  tableIds: string
-  /**
-   *生成状态
-   */
-  status: string
-  /**
-   *错误信息
-   */
-  errorMsg: string
-}
-
-/**
  * 查询请求类型
  */
 export interface GenLogQueryRequest extends PageQueryRequest {

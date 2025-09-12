@@ -25,13 +25,8 @@ export const GenTemplateOperationRules: FormRules<GenTemplateOperationRequest> =
     {
       required: true,
       message: '请选择模板分组',
-      trigger: 'change',
-    },
-    {
-      type: 'number',
-      message: '分组ID必须为数字',
-      trigger: 'change',
-    },
+      trigger : ['blur', 'change'],
+    }
   ],
 
   // 模板名称验证
@@ -39,19 +34,8 @@ export const GenTemplateOperationRules: FormRules<GenTemplateOperationRequest> =
     {
       required: true,
       message: '请输入模板名称',
-      trigger: 'blur',
-    },
-    {
-      min: 1,
-      max: 100,
-      message: '模板名称长度限制在1-100个字符',
-      trigger: 'blur',
-    },
-    {
-      pattern: /^[\u4e00-\u9fa5a-zA-Z0-9_.-]+$/,
-      message: '模板名称只能包含中文、字母、数字、下划线、点和横杠',
-      trigger: 'blur',
-    },
+      trigger : ['blur', 'change'],
+    }
   ],
 
   // 模板内容验证
@@ -59,12 +43,7 @@ export const GenTemplateOperationRules: FormRules<GenTemplateOperationRequest> =
     {
       required: true,
       message: '请输入模板内容',
-      trigger: 'blur',
-    },
-    {
-      min: 10,
-      message: '模板内容不能少于10个字符',
-      trigger: 'blur',
+      trigger : ['blur', 'change'],
     },
   ],
 
@@ -73,18 +52,8 @@ export const GenTemplateOperationRules: FormRules<GenTemplateOperationRequest> =
     {
       required: true,
       message: '请输入文件类型',
-      trigger: 'blur',
-    },
-    {
-      pattern: /^[a-zA-Z0-9_]+$/,
-      message: '文件类型只能包含字母、数字和下划线',
-      trigger: 'blur',
-    },
-    {
-      max: 50,
-      message: '文件类型长度不能超过50个字符',
-      trigger: 'blur',
-    },
+      trigger : ['blur', 'change'],
+    }
   ],
 
   // 文件路径模板验证
@@ -92,18 +61,8 @@ export const GenTemplateOperationRules: FormRules<GenTemplateOperationRequest> =
     {
       required: true,
       message: '请输入文件路径模板',
-      trigger: 'blur',
-    },
-    {
-      pattern: /^[\/a-zA-Z0-9_\{\}]+$/,
-      message: '文件路径只能包含字母、数字、下划线、斜杠和模板变量标识{}',
-      trigger: 'blur',
-    },
-    {
-      max: 500,
-      message: '文件路径长度不能超过500个字符',
-      trigger: 'blur',
-    },
+      trigger : ['blur', 'change'],
+    }
   ],
 
   // 文件名模板验证
@@ -111,25 +70,14 @@ export const GenTemplateOperationRules: FormRules<GenTemplateOperationRequest> =
     {
       required: true,
       message: '请输入文件名模板',
-      trigger: 'blur',
-    },
-    {
-      pattern: /^[a-zA-Z0-9_\{\}\.]+$/,
-      message: '文件名只能包含字母、数字、下划线、点和模板变量标识{}',
-      trigger: 'blur',
-    },
-    {
-      max: 200,
-      message: '文件名长度不能超过200个字符',
-      trigger: 'blur',
-    },
+      trigger : ['blur', 'change'],
+    }
   ],
 }
 
 /**
  * 列表显示配置
  */
-export const GenTemplateColumnOption: ColumnOption[] = []
 export const GenTemplateGroupOperationForm: GenTemplateGroupOperationRequest = {
   groupSort: 0,
   groupDesc: '',

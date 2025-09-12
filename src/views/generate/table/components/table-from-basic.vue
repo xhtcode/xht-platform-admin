@@ -34,6 +34,12 @@
     <el-form-item label="前端作者" prop="tableInfo.frontEndAuthor">
       <el-input v-model="tableInfo.frontEndAuthor" placeholder="请输入前端作者" />
     </el-form-item>
+    <el-form-item label="权限前缀" prop="tableInfo.permissionPrefix">
+      <el-input v-model="tableInfo.permissionPrefix" placeholder="请输入权限前缀" disabled />
+    </el-form-item>
+    <el-form-item label="上级菜单" prop="tableInfo.parentMenu">
+      <el-input v-model="tableInfo.parentMenu" placeholder="请输入上级菜单" disabled />
+    </el-form-item>
   </div>
 </template>
 

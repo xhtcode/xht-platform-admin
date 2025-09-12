@@ -34,10 +34,10 @@
         <el-input v-model="addUpdateForm.password" />
       </el-form-item>
       <el-form-item label="连接测试结果" prop="testResult">
-        <el-input v-model="addUpdateForm.testResult" />
+        <el-input v-model="addUpdateForm.testResult" disabled />
       </el-form-item>
       <el-form-item label="最后测试时间" prop="lastTestTime">
-        <el-input v-model="addUpdateForm.lastTestTime" />
+        <el-input v-model="addUpdateForm.lastTestTime" disabled />
       </el-form-item>
     </el-form>
     <template #footer>

@@ -18,6 +18,9 @@ export interface GenTableInfoOperationRequest extends BasicFormRequest {
    * 字段信息
    */
   columnInfos: GenColumnInfoResponse[]
+  /**
+   * 查询字段信息
+   */
   queryColumns: any[]
 }
 
@@ -114,6 +117,14 @@ export interface GenTableInfoResponse extends BasicResponse {
    */
   fromNumber: number
   /**
+   * 权限前缀
+   */
+  permissionPrefix: string
+  /**
+   * 上级菜单
+   */
+  parentMenu: ModeIdType
+  /**
    *创建时间
    */
   tableCreateTime: string
@@ -121,15 +132,4 @@ export interface GenTableInfoResponse extends BasicResponse {
    *更新时间
    */
   tableUpdateTime: string
-}
-
-export interface GenTableInfoVo {
-  /**
-   * 表信息
-   */
-  tableInfo: GenTableInfoResponse
-  /**
-   * 字段信息
-   */
-  columnInfos: GenColumnInfoResponse[]
 }

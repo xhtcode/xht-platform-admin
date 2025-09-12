@@ -82,7 +82,7 @@ const createTableIndex = (index: number) => {
 }
 const dataBaseList = ref<GenDataSourceResponse[]>([])
 const rules: FormRules = {
-  dbId: [{ required: true, message: '请选择配置名称', trigger: 'change' }],
+  dbId: [{ required: true, message: '请选择配置名称', trigger : ['blur', 'change'], }],
 }
 const importTableFormRef = ref<any>({})
 const addUpdateForm = ref<any>({})

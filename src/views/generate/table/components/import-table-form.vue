@@ -51,7 +51,7 @@ interface addUpdateOption {
 }
 
 const rules: FormRules = {
-  groupId: [{ required: true, message: '请选择模板分组名称', trigger: 'change' }],
+  groupId: [{ required: true, message: '请选择模板分组名称', trigger : ['blur', 'change'], }],
 }
 const addUpdateForm = ref<any>({})
 const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
