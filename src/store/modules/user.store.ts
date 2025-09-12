@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia'
-import type { LoginRequestType } from '@/api/login/type'
-import { loginInPassWord } from '@/api/login/api'
+import type { LoginRequestType } from '@/service/model/login/login.model'
+import { loginInPassWord } from '@/service/api/login/api'
 import type { AxiosResponse } from 'axios'
 import { resetRouter } from '@/router'
 import { useMessageBox } from '@/hooks/use-message'
 import pInIaPersistConfig from '@/store/pinia-persist'
-import { getUserInfo } from '@/api/permission'
+import { getUserInfo } from '@/service/api/permission'
 
 const defaultState: UserInfoStoreType = {
   userId: null, // 用户id

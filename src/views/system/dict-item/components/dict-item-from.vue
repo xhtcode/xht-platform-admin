@@ -93,10 +93,10 @@ import {
   querySysDictItemById,
   saveSysDictItem,
   updateSysDictItem,
-} from '@/api/system/dict.item.api'
+} from '@/service/api/system/dict.item.api'
 
-import type { SysDictItemOperationRequest } from '@/model/system/dict.item.model'
-import { DictItemStatusEnums } from '@/model/system/dict.item.model'
+import type { SysDictItemOperationRequest } from '@/service/model/system/dict.item.model'
+import { DictItemStatusEnums } from '@/service/model/system/dict.item.model'
 import {
   SysDictItemOperationForm,
   SysDictItemOperationRules,
@@ -104,7 +104,7 @@ import {
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { handleFormErrors } from '@/utils/moudle/element'
 import { useRoute } from 'vue-router'
-import type { ModeIdType } from '@/model/base.model'
+import type { ModeIdType } from '@/service/model/base.model'
 
 defineOptions({ name: 'SysDictItemAddOrUpdate' })
 const state = reactive<AddUpdateOption<SysDictItemOperationRequest>>({

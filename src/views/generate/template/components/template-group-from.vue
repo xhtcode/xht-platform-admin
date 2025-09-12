@@ -44,16 +44,16 @@ import {
   queryGenTemplateGroupById,
   saveGenTemplateGroup,
   updateGenTemplateGroup,
-} from '@/api/generate/template.group.api'
+} from '@/service/api/generate/template.group.api'
 
-import type { GenTemplateGroupOperationRequest } from '@/model/generate/template.group.model'
+import type { GenTemplateGroupOperationRequest } from '@/service/model/generate/template.group.model'
 import {
   GenTemplateGroupOperationForm,
   GenTemplateGroupOperationRules,
 } from '@/views/generate/template/template.data'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { handleFormErrors } from '@/utils/moudle/element'
-import type { ModeIdType } from '@/model/base.model'
+import type { ModeIdType } from '@/service/model/base.model'
 
 defineOptions({ name: 'TemplateGroupFrom' })
 const state = reactive<AddUpdateOption<GenTemplateGroupOperationRequest>>({

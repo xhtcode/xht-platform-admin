@@ -99,15 +99,15 @@ import DatasourceFrom from './components/datasource-from.vue'
 import type {
   GenDataSourceQueryRequest,
   GenDataSourceResponse,
-} from '@/model/generate/datasource.model'
+} from '@/service/model/generate/datasource.model'
 import {
   connectionTest,
   queryGenDataSourceList,
   removeGenDataSourceByIds,
-} from '@/api/generate/datasource.api'
+} from '@/service/api/generate/datasource.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import type { BasicResponse, ModeIdArrayType, PageQueryRequest } from '@/model/base.model'
-import { DataBaseTypeEnums } from '@/common/enums/generate/generate.enums'
+import type { BasicResponse, ModeIdArrayType, PageQueryRequest } from '@/service/model/base.model'
+import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
 import type { AxiosResponse } from 'axios'
 
 defineOptions({ name: 'GenDataSourceViewIndex' })

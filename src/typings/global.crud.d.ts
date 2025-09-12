@@ -1,4 +1,4 @@
-import { BasicFormRequest } from '@/model/base.model'
+import { BasicFormRequest } from '@/service/model/base.model'
 
 /**
  * 增删改查 基础字段设置

@@ -44,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-import type { GenTableInfoResponse } from '@/model/generate/table.model'
+import type { GenTableInfoResponse } from '@/service/model/generate/table.model'
 
 const tableInfo = defineModel<GenTableInfoResponse>('tableInfo', {
   required: true,

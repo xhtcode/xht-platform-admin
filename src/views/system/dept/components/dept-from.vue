@@ -119,17 +119,17 @@
 
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
-import { querySysDeptById, saveSysDept, updateSysDept } from '@/api/system/dept.api'
+import { querySysDeptById, saveSysDept, updateSysDept } from '@/service/api/system/dept.api'
 
-import type { SysDeptOperationRequest } from '@/model/system/dept.model'
-import { DeptStatusEnums } from '@/model/system/dept.model'
+import type { SysDeptOperationRequest } from '@/service/model/system/dept.model'
+import { DeptStatusEnums } from '@/service/model/system/dept.model'
 import { SysDeptOperationForm, SysDeptOperationRules } from '@/views/system/dept/dept.data'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { handleFormErrors } from '@/utils/moudle/element'
-import type { ModeIdType } from '@/model/base.model'
+import type { ModeIdType } from '@/service/model/base.model'
 import DeptUserFrom from '@/views/system/dept/components/dept-user-from.vue'
 import { Search } from '@element-plus/icons-vue'
-import type { UserSimpleVo } from '@/model/system/user.model'
+import type { UserSimpleVo } from '@/service/model/system/user.model'
 
 defineOptions({ name: 'SysDeptAddOrUpdate' })
 

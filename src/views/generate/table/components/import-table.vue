@@ -66,13 +66,16 @@
 
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
-import { syncList } from '@/api/generate/table.api'
+import { syncList } from '@/service/api/generate/table.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import { queryGenDataSourceList } from '@/api/generate/datasource.api'
+import { queryGenDataSourceList } from '@/service/api/generate/datasource.api'
 import ImportTableForm from '@/views/generate/table/components/import-table-form.vue'
 import { useTableToolHooks } from '@/hooks/use-crud-hooks'
-import type { GenTableInfoQueryRequest, GenTableInfoResponse } from '@/model/generate/table.model'
-import type { GenDataSourceResponse } from '@/model/generate/datasource.model'
+import type {
+  GenTableInfoQueryRequest,
+  GenTableInfoResponse,
+} from '@/service/model/generate/table.model'
+import type { GenDataSourceResponse } from '@/service/model/generate/datasource.model'
 const tableStyle = useTableToolHooks()
 /**
  * 自定义表格索引生成
@@ -82,7 +85,7 @@ const createTableIndex = (index: number) => {
 }
 const dataBaseList = ref<GenDataSourceResponse[]>([])
 const rules: FormRules = {
-  dbId: [{ required: true, message: '请选择配置名称', trigger : ['blur', 'change'], }],
+  dbId: [{ required: true, message: '请选择配置名称', trigger: ['blur', 'change'] }],
 }
 const importTableFormRef = ref<any>({})
 const addUpdateForm = ref<any>({})

@@ -87,10 +87,13 @@
 import type { FormInstance } from 'element-plus'
 import { useTableQueryPageHooks, useTableToolHooks } from '@/hooks/use-crud-hooks'
 import TableFrom from './components/table-from.vue'
-import type { GenTableInfoQueryRequest, GenTableInfoResponse } from '@/model/generate/table.model'
-import { queryGenTableInfoPage, removeGenTableInfoByIds } from '@/api/generate/table.api'
+import type {
+  GenTableInfoQueryRequest,
+  GenTableInfoResponse,
+} from '@/service/model/generate/table.model'
+import { queryGenTableInfoPage, removeGenTableInfoByIds } from '@/service/api/generate/table.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import type { ModeIdArrayType } from '@/model/base.model'
+import type { ModeIdArrayType } from '@/service/model/base.model'
 
 defineOptions({ name: 'GenTableInfoViewIndex' })
 

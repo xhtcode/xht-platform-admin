@@ -1,9 +1,12 @@
-import type { SysUserOperationRequest, UserProfilesCreateRequest } from '@/model/system/user.model'
-import { UserStatusEnums } from '@/model/system/user.model'
+import type {
+  SysUserOperationRequest,
+  UserProfilesCreateRequest,
+} from '@/service/model/system/user.model'
+import { UserStatusEnums } from '@/service/model/system/user.model'
 import type { FormRules } from 'element-plus'
 import type { ColumnOption } from '@/components/table-tool-bar/types'
-import type { SysDeptResponse } from '@/model/system/dept.model'
-import type { SysDeptPostResponse } from '@/model/system/dept.post.model'
+import type { SysDeptResponse } from '@/service/model/system/dept.model'
+import type { SysDeptPostResponse } from '@/service/model/system/dept.post.model'
 
 /**
  * 增改页面 表单类型 默认值

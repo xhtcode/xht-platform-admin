@@ -151,22 +151,22 @@
 
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
-import { querySysMenuById, saveSysMenu, updateSysMenu } from '@/api/system/menu.api'
+import { querySysMenuById, saveSysMenu, updateSysMenu } from '@/service/api/system/menu.api'
 import { useMessageBox } from '@/hooks/use-message'
 import { handleFormErrors } from '@/utils/moudle/element'
-import type { SysMenuOperationRequest } from '@/model/system/menu.model'
+import type { SysMenuOperationRequest } from '@/service/model/system/menu.model'
 import {
   MenuCacheEnums,
   MenuHiddenEnums,
   MenuLinkEnums,
   MenuStatusEnums,
   MenuTypeEnums,
-} from '@/model/system/menu.model'
+} from '@/service/model/system/menu.model'
 import MenuTreeSelect from '@/components/system/menu-tree-select/index.vue'
 import { SysMenuOperationForm, SysMenuOperationRules } from '@/views/system/menu/menu.data'
 
 import { SysDeptOperationForm } from '@/views/system/dept/dept.data'
-import type { ModeIdType } from '@/model/base.model'
+import type { ModeIdType } from '@/service/model/base.model'
 
 const rules: FormRules = SysMenuOperationRules
 const state = reactive<AddUpdateOption<SysMenuOperationRequest>>({

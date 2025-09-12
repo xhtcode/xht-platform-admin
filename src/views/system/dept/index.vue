@@ -127,13 +127,13 @@
 </template>
 
 <script lang="ts" setup>
-import { querySysDeptTree, removeSysDeptById } from '@/api/system/dept.api'
+import { querySysDeptTree, removeSysDeptById } from '@/service/api/system/dept.api'
 import type {
   SysDeptQueryRequest,
   SysDeptResponse,
   SysDeptTreeResponse,
-} from '@/model/system/dept.model'
-import { DeptStatusEnums } from '@/model/system/dept.model'
+} from '@/service/model/system/dept.model'
+import { DeptStatusEnums } from '@/service/model/system/dept.model'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { FormInstance } from 'element-plus'
 

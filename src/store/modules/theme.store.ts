@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
-import { AppLanguageEnums, ComponentSizeEnums, DeviceEnums } from '@/common/enums'
+import { AppLanguageEnums, ComponentSizeEnums, DeviceEnums } from '@/service/enums'
 import pInIaPersistConfig from '@/store/pinia-persist'
-import { DefaultThemeColor } from '@/common/constant'
+import { DefaultThemeColor } from '@/service/constant'
 
 /**
  * 主题相关pinia

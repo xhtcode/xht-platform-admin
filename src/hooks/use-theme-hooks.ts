@@ -1,7 +1,7 @@
 import { useThemeStore } from '@/store'
 import { storeToRefs } from 'pinia'
 import { changeCssProperty } from '@/utils/theme'
-import { DeviceEnums } from '@/common/enums'
+import { DeviceEnums } from '@/service/enums'
 import type { CSSProperties } from 'vue'
 import variables from '@/styles/variables.module.scss'
 

@@ -53,17 +53,17 @@ import {
   queryGenDataSourceById,
   saveGenDataSource,
   updateGenDataSource,
-} from '@/api/generate/datasource.api'
+} from '@/service/api/generate/datasource.api'
 
-import type { GenDataSourceOperationRequest } from '@/model/generate/datasource.model'
+import type { GenDataSourceOperationRequest } from '@/service/model/generate/datasource.model'
 import {
   GenDataSourceOperationForm,
   GenDataSourceOperationRules,
 } from '@/views/generate/datasource/datasource.data'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { handleFormErrors } from '@/utils/moudle/element'
-import type { ModeIdType } from '@/model/base.model'
-import { DataBaseTypeEnums } from '@/common/enums/generate/generate.enums'
+import type { ModeIdType } from '@/service/model/base.model'
+import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
 
 defineOptions({ name: 'GenDataSourceAddOrUpdate' })
 const state = reactive<AddUpdateOption<GenDataSourceOperationRequest>>({

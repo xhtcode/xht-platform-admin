@@ -50,17 +50,17 @@ import {
   queryGenTypeMappingById,
   saveGenTypeMapping,
   updateGenTypeMapping,
-} from '@/api/generate/type.mapping.api'
+} from '@/service/api/generate/type.mapping.api'
 
-import type { GenTypeMappingOperationRequest } from '@/model/generate/type.mapping.model'
+import type { GenTypeMappingOperationRequest } from '@/service/model/generate/type.mapping.model'
 import {
   GenTypeMappingOperationForm,
   GenTypeMappingOperationRules,
 } from '@/views/generate/type-mapping/type.mapping.data'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { handleFormErrors } from '@/utils/moudle/element'
-import type { ModeIdType } from '@/model/base.model'
-import { DataBaseTypeEnums, LanguageTypeEnums } from '@/common/enums/generate/generate.enums'
+import type { ModeIdType } from '@/service/model/base.model'
+import { DataBaseTypeEnums, LanguageTypeEnums } from '@/service/enums/generate/generate.enums'
 
 defineOptions({ name: 'GenTypeMappingAddOrUpdate' })
 const state = reactive<AddUpdateOption<GenTypeMappingOperationRequest>>({

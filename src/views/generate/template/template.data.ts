@@ -1,7 +1,7 @@
 import type { FormRules } from 'element-plus'
 import type { ColumnOption } from '@/components/table-tool-bar/types'
-import type { GenTemplateOperationRequest } from '@/model/generate/template.model'
-import type { GenTemplateGroupOperationRequest } from '@/model/generate/template.group.model'
+import type { GenTemplateOperationRequest } from '@/service/model/generate/template.model'
+import type { GenTemplateGroupOperationRequest } from '@/service/model/generate/template.group.model'
 
 /**
  * 增改页面 表单类型 默认值
@@ -25,8 +25,8 @@ export const GenTemplateOperationRules: FormRules<GenTemplateOperationRequest> =
     {
       required: true,
       message: '请选择模板分组',
-      trigger : ['blur', 'change'],
-    }
+      trigger: ['blur', 'change'],
+    },
   ],
 
   // 模板名称验证
@@ -34,8 +34,8 @@ export const GenTemplateOperationRules: FormRules<GenTemplateOperationRequest> =
     {
       required: true,
       message: '请输入模板名称',
-      trigger : ['blur', 'change'],
-    }
+      trigger: ['blur', 'change'],
+    },
   ],
 
   // 模板内容验证
@@ -43,7 +43,7 @@ export const GenTemplateOperationRules: FormRules<GenTemplateOperationRequest> =
     {
       required: true,
       message: '请输入模板内容',
-      trigger : ['blur', 'change'],
+      trigger: ['blur', 'change'],
     },
   ],
 
@@ -52,8 +52,8 @@ export const GenTemplateOperationRules: FormRules<GenTemplateOperationRequest> =
     {
       required: true,
       message: '请输入文件类型',
-      trigger : ['blur', 'change'],
-    }
+      trigger: ['blur', 'change'],
+    },
   ],
 
   // 文件路径模板验证
@@ -61,8 +61,8 @@ export const GenTemplateOperationRules: FormRules<GenTemplateOperationRequest> =
     {
       required: true,
       message: '请输入文件路径模板',
-      trigger : ['blur', 'change'],
-    }
+      trigger: ['blur', 'change'],
+    },
   ],
 
   // 文件名模板验证
@@ -70,8 +70,8 @@ export const GenTemplateOperationRules: FormRules<GenTemplateOperationRequest> =
     {
       required: true,
       message: '请输入文件名模板',
-      trigger : ['blur', 'change'],
-    }
+      trigger: ['blur', 'change'],
+    },
   ],
 }
 

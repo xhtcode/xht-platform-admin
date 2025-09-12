@@ -106,8 +106,8 @@
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
 
-import type { SysDeptPostOperationRequest } from '@/model/system/dept.post.model'
-import { SysDeptPostStatusEnums } from '@/model/system/dept.post.model'
+import type { SysDeptPostOperationRequest } from '@/service/model/system/dept.post.model'
+import { SysDeptPostStatusEnums } from '@/service/model/system/dept.post.model'
 import {
   SysDeptPostOperationForm,
   SysDeptPostOperationRules,
@@ -118,9 +118,9 @@ import {
   querySysDeptPostById,
   saveSysDeptPost,
   updateSysDeptPost,
-} from '@/api/system/dept.post.api'
-import type { ModeIdType } from '@/model/base.model'
-import { SystemFlagEnums } from '@/model/base.model'
+} from '@/service/api/system/dept.post.api'
+import type { ModeIdType } from '@/service/model/base.model'
+import { SystemFlagEnums } from '@/service/model/base.model'
 
 defineOptions({ name: 'SysDeptAddOrUpdate' })
 const state = reactive<AddUpdateOption<SysDeptPostOperationRequest>>({

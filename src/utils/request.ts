@@ -13,7 +13,7 @@ import {
   HEADER_TRACE_ID,
   HEADER_USER_ACCOUNT,
   HEADER_USER_ID,
-} from '@/common/constant'
+} from '@/service/constant'
 
 // 生成唯一追踪ID，用于请求链路追踪
 const generateTraceId = (): string => {

@@ -82,14 +82,14 @@
 
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
-import { querySysDictById, saveSysDict, updateSysDict } from '@/api/system/dict.api'
+import { querySysDictById, saveSysDict, updateSysDict } from '@/service/api/system/dict.api'
 
-import type { SysDictOperationRequest } from '@/model/system/dict.model'
-import { DictStatusEnums } from '@/model/system/dict.model'
+import type { SysDictOperationRequest } from '@/service/model/system/dict.model'
+import { DictStatusEnums } from '@/service/model/system/dict.model'
 import { SysDictOperationForm, SysDictOperationRules } from '@/views/system/dict/dict.data'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { handleFormErrors } from '@/utils/moudle/element'
-import type { ModeIdType } from '@/model/base.model'
+import type { ModeIdType } from '@/service/model/base.model'
 
 defineOptions({ name: 'SysDictAddOrUpdate' })
 

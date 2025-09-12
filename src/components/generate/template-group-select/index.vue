@@ -10,13 +10,13 @@
 </template>
 
 <script setup lang="ts">
-import { queryGenTemplateGroupList } from '@/api/generate/template.group.api'
+import { queryGenTemplateGroupList } from '@/service/api/generate/template.group.api'
 import type {
   GenTemplateGroupSelectProps,
   GenTemplateGroupSelectState,
 } from '@/components/generate/template-group-select/types'
 import { useMessage } from '@/hooks/use-message'
-import type { ModeIdType } from '@/model/base.model'
+import type { ModeIdType } from '@/service/model/base.model'
 
 /**
  * 定义组件选项

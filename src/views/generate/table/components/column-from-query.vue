@@ -49,7 +49,7 @@
 </template>
 <script lang="ts" setup>
 import { useTableToolHooks } from '@/hooks/use-crud-hooks'
-import { GenColumnInfoResponse } from '@/model/generate/column.model'
+import { GenColumnInfoResponse } from '@/service/model/generate/column.model'
 
 const { cellStyle, headerCellStyle } = useTableToolHooks()
 const queryColumns = defineModel<any[]>('queryColumns', {

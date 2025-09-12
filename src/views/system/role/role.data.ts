@@ -1,5 +1,5 @@
-import type { SysRoleOperationRequest } from '@/model/system/role.model'
-import { RoleStatusEnums } from '@/model/system/role.model'
+import type { SysRoleOperationRequest } from '@/service/model/system/role.model'
+import { RoleStatusEnums } from '@/service/model/system/role.model'
 import type { FormRules } from 'element-plus'
 import type { ColumnOption } from '@/components/table-tool-bar/types'
 

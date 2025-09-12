@@ -1,4 +1,4 @@
-import { AppLanguageEnums, ComponentSizeEnums } from '@/common/enums'
+import { AppLanguageEnums, ComponentSizeEnums } from '@/service/enums'
 
 /**
  * pinia自定义ts类型

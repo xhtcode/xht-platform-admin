@@ -3,7 +3,7 @@ import type { ColumnOption } from '@/components/table-tool-bar/types'
 import type {
   GenTableInfoOperationRequest,
   GenTableInfoResponse,
-} from '@/model/generate/table.model'
+} from '@/service/model/generate/table.model'
 
 /**
  * 增改页面 表单类型 默认值
@@ -22,72 +22,72 @@ export const GenTableInfoOperationRules: FormRules<GenTableInfoOperationRequest>
     {
       required: true,
       message: '请选择分组',
-      trigger: 'change'
-    }
+      trigger: 'change',
+    },
   ],
   'tableInfo.dataSourceId': [
     {
       required: true,
       message: '请选择数据源',
-      trigger: 'change'
-    }
+      trigger: 'change',
+    },
   ],
   'tableInfo.tableName': [
     {
       required: true,
       message: '请输入表名称',
-      trigger: 'blur'
-    }
+      trigger: 'blur',
+    },
   ],
   'tableInfo.tableComment': [
     {
       required: true,
       message: '请输入表注释',
-      trigger: 'blur'
-    }
+      trigger: 'blur',
+    },
   ],
   'tableInfo.moduleName': [
     {
       required: true,
       message: '请输入模块名称',
-      trigger: 'blur'
-    }
+      trigger: 'blur',
+    },
   ],
   'tableInfo.codeName': [
     {
       required: true,
       message: '请输入代码名称',
-      trigger: 'blur'
-    }
+      trigger: 'blur',
+    },
   ],
   'tableInfo.backEndAuthor': [
     {
       required: true,
       message: '请输入后端作者',
-      trigger: 'blur'
-    }
+      trigger: 'blur',
+    },
   ],
   'tableInfo.frontEndAuthor': [
     {
       required: true,
       message: '请输入前端作者',
-      trigger: 'blur'
-    }
+      trigger: 'blur',
+    },
   ],
   'tableInfo.pageStyle': [
     {
       required: true,
       message: '请选择页面风格',
-      trigger: 'change'
-    }
+      trigger: 'change',
+    },
   ],
   'tableInfo.fromNumber': [
     {
       required: true,
       message: '请选择每行数量',
-      trigger: 'change'
-    }
-  ]
+      trigger: 'change',
+    },
+  ],
 }
 
 /**

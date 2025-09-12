@@ -136,11 +136,11 @@
 import type { FormInstance } from 'element-plus'
 import { useTableQueryPageHooks, useTableToolHooks } from '@/hooks/use-crud-hooks'
 import DictFrom from './components/dict-from.vue'
-import type { SysDictQueryRequest, SysDictResponse } from '@/model/system/dict.model'
-import { DictStatusEnums } from '@/model/system/dict.model'
-import { querySysDictPage, removeSysDictByIds } from '@/api/system/dict.api'
+import type { SysDictQueryRequest, SysDictResponse } from '@/service/model/system/dict.model'
+import { DictStatusEnums } from '@/service/model/system/dict.model'
+import { querySysDictPage, removeSysDictByIds } from '@/service/api/system/dict.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import type { ModeIdArrayType } from '@/model/base.model'
+import type { ModeIdArrayType } from '@/service/model/base.model'
 
 defineOptions({ name: 'SysDictViewIndex' })
 

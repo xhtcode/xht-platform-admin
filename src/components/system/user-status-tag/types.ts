@@ -1,5 +1,5 @@
 import type { TagProps } from 'element-plus'
-import { UserStatusEnums } from '@/model/system/user.model'
+import { UserStatusEnums } from '@/service/model/system/user.model'
 
 /**
  * 用户状态标签组件的属性接口

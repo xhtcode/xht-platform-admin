@@ -43,11 +43,11 @@
 </template>
 
 <script setup lang="ts">
-import { queryToolsMenuTree } from '@/api/tools.api'
+import { queryToolsMenuTree } from '@/service/api/tools.api'
 import type { CheckboxValueType } from 'element-plus'
-import { roleMenuBind, selectMenuIdByRoleId } from '@/api/system/role.api'
+import { roleMenuBind, selectMenuIdByRoleId } from '@/service/api/system/role.api'
 import { useMessage } from '@/hooks/use-message'
-import type { ModeIdType } from '@/model/base.model'
+import type { ModeIdType } from '@/service/model/base.model'
 
 defineOptions({ name: 'MenuRoleFrom' })
 const state = reactive<AddUpdateOption<any>>({

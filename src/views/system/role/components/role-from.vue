@@ -71,14 +71,14 @@
 
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
-import { querySysRoleById, saveSysRole, updateSysRole } from '@/api/system/role.api'
+import { querySysRoleById, saveSysRole, updateSysRole } from '@/service/api/system/role.api'
 
-import type { SysRoleOperationRequest } from '@/model/system/role.model'
-import { RoleStatusEnums } from '@/model/system/role.model'
+import type { SysRoleOperationRequest } from '@/service/model/system/role.model'
+import { RoleStatusEnums } from '@/service/model/system/role.model'
 import { SysRoleOperationForm, SysRoleOperationRules } from '@/views/system/role/role.data'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { handleFormErrors } from '@/utils/moudle/element'
-import type { ModeIdType } from '@/model/base.model'
+import type { ModeIdType } from '@/service/model/base.model'
 
 defineOptions({ name: 'SysRoleAddOrUpdate' })
 const state = reactive<AddUpdateOption<SysRoleOperationRequest>>({

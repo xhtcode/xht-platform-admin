@@ -87,8 +87,8 @@
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
 import { useTableQueryPageHooks, useTableToolHooks } from '@/hooks/use-crud-hooks'
-import type { GenLogQueryRequest, GenLogResponse } from '@/model/generate/log.model'
-import { queryGenLogPage } from '@/api/generate/log.api'
+import type { GenLogQueryRequest, GenLogResponse } from '@/service/model/generate/log.model'
+import { queryGenLogPage } from '@/service/api/generate/log.api'
 
 defineOptions({ name: 'GenLogViewIndex' })
 

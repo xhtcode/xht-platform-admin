@@ -1,5 +1,5 @@
 import type { _RouteLocationBase } from 'vue-router'
-import type { MenuTypeEnums } from '@/model/system/menu.model'
+import type { MenuTypeEnums } from '@/service/model/system/menu.model'
 
 declare module 'vue-router' {
   interface RouteMeta extends Record<string | number | symbol, unknown> {

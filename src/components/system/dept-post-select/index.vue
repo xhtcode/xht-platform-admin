@@ -22,9 +22,9 @@
   </el-row>
 </template>
 <script setup lang="ts">
-import type { ModeIdType } from '@/model/base.model'
-import { findListByDeptId } from '@/api/system/dept.post.api'
-import type { SysDeptPostResponse } from '@/model/system/dept.post.model'
+import type { ModeIdType } from '@/service/model/base.model'
+import { findListByDeptId } from '@/service/api/system/dept.post.api'
+import type { SysDeptPostResponse } from '@/service/model/system/dept.post.model'
 
 interface DeptPostSelectTreeProps {
   deptId?: ModeIdType

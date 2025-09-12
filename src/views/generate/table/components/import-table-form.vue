@@ -42,7 +42,7 @@
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
 import { useMessageBox } from '@/hooks/use-message'
-import { importTable } from '@/api/generate/table.api'
+import { importTable } from '@/service/api/generate/table.api'
 
 interface addUpdateOption {
   visibleStatus: boolean
@@ -51,7 +51,7 @@ interface addUpdateOption {
 }
 
 const rules: FormRules = {
-  groupId: [{ required: true, message: '请选择模板分组名称', trigger : ['blur', 'change'], }],
+  groupId: [{ required: true, message: '请选择模板分组名称', trigger: ['blur', 'change'] }],
 }
 const addUpdateForm = ref<any>({})
 const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')

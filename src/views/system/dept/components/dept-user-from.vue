@@ -53,10 +53,10 @@
   </el-dialog>
 </template>
 <script setup lang="ts">
-import type { ModeIdType } from '@/model/base.model'
-import { getBindUser } from '@/api/tools.api'
+import type { ModeIdType } from '@/service/model/base.model'
+import { getBindUser } from '@/service/api/tools.api'
 import { useTableToolHooks } from '@/hooks/use-crud-hooks'
-import type { UserSimpleVo } from '@/model/system/user.model'
+import type { UserSimpleVo } from '@/service/model/system/user.model'
 import { useMessage } from '@/hooks/use-message'
 
 defineOptions({ name: 'DeptUserFrom' })

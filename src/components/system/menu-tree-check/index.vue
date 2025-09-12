@@ -14,9 +14,9 @@
 </template>
 
 <script lang="ts" setup>
-import type { SysMenuTreeResponse } from '@/model/system/menu.model'
-import { MenuTypeEnums } from '@/model/system/menu.model'
-import { queryToolsMenuTree } from '@/api/tools.api'
+import type { SysMenuTreeResponse } from '@/service/model/system/menu.model'
+import { MenuTypeEnums } from '@/service/model/system/menu.model'
+import { queryToolsMenuTree } from '@/service/api/tools.api'
 
 defineOptions({ name: 'MenuTree' })
 

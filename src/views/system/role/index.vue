@@ -136,9 +136,13 @@
 import type { FormInstance } from 'element-plus'
 import { useTableQueryPageHooks, useTableToolHooks } from '@/hooks/use-crud-hooks'
 import RoleFrom from './components/role-from.vue'
-import type { SysRoleQueryRequest, SysRoleResponse } from '@/model/system/role.model'
-import { RoleStatusEnums } from '@/model/system/role.model'
-import { querySysRolePage, removeSysRoleById, removeSysRoleByIds } from '@/api/system/role.api'
+import type { SysRoleQueryRequest, SysRoleResponse } from '@/service/model/system/role.model'
+import { RoleStatusEnums } from '@/service/model/system/role.model'
+import {
+  querySysRolePage,
+  removeSysRoleById,
+  removeSysRoleByIds,
+} from '@/service/api/system/role.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import MenuRoleFrom from '@/views/system/role/components/menu-role-from.vue'
 

@@ -1,6 +1,6 @@
 import type { SelectProps } from 'element-plus'
-import type { ModeIdType } from '@/model/base.model'
-import type { GenDataSourceResponse } from '@/model/generate/datasource.model'
+import type { ModeIdType } from '@/service/model/base.model'
+import type { GenDataSourceResponse } from '@/service/model/generate/datasource.model'
 
 /**
  * 数据源组件状态

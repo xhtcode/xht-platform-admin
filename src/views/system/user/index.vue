@@ -308,14 +308,14 @@
 import type { FormInstance } from 'element-plus'
 import { useTableQueryPageHooks, useTableToolHooks } from '@/hooks/use-crud-hooks'
 import UserFrom from '@/views/system/user/components/user-from.vue'
-import type { SysUserQueryRequest, SysUserResponse } from '@/model/system/user.model'
-import { UserStatusEnums } from '@/model/system/user.model'
+import type { SysUserQueryRequest, SysUserResponse } from '@/service/model/system/user.model'
+import { UserStatusEnums } from '@/service/model/system/user.model'
 import {
   querySysUserPage,
   removeSysUserById,
   removeSysUserByIds,
   resetPassword,
-} from '@/api/system/user.api'
+} from '@/service/api/system/user.api'
 import {
   LocationFilled,
   OfficeBuilding,
@@ -325,7 +325,7 @@ import {
   User,
   UserFilled,
 } from '@element-plus/icons-vue'
-import type { SysDeptResponse } from '@/model/system/dept.model'
+import type { SysDeptResponse } from '@/service/model/system/dept.model'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { disabledTodayAndFuture } from '@/utils/moudle/element'
 import UserRoleFrom from '@/views/system/user/components/user-role-from.vue'

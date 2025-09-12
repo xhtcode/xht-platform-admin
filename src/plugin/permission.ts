@@ -5,7 +5,7 @@ import { useUserInfoStore } from '@/store/modules/user.store'
 import { useRouteStore } from '@/store/modules/routes.store'
 import type { RouteLocationNormalized, RouteRecordRaw } from 'vue-router'
 import { useTitle } from '@/hooks/use-title'
-import { HOME_PAGE_PATH, PAGE_PATH_LOGIN } from '@/common/constant'
+import { HOME_PAGE_PATH, PAGE_PATH_LOGIN } from '@/service/constant'
 
 const { setTitle } = useTitle()
 /**

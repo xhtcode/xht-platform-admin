@@ -1,5 +1,5 @@
-import type { SysDictOperationRequest } from '@/model/system/dict.model'
-import { DictStatusEnums } from '@/model/system/dict.model'
+import type { SysDictOperationRequest } from '@/service/model/system/dict.model'
+import { DictStatusEnums } from '@/service/model/system/dict.model'
 import type { FormRules } from 'element-plus'
 import type { ColumnOption } from '@/components/table-tool-bar/types'
 

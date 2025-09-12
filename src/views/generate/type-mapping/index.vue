@@ -101,11 +101,14 @@ import TypeMappingFrom from './components/type-mapping-from.vue'
 import type {
   GenTypeMappingQueryRequest,
   GenTypeMappingResponse,
-} from '@/model/generate/type.mapping.model'
-import { queryGenTypeMappingPage, removeGenTypeMappingByIds } from '@/api/generate/type.mapping.api'
+} from '@/service/model/generate/type.mapping.model'
+import {
+  queryGenTypeMappingPage,
+  removeGenTypeMappingByIds,
+} from '@/service/api/generate/type.mapping.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import type { ModeIdArrayType } from '@/model/base.model'
-import { DataBaseTypeEnums, LanguageTypeEnums } from '@/common/enums/generate/generate.enums'
+import type { ModeIdArrayType } from '@/service/model/base.model'
+import { DataBaseTypeEnums, LanguageTypeEnums } from '@/service/enums/generate/generate.enums'
 
 defineOptions({ name: 'GenTypeMappingViewIndex' })
 

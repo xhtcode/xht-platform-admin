@@ -102,10 +102,10 @@
 </template>
 <script setup lang="ts">
 import { useThemeStore } from '@/store'
-import { AppLanguageEnums, ComponentSizeEnums } from '@/common/enums'
+import { AppLanguageEnums, ComponentSizeEnums } from '@/service/enums'
 import { storeToRefs } from 'pinia'
 import useThemeColorHooks from '@/hooks/use-theme-hooks'
-import { DefaultThemeColor } from '@/common/constant'
+import { DefaultThemeColor } from '@/service/constant'
 
 defineOptions({
   name: 'AppSetting',

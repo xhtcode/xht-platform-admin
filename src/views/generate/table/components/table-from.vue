@@ -59,16 +59,16 @@ import {
   queryGenTableInfoById,
   saveGenTableInfo,
   updateGenTableInfo,
-} from '@/api/generate/table.api'
+} from '@/service/api/generate/table.api'
 
-import type { GenTableInfoOperationRequest } from '@/model/generate/table.model'
+import type { GenTableInfoOperationRequest } from '@/service/model/generate/table.model'
 import {
   GenTableInfoOperationForm,
   GenTableInfoOperationRules,
 } from '@/views/generate/table/table.data'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { handleFormErrors } from '@/utils/moudle/element'
-import type { ModeIdType } from '@/model/base.model'
+import type { ModeIdType } from '@/service/model/base.model'
 import ColumnFromBasic from '@/views/generate/table/components/column-from-basic.vue'
 import ColumnFromType from '@/views/generate/table/components/column-from-type.vue'
 import ColumnFromEdit from '@/views/generate/table/components/column-from-edit.vue'

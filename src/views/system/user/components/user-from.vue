@@ -232,14 +232,14 @@
 
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
-import { querySysUserById, saveSysUser, updateSysUser } from '@/api/system/user.api'
+import { querySysUserById, saveSysUser, updateSysUser } from '@/service/api/system/user.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { handleFormErrors } from '@/utils/moudle/element'
 import { SysUserOperationForm, SysUserOperationRules } from '@/views/system/user/user.data'
 
-import type { SysUserOperationRequest } from '@/model/system/user.model'
-import { UserStatusEnums } from '@/model/system/user.model'
-import type { ModeIdType } from '@/model/base.model'
+import type { SysUserOperationRequest } from '@/service/model/system/user.model'
+import { UserStatusEnums } from '@/service/model/system/user.model'
+import type { ModeIdType } from '@/service/model/base.model'
 
 const rules: FormRules = SysUserOperationRules
 const state = reactive<AddUpdateOption<SysUserOperationRequest>>({

@@ -99,12 +99,15 @@
 import type { FormInstance } from 'element-plus'
 import { useTableQueryPageHooks, useTableToolHooks } from '@/hooks/use-crud-hooks'
 import TemplateFrom from './components/template-from.vue'
-import type { GenTemplateQueryRequest, GenTemplateResponse } from '@/model/generate/template.model'
-import { queryGenTemplatePage, removeGenTemplateByIds } from '@/api/generate/template.api'
+import type {
+  GenTemplateQueryRequest,
+  GenTemplateResponse,
+} from '@/service/model/generate/template.model'
+import { queryGenTemplatePage, removeGenTemplateByIds } from '@/service/api/generate/template.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import type { ModeIdArrayType } from '@/model/base.model'
+import type { ModeIdArrayType } from '@/service/model/base.model'
 import TemplateGroupTree from '@/views/generate/template/components/template-group-tree.vue'
-import type { GenTemplateGroupResponse } from '@/model/generate/template.group.model'
+import type { GenTemplateGroupResponse } from '@/service/model/generate/template.group.model'
 
 defineOptions({ name: 'GenTemplateViewIndex' })
 

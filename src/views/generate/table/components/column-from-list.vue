@@ -94,7 +94,10 @@
   </el-table>
 </template>
 <script lang="ts" setup>
-import { GenColumnInfoOperationRequest, GenColumnInfoResponse } from '@/model/generate/column.model'
+import {
+  GenColumnInfoOperationRequest,
+  GenColumnInfoResponse,
+} from '@/service/model/generate/column.model'
 import { useTableToolHooks } from '@/hooks/use-crud-hooks'
 
 const { cellStyle, headerCellStyle } = useTableToolHooks()

@@ -27,12 +27,12 @@
 
 <script lang="ts" setup>
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import type { GenTemplateGroupResponse } from '@/model/generate/template.group.model'
+import type { GenTemplateGroupResponse } from '@/service/model/generate/template.group.model'
 import { Delete, Edit } from '@element-plus/icons-vue'
-import { ModeIdType } from '@/model/base.model'
-import { queryGenTemplateGroupList } from '@/api/generate/group.api'
+import { ModeIdType } from '@/service/model/base.model'
+import { queryGenTemplateGroupList } from '@/service/api/generate/group.api'
 import TemplateGroupFrom from '@/views/generate/template/components/template-group-from.vue'
-import { removeGenTemplateByIds } from '@/api/generate/template.api'
+import { removeGenTemplateByIds } from '@/service/api/generate/template.api'
 
 /**
  * 数据源组件状态

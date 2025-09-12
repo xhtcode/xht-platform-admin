@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
 import type { RouteRecordRaw } from 'vue-router'
-import { getRouters } from '@/api/permission'
+import { getRouters } from '@/service/api/permission'
 import DynamicRouter from '@/router/modules/dynamic'
 import { cloneDeep } from 'lodash'
-import { MenuTypeEnums } from '@/model/system/menu.model'
+import { MenuTypeEnums } from '@/service/model/system/menu.model'
 
 const LayOutIndex = import('@/layout/index.vue')
 const viewsModules: any = import.meta.glob('../../views/**/*.{vue,tsx}')

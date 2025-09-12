@@ -39,11 +39,11 @@
 </template>
 
 <script setup lang="ts">
-import { queryToolsRoleList } from '@/api/tools.api'
+import { queryToolsRoleList } from '@/service/api/tools.api'
 import type { CheckboxValueType } from 'element-plus'
 import { useMessage } from '@/hooks/use-message'
-import { selectRoleIdByUserId, UserRoleBind } from '@/api/system/user.api'
-import type { ModeIdType } from '@/model/base.model'
+import { selectRoleIdByUserId, UserRoleBind } from '@/service/api/system/user.api'
+import type { ModeIdType } from '@/service/model/base.model'
 
 defineOptions({ name: 'UserRoleFrom' })
 const state = reactive<AddUpdateOption<any>>({

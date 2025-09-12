@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { queryGenDataSourceList } from '@/api/generate/datasource.api'
+import { queryGenDataSourceList } from '@/service/api/generate/datasource.api'
 import type {
   DataSourceSelectProps,
   DataSourceSelectState,

@@ -1,10 +1,10 @@
-import type { SysMenuOperationRequest } from '@/model/system/menu.model'
+import type { SysMenuOperationRequest } from '@/service/model/system/menu.model'
 import {
   MenuCacheEnums,
   MenuHiddenEnums,
   MenuStatusEnums,
   MenuTypeEnums,
-} from '@/model/system/menu.model'
+} from '@/service/model/system/menu.model'
 import type { FormRules } from 'element-plus'
 import type { ColumnOption } from '@/components/table-tool-bar/types'
 

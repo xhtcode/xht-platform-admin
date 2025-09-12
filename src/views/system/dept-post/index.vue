@@ -175,16 +175,19 @@
 import type { FormInstance } from 'element-plus'
 import { useTableQueryPageHooks, useTableToolHooks } from '@/hooks/use-crud-hooks'
 import DeptPostFrom from './components/dept-post-from.vue'
-import type { SysDeptPostQueryRequest, SysDeptPostResponse } from '@/model/system/dept.post.model'
-import { SysDeptPostStatusEnums } from '@/model/system/dept.post.model'
+import type {
+  SysDeptPostQueryRequest,
+  SysDeptPostResponse,
+} from '@/service/model/system/dept.post.model'
+import { SysDeptPostStatusEnums } from '@/service/model/system/dept.post.model'
 import {
   querySysDeptPostPage,
   removeSysDeptPostById,
   removeSysDeptPostByIds,
-} from '@/api/system/dept.post.api'
+} from '@/service/api/system/dept.post.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import type { SysDeptResponse } from '@/model/system/dept.model'
-import { SystemFlagEnums } from '@/model/base.model'
+import type { SysDeptResponse } from '@/service/model/system/dept.model'
+import { SystemFlagEnums } from '@/service/model/base.model'
 
 defineOptions({ name: 'SysDeptPostViewIndex' })
 

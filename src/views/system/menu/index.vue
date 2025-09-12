@@ -204,19 +204,19 @@
 </template>
 
 <script lang="ts" setup>
-import { querySysMenuTree, removeSysMenuById } from '@/api/system/menu.api'
+import { querySysMenuTree, removeSysMenuById } from '@/service/api/system/menu.api'
 import type {
   SysMenuQueryRequest,
   SysMenuResponse,
   SysMenuTreeResponse,
-} from '@/model/system/menu.model'
+} from '@/service/model/system/menu.model'
 import {
   MenuCacheEnums,
   MenuHiddenEnums,
   MenuLinkEnums,
   MenuStatusEnums,
   MenuTypeEnums,
-} from '@/model/system/menu.model'
+} from '@/service/model/system/menu.model'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { FormInstance } from 'element-plus'
 import MenuFrom from '@/views/system/menu/components/menu-from.vue'

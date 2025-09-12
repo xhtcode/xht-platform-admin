@@ -1,6 +1,6 @@
 import type { SelectProps } from 'element-plus'
-import type { ModeIdType } from '@/model/base.model'
-import type { GenTemplateGroupResponse } from '@/model/generate/template.group.model'
+import type { ModeIdType } from '@/service/model/base.model'
+import type { GenTemplateGroupResponse } from '@/service/model/generate/template.group.model'
 
 /**
  * 数据源组件状态

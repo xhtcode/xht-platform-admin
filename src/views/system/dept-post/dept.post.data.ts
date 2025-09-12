@@ -1,5 +1,5 @@
-import type { SysDeptPostOperationRequest } from '@/model/system/dept.post.model'
-import { SysDeptPostStatusEnums } from '@/model/system/dept.post.model'
+import type { SysDeptPostOperationRequest } from '@/service/model/system/dept.post.model'
+import { SysDeptPostStatusEnums } from '@/service/model/system/dept.post.model'
 import type { FormRules } from 'element-plus'
 import type { ColumnOption } from '@/components/table-tool-bar/types'
 

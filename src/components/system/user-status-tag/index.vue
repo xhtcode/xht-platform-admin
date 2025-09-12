@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts" setup>
-import { UserStatusEnums } from '@/model/system/user.model'
+import { UserStatusEnums } from '@/service/model/system/user.model'
 import type { UserStatusTagProps } from '@/components/system/user-status-tag/types'
 
 defineOptions({ name: 'UserStatusTag', inheritAttrs: false })

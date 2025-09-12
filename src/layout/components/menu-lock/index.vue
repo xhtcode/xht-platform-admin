@@ -11,7 +11,7 @@
 import { Expand, Fold } from '@element-plus/icons-vue'
 import { useThemeStore } from '@/store'
 import { storeToRefs } from 'pinia'
-import { DeviceEnums } from '@/common/enums'
+import { DeviceEnums } from '@/service/enums'
 
 defineOptions({ name: 'MenuLock' })
 const themeStore = useThemeStore()

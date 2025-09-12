@@ -72,7 +72,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { GenColumnInfoResponse } from '@/model/generate/column.model'
+import { GenColumnInfoResponse } from '@/service/model/generate/column.model'
 import { useTableToolHooks } from '@/hooks/use-crud-hooks'
 
 const { cellStyle, headerCellStyle } = useTableToolHooks()

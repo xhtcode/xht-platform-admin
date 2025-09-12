@@ -53,16 +53,16 @@ import {
   queryGenTemplateById,
   saveGenTemplate,
   updateGenTemplate,
-} from '@/api/generate/template.api'
+} from '@/service/api/generate/template.api'
 
-import type { GenTemplateOperationRequest } from '@/model/generate/template.model'
+import type { GenTemplateOperationRequest } from '@/service/model/generate/template.model'
 import {
   GenTemplateOperationForm,
   GenTemplateOperationRules,
 } from '@/views/generate/template/template.data'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { handleFormErrors } from '@/utils/moudle/element'
-import type { ModeIdType } from '@/model/base.model'
+import type { ModeIdType } from '@/service/model/base.model'
 
 defineOptions({ name: 'GenTemplateAddOrUpdate' })
 const state = reactive<AddUpdateOption<GenTemplateOperationRequest>>({
