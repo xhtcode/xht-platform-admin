@@ -107,7 +107,7 @@ import {
 } from '@/api/generate/datasource.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { BasicResponse, ModeIdArrayType, PageQueryRequest } from '@/model/base.model'
-import { DataBaseTypeEnums } from '@/model/generate/common.model'
+import { DataBaseTypeEnums } from '@/common/enums/generate/generate.enums'
 import type { AxiosResponse } from 'axios'
 
 defineOptions({ name: 'GenDataSourceViewIndex' })

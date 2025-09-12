@@ -1,7 +1,7 @@
 import type { SelectProps } from 'element-plus'
 import type { ModeIdType } from '@/model/base.model'
 import type { GenTypeMappingResponse } from '@/model/generate/type.mapping.model'
-import { DataBaseTypeEnums, LanguageTypeEnums } from '@/model/generate/common.model'
+import { DataBaseTypeEnums, LanguageTypeEnums } from '@/common/enums/generate/generate.enums'
 
 /**
  * 数据源组件状态

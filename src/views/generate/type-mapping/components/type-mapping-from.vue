@@ -60,7 +60,7 @@ import {
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { handleFormErrors } from '@/utils/moudle/element'
 import type { ModeIdType } from '@/model/base.model'
-import { DataBaseTypeEnums, LanguageTypeEnums } from '@/model/generate/common.model'
+import { DataBaseTypeEnums, LanguageTypeEnums } from '@/common/enums/generate/generate.enums'
 
 defineOptions({ name: 'GenTypeMappingAddOrUpdate' })
 const state = reactive<AddUpdateOption<GenTypeMappingOperationRequest>>({

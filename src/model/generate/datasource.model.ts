@@ -4,7 +4,7 @@ import type {
   ModeIdType,
   PageQueryRequest,
 } from '@/model/base.model'
-import { DataBaseTypeEnums } from '@/model/generate/common.model'
+import { DataBaseTypeEnums } from '@/common/enums/generate/generate.enums'
 
 /**
  * 操作类型

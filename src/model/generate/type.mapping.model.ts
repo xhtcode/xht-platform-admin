@@ -1,5 +1,5 @@
 import type { BasicResponse, ModeIdType, PageQueryRequest } from '@/model/base.model'
-import { DataBaseTypeEnums, LanguageTypeEnums } from '@/model/generate/common.model'
+import { DataBaseTypeEnums, LanguageTypeEnums } from '@/common/enums/generate/generate.enums'
 
 /**
  * 操作类型

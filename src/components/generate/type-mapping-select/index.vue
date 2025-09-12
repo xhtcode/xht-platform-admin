@@ -16,7 +16,7 @@ import type {
   TypeMappingSelectState,
 } from '@/components/generate/type-mapping-select/types'
 import { useMessage } from '@/hooks/use-message'
-import { DataBaseTypeEnums, LanguageTypeEnums } from '@/model/generate/common.model'
+import { DataBaseTypeEnums, LanguageTypeEnums } from '@/common/enums/generate/generate.enums'
 import { queryGenTypeMappingList } from '@/api/generate/type.mapping.api'
 
 /**

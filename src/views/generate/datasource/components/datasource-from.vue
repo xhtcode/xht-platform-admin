@@ -63,7 +63,7 @@ import {
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { handleFormErrors } from '@/utils/moudle/element'
 import type { ModeIdType } from '@/model/base.model'
-import { DataBaseTypeEnums } from '@/model/generate/common.model'
+import { DataBaseTypeEnums } from '@/common/enums/generate/generate.enums'
 
 defineOptions({ name: 'GenDataSourceAddOrUpdate' })
 const state = reactive<AddUpdateOption<GenDataSourceOperationRequest>>({
