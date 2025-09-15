@@ -79,7 +79,7 @@
         @pagination="handleQuery"
       />
     </div>
-    <table-from ref="tableFromRef" @success="handleQuery()" />
+    <table-from ref="tableFormRef" @success="handleQuery()" />
   </div>
 </template>
 
@@ -117,7 +117,7 @@ const { createTableIndex, handleQuery, handleSelectionChange } = useTableQueryPa
 const { queryParams } = toRefs(state)
 
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
-const tableFromRef = useTemplateRef('tableFromRef')
+const tableFormRef = useTemplateRef('tableFormRef')
 const { cellStyle, headerCellStyle } = useTableToolHooks()
 
 /**
@@ -131,14 +131,14 @@ const resetQuery = async () => {
  * 处理新增
  */
 const handleAdd = () => {
-  tableFromRef.value?.show('add', null)
+  tableFormRef.value?.show('add', null)
 }
 
 /**
  * 处理编辑
  */
 const handleEdit = (row: GenTableInfoResponse) => {
-  tableFromRef.value?.show('update', row.id)
+  tableFormRef.value?.show('update', row.id)
 }
 
 /**
