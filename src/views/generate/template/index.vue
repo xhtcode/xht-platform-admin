@@ -91,14 +91,14 @@
         </div>
       </split-pane-item>
     </split-panes>
-    <template-from ref="templateFromRef" @success="handleQuery()" />
+    <template-form ref="templateFormRef" @success="handleQuery()" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
 import { useTableQueryPageHooks, useTableToolHooks } from '@/hooks/use-crud-hooks'
-import TemplateFrom from './components/template-from.vue'
+import TemplateForm from './components/template-form.vue'
 import type {
   GenTemplateQueryRequest,
   GenTemplateResponse,
@@ -132,7 +132,7 @@ const { queryParams } = toRefs(state)
 
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 const templateGroupRef = useTemplateRef('templateGroupRef')
-const templateFromRef = useTemplateRef('templateFromRef')
+const templateFormRef = useTemplateRef('templateFormRef')
 const { cellStyle, headerCellStyle } = useTableToolHooks()
 
 /**
@@ -147,14 +147,14 @@ const resetQuery = async () => {
  * 处理新增
  */
 const handleAdd = () => {
-  templateFromRef.value?.show('add', null)
+  templateFormRef.value?.show('add', null)
 }
 
 /**
  * 处理编辑
  */
 const handleEdit = (row: GenTemplateResponse) => {
-  templateFromRef.value?.show('update', row.id)
+  templateFormRef.value?.show('update', row.id)
 }
 
 /**

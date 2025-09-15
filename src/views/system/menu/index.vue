@@ -199,7 +199,7 @@
         </el-table-column>
       </el-table>
     </div>
-    <menu-from ref="menuFromRef" @success="handleQuery()" />
+    <menu-form ref="menuFormRef" @success="handleQuery()" />
   </div>
 </template>
 
@@ -219,7 +219,7 @@ import {
 } from '@/service/model/system/menu.model'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { FormInstance } from 'element-plus'
-import MenuFrom from '@/views/system/menu/components/menu-from.vue'
+import MenuForm from '@/views/system/menu/components/menu-form.vue'
 import { SysMenuColumnOption } from '@/views/system/menu/menu.data'
 import { useTableToolHooks } from '@/hooks/use-crud-hooks'
 
@@ -256,7 +256,7 @@ const state = reactive<CrudOption>({
 const { queryParams } = toRefs(state)
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 const tableRef = useTemplateRef('tableRef')
-const menuFromRef = useTemplateRef('menuFromRef')
+const menuFormRef = useTemplateRef('  menuFormRef')
 /**
  * 查询数据列表
  */
@@ -282,13 +282,13 @@ const resetQuery = async () => {
  * 处理新增
  */
 const handleAdd = () => {
-  menuFromRef.value?.show('add', null)
+  menuFormRef.value?.show('add', null)
 }
 /**
  * 处理编辑
  */
 const handleEdit = (row: SysMenuResponse) => {
-  menuFromRef.value?.show('update', row.id)
+  menuFormRef.value?.show('update', row.id)
 }
 
 /**

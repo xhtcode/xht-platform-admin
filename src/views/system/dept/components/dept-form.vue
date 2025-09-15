@@ -109,7 +109,7 @@
       <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>
       <el-button @click="close">取 消</el-button>
     </template>
-    <dept-user-from
+    <dept-user-form
       ref="deptUserDialog"
       v-model="addUpdateForm.leaderUserId"
       @change="handleDeptUser"
@@ -127,7 +127,7 @@ import { SysDeptOperationForm, SysDeptOperationRules } from '@/views/system/dept
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { handleFormErrors } from '@/utils/moudle/element'
 import type { ModeIdType } from '@/service/model/base.model'
-import DeptUserFrom from '@/views/system/dept/components/dept-user-from.vue'
+import DeptUserForm from '@/views/system/dept/components/dept-user-form.vue'
 import { Search } from '@element-plus/icons-vue'
 import type { UserSimpleVo } from '@/service/model/system/user.model'
 

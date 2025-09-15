@@ -21,7 +21,7 @@
       </div>
     </template>
     <el-empty description="暂无相关模板数据" v-else />
-    <template-group-from ref="templateGroupFromRef" @success="refreshTreeDate()" />
+    <template-group-form ref="templateGroupFormRef" @success="refreshTreeDate()" />
   </div>
 </template>
 
@@ -31,7 +31,7 @@ import type { GenTemplateGroupResponse } from '@/service/model/generate/template
 import { Delete, Edit } from '@element-plus/icons-vue'
 import { ModeIdType } from '@/service/model/base.model'
 import { queryGenTemplateGroupList } from '@/service/api/generate/group.api'
-import TemplateGroupFrom from '@/views/generate/template/components/template-group-from.vue'
+import TemplateGroupForm from '@/views/generate/template/components/template-group-form.vue'
 import { removeGenTemplateByIds } from '@/service/api/generate/template.api'
 
 /**
@@ -66,7 +66,7 @@ const state = reactive<GenTemplateGroupTreeState>({
 })
 const emits = defineEmits(['nodeClick'])
 const index = ref<ModeIdType>(null)
-const templateGroupFromRef = useTemplateRef('templateGroupFromRef')
+const templateGroupFormRef = useTemplateRef('templateGroupFormRef')
 /**
  * 选择时进行数据双向绑定
  */
@@ -99,10 +99,10 @@ const refreshTreeDate = async () => {
   }
 }
 const handleTemplateGroupAdd = () => {
-  templateGroupFromRef.value?.show('add', null)
+  templateGroupFormRef.value?.show('add', null)
 }
 const handleTemplateGroupUpdate = (row: GenTemplateGroupResponse) => {
-  templateGroupFromRef.value?.show('update', row.id)
+  templateGroupFormRef.value?.show('update', row.id)
 }
 const handleTemplateGroupRemove = async (row: GenTemplateGroupResponse) => {
   state.loading = true

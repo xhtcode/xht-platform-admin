@@ -127,8 +127,8 @@
         @pagination="handleQuery"
       />
     </div>
-    <role-from ref="roleFromRef" @success="handleQuery" />
-    <menu-role-from ref="menuRoleFromRef" />
+    <role-from ref="roleFormRef" @success="handleQuery" />
+    <menu-role-form ref="menuRoleFormRef" />
   </div>
 </template>
 
@@ -144,7 +144,7 @@ import {
   removeSysRoleByIds,
 } from '@/service/api/system/role.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import MenuRoleFrom from '@/views/system/role/components/menu-role-from.vue'
+import MenuRoleForm from '@/views/system/role/components/menu-role-form.vue'
 
 defineOptions({ name: 'SysRoleViewIndex' })
 
@@ -168,8 +168,8 @@ const { createTableIndex, handleQuery, handleSelectionChange } = useTableQueryPa
 const { queryParams } = toRefs(state)
 
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
-const roleFromRef = useTemplateRef('roleFromRef')
-const menuRoleFromRef = useTemplateRef('menuRoleFromRef')
+const roleFormRef = useTemplateRef('roleFormRef')
+const menuRoleFormRef = useTemplateRef('menuRoleFormRef')
 const { cellStyle, headerCellStyle } = useTableToolHooks()
 
 /**
@@ -183,14 +183,14 @@ const resetQuery = async () => {
  * 处理新增
  */
 const handleAdd = () => {
-  roleFromRef.value?.show('add', null)
+  roleFormRef.value?.show('add', null)
 }
 
 /**
  * 处理编辑
  */
 const handleEdit = (row: SysRoleResponse) => {
-  roleFromRef.value?.show('update', row.id)
+  roleFormRef.value?.show('update', row.id)
 }
 
 /**
@@ -239,7 +239,7 @@ const handleBatchDelete = async () => {
  * 处理分配权限
  */
 const handleAuth = (row: SysRoleResponse) => {
-  menuRoleFromRef.value?.show(row.id)
+  menuRoleFormRef.value?.show(row.id)
 }
 
 onMounted(async () => {

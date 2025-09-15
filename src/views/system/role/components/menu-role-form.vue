@@ -49,7 +49,7 @@ import { roleMenuBind, selectMenuIdByRoleId } from '@/service/api/system/role.ap
 import { useMessage } from '@/hooks/use-message'
 import type { ModeIdType } from '@/service/model/base.model'
 
-defineOptions({ name: 'MenuRoleFrom' })
+defineOptions({ name: 'MenuRoleForm' })
 const state = reactive<AddUpdateOption<any>>({
   title: '增加部门',
   visibleStatus: false,

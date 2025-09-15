@@ -45,7 +45,7 @@ import { useMessage } from '@/hooks/use-message'
 import { selectRoleIdByUserId, UserRoleBind } from '@/service/api/system/user.api'
 import type { ModeIdType } from '@/service/model/base.model'
 
-defineOptions({ name: 'UserRoleFrom' })
+defineOptions({ name: 'UserRoleForm' })
 const state = reactive<AddUpdateOption<any>>({
   title: '增加部门',
   visibleStatus: false,

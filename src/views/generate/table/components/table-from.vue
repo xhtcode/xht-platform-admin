@@ -27,22 +27,22 @@
           </div>
         </el-tab-pane>
         <el-tab-pane label="字段信息" :name="2">
-          <column-from-basic :column-info="addUpdateForm.columnInfos" />
+          <column-form-basic :column-info="addUpdateForm.columnInfos" />
         </el-tab-pane>
         <el-tab-pane label="字段类型" :name="3">
-          <column-from-type :column-info="addUpdateForm.columnInfos" />
+          <column-form-type :column-info="addUpdateForm.columnInfos" />
         </el-tab-pane>
         <el-tab-pane label="表单字段" :name="4">
-          <column-from-edit :table-info="addUpdateForm" :column-info="addUpdateForm.columnInfos" />
+          <column-form-edit :table-info="addUpdateForm" :column-info="addUpdateForm.columnInfos" />
         </el-tab-pane>
         <el-tab-pane label="查询字段" :name="5">
-          <column-from-query
+          <column-form-query
             :column-info="addUpdateForm.columnInfos"
             :query-columns="addUpdateForm.queryColumns"
           />
         </el-tab-pane>
         <el-tab-pane label="列表字段" :name="6">
-          <column-from-list :column-info="addUpdateForm.columnInfos" />
+          <column-form-list :column-info="addUpdateForm.columnInfos" />
         </el-tab-pane>
       </el-tabs>
     </el-form>
@@ -69,11 +69,11 @@ import {
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { handleFormErrors } from '@/utils/moudle/element'
 import type { ModeIdType } from '@/service/model/base.model'
-import ColumnFromBasic from '@/views/generate/table/components/column-from-basic.vue'
-import ColumnFromType from '@/views/generate/table/components/column-from-type.vue'
-import ColumnFromEdit from '@/views/generate/table/components/column-from-edit.vue'
-import ColumnFromQuery from '@/views/generate/table/components/column-from-query.vue'
-import ColumnFromList from '@/views/generate/table/components/column-from-list.vue'
+import ColumnFormBasic from '@/views/generate/table/components/column-form-basic.vue'
+import ColumnFormType from '@/views/generate/table/components/column-form-type.vue'
+import ColumnFormEdit from '@/views/generate/table/components/column-form-edit.vue'
+import ColumnFormQuery from '@/views/generate/table/components/column-form-query.vue'
+import ColumnFormList from '@/views/generate/table/components/column-form-list.vue'
 import TableFromBasic from '@/views/generate/table/components/table-from-basic.vue'
 import CodeExampleView from '@/views/generate/table/components/code-example-view.vue'
 

@@ -88,14 +88,14 @@
         </el-table-column>
       </el-table>
     </div>
-    <datasource-from ref="datasourceFromRef" @success="handleQuery()" />
+    <datasource-form ref="datasourceFormRef" @success="handleQuery()" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
 import { useTableToolHooks } from '@/hooks/use-crud-hooks'
-import DatasourceFrom from './components/datasource-from.vue'
+import DatasourceForm from './components/datasource-form.vue'
 import type {
   GenDataSourceQueryRequest,
   GenDataSourceResponse,
@@ -133,7 +133,7 @@ const state = reactive<TableQueryState<GenDataSourceQueryRequest, GenDataSourceR
 const { queryParams } = toRefs(state)
 
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
-const datasourceFromRef = useTemplateRef('datasourceFromRef')
+const datasourceFormRef = useTemplateRef('datasourceFormRef')
 const { cellStyle, headerCellStyle } = useTableToolHooks()
 /**
  * 查询表单提交
@@ -164,14 +164,14 @@ const resetQuery = async () => {
  * 处理新增
  */
 const handleAdd = () => {
-  datasourceFromRef.value?.show('add', null)
+  datasourceFormRef.value?.show('add', null)
 }
 
 /**
  * 处理编辑
  */
 const handleEdit = (row: GenDataSourceResponse) => {
-  datasourceFromRef.value?.show('update', row.id)
+  datasourceFormRef.value?.show('update', row.id)
 }
 
 /**

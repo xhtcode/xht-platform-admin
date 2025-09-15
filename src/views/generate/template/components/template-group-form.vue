@@ -55,7 +55,7 @@ import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { handleFormErrors } from '@/utils/moudle/element'
 import type { ModeIdType } from '@/service/model/base.model'
 
-defineOptions({ name: 'TemplateGroupFrom' })
+defineOptions({ name: 'TemplateGroupForm' })
 const state = reactive<AddUpdateOption<GenTemplateGroupOperationRequest>>({
   title: '增加模板分组',
   visibleStatus: false,

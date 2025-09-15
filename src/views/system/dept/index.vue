@@ -122,7 +122,7 @@
         </el-table-column>
       </el-table>
     </div>
-    <dept-from ref="deptFromRef" @success="handleQuery()" />
+    <dept-form ref="deptFormRef" @success="handleQuery()" />
   </div>
 </template>
 
@@ -137,11 +137,11 @@ import { DeptStatusEnums } from '@/service/model/system/dept.model'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { FormInstance } from 'element-plus'
 
-import DeptFrom from '@/views/system/dept/components/dept-from.vue'
+import DeptForm from '@/views/system/dept/components/dept-form.vue'
 import { useTableToolHooks } from '@/hooks/use-crud-hooks'
 
 defineOptions({ name: 'SysDeptViewIndex' })
-const deptFromRef = useTemplateRef('deptFromRef')
+const deptFormRef = useTemplateRef('deptFormRef')
 /**
  * 定义表格通用样式
  * @returns  css
@@ -199,13 +199,13 @@ const resetQuery = async () => {
  * 处理新增
  */
 const handleAdd = () => {
-  deptFromRef.value?.show('add', null)
+  deptFormRef.value?.show('add', null)
 }
 /**
  * 处理编辑
  */
 const handleEdit = (row: SysDeptResponse) => {
-  deptFromRef.value?.show('update', row.id)
+  deptFormRef.value?.show('update', row.id)
 }
 
 /**

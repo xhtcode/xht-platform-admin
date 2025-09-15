@@ -54,11 +54,7 @@ export interface GenColumnInfoExtConfig {
  * 操作类型
  */
 export interface GenColumnInfoOperationRequest {
-  listWidth: number | null
-  listOverflowTooltip: number
-  listHidden: number
-  listDisabled: number
-  listShow: number
+
   /**
    *id
    */
@@ -92,6 +88,10 @@ export interface GenColumnInfoOperationRequest {
    */
   codeComment: string
   /**
+   * 代码字段长度
+   */
+  codeLength: number
+  /**
    *字段默认值
    */
   defaultValue: string
@@ -111,6 +111,30 @@ export interface GenColumnInfoOperationRequest {
    *字段排序
    */
   sortOrder: number
+  /**
+   * 列表描述
+   */
+  listComment: number
+  /**
+   * 列宽度
+   */
+  listWidth: number | null
+  /**
+   * 溢出提示
+   */
+  listOverflowTooltip: number
+  /**
+   * 默认隐藏
+   */
+  listHidden: number
+  /**
+   * 显示禁用
+   */
+  listDisabled: number
+  /**
+   * 显示
+   */
+  listShow: number
 }
 
 /**
