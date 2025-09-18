@@ -95,7 +95,11 @@ defineOptions({
     }
   }
 }
-
+@media (max-width: 992px) {
+  .left-container {
+    flex: 0 0 400px;
+  }
+}
 @media (max-width: 768px) {
   .left-container {
     display: none;

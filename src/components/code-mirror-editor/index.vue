@@ -7,7 +7,7 @@ import type { MirrorEditorProps } from '@/components/code-mirror-editor/types'
 import { onMounted, onUnmounted, watch } from 'vue'
 import { EditorView, keymap } from '@codemirror/view'
 import { Compartment, EditorState } from '@codemirror/state'
-import { indentWithTab } from '@codemirror/commands'
+import { indentWithTab, standardKeymap, insertTab } from '@codemirror/commands'
 import { javascript } from '@codemirror/lang-javascript'
 import { java } from '@codemirror/lang-java'
 import { html } from '@codemirror/lang-html'
@@ -46,6 +46,31 @@ onMounted(() => {
     doc: modelValue.value, // 初始内容（来自外部 props）
     extensions: [
       basicSetup,
+      // 在basicSetup之后添加高优先级Tab键处理
+      keymap.of([
+        {
+          key: 'Tab',
+          run: (view) => {
+            // 在光标位置直接插入Tab或空格，而不是整行缩进
+            const { state, dispatch } = view
+            const indent = '  ' // 4个空格作为缩进
+
+            // 直接在每个光标位置插入缩进
+            dispatch(state.update({
+              changes: state.selection.ranges.map(range => ({
+                from: range.from,
+                to: range.to,
+                insert: range.empty ? indent : indent // 无论是否有选择都插入缩进
+              })),
+              selection: {
+                anchor: state.selection.main.from + indent.length,
+                head: state.selection.main.to + indent.length
+              }
+            }))
+            return true
+          }
+        }
+      ]),
       themeCompartment.of(themeStore.darkStatus ? boysAndGirls : espresso),
       // 根据 props.language 动态加载语言模式
       getLanguageExtension(props.language),
@@ -61,7 +86,6 @@ onMounted(() => {
           emit('change', newValue) // 自定义变化事件
         }
       }),
-      keymap.of([indentWithTab]),
     ],
   })
 
@@ -70,6 +94,9 @@ onMounted(() => {
     state: initialState,
     parent: editorContainer.value,
   })
+
+  // 确保编辑器可以获取焦点
+  editorView.value.focus()
 })
 
 // 5. 组件卸载：销毁编辑器实例（避免内存泄漏）

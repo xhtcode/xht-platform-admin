@@ -160,7 +160,7 @@ const handlePhoneLogin = async () => {
 
   .sms-button {
     width: 120px;
-    height: 34px;
+    height: 32px;
     flex-shrink: 0;
     font-size: 0.75rem;
     padding: 0 0.5rem;
