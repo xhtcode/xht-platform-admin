@@ -256,7 +256,7 @@ const state = reactive<CrudOption>({
 const { queryParams } = toRefs(state)
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 const tableRef = useTemplateRef('tableRef')
-const menuFormRef = useTemplateRef('  menuFormRef')
+const menuFormRef = useTemplateRef('menuFormRef')
 /**
  * 查询数据列表
  */

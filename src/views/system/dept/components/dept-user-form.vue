@@ -81,7 +81,7 @@ const props = withDefaults(defineProps<DeptUserProps>(), {
 })
 
 const { cellStyle, headerCellStyle } = useTableToolHooks()
-const tableRef = useTemplateRef('tableRef')
+const tableRef = useTemplateRef<any>('tableRef')
 const emits = defineEmits<{
   (e: 'change', user: UserSimpleVo): void
 }>()
