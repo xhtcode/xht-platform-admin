@@ -8,7 +8,6 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    CodeMirrorEditor: typeof import('./../components/code-mirror-editor/index.vue')['default']
     CodeMonacoEditor: typeof import('./../components/code-monaco-editor/index.vue')['default']
     ContextMenu: typeof import('./../components/context-menu/index.vue')['default']
     DatasourceSelect: typeof import('./../components/generate/datasource-select/index.vue')['default']

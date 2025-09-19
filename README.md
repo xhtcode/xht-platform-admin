@@ -16,7 +16,6 @@ XHT Platform Admin 是一个现代化的企业级前端管理后台系统，采�
 - **路由管理**: Vue Router 4.5+
 - **HTTP 客户端**: Axios 1.11+
 - **样式方案**: UnoCSS + SCSS
-- **代码编辑器**: CodeMirror 6.0+
 - **图标方案**: Element Plus Icons
 - **工具库**: VueUse、Lodash
 
@@ -126,7 +125,6 @@ src/
 - **响应式设计**: 支持多种设备尺寸自适应
 - **主题切换**: 支持明暗主题切换
 - **国际化**: 多语言支持准备
-- **代码编辑器**: 集成 CodeMirror 代码编辑功能
 - **权限控制**: 完整的 RBAC 权限管理体系
 - **代码生成**: 强大的代码自动生成功能
 - **组件化**: 高度组件化的开发模式
@@ -173,4 +171,3 @@ src/
 - [Vite](https://vitejs.dev/)
 - [Pinia](https://pinia.vuejs.org/)
 - [UnoCSS](https://uno.antfu.me/)
-- [CodeMirror](https://codemirror.net/)
