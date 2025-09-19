@@ -65,7 +65,7 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column align="center" type="selection" width="55" />
-        <el-table-column :index="(index) => index + 1" label="序号" type="index" width="55" />
+        <el-table-column :index="createIndex" label="序号" type="index" width="55" />
         <el-table-column label="数据库名称" prop="name" width="120px" />
         <el-table-column label="数据库类型" prop="dbType" width="120px" />
         <el-table-column label="数据库地址" prop="url" width="220px" show-overflow-tooltip />
@@ -135,6 +135,13 @@ const { queryParams } = toRefs(state)
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 const datasourceFormRef = useTemplateRef('datasourceFormRef')
 const { cellStyle, headerCellStyle } = useTableToolHooks()
+/**
+ * 创建序号
+ * @param index 索引
+ */
+const createIndex = (index: number) => {
+  return index + 1
+}
 /**
  * 查询表单提交
  */

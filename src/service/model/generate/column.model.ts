@@ -54,7 +54,6 @@ export interface GenColumnInfoExtConfig {
  * 操作类型
  */
 export interface GenColumnInfoOperationRequest {
-
   /**
    *id
    */

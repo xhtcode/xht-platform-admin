@@ -1,10 +1,7 @@
 import request from '@/utils/request'
 import type { AxiosPromise } from 'axios'
 import type { ModeIdType, PageResponse } from '@/service/model/base.model'
-import type {
-  GenLogQueryRequest,
-  GenLogResponse,
-} from '@/service/model/generate/log.model'
+import type { GenLogQueryRequest, GenLogResponse } from '@/service/model/generate/log.model'
 
 /**
  * 后台管理服务前缀
