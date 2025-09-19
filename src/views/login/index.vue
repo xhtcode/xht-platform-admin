@@ -43,7 +43,7 @@
       <div class="other-party-login">
         <div class="other-party-icons">
           <div
-            class="icon-item"
+            class="other-party-icon-item"
             :class="{ active: activeLoginType === 'password' }"
             title="密码登录"
             @click="handleChangeLoginType('password')"
@@ -51,7 +51,7 @@
             <div class="icon icon-login-password" />
           </div>
           <div
-            class="icon-item"
+            class="other-party-icon-item"
             :class="{ active: activeLoginType === 'phone' }"
             title="手机号登录"
             @click="handleChangeLoginType('phone')"
@@ -59,7 +59,7 @@
             <div class="icon icon-login-phone" />
           </div>
           <div
-            class="icon-item"
+            class="other-party-icon-item"
             :class="{ active: activeLoginType === 'qrcode' }"
             title="扫码登录"
             @click="handleChangeLoginType('qrcode')"
@@ -67,7 +67,7 @@
             <div class="icon icon-login-sm" />
           </div>
           <div
-            class="icon-item"
+            class="other-party-icon-item"
             :class="{ active: activeLoginType === 'wechat' }"
             title="微信登录"
             @click="handleChangeLoginType('wechat')"
@@ -75,7 +75,7 @@
             <div class="icon icon-login-wechat" />
           </div>
           <div
-            class="icon-item"
+            class="other-party-icon-item"
             :class="{ active: activeLoginType === 'qq' }"
             title="QQ登录"
             @click="handleChangeLoginType('qq')"
@@ -83,7 +83,7 @@
             <div class="icon icon-login-qq" />
           </div>
           <div
-            class="icon-item"
+            class="other-party-icon-item"
             :class="{ active: activeLoginType === 'dinging' }"
             title="钉钉登录"
             @click="handleChangeLoginType('dinging')"
@@ -211,7 +211,7 @@ onUnmounted(() => {
       flex-wrap: wrap;
       padding: 0 10px;
 
-      .icon-item {
+      .other-party-icon-item {
         width: 28px;
         height: 28px;
         display: flex;
