@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 import type { AxiosPromise } from 'axios'
-import type { ModeIdType } from '@/service/model/base.model'
+import type { ModeIdType, PageResponse } from '@/service/model/base.model'
 import type {
   GenTemplateGroupOperationRequest,
   GenTemplateGroupQueryRequest,
@@ -15,9 +15,9 @@ const baseURL: string = import.meta.env.VITE_GENERATE_API_PREFIX
 enum Api {
   SAVE = '/gen/template/group/add',
   UPDATE = '/gen/template/group/update',
-  DELETE = '/gen/template/group/delete',
+  DELETE = '/gen/template/group/delete/',
   QUERY_ONE = '/gen/template/group/get/',
-  QUERY_LIST = '/gen/template/group/list',
+  QUERY_PAGE = '/gen/template/group/page',
 }
 
 /**
@@ -51,12 +51,11 @@ export const updateGenTemplateGroup = (
 /**
  * 删除模板信息
  */
-export const removeGenTemplateGroupByIds = (ids: ModeIdType[]): AxiosPromise<boolean> => {
+export const removeGenTemplateGroupByIds = (id: ModeIdType): AxiosPromise<boolean> => {
   return request({
-    url: Api.DELETE,
+    url: Api.DELETE + `${id}`,
     baseURL,
     method: 'post',
-    data: ids,
   })
 }
 
@@ -76,11 +75,11 @@ export const queryGenTemplateGroupById = (
 /**
  * 查询全部模板信息
  */
-export const queryGenTemplateGroupList = (
+export const queryGenTemplateGroupPage = (
   data?: GenTemplateGroupQueryRequest
-): AxiosPromise<GenTemplateGroupResponse[]> => {
+): AxiosPromise<PageResponse<GenTemplateGroupResponse>> => {
   return request({
-    url: Api.QUERY_LIST,
+    url: Api.QUERY_PAGE,
     baseURL,
     method: 'get',
     params: { ...data },

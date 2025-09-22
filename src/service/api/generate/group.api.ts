@@ -13,11 +13,11 @@ import type {
 const baseURL: string = import.meta.env.VITE_GENERATE_API_PREFIX
 
 enum Api {
-  SAVE = '/gen/datasource/add',
-  UPDATE = '/gen/datasource/update',
-  DELETE = '/gen/datasource/delete',
-  QUERY_ONE = '/gen/datasource/get/',
-  QUERY_LIST = '/gen/datasource/list',
+  SAVE = '/gen/template/group/add',
+  UPDATE = '/gen/template/group/update',
+  DELETE = '/gen/template/group/delete',
+  QUERY_ONE = '/gen/template/group/get/',
+  QUERY_LIST = '/gen/template/group/list',
 }
 
 /**

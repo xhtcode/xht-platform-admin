@@ -38,6 +38,7 @@ export const useTableQueryPageHooks = <Req extends PageQueryRequest, Res extends
   const handleQuery = async (): Promise<void> => {
     state.loadingStatus = true
     try {
+      console.log(queryParams.value)
       const response: AxiosResponse<PageResponse<Res>> = await queryPageApi(queryParams.value)
       const { records = [], total = 0, pages = 0 } = response.data
       state.tableList = records

@@ -16,10 +16,31 @@
       label-width="100px"
     >
       <el-form-item label="分组名称" prop="groupName">
-        <el-input v-model="addUpdateForm.groupName" />
+        <el-input
+          v-model="addUpdateForm.groupName"
+          :maxlength="50"
+          show-word-limit
+          placeholder="请输入分组名称"
+        />
+      </el-form-item>
+      <el-form-item label="模板数量" prop="templateCount">
+        <el-input-number
+          class="!w-full"
+          :min="1"
+          :max="999"
+          readonly
+          v-model="addUpdateForm.templateCount"
+          placeholder="模板数量后台生成"
+        />
       </el-form-item>
       <el-form-item label="分组排序" prop="groupSort">
-        <el-input-number :min="1" :max="999" v-model="addUpdateForm.groupSort" />
+        <el-input-number
+          class="!w-full"
+          :min="1"
+          :max="999"
+          v-model="addUpdateForm.groupSort"
+          placeholder="请输入分组排序"
+        />
       </el-form-item>
       <el-form-item label="分组描述" prop="groupDesc">
         <el-input
@@ -27,7 +48,9 @@
           type="textarea"
           :rows="5"
           resize="none"
+          placeholder="请输入分组描述"
           :maxlength="200"
+          show-word-limit
         />
       </el-form-item>
     </el-form>

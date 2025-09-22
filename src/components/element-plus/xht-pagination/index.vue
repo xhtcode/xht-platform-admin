@@ -57,14 +57,16 @@ const emits = defineEmits(['pagination'])
 /**
  *  page-size 改变时触发
  */
-const handleSizeChange = () => {
+const handleSizeChange = (val: number) => {
+  pageSize.value = val
   emits('pagination')
 }
 
 /**
  * current-page 改变时触发
  */
-const handleCurrentChange = () => {
+const handleCurrentChange = (val: number) => {
+  currentPage.value = val
   emits('pagination')
 }
 </script>

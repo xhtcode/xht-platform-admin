@@ -1,31 +1,6 @@
 import type { BasicResponse, ModeIdType, PageQueryRequest } from '@/service/model/base.model'
 
 /**
- * 操作类型
- */
-export interface GenTemplateGroupOperationRequest {
-  /**
-   * 分组ID
-   */
-  id: ModeIdType
-
-  /**
-   * 分组名称
-   */
-  groupName: string
-
-  /**
-   * 分组描述
-   */
-  groupDesc: string
-
-  /**
-   * 分组排序
-   */
-  groupSort: number
-}
-
-/**
  * 查询请求类型
  */
 export interface GenTemplateGroupQueryRequest extends PageQueryRequest {
@@ -50,7 +25,24 @@ export interface GenTemplateGroupResponse extends BasicResponse {
   groupName: string
 
   /**
+   * 模板数量
+   */
+  templateCount: number
+
+  /**
    * 分组描述
    */
   groupDesc: string
+
+  /**
+   * 分组排序
+   */
+  groupSort: number
+}
+
+/**
+ * 操作类型
+ */
+export interface GenTemplateGroupOperationRequest extends GenTemplateGroupResponse {
+
 }

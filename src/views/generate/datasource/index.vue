@@ -73,7 +73,7 @@
         <el-table-column label="数据库密码" prop="password" width="120px" />
         <el-table-column label="最后测试时间" prop="lastTestTime" width="220px">
           <template #default="{ row }">
-            <el-tag v-if="row.testResult === 'SUCCESS'" type="success">
+            <el-tag v-if="row.testResult === 'success'" type="success">
               {{ row.lastTestTime }}
             </el-tag>
             <el-tag v-else type="danger">{{ row.lastTestTime }}</el-tag>

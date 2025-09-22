@@ -32,7 +32,6 @@
 </template>
 
 <script lang="ts" setup>
-import type { ElTree } from 'element-plus'
 import { useVModel } from '@vueuse/core'
 import { querySysDeptTree } from '@/service/api/system/dept.api'
 import type {

@@ -13,32 +13,34 @@
       :model="addUpdateForm"
       :rules="rules"
       element-loading-text="拼命加载中"
-      label-width="100px"
+      label-width="80px"
     >
-      <el-form-item label="数据源名称" prop="name">
-        <el-input v-model="addUpdateForm.name" />
+      <el-form-item label="名称" prop="name">
+        <el-input v-model="addUpdateForm.name" placeholder="请输入数据源名称" maxlength="100" show-word-limit/>
       </el-form-item>
-      <el-form-item label="数据库类型" prop="dbType">
+      <el-form-item label="类型" prop="dbType">
         <el-select v-model="addUpdateForm.dbType" placeholder="请选择数据库类型">
           <el-option :value="DataBaseTypeEnums.MYSQL" label="MySql" />
           <el-option :value="DataBaseTypeEnums.ORACLE" label="Oracle" />
         </el-select>
       </el-form-item>
-      <el-form-item label="数据库地址" prop="url">
-        <el-input v-model="addUpdateForm.url" />
+      <el-form-item label="地址" prop="url">
+        <el-input v-model="addUpdateForm.url" placeholder="请输入数据库连接URL" maxlength="200" show-word-limit/>
       </el-form-item>
-      <el-form-item label="数据库用户名" prop="username">
-        <el-input v-model="addUpdateForm.username" />
+      <el-form-item label="用户名" prop="username">
+        <el-input v-model="addUpdateForm.username" placeholder="请输入数据库链接用户名" maxlength="100" show-word-limit/>
       </el-form-item>
-      <el-form-item label="数据库密码" prop="password">
-        <el-input v-model="addUpdateForm.password" />
+      <el-form-item label="密码" prop="password">
+        <el-input v-model="addUpdateForm.password" placeholder="请输入数据库链接密码" maxlength="100" show-word-limit/>
       </el-form-item>
-      <el-form-item label="连接测试结果" prop="testResult">
-        <el-input v-model="addUpdateForm.testResult" disabled />
-      </el-form-item>
-      <el-form-item label="最后测试时间" prop="lastTestTime">
-        <el-input v-model="addUpdateForm.lastTestTime" disabled />
-      </el-form-item>
+      <template v-if="state.operationStatus === 'update'">
+        <el-form-item label="测试结果" prop="testResult">
+          <el-input v-model="addUpdateForm.testResult" disabled placeholder="测试结果" />
+        </el-form-item>
+        <el-form-item label="测试时间" prop="lastTestTime">
+          <el-input v-model="addUpdateForm.lastTestTime" disabled placeholder="测试时间" />
+        </el-form-item>
+      </template>
     </el-form>
     <template #footer>
       <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>

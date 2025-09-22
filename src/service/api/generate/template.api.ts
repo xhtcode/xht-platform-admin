@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 import type { AxiosPromise } from 'axios'
-import type { ModeIdType, PageResponse } from '@/service/model/base.model'
+import type { ModeIdType } from '@/service/model/base.model'
 import type {
   GenTemplateOperationRequest,
   GenTemplateQueryRequest,
@@ -17,7 +17,7 @@ enum Api {
   UPDATE = '/gen/template/update',
   DELETE = '/gen/template/delete',
   QUERY_ONE = '/gen/template/get/',
-  QUERY_PAGE = '/gen/template/page',
+  QUERY_LIST = '/gen/template/list/',
 }
 
 /**
@@ -70,11 +70,11 @@ export const queryGenTemplateById = (id: ModeIdType): AxiosPromise<GenTemplateRe
 /**
  * 查询全部模板信息
  */
-export const queryGenTemplatePage = (
-  data?: GenTemplateQueryRequest
-): AxiosPromise<PageResponse<GenTemplateResponse>> => {
+export const queryGenTemplateList = (
+  data: GenTemplateQueryRequest
+): AxiosPromise<GenTemplateResponse[]> => {
   return request({
-    url: Api.QUERY_PAGE,
+    url: Api.QUERY_LIST + `${data.groupId}`,
     baseURL,
     method: 'get',
     params: { ...data },

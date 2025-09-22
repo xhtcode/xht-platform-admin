@@ -42,6 +42,20 @@ export const GenDataSourceOperationRules: FormRules<GenDataSourceOperationReques
       trigger: ['blur', 'change'],
     },
   ],
+  username: [
+    {
+      required: true,
+      message: '请输入数据库用户名',
+      trigger: ['blur', 'change'],
+    },
+  ],
+  password: [
+    {
+      required: true,
+      message: '请输入数据库密码',
+      trigger: ['blur', 'change'],
+    },
+  ],
 }
 
 /**

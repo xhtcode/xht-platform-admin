@@ -6,21 +6,19 @@
         :disabled="state.loadingStatus"
         :model="queryParams"
         class="user-select-display"
-        label-width="120px"
+        label-width="80px"
       >
         <el-row>
           <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
-            <el-form-item label="生成批次号" prop="batchNo">
+            <el-form-item label="批次号" prop="batchNo">
               <el-input v-model="queryParams.batchNo" placeholder="请输入生成批次号" />
             </el-form-item>
           </el-col>
           <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
             <el-form-item label="模板分组" prop="groupId">
-              <el-input v-model="queryParams.groupId" placeholder="请输入分组id" />
+              <template-group-select v-model="queryParams.groupId" />
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
             <el-form-item label="生成时间" prop="generateTimeStart">
               <el-date-picker
@@ -43,7 +41,7 @@
               />
             </el-form-item>
           </el-col>
-          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24" class="text-center">
+          <el-col :span="22" class="text-right">
             <el-button icon="Search" type="primary" @click="handleQuery()">查询</el-button>
             <el-button icon="Refresh" @click="resetQuery">重置</el-button>
           </el-col>

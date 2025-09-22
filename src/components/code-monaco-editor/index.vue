@@ -1,5 +1,5 @@
 <template>
-  <div ref="codeEditBox" class="codeEditBox" />
+  <div ref="codeEditBox" class="code-edit-box" />
 </template>
 <script lang="ts" setup>
 import type { EditorProps, LanguageType } from '@/components/code-monaco-editor/types'
@@ -42,6 +42,23 @@ const editor = shallowRef<monaco.editor.IStandaloneCodeEditor | null>()
 const init = () => {
   const flag = true
   monaco.languages.typescript.typescriptDefaults.setEagerModelSync(true)
+  monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
+    target: monaco.languages.typescript.ScriptTarget.ES2020,
+    // 核心：关闭模块解析相关的严格检查
+    moduleResolution: monaco.languages.typescript.ModuleResolutionKind.NodeJs,
+    allowSyntheticDefaultImports: true, // 允许从无默认导出的模块默认导入
+    esModuleInterop: true,
+
+    // 禁用未找到模块的错误（关键）
+    skipLibCheck: true, // 跳过对库文件的类型检查
+    noResolve: true, // 完全禁用模块解析（会导致所有导入都不验证，但可能引发其他问题）
+
+    // 可选：关闭其他严格检查
+    strict: false,
+    noImplicitAny: false,
+    noUnusedLocals: false,
+    noUnusedParameters: false,
+  })
   monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
     noSemanticValidation: true,
     noSyntaxValidation: false,
@@ -52,7 +69,7 @@ const init = () => {
   })
   editor.value = monaco.editor.create(codeEditBox.value!, {
     value: modelValue.value,
-    language: language.value as any,
+    language: convertLanguage(language.value),
     theme: props.theme,
     readOnly: readonly.value, //只读
     placeholder: props.placeholder,
@@ -68,7 +85,8 @@ const init = () => {
       supportThemeIcons: false,
       supportHtml: false,
     }, // 为只读时编辑内日提示词
-    automaticLayout: false, // // 设置是否启用自动布局，使编辑器在容器尺寸变化时自动调整大小。
+    quickSuggestions: true,
+    automaticLayout: true, // // 设置是否启用自动布局，使编辑器在容器尺寸变化时自动调整大小。
     formatOnPaste: true, //是否启用粘贴时自动格式化
     formatOnType: false, //是否启用输入时自动格式化
     contextmenu: true, //是否启用自定义右键菜单。
@@ -80,6 +98,7 @@ const init = () => {
     mouseWheelZoom: true, //使用鼠标滚轮结合 Ctrl 键缩放字体
     scrollBeyondLastLine: false, // 滚动完最后一行后不准再滚动一屏幕
   })
+
   /**
    * 监听内容改变
    */
@@ -106,7 +125,7 @@ const setValue = (newValue: string) => {
 watch(
   () => language.value,
   (newValue) => {
-    monaco.editor.setModelLanguage(editor.value!.getModel()!, newValue as string)
+    monaco.editor.setModelLanguage(editor.value!.getModel()!, convertLanguage(newValue))
   }
 )
 watch(
@@ -122,7 +141,24 @@ watch(
     immediate: true,
   }
 )
-
+/**
+ * 转换语言
+ * @param language 语言
+ */
+const convertLanguage = (language?: string | null): string => {
+  if (!language) {
+    return 'txt'
+  }
+  switch (language) {
+    case 'vue':
+    case 'ts':
+      return 'typescript'
+    case 'js':
+      return 'javascript'
+    default:
+      return language
+  }
+}
 onBeforeUnmount(() => {
   editor.value?.dispose()
 })
@@ -134,7 +170,8 @@ defineExpose({
 })
 </script>
 <style lang="scss" scoped>
-.codeEditBox {
+.code-edit-box {
+  border: 1px solid var(--el-border-color);
   width: v-bind(width);
   height: v-bind(height);
 

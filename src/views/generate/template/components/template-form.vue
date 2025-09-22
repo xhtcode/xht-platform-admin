@@ -1,162 +1,108 @@
 <template>
-  <el-drawer
-    v-model="state.visibleStatus"
-    :before-close="close"
-    :close-on-click-modal="false"
-    :title="state.title"
-    append-to-body
-    size="45%"
+  <el-form
+    ref="addUpdateFormRef"
+    v-loading="loadingStatus"
+    :model="addUpdateForm"
+    :rules="rules"
+    element-loading-text="拼命加载中"
+    label-width="100px"
+    class="flex h-full flex-direction-column"
   >
-    <el-form
-      ref="addUpdateFormRef"
-      v-loading="state.loadingStatus"
-      :model="addUpdateForm"
-      :rules="rules"
-      element-loading-text="拼命加载中"
-      label-width="100px"
-    >
-      <el-form-item label="分组id" prop="groupId">
-        <el-input v-model="addUpdateForm.groupId" placeholder="请输入分组id" />
-      </el-form-item>
-      <el-form-item label="模板名称" prop="name">
-        <el-input v-model="addUpdateForm.name" placeholder="请输入模板名称" />
-      </el-form-item>
-      <el-form-item label="模板内容（Velocity语法）" prop="content">
-        <code-mirror-editor
-          v-model="addUpdateForm.content"
-          placeholder="请输入模板内容（Velocity语法）"
-        />
-      </el-form-item>
-      <el-form-item label="文件类型" prop="fileType">
-        <el-input v-model="addUpdateForm.fileType" placeholder="请输入文件类型" />
-      </el-form-item>
-      <el-form-item label="文件路径模板" prop="filePathTemplate">
-        <el-input v-model="addUpdateForm.filePathTemplate" placeholder="请输入文件路径模板" />
-      </el-form-item>
-      <el-form-item label="文件名模板" prop="fileNameTemplate">
-        <el-input v-model="addUpdateForm.fileNameTemplate" placeholder="请输入文件名模板" />
-      </el-form-item>
-      <el-form-item label="执行条件" prop="templateCondition">
-        <el-input v-model="addUpdateForm.templateCondition" placeholder="请输入文件名模板" />
-      </el-form-item>
-    </el-form>
-    <template #footer>
-      <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>
-      <el-button @click="close">取 消</el-button>
-    </template>
-  </el-drawer>
+    <div>
+      <el-row>
+        <el-col :span="6">
+          <el-form-item label="模板名称" prop="templateName">
+            <el-input
+              v-model="addUpdateForm.templateName"
+              :max="10"
+              show-word-limit
+              placeholder="请输入模板名称"
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="文件名" prop="templateFileName">
+            <el-input v-model="addUpdateForm.templateFileName" placeholder="请输入文件名模板" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="文件类型" prop="templateFileType">
+            <el-select v-model="addUpdateForm.templateFileType" placeholder="请选择文件类型">
+              <el-option label="java" value="java"></el-option>
+              <el-option label="vue" value="vue"></el-option>
+              <el-option label="ts" value="ts"></el-option>
+              <el-option label="ts" value="js"></el-option>
+              <el-option label="sql" value="sql"></el-option>
+              <el-option label="txt" value="txt"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="模板排序" prop="templateSort">
+            <el-input-number
+              v-model="addUpdateForm.templateSort"
+              class="w100"
+              :min="0"
+              :max="999"
+              placeholder="请输入模板排序"
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <el-form-item label="文件路径" prop="templateFilePath">
+            <el-input
+              v-model="addUpdateForm.templateFilePath"
+              :max="500"
+              show-word-limit
+              placeholder="请输入文件路径模板"
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <el-form-item label="忽略字段" prop="templateIgnoreField">
+            <el-input v-model="addUpdateForm.templateIgnoreField" placeholder="请输入忽略字段" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="4" class="text-center">
+          <el-button :disabled="loadingStatus" type="primary" @click="submitForm">
+            保存/修改
+          </el-button>
+        </el-col>
+      </el-row>
+    </div>
+    <el-form-item class="h100" label="模板内容" prop="templateContent">
+      <code-monaco-editor
+        v-model="addUpdateForm.templateContent"
+        :language="addUpdateForm.templateFileType"
+      />
+    </el-form-item>
+  </el-form>
 </template>
 
-<script lang="ts" setup>
-import type { FormInstance, FormRules } from 'element-plus'
-import {
-  queryGenTemplateById,
-  saveGenTemplate,
-  updateGenTemplate,
-} from '@/service/api/generate/template.api'
-
-import type { GenTemplateOperationRequest } from '@/service/model/generate/template.model'
+<script setup lang="ts">
+import type { FormRules } from 'element-plus'
 import {
   GenTemplateOperationForm,
   GenTemplateOperationRules,
 } from '@/views/generate/template/template.data'
-import { useMessage, useMessageBox } from '@/hooks/use-message'
-import { handleFormErrors } from '@/utils/moudle/element'
-import type { ModeIdType } from '@/service/model/base.model'
+import type { GenTemplateOperationRequest } from '@/service/model/generate/template.model'
 
-defineOptions({ name: 'GenTemplateAddOrUpdate' })
-const state = reactive<AddUpdateOption<GenTemplateOperationRequest>>({
-  title: '增加模板信息',
-  visibleStatus: false,
-  operationStatus: 'add',
-  loadingStatus: false,
-  addUpdateForm: { ...GenTemplateOperationForm },
+defineOptions({
+  name: 'TemplateForm',
+  inheritAttrs: false,
 })
-const addUpdateFormRef = ref<FormInstance>()
-const { addUpdateForm } = toRefs(state)
-const emits = defineEmits(['success'])
+const loadingStatus = defineModel<boolean>('loadingStatus', {
+  required: true,
+  default: false,
+})
+const addUpdateForm = defineModel<GenTemplateOperationRequest>('addUpdateForm', {
+  required: true,
+  default: {
+    ...GenTemplateOperationForm,
+  },
+})
 const rules: FormRules = GenTemplateOperationRules
-/**
- * 打开显示
- */
-const show = async (type: 'add' | 'update', id: ModeIdType) => {
-  state.visibleStatus = true
-  await nextTick(() => {
-    addUpdateFormRef.value?.resetFields()
-  })
-  state.operationStatus = type
-  if (type === 'update') {
-    state.loadingStatus = true
-    state.title = '修改模板信息'
-    await queryGenTemplateById(id)
-      .then((response) => {
-        const { data } = JSON.parse(JSON.stringify(response))
-        addUpdateForm.value = { ...data }
-      })
-      .catch(() => {
-        useMessage().error('数据初始化加载失败')
-      })
-      .finally(() => {
-        state.loadingStatus = false
-      })
-  }
-}
-/**
- * 提交表单
- */
-const submitForm = () => {
-  state.visibleStatus = true
-  addUpdateFormRef.value?.validate(async (valid) => {
-    if (valid) {
-      if (state.operationStatus === 'add') {
-        //增加
-        await saveGenTemplate(addUpdateForm.value)
-          .then((_) => {
-            useMessage().success('新增数据成功')
-            emits('success')
-            close()
-          })
-          .catch((err: any) => {
-            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
-          })
-          .finally(() => {
-            state.loadingStatus = false
-          })
-      } else {
-        //修改
-        await updateGenTemplate({ ...addUpdateForm.value })
-          .then((_) => {
-            useMessage().success('修改数据成功')
-            emits('success')
-            close()
-          })
-          .catch((err: any) => {
-            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
-          })
-          .finally(() => {
-            state.loadingStatus = false
-          })
-      }
-    } else {
-      state.loadingStatus = false
-      useMessageBox().error('表单校验未通过，请重新检查提交内容')
-    }
-  })
-}
-
-/**
- * 关闭
- */
-const close = () => {
-  addUpdateForm.value = { ...GenTemplateOperationForm }
-  state.visibleStatus = false
-  state.operationStatus = 'add'
-  state.loadingStatus = false
-  addUpdateFormRef.value?.resetFields()
-}
-defineExpose({
-  show,
-})
+const submitForm = () => {}
 </script>
 
-<style scoped></style>
+<style scoped lang="scss"></style>

@@ -12,7 +12,7 @@
         :content="showSearch ? '快速查询' : '高级查询'"
         placement="top"
       >
-        <el-button circle size="small" icon="Search" @click="toggleSearch" />
+        <el-button circle size="small" icon="Switch" @click="toggleSearch" />
       </el-tooltip>
       <el-tooltip v-if="refreshStatus" class="item" content="刷新" placement="top">
         <el-button type="info" size="small" circle icon="Refresh" @click="refresh" />

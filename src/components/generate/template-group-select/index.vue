@@ -15,7 +15,6 @@ import type {
   GenTemplateGroupSelectProps,
   GenTemplateGroupSelectState,
 } from '@/components/generate/template-group-select/types'
-import { useMessage } from '@/hooks/use-message'
 import type { ModeIdType } from '@/service/model/base.model'
 
 /**
@@ -53,12 +52,7 @@ const handleQuery = async () => {
   try {
     const res = await queryGenTemplateGroupList()
     state.tableList = res.data || []
-    if (state.tableList.length === 0) {
-      useMessage().info('未查询到模板分组信息')
-    }
-  } catch (error) {
-    useMessage().error('查询模板分组失败，请稍后重试')
-  } finally {
+  }  finally {
     // 重置加载状态
     state.loading = false
   }
