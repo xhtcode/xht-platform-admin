@@ -43,6 +43,4 @@ export interface GenTemplateGroupResponse extends BasicResponse {
 /**
  * 操作类型
  */
-export interface GenTemplateGroupOperationRequest extends GenTemplateGroupResponse {
-
-}
+export interface GenTemplateGroupOperationRequest extends GenTemplateGroupResponse {}

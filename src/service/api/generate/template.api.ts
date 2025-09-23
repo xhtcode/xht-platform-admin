@@ -47,12 +47,11 @@ export const updateGenTemplate = (data: GenTemplateOperationRequest): AxiosPromi
 /**
  * 删除模板信息
  */
-export const removeGenTemplateByIds = (ids: ModeIdType[]): AxiosPromise<boolean> => {
+export const removeGenTemplateById = (id: ModeIdType): AxiosPromise<boolean> => {
   return request({
-    url: Api.DELETE,
+    url: Api.DELETE + `${id}`,
     baseURL,
     method: 'post',
-    data: ids,
   })
 }
 
@@ -70,13 +69,10 @@ export const queryGenTemplateById = (id: ModeIdType): AxiosPromise<GenTemplateRe
 /**
  * 查询全部模板信息
  */
-export const queryGenTemplateList = (
-  data: GenTemplateQueryRequest
-): AxiosPromise<GenTemplateResponse[]> => {
+export const queryGenTemplateList = (groupId: ModeIdType): AxiosPromise<GenTemplateResponse[]> => {
   return request({
-    url: Api.QUERY_LIST + `${data.groupId}`,
+    url: Api.QUERY_LIST + `${groupId}`,
     baseURL,
     method: 'get',
-    params: { ...data },
   })
 }

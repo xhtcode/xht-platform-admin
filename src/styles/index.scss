@@ -5,11 +5,11 @@
 @use '@/styles/variables/var.dark.scss' as *;
 //@use '@/styles/theme/element.scss';
 @use '@/styles/theme/layout.scss';
-@use "sass:math";
+@use 'sass:math';
 
 .el-drawer__header {
   margin-bottom: 0 !important;
-  padding-bottom: calc(var(--el-drawer-padding-primary) / 2 ) !important;
+  padding-bottom: calc(var(--el-drawer-padding-primary) / 2) !important;
   border-bottom: 1px solid var(--el-border-color);
   @extend .user-select-none;
 }

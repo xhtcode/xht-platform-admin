@@ -30,7 +30,6 @@
         :column-data="[]"
         column-status
         refresh-status
-        search-status
         @refresh="handleQuery"
       >
         <el-button icon="Plus" size="small" type="primary" @click="handleAdd">新增</el-button>
@@ -50,10 +49,11 @@
         :data="state.tableList"
         :header-cell-style="headerCellStyle"
         class="flex-1"
+        ref="tableRef"
+        highlight-current-row
+        @current-change="handleCurrentChange"
         empty-text="系统暂无相关模板信息！"
-        @selection-change="handleSelectionChange"
       >
-        <el-table-column align="center" type="selection" width="55" />
         <el-table-column :index="createTableIndex" label="序号" type="index" width="55" />
         <el-table-column label="分组名称" prop="groupName" width="200" />
         <el-table-column label="模板数量" prop="templateCount" width="80" />
@@ -94,7 +94,6 @@ import {
   removeGenTemplateGroupByIds,
 } from '@/service/api/generate/template.group.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import type { ModeIdArrayType } from '@/service/model/base.model'
 import TemplateGroupForm from '@/views/generate/template/components/template-group-form.vue'
 import TemplateViewForm from '@/views/generate/template/components/template-view-form.vue'
 
@@ -115,13 +114,14 @@ const state = reactive<TableQueryPageState<GenTemplateGroupQueryRequest, GenTemp
     multipleStatus: true, // 多个禁用
   }
 )
-const { createTableIndex, handleQuery, handleSelectionChange } = useTableQueryPageHooks<
+const { createTableIndex, handleQuery, handleCurrentChange } = useTableQueryPageHooks<
   GenTemplateGroupQueryRequest,
   GenTemplateGroupResponse
 >(state, queryGenTemplateGroupPage)
 const { queryParams } = toRefs(state)
 
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
+const tableRef = useTemplateRef('tableRef')
 const templateGroupFormRef = useTemplateRef('templateGroupFormRef')
 const templateGroupViewRef = useTemplateRef('templateGroupViewRef')
 const { cellStyle, headerCellStyle } = useTableToolHooks()
@@ -131,6 +131,7 @@ const { cellStyle, headerCellStyle } = useTableToolHooks()
  */
 const resetQuery = async () => {
   queryFormRef.value?.resetFields()
+  tableRef.value!.setCurrentRow(null)
   await handleQuery()
 }
 /**
@@ -143,6 +144,7 @@ const handleAdd = () => {
  * 处理模板查看
  */
 const handleView = (row: GenTemplateGroupResponse) => {
+  console.log(row.id)
   templateGroupViewRef.value?.show(row.id)
 }
 /**
@@ -157,20 +159,10 @@ const handleEdit = (row: GenTemplateGroupResponse) => {
  */
 const handleDelete = async (row?: GenTemplateGroupResponse) => {
   state.loadingStatus = true
-  let ids: ModeIdArrayType = []
-  if (row) {
-    ids = [row.id]
-  } else {
-    ids = state.selectedRows.map((item) => item.id)
-  }
-  if (!ids || ids.length <= 0) {
-    useMessage().error('请选择模板信息数据')
-    return
-  }
   await useMessageBox()
     .confirm('此操作将永久删除模板信息, 是否继续?')
     .then(() => {
-      removeGenTemplateGroupByIds(ids).then(async () => {
+      removeGenTemplateGroupByIds(row!.id).then(async () => {
         useMessage().success('删除模板信息成功!')
         await handleQuery()
       })

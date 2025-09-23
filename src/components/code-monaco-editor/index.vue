@@ -1,5 +1,5 @@
 <template>
-  <div ref="codeEditBox" class="code-edit-box" />
+  <div ref="codeEditBox" class="code-edit-box" :class="validateStatus ? 'error-border' : ''" />
 </template>
 <script lang="ts" setup>
 import type { EditorProps, LanguageType } from '@/components/code-monaco-editor/types'
@@ -21,6 +21,7 @@ const props = withDefaults(defineProps<EditorProps>(), {
   placeholder: '有什么想表达的？快来输入吧✨...',
   fontSize: 16,
   minimap: false,
+  validateStatus: false,
 })
 const modelValue = defineModel<string>('modelValue')
 const language = defineModel<LanguageType>('language', {
@@ -178,5 +179,8 @@ defineExpose({
   :deep(.monaco-editor-overlaymessage) {
     display: none !important;
   }
+}
+.error-border {
+  border: 1px solid var(--el-color-danger);
 }
 </style>

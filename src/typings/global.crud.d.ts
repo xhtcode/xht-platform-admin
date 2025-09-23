@@ -23,7 +23,7 @@ declare global {
   interface AddUpdateOption<Req extends BasicFormRequest> {
     title: string // 弹窗标题
     visibleStatus: boolean // 弹窗可见状态
-    operationStatus: 'add' | 'update'  // 操作类型
+    operationStatus: 'add' | 'update' // 操作类型
     loadingStatus: boolean // 加载状态
     addUpdateForm: Req // 表单数据
     [key: string]: any // 允许扩展其他属性

@@ -1,8 +1,6 @@
 import type { FormRules } from 'element-plus'
 import type { GenTemplateOperationRequest } from '@/service/model/generate/template.model'
-import type {
-  GenTemplateGroupOperationRequest,
-} from '@/service/model/generate/template.group.model'
+import type { GenTemplateGroupOperationRequest } from '@/service/model/generate/template.group.model'
 
 /**
  * 增改页面 表单类型 默认值
@@ -13,16 +11,60 @@ export const GenTemplateOperationForm: GenTemplateOperationRequest = {
   templateContent: '',
   templateFileName: '',
   templateFilePath: '',
-  templateFileType: '',
-  templateIgnoreField: '',
+  templateFileType: 'java',
+  templateIgnoreField: [],
   templateName: '',
-  templateSort: 0,
+  templateSort: 999,
+  isNew: false,
 }
 
 /**
  * 增改页面 表单类型 表单校验
  */
-export const GenTemplateOperationRules: FormRules<GenTemplateOperationRequest> = {}
+export const GenTemplateOperationRules: FormRules<GenTemplateOperationRequest> = {
+  templateName: [
+    {
+      required: true,
+      message: '请输入模板名称',
+      trigger: ['blur', 'change'],
+    },
+  ],
+  templateContent: [
+    {
+      required: true,
+      message: '请输入模板内容',
+      trigger: ['blur', 'change'],
+    },
+  ],
+  templateFilePath: [
+    {
+      required: true,
+      message: '请输入文件路径模板',
+      trigger: ['blur', 'change'],
+    },
+  ],
+  templateFileName: [
+    {
+      required: true,
+      message: '请输入文件名模板',
+      trigger: ['blur', 'change'],
+    },
+  ],
+  templateFileType: [
+    {
+      required: true,
+      message: '请输入文件类型',
+      trigger: ['blur', 'change'],
+    },
+  ],
+  templateSort: [
+    {
+      required: true,
+      message: '请输入模板排序',
+      trigger: ['blur', 'change'],
+    },
+  ],
+}
 
 /**
  * 列表显示配置

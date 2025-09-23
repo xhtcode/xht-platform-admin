@@ -45,7 +45,7 @@ export interface GenTemplateResponse extends BasicResponse {
   /**
    * 忽略的字段
    */
-  templateIgnoreField: string
+  templateIgnoreField: string[]
   /**
    * 模板排序
    */
@@ -55,4 +55,6 @@ export interface GenTemplateResponse extends BasicResponse {
 /**
  * 操作类型
  */
-export interface GenTemplateOperationRequest extends GenTemplateResponse {}
+export interface GenTemplateOperationRequest extends Partial<GenTemplateResponse> {
+  isNew?: boolean
+}

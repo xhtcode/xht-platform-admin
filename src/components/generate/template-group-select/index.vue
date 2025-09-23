@@ -52,7 +52,7 @@ const handleQuery = async () => {
   try {
     const res = await queryGenTemplateGroupList()
     state.tableList = res.data || []
-  }  finally {
+  } finally {
     // 重置加载状态
     state.loading = false
   }

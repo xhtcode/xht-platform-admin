@@ -38,7 +38,6 @@ export const useTableQueryPageHooks = <Req extends PageQueryRequest, Res extends
   const handleQuery = async (): Promise<void> => {
     state.loadingStatus = true
     try {
-      console.log(queryParams.value)
       const response: AxiosResponse<PageResponse<Res>> = await queryPageApi(queryParams.value)
       const { records = [], total = 0, pages = 0 } = response.data
       state.tableList = records
@@ -72,11 +71,20 @@ export const useTableQueryPageHooks = <Req extends PageQueryRequest, Res extends
     state.singleStatus = selection.length !== 1
     state.multipleStatus = selection.length === 0
   }
-
+  /**
+   * 处理选中行变化
+   * @param selection 选中的行数据
+   */
+  const handleCurrentChange = (selection: Res): void => {
+    state.selectedRows.push(selection)
+    state.singleStatus = !selection
+    state.multipleStatus = !selection
+  }
   return {
     createTableIndex,
     handleQuery,
     handleSelectionChange,
+    handleCurrentChange,
   }
 }
 

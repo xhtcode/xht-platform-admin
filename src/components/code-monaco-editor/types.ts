@@ -68,4 +68,5 @@ export interface EditorProps {
   placeholder?: string
   fontSize?: number // 字体大小
   minimap?: boolean // 是否显示小地图
+  validateStatus?: boolean // 校验状态
 }
