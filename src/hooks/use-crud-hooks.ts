@@ -109,7 +109,7 @@ const mergeDefaultOptions = (options: any, props: any): TableQueryPageState<any,
  */
 export const useTableToolHooks = (): TableStyle => {
   return {
-    cellStyle: { textAlign: 'center' },
+    cellStyle: { textAlign: 'center',padding: '4px 0' },
     headerCellStyle: {
       textAlign: 'center',
       background: 'var(--el-table-row-hover-bg-color)',

@@ -3,20 +3,21 @@
     <el-table-column label="基础信息">
       <template #default>
         <el-table-column type="index" label="序号" :index="createIndex" width="55" />
-        <el-table-column prop="columnName" label="DB字段名" width="160">
+        <el-table-column prop="dbName" label="DB字段名" width="160">
           <template #default="{ row }">
-            <el-text :type="row.isPrimary === 1 ? 'danger' : ''">
-              {{ row.columnName }}
-              <el-text v-if="row.isRequired === 1" type="warning">(非空)</el-text>
+            <el-text :type="row.dbPrimary === 1 ? 'danger' : ''">
+              {{ row.dbName }}
+              <el-text v-if="row.dbRequired === 1" type="warning">(非空)</el-text>
             </el-text>
           </template>
         </el-table-column>
-        <el-table-column
-          prop="columnComment"
-          label="DB字段注释"
-          show-overflow-tooltip
-          width="160"
-        />
+        <el-table-column prop="dbComment" label="DB字段注释" show-overflow-tooltip width="160" />
+        <el-table-column prop="dbLength" label="DB类型" width="160">
+          <template #default="{ row }">
+            <el-text>{{ row.dbType }}</el-text>
+            <el-text v-if="row.dbLength > 0">({{ row.dbLength }})</el-text>
+          </template>
+        </el-table-column>
       </template>
     </el-table-column>
     <el-table-column prop="codeName" label="代码名称">
@@ -39,16 +40,6 @@
           :maxlength="100"
           show-word-limit
           placeholder="请输入代码名称"
-        />
-      </template>
-    </el-table-column>
-    <el-table-column prop="columnLength" label="字段长度">
-      <template #default="{ row }">
-        <el-input-number
-          v-model="row.columnLength"
-          :min="0"
-          class="w100"
-          placeholder="请输入字段长度"
         />
       </template>
     </el-table-column>

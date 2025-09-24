@@ -1,10 +1,11 @@
 import request from '@/utils/request'
 import type { AxiosPromise } from 'axios'
 import type { ModeIdType, PageResponse } from '@/service/model/base.model'
-import type {
+import {
   GenTableInfoOperationRequest,
   GenTableInfoQueryRequest,
   GenTableInfoResponse,
+  ImportTableFormRequest,
 } from '@/service/model/generate/table.model'
 
 /**
@@ -13,20 +14,21 @@ import type {
 const baseURL: string = import.meta.env.VITE_GENERATE_API_PREFIX
 
 enum Api {
-  SAVE = '/gen/table/info/add',
+  IMPORT_TABLE = '/gen/table/info/import',
   UPDATE = '/gen/table/info/update',
-  DELETE = '/gen/table/info/delete',
+  DELETE = '/gen/table/info/delete/',
   QUERY_ONE = '/gen/table/info/get/',
-  QUERY_PAGE = '/gen/table/info/page',
+  QUERY_EXISTS_PAGE = '/gen/table/info/exists/page',
+  QUERY_NO_EXISTS_PAGE = '/gen/table/info/no/exists/page',
   SYNC_TABLE = '/gen/table/info/sync',
 }
 
 /**
  * 保存表信息
  */
-export const saveGenTableInfo = (data: GenTableInfoOperationRequest): AxiosPromise<boolean> => {
+export const importTableInfo = (data: ImportTableFormRequest): AxiosPromise<boolean> => {
   return request({
-    url: Api.SAVE,
+    url: Api.IMPORT_TABLE,
     baseURL,
     method: 'post',
     data: data,
@@ -48,12 +50,11 @@ export const updateGenTableInfo = (data: GenTableInfoOperationRequest): AxiosPro
 /**
  * 删除表信息
  */
-export const removeGenTableInfoByIds = (ids: ModeIdType[]): AxiosPromise<boolean> => {
+export const removeGenTableInfoByIds = (id: ModeIdType): AxiosPromise<boolean> => {
   return request({
-    url: Api.DELETE,
+    url: Api.DELETE + `${id}`,
     baseURL,
     method: 'post',
-    data: ids,
   })
 }
 
@@ -69,23 +70,31 @@ export const queryGenTableInfoById = (id: ModeIdType): AxiosPromise<GenTableInfo
 }
 
 /**
- * 查询全部表信息
+ * 分页查询已导入的表信息
+ * @param data 查询参数
  */
-export const queryGenTableInfoPage = (
+export const queryExistsPage = (
   data?: GenTableInfoQueryRequest
 ): AxiosPromise<PageResponse<GenTableInfoResponse>> => {
   return request({
-    url: Api.QUERY_PAGE,
+    url: Api.QUERY_EXISTS_PAGE,
     baseURL,
     method: 'get',
     params: { ...data },
   })
 }
 
-export const importTable = (data?: GenTableInfoQueryRequest): AxiosPromise<boolean> => {
-  return request({})
-}
-
-export const syncList = (data?: GenTableInfoQueryRequest): AxiosPromise<GenTableInfoResponse[]> => {
-  return request({})
+/**
+ * 分页查询未导入的表信息
+ * @param data 查询参数
+ */
+export const queryNoExistsPage = (
+  data?: GenTableInfoQueryRequest
+): AxiosPromise<GenTableInfoResponse[]> => {
+  return request({
+    url: Api.QUERY_NO_EXISTS_PAGE,
+    baseURL,
+    method: 'get',
+    params: { ...data },
+  })
 }

@@ -1,10 +1,18 @@
 <template>
-  <el-select v-bind="{ ...$attrs, ...props, loading: state.loading }">
+  <el-select
+    v-model="value"
+    :clearable="clearable"
+    :disabled="disabled"
+    value-key="id"
+    :placeholder="placeholder"
+    filterable
+    @change="handleChange"
+  >
     <el-option
       v-for="item in state.tableList"
       :key="item.id"
       :label="item.targetDataType"
-      :value="item.id"
+      :value="item"
     />
   </el-select>
 </template>
@@ -15,9 +23,10 @@ import type {
   TypeMappingSelectProps,
   TypeMappingSelectState,
 } from '@/components/generate/type-mapping-select/types'
-import { useMessage } from '@/hooks/use-message'
 import { DataBaseTypeEnums, LanguageTypeEnums } from '@/service/enums/generate/generate.enums'
 import { queryGenTypeMappingList } from '@/service/api/generate/type.mapping.api'
+import { ModeIdType } from '@/service/model/base.model'
+import type { GenTypeMappingResponse } from '@/service/model/generate/type.mapping.model'
 
 /**
  * 定义组件选项
@@ -31,15 +40,18 @@ defineOptions({
  * 定义组件属性
  */
 const props = withDefaults(defineProps<TypeMappingSelectProps>(), {
-  modelValue: null,
+  dbType: DataBaseTypeEnums.MYSQL,
+  languageType: LanguageTypeEnums.JAVA,
   placeholder: '请选择类型映射信息对象',
   clearable: true,
   disabled: false,
-  showTopDept: false,
-  dbType: DataBaseTypeEnums.MYSQL,
-  languageType: LanguageTypeEnums.JAVA,
 })
-
+const modelValue = defineModel<string>('modelValue')
+const importValue = defineModel<string>('importValue', {
+  required: false,
+  default: '',
+})
+const value = ref<ModeIdType>('')
 /**
  * 组件状态管理
  */
@@ -55,19 +67,29 @@ const handleQuery = async () => {
   // 设置加载状态
   state.loading = true
   try {
-    const res = await queryGenTypeMappingList()
+    const res = await queryGenTypeMappingList({
+      dbType: props.dbType,
+      targetLanguage: props.languageType,
+    })
     state.tableList = res.data || []
-    if (state.tableList.length === 0) {
-      useMessage().info('未查询到类型映射信息信息')
-    }
-  } catch (error) {
-    useMessage().error('查询类型映射信息失败，请稍后重试')
+    state.tableList.forEach((item) => {
+      if (modelValue.value === item.targetDataType) {
+        value.value = item
+        return
+      }
+    })
   } finally {
     // 重置加载状态
     state.loading = false
   }
 }
-
+const handleChange = (value: GenTypeMappingResponse) => {
+  modelValue.value = value.targetDataType
+  importValue.value = value.importPackage
+  console.log(value.targetDataType)
+  console.log(value.importPackage)
+  console.dir(value)
+}
 /**
  * 组件挂载时查询数据
  */

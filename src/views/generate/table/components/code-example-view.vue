@@ -3,13 +3,13 @@
     <div class="preview-title">代码示例</div>
     <pre class="preview-block user-select-none">
 /**
- * 描述 ：{{ tableInfo.codeComment }}
+ * 描述 ：{{ tableInfo?.codeComment }}
  *
- * @author : {{ tableInfo.backEndAuthor }}
+ * @author : {{ tableInfo?.backEndAuthor }}
  **/
 @Data
 @Entity
-public class {{ tableInfo.codeName }}Entity implements Serializable {
+public class {{ tableInfo?.codeName }}Entity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

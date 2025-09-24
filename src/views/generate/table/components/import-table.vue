@@ -22,8 +22,8 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="数据库" prop="dbId">
-            <datasource-select v-model="queryParams.dbId" placeholder="请选择配置名称" />
+          <el-form-item label="数据库" prop="dataSourceId">
+            <datasource-select v-model="queryParams.dataSourceId" placeholder="请选择配置名称" />
           </el-form-item>
         </el-col>
         <el-col :span="8" style="text-align: center">
@@ -45,10 +45,10 @@
       <el-table-column type="selection" width="55" />
       <el-table-column :index="createTableIndex" label="序号" type="index" width="55" />
       <el-table-column label="表名" prop="tableName" />
-      <el-table-column label="引擎" prop="engine" />
-      <el-table-column label="描述" prop="description" />
-      <el-table-column label="创建时间" prop="createTime" />
-      <el-table-column label="更新时间" prop="updateTime" />
+      <el-table-column label="引擎" prop="engineName" />
+      <el-table-column label="描述" prop="tableComment" />
+      <el-table-column label="创建时间" prop="tableCreateTime" />
+      <el-table-column label="更新时间" prop="tableUpdateTime" />
     </el-table>
     <template #footer>
       <el-button
@@ -66,7 +66,7 @@
 
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
-import { syncList } from '@/service/api/generate/table.api'
+import { queryNoExistsPage } from '@/service/api/generate/table.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { queryGenDataSourceList } from '@/service/api/generate/datasource.api'
 import ImportTableForm from '@/views/generate/table/components/import-table-form.vue'
@@ -85,7 +85,7 @@ const createTableIndex = (index: number) => {
 }
 const dataBaseList = ref<GenDataSourceResponse[]>([])
 const rules: FormRules = {
-  dbId: [{ required: true, message: '请选择配置名称', trigger: ['blur', 'change'] }],
+  dataSourceId: [{ required: true, message: '请选择配置名称', trigger: ['blur', 'change'] }],
 }
 const importTableFormRef = ref<any>({})
 const addUpdateForm = ref<any>({})
@@ -108,7 +108,7 @@ const state = reactive<CrudOption>({
   loadingStatus: false,
   queryParams: {
     descName: 'id',
-    dbId: '',
+    dataSourceId: '',
   },
   tableList: [],
 })
@@ -129,19 +129,16 @@ const handleQuery = () => {
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
       state.tableList = []
-      syncList(queryParams.value)
+      queryNoExistsPage(queryParams.value)
         .then((response) => {
           state.tableList = response.data || []
-        })
-        .catch((_) => {
-          useMessage().error('获取数据失败')
         })
         .finally(() => {
           state.loadingStatus = false
         })
     } else {
       state.loadingStatus = false
-      useMessageBox().error('表单校验未通过，请重新检查提交内容')
+      useMessage().error('表单校验未通过，请重新检查提交内容')
     }
   })
 }
@@ -164,7 +161,7 @@ const show = () => {
  */
 const submitForm = () => {
   state.visibleStatus = true
-  importTableFormRef.value.show(state.checkData, state.queryParams.dbId)
+  importTableFormRef.value.show(state.checkData, state.queryParams.dataSourceId)
 }
 const handleSuccess = () => {
   emit('success')

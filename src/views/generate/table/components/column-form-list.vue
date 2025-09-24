@@ -3,20 +3,21 @@
     <el-table-column label="基础信息">
       <template #default>
         <el-table-column type="index" label="序号" :index="createIndex" width="55" />
-        <el-table-column prop="columnName" label="DB字段名" width="160">
+        <el-table-column prop="dbName" label="DB字段名" width="160">
           <template #default="{ row }">
-            <el-text :type="row.isPrimary === 1 ? 'danger' : ''">
-              {{ row.columnName }}
-              <el-text v-if="row.isRequired === 1" type="warning">(非空)</el-text>
+            <el-text :type="row.dbPrimary === 1 ? 'danger' : ''">
+              {{ row.dbName }}
+              <el-text v-if="row.dbRequired === 1" type="warning">(非空)</el-text>
             </el-text>
           </template>
         </el-table-column>
-        <el-table-column
-          prop="columnComment"
-          label="DB字段注释"
-          show-overflow-tooltip
-          width="160"
-        />
+        <el-table-column prop="dbComment" label="DB字段注释" show-overflow-tooltip width="160" />
+        <el-table-column prop="dbLength" label="DB类型" width="160">
+          <template #default="{ row }">
+            <el-text>{{ row.dbType }}</el-text>
+            <el-text v-if="row.dbLength > 0">({{ row.dbLength }})</el-text>
+          </template>
+        </el-table-column>
       </template>
     </el-table-column>
     <el-table-column prop="codeName" label="列表字段">
@@ -41,53 +42,31 @@
     </el-table-column>
     <el-table-column prop="listShow" label="显示" width="90">
       <template #default="{ row }">
-        <el-checkbox
+        <el-switch
           v-model="row.listShow"
-          :true-value="1"
-          :false-value="0"
+          :active-value="GenStatusEnums.ENABLED"
+          :inactive-value="GenStatusEnums.DISABLED"
           @change="changeList(row)"
         />
       </template>
     </el-table-column>
     <el-table-column prop="listDisabled" label="显示禁用" width="90">
       <template #default="{ row }">
-        <el-checkbox
+        <el-switch
           v-model="row.listDisabled"
           :disabled="row.listShow !== 1"
-          :true-value="1"
-          :false-value="0"
+          :active-value="GenStatusEnums.ENABLED"
+          :inactive-value="GenStatusEnums.DISABLED"
         />
       </template>
     </el-table-column>
     <el-table-column prop="listHidden" label="默认隐藏" width="90">
       <template #default="{ row }">
-        <el-checkbox
+        <el-switch
           v-model="row.listHidden"
           :disabled="row.listShow !== 1"
-          :true-value="1"
-          :false-value="0"
-        />
-      </template>
-    </el-table-column>
-    <el-table-column prop="listOverflowTooltip" label="溢出提示" width="90">
-      <template #default="{ row }">
-        <el-checkbox
-          v-model="row.listOverflowTooltip"
-          :disabled="row.listShow !== 1"
-          :true-value="1"
-          :false-value="0"
-        />
-      </template>
-    </el-table-column>
-    <el-table-column prop="listWidth" label="列宽度">
-      <template #default="{ row }">
-        <el-input-number
-          class="w100"
-          v-model="row.listWidth"
-          :disabled="row.listShow !== 1"
-          :min="0"
-          :max="999"
-          placeholder="请输入列宽度"
+          :active-value="GenStatusEnums.ENABLED"
+          :inactive-value="GenStatusEnums.DISABLED"
         />
       </template>
     </el-table-column>
@@ -96,25 +75,29 @@
 <script lang="ts" setup>
 import {
   GenColumnInfoOperationRequest,
-  GenColumnInfoResponse,
+  GenColumnInfoResponse, GenStatusEnums,
 } from '@/service/model/generate/column.model'
 import { useTableToolHooks } from '@/hooks/use-crud-hooks'
 
 const { cellStyle, headerCellStyle } = useTableToolHooks()
+/**
+ * 列信息模型，用于双向绑定列数据
+ * @type {GenColumnInfoResponse[]} 列信息数组
+ */
 const columnInfo = defineModel<GenColumnInfoResponse[]>('columnInfo', {
   required: true,
   default: () => [],
 })
+
 /**
- *
- * @param row
+ * 当列表显示状态改变时的处理函数
+ * 如果列表不显示，则重置禁用和隐藏状态
+ * @param row 需要处理的列信息对象
  */
 const changeList = (row: GenColumnInfoOperationRequest) => {
   if (row.listShow !== 1) {
     row.listDisabled = 0
     row.listHidden = 0
-    row.listOverflowTooltip = 0
-    row.listWidth = null
   }
 }
 /**

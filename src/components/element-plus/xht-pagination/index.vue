@@ -40,7 +40,7 @@ const props = withDefaults(defineProps<XhtPaginationProps>(), {
   pageSizes: () => [10, 20, 30, 50, 100, 500], //每页显示个数选择器的选项设置
   disabled: false, //是否禁用分页
   teleported: true, //是否将下拉菜单teleport至 body
-  hideOnSinglePage: true, //只有一页时是否隐藏
+  hideOnSinglePage: false, //只有一页时是否隐藏
   prevText: undefined, //	替代图标显示的上一页文字
   prevIcon: undefined,
   nextText: undefined,

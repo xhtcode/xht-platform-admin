@@ -7,12 +7,13 @@
     append-to-body
   >
     <el-form
+      class="h-350px"
       ref="addUpdateFormRef"
       v-loading="addUpdatePageInit.loadingStatus"
       :model="addUpdateForm"
       :rules="rules"
       element-loading-text="拼命加载中"
-      label-width="100px"
+      label-width="120px"
     >
       <el-row :gutter="20">
         <el-col :span="24">
@@ -42,7 +43,8 @@
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
 import { useMessageBox } from '@/hooks/use-message'
-import { importTable } from '@/service/api/generate/table.api'
+import { importTableInfo } from '@/service/api/generate/table.api'
+import { ModeIdType } from '@/service/model/base.model'
 
 interface addUpdateOption {
   visibleStatus: boolean
@@ -53,7 +55,11 @@ interface addUpdateOption {
 const rules: FormRules = {
   groupId: [{ required: true, message: '请选择模板分组名称', trigger: ['blur', 'change'] }],
 }
-const addUpdateForm = ref<any>({})
+const addUpdateForm = ref<{
+  groupId: ModeIdType
+}>({
+  groupId: null,
+})
 const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
 const tableList = ref<any[]>([])
 const dataBaseInfo = ref<any>(null)
@@ -80,18 +86,15 @@ const submitForm = () => {
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
       //修改
-      await importTable({
+      await importTableInfo({
         tableNames: tableList.value,
-        dbId: dataBaseInfo.value,
-        ...addUpdateForm.value,
+        dataSourceId: dataBaseInfo.value,
+        groupId: addUpdateForm.value.groupId,
       })
         .then((_) => {
           useMessageBox().success('修改数据成功')
           emit('success')
           close()
-        })
-        .catch((_: any) => {
-          useMessageBox().error('修改数据失败')
         })
         .finally(() => {
           addUpdatePageInit.value.loadingStatus = false
@@ -107,7 +110,9 @@ const submitForm = () => {
  * 关闭
  */
 const close = () => {
-  addUpdateForm.value = {}
+  addUpdateForm.value = {
+    groupId: null,
+  }
   addUpdatePageInit.value = {
     visibleStatus: false,
     operationStatus: true,

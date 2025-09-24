@@ -1,140 +1,145 @@
 import type { BasicResponse, ModeIdType, PageQueryRequest } from '@/service/model/base.model'
-import { LanguageTypeEnums } from '@/service/enums/generate/generate.enums'
 
-type ColumnInfoTypeMapping = {
-  languageType: LanguageTypeEnums // 语言类型
-  columnType: string // 字段类型
-  importPackage: string //导入包路径（如：java.time.LocalDateTime）
-  defaultValue: string // 默认值
+export enum GenStatusEnums {
+  DISABLED = 0, // 不显示/非必填/禁用/隐藏
+  ENABLED = 1, // 显示/必填/启用/不隐藏
 }
 
 /**
- * 字典扩展配置
+ * 响应类型
  */
-export interface GenColumnInfoExtConfig {
-  /**
-   *表单项 0：否 1：是
-   */
-  formItem: string
-  /**
-   *表单必填 0：否 1：是
-   */
-  formRequired: string
-  /**
-   *表单类型
-   */
-  formType: string
-  /**
-   *列表项 0：否 1：是
-   */
-  gridItem: string
-  /**
-   *列表排序 0：否 1：是
-   */
-  gridSort: string
-  /**
-   *查询项 0：否 1：是
-   */
-  queryItem: string
-  /**
-   *查询方式
-   */
-  queryType: string
-  /**
-   *查询表单类型
-   */
-  queryFormType: string
-  /**
-   * 类型映射
-   */
-  typeMappings: ColumnInfoTypeMapping[]
-}
+export interface GenColumnInfoResponse extends BasicResponse {
+  /** 主键 */
+  id: number
 
+  /** 表id */
+  tableId: number
+
+  /** 表名称(冗余字段) */
+  tableName: string
+
+  /** 字段名 */
+  dbName: string
+
+  /** 字段类型 */
+  dbType: string
+
+  /** 字段主键：0-非主键，1-主键 */
+  dbPrimary: GenStatusEnums
+
+  /** 字段必填：0-非必填，1-必填 */
+  dbRequired: GenStatusEnums
+
+  /** 字段注释 */
+  dbComment: string
+
+  /** 字段长度 */
+  dbLength: number
+
+  /** 代码名称 */
+  codeName: string
+
+  /** 代码注释 */
+  codeComment: string
+
+  /** 表单新增：0-不显示，1-显示 */
+  fromInsert: GenStatusEnums
+
+  /** 表单更新：0-不显示，1-显示 */
+  fromUpdate: GenStatusEnums
+
+  /** 表单输入长度 */
+  fromLength?: number // 允许为null，故设为可选
+
+  /** 表单必填：0-非必填，1-必填 */
+  fromFill: GenStatusEnums
+
+  /** 表单组件 */
+  fromComponent: string
+
+  /** 列表显示：0-不显示，1-显示 */
+  listShow: GenStatusEnums
+
+  /** 列表描述 */
+  listComment: string
+
+  /** 显示切换禁用：0-不禁用，1-禁用 */
+  listDisabled: GenStatusEnums
+
+  /** 默认隐藏：0-不隐藏，1-隐藏 */
+  listHidden: GenStatusEnums
+
+  /** java类型 */
+  codeJava: string
+
+  /** java类型 包地址 */
+  codeJavaPackage: string
+
+  /** ts类型 */
+  codeTs: string
+
+  /** 字段排序 */
+  sortOrder: number
+}
+/**
+ * 代码生成器-查询条件
+ * 对应Java类：GenTableColumnQueryResponse
+ */
+export interface GenTableColumnQueryResponse {
+  /**
+   * 主键
+   */
+  id: number;
+
+  /**
+   * 表id
+   */
+  tableId: ModeIdType;
+
+  /**
+   * 表名称(冗余字段)
+   */
+  tableName?: string;
+
+  /**
+   * 字段id
+   */
+  columnId: ModeIdType;
+
+  /**
+   * 字段名称
+   */
+  columnName?: string;
+
+  /**
+   * 表单输入长度（可为null，故设为可选）
+   */
+  fromLength?: number;
+
+  /**
+   * 查询类型（如等于、不等于、大于、小于等）
+   */
+  queryType?: string;
+
+  /**
+   * 条件标签（显示用的文本）
+   */
+  conditionLabel: string;
+
+  /**
+   * 字段值（条件值）
+   */
+  conditionValue?: string;
+
+  /**
+   * 字段排序
+   */
+  sortOrder: number;
+}
 /**
  * 操作类型
  */
-export interface GenColumnInfoOperationRequest {
-  /**
-   *id
-   */
-  id: ModeIdType
-  /**
-   *表ID
-   */
-  tableId: ModeIdType
-  /**
-   *数据库字段名
-   */
-  columnName: string
-  /**
-   *数据库字段类型
-   */
-  dbDataType: string
-  /**
-   *字段注释
-   */
-  columnComment: string
-  /**
-   * 字段长度
-   */
-  columnLength: number
-  /**
-   * 代码名称
-   */
-  codeName: string
-  /**
-   * 代码注释
-   */
-  codeComment: string
-  /**
-   * 代码字段长度
-   */
-  codeLength: number
-  /**
-   *字段默认值
-   */
-  defaultValue: string
-  /**
-   *是否必填
-   */
-  isRequired: number
-  /**
-   *是否主键
-   */
-  isPrimary: number
-  /**
-   * 字段扩展
-   */
-  extConfig: GenColumnInfoExtConfig
-  /**
-   *字段排序
-   */
-  sortOrder: number
-  /**
-   * 列表描述
-   */
-  listComment: number
-  /**
-   * 列宽度
-   */
-  listWidth: number | null
-  /**
-   * 溢出提示
-   */
-  listOverflowTooltip: number
-  /**
-   * 默认隐藏
-   */
-  listHidden: number
-  /**
-   * 显示禁用
-   */
-  listDisabled: number
-  /**
-   * 显示
-   */
-  listShow: number
-}
+export interface GenColumnInfoOperationRequest extends Partial<GenColumnInfoResponse> {}
 
 /**
  * 查询请求类型
@@ -144,50 +149,4 @@ export interface GenColumnInfoQueryRequest extends PageQueryRequest {
    *表ID
    */
   tableId?: ModeIdType
-}
-
-/**
- * 响应类型
- */
-export interface GenColumnInfoResponse extends BasicResponse {
-  /**
-   *id
-   */
-  id: ModeIdType
-  /**
-   *表ID
-   */
-  tableId: ModeIdType
-  /**
-   *数据库字段名
-   */
-  columnName: string
-  /**
-   *数据库字段类型,可用值:MySql,Oracle
-   */
-  dbDataType: string
-  /**
-   *字段注释
-   */
-  columnComment: string
-  /**
-   *字段默认值
-   */
-  defaultValue: string
-  /**
-   *是否必填
-   */
-  isRequired: number
-  /**
-   *是否主键
-   */
-  isPrimary: number
-  /**
-   * 字段扩展
-   */
-  extConfig: GenColumnInfoExtConfig
-  /**
-   *字段排序
-   */
-  sortOrder: number
 }

@@ -18,6 +18,7 @@ enum Api {
   DELETE = '/gen/template/group/delete/',
   QUERY_ONE = '/gen/template/group/get/',
   QUERY_PAGE = '/gen/template/group/page',
+  QUERY_LIST = '/gen/template/group/list',
 }
 
 /**
@@ -74,6 +75,18 @@ export const queryGenTemplateGroupById = (
 
 /**
  * 查询全部模板信息
+ */
+export const queryGenTemplateGroupList = ():AxiosPromise<GenTemplateGroupResponse[]> => {
+  return request({
+    url: Api.QUERY_LIST,
+    baseURL,
+    method: 'get',
+  })
+}
+
+/**
+ * 分页查询模板信息
+ * @param data
  */
 export const queryGenTemplateGroupPage = (
   data?: GenTemplateGroupQueryRequest

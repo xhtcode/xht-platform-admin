@@ -6,9 +6,24 @@
         :disabled="state.loadingStatus"
         :model="queryParams"
         class="user-select-display"
-        label-width="120px"
+        label-width="100px"
       >
         <el-row>
+          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
+            <el-form-item label="数据源" prop="dataSourceId">
+              <datasource-select v-model="queryParams.dataSourceId" placeholder="请选择数据源" />
+            </el-form-item>
+          </el-col>
+          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
+            <el-form-item label="模板分组" prop="groupId">
+              <template-group-select v-model="queryParams.groupId" placeholder="请选择模板分组" />
+            </el-form-item>
+          </el-col>
+          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
+            <el-form-item label="表名称" prop="tableName">
+              <template-group-select v-model="queryParams.tableName" placeholder="请输入表名称" />
+            </el-form-item>
+          </el-col>
           <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24" class="text-center">
             <el-button icon="Search" type="primary" @click="handleQuery()">查询</el-button>
             <el-button icon="Refresh" @click="resetQuery">重置</el-button>
@@ -23,8 +38,9 @@
         search-status
         @refresh="handleQuery"
       >
-        <el-button>导入</el-button>
-        <el-button icon="Plus" size="small" type="primary" @click="handleAdd">新增</el-button>
+        <el-button icon="Download" size="small" type="primary" @click="handleImport">
+          导入
+        </el-button>
         <el-button
           :disabled="state.singleStatus"
           icon="Edit"
@@ -55,19 +71,19 @@
       >
         <el-table-column align="center" type="selection" width="55" />
         <el-table-column :index="createTableIndex" label="序号" type="index" width="55" />
-        <el-table-column label="引擎名称" prop="engineName" />
-        <el-table-column label="数据库表名" prop="tableName" />
-        <el-table-column label="表注释" prop="tableComment" />
-        <el-table-column label="代码名称" prop="codeName" />
-        <el-table-column label="代码注释" prop="codeComment" />
-        <el-table-column label="表创建时间" prop="tableCreateTime" />
-        <el-table-column label="表更新时间" prop="tableUpdateTime" />
-        <el-table-column align="center" label="操作" width="220px">
+        <el-table-column label="引擎名称" prop="engineName" width="100" />
+        <el-table-column label="数据库表名" align="left" prop="tableName" width="220" sortable />
+        <el-table-column label="表注释" prop="tableComment" width="260" show-overflow-tooltip />
+        <el-table-column label="代码名称" prop="codeName" width="220" />
+        <el-table-column label="代码注释" prop="codeComment" width="260" show-overflow-tooltip />
+        <el-table-column label="表创建时间" prop="tableCreateTime" width="180" sortable />
+        <el-table-column label="表更新时间" prop="tableUpdateTime" width="180" sortable />
+        <el-table-column align="center" fixed="right" label="操作" width="280px">
           <template #default="{ row }">
-            <el-button>同步</el-button>
+            <el-button icon="refresh" link type="primary">同步</el-button>
             <el-button icon="edit" link type="success" @click="handleEdit(row)">修改</el-button>
             <el-button icon="delete" link type="danger" @click="handleDelete(row)">删除</el-button>
-            <el-button>下载</el-button>
+            <el-button icon="download" link type="warning">下载</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -80,6 +96,7 @@
       />
     </div>
     <table-from ref="tableFormRef" @success="handleQuery()" />
+    <import-table ref="importTableRef" @success="handleQuery()" />
   </div>
 </template>
 
@@ -91,9 +108,10 @@ import type {
   GenTableInfoQueryRequest,
   GenTableInfoResponse,
 } from '@/service/model/generate/table.model'
-import { queryGenTableInfoPage, removeGenTableInfoByIds } from '@/service/api/generate/table.api'
+import { queryExistsPage, removeGenTableInfoByIds } from '@/service/api/generate/table.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { ModeIdArrayType } from '@/service/model/base.model'
+import ImportTable from '@/views/generate/table/components/import-table.vue'
 
 defineOptions({ name: 'GenTableInfoViewIndex' })
 
@@ -113,11 +131,12 @@ const state = reactive<TableQueryPageState<GenTableInfoQueryRequest, GenTableInf
 const { createTableIndex, handleQuery, handleSelectionChange } = useTableQueryPageHooks<
   GenTableInfoQueryRequest,
   GenTableInfoResponse
->(state, queryGenTableInfoPage)
+>(state, queryExistsPage)
 const { queryParams } = toRefs(state)
 
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 const tableFormRef = useTemplateRef('tableFormRef')
+const importTableRef = useTemplateRef('importTableRef')
 const { cellStyle, headerCellStyle } = useTableToolHooks()
 
 /**
@@ -127,18 +146,19 @@ const resetQuery = async () => {
   queryFormRef.value?.resetFields()
   await handleQuery()
 }
+
 /**
- * 处理新增
+ * 处理导入
  */
-const handleAdd = () => {
-  tableFormRef.value?.show('add', null)
+const handleImport = () => {
+  importTableRef.value?.show()
 }
 
 /**
  * 处理编辑
  */
 const handleEdit = (row: GenTableInfoResponse) => {
-  tableFormRef.value?.show('update', row.id)
+  tableFormRef.value?.show(row.id)
 }
 
 /**
