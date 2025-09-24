@@ -52,12 +52,12 @@
         </el-button>
         <el-button
           :disabled="state.multipleStatus"
-          icon="Delete"
+          icon="download"
           size="small"
-          type="danger"
-          @click="handleDelete(undefined)"
+          type="warning"
+          @click="handleDownload()"
         >
-          批量删除
+          批量下载
         </el-button>
       </table-tool-bar>
       <el-table
@@ -80,10 +80,12 @@
         <el-table-column label="表更新时间" prop="tableUpdateTime" width="180" sortable />
         <el-table-column align="center" fixed="right" label="操作" width="280px">
           <template #default="{ row }">
-            <el-button icon="refresh" link type="primary">同步</el-button>
+            <el-button icon="refresh" link type="primary" @click="handleSync(row)">同步</el-button>
             <el-button icon="edit" link type="success" @click="handleEdit(row)">修改</el-button>
             <el-button icon="delete" link type="danger" @click="handleDelete(row)">删除</el-button>
-            <el-button icon="download" link type="warning">下载</el-button>
+            <el-button icon="download" link type="warning" @click="handleDownload(row)">
+              下载
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -97,6 +99,7 @@
     </div>
     <table-from ref="tableFormRef" @success="handleQuery()" />
     <import-table ref="importTableRef" @success="handleQuery()" />
+    <download-code-file ref="downloadCodeFileRef" />
   </div>
 </template>
 
@@ -108,10 +111,15 @@ import type {
   GenTableInfoQueryRequest,
   GenTableInfoResponse,
 } from '@/service/model/generate/table.model'
-import { queryExistsPage, removeGenTableInfoByIds } from '@/service/api/generate/table.api'
+import {
+  queryExistsPage,
+  removeGenTableInfoByIds,
+  syncTableApi,
+} from '@/service/api/generate/table.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import type { ModeIdArrayType } from '@/service/model/base.model'
 import ImportTable from '@/views/generate/table/components/import-table.vue'
+import { ModeIdArrayType } from '@/service/model/base.model'
+import DownloadCodeFile from '@/views/generate/table/components/download-code-file.vue'
 
 defineOptions({ name: 'GenTableInfoViewIndex' })
 
@@ -137,6 +145,7 @@ const { queryParams } = toRefs(state)
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 const tableFormRef = useTemplateRef('tableFormRef')
 const importTableRef = useTemplateRef('importTableRef')
+const downloadCodeFileRef = useTemplateRef('downloadCodeFileRef')
 const { cellStyle, headerCellStyle } = useTableToolHooks()
 
 /**
@@ -162,24 +171,52 @@ const handleEdit = (row: GenTableInfoResponse) => {
 }
 
 /**
- * 处理删除
+ * 处理同步操作
  */
-const handleDelete = async (row?: GenTableInfoResponse) => {
+const handleSync = async (row: GenTableInfoResponse) => {
   state.loadingStatus = true
-  let ids: ModeIdArrayType = []
+  await useMessageBox()
+    .confirm(`是否要同步${row.tableName}的信息,此操作会更改已有的配置，是否继续！`)
+    .then(() => {
+      syncTableApi(row!.id).then(async () => {
+        useMessage().success(`${row.tableName}表信息成功!`)
+        await handleQuery()
+      })
+    })
+    .catch((_) => {})
+    .finally(() => {
+      state.loadingStatus = false
+    })
+}
+
+/**
+ * 处理下载操作
+ */
+const handleDownload = async (row?: GenTableInfoResponse) => {
+  state.loadingStatus = true
+  let dataArray: ModeIdArrayType = []
   if (row) {
-    ids = [row.id]
+    dataArray = [row]
   } else {
-    ids = state.selectedRows.map((item) => item.id)
+    dataArray = [...state.selectedRows]
   }
-  if (!ids || ids.length <= 0) {
+  if (!dataArray || dataArray.length <= 0) {
     useMessage().error('请选择表信息数据')
     return
   }
+  downloadCodeFileRef.value?.show(dataArray)
+  state.loadingStatus = false
+}
+
+/**
+ * 处理删除
+ */
+const handleDelete = async (row: GenTableInfoResponse) => {
+  state.loadingStatus = true
   await useMessageBox()
     .confirm('此操作将永久删除表信息, 是否继续?')
     .then(() => {
-      removeGenTableInfoByIds(ids).then(async () => {
+      removeGenTableInfoByIds(row!.id).then(async () => {
         useMessage().success('删除表信息成功!')
         await handleQuery()
       })

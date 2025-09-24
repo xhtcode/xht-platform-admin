@@ -67,15 +67,14 @@
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
 import { queryNoExistsPage } from '@/service/api/generate/table.api'
-import { useMessage, useMessageBox } from '@/hooks/use-message'
-import { queryGenDataSourceList } from '@/service/api/generate/datasource.api'
+import { useMessage } from '@/hooks/use-message'
 import ImportTableForm from '@/views/generate/table/components/import-table-form.vue'
 import { useTableToolHooks } from '@/hooks/use-crud-hooks'
 import type {
   GenTableInfoQueryRequest,
   GenTableInfoResponse,
 } from '@/service/model/generate/table.model'
-import type { GenDataSourceResponse } from '@/service/model/generate/datasource.model'
+
 const tableStyle = useTableToolHooks()
 /**
  * 自定义表格索引生成
@@ -83,13 +82,12 @@ const tableStyle = useTableToolHooks()
 const createTableIndex = (index: number) => {
   return ((state.queryParams.current || 1) - 1) * (state.queryParams.size || 0) + index + 1
 }
-const dataBaseList = ref<GenDataSourceResponse[]>([])
 const rules: FormRules = {
   dataSourceId: [{ required: true, message: '请选择配置名称', trigger: ['blur', 'change'] }],
 }
-const importTableFormRef = ref<any>({})
 const addUpdateForm = ref<any>({})
-const addUpdateFormRef = ref<FormInstance>()
+const importTableFormRef = useTemplateRef<any>('importTableFormRef')
+const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
 const emit = defineEmits(['success'])
 
 interface CrudOption {
@@ -181,11 +179,6 @@ const close = () => {
   state.loadingStatus = false
   addUpdateFormRef.value?.resetFields()
 }
-onMounted(() => {
-  queryGenDataSourceList().then((response) => {
-    dataBaseList.value = response.data
-  })
-})
 defineExpose({
   show,
 })

@@ -76,7 +76,7 @@ export const queryGenTemplateGroupById = (
 /**
  * 查询全部模板信息
  */
-export const queryGenTemplateGroupList = ():AxiosPromise<GenTemplateGroupResponse[]> => {
+export const queryGenTemplateGroupList = (): AxiosPromise<GenTemplateGroupResponse[]> => {
   return request({
     url: Api.QUERY_LIST,
     baseURL,

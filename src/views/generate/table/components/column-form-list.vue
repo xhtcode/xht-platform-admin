@@ -75,7 +75,8 @@
 <script lang="ts" setup>
 import {
   GenColumnInfoOperationRequest,
-  GenColumnInfoResponse, GenStatusEnums,
+  GenColumnInfoResponse,
+  GenStatusEnums,
 } from '@/service/model/generate/column.model'
 import { useTableToolHooks } from '@/hooks/use-crud-hooks'
 
