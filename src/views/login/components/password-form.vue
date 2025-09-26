@@ -1,5 +1,11 @@
 <template>
-  <el-form ref="loginFormRef" size="default" :model="loginForm" :rules="loginRules">
+  <el-form
+    ref="loginFormRef"
+    size="default"
+    v-loading="loading"
+    :model="loginForm"
+    :rules="loginRules"
+  >
     <el-form-item prop="username">
       <el-input
         v-model="loginForm.username"
@@ -90,44 +96,46 @@ const userInfoStore = useUserInfoStore()
  * 刷新验证码
  */
 const refreshCaptcha = () => {
-  generateCaptcha(loginForm.uuid).then((res) => {
-    captchaUrl.value = res.data.code
-    loginForm.uuid = res.data.key
-  })
+  loading.value = true
+  generateCaptcha(loginForm.uuid)
+    .then((res) => {
+      captchaUrl.value = `data:image/png;base64,${res.data.code}`
+      loginForm.uuid = res.data.key
+    })
+    .finally(() => {
+      loading.value = false
+    })
 }
 // 表单引用
 const loginFormRef = useTemplateRef<FormInstance>('loginFormRef')
 // 登录处理
 const handleLogin = async () => {
-  if (!loginFormRef.value) {
-    return
-  }
-
-  try {
-    await loginFormRef.value.validate()
-    loading.value = true
-    userInfoStore
-      .login({
-        username: loginForm.username,
-        password: loginForm.password,
-        code: loginForm.code,
-        uuid: loginForm.uuid,
-        timeout: 10000,
-      })
-      .then(() => {
-        useMessage().success('登录成功 !')
-        router.push({ path: HOME_PAGE_PATH })
-      })
-      .catch(() => {
-        refreshCaptcha()
-      })
-      .finally(() => {
-        loading.value = false
-      })
-    loading.value = false
-  } catch (error) {
-    console.error('表单验证失败:', error)
-  }
+  loading.value = true
+  await loginFormRef.value?.validate()
+  loginFormRef.value?.validate(async (valid) => {
+    if (valid) {
+      userInfoStore
+        .login({
+          username: loginForm.username,
+          password: loginForm.password,
+          code: loginForm.code,
+          uuid: loginForm.uuid,
+          timeout: 10000,
+        })
+        .then(() => {
+          useMessage().success('登录成功 !')
+          router.push({ path: HOME_PAGE_PATH })
+        })
+        .catch(() => {
+          refreshCaptcha()
+        })
+        .finally(() => {
+          loading.value = false
+        })
+    } else {
+      loading.value = false
+    }
+  })
 }
 onMounted(() => {
   refreshCaptcha()

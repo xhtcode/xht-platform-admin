@@ -122,6 +122,7 @@ const show = () => {
  * 关闭
  */
 const close = () => {
+  if (state.loadingStatus) return
   state.visibleStatus = false
 }
 const initRestaurants = (data: RouteRecordRaw[]) => {

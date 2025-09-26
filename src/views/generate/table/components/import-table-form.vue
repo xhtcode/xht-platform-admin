@@ -110,6 +110,7 @@ const submitForm = () => {
  * 关闭
  */
 const close = () => {
+  if (addUpdatePageInit.value.loadingStatus) return
   addUpdateForm.value = {
     groupId: null,
   }

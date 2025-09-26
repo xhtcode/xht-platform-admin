@@ -149,6 +149,7 @@ const addNewData = () => {
  * 关闭
  */
 const close = () => {
+  if (state.loadingStatus) return
   state.visibleStatus = false
   state.loadingStatus = false
 }

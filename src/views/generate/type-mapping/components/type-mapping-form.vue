@@ -146,6 +146,7 @@ const submitForm = () => {
  * 关闭
  */
 const close = () => {
+  if (state.loadingStatus) return
   addUpdateForm.value = { ...GenTypeMappingOperationForm }
   state.visibleStatus = false
   state.operationStatus = 'add'

@@ -16,7 +16,7 @@
       label-width="100px"
     >
       <el-row>
-        <el-col :span="8">
+        <el-col :span="24">
           <el-form-item label="包名" prop="packageName">
             <el-input v-model="addUpdateForm.packageName" placeholder="请输入包名" />
           </el-form-item>
@@ -36,7 +36,7 @@
       <el-table-column label="表注释" prop="tableComment" width="260" show-overflow-tooltip />
     </el-table>
     <template #footer>
-      <el-button type="primary" @click="submitForm">提交</el-button>
+      <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>
       <el-button @click="close">取 消</el-button>
     </template>
   </el-drawer>
@@ -97,10 +97,14 @@ const submitForm = () => {
       downloadFileApi(
         state.tableList.map((item) => item.id),
         addUpdateForm.value.packageName
-      ).then((data) => {
-        console.log(data)
-        useMessage().success('下载文件成功!')
-      })
+      )
+        .then((data) => {
+          console.log(data)
+          useMessage().success('下载文件成功!')
+        })
+        .finally(() => {
+          state.loadingStatus = false
+        })
     } else {
       state.loadingStatus = false
       useMessage().error('表单校验未通过，请重新检查提交内容')
@@ -112,6 +116,7 @@ const submitForm = () => {
  * 关闭
  */
 const close = () => {
+  if (state.loadingStatus) return
   addUpdateForm.value = {
     packageName: 'com.xht.demo',
   }

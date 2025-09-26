@@ -85,6 +85,7 @@ const show = async (userId: ModeIdType) => {
  * 关闭
  */
 const close = () => {
+  if (state.loadingStatus) return
   state.visibleStatus = false
   state.operationStatus = 'add'
   state.loadingStatus = false

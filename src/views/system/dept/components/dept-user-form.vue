@@ -22,7 +22,11 @@
       empty-text="暂无用户数据"
       highlight-current-row
       :data="state.userList"
-      :row-class-name="getClassName"
+      :row-class-name="
+        ({ row }) => {
+          return row.deptId ? '' : 'no-dept-row'
+        }
+      "
       @row-dblclick="onSubmit"
       @current-change="handleCurrentChange"
     >
@@ -105,6 +109,7 @@ const show = (deptId: ModeIdType) => {
  * 关闭对话框
  */
 const close = () => {
+  if (state.loadingStatus) return
   state.visibleStatus = false
   state.currentRow = null
   tableRef.value?.setCurrentRow(null)
@@ -123,9 +128,7 @@ const onSubmit = () => {
     useMessage().error('暂未选择部门主管')
   }
 }
-const getClassName = (row: UserSimpleVo) => {
-  return row.deptId ? '' : 'no-dept-row'
-}
+
 defineExpose({
   show,
 })
