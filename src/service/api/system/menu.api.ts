@@ -16,7 +16,7 @@ const baseURL: string = import.meta.env.VITE_ADMIN_API_PREFIX
 enum Api {
   SAVE = '/sys/menu/add',
   UPDATE = '/sys/menu/update',
-  DELETE = '/sys/menu/delete/',
+  DELETE = '/sys/menu/remove/',
   QUERY_ONE = '/sys/menu/get/',
   QUERY_TREE = '/sys/menu/tree',
 }

@@ -15,7 +15,7 @@ const baseURL: string = import.meta.env.VITE_ADMIN_API_PREFIX
 enum Api {
   SAVE = '/sys/user/add',
   UPDATE = '/sys/user/update',
-  DELETE = '/sys/user/delete/',
+  DELETE = '/sys/user/remove/',
   QUERY_ONE = '/sys/user/get/',
   QUERY_PAGE = '/sys/user/page',
   RESET_PASSWORD = `/sys/user/reset/`,

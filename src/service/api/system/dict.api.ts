@@ -15,7 +15,7 @@ const baseURL: string = import.meta.env.VITE_ADMIN_API_PREFIX
 enum Api {
   SAVE = '/sys/dict/types/add',
   UPDATE = '/sys/dict/types/update',
-  DELETE = '/sys/dict/types/delete',
+  DELETE = '/sys/dict/types/remove',
   QUERY_ONE = '/sys/dict/types/get/',
   QUERY_LIST = '/sys/dict/types/page',
 }
