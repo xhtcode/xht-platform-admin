@@ -1,12 +1,12 @@
 <template>
   <div class="main-container-none">
-    <split-panes :push-other-panes="false">
-      <split-pane-item min-size="20" size="20">
+    <el-splitter :push-other-panes="false">
+      <el-splitter-panel size="20%" :resizable="false" collapsible>
         <div class="h100">
           <dept-tree ref="deptTreeRef" @click-node="handleDeptClick" />
         </div>
-      </split-pane-item>
-      <split-pane-item min-size="80" size="80">
+      </el-splitter-panel>
+      <el-splitter-panel size="80" :resizable="false" collapsible>
         <div class="main-container-auto main-container-view flex-4">
           <el-form
             ref="queryFormRef"
@@ -297,8 +297,8 @@
             @pagination="handleQuery"
           />
         </div>
-      </split-pane-item>
-    </split-panes>
+      </el-splitter-panel>
+    </el-splitter>
     <user-form ref="userFormRef" @success="handleQuery" />
     <user-role-form ref="userRoleFormRef" />
   </div>
@@ -495,9 +495,3 @@ onMounted(async () => {
   await handleQuery()
 })
 </script>
-
-<style lang="scss" scoped>
-:deep(.splitpanes--vertical .splitpanes__splitter) {
-  cursor: auto !important;
-}
-</style>

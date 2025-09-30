@@ -1,12 +1,12 @@
 <template>
   <div class="main-container-none">
-    <split-panes>
-      <split-pane-item min-size="20" size="20">
+    <el-splitter>
+      <el-splitter-panel size="20%" :resizable="false" collapsible>
         <div class="h100">
-          <dept-tree-click ref="deptTreeRef" @click-node="handleDeptClick" />
+          <dept-tree ref="deptTreeRef" @click-node="handleDeptClick" />
         </div>
-      </split-pane-item>
-      <split-pane-item min-size="80" size="80">
+      </el-splitter-panel>
+      <el-splitter-panel size="80%" :resizable="false" collapsible>
         <div class="main-container-auto main-container-view">
           <el-form
             ref="queryFormRef"
@@ -165,9 +165,9 @@
             @pagination="queryPostData"
           />
         </div>
-      </split-pane-item>
+      </el-splitter-panel>
       <dept-post-form ref="deptPostFormRef" @success="queryPostData" />
-    </split-panes>
+    </el-splitter>
   </div>
 </template>
 

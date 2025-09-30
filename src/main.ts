@@ -6,8 +6,6 @@ import { setupStore } from '@/store'
 import { setupPermission } from '@/plugin/permission'
 import { setupElIcons } from './plugin/icon'
 // 布局工具
-import { Pane, Splitpanes } from 'splitpanes'
-import 'splitpanes/dist/splitpanes.css'
 import 'element-plus/theme-chalk/dark/css-vars.css'
 /**
  * UnoCSS 样式引擎
@@ -21,6 +19,5 @@ setupStore(app)
 setupPermission()
 setupElIcons(app)
 // 导入布局插件
-app.component('SplitPanes', Splitpanes)
-app.component('SplitPaneItem', Pane)
+
 app.mount('#app')
