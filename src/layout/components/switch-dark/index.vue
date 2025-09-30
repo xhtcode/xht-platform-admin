@@ -1,5 +1,5 @@
 <template>
-  <div class="switch-dark layout-header-top-item" @click="toggleColorScheme()">
+  <div class="switch-dark layout-header-top-item cursor-pointer" @click="toggleColorScheme()">
     <div v-if="darkStatus" class="icon-common-moon text-16px" />
     <div v-else class="icon-common-sunny text-16px" />
   </div>
