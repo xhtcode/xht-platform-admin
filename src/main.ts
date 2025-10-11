@@ -18,6 +18,4 @@ setupRouter(app)
 setupStore(app)
 setupPermission()
 setupElIcons(app)
-// 导入布局插件
-
 app.mount('#app')

@@ -8,7 +8,7 @@ export interface RightToolbarPropsType {
   importStatus?: boolean // 是否导入
   exportStatus?: boolean // 是否导出
   columnStatus?: boolean // 显隐列
-  columnData: ColumnOption[] // 显隐数据
+  columnData?: ColumnOption[] // 显隐数据
   gutter?: number // 列表项之间的间距
 }
 

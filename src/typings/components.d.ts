@@ -75,6 +75,7 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     TableToolBar: typeof import('./../components/table-tool-bar/index.vue')['default']
     TemplateGroupSelect: typeof import('./../components/generate/template-group-select/index.vue')['default']
+    Test: typeof import('./../components/table-tool-bar/test.vue')['default']
     TypeMappingSelect: typeof import('./../components/generate/type-mapping-select/index.vue')['default']
     UserStatusTag: typeof import('./../components/system/user-status-tag/index.vue')['default']
     XhtCard: typeof import('./../components/xht-card/index.vue')['default']

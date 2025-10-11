@@ -1,6 +1,6 @@
 <template>
   <el-config-provider :locale="zhCn" :size="sizeType">
-    <router-view />
+    <table-tool-bar search-status column-status/>
   </el-config-provider>
 </template>
 <script setup lang="ts">
