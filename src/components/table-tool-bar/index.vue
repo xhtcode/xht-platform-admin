@@ -9,74 +9,124 @@
       <el-tooltip
         v-if="searchStatus"
         class="item"
-        :content="showSearch ? '快速查询' : '高级查询'"
+        content="搜索切换"
         placement="top"
       >
         <el-button circle size="small" icon="Switch" @click="toggleSearch" />
       </el-tooltip>
       <el-tooltip v-if="refreshStatus" class="item" content="刷新" placement="top">
-        <el-button type="info" size="small" circle icon="Refresh" @click="refresh" />
+        <el-button
+          type="info"
+          size="small"
+          circle
+          icon="Refresh"
+          @click="emitFunction('refresh')"
+        />
       </el-tooltip>
       <el-tooltip v-if="importStatus" class="item" content="导入" placement="top">
-        <el-button type="success" size="small" circle icon="Upload" @click="importData" />
+        <el-button
+          type="success"
+          size="small"
+          circle
+          icon="Upload"
+          @click="emitFunction('import')"
+        />
       </el-tooltip>
       <el-tooltip v-if="exportStatus" class="item" content="导出" placement="top">
-        <el-button type="primary" size="small" circle icon="Download" @click="exportData" />
+        <el-button
+          type="primary"
+          size="small"
+          circle
+          icon="Download"
+          @click="emitFunction('export')"
+        />
       </el-tooltip>
-      <el-tooltip v-if="columnStatus" class="item" content="显隐列" placement="top">
-        <el-button color="#626aef" size="small" circle icon="Menu" @click="showColumn" />
-      </el-tooltip>
+      <el-button color="#626aef" ref="columnBtnRef" size="small" circle icon="Tools" />
       <slot name="column" />
-      <el-dialog v-model="state.openStatus" title="显示/隐藏" append-to-body width="45vw">
-        <div class="w100 flex-center">
-          <el-transfer
-            v-model="state.columnValue"
-            v-loading="state.loadingStatus"
-            :data="columnData"
-            :props="{
-              key: 'value',
-              label: 'name',
-            }"
-            filterable
-            :titles="['隐藏列', '显示列']"
-          >
-            <template #left-empty>
-              <el-empty :image-size="60" description="暂无隐藏的列数据" />
-            </template>
-            <template #right-empty>
-              <el-empty :image-size="60" description="暂无显示的列数据" />
-            </template>
-          </el-transfer>
-        </div>
-      </el-dialog>
     </div>
+    <el-popover
+      trigger="click"
+      placement="left-start"
+      :virtual-ref="columnBtnRef"
+      virtual-triggering
+      append-to="body"
+      width="auto"
+    >
+      <el-checkbox
+        v-model="checkAllStatus"
+        :indeterminate="indeterminateStatus"
+        @change="handleCheckAllChange"
+      >
+        全选
+      </el-checkbox>
+      <el-divider style="margin: 0" />
+      <el-checkbox-group v-model="checkedDataArray">
+        <div v-for="city in columnData" :key="city.value" class="max-w-[160px] overflow-hidden ws-nowrap">
+          <el-checkbox
+            :label="city.value"
+            :value="city.name"
+            :disabled="city.disabled"
+            @change="checkboxChange(city)"
+          >
+            <div class="">
+              {{ city.value }}
+            </div>
+          </el-checkbox>
+        </div>
+      </el-checkbox-group>
+    </el-popover>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { EmitsType, RightToolbarPropsType, StateType } from '@/components/table-tool-bar/types'
-import { useVModel } from '@vueuse/core'
+import type {
+  ColumnOption,
+  EmitsType,
+  RightToolbarPropsType,
+} from '@/components/table-tool-bar/types'
+import type { CheckboxValueType } from 'element-plus'
 
 defineOptions({ name: 'TableToolbar' })
 const props = withDefaults(defineProps<RightToolbarPropsType>(), {
   searchStatus: false, // 是否显示搜索框
-  showSearch: false, // 是否显示搜索框提示
   refreshStatus: false, // 是否显示刷新
   importStatus: false, // 是否导入
   exportStatus: false, // 是否导出
   columnStatus: false, // 显隐列
-  columnData: () => [], // 显隐数据
   gutter: 0, // 列表项之间的间距
 })
-const emits = defineEmits<EmitsType>()
-const state = reactive<StateType>({
-  columnValue: [], // 显隐数据
-  openStatus: false, // 是否显示弹出层
-  loadingStatus: false, // 加载
-})
-const showSearch = useVModel(props, 'showSearch', emits)
-const columnData = useVModel(props, 'columnData', emits)
+const columnBtnRef = useTemplateRef('columnBtnRef')
+const checkAllStatus = ref(false)
+const indeterminateStatus = ref(false)
+const checkedDataArray = ref<string[]>([])
+const checkedAllCount = computed<string[]>(() =>
+  columnData.value.filter((item) => !item.disabled).map((item) => item.name)
+)
+const handleCheckAllChange = (val: CheckboxValueType) => {
+  checkedDataArray.value = val ? checkedAllCount.value : []
+  const empStatus = checkedDataArray.value.length > 0
+  columnData.value.forEach((item) => {
+    if (!item.disabled) item.visible = empStatus
+  })
+  indeterminateStatus.value = false
+}
 
+const checkboxChange = (value: ColumnOption) => {
+  value.visible = !value.visible
+  const empStatus = checkedDataArray.value.length === checkedAllCount.value.length
+  indeterminateStatus.value = checkedDataArray.value.length > 0 && !empStatus
+  checkAllStatus.value = empStatus
+}
+
+const emits = defineEmits<EmitsType>()
+const showSearch = defineModel<boolean>('showSearch', {
+  required: false,
+  default: false,
+})
+const columnData = defineModel<ColumnOption[]>('columnData', {
+  required: false,
+  default: [],
+})
 /**
  * 如果props中有传入gutter属性，则计算出marginRight 返回计算后的样式对象
  */
@@ -96,41 +146,8 @@ const toggleSearch = () => {
   showSearch.value = !showSearch.value
 }
 
-/**
- * 导入数据
- */
-const importData = () => {
-  emits('import')
-}
-
-/**
- * 导出数据
- */
-const exportData = () => {
-  emits('export')
-}
-
-/**
- * 刷新
- */
-const refresh = () => {
-  emits('refresh')
-}
-
-/**
- * 打开显隐列dialog
- */
-const showColumn = () => {
-  state.loadingStatus = true
-  state.columnValue = []
-  state.openStatus = true
-  // 显隐列初始默认隐藏列
-  props.columnData.forEach((item) => {
-    if (item.visible) {
-      state.columnValue.push(item.value)
-    }
-  })
-  state.loadingStatus = false
+const emitFunction = (emitFunName: 'import' | 'export' | 'refresh' | any) => {
+  emits(emitFunName)
 }
 </script>
 
@@ -139,11 +156,5 @@ const showColumn = () => {
 .top-right-btn {
   display: flex;
   justify-content: flex-end;
-
-  .item {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
 }
 </style>

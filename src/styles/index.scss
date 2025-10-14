@@ -1,21 +1,23 @@
-@use '@/styles/common/basic.scss';
-//@use '@/styles/common/common.scss';
-@use '@/styles/common/reset.scss';
+@charset "UTF-8";
 @use '@/styles/variables/var.scss' as *;
 @use '@/styles/variables/var.dark.scss' as *;
-//@use '@/styles/theme/element.scss';
+@use '@/styles/theme/element.scss';
 @use '@/styles/theme/layout.scss';
 @use 'sass:math';
 
-.el-drawer__header {
-  margin-bottom: 0 !important;
-  padding-bottom: calc(var(--el-drawer-padding-primary) / 2) !important;
-  border-bottom: 1px solid var(--el-border-color);
-  @extend .user-select-none;
+html,
+body,
+#app {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--xht-bg-color);
+  color: var(--xht-text-color);
+  font-size: 14px;
+  position: relative;
 }
 
-.el-drawer__footer {
-  padding: 10px 20px;
-  border-top: 1px solid var(--el-border-color);
-  @extend .user-select-none;
+.user-select-none {
+  user-select: none;
 }

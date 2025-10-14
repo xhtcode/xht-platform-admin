@@ -1,6 +1,6 @@
 <template>
   <el-config-provider :locale="zhCn" :size="sizeType">
-    <table-tool-bar search-status column-status/>
+    <xht-table/>
   </el-config-provider>
 </template>
 <script setup lang="ts">

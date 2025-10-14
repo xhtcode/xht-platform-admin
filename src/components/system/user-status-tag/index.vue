@@ -4,7 +4,6 @@
     hit
     disable-transitions
     effect="dark"
-    class="no-border"
   >
     {{ getStatusLabel(props.status) }}
   </el-tag>

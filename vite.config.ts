@@ -126,7 +126,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
             importStyle: 'sass',
           }),
         ],
-        dirs: ['src/components'], // 指定自定义组件位置(默认:src/components)
+        globs: ['src/components/**/index.vue'], // 指定自定义组件位置(默认:src/components)
         dts: path.resolve(pathSrc, 'typings', 'components.d.ts'), // 导入组件类型声明文件路径 (false:关闭自动生成)
       }),
     ],

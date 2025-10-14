@@ -11,7 +11,7 @@
         <div :class="`icon-menu-${modelValue}`" @click="openDialog()" />
       </template>
       <template v-if="props.clearable" #suffix>
-        <el-icon class="button-hover" size="1em" @click="clearableValue">
+        <el-icon size="1em" @click="clearableValue">
           <circle-close />
         </el-icon>
       </template>

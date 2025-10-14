@@ -1,5 +1,4 @@
 @use '@/styles/variables.scss';
-@use '@/styles/common/common.scss';
 
 $header-height: variables.$header-height !default;
 $header-item-width: 40px !default;
@@ -28,6 +27,7 @@ $header-item-width: 40px !default;
     display: flex;
     flex-direction: column;
     overflow-x: hidden !important;
+
     .el-scrollbar__view {
       overflow: hidden;
     }
@@ -44,13 +44,12 @@ $header-item-width: 40px !default;
   }
 
   .layout-header {
-    @extend .flex;
+    display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0;
-    box-shadow:
-      0 1px 3px 0 rgba(0, 0, 0, 0.12),
-      0 0 3px 0 rgba(0, 0, 0, 0.06);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12),
+    0 0 3px 0 rgba(0, 0, 0, 0.06);
     height: auto !important;
 
     .layout-header-container {
@@ -77,11 +76,10 @@ $header-item-width: 40px !default;
         .layout-header-top-item {
           display: flex;
           height: $header-height;
-
-          @extend .flex-center;
+          justify-content: center;
+          align-items: center;
           cursor: pointer;
           width: $header-item-width;
-          justify-content: center;
           opacity: 0.8;
 
           &:hover {
@@ -105,9 +103,8 @@ $header-item-width: 40px !default;
     position: relative;
     display: flex;
     border-bottom: 1px solid var(--xht-border-color);
-    box-shadow:
-      6px 2px 3px 0 rgb(0 0 0 / 12%),
-      0 0 3px 0 rgb(0 0 0 / 6%);
+    box-shadow: 6px 2px 3px 0 rgb(0 0 0 / 12%),
+    0 0 3px 0 rgb(0 0 0 / 6%);
 
     .tags-container {
       position: relative;
@@ -120,7 +117,9 @@ $header-item-width: 40px !default;
       }
 
       .tags-container-view-tool {
-        @extend .flex-center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         width: 35px;
         height: 35px;
         cursor: pointer;
@@ -210,7 +209,9 @@ $header-item-width: 40px !default;
     background-color: var(--xht-main-bg-color);
     height: variables.$footer-height;
     padding: 0;
-    @extend .flex-center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
 
@@ -225,7 +226,8 @@ $header-item-width: 40px !default;
     left: 0;
     overflow: hidden;
     height: 100%;
-    @extend .flex, .layout-padding;
+    display: flex;
+    @extend .layout-padding;
     flex: 1;
     flex-direction: column;
   }
@@ -233,7 +235,7 @@ $header-item-width: 40px !default;
   .main-container-scrollbar {
     overflow: hidden;
     height: 100%;
-    @extend .flex, .layout-padding;
+    @extend .layout-padding;
     flex: 1;
     flex-direction: column;
   }

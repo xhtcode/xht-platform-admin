@@ -1,27 +1,23 @@
-/* Input 输入框、InputNumber 计数器
-------------------------------- */
-// 修改数字输入框默认宽度为100%
+//=================== 抽屉 el-drawer 样式修改 ===================
+.el-drawer__header {
+  margin-bottom: 0 !important;
+  padding-bottom: calc(var(--el-drawer-padding-primary) / 2) !important;
+  border-bottom: 1px solid var(--el-border-color);
+  user-select: none;
+}
+
+.el-drawer__footer {
+  padding: 10px 20px;
+  border-top: 1px solid var(--el-border-color);
+  user-select: none;
+}
+
+//=================== 修改数字输入框默认宽度为100% ===================
 .el-input-number {
   width: 100%;
 }
-.el-menu-item {
-  height: 56px !important;
-  line-height: 56px !important;
-}
 
-.el-menu--collapse {
-  width: 64px !important;
-}
-
-.el-menu-item .menu-icon,
-.el-sub-menu .menu-icon {
-  display: inline-block;
-  vertical-align: middle;
-  margin-right: 5px;
-  text-align: center;
-  justify-content: center;
-}
-
+//=================== 自定义颜色选择器样式 ===================
 .custom-color-picker {
   .el-color-dropdown__link-btn {
     display: none !important;
