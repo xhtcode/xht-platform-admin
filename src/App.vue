@@ -1,6 +1,6 @@
 <template>
   <el-config-provider :locale="zhCn" :size="sizeType">
-    <xht-table/>
+    <router-view />
   </el-config-provider>
 </template>
 <script setup lang="ts">

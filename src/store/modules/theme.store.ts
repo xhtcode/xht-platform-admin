@@ -12,7 +12,7 @@ export const useThemeStore = defineStore(
     /**
      * 设备类型
      */
-    const device = ref<DeviceEnums>(DeviceEnums.DESKTOP)
+    const device = ref<DeviceEnums>(DeviceEnums.MOBILE)
     /**
      * 侧边栏状态
      */

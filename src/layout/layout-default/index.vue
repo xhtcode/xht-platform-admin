@@ -19,7 +19,7 @@
                 <template #default="{ Component, route }">
                   <Transition name="main-view-animation" mode="out-in">
                     <keep-alive>
-                      <component :is="Component" :key="route.fullPath" class="w100" />
+                      <component :is="Component" :key="route.fullPath" class="w-full" />
                     </keep-alive>
                   </Transition>
                 </template>
@@ -46,7 +46,7 @@ const headerRef = useTemplateRef('headerRef')
 const footerRef = useTemplateRef('footerRef')
 const themeStore = useThemeStore()
 const { footerStatus, sidebarStatus } = storeToRefs(themeStore)
-const { mainStyle, desktopShowStatus, mobileShowStatus } = useThemeHooks()
+const { mainStyle, desktopShowStatus, mobileShowStatus, asideStyle } = useThemeHooks()
 
 /**
  * 处理遮罩层点击事件，关闭侧边栏
@@ -66,7 +66,7 @@ function handleCloseSidebar() {
   left: 0;
   z-index: 999;
   height: 100%;
-  width: variables.$menu-width-200;
+  width: v-bind(asideStyle);
   transition: width 0.28s;
   background: var(--xht-bg-color);
 

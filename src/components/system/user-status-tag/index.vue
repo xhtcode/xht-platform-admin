@@ -1,10 +1,5 @@
 <template>
-  <el-tag
-    :color="getTagColor(props.status)"
-    hit
-    disable-transitions
-    effect="dark"
-  >
+  <el-tag :color="getTagColor(props.status)" hit disable-transitions effect="dark">
     {{ getStatusLabel(props.status) }}
   </el-tag>
 </template>

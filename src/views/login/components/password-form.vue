@@ -27,9 +27,9 @@
         show-password
       />
     </el-form-item>
-    <el-form-item prop="code">
+    <el-form-item prop="captcha_code">
       <div class="captcha-container">
-        <el-input v-model="loginForm.code" placeholder="验证码" class="login-input">
+        <el-input v-model="loginForm.captcha_code" placeholder="验证码" class="login-input">
           <template #prefix>
             <div class="icon-login-code h-1rem w-1rem color-[var(--color)]" />
           </template>
@@ -77,17 +77,16 @@ defineOptions({ name: 'PasswordForm' })
 const loginForm = reactive<LoginRequestType>({
   username: 'admin',
   password: '123456',
-  code: '',
-  uuid: '',
-  timeout: 0,
+  captcha_code: '',
+  captcha_key: '',
 })
 const loading = ref(false)
 const router = useRouter()
 // 表单验证规则
 const loginRules: FormRules = {
-  username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-  password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
-  code: [{ required: true, message: '请输入验证码', trigger: 'blur' }],
+  username: [{ required: true, message: '请输入用户名', trigger: ['blur', 'change'] }],
+  password: [{ required: true, message: '请输入密码', trigger: ['blur', 'change'] }],
+  captcha_code: [{ required: true, message: '请输入验证码', trigger: ['blur', 'change'] }],
 }
 // 验证码相关
 const captchaUrl = ref<string>('')
@@ -97,10 +96,10 @@ const userInfoStore = useUserInfoStore()
  */
 const refreshCaptcha = () => {
   loading.value = true
-  generateCaptcha(loginForm.uuid)
+  generateCaptcha(loginForm.captcha_key)
     .then((res) => {
       captchaUrl.value = `data:image/png;base64,${res.data.code}`
-      loginForm.uuid = res.data.key
+      loginForm.captcha_key = res.data.key
     })
     .finally(() => {
       loading.value = false
@@ -111,16 +110,14 @@ const loginFormRef = useTemplateRef<FormInstance>('loginFormRef')
 // 登录处理
 const handleLogin = async () => {
   loading.value = true
-  await loginFormRef.value?.validate()
   loginFormRef.value?.validate(async (valid) => {
     if (valid) {
       userInfoStore
         .login({
           username: loginForm.username,
           password: loginForm.password,
-          code: loginForm.code,
-          uuid: loginForm.uuid,
-          timeout: 10000,
+          captcha_code: loginForm.captcha_code,
+          captcha_key: loginForm.captcha_key,
         })
         .then(() => {
           useMessage().success('登录成功 !')

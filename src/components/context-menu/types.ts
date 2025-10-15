@@ -5,3 +5,7 @@ export interface ContextMenuSchemaType {
   disabled?: boolean | any //禁用
   divided?: boolean //下划线
 }
+export interface PropsTypes {
+  trigger?: 'click' | 'hover' | 'focus' | 'contextmenu'
+  disabled?: boolean
+}

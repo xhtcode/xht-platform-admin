@@ -11,88 +11,38 @@
         </el-icon>
       </span>
       <div class="tags-container-view-tool flex-1">
-        <el-scrollbar ref="scrollbarRef" class="h100" view-class="h100" @scroll="elScrollbarScroll">
-          <div class="h100 flex" style="align-items: center">
-            <ContextMenu
-              v-for="item in visitedViews"
-              :key="item.path"
-              :ref="itemRefs.set"
-              :class="[
-                `tags-view-item`,
-                item.affixStatus ? `tags-view-item-affix` : '',
-                {
-                  'is-active': isActive(item),
-                },
-              ]"
-              :menu-list="[
-                {
-                  icon: 'refresh',
-                  label: '重新加载',
-                  disabled: selectedTag?.fullPath !== item.path,
-                  command: 'refresh',
-                },
-                {
-                  icon: 'close',
-                  label: '关闭此项',
-                  disabled: !!visitedViews.length && selectedTag?.meta.affixStatus,
-                  command: 'close',
-                },
-                {
-                  divided: true,
-                  icon: 'd-arrow-left',
-                  label: '关闭左侧',
-                  disabled:
-                    !!visitedViews.length &&
-                    (item.path === visitedViews[0].path || selectedTag?.fullPath !== item.path),
-                  command: 'closeLeft',
-                },
-                {
-                  icon: 'd-arrow-right',
-                  label: '关闭右侧',
-                  disabled:
-                    !!visitedViews?.length &&
-                    (item.path === visitedViews[visitedViews.length - 1].path ||
-                      selectedTag?.fullPath !== item.path),
-                  command: 'closeRight',
-                },
-                {
-                  divided: true,
-                  icon: 'discount',
-                  label: '关闭其他',
-                  disabled: selectedTag?.fullPath !== item.path,
-                  command: 'closeOther',
-                },
-                {
-                  icon: 'minus',
-                  label: '关闭全部',
-                  command: 'closeAll',
-                },
-              ]"
-              :tag-item="item"
-              @change="commandTrigger"
-              @visible-change="visibleChange"
-            >
-              <router-link
+        <el-scrollbar
+          ref="scrollbarRef"
+          class="h-full"
+          view-class="h-full"
+          @scroll="elScrollbarScroll"
+        >
+          <div class="h-full flex items-center">
+            <template v-for="item in visitedViews" :key="item.path">
+              <div
+                :class="[
+                  `tags-view-item`,
+                  {
+                    'is-active': isActive(item),
+                  },
+                ]"
                 :ref="tagLinksRefs.set"
-                v-slot="{ navigate }"
-                :key="item.path"
-                :to="{ path: item.path, query: item.query }"
-                custom
+                @contextmenu="handleContextmenu($event, item)"
+                @click="handleClickMenu(item)"
               >
-                <div class="tags-view-item-container" @click="navigate">
-                  <div :class="`icon-menu-${item.icon}`" class="mr-5 text-8px" />
-                  {{ item.title }}
-                  <el-icon
-                    v-if="!item.affixStatus"
-                    :size="14"
-                    class="tags-view-item-close"
-                    @click.prevent.stop="closeSelectedTag(item)"
-                  >
-                    <close />
-                  </el-icon>
-                </div>
-              </router-link>
-            </ContextMenu>
+                <div :class="`icon-menu-${item.icon}`" />
+                <div class="pl-5px flex-1 text-nowrap">{{ item.title }}</div>
+                <el-icon
+                  v-if="!item.affixStatus"
+                  :size="14"
+                  class="tags-view-item-close"
+                  @click.prevent.stop="closeSelectedTag(item)"
+                >
+                  <close />
+                </el-icon>
+              </div>
+            </template>
+            <context-menu ref="contextMenuRef" :menu-list="menuList" @change="commandTrigger" />
           </div>
         </el-scrollbar>
       </div>
@@ -101,68 +51,75 @@
           <d-arrow-right />
         </el-icon>
       </span>
-      <span class="tags-container-view-tool" @click="refreshSelectedTag(selectedTag)">
-        <el-icon class="tags-view-tool-icon-hover">
-          <refresh-right />
-        </el-icon>
-      </span>
-      <ContextMenu :menu-list="defaultMenuList" trigger="click" @change="commandTrigger">
+      <el-dropdown trigger="click">
         <span class="tags-container-view-tool flex-center">
           <el-icon class="tags-view-tool-icon-hover">
-            <Menu />
+            <Grid />
           </el-icon>
         </span>
-      </ContextMenu>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item>
+              <div class="user-select-none flex-center" @click="refreshSelectedTag(selectedTag)">
+                <el-icon>
+                  <refresh-right />
+                </el-icon>
+                <span>重新加载</span>
+              </div>
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <div class="user-select-none flex-center" @click="commandTrigger('closeAll', null)">
+                <el-icon>
+                  <minus />
+                </el-icon>
+                <span>全部关闭</span>
+              </div>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
     </div>
   </div>
 </template>
-
 <script lang="ts" setup>
-import type {
-  RouteLocationNormalized,
-  RouteLocationNormalizedLoaded,
-  RouterLinkProps,
-} from 'vue-router'
+import type { RouteLocationNormalizedLoaded, RouterLinkProps } from 'vue-router'
 import { useRoute, useRouter } from 'vue-router'
 import { filterAffixTagsView, formatRoute } from './helper'
 import { useTemplateRefsList } from '@vueuse/core'
 import { useRouteStore } from '@/store/modules/routes.store'
-import { useThemeStore } from '@/store/modules/theme.store'
-import { Close, DArrowLeft, DArrowRight, RefreshRight } from '@element-plus/icons-vue'
+import { Close, DArrowLeft, DArrowRight, Grid, Minus, RefreshRight } from '@element-plus/icons-vue'
 import useTagsStore from '@/store/modules/tags.store'
-import { useScrollTo } from '@/utils/scroll-to'
+import { useMessage } from '@/hooks/use-message'
+import type { ContextMenuSchemaType } from '@/components/context-menu/types'
 
+// 定义组件名称
 defineOptions({ name: 'TagsViewComponent' })
+
+// 路由相关实例
 const router = useRouter()
 const route = useRoute()
+
+// 状态管理实例
 const routeStore = useRouteStore()
-const themeStore = useThemeStore()
 const tagsViewPlusStore = useTagsStore()
 
-/**
- * 所有右键菜单组件的元素
- */
-const itemRefs = useTemplateRefsList<any>()
-const affixTagArr = ref<TagsViewType[]>([])
+// 模板引用
+const contextMenuRef = useTemplateRef('contextMenuRef')
 const tagLinksRefs = useTemplateRefsList<RouterLinkProps>()
-const scrollbarRef = ref<any>()
-const tagsViewStatus = computed(() => themeStore.tagsViewStatus)
-const visitedViews = computed(() => tagsViewPlusStore.visitedViews)
-const scrollLeftNumber = ref(0)
+const scrollbarRef = useTemplateRef<any>('scrollbarRef')
 
-const selectedTag = ref<RouteLocationNormalizedLoaded>()
-const defaultMenuList = [
-  {
-    icon: 'refresh',
-    label: '重新加载',
-    command: 'refresh',
-  },
-  {
-    icon: 'minus',
-    label: '关闭全部',
-    command: 'closeAll',
-  },
-]
+// 响应式数据
+const affixTagArr = ref<TagsViewType[]>([]) // 固定标签数组
+const visitedViews = computed(() => tagsViewPlusStore.visitedViews) // 已访问视图列表
+const scrollLeftNumber = useStorage<number>('scrollLeftNumber', 0) // 滚动位置存储
+const selectedTag = ref<RouteLocationNormalizedLoaded>() // 当前选中的标签
+const menuList = shallowRef<ContextMenuSchemaType[]>([]) // 右键菜单列表
+
+/**
+ * 处理右键菜单命令触发事件
+ * @param command 命令类型
+ * @param tagItem 标签项
+ */
 const commandTrigger = (command: string, tagItem: any) => {
   switch (command) {
     case 'refresh':
@@ -186,8 +143,58 @@ const commandTrigger = (command: string, tagItem: any) => {
       break
   }
 }
+
 /**
- * 初始化tag
+ * 处理标签右键菜单事件
+ * @param event 鼠标事件
+ * @param tagItem 标签项
+ */
+const handleContextmenu = (event: MouseEvent, tagItem: TagsViewType) => {
+  menuList.value = [
+    {
+      icon: 'refresh',
+      label: '重新加载',
+      disabled: selectedTag.value?.fullPath !== tagItem.path,
+      command: 'refresh',
+    },
+    {
+      icon: 'close',
+      label: '关闭此项',
+      disabled: !!visitedViews.value?.length && selectedTag.value?.meta.affixStatus,
+      command: 'close',
+    },
+    {
+      divided: true,
+      icon: 'd-arrow-left',
+      label: '关闭左侧',
+      disabled:
+        !!visitedViews.value?.length &&
+        (tagItem.path === visitedViews.value![0].path ||
+          selectedTag.value?.fullPath !== tagItem.path),
+      command: 'closeLeft',
+    },
+    {
+      icon: 'd-arrow-right',
+      label: '关闭右侧',
+      disabled:
+        !!visitedViews.value?.length &&
+        (tagItem.path === visitedViews.value[visitedViews.value!.length - 1].path ||
+          selectedTag.value?.fullPath !== tagItem.path),
+      command: 'closeRight',
+    },
+    {
+      divided: true,
+      icon: 'discount',
+      label: '关闭其他',
+      disabled: selectedTag.value?.fullPath !== tagItem.path,
+      command: 'closeOther',
+    },
+  ]
+  contextMenuRef.value?.openContextmenu(event, tagItem)
+}
+
+/**
+ * 初始化固定标签
  */
 const initTags = () => {
   affixTagArr.value = filterAffixTagsView(routeStore.allRoutes)
@@ -199,7 +206,7 @@ const initTags = () => {
 }
 
 /**
- * 新增tag
+ * 添加新的标签页
  */
 const addTags = () => {
   const currentRoute = router.currentRoute.value
@@ -207,21 +214,27 @@ const addTags = () => {
     selectedTag.value = router.currentRoute.value
     tagsViewPlusStore.addVisitedViews(formatRoute(router.currentRoute.value))
   }
-  return false
+  scrollbarRef.value?.update()
+  move(tagsViewPlusStore.visitedViews.length * 10)
 }
 
 /**
- * 关闭选中的tag
+ * 关闭指定标签页
+ * @param view 要关闭的标签页
  */
 const closeSelectedTag = (view: TagsViewType) => {
+  // 固定标签不允许关闭
   if (view.affixStatus) return
   tagsViewPlusStore.removeVisitedView(view)
+  // 如果关闭的是当前激活的标签，则跳转到最后一个标签
   if (isActive(view)) {
     toLastView()
   }
 }
+
 /**
- * 重新加载
+ * 刷新当前选中的标签页
+ * @param view 要刷新的标签页
  */
 const refreshSelectedTag = async (view?: RouteLocationNormalizedLoaded) => {
   if (!view) return
@@ -237,7 +250,7 @@ const refreshSelectedTag = async (view?: RouteLocationNormalizedLoaded) => {
 }
 
 /**
- * 跳转到最后一个
+ * 跳转到最后一个访问的视图
  */
 const toLastView = () => {
   const visitedViews = tagsViewPlusStore.visitedViews
@@ -250,118 +263,62 @@ const toLastView = () => {
 }
 
 /**
- * 是否是当前tag
+ * 处理标签点击事件
+ * @param subItem 标签项
+ */
+const handleClickMenu = async (subItem: TagsViewType) => {
+  await router
+    .push(subItem.path)
+    .then(() => {
+      move(100)
+    })
+    .catch((_) => {
+      useMessage().error('路由错误，请联系管理员!' + subItem.path)
+    })
+}
+
+/**
+ * 判断是否为当前激活的标签
+ * @param route 标签路由信息
+ * @returns boolean 是否为当前激活标签
  */
 const isActive = (route: TagsViewType): boolean => {
   return route.path === unref(router.currentRoute).fullPath
 }
-/**
- * 滚动到选中的tag
- */
-const moveToCurrentTag = async () => {
-  await nextTick(() => {
-    for (const v of unref(visitedViews)) {
-      if (v.path === unref(router.currentRoute).path) {
-        moveToTarget(v)
-        break
-      }
-    }
-  })
-}
-const moveToTarget = (currentTag: TagsViewType) => {
-  const wrap$ = unref(scrollbarRef)?.wrapRef
-  let firstTag: RouterLinkProps | null = null
-  let lastTag: RouterLinkProps | null = null
-  const tagList = unref(tagLinksRefs)
-  if (tagList.length > 0) {
-    firstTag = tagList[0]
-    lastTag = tagList[tagList.length - 1]
-  }
-  if ((firstTag?.to as RouteLocationNormalized).path === currentTag.path) {
-    // 直接滚动到0的位置
-    useScrollTo({
-      el: wrap$!,
-      position: 'scrollLeft',
-      to: 0,
-      duration: 500,
-    }).start()
-  } else if ((lastTag?.to as RouteLocationNormalized).path === currentTag.path) {
-    // 滚动到最后的位置
-    useScrollTo({
-      el: wrap$!,
-      position: 'scrollLeft',
-      to: wrap$!.scrollWidth - wrap$!.offsetWidth,
-      duration: 500,
-    }).start()
-  } else {
-    const currentIndex: number = tagList.findIndex(
-      (item) => (item?.to as RouteLocationNormalized).path === currentTag.path
-    )
-    const tgsRefs = document.getElementsByClassName(`tags-view-item`)
-    const prevTag = tgsRefs[currentIndex - 1] as HTMLElement
-    const nextTag = tgsRefs[currentIndex + 1] as HTMLElement
-    // 标签的左偏移量在nextTag之后
-    const afterNextTagOffsetLeft = (nextTag?.offsetLeft || 0) + (nextTag?.offsetWidth || 0) + 4
-    // 标签在prevTag之前的偏移
-    const beforePrevTagOffsetLeft = (prevTag?.offsetLeft || 0) - 4
-    if (afterNextTagOffsetLeft > unref(scrollLeftNumber) + wrap$!.offsetWidth) {
-      useScrollTo({
-        el: wrap$!,
-        position: 'scrollLeft',
-        to: afterNextTagOffsetLeft - wrap$!.offsetWidth,
-        duration: 500,
-      }).start()
-    } else if (beforePrevTagOffsetLeft < unref(scrollLeftNumber)) {
-      useScrollTo({
-        el: wrap$!,
-        position: 'scrollLeft',
-        to: beforePrevTagOffsetLeft,
-        duration: 500,
-      }).start()
-    }
-  }
-}
 
+/**
+ * 处理滚动条滚动事件
+ * @param param0 滚动事件参数
+ */
 const elScrollbarScroll = ({ scrollLeft }: any) => {
   scrollLeftNumber.value = scrollLeft as number
 }
+
 /**
- * 右键菜单装填改变的时候
+ * 移动标签容器滚动位置
+ * @param to 移动距离
  */
-const visibleChange = (visible: boolean, tagItem: RouteLocationNormalizedLoaded) => {
-  if (visible) {
-    for (const v of unref(itemRefs)) {
-      const elDropdownMenuRef = v.elDropdownMenuRef
-      if (tagItem?.fullPath !== v.tagItem?.path) {
-        elDropdownMenuRef?.handleClose()
-      }
-    }
-  }
+const move = (to: number = 0) => {
+  scrollbarRef.value?.setScrollLeft(scrollLeftNumber.value + to)
 }
+
 /**
- * 移动到某个位置
+ * 组件挂载后初始化标签和位置
  */
-const move = (to: number) => {
-  const wrap$ = unref(scrollbarRef)?.wrapRef
-  const { start } = useScrollTo({
-    el: wrap$!,
-    position: 'scrollLeft',
-    to: unref(scrollLeftNumber) + to,
-    duration: 500,
-  })
-  start()
-}
 onMounted(() => {
   initTags()
+  move()
 })
 
+/**
+ * 监听路由变化，自动添加标签
+ */
 watch(
   () => route.name,
   (newVal) => {
     if (newVal) {
       addTags()
     }
-    moveToCurrentTag()
   },
   {
     immediate: true,

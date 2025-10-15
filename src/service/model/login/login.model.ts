@@ -12,7 +12,6 @@ export interface CaptchaResponseType {
 export interface LoginRequestType {
   username: string
   password: string
-  code: string
-  uuid: string
-  timeout: number
+  captcha_code: string
+  captcha_key: string
 }

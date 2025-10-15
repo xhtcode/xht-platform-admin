@@ -11,8 +11,6 @@ onMounted(() => {})
 </script>
 
 <template>
-  <div class="vwh-100">
-    <component :is="LayoutComponents[layout]" />
-  </div>
+  <component :is="LayoutComponents[layout]" />
 </template>
 <style lang="scss"></style>

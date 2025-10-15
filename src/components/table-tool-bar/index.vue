@@ -1,17 +1,12 @@
 <template>
-  <div class="flex p-8">
+  <div class="flex p-8px">
     <div class="flex-1">
       <el-space>
         <slot />
       </el-space>
     </div>
     <div class="top-right-btn" :style="style">
-      <el-tooltip
-        v-if="searchStatus"
-        class="item"
-        content="搜索切换"
-        placement="top"
-      >
+      <el-tooltip v-if="searchStatus" class="item" content="搜索切换" placement="top">
         <el-button circle size="small" icon="Switch" @click="toggleSearch" />
       </el-tooltip>
       <el-tooltip v-if="refreshStatus" class="item" content="刷新" placement="top">
@@ -61,7 +56,11 @@
       </el-checkbox>
       <el-divider style="margin: 0" />
       <el-checkbox-group v-model="checkedDataArray">
-        <div v-for="city in columnData" :key="city.value" class="max-w-[160px] overflow-hidden ws-nowrap">
+        <div
+          v-for="city in columnData"
+          :key="city.value"
+          class="max-w-[160px] overflow-hidden ws-nowrap"
+        >
           <el-checkbox
             :label="city.value"
             :value="city.name"

@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import type { CaptchaResponseType } from '@/service/model/login/login.model'
+import { CaptchaResponseType, LoginRequestType } from '@/service/model/login/login.model'
 import type { AxiosPromise } from 'axios'
 
 const baseAuthURL = import.meta.env.VITE_AUTH_API_PREFIX
@@ -25,22 +25,19 @@ export const generateCaptcha = (captchaKey: any): AxiosPromise<CaptchaResponseTy
 /**
  * 登录
  */
-export const loginInPassWord = (data: any): AxiosPromise<TokenInfoType> => {
+export const loginInPassWord = (data: LoginRequestType): AxiosPromise<TokenInfoType> => {
   const encPassword = data.password
   // 密码加密
-  const { username, captchaCode, captchaKey } = data
   return request({
     url: '/oauth2/token',
     method: 'post',
     baseURL: baseAuthURL,
     params: {},
     data: {
-      username: username,
+      ...data,
       password: encPassword,
       grant_type: 'password',
       scope: 'openid',
-      captcha_code: captchaCode,
-      captchaKey: captchaKey,
     },
     headers: {
       auth: true,
