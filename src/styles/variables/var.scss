@@ -13,7 +13,6 @@
   --xht-text-color: #303133;
   --xht-bg-color: #ffffff;
   --xht-main-bg-color: #f8f8f8;
-  --xht-border-color: #e4e7ed;
   --xht-card-bg-color: #ffffff;
   --xht-card-border-color: #e4e7ed;
   --xht-button-hover-bg-color: rgb(0 0 0 / 10%);
@@ -25,4 +24,14 @@
   --xht-menu-active-text: var(--el-color-primary);
   --xht-menu-hover: rgb(0 0 0 / 20%);
   --xht-sidebar-logo-background: rgb(0 0 0 / 20%);
+
+
+  --xht-fill-color-blank: #ffffff;
+  --xht-border-color: #e4e7ed;
+  --xht-border-color-light: #e4e7ed;
+
+
+  --xht-menu-bg-color: var(--xht-fill-color-blank);
+  --xht-header-bg-color: var(--xht-fill-color-blank);
+  --xht-tag-bg-color: var(--xht-fill-color-blank);
 }

@@ -4,6 +4,7 @@ import { getRouters } from '@/service/api/permission'
 import DynamicRouter from '@/router/modules/dynamic'
 import { cloneDeep } from 'lodash'
 import { MenuTypeEnums } from '@/service/model/system/menu.model'
+import pInIaPersistConfig from '@/store/pinia-persist'
 
 const LayOutIndex = import('@/layout/index.vue')
 const viewsModules: any = import.meta.glob('../../views/**/*.{vue,tsx}')
@@ -112,4 +113,8 @@ export const useRouteStore = defineStore('router', () => {
     formatRoutes,
     generateRoutesAtBack,
   }
+},{
+  persist: pInIaPersistConfig('router', [
+    'activeRoute'
+  ])
 })

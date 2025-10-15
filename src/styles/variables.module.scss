@@ -1,8 +1,4 @@
-/* stylelint-disable property-no-unknown */
 :export {
-  headerHeight: $header-height;
-  tagsHeight: $tags-height;
-  footerHeight: $footer-height;
   menuWidth64: $menu-width-64;
   menuWidth200: $menu-width-200;
   logoTitleColor: $base-logo-title-color;
@@ -12,6 +8,10 @@
   xhtMenuActiveText: $xht-menu-active-text;
   xhtMenuHover: $xht-menu-hover;
   xhtSidebarLogoBackground: $xht-sidebar-logo-background;
+  menuWidth: $menu-width; // 菜单宽度
+  menuColumnWidth: $menu-column-width; // 分栏菜单宽度
+  menuCollapseWidth: $menu-collapse-width; // 折叠菜单宽度
+  headerHeight: $header-height; // 头部高度
+  footerHeight: $footer-height; // 底部高度
+  tagsHeight: $tags-height; // 标签栏高度
 }
-
-/* stylelint-enable property-no-unknown */

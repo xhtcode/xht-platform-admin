@@ -58,8 +58,8 @@ export default defineConfig({
       extraProperties: {
         // 额外属性
         display: 'inline-block',
-        width: '1.2em',
-        height: '1.2em',
+        width: '16px',
+        height: '16px',
       },
       // 图表集合
       collections: {

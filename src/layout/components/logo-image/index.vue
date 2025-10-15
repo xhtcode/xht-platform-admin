@@ -12,7 +12,7 @@
 <script lang="ts" setup>
 import { useThemeHooks } from '@/hooks/use-theme-hooks'
 
-defineOptions({ name: 'LogoImageComponent' })
+defineOptions({ name: 'LogoImage' })
 const { menuCollapse } = useThemeHooks()
 </script>
 
@@ -23,6 +23,7 @@ const { menuCollapse } = useThemeHooks()
   user-select: none;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 
   .layout-logo-img {
     height: 18px;

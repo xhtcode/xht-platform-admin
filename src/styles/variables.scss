@@ -1,7 +1,4 @@
 // src/styles/variables.scss
-$header-height: 50px;
-$tags-height: 38px;
-$footer-height: 30px;
 $menu-width-64: 64px;
 $menu-width-200: 200px;
 $base-logo-title-color: #ffffff;
@@ -11,3 +8,10 @@ $xht-menu-text: var(--xht-menu-text); // 菜单文字颜色
 $xht-menu-active-text: var(--xht-menu-active-text); // 菜单激活文字颜色
 $xht-menu-hover: var(--xht-menu-hover); // 菜单悬停背景色
 $xht-sidebar-logo-background: var(--xht-sidebar-logo-background); // 侧边栏 Logo 背景色
+
+$menu-width: 210px; // 菜单宽度
+$menu-column-width: 70px; // 分栏菜单宽度
+$menu-collapse-width: 65px; // 折叠菜单宽度
+$header-height: 55px; // 头部高度
+$tags-height: 40px; // 标签页高度
+$footer-height: 30px; // 底部高度

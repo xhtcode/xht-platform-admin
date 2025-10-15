@@ -1,24 +1,38 @@
-import { RouteRecordRaw, useRouter } from 'vue-router'
-import RegularUtil from '@/utils/RegularUtils'
-import { useMessage } from '@/hooks/use-message'
-
-const router = useRouter()
+import type { RouteRecordRaw } from 'vue-router'
 
 /**
- * 菜单点击
- * @param subItem
+ * 将原始路由转换成导航菜单
+ * @param routes
  */
-export const handleClickMenu = async (subItem: any) => {
-  if (subItem.meta?.linkStatus) {
-    if (RegularUtil.isExternal(subItem.path)) {
-      return window.open(subItem.path, '_blank')
-    }
-    const href = router.resolve({
-      path: subItem.path,
+const convertRouteToMenu = (routes: any[]): RouteRecordRaw[] => {
+  const returnMenus: any[] = []
+  routes
+    .filter((item: any) => !item.meta?.hiddenStatus)
+    .forEach((item) => {
+      const menuItem: any = {
+        path: item.path,
+        meta: {
+          title: item.meta?.title,
+          icon: item.meta?.icon,
+          activeMenuPath: item.meta?.activeMenuPath,
+          linkStatus: item.meta?.linkStatus,
+          hiddenStatus: item.meta?.hiddenStatus,
+          fullStatus: item.meta?.fullStatus,
+          affixStatus: item.meta?.affixStatus || false,
+          keepAliveStatus: item.meta?.keepAliveStatus,
+          backstage: item.meta?.backstage,
+          menuType: item.meta?.menuType,
+          rank: item.meta?.rank,
+          roles: item.meta?.roles,
+        },
+        children: [],
+      }
+      if (item.children && item.children.length > 0) {
+        menuItem.children = convertRouteToMenu(item.children)
+      }
+      returnMenus.push(menuItem)
     })
-    return window.open(href.href, '_blank')
-  }
-  await router.push(subItem.path).catch((_) => {
-    useMessage().error('路由错误，请联系管理员!' + subItem.path)
-  })
+  return returnMenus
 }
+
+export { convertRouteToMenu }

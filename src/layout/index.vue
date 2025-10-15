@@ -4,7 +4,7 @@ const LayoutComponents: Record<any, Component> = {
   default: defineAsyncComponent(() => import('@/layout/layout-default/index.vue')),
   columns: defineAsyncComponent(() => import('@/layout/layout-columns/index.vue')),
 }
-const layout = computed<any>(() => 'default')
+const layout = computed<any>(() => 'columns')
 
 // 页面加载前
 onMounted(() => {})
