@@ -43,3 +43,12 @@
     }
   }
 }
+.el-menu {
+  border: none;
+
+  .el-menu-item {
+    &.is-active {
+      background: var(--el-color-primary-light-9) !important;
+    }
+  }
+}

@@ -16,7 +16,17 @@
       <div class="tabs-box-container">
         <tags-view-component />
       </div>
-      <el-main class="xht-main-container"></el-main>
+      <el-main class="xht-main-container">
+        <router-view>
+          <template #default="{ Component, route }">
+            <Transition name="main-view-animation" mode="out-in">
+              <keep-alive>
+                <component :is="Component" :key="route.fullPath" class="w-full" />
+              </keep-alive>
+            </Transition>
+          </template>
+        </router-view>
+      </el-main>
       <el-footer class="xht-footer-container">
         <div class="xht-footer-main">
           <div class="xht-footer-main-item bg-blue">
@@ -36,18 +46,28 @@ import LogoImage from '@/layout/components/logo-image/index.vue'
 import MenuSplit from '@/layout/components/menu-split/index.vue'
 import MenuMain from '@/layout/components/menu-main/index.vue'
 import type { RouteRecordRaw } from 'vue-router'
+import { useRouter } from 'vue-router'
+import { findMenuChildrenFirst } from '@/layout/components/helper'
+import { useMessage } from '@/hooks/use-message'
 
 defineOptions({
   name: 'LayoutColumns',
 })
+const router = useRouter()
 const menuList = ref<RouteRecordRaw[]>([])
 const asideMenuStyle = computed<CSSProperties>(() => {
   return {
     width: variables.menuWidth,
   }
 })
-const handleMenuClick = (menuItems: RouteRecordRaw[]) => {
-  menuList.value = menuItems ?? []
+const handleMenuClick = async (menuItems: RouteRecordRaw[]) => {
+  menuList.value = menuItems
+  const menuChildrenFirst = findMenuChildrenFirst(menuItems)
+  if (menuChildrenFirst) {
+    await router.push(menuChildrenFirst.path).catch((_) => {
+      useMessage().error('路由错误，请联系管理员!')
+    })
+  }
 }
 </script>
 

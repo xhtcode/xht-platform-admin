@@ -35,4 +35,27 @@ const convertRouteToMenu = (routes: any[]): RouteRecordRaw[] => {
   return returnMenus
 }
 
-export { convertRouteToMenu }
+/**
+ * 递归查找菜单列表中的第一个有效子菜单项
+ * @param menuList 菜单列表
+ * @returns 返回第一个有效的菜单项
+ */
+const findMenuChildrenFirst = (menuList: RouteRecordRaw[]): RouteRecordRaw | null => {
+  if (!menuList || menuList.length === 0) {
+    return null
+  }
+  const firstMenu = menuList[0]
+  if (firstMenu.children && firstMenu.children.length > 0) {
+    return findMenuChildrenFirst(firstMenu.children)
+  }
+  if (firstMenu.meta?.linkStatus) {
+    for (const menuListElement of menuList) {
+      if (!menuListElement.meta?.linkStatus) {
+        return menuListElement
+      }
+    }
+    return null
+  }
+  return firstMenu
+}
+export { convertRouteToMenu, findMenuChildrenFirst }
