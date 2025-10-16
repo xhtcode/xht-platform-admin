@@ -103,7 +103,9 @@ export const useThemeDeviceHooks = () => {
     (val) => {
       const isDesktop = val >= WIDTH_DESKTOP
       device.value = isDesktop ? DeviceEnums.DESKTOP : DeviceEnums.MOBILE
-      menuStatus.value = isDesktop
+      if (menuStatus.value) {
+        menuStatus.value = isDesktop
+      }
     },
     {
       immediate: true,

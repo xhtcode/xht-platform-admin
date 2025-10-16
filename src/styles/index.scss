@@ -4,6 +4,7 @@
 @use '@/styles/theme/element.scss';
 @use '@/styles/theme/layout.scss';
 @use 'sass:math';
+
 html,
 body,
 #app {
@@ -19,4 +20,19 @@ body,
 
 .user-select-none {
   user-select: none;
+}
+
+.header-tool-item {
+  padding: 2px;
+  width: 36px;
+  height: $header-height;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--el-color-primary);
+    background-color: var(--xht-hover-bg-color);
+  }
 }

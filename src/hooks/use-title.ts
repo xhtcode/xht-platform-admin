@@ -13,7 +13,7 @@ const dynamicTitle = ref<string>('')
  * @param title 标题
  */
 const setTitle = (title: string | unknown) => {
-  dynamicTitle.value = title ? `${VITE_APP_TITLE} | ${title}` : VITE_APP_TITLE
+  dynamicTitle.value = title ? `${title}` : VITE_APP_TITLE
 }
 
 /**

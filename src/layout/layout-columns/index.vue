@@ -12,28 +12,26 @@
       </el-scrollbar>
     </el-aside>
     <el-container class="w-full h-full">
-      <el-header class="xht-header-container"></el-header>
+      <el-header class="xht-header-container">
+        <div class="xht-header-item">
+          <menu-lock />
+          <bread-crumb />
+        </div>
+        <div class="xht-header-item">
+          <switch-dark />
+          <page-full-screen />
+          <menu-search />
+          <app-setting />
+          <user-avatar />
+        </div>
+      </el-header>
       <div class="tabs-box-container">
         <tags-view-component />
       </div>
       <el-main class="xht-main-container">
-        <router-view>
-          <template #default="{ Component, route }">
-            <Transition name="main-view-animation" mode="out-in">
-              <keep-alive>
-                <component :is="Component" :key="route.fullPath" class="w-full" />
-              </keep-alive>
-            </Transition>
-          </template>
-        </router-view>
+        <div class="test"></div>
       </el-main>
-      <el-footer class="xht-footer-container">
-        <div class="xht-footer-main">
-          <div class="xht-footer-main-item bg-blue">
-            <bread-crumb />
-          </div>
-        </div>
-      </el-footer>
+      <layout-footer />
     </el-container>
   </el-container>
 </template>
@@ -49,15 +47,26 @@ import type { RouteRecordRaw } from 'vue-router'
 import { useRouter } from 'vue-router'
 import { findMenuChildrenFirst } from '@/layout/components/helper'
 import { useMessage } from '@/hooks/use-message'
+import MenuLock from '@/layout/components/menu-lock/index.vue'
+import { useThemeStore } from '@/store'
+import { storeToRefs } from 'pinia'
+import UserAvatar from '@/layout/components/user-avatar/index.vue'
+import MenuSearch from '@/layout/components/menu-search/index.vue'
+import AppSetting from '@/layout/components/app-setting/index.vue'
+import PageFullScreen from '@/layout/components/page-full-screen/index.vue'
+import SwitchDark from '@/layout/components/switch-dark/index.vue'
+import LayoutFooter from '@/layout/components/layout-footer/index.vue'
 
 defineOptions({
   name: 'LayoutColumns',
 })
 const router = useRouter()
 const menuList = ref<RouteRecordRaw[]>([])
+const themeStore = useThemeStore()
+const { menuStatus } = storeToRefs(themeStore)
 const asideMenuStyle = computed<CSSProperties>(() => {
   return {
-    width: variables.menuWidth,
+    width: menuStatus.value ? variables.menuWidth : variables.menuCollapseWidth,
   }
 })
 const handleMenuClick = async (menuItems: RouteRecordRaw[]) => {
@@ -72,6 +81,14 @@ const handleMenuClick = async (menuItems: RouteRecordRaw[]) => {
 </script>
 
 <style lang="scss" scoped>
+.test {
+  width: 150px;
+  height: 40px;
+  margin: 0 auto;
+  background: red;
+  border-radius: 10px 10px 0 0;
+}
+
 .xht-layout-container {
   width: 100%;
   height: 100%;
@@ -105,6 +122,13 @@ const handleMenuClick = async (menuItems: RouteRecordRaw[]) => {
     padding: 0;
     background-color: var(--xht-header-bg-color);
     border-bottom: 1px solid var(--xht-border-color-light);
+
+    .xht-header-item {
+      height: $header-height;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
   }
 
   .tabs-box-container {
@@ -118,30 +142,6 @@ const handleMenuClick = async (menuItems: RouteRecordRaw[]) => {
     padding: 8px;
     overflow-x: hidden;
     background-color: var(--el-bg-color-page);
-  }
-
-  .xht-footer-container {
-    height: auto;
-    padding: 0;
-
-    .xht-footer-main {
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: $footer-height;
-      padding: 0;
-      overflow: hidden;
-      background-color: var(--el-bg-color);
-      border-top: 1px solid var(--el-border-color-light);
-
-      .xht-footer-main-item {
-        flex: 1;
-        height: 100%;
-        display: flex;
-        align-items: center;
-      }
-    }
   }
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
-  <div class="menu-search layout-header-top-item" @click="show">
-    <div class="icon-common-search text-16px" />
+  <div class="header-tool-item" @click="show">
+    <div class="icon-common-search size-20px" />
     <el-dialog
       v-model="state.visibleStatus"
       :before-close="close"
@@ -122,7 +122,6 @@ const show = () => {
  * 关闭
  */
 const close = () => {
-  if (state.loadingStatus) return
   state.visibleStatus = false
 }
 const initRestaurants = (data: RouteRecordRaw[]) => {

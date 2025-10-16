@@ -17,7 +17,7 @@
   --xht-card-border-color: #e4e7ed;
   --xht-button-hover-bg-color: rgb(0 0 0 / 10%);
   --xht-bg-header-color: #ffffff !important;
-  --xht-hover-bg-color: #f5f7fa;
+
   // 菜单相关
   --xht-menu-background: #ffffff;
   --xht-menu-text: #fff;
@@ -28,8 +28,9 @@
   --xht-fill-color-blank: #ffffff;
   --xht-border-color: #e4e7ed;
   --xht-border-color-light: #e4e7ed;
-
+  --el-fill-color-light: #f5f7fa;
   --xht-menu-bg-color: var(--xht-fill-color-blank);
   --xht-header-bg-color: var(--xht-fill-color-blank);
   --xht-tag-bg-color: var(--xht-fill-color-blank);
+  --xht-hover-bg-color: #f5f7fa;
 }

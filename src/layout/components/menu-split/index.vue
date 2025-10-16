@@ -19,7 +19,7 @@
 import { convertRouteToMenu } from '@/layout/components/helper'
 import DynamicRouter from '@/router/modules/dynamic'
 import { useRouteStore } from '@/store/modules/routes.store'
-import { RouteRecordRaw, useRoute } from 'vue-router'
+import { type RouteLocationNormalizedLoaded, RouteRecordRaw, useRoute } from 'vue-router'
 import type { EmitsType } from '@/layout/components/menu-split/types'
 
 defineOptions({
@@ -42,6 +42,19 @@ const handleMenuClick = (menuItem: RouteRecordRaw) => {
     menuItem.children && menuItem.children.length > 0 ? menuItem.children : [menuItem]
   )
 }
+const changeMenuList = () => {
+  const currentMenuPath = route.matched[0]?.path
+  if (activeMenuPath.value === currentMenuPath) {
+    return
+  }
+  activeMenuPath.value = currentMenuPath
+  menuList.value.forEach((item) => {
+    if (item.path === currentMenuPath) {
+      emits('change', item.children && item.children.length > 0 ? item.children : [item])
+      return
+    }
+  })
+}
 onMounted(() => {
   activeMenuPath.value = route.matched[0]?.path
   menuList.value.forEach((item) => {
@@ -50,6 +63,12 @@ onMounted(() => {
     }
   })
 })
+watch(
+  () => route.path,
+  () => {
+    changeMenuList()
+  }
+)
 </script>
 
 <style scoped lang="scss">
@@ -67,6 +86,7 @@ onMounted(() => {
   }
 
   .xht-split-item {
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     align-items: center;

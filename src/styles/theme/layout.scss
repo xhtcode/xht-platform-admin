@@ -1,6 +1,5 @@
 @use '@/styles/variables.scss';
 
-$header-height: variables.$header-height !default;
 $header-item-width: 40px !default;
 
 .layout-container {
@@ -76,7 +75,6 @@ $header-item-width: 40px !default;
 
         .layout-header-top-item {
           display: flex;
-          height: $header-height;
           justify-content: center;
           align-items: center;
           cursor: pointer;

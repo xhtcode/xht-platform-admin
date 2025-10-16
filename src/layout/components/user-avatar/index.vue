@@ -68,14 +68,11 @@ const openDialog = (type: 'infoRef' | 'passwordRef' | 'logout') => {
 
 <style lang="scss" scoped>
 @use 'sass:math';
-@use '@/styles/theme/layout' with (
-  $header-item-width: auto
-);
 
 .user-info-container {
   .avatar-container {
     height: 100%;
-    line-height: layout.$header-height;
+    line-height: $header-height;
     white-space: nowrap;
     cursor: pointer;
 

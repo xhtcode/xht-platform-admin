@@ -1,8 +1,8 @@
 <template>
-  <div class="page-full-screen layout-header-top-item" @click="toggleFullScreen">
+  <div class="header-tool-item" @click="toggleFullScreen">
     <div
       :class="isFullscreen ? 'icon-common-fullscreen-exit' : 'icon-common-fullscreen'"
-      class="text-18px"
+      class="size-20px"
     />
   </div>
 </template>
