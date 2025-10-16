@@ -46,7 +46,7 @@
 
 .el-menu {
   border: none !important;
-
+  user-select: none;
   .el-menu-item {
     &.is-active {
       background: var(--el-color-primary) !important;

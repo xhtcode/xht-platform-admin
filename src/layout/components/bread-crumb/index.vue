@@ -74,6 +74,7 @@ watch(
   height: 100%;
   display: flex;
   justify-items: center;
+  user-select: none;
 
   :deep(.el-breadcrumb__inner) {
     height: 100%;

@@ -7,7 +7,6 @@
 </template>
 
 <script setup lang="ts">
-import variables from '@/styles/variables.module.scss'
 defineOptions({
   name: 'LayoutFooter',
 })
