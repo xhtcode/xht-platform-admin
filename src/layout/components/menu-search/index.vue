@@ -49,7 +49,7 @@
 import { useRouteStore } from '@/store/modules/routes.store'
 import { useRoute, useRouter } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
-import RegularUtil from '@/utils/RegularUtils'
+import RegularUtil from '@/utils/moudle/RegularUtils'
 import { useMessage } from '@/hooks/use-message'
 
 defineOptions({

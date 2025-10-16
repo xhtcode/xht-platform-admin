@@ -20,7 +20,7 @@
 import MenuItem from '@/layout/components/menu-item/index.vue'
 import type { RouteRecordRaw } from 'vue-router'
 import { useRouter } from 'vue-router'
-import RegularUtil from '@/utils/RegularUtils'
+import RegularUtil from '@/utils/moudle/RegularUtils'
 import { useMessage } from '@/hooks/use-message'
 
 defineOptions({ name: 'MenuItemComponent' })

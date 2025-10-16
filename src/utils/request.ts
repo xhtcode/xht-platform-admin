@@ -14,13 +14,7 @@ import {
   HEADER_USER_ACCOUNT,
   HEADER_USER_ID,
 } from '@/service/constant'
-
-// 生成唯一追踪ID，用于请求链路追踪
-const generateTraceId = (): string => {
-  const timestamp = Date.now().toString(36)
-  const randomStr = Math.random().toString(36).substring(2, 10)
-  return `${timestamp}-${randomStr}`
-}
+import { generateUUID } from '@/utils/index'
 
 // 默认配置
 const defaultConfig: AxiosRequestConfig = {
@@ -56,7 +50,7 @@ service.interceptors.request.use(
     }
 
     // 设置链路追踪ID
-    config.headers.set(HEADER_TRACE_ID, generateTraceId())
+    config.headers.set(HEADER_TRACE_ID, generateUUID())
 
     // 修正用户信息头映射（避免原代码中的赋值错误）
     if (userStore.getUserId) {
@@ -89,7 +83,7 @@ service.interceptors.response.use(
     }
 
     // 处理JSON响应
-    const { code, msg, data } = response.data
+    const { code, msg } = response.data
     // 成功状态码（根据实际业务调整）
     if (code === 200) {
       return response.data
