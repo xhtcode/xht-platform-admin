@@ -41,7 +41,7 @@ const menuLists = computed<any>(() => {
  * 菜单点击
  * @param subItem
  */
-const handleClickMenu = async (subItem: RouteRecordRaw) => {
+const handleClickMenu = (subItem: RouteRecordRaw) => {
   if (subItem.meta?.linkStatus) {
     if (RegularUtil.isExternal(subItem.path)) {
       return window.open(subItem.path, '_blank')
@@ -51,7 +51,7 @@ const handleClickMenu = async (subItem: RouteRecordRaw) => {
     })
     return window.open(href.href, '_blank')
   }
-  await router.push(subItem.path).catch((_) => {
+  router.push(subItem.path).catch((_) => {
     useMessage().error('路由错误，请联系管理员!' + subItem.path)
   })
 }

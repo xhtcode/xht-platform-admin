@@ -29,7 +29,7 @@
         <tags-view-component />
       </div>
       <el-main class="xht-main-container">
-        <div class="test"></div>
+        <router-view />
       </el-main>
       <layout-footer />
     </el-container>
@@ -69,26 +69,26 @@ const asideMenuStyle = computed<CSSProperties>(() => {
     width: menuStatus.value ? variables.menuWidth : variables.menuCollapseWidth,
   }
 })
-const handleMenuClick = async (menuItems: RouteRecordRaw[]) => {
+
+/**
+ * 菜单点击事件
+ * @param menuItems - 菜单列表
+ * @param linkStatus - 菜单是否跳转
+ */
+const handleMenuClick = async (menuItems: RouteRecordRaw[], linkStatus: boolean) => {
   menuList.value = menuItems
-  const menuChildrenFirst = findMenuChildrenFirst(menuItems)
-  if (menuChildrenFirst) {
-    await router.push(menuChildrenFirst.path).catch((_) => {
-      useMessage().error('路由错误，请联系管理员!')
-    })
+  if (linkStatus) {
+    const menuChildrenFirst = findMenuChildrenFirst(menuItems)
+    if (menuChildrenFirst) {
+      await router.push(menuChildrenFirst.path).catch((_) => {
+        useMessage().error('路由错误，请联系管理员!')
+      })
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.test {
-  width: 150px;
-  height: 40px;
-  margin: 0 auto;
-  background: red;
-  border-radius: 10px 10px 0 0;
-}
-
 .xht-layout-container {
   width: 100%;
   height: 100%;

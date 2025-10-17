@@ -4,7 +4,7 @@
     :virtual-ref="triggerRef"
     virtual-triggering
     trigger="contextmenu"
-    placement="bottom"
+    placement="bottom-end"
     @command="commandTrigger"
   >
     <template #dropdown>
@@ -28,17 +28,17 @@
   </el-dropdown>
 </template>
 <script lang="ts" setup>
-import type { ContextMenuSchemaType, PropsTypes } from '@/components/context-menu/types'
+import type { ContextMenuSchemaType, PropsTypes } from '@/layout/components/tags-view/types'
 import { ref, shallowRef, useTemplateRef } from 'vue'
 
-defineOptions({ name: 'ContextMenu' })
+defineOptions({ name: 'TagsContextMenu' })
 
 // 获取dropdown组件的引用
 const dropdownRef = useTemplateRef('dropdownRef')
 
 // 定义事件发射器
 const emits = defineEmits<{
-  (e: 'change', type: OperationType | string, tagItem: any): void
+  (e: 'change', type: OperationType | string): void
 }>()
 
 // 定义组件props，默认值设置
@@ -66,7 +66,7 @@ const itemData = shallowRef<any>()
 
 // 菜单项点击处理函数
 const commandTrigger = (menuItem: ContextMenuSchemaType) => {
-  emits('change', menuItem.command as string, itemData.value)
+  emits('change', menuItem.command as string)
 }
 
 // 打开右键菜单函数

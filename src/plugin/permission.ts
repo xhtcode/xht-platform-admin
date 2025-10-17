@@ -18,7 +18,7 @@ NProgress.configure({ showSpinner: false })
 const whiteList = ['/login']
 
 export function setupPermission() {
-  router.beforeEach(async (to, from, next) => {
+  router.beforeEach(async (to, _, next) => {
     NProgress.start()
     const userInfoStore = useUserInfoStore()
     const routeStore = useRouteStore()
@@ -50,7 +50,8 @@ export function setupPermission() {
             query: to.query,
             replace: true,
           })
-        } catch {
+        } catch (e) {
+          console.error('路由错误', e)
           await userInfoStore.logout()
           next({ path: PAGE_PATH_LOGIN })
         }

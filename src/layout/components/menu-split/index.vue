@@ -19,19 +19,20 @@
 import { convertRouteToMenu } from '@/layout/components/helper'
 import DynamicRouter from '@/router/modules/dynamic'
 import { useRouteStore } from '@/store/modules/routes.store'
-import { type RouteLocationNormalizedLoaded, RouteRecordRaw, useRoute } from 'vue-router'
+import { RouteRecordRaw, useRoute, useRouter } from 'vue-router'
 import type { EmitsType } from '@/layout/components/menu-split/types'
 
 defineOptions({
   name: 'MenuSplit',
 })
 const route = useRoute()
+const router = useRouter()
 const emits = defineEmits<EmitsType>()
 const routeStore = useRouteStore()
 const menuList = computed<RouteRecordRaw[]>(() => {
   return convertRouteToMenu(DynamicRouter.concat(routeStore.routesRaw))
 })
-const activeMenuPath = ref<string>(menuList.value[0].path)
+const activeMenuPath = ref<string>('')
 const handleMenuClick = (menuItem: RouteRecordRaw) => {
   if (activeMenuPath.value === menuItem.path) {
     return
@@ -39,33 +40,36 @@ const handleMenuClick = (menuItem: RouteRecordRaw) => {
   activeMenuPath.value = menuItem.path
   emits(
     'change',
-    menuItem.children && menuItem.children.length > 0 ? menuItem.children : [menuItem]
+    menuItem.children && menuItem.children.length > 0 ? menuItem.children : [menuItem],
+    false
   )
 }
 const changeMenuList = () => {
-  const currentMenuPath = route.matched[0]?.path
+  const currentMenuPath = router.currentRoute.value.matched[0]?.path
   if (activeMenuPath.value === currentMenuPath) {
     return
   }
   activeMenuPath.value = currentMenuPath
   menuList.value.forEach((item) => {
     if (item.path === currentMenuPath) {
-      emits('change', item.children && item.children.length > 0 ? item.children : [item])
+      emits('change', item.children && item.children.length > 0 ? item.children : [item], true)
       return
     }
   })
 }
 onMounted(() => {
-  activeMenuPath.value = route.matched[0]?.path
+  console.log(route.path)
+  activeMenuPath.value = router.currentRoute.value.matched[0]?.path
   menuList.value.forEach((item) => {
     if (item.path === activeMenuPath.value) {
-      emits('change', item.children && item.children.length > 0 ? item.children : [item])
+      emits('change', item.children && item.children.length > 0 ? item.children : [item], false)
     }
   })
 })
 watch(
   () => route.path,
   () => {
+    console.log(route.path)
     changeMenuList()
   }
 )

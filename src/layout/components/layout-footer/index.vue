@@ -19,6 +19,7 @@ defineOptions({
   background-color: var(--el-bg-color-page);
   display: block;
   unicode-bidi: isolate;
+  user-select: none;
   .xht-footer-main {
     position: relative;
     display: flex;

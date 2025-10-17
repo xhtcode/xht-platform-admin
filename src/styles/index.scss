@@ -5,6 +5,13 @@
 @use '@/styles/theme/layout.scss';
 @use 'sass:math';
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  outline: none !important;
+}
+
 html,
 body,
 #app {

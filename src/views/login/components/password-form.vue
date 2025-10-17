@@ -29,7 +29,7 @@
     </el-form-item>
     <el-form-item prop="captcha_code">
       <div class="captcha-container">
-        <el-input v-model="loginForm.captcha_code" placeholder="验证码" class="login-input">
+        <el-input v-model.number="loginForm.captcha_code" placeholder="验证码" class="login-input">
           <template #prefix>
             <div class="icon-login-code h-1rem w-1rem color-[var(--color)]" />
           </template>
