@@ -19,27 +19,15 @@
 
 //=================== 自定义颜色选择器样式 ===================
 .custom-color-picker {
-  .el-color-dropdown__link-btn {
-    display: none !important;
-  }
+  .el-color-picker-panel__footer {
+    justify-content: flex-end !important;
 
-  .el-color-dropdown__btns {
-    position: relative;
-  }
+    .el-input {
+      display: none;
+    }
 
-  .el-color-dropdown__value {
-    //添加一层挡板禁止输入
-    &:before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      z-index: 1;
-      // 和父级宽度一致
-      height: revert;
-      width: 70%;
+    .el-button:first-child {
+      display: none;
     }
   }
 }
@@ -71,9 +59,7 @@
     text-align: center;
     justify-content: center;
   }
-
 }
-
 
 //=================== 表单控件样式修改 ===================
 .el-form {

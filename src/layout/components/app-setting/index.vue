@@ -12,30 +12,16 @@
         ref="queryFormRef"
         :disabled="state.loadingStatus"
         class="user-select-display app-setting-form"
-        label-width="120px"
+        label-width="80px"
         size="default"
       >
-        <el-divider>全局配置</el-divider>
-        <el-form-item label="语言/Language">
-          <el-select v-model="languageType" placeholder="请选择语言">
-            <el-option label="中文" :value="AppLanguageEnums.ZH_CN" />
-            <el-option label="英文" :value="AppLanguageEnums.EN" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="组件大小">
-          <el-radio-group v-model="sizeType">
-            <el-radio-button :value="ComponentSizeEnums.LARGE" label="大型" />
-            <el-radio-button :value="ComponentSizeEnums.DEFAULT" label="默认" />
-            <el-radio-button :value="ComponentSizeEnums.SMALL" label="小型" />
-          </el-radio-group>
-        </el-form-item>
+        <el-divider>布局样式</el-divider>
         <el-form-item label="水印内容">
           <el-input v-model="watermarkContent" disabled placeholder="请输入水印内容" />
         </el-form-item>
-        <el-divider>颜色主题风格</el-divider>
+        <el-divider>主题设置</el-divider>
         <el-form-item label="主题颜色">
           <el-color-picker
-            id="test"
             v-model="colorType"
             popper-class="custom-color-picker"
             :predefine="predefineColors"
@@ -64,7 +50,14 @@
             :inactive-value="false"
           />
         </el-form-item>
-        <el-divider>导航栏</el-divider>
+        <el-divider>界面设置</el-divider>
+        <el-form-item label="组件大小">
+          <el-radio-group v-model="sizeType">
+            <el-radio-button :value="ComponentSizeEnums.LARGE" label="大型" />
+            <el-radio-button :value="ComponentSizeEnums.DEFAULT" label="默认" />
+            <el-radio-button :value="ComponentSizeEnums.SMALL" label="小型" />
+          </el-radio-group>
+        </el-form-item>
         <el-form-item label="面包屑">
           <el-switch
             v-model="breadcrumb"
@@ -74,7 +67,6 @@
             :inactive-value="false"
           />
         </el-form-item>
-        <el-divider>布局设置</el-divider>
         <el-form-item label="标签页">
           <el-switch
             v-model="tagsViewStatus"
@@ -142,15 +134,12 @@ const predefineColors = ref([
   '#ffd700',
   '#90ee90',
   '#00ced1',
-  '#1e90ff',
   '#c71585',
 ])
 /**
  * 禁用 颜色选择器
  */
-const displayColorPicker = computed(
-  () => darkStatus.value || mournModeStatus.value || colorWeaknessModeStatus.value
-)
+const displayColorPicker = computed(() => mournModeStatus.value || colorWeaknessModeStatus.value)
 /**
  * 恢复默认配置
  */
@@ -166,11 +155,3 @@ const resetSetting = () => {
   colorWeaknessModeStatus.value = false
 }
 </script>
-<style>
-.app-setting-form {
-  .el-form-item__label {
-    user-select: none;
-    font-weight: bold;
-  }
-}
-</style>

@@ -10,6 +10,10 @@ export const useThemeStore = defineStore(
   'theme',
   (): ThemeStoreType => {
     /**
+     * 布局类型
+     */
+    const layoutType = ref<'default' | 'columns'>('columns')
+    /**
      * 设备类型
      */
     const device = ref<DeviceEnums>(DeviceEnums.MOBILE)
@@ -62,10 +66,17 @@ export const useThemeStore = defineStore(
      * 默认主题颜色
      */
     const colorType = ref<string>(DefaultThemeColor)
+    /**
+     * 哀悼模式
+     */
     const mournModeStatus = ref<boolean>(false)
+    /**
+     * 色弱模式
+     */
     const colorWeaknessModeStatus = ref<boolean>(false)
 
     return {
+      layoutType,
       device,
       sidebarStatus,
       darkStatus,
@@ -83,6 +94,7 @@ export const useThemeStore = defineStore(
   },
   {
     persist: pInIaPersistConfig('theme', [
+      'layoutType',
       'darkStatus',
       'menuStatus',
       'breadcrumb',

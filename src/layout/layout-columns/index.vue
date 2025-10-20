@@ -108,28 +108,5 @@ const handleMenuClick = async (menuItems: RouteRecordRaw[], linkStatus: boolean)
     border-right: 1px solid var(--xht-border-color);
     transition: width 0.3s ease;
   }
-
-  .xht-header-container {
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: $header-height;
-    padding: 0;
-    background-color: var(--xht-header-bg-color);
-    border-bottom: 1px solid var(--xht-border-color-light);
-
-    .xht-header-item {
-      height: $header-height;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-  }
-
-  .tabs-box-container {
-    background-color: var(--xht-tag-bg-color);
-    width: 100%;
-  }
 }
 </style>

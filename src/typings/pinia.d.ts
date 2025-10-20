@@ -40,6 +40,7 @@ declare global {
    * 存储应用的主题相关配置状态
    */
   interface ThemeStoreType {
+    layoutType: Ref<'default' | 'columns'>
     /**
      * 设备类型
      */

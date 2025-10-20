@@ -3,7 +3,7 @@
     <router-view>
       <template #default="{ Component, route }">
         <Transition name="main-view-animation" mode="out-in">
-          <keep-alive  v-if="refreshStatus">
+          <keep-alive v-if="refreshStatus">
             <component :is="Component" :key="route.fullPath" class="w-full" />
           </keep-alive>
         </Transition>

@@ -1,52 +1,52 @@
 <template>
-  <el-container class="layout-container">
+  <el-container class="xht-layout-container">
     <div v-if="mobileShowStatus" class="layout__overlay" @click="handleCloseSidebar" />
     <div v-if="mobileShowStatus" class="layout__sidebar">
       <layout-aside />
     </div>
     <layout-aside v-if="desktopShowStatus" />
-    <el-container class="layout-container-view">
-      <el-scrollbar always>
-        <layout-header ref="headerRef" />
-        <el-main class="layout-main" :style="mainStyle">
-          <el-scrollbar
-            class="layout-main-scrollbar"
-            view-class="layout-main-scrollbar"
-            wrap-class="layout-main-scrollbar"
-          >
-            <div class="layout-main-parent">
-              <router-view>
-                <template #default="{ Component, route }">
-                  <Transition name="main-view-animation" mode="out-in">
-                    <keep-alive>
-                      <component :is="Component" :key="route.fullPath" class="w-full" />
-                    </keep-alive>
-                  </Transition>
-                </template>
-              </router-view>
-            </div>
-            <el-footer v-if="footerStatus" ref="footerRef" class="layout-footer user-select-none">
-              小糊涂后台管理系统
-            </el-footer>
-          </el-scrollbar>
-        </el-main>
-      </el-scrollbar>
+    <el-container class="w-full h-full">
+      <el-header class="xht-header-container">
+        <div class="xht-header-item">
+          <menu-lock />
+          <bread-crumb />
+        </div>
+        <div class="xht-header-item">
+          <switch-dark />
+          <page-full-screen />
+          <menu-search />
+          <app-setting />
+          <user-avatar />
+        </div>
+      </el-header>
+      <div class="tabs-box-container">
+        <tags-view />
+      </div>
+      <layout-main />
+      <layout-footer />
     </el-container>
   </el-container>
 </template>
 <script setup lang="ts">
-import LayoutHeader from '@/layout/components/layout-header/index.vue'
 import { useThemeStore } from '@/store'
 import { storeToRefs } from 'pinia'
 import LayoutAside from '@/layout/components/layout-aside/index.vue'
 import { useThemeHooks } from '@/hooks/use-theme-hooks'
+import MenuSearch from '@/layout/components/menu-search/index.vue'
+import MenuLock from '@/layout/components/menu-lock/index.vue'
+import BreadCrumb from '@/layout/components/bread-crumb/index.vue'
+import PageFullScreen from '@/layout/components/page-full-screen/index.vue'
+import UserAvatar from '@/layout/components/user-avatar/index.vue'
+import AppSetting from '@/layout/components/app-setting/index.vue'
+import SwitchDark from '@/layout/components/switch-dark/index.vue'
+import LayoutFooter from '@/layout/components/layout-footer/index.vue'
+import TagsView from '@/layout/components/tags-view/index.vue'
+import LayoutMain from '@/layout/components/layout-main/index.vue'
 
 defineOptions({ name: 'LayoutDefaultComponent' })
-const headerRef = useTemplateRef('headerRef')
-const footerRef = useTemplateRef('footerRef')
 const themeStore = useThemeStore()
-const { footerStatus, sidebarStatus } = storeToRefs(themeStore)
-const { mainStyle, desktopShowStatus, mobileShowStatus, asideStyle } = useThemeHooks()
+const { sidebarStatus } = storeToRefs(themeStore)
+const { desktopShowStatus, mobileShowStatus, asideStyle } = useThemeHooks()
 
 /**
  * 处理遮罩层点击事件，关闭侧边栏
@@ -84,5 +84,4 @@ function handleCloseSidebar() {
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.3);
 }
-
 </style>
