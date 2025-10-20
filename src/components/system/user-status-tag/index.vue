@@ -1,11 +1,11 @@
 <template>
-  <el-tag :color="getTagColor(props.status)" hit disable-transitions effect="dark">
+  <el-tag class="user-status-tag" :color="getTagColor(props.status)">
     {{ getStatusLabel(props.status) }}
   </el-tag>
 </template>
 
 <script lang="ts" setup>
-import { UserStatusEnums } from '@/service/model/system/user.model'
+import { UserStatusColor, UserStatusDesc, UserStatusEnums } from '@/service/model/system/user.model'
 import type { UserStatusTagProps } from '@/components/system/user-status-tag/types'
 
 defineOptions({ name: 'UserStatusTag', inheritAttrs: false })
@@ -13,45 +13,18 @@ defineOptions({ name: 'UserStatusTag', inheritAttrs: false })
 const props = withDefaults(defineProps<UserStatusTagProps>(), {})
 // 根据状态值返回对应的标签颜色
 const getTagColor = (status: UserStatusEnums) => {
-  switch (status) {
-    case UserStatusEnums.NORMAL:
-      return '#67c23a' // 绿色
-    case UserStatusEnums.DISABLE:
-      return '#909399' // 灰色
-    case UserStatusEnums.LOCKED:
-      return '#e6a23c' // 橙色
-    case UserStatusEnums.EXPIRED:
-      return '#f56c6c' // 红色
-    case UserStatusEnums.FORBIDDEN:
-      return '#f56c6c' // 红色
-    case UserStatusEnums.UNREGISTER:
-      return '#909399' // 灰色
-    case UserStatusEnums.OTHER:
-      return '#909399' // 灰色
-    default:
-      return ''
-  }
+  return UserStatusColor[status]
 }
 
 // 根据状态值返回对应的标签文本
 const getStatusLabel = (status: UserStatusEnums) => {
-  switch (status) {
-    case UserStatusEnums.NORMAL:
-      return '正常状态'
-    case UserStatusEnums.DISABLE:
-      return '禁用状态'
-    case UserStatusEnums.LOCKED:
-      return '锁定状态'
-    case UserStatusEnums.EXPIRED:
-      return '过期状态'
-    case UserStatusEnums.FORBIDDEN:
-      return '禁止登录状态'
-    case UserStatusEnums.UNREGISTER:
-      return '未注册状态'
-    case UserStatusEnums.OTHER:
-      return '其他状态'
-    default:
-      return '未知状态'
-  }
+  return UserStatusDesc[status]
 }
 </script>
+<style lang="scss" scoped>
+.user-status-tag {
+  border-width: 0 !important;
+  color: #ffffff;
+  user-select: none;
+}
+</style>

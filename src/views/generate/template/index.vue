@@ -59,8 +59,8 @@
         <el-table-column label="模板数量" prop="templateCount" width="80" />
         <el-table-column label="分组描述" prop="groupSort" width="80" />
         <el-table-column label="分组描述" prop="groupDesc" width="260" show-overflow-tooltip />
-        <el-table-column label="创建时间" prop="createTime" width="200" />
-        <el-table-column label="更新时间" prop="updateTime" width="200" />
+        <el-table-column label="创建时间" prop="createTime" width="180" />
+        <el-table-column label="更新时间" prop="updateTime" width="180" />
         <el-table-column align="center" fixed="right" label="操作" width="260px">
           <template #default="{ row }">
             <el-button icon="view" link type="primary" @click="handleView(row)">模板查看</el-button>

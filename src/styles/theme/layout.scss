@@ -182,6 +182,9 @@ $header-item-width: 40px !default;
     width: 100%;
   }
 
+  .xht-view-container-none {
+    padding: 0 !important;
+  }
   .xht-view-container {
     display: flex;
     flex-direction: column;
@@ -189,7 +192,7 @@ $header-item-width: 40px !default;
     height: 100%;
     overflow-x: hidden;
     box-sizing: border-box;
-    padding: 8px !important;
+    padding: 10px !important;
     background: var(--xht-bg-color);
     border: 1px solid var(--xht-border-color);
     border-radius: 6px;
@@ -199,6 +202,10 @@ $header-item-width: 40px !default;
       display: flex;
       flex: 1;
       flex-direction: column;
+    }
+
+    .xht-view-main-padding {
+      padding: 10px;
     }
   }
 }

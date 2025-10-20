@@ -1,170 +1,166 @@
 <template>
-  <div class="xht-view-container">
+  <div class="xht-view-container xht-view-container-none">
     <el-splitter>
-      <el-splitter-panel size="20%" :resizable="false" collapsible>
-        <div class="xht-view-main">
-          <dept-tree ref="deptTreeRef" @click-node="handleDeptClick" />
-        </div>
+      <el-splitter-panel size="20%" class="xht-view-main" :resizable="false" collapsible>
+        <dept-tree ref="deptTreeRef" @click-node="handleDeptClick" />
       </el-splitter-panel>
-      <el-splitter-panel size="80%" :resizable="false" collapsible>
-        <div class="xht-view-main">
-          <el-form
-            ref="queryFormRef"
-            :disabled="state.loadingStatus"
-            :model="queryParams"
-            class="user-select-display"
-            label-width="80px"
+      <el-splitter-panel size="80%" class="xht-view-main xht-view-main-padding" :resizable="false">
+        <el-form
+          ref="queryFormRef"
+          :disabled="state.loadingStatus"
+          :model="queryParams"
+          class="user-select-display"
+          label-width="80px"
+        >
+          <el-row v-if="!state.searchStatus">
+            <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="4">
+              <el-form-item label="关键字" prop="keyWord">
+                <el-input v-model="queryParams.keyWord" placeholder="请输入关键字" />
+              </el-form-item>
+            </el-col>
+            <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="4" class="text-center">
+              <el-button icon="Search" type="primary" @click="queryPostData">查询</el-button>
+              <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+            </el-col>
+          </el-row>
+          <el-row v-else>
+            <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="4">
+              <el-form-item label="岗位编码" prop="postCode">
+                <el-input
+                  v-model="queryParams.postCode"
+                  class="w100"
+                  :maxlength="50"
+                  show-word-limit
+                  placeholder="请输入岗位编码"
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="4">
+              <el-form-item label="岗位名称" prop="postName">
+                <el-input
+                  v-model="queryParams.postName"
+                  class="w100"
+                  :maxlength="50"
+                  show-word-limit
+                  placeholder="请输入岗位名称"
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="4">
+              <el-form-item label="岗位状态" prop="postStatus">
+                <el-select
+                  v-model="queryParams.postStatus"
+                  class="w100"
+                  placeholder="请选择岗位状态"
+                >
+                  <el-option label="正常" :value="SysDeptPostStatusEnums.NORMAL" />
+                  <el-option label="停用" :value="SysDeptPostStatusEnums.DISABLE" />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="4">
+              <el-form-item label="系统内置" prop="systemFlag">
+                <el-select
+                  v-model="queryParams.systemFlag"
+                  class="w100"
+                  placeholder="请选择系统内置"
+                >
+                  <el-option label="正常" :value="SystemFlagEnums.YES" />
+                  <el-option label="停用" :value="SystemFlagEnums.NO" />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :offset="8" :xs="24" :sm="12" :md="8" :lg="8" :xl="4" class="text-center">
+              <el-button icon="Search" type="primary" @click="queryPostData">查询</el-button>
+              <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+            </el-col>
+          </el-row>
+        </el-form>
+        <table-tool-bar
+          v-model:show-search="state.searchStatus"
+          :column-data="[]"
+          column-status
+          refresh-status
+          search-status
+          @refresh="queryPostData"
+        >
+          <el-button icon="Plus" size="small" type="primary" @click="handleAdd">新增</el-button>
+          <el-button
+            icon="Edit"
+            size="small"
+            type="success"
+            :disabled="state.singleStatus"
+            @click="handleEdit(state.selectedRows[0])"
           >
-            <el-row v-if="!state.searchStatus">
-              <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="4">
-                <el-form-item label="关键字" prop="keyWord">
-                  <el-input v-model="queryParams.keyWord" placeholder="请输入关键字" />
-                </el-form-item>
-              </el-col>
-              <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="4" class="text-center">
-                <el-button icon="Search" type="primary" @click="queryPostData">查询</el-button>
-                <el-button icon="Refresh" @click="resetQuery">重置</el-button>
-              </el-col>
-            </el-row>
-            <el-row v-else>
-              <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="4">
-                <el-form-item label="岗位编码" prop="postCode">
-                  <el-input
-                    v-model="queryParams.postCode"
-                    class="w100"
-                    :maxlength="50"
-                    show-word-limit
-                    placeholder="请输入岗位编码"
-                  />
-                </el-form-item>
-              </el-col>
-              <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="4">
-                <el-form-item label="岗位名称" prop="postName">
-                  <el-input
-                    v-model="queryParams.postName"
-                    class="w100"
-                    :maxlength="50"
-                    show-word-limit
-                    placeholder="请输入岗位名称"
-                  />
-                </el-form-item>
-              </el-col>
-              <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="4">
-                <el-form-item label="岗位状态" prop="postStatus">
-                  <el-select
-                    v-model="queryParams.postStatus"
-                    class="w100"
-                    placeholder="请选择岗位状态"
-                  >
-                    <el-option label="正常" :value="SysDeptPostStatusEnums.NORMAL" />
-                    <el-option label="停用" :value="SysDeptPostStatusEnums.DISABLE" />
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="4">
-                <el-form-item label="系统内置" prop="systemFlag">
-                  <el-select
-                    v-model="queryParams.systemFlag"
-                    class="w100"
-                    placeholder="请选择系统内置"
-                  >
-                    <el-option label="正常" :value="SystemFlagEnums.YES" />
-                    <el-option label="停用" :value="SystemFlagEnums.NO" />
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <el-col :offset="8" :xs="24" :sm="12" :md="8" :lg="8" :xl="4" class="text-center">
-                <el-button icon="Search" type="primary" @click="queryPostData">查询</el-button>
-                <el-button icon="Refresh" @click="resetQuery">重置</el-button>
-              </el-col>
-            </el-row>
-          </el-form>
-          <table-tool-bar
-            v-model:show-search="state.searchStatus"
-            :column-data="[]"
-            column-status
-            refresh-status
-            search-status
-            @refresh="queryPostData"
+            修改
+          </el-button>
+          <el-button
+            icon="Delete"
+            size="small"
+            type="danger"
+            :disabled="state.multipleStatus"
+            @click="handleBatchDelete"
           >
-            <el-button icon="Plus" size="small" type="primary" @click="handleAdd">新增</el-button>
-            <el-button
-              icon="Edit"
-              size="small"
-              type="success"
-              :disabled="state.singleStatus"
-              @click="handleEdit(state.selectedRows[0])"
-            >
-              修改
-            </el-button>
-            <el-button
-              icon="Delete"
-              size="small"
-              type="danger"
-              :disabled="state.multipleStatus"
-              @click="handleBatchDelete"
-            >
-              批量删除
-            </el-button>
-          </table-tool-bar>
-          <el-table
-            v-loading="state.loadingStatus"
-            :data="state.tableList"
-            :header-cell-style="headerCellStyle"
-            :cell-style="cellStyle"
-            class="flex-1"
-            current-row-key="id"
-            border
-            :empty-text="queryParams.deptId ? '该部门下未添加岗位信息' : '未选择要查询的部门'"
-            @selection-change="handleSelectionChange"
-          >
-            <el-table-column type="selection" width="55" align="center" />
-            <el-table-column :index="createTableIndex" label="序号" type="index" width="55" />
-            <el-table-column prop="postCode" label="岗位编码" width="120" />
-            <el-table-column prop="postName" label="岗位名称" width="220" />
-            <el-table-column prop="postLimit" label="员工统计" width="120">
-              <template #default="{ row }">
-                <el-tag :type="row.postHave >= row.postLimit ? 'danger' : 'success'">
-                  {{ row.postHave }} /
-                  {{ row.postLimit ? row.postLimit : '异常' }}
-                </el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column prop="postStatus" label="岗位状态" width="120">
-              <template #default="{ row }">
-                <el-tag v-if="row.postStatus === 0" type="success">启用</el-tag>
-                <el-tag v-else type="danger">禁用</el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column prop="systemFlag" label="系统内置" width="100">
-              <template #default="{ row }">
-                <el-tag v-if="row.systemFlag === 0" type="success">是</el-tag>
-                <el-tag v-else type="danger">否</el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column prop="postSort" label="岗位排序" width="100" />
-            <el-table-column prop="remark" label="岗位描述" width="260" show-overflow-tooltip />
-            <el-table-column label="创建时间" prop="createTime" width="160" />
-            <el-table-column label="更新时间" prop="updateTime" width="160" />
-            <el-table-column label="创建人" prop="createBy" width="160" />
-            <el-table-column label="更新人" prop="updateBy" width="160" />
-            <el-table-column fixed="right" label="操作" width="260px">
-              <template #default="{ row }">
-                <el-button icon="edit" link type="success" @click="handleEdit(row)">修改</el-button>
-                <el-button icon="delete" link type="danger" @click="handleDelete(row)">
-                  删除
-                </el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-          <xht-pagination
-            v-model:current-page="state.queryParams.current"
-            v-model:page-size="state.queryParams.size"
-            :page-count="state.pages"
-            :total="state.total"
-            @pagination="queryPostData"
-          />
-        </div>
+            批量删除
+          </el-button>
+        </table-tool-bar>
+        <el-table
+          v-loading="state.loadingStatus"
+          :data="state.tableList"
+          :header-cell-style="headerCellStyle"
+          :cell-style="cellStyle"
+          class="flex-1"
+          current-row-key="id"
+          border
+          :empty-text="queryParams.deptId ? '该部门下未添加岗位信息' : '未选择要查询的部门'"
+          @selection-change="handleSelectionChange"
+        >
+          <el-table-column type="selection" width="55" align="center" />
+          <el-table-column :index="createTableIndex" label="序号" type="index" width="55" />
+          <el-table-column prop="postCode" label="岗位编码" width="120" />
+          <el-table-column prop="postName" label="岗位名称" width="220" />
+          <el-table-column prop="postLimit" label="员工统计" width="120">
+            <template #default="{ row }">
+              <el-tag :type="row.postHave >= row.postLimit ? 'danger' : 'success'">
+                {{ row.postHave }} /
+                {{ row.postLimit ? row.postLimit : '异常' }}
+              </el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column prop="postStatus" label="岗位状态" width="120">
+            <template #default="{ row }">
+              <el-tag v-if="row.postStatus === 0" type="success">启用</el-tag>
+              <el-tag v-else type="danger">禁用</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column prop="systemFlag" label="系统内置" width="100">
+            <template #default="{ row }">
+              <el-tag v-if="row.systemFlag === 0" type="success">是</el-tag>
+              <el-tag v-else type="danger">否</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column prop="postSort" label="岗位排序" width="100" />
+          <el-table-column prop="remark" label="岗位描述" width="260" show-overflow-tooltip />
+          <el-table-column label="创建时间" prop="createTime" width="180" />
+          <el-table-column label="更新时间" prop="updateTime" width="180" />
+          <el-table-column label="创建人" prop="createBy" width="160" />
+          <el-table-column label="更新人" prop="updateBy" width="160" />
+          <el-table-column fixed="right" label="操作" width="260px">
+            <template #default="{ row }">
+              <el-button icon="edit" link type="success" @click="handleEdit(row)">修改</el-button>
+              <el-button icon="delete" link type="danger" @click="handleDelete(row)">
+                删除
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <xht-pagination
+          v-model:current-page="state.queryParams.current"
+          v-model:page-size="state.queryParams.size"
+          :page-count="state.pages"
+          :total="state.total"
+          @pagination="queryPostData"
+        />
       </el-splitter-panel>
       <dept-post-form ref="deptPostFormRef" @success="queryPostData" />
     </el-splitter>

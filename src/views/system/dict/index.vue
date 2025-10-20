@@ -109,8 +109,8 @@
           </template>
         </el-table-column>
         <el-table-column label="字典描述" prop="remark" width="220" />
-        <el-table-column label="创建时间" prop="createTime" width="220" />
-        <el-table-column label="更新时间" prop="updateTime" width="220" />
+        <el-table-column label="创建时间" prop="createTime" width="180" />
+        <el-table-column label="更新时间" prop="updateTime" width="180" />
         <el-table-column label="创建人" prop="createBy" width="160" />
         <el-table-column label="更新人" prop="updateBy" width="160" />
         <el-table-column fixed="right" label="操作" width="220px">

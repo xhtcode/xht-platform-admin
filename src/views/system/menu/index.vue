@@ -186,8 +186,8 @@
             <el-link type="default">{{ row.menuPath }}</el-link>
           </template>
         </el-table-column>
-        <el-table-column label="创建时间" prop="createTime" width="220" align="center" />
-        <el-table-column label="更新时间" prop="updateTime" width="220" align="center" />
+        <el-table-column label="创建时间" prop="createTime" width="180" align="center" />
+        <el-table-column label="更新时间" prop="updateTime" width="180" align="center" />
         <el-table-column label="创建人" prop="createBy" width="160" align="center" />
         <el-table-column label="更新人" prop="updateBy" width="160" align="center" />
 
