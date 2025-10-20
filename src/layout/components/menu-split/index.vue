@@ -41,7 +41,7 @@ const handleMenuClick = (menuItem: RouteRecordRaw) => {
   emits(
     'change',
     menuItem.children && menuItem.children.length > 0 ? menuItem.children : [menuItem],
-    false
+    true
   )
 }
 const changeMenuList = () => {

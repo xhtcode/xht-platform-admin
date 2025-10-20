@@ -14,7 +14,7 @@ const StaticRouter: RouteRecordRaw[] = [
     path: '/redirect/:path(.*)',
     name: 'RedirectViewIndex',
     component: () => import('@/views/other/redirect.vue'),
-    meta: { breadCrumbStatus: true, hiddenStatus: true },
+    meta: { title: '用于同路由刷新', breadCrumbStatus: true, hiddenStatus: true },
   },
   {
     path: '/:path(.*)*',

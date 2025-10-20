@@ -26,7 +26,12 @@
         <ArrowDownBold />
       </el-icon>
     </div>
-    <tags-tool-menu ref="contextMenuRef" :menu-list="menuList" @change="commandTrigger" />
+    <tags-tool-menu
+      ref="contextMenuRef"
+      :disabled="loadingStatus"
+      :menu-list="menuList"
+      @change="commandTrigger"
+    />
   </div>
 </template>
 <script lang="ts" setup>
@@ -39,8 +44,9 @@ import type { ContextMenuSchemaType } from '@/layout/components/tags-view/types'
 import { useMessage } from '@/hooks/use-message'
 import TagsToolMenu from '@/layout/components/tags-view/components/tags-tool-menu.vue'
 import { TabPaneName } from 'element-plus'
+import useRouterLoadingHooks from '@/hooks/use-router-loading'
 
-defineOptions({ name: 'TagsViewComponent' })
+defineOptions({ name: 'TagsView' })
 
 // 路由相关实例
 const router = useRouter()
@@ -62,6 +68,7 @@ const activeTab = computed<TagsViewType | undefined>(() => {
     (item) => item.path === unref(router.currentRoute).fullPath
   )
 })
+const { loadingStatus, refreshRouter } = useRouterLoadingHooks()
 /**
  * 处理右键菜单命令触发事件
  * @param command 命令类型
@@ -96,6 +103,9 @@ const commandTrigger = (command: string) => {
  * @param event 鼠标事件
  */
 const handleContextmenu = (event: MouseEvent) => {
+  if (loadingStatus.value) {
+    return
+  }
   menuList.value = [
     {
       icon: 'refresh',
@@ -177,16 +187,12 @@ const closeSelectedTag = () => {
   tagsViewPlusStore.removeVisitedView(activeTab.value!)
   toLastView()
 }
-
+const emits = defineEmits(['refresh'])
 /**
  * 刷新当前选中的标签页
  */
 const refreshSelectedTag = async () => {
-  const { path, query } = router.currentRoute.value
-  await router.replace({
-    path: '/redirect' + path,
-    query: query,
-  })
+  await refreshRouter()
 }
 
 /**

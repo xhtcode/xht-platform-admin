@@ -26,10 +26,18 @@
         </div>
       </el-header>
       <div class="tabs-box-container">
-        <tags-view-component />
+        <tags-view />
       </div>
-      <el-main class="xht-main-container">
-        <router-view />
+      <el-main class="xht-main-container" v-loading="loadingStatus">
+        <router-view v-if="refreshStatus">
+          <template #default="{ Component, route }">
+            <Transition name="main-view-animation" mode="out-in">
+              <keep-alive>
+                <component :is="Component" :key="route.fullPath" class="w-full" />
+              </keep-alive>
+            </Transition>
+          </template>
+        </router-view>
       </el-main>
       <layout-footer />
     </el-container>
@@ -39,12 +47,11 @@
 import variables from '@/styles/variables.module.scss'
 import type { CSSProperties } from 'vue'
 import BreadCrumb from '@/layout/components/bread-crumb/index.vue'
-import TagsViewComponent from '@/layout/components/tags-view/index.vue'
+import TagsView from '@/layout/components/tags-view/index.vue'
 import LogoImage from '@/layout/components/logo-image/index.vue'
 import MenuSplit from '@/layout/components/menu-split/index.vue'
 import MenuMain from '@/layout/components/menu-main/index.vue'
-import type { RouteRecordRaw } from 'vue-router'
-import { useRouter } from 'vue-router'
+import { RouteRecordRaw, useRouter } from 'vue-router'
 import { findMenuChildrenFirst } from '@/layout/components/helper'
 import { useMessage } from '@/hooks/use-message'
 import MenuLock from '@/layout/components/menu-lock/index.vue'
@@ -56,6 +63,7 @@ import AppSetting from '@/layout/components/app-setting/index.vue'
 import PageFullScreen from '@/layout/components/page-full-screen/index.vue'
 import SwitchDark from '@/layout/components/switch-dark/index.vue'
 import LayoutFooter from '@/layout/components/layout-footer/index.vue'
+import useRouterLoadingHooks from '@/hooks/use-router-loading'
 
 defineOptions({
   name: 'LayoutColumns',
@@ -69,11 +77,11 @@ const asideMenuStyle = computed<CSSProperties>(() => {
     width: menuStatus.value ? variables.menuWidth : variables.menuCollapseWidth,
   }
 })
-
+const { loadingStatus, refreshStatus } = useRouterLoadingHooks()
 /**
  * 菜单点击事件
  * @param menuItems - 菜单列表
- * @param linkStatus - 菜单是否跳转
+ * @param linkStatus - 菜单是否跳转   true 跳转 false 不跳转
  */
 const handleMenuClick = async (menuItems: RouteRecordRaw[], linkStatus: boolean) => {
   menuList.value = menuItems

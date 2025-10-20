@@ -22,7 +22,13 @@ export const useRouteStore = defineStore(
     const routesRaw = ref<any[]>([]) // 原始路由
     const formatRoutes = ref<RouteRecordRaw[]>([]) //添加路由时使用
     const allRoutes = computed(() => DynamicRouter.concat(routesRaw.value))
-
+    /**
+     * 路由状态
+     */
+    const routerStatus = reactive<RouterStatus>({
+      loadingStatus: false,
+      refreshStatus: true,
+    })
     /**
      * 实际路由
      */
@@ -109,6 +115,7 @@ export const useRouteStore = defineStore(
     }
 
     return {
+      routerStatus,
       isGenerate,
       routesRaw,
       allRoutes,
