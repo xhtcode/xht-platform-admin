@@ -107,8 +107,7 @@ const handleMenuClick = async (menuItems: RouteRecordRaw[], linkStatus: boolean)
     flex-direction: column;
     width: $menu-column-width;
     height: 100%;
-    background-color: var(--xht-menu-bg-color);
-    border-right: 1px solid var(--xht-border-color);
+    background-color: var(--xhe-split-menu-bg-color);
   }
 
   .xht-aside-menu {
