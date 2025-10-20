@@ -27,7 +27,7 @@ export const useThemeHooks = () => {
    */
   const asideStyle = computed<CSSProperties>(() => {
     return {
-      width: menuCollapse.value ? variables.menuWidth200 : variables.menuWidth64,
+      width: menuCollapse.value ? variables.menuWidth : variables.menuCollapseWidth,
     }
   })
   /**

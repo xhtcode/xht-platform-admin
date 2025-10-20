@@ -1,6 +1,6 @@
 <template>
-  <div class="main-container-none">
-    <div class="main-container-auto main-container-view">
+  <div class="xht-view-container">
+    <div class="xht-view-main">
       <el-form
         ref="queryFormRef"
         :disabled="state.loadingStatus"

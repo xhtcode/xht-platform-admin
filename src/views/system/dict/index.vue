@@ -1,6 +1,6 @@
 <template>
-  <div class="main-container-none">
-    <div class="main-container-auto main-container-view">
+  <div class="xht-view-container">
+    <div class="xht-view-main">
       <el-form
         ref="queryFormRef"
         :disabled="state.loadingStatus"
@@ -109,11 +109,11 @@
           </template>
         </el-table-column>
         <el-table-column label="字典描述" prop="remark" width="220" />
-        <el-table-column label="创建时间" prop="createTime" width="160" />
-        <el-table-column label="更新时间" prop="updateTime" width="160" />
+        <el-table-column label="创建时间" prop="createTime" width="220" />
+        <el-table-column label="更新时间" prop="updateTime" width="220" />
         <el-table-column label="创建人" prop="createBy" width="160" />
         <el-table-column label="更新人" prop="updateBy" width="160" />
-        <el-table-column fixed="right" label="操作" width="260px">
+        <el-table-column fixed="right" label="操作" width="220px">
           <template #default="{ row }">
             <el-button icon="edit" link type="success" @click="handleEdit(row)">修改</el-button>
             <el-button icon="delete" link type="danger" @click="handleDelete(row)">删除</el-button>

@@ -1,6 +1,6 @@
 <template>
-  <div class="main-container-scrollbar">
-    <div class="main-container-auto main-container-view">
+  <div class="xht-view-container">
+    <div class="xht-view-main">
       <div class="icon-menu-menu" />
       <div class="icon-menu-tree" />
     </div>

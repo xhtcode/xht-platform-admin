@@ -1,13 +1,13 @@
 <template>
-  <div class="main-container-none">
+  <div class="xht-view-container">
     <el-splitter>
       <el-splitter-panel size="20%" :resizable="false" collapsible>
-        <div class="h100">
+        <div class="xht-view-main">
           <dept-tree ref="deptTreeRef" @click-node="handleDeptClick" />
         </div>
       </el-splitter-panel>
       <el-splitter-panel size="80%" :resizable="false" collapsible>
-        <div class="main-container-auto main-container-view">
+        <div class="xht-view-main">
           <el-form
             ref="queryFormRef"
             :disabled="state.loadingStatus"

@@ -4,7 +4,7 @@
       <template #default="{ Component, route }">
         <Transition name="main-view-animation" mode="out-in">
           <keep-alive v-if="refreshStatus">
-            <component :is="Component" :key="route.fullPath" class="w-full" />
+            <component :is="Component" :key="route.fullPath" />
           </keep-alive>
         </Transition>
       </template>
@@ -25,7 +25,7 @@ const { loadingStatus, refreshStatus } = useRouterLoadingHooks()
 .xht-main-container {
   position: relative;
   box-sizing: border-box;
-  padding: 8px;
+  padding: 10px;
   overflow-x: hidden;
   background-color: var(--xht-page-bg-color);
 }

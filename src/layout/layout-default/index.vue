@@ -1,11 +1,11 @@
 <template>
   <el-container class="xht-layout-container">
     <div v-if="mobileShowStatus" class="layout__overlay" @click="handleCloseSidebar" />
-    <div v-if="mobileShowStatus" class="layout__sidebar">
+    <div v-if="mobileShowStatus" class="layout__sidebar" :style="asideStyle">
       <layout-aside />
     </div>
     <layout-aside v-if="desktopShowStatus" />
-    <el-container class="w-full h-full">
+    <el-container class="w-full h-full overflow-hidden">
       <el-header class="xht-header-container">
         <div class="xht-header-item">
           <menu-lock />
@@ -66,7 +66,6 @@ function handleCloseSidebar() {
   left: 0;
   z-index: 999;
   height: 100%;
-  width: v-bind(asideStyle);
   transition: width 0.28s;
   background: var(--xht-bg-color);
 

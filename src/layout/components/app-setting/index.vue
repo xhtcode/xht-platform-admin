@@ -1,13 +1,7 @@
 <template>
   <div class="header-tool-item" @click="state.visibleStatus = true">
     <div class="icon-common-theme size-20px" />
-    <el-drawer
-      v-model="state.visibleStatus"
-      :close-on-click-modal="false"
-      append-to-body
-      size="360px"
-      title="主题设置"
-    >
+    <el-drawer v-model="state.visibleStatus" append-to-body size="360px" title="主题设置">
       <el-form
         ref="queryFormRef"
         :disabled="state.loadingStatus"
