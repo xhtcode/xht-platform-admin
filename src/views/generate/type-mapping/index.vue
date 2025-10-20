@@ -65,6 +65,7 @@
         :data="state.tableList"
         :header-cell-style="headerCellStyle"
         class="flex-1"
+        border
         empty-text="系统相关字段类型映射！"
         @selection-change="handleSelectionChange"
       >
