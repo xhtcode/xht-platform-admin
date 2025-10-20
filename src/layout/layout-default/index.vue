@@ -85,22 +85,4 @@ function handleCloseSidebar() {
   background-color: rgba(0, 0, 0, 0.3);
 }
 
-/* 主内容区动画 */
-.main-view-animation-enter-active {
-  transition: 0.6s;
-}
-
-.main-view-animation-leave-active {
-  transition: 0.4s;
-}
-
-.main-view-animation-enter-from {
-  margin-left: -20px;
-  opacity: 0;
-}
-
-.main-view-animation-leave-to {
-  margin-left: 20px;
-  opacity: 0;
-}
 </style>

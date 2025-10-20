@@ -104,7 +104,6 @@ const fetchTableData = (count: number = 10): Promise<TableData[]> => {
     // 延迟后返回生成的数据
     setTimeout(() => {
       const data = generateChineseContentData(count)
-      console.log(data)
       resolve(data)
     }, 1000)
   })

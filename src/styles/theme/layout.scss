@@ -47,9 +47,8 @@ $header-item-width: 40px !default;
     justify-content: space-between;
     align-items: center;
     padding: 0;
-    box-shadow:
-      0 1px 3px 0 rgba(0, 0, 0, 0.12),
-      0 0 3px 0 rgba(0, 0, 0, 0.06);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12),
+    0 0 3px 0 rgba(0, 0, 0, 0.06);
     height: auto !important;
 
     .layout-header-container {
@@ -102,9 +101,8 @@ $header-item-width: 40px !default;
     position: relative;
     display: flex;
     border-bottom: 1px solid var(--xht-border-color);
-    box-shadow:
-      6px 2px 3px 0 rgb(0 0 0 / 12%),
-      0 0 3px 0 rgb(0 0 0 / 6%);
+    box-shadow: 6px 2px 3px 0 rgb(0 0 0 / 12%),
+    0 0 3px 0 rgb(0 0 0 / 6%);
 
     .tags-container {
       position: relative;
@@ -213,41 +211,57 @@ $header-item-width: 40px !default;
   padding: 8px !important;
 }
 
-.layout-main {
-  .main-container-none {
-    position: absolute;
-    top: 0;
-    left: 0;
-    overflow: hidden;
-    height: 100%;
-    display: flex;
-    @extend .layout-padding;
-    flex: 1;
-    flex-direction: column;
-  }
+.main-container-none {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  @extend .layout-padding;
+  flex: 1;
+  flex-direction: column;
+}
 
-  .main-container-scrollbar {
-    overflow: hidden;
-    height: 100%;
-    @extend .layout-padding;
-    flex: 1;
-    flex-direction: column;
-  }
+.main-container-scrollbar {
+  overflow: hidden;
+  height: 100%;
+  @extend .layout-padding;
+  flex: 1;
+  flex-direction: column;
+}
 
-  .main-container-auto {
-    height: inherit;
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    @extend .layout-padding;
-  }
+.main-container-auto {
+  height: inherit;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  @extend .layout-padding;
+}
 
-  .main-container-view {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background: var(--xht-bg-color);
-    border: 1px solid var(--xht-border-color);
-    border-radius: var(--xht-border-radius-base);
-  }
+.main-container-view {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--xht-bg-color);
+  border: 1px solid var(--xht-border-color);
+  border-radius: var(--xht-border-radius-base);
+}
+/* 主内容区动画 */
+.main-view-animation-enter-active {
+  transition: 0.6s;
+}
+
+.main-view-animation-leave-active {
+  transition: 0.4s;
+}
+
+.main-view-animation-enter-from {
+  margin-left: -20px;
+  opacity: 0;
+}
+
+.main-view-animation-leave-to {
+  margin-left: 20px;
+  opacity: 0;
 }

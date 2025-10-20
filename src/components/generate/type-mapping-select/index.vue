@@ -86,8 +86,6 @@ const handleQuery = async () => {
 const handleChange = (value: GenTypeMappingResponse) => {
   modelValue.value = value.targetDataType
   importValue.value = value.importPackage
-  console.log(value.targetDataType)
-  console.log(value.importPackage)
   console.dir(value)
 }
 /**

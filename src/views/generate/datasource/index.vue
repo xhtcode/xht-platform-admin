@@ -164,7 +164,6 @@ const handleSelectionChange = (selection: any[]) => {
  */
 const resetQuery = async () => {
   queryFormRef.value?.resetFields()
-  console.log(queryFormRef.value)
   await handleQuery()
 }
 /**

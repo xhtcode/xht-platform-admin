@@ -144,7 +144,6 @@ const handleAdd = () => {
  * 处理模板查看
  */
 const handleView = (row: GenTemplateGroupResponse) => {
-  console.log(row.id)
   templateGroupViewRef.value?.show(row.id)
 }
 /**

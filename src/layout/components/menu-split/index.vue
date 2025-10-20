@@ -58,7 +58,6 @@ const changeMenuList = () => {
   })
 }
 onMounted(() => {
-  console.log(route.path)
   activeMenuPath.value = router.currentRoute.value.matched[0]?.path
   menuList.value.forEach((item) => {
     if (item.path === activeMenuPath.value) {

@@ -28,17 +28,7 @@
       <div class="tabs-box-container">
         <tags-view />
       </div>
-      <el-main class="xht-main-container" v-loading="loadingStatus">
-        <router-view v-if="refreshStatus">
-          <template #default="{ Component, route }">
-            <Transition name="main-view-animation" mode="out-in">
-              <keep-alive>
-                <component :is="Component" :key="route.fullPath" class="w-full" />
-              </keep-alive>
-            </Transition>
-          </template>
-        </router-view>
-      </el-main>
+      <layout-main />
       <layout-footer />
     </el-container>
   </el-container>
@@ -63,7 +53,7 @@ import AppSetting from '@/layout/components/app-setting/index.vue'
 import PageFullScreen from '@/layout/components/page-full-screen/index.vue'
 import SwitchDark from '@/layout/components/switch-dark/index.vue'
 import LayoutFooter from '@/layout/components/layout-footer/index.vue'
-import useRouterLoadingHooks from '@/hooks/use-router-loading'
+import LayoutMain from '@/layout/components/layout-main/index.vue'
 
 defineOptions({
   name: 'LayoutColumns',
@@ -77,7 +67,6 @@ const asideMenuStyle = computed<CSSProperties>(() => {
     width: menuStatus.value ? variables.menuWidth : variables.menuCollapseWidth,
   }
 })
-const { loadingStatus, refreshStatus } = useRouterLoadingHooks()
 /**
  * 菜单点击事件
  * @param menuItems - 菜单列表
@@ -141,14 +130,6 @@ const handleMenuClick = async (menuItems: RouteRecordRaw[], linkStatus: boolean)
   .tabs-box-container {
     background-color: var(--xht-tag-bg-color);
     width: 100%;
-  }
-
-  .xht-main-container {
-    position: relative;
-    box-sizing: border-box;
-    padding: 8px;
-    overflow-x: hidden;
-    background-color: var(--el-bg-color-page);
   }
 }
 </style>

@@ -111,8 +111,7 @@ const init = () => {
   /**
    * 监听只读编辑
    */
-  editor.value.onDidAttemptReadOnlyEdit((e) => {
-    console.log(e)
+  editor.value.onDidAttemptReadOnlyEdit((_) => {
     useMessage().error('正在预览中，此刻内容仅供查看，暂无法编辑 ✨!')
   })
 }

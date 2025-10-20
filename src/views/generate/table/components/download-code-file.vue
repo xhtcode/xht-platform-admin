@@ -99,7 +99,6 @@ const submitForm = () => {
         addUpdateForm.value.packageName
       )
         .then((data) => {
-          console.log(data)
           useMessage().success('下载文件成功!')
         })
         .finally(() => {
