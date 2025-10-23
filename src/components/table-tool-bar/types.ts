@@ -1,3 +1,5 @@
+import type { BasicResponse } from '@/service/model/base.model'
+
 /**
  * 右边工作区props类型
  */
@@ -23,11 +25,17 @@ export interface StateType {
  * 显隐数据类型
  */
 export interface ColumnOption {
-  name: string //字段英文名
-  value: string //字段中文名
-  width: number
+  desc: string //描述
   visible: boolean //是否显示 true 显示
   disabled?: boolean //是否禁用 true 禁用
+}
+
+/**
+ * 部门操作请求相关字段的显隐配置类型
+ * key 为 Response 的所有属性名，value 为对应字段的显隐配置
+ */
+export type ColumnConfig<Response extends BasicResponse> = {
+  [key in keyof Response]?: ColumnOption
 }
 
 /**

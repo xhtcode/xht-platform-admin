@@ -261,7 +261,7 @@
             </template>
           </el-table-column>
           <el-table-column label="创建时间" prop="createTime" width="180" />
-          <el-table-column label="创建人" prop="createBy" width="180" />
+          <el-table-column label="创建人" prop="createBy" width="160" />
           <el-table-column fixed="right" label="操作" width="200px">
             <template #default="{ row }">
               <el-space wrap>

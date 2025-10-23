@@ -1,10 +1,11 @@
 import type {
   SysUserOperationRequest,
+  SysUserResponse,
   UserProfilesCreateRequest,
 } from '@/service/model/system/user.model'
 import { UserStatusEnums } from '@/service/model/system/user.model'
 import type { FormRules } from 'element-plus'
-import type { ColumnOption } from '@/components/table-tool-bar/types'
+import { ColumnConfig } from '@/components/table-tool-bar/types'
 import type { SysDeptResponse } from '@/service/model/system/dept.model'
 import type { SysDeptPostResponse } from '@/service/model/system/dept.post.model'
 
@@ -59,4 +60,25 @@ export const SysUserOperationRules: FormRules = {
 /**
  * 列表显示配置
  */
-export const SysUserColumnOption: ColumnOption[] = []
+export const SysUserColumnOption: ColumnConfig<SysUserResponse> = {
+  createBy: {
+    desc: '创建人',
+    visible: true,
+    disabled: false,
+  },
+  createTime: {
+    desc: '创建时间',
+    visible: true,
+    disabled: false,
+  },
+  updateBy: {
+    desc: '更新人',
+    visible: false,
+    disabled: false,
+  },
+  updateTime: {
+    desc: '更新时间',
+    visible: false,
+    disabled: false,
+  },
+}

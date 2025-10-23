@@ -1,7 +1,11 @@
 import type { FormRules } from 'element-plus'
-import type { ColumnOption } from '@/components/table-tool-bar/types'
-import type { GenDataSourceOperationRequest } from '@/service/model/generate/datasource.model'
+import { ColumnConfig, ColumnOption } from '@/components/table-tool-bar/types'
+import type {
+  GenDataSourceOperationRequest,
+  GenDataSourceResponse,
+} from '@/service/model/generate/datasource.model'
 import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
+import { SysDeptResponse } from '@/service/model/system/dept.model'
 
 /**
  * 增改页面 表单类型 默认值
@@ -61,4 +65,11 @@ export const GenDataSourceOperationRules: FormRules<GenDataSourceOperationReques
 /**
  * 列表显示配置
  */
-export const GenDataSourceColumnOption: ColumnOption[] = []
+export const GenDataSourceColumnOption: ColumnConfig<GenDataSourceResponse> = {
+  name: { desc: '数据库名称', visible: true, disabled: false },
+  dbType: { desc: '数据库类型', visible: true, disabled: false },
+  url: { desc: '数据库地址', visible: true, disabled: false },
+  username: { desc: '数据库用户名', visible: true, disabled: false },
+  password: { desc: '数据库密码', visible: true, disabled: false },
+  lastTestTime: { desc: '最后测试时间', visible: true, disabled: false },
+}

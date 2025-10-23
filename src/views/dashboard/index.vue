@@ -1,12 +1,11 @@
 <template>
   <div class="xht-view-container">
     <div class="xht-view-main">
-      <div class="icon-menu-menu" />
-      <div class="icon-menu-tree" />
+      <xht-table />
     </div>
   </div>
 </template>
-<script setup lang="ts">
+<script lang="ts" setup>
 defineOptions({ name: 'HomeViewComponentIndex' })
 </script>
 

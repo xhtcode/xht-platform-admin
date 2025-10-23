@@ -1,4 +1,4 @@
-import type { SysMenuOperationRequest } from '@/service/model/system/menu.model'
+import type { SysMenuOperationRequest, SysMenuResponse } from '@/service/model/system/menu.model'
 import {
   MenuCacheEnums,
   MenuHiddenEnums,
@@ -6,7 +6,7 @@ import {
   MenuTypeEnums,
 } from '@/service/model/system/menu.model'
 import type { FormRules } from 'element-plus'
-import type { ColumnOption } from '@/components/table-tool-bar/types'
+import { ColumnConfig } from '@/components/table-tool-bar/types'
 
 /**
  * 增改页面 表单类型 默认值
@@ -62,10 +62,25 @@ export const SysMenuOperationRules: FormRules = {
 /**
  * 列表显示配置
  */
-export const SysMenuColumnOption: ColumnOption[] = [
-  {
-    value: 'menuName',
-    name: '菜单名称',
+export const SysMenuColumnOption: ColumnConfig<SysMenuResponse> = {
+  createBy: {
+    desc: '创建人',
     visible: true,
+    disabled: false,
   },
-]
+  createTime: {
+    desc: '创建时间',
+    visible: true,
+    disabled: false,
+  },
+  updateBy: {
+    desc: '更新人',
+    visible: false,
+    disabled: false,
+  },
+  updateTime: {
+    desc: '更新时间',
+    visible: false,
+    disabled: false,
+  },
+}

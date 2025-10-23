@@ -1,7 +1,10 @@
-import type { SysDeptOperationRequest } from '@/service/model/system/dept.model'
-import { DeptStatusEnums } from '@/service/model/system/dept.model'
+import {
+  DeptStatusEnums,
+  SysDeptOperationRequest,
+  SysDeptResponse,
+} from '@/service/model/system/dept.model'
 import type { FormRules } from 'element-plus'
-import type { ColumnOption } from '@/components/table-tool-bar/types'
+import { ColumnConfig } from '@/components/table-tool-bar/types'
 
 /**
  * 增改页面 表单类型 默认值
@@ -33,8 +36,34 @@ export const SysDeptOperationRules: FormRules = {
   email: [{ required: true, message: '请输入部门联系邮箱', trigger: ['blur', 'change'] }], //邮箱
   remark: [{ required: true, message: '请输入部门备注', trigger: ['blur', 'change'] }], //备注
 }
-
 /**
  * 列表显示配置
  */
-export const SysDeptColumnOption: ColumnOption[] = []
+export const SysDeptColumnOption: ColumnConfig<SysDeptResponse> = {
+  deptName: { desc: '部门名称', visible: true, disabled: false },
+  leaderName: { desc: '部门主管', visible: true, disabled: false },
+  phone: { desc: '联系电话', visible: true, disabled: false },
+  email: { desc: '联系邮箱', visible: true, disabled: false },
+  deptStatus: { desc: '部门状态', visible: true, disabled: false },
+  deptSort: { desc: '显示顺序', visible: true, disabled: false },
+  createBy: {
+    desc: '创建人',
+    visible: true,
+    disabled: false,
+  },
+  createTime: {
+    desc: '创建时间',
+    visible: true,
+    disabled: false,
+  },
+  updateBy: {
+    desc: '更新人',
+    visible: false,
+    disabled: false,
+  },
+  updateTime: {
+    desc: '更新时间',
+    visible: false,
+    disabled: false,
+  },
+}

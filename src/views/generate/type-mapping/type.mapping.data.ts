@@ -1,7 +1,11 @@
 import type { FormRules } from 'element-plus'
-import type { ColumnOption } from '@/components/table-tool-bar/types'
-import type { GenTypeMappingOperationRequest } from '@/service/model/generate/type.mapping.model'
+import { ColumnConfig, ColumnOption } from '@/components/table-tool-bar/types'
+import type {
+  GenTypeMappingOperationRequest,
+  GenTypeMappingResponse,
+} from '@/service/model/generate/type.mapping.model'
 import { DataBaseTypeEnums, LanguageTypeEnums } from '@/service/enums/generate/generate.enums'
+import type { GenTableInfoResponse } from '@/service/model/generate/table.model'
 
 /**
  * 增改页面 表单类型 默认值
@@ -52,4 +56,25 @@ export const GenTypeMappingOperationRules: FormRules<GenTypeMappingOperationRequ
 /**
  * 列表显示配置
  */
-export const GenTypeMappingColumnOption: ColumnOption[] = []
+export const GenTypeMappingColumnOption: ColumnConfig<GenTypeMappingResponse> = {
+  createBy: {
+    desc: '创建人',
+    visible: true,
+    disabled: false,
+  },
+  createTime: {
+    desc: '创建时间',
+    visible: true,
+    disabled: false,
+  },
+  updateBy: {
+    desc: '更新人',
+    visible: false,
+    disabled: false,
+  },
+  updateTime: {
+    desc: '更新时间',
+    visible: false,
+    disabled: false,
+  },
+}

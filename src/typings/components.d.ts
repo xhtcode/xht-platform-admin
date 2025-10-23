@@ -53,6 +53,7 @@ declare module 'vue' {
     ElOption: typeof import('element-plus/es')['ElOption']
     ElPagination: typeof import('element-plus/es')['ElPagination']
     ElPopover: typeof import('element-plus/es')['ElPopover']
+    ElRadio: typeof import('element-plus/es')['ElRadio']
     ElRadioButton: typeof import('element-plus/es')['ElRadioButton']
     ElRadioGroup: typeof import('element-plus/es')['ElRadioGroup']
     ElRow: typeof import('element-plus/es')['ElRow']
@@ -84,10 +85,10 @@ declare module 'vue' {
     TypeMappingSelect: typeof import('./../components/generate/type-mapping-select/index.vue')['default']
     UserStatusTag: typeof import('./../components/system/user-status-tag/index.vue')['default']
     XhtCard: typeof import('./../components/xht-card/index.vue')['default']
-    XhtColumnSelection: typeof import('./../components/element-plus/xht-column-selection/index.vue')['default']
+    XhtColumnDragSort: typeof import('./../components/element-plus/xht-table/components/xht-column-drag-sort/index.vue')['default']
+    XhtColumnIndex: typeof import('./../components/element-plus/xht-table/components/xht-column-index/index.vue')['default']
     XhtPagination: typeof import('./../components/element-plus/xht-pagination/index.vue')['default']
     XhtTable: typeof import('./../components/element-plus/xht-table/index.vue')['default']
-    XhtTableV2: typeof import('./../components/element-plus/xht-table-v2/index.vue')['default']
   }
   export interface GlobalDirectives {
     vLoading: typeof import('element-plus/es')['ElLoadingDirective']

@@ -1,7 +1,7 @@
-import type { SysDictOperationRequest } from '@/service/model/system/dict.model'
+import type { SysDictOperationRequest, SysDictResponse } from '@/service/model/system/dict.model'
 import { DictStatusEnums } from '@/service/model/system/dict.model'
 import type { FormRules } from 'element-plus'
-import type { ColumnOption } from '@/components/table-tool-bar/types'
+import { ColumnConfig } from '@/components/table-tool-bar/types'
 
 /**
  * 增改页面 表单类型 默认值
@@ -51,4 +51,25 @@ export const SysDictOperationRules: FormRules = {
 /**
  * 列表显示配置
  */
-export const SysDictColumnOption: ColumnOption[] = []
+export const SysDictColumnOption: ColumnConfig<SysDictResponse> = {
+  createBy: {
+    desc: '创建人',
+    visible: true,
+    disabled: false,
+  },
+  createTime: {
+    desc: '创建时间',
+    visible: true,
+    disabled: false,
+  },
+  updateBy: {
+    desc: '更新人',
+    visible: false,
+    disabled: false,
+  },
+  updateTime: {
+    desc: '更新时间',
+    visible: false,
+    disabled: false,
+  },
+}

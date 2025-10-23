@@ -30,7 +30,7 @@
       </el-form>
       <table-tool-bar
         v-model:show-search="state.searchStatus"
-        :column-data="[]"
+        :column-data="columnOption"
         column-status
         refresh-status
         @refresh="handleQuery"
@@ -109,6 +109,8 @@ import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { BasicResponse, ModeIdArrayType, PageQueryRequest } from '@/service/model/base.model'
 import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
 import type { AxiosResponse } from 'axios'
+import { GenDataSourceColumnOption } from '@/views/generate/datasource/datasource.data'
+import { ColumnConfig } from '@/components/table-tool-bar/types'
 
 defineOptions({ name: 'GenDataSourceViewIndex' })
 
@@ -131,7 +133,9 @@ const state = reactive<TableQueryState<GenDataSourceQueryRequest, GenDataSourceR
   multipleStatus: true, // 多个禁用
 })
 const { queryParams } = toRefs(state)
-
+const columnOption = ref<ColumnConfig<GenDataSourceResponse>>({
+  ...GenDataSourceColumnOption,
+})
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 const datasourceFormRef = useTemplateRef('datasourceFormRef')
 const { cellStyle, headerCellStyle } = useTableToolHooks()

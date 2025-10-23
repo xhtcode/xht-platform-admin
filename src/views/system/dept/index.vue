@@ -46,7 +46,7 @@
       </el-form>
       <table-tool-bar
         v-model:show-search="state.searchStatus"
-        :column-data="[]"
+        :column-data="columnOption"
         column-status
         refresh-status
         search-status
@@ -59,7 +59,6 @@
       </table-tool-bar>
       <el-table
         v-if="state.refreshTable"
-        ref="tableRef"
         v-loading="state.loadingStatus"
         :data="state.tableList"
         :default-expand-all="state.expandAllStatus"
@@ -139,6 +138,9 @@ import type { FormInstance } from 'element-plus'
 
 import DeptForm from '@/views/system/dept/components/dept-form.vue'
 import { useTableToolHooks } from '@/hooks/use-crud-hooks'
+import { SysDeptColumnOption } from '@/views/system/dept/dept.data'
+import { ColumnConfig } from '@/components/table-tool-bar/types'
+import type { GenTableInfoResponse } from '@/service/model/generate/table.model'
 
 defineOptions({ name: 'SysDeptViewIndex' })
 const deptFormRef = useTemplateRef('deptFormRef')
@@ -147,6 +149,9 @@ const deptFormRef = useTemplateRef('deptFormRef')
  * @returns  css
  */
 const tableStyle = useTableToolHooks()
+const columnOption = ref<ColumnConfig<GenTableInfoResponse>>({
+  ...SysDeptColumnOption,
+})
 
 interface CrudOption {
   total: number
@@ -172,7 +177,6 @@ const state = reactive<CrudOption>({
 
 const { queryParams } = toRefs(state)
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
-const tableRef = useTemplateRef('tableRef')
 
 /**
  * 查询数据列表
