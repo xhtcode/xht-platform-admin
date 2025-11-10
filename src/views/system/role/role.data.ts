@@ -1,8 +1,7 @@
 import type { SysRoleOperationRequest, SysRoleResponse } from '@/service/model/system/role.model'
 import { RoleStatusEnums } from '@/service/model/system/role.model'
 import type { FormRules } from 'element-plus'
-import { ColumnConfig, ColumnOption } from '@/components/table-tool-bar/types'
-import type { SysDictResponse } from '@/service/model/system/dict.model'
+import { ColumnConfig } from '@/components/table-tool-bar/types'
 
 /**
  * 增改页面 表单类型 默认值
@@ -33,11 +32,12 @@ export const SysRoleOperationRules: FormRules = {
  * 列表显示配置
  */
 export const SysRoleColumnOption: ColumnConfig<SysRoleResponse> = {
-  createBy: {
-    desc: '创建人',
-    visible: true,
-    disabled: false,
-  },
+  roleName: { desc: '角色名称', visible: true, disabled: false },
+  roleCode: { desc: '角色编码', visible: true, disabled: false },
+  roleStatus: { desc: '角色状态', visible: true, disabled: false },
+  dataScope: { desc: '数据范围', visible: true, disabled: false },
+  roleSort: { desc: '显示顺序', visible: true, disabled: false },
+  createBy: { desc: '创建人', visible: true, disabled: false },
   createTime: {
     desc: '创建时间',
     visible: true,

@@ -56,7 +56,7 @@
       </el-form>
       <table-tool-bar
         v-model:show-search="state.searchStatus"
-        :column-data="[]"
+        v-model:column-data="columnOption"
         column-status
         refresh-status
         search-status
@@ -109,10 +109,10 @@
           </template>
         </el-table-column>
         <el-table-column label="字典描述" prop="remark" width="220" />
-        <el-table-column label="创建时间" prop="createTime" width="180" />
-        <el-table-column label="更新时间" prop="updateTime" width="180" />
         <el-table-column label="创建人" prop="createBy" width="160" />
+        <el-table-column label="创建时间" prop="createTime" width="180" />
         <el-table-column label="更新人" prop="updateBy" width="160" />
+        <el-table-column label="更新时间" prop="updateTime" width="180" />
         <el-table-column fixed="right" label="操作" width="220px">
           <template #default="{ row }">
             <el-button icon="edit" link type="success" @click="handleEdit(row)">修改</el-button>
@@ -141,6 +141,8 @@ import { DictStatusEnums } from '@/service/model/system/dict.model'
 import { querySysDictPage, removeSysDictByIds } from '@/service/api/system/dict.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { ModeIdArrayType } from '@/service/model/base.model'
+import type { ColumnConfig } from '@/components/table-tool-bar/types'
+import { SysDictColumnOption } from '@/views/system/dict/dict.data'
 
 defineOptions({ name: 'SysDictViewIndex' })
 
@@ -167,7 +169,9 @@ const { queryParams } = toRefs(state)
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 const dictFormRef = useTemplateRef('dictFormRef')
 const { cellStyle, headerCellStyle } = useTableToolHooks()
-
+const columnOption = ref<ColumnConfig<SysDictResponse>>({
+  ...SysDictColumnOption,
+})
 /**
  * 重置表单
  */

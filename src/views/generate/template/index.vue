@@ -27,7 +27,7 @@
       </el-form>
       <table-tool-bar
         v-model:show-search="state.searchStatus"
-        :column-data="[]"
+        v-model:column-data="columnOption"
         column-status
         refresh-status
         @refresh="handleQuery"
@@ -96,6 +96,8 @@ import {
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import TemplateGroupForm from '@/views/generate/template/components/template-group-form.vue'
 import TemplateViewForm from '@/views/generate/template/components/template-view-form.vue'
+import { GenTemplateGroupOperationOption } from '@/views/generate/template/template.data'
+import type { ColumnConfig } from '@/components/table-tool-bar/types'
 
 defineOptions({ name: 'GenTemplateGroupViewIndex' })
 
@@ -125,7 +127,9 @@ const tableRef = useTemplateRef('tableRef')
 const templateGroupFormRef = useTemplateRef('templateGroupFormRef')
 const templateGroupViewRef = useTemplateRef('templateGroupViewRef')
 const { cellStyle, headerCellStyle } = useTableToolHooks()
-
+const columnOption = ref<ColumnConfig<GenTemplateGroupResponse>>({
+  ...GenTemplateGroupOperationOption,
+})
 /**
  * 重置表单
  */

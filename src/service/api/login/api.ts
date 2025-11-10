@@ -12,7 +12,7 @@ export const generateCaptcha = (captchaKey: any): AxiosPromise<CaptchaResponseTy
   return request({
     url: '/login/captcha',
     baseURL: baseAuthURL,
-    method: 'get',
+    method: 'post',
     headers: {
       skipToken: true,
     },

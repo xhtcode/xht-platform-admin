@@ -49,7 +49,7 @@
       </el-form>
       <table-tool-bar
         v-model:show-search="state.searchStatus"
-        :column-data="[]"
+        v-model:column-data="columnOption"
         column-status
         refresh-status
         @refresh="handleQuery"
@@ -87,6 +87,9 @@ import type { FormInstance } from 'element-plus'
 import { useTableQueryPageHooks, useTableToolHooks } from '@/hooks/use-crud-hooks'
 import type { GenLogQueryRequest, GenLogResponse } from '@/service/model/generate/log.model'
 import { queryGenLogPage } from '@/service/api/generate/log.api'
+import { ColumnConfig } from '@/components/table-tool-bar/types'
+import type { GenDataSourceResponse } from '@/service/model/generate/datasource.model'
+import { GenLogColumnOption } from '@/views/generate/log/log.data'
 
 defineOptions({ name: 'GenLogViewIndex' })
 
@@ -108,7 +111,9 @@ const { createTableIndex, handleQuery, handleSelectionChange } = useTableQueryPa
   GenLogResponse
 >(state, queryGenLogPage)
 const { queryParams } = toRefs(state)
-
+const columnOption = ref<ColumnConfig<GenDataSourceResponse>>({
+  ...GenLogColumnOption,
+})
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 const { cellStyle, headerCellStyle } = useTableToolHooks()
 

@@ -120,7 +120,7 @@ const handleLogin = async () => {
           captcha_key: loginForm.captcha_key,
         })
         .then(() => {
-          useMessage().success('登录成功 !')
+          useMessage().success('登录成功，已为您加载专属工作台，开始工作吧～ !')
           router.push({ path: HOME_PAGE_PATH })
         })
         .catch(() => {

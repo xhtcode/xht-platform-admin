@@ -56,7 +56,7 @@
       </el-form>
       <table-tool-bar
         v-model:show-search="state.searchStatus"
-        :column-data="[]"
+        v-model:column-data="columnOption"
         column-status
         refresh-status
         search-status
@@ -118,10 +118,10 @@
             <el-tag v-else type="danger">禁用</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="创建时间" prop="createTime" width="180" />
-        <el-table-column label="更新时间" prop="updateTime" width="180" />
         <el-table-column label="创建人" prop="createBy" width="160" />
+        <el-table-column label="创建时间" prop="createTime" width="180" />
         <el-table-column label="更新人" prop="updateBy" width="160" />
+        <el-table-column label="更新时间" prop="updateTime" width="180" />
         <el-table-column fixed="right" label="操作" width="260px">
           <template #default="{ row }">
             <el-button icon="edit" link type="success" @click="handleEdit(row)">修改</el-button>
@@ -154,6 +154,8 @@ import { querySysDictItemPage, removeSysDictItemById } from '@/service/api/syste
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { ModeIdArrayType } from '@/service/model/base.model'
 import { useRoute } from 'vue-router'
+import type { ColumnConfig } from '@/components/table-tool-bar/types'
+import { SysDictItemColumnOption } from '@/views/system/dict-item/dict.item.data'
 
 defineOptions({ name: 'SysDictItemViewIndex' })
 const route = useRoute()
@@ -184,7 +186,9 @@ const { queryParams } = toRefs(state)
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 const dictItemFormRef = useTemplateRef('dictItemFormRef')
 const { cellStyle, headerCellStyle } = useTableToolHooks()
-
+const columnOption = ref<ColumnConfig<SysDictItemResponse>>({
+  ...SysDictItemColumnOption,
+})
 /**
  * 重置表单
  */

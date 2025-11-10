@@ -30,7 +30,7 @@
       </el-form>
       <table-tool-bar
         v-model:show-search="state.searchStatus"
-        :column-data="columnOption"
+        v-model:column-data="columnOption"
         column-status
         refresh-status
         @refresh="handleQuery"

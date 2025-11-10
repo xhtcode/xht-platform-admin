@@ -64,6 +64,14 @@ export const SysDictItemOperationRules: FormRules = {
  * 列表显示配置
  */
 export const SysDictItemColumnOption: ColumnConfig<SysDictItemResponse> = {
+  dictCode: { desc: '字典项编码', visible: true, disabled: false },
+  itemLabel: { desc: '字典项标签', visible: true, disabled: false },
+  itemValue: { desc: '字典项值', visible: true, disabled: false },
+  itemColor: { desc: '显示颜色', visible: true, disabled: false },
+  sortOrder: { desc: '排序', visible: true, disabled: false },
+  remark: { desc: '描述', visible: true, disabled: false },
+  status: { desc: '状态', visible: true, disabled: false },
+
   createBy: {
     desc: '创建人',
     visible: true,

@@ -32,7 +32,7 @@
       </el-form>
       <table-tool-bar
         v-model:show-search="state.searchStatus"
-        :column-data="[]"
+        v-model:column-data="columnOption"
         column-status
         refresh-status
         search-status
@@ -120,6 +120,8 @@ import { useMessage, useMessageBox } from '@/hooks/use-message'
 import ImportTable from '@/views/generate/table/components/import-table.vue'
 import { ModeIdArrayType } from '@/service/model/base.model'
 import DownloadCodeFile from '@/views/generate/table/components/download-code-file.vue'
+import { ColumnConfig } from '@/components/table-tool-bar/types'
+import { GenTableInfoColumnOption } from '@/views/generate/table/table.data'
 
 defineOptions({ name: 'GenTableInfoViewIndex' })
 
@@ -142,6 +144,9 @@ const { createTableIndex, handleQuery, handleSelectionChange } = useTableQueryPa
 >(state, queryExistsPage)
 const { queryParams } = toRefs(state)
 
+const columnOption = ref<ColumnConfig<GenTableInfoResponse>>({
+  ...GenTableInfoColumnOption,
+})
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 const tableFormRef = useTemplateRef('tableFormRef')
 const importTableRef = useTemplateRef('importTableRef')
@@ -194,7 +199,7 @@ const handleSync = async (row: GenTableInfoResponse) => {
  */
 const handleDownload = async (row?: GenTableInfoResponse) => {
   state.loadingStatus = true
-  let dataArray: ModeIdArrayType = []
+  let dataArray: ModeIdArrayType
   if (row) {
     dataArray = [row]
   } else {

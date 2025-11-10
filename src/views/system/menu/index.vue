@@ -51,8 +51,8 @@
         </el-row>
       </el-form>
       <table-tool-bar
-        v-model:column-data="SysMenuColumnOption"
         v-model:show-search="state.searchStatus"
+        v-model:column-data="columnOption"
         column-status
         refresh-status
         search-status
@@ -186,10 +186,10 @@
             <el-link type="default">{{ row.menuPath }}</el-link>
           </template>
         </el-table-column>
-        <el-table-column label="创建时间" prop="createTime" width="180" align="center" />
-        <el-table-column label="更新时间" prop="updateTime" width="180" align="center" />
-        <el-table-column label="创建人" prop="createBy" width="160" align="center" />
-        <el-table-column label="更新人" prop="updateBy" width="160" align="center" />
+        <el-table-column label="创建人" prop="createBy" width="160" />
+        <el-table-column label="创建时间" prop="createTime" width="180" />
+        <el-table-column label="更新人" prop="updateBy" width="160" />
+        <el-table-column label="更新时间" prop="updateTime" width="180" />
 
         <el-table-column fixed="right" label="操作" width="220px" align="center">
           <template #default="{ row }">
@@ -222,6 +222,7 @@ import type { FormInstance } from 'element-plus'
 import MenuForm from '@/views/system/menu/components/menu-form.vue'
 import { SysMenuColumnOption } from '@/views/system/menu/menu.data'
 import { useTableToolHooks } from '@/hooks/use-crud-hooks'
+import type { ColumnConfig } from '@/components/table-tool-bar/types'
 
 defineOptions({ name: 'SysMenuViewIndex' })
 
@@ -257,6 +258,9 @@ const { queryParams } = toRefs(state)
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 const tableRef = useTemplateRef('tableRef')
 const menuFormRef = useTemplateRef('menuFormRef')
+const columnOption = ref<ColumnConfig<SysMenuResponse>>({
+  ...SysMenuColumnOption,
+})
 /**
  * 查询数据列表
  */

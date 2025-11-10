@@ -63,6 +63,18 @@ export const SysMenuOperationRules: FormRules = {
  * 列表显示配置
  */
 export const SysMenuColumnOption: ColumnConfig<SysMenuResponse> = {
+  menuType: { desc: '菜单类型', visible: true, disabled: false },
+  menuName: { desc: '菜单名称', visible: true, disabled: false },
+  menuIcon: { desc: '菜单图标', visible: true, disabled: false },
+  menuHidden: { desc: '显示状态', visible: true, disabled: false },
+  menuCache: { desc: '缓存状态', visible: true, disabled: false },
+  menuStatus: { desc: '菜单状态', visible: true, disabled: false },
+  menuAuthority: { desc: '权限标识', visible: true, disabled: false },
+  menuSort: { desc: '菜单排序', visible: true, disabled: false },
+  viewPath: { desc: '组件视图', visible: true, disabled: false },
+  frameFlag: { desc: '外链', visible: true, disabled: false },
+  menuPath: { desc: '路由地址', visible: true, disabled: false },
+
   createBy: {
     desc: '创建人',
     visible: true,

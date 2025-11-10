@@ -52,6 +52,11 @@ export const SysDictOperationRules: FormRules = {
  * 列表显示配置
  */
 export const SysDictColumnOption: ColumnConfig<SysDictResponse> = {
+  dictName: { desc: '字典名称', visible: true, disabled: false },
+  dictCode: { desc: '字典编码', visible: true, disabled: false },
+  sortOrder: { desc: '排序序号', visible: true, disabled: false },
+  status: { desc: '字典状态', visible: true, disabled: false },
+  remark: { desc: '字典描述', visible: true, disabled: false },
   createBy: {
     desc: '创建人',
     visible: true,

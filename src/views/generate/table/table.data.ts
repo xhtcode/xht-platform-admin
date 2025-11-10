@@ -94,24 +94,11 @@ export const GenTableInfoOperationRules: FormRules<GenTableInfoOperationRequest>
  * 列表显示配置
  */
 export const GenTableInfoColumnOption: ColumnConfig<GenTableInfoResponse> = {
-  createBy: {
-    desc: '创建人',
-    visible: true,
-    disabled: false,
-  },
-  createTime: {
-    desc: '创建时间',
-    visible: true,
-    disabled: false,
-  },
-  updateBy: {
-    desc: '更新人',
-    visible: false,
-    disabled: false,
-  },
-  updateTime: {
-    desc: '更新时间',
-    visible: false,
-    disabled: false,
-  },
+  engineName: { desc: '引擎名称', visible: true, disabled: false },
+  tableName: { desc: '数据库表名', visible: true, disabled: false },
+  tableComment: { desc: '表注释', visible: true, disabled: false },
+  codeName: { desc: '代码名称', visible: true, disabled: false },
+  codeComment: { desc: '代码注释', visible: true, disabled: false },
+  tableCreateTime: { desc: '表创建时间', visible: true, disabled: false },
+  tableUpdateTime: { desc: '表更新时间', visible: true, disabled: false },
 }

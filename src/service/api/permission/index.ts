@@ -10,7 +10,7 @@ const baseURL: string = import.meta.env.VITE_ADMIN_API_PREFIX
 export const getRouters = (): AxiosPromise<RouteRecordRaw[]> => {
   return request({
     baseURL: baseURL,
-    url: '/authority/user/profile/getRouters',
+    url: '/sys/user/profile/routers',
     method: 'get',
   })
 }
@@ -20,7 +20,7 @@ export const getRouters = (): AxiosPromise<RouteRecordRaw[]> => {
  */
 export const getUserInfo = (): AxiosPromise<any> => {
   return request({
-    url: '/authority/user/profile/info',
+    url: '/sys/user/profile',
     baseURL: baseURL,
     method: 'get',
   })

@@ -46,7 +46,7 @@
       </el-form>
       <table-tool-bar
         v-model:show-search="state.searchStatus"
-        :column-data="columnOption"
+        v-model:column-data="columnOption"
         column-status
         refresh-status
         search-status
@@ -109,10 +109,10 @@
           align="center"
           show-overflow-tooltip
         />
-        <el-table-column label="创建时间" prop="createTime" width="180" align="center" />
-        <el-table-column label="更新时间" prop="updateTime" width="180" align="center" />
         <el-table-column label="创建人" prop="createBy" width="160" align="center" />
+        <el-table-column label="创建时间" prop="createTime" width="180" align="center" />
         <el-table-column label="更新人" prop="updateBy" width="160" align="center" />
+        <el-table-column label="更新时间" prop="updateTime" width="180" align="center" />
         <el-table-column fixed="right" label="操作" width="220px" align="center">
           <template #default="{ row }">
             <el-button icon="edit" link type="success" @click="handleEdit(row)">修改</el-button>
@@ -140,7 +140,6 @@ import DeptForm from '@/views/system/dept/components/dept-form.vue'
 import { useTableToolHooks } from '@/hooks/use-crud-hooks'
 import { SysDeptColumnOption } from '@/views/system/dept/dept.data'
 import { ColumnConfig } from '@/components/table-tool-bar/types'
-import type { GenTableInfoResponse } from '@/service/model/generate/table.model'
 
 defineOptions({ name: 'SysDeptViewIndex' })
 const deptFormRef = useTemplateRef('deptFormRef')
@@ -149,10 +148,6 @@ const deptFormRef = useTemplateRef('deptFormRef')
  * @returns  css
  */
 const tableStyle = useTableToolHooks()
-const columnOption = ref<ColumnConfig<GenTableInfoResponse>>({
-  ...SysDeptColumnOption,
-})
-
 interface CrudOption {
   total: number
   pages: number
@@ -177,7 +172,9 @@ const state = reactive<CrudOption>({
 
 const { queryParams } = toRefs(state)
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
-
+const columnOption = ref<ColumnConfig<SysDeptResponse>>({
+  ...SysDeptColumnOption,
+})
 /**
  * 查询数据列表
  */

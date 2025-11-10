@@ -46,7 +46,7 @@
       </el-form>
       <table-tool-bar
         v-model:show-search="state.searchStatus"
-        :column-data="[]"
+        v-model:column-data="columnOption"
         column-status
         refresh-status
         search-status
@@ -105,10 +105,10 @@
           </template>
         </el-table-column>
         <el-table-column label="显示顺序" prop="roleSort" width="100" />
-        <el-table-column label="创建时间" prop="createTime" width="180" />
-        <el-table-column label="更新时间" prop="updateTime" width="180" />
         <el-table-column label="创建人" prop="createBy" width="160" />
+        <el-table-column label="创建时间" prop="createTime" width="180" />
         <el-table-column label="更新人" prop="updateBy" width="160" />
+        <el-table-column label="更新时间" prop="updateTime" width="180" />
         <el-table-column fixed="right" label="操作" width="260px">
           <template #default="{ row }">
             <el-button icon="edit" link type="success" @click="handleEdit(row)">修改</el-button>
@@ -145,6 +145,8 @@ import {
 } from '@/service/api/system/role.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import MenuRoleForm from '@/views/system/role/components/menu-role-form.vue'
+import type { ColumnConfig } from '@/components/table-tool-bar/types'
+import { SysRoleColumnOption } from '@/views/system/role/role.data'
 
 defineOptions({ name: 'SysRoleViewIndex' })
 
@@ -171,7 +173,9 @@ const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 const roleFormRef = useTemplateRef('roleFormRef')
 const menuRoleFormRef = useTemplateRef('menuRoleFormRef')
 const { cellStyle, headerCellStyle } = useTableToolHooks()
-
+const columnOption = ref<ColumnConfig<SysRoleResponse>>({
+  ...SysRoleColumnOption,
+})
 /**
  * 重置表单
  */

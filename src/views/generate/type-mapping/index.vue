@@ -33,7 +33,7 @@
       </el-form>
       <table-tool-bar
         v-model:show-search="state.searchStatus"
-        :column-data="[]"
+        v-model:column-data="columnOption"
         column-status
         refresh-status
         search-status
@@ -110,6 +110,8 @@ import {
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { ModeIdArrayType } from '@/service/model/base.model'
 import { DataBaseTypeEnums, LanguageTypeEnums } from '@/service/enums/generate/generate.enums'
+import type { ColumnConfig } from '@/components/table-tool-bar/types'
+import { GenTypeMappingColumnOption } from '@/views/generate/type-mapping/type.mapping.data'
 
 defineOptions({ name: 'GenTypeMappingViewIndex' })
 
@@ -135,7 +137,9 @@ const { queryParams } = toRefs(state)
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 const typeMappingFormRef = useTemplateRef('typeMappingFormRef')
 const { cellStyle, headerCellStyle } = useTableToolHooks()
-
+const columnOption = ref<ColumnConfig<GenTypeMappingResponse>>({
+  ...GenTypeMappingColumnOption,
+})
 /**
  * 重置表单
  */

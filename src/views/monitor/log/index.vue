@@ -71,13 +71,7 @@
       </xht-card>
     </el-form>
     <div class="main-container-auto main-container-view">
-      <table-tool-bar
-        :column-data="[]"
-        column-status
-        refresh-status
-        search-status
-        @refresh="handleQuery"
-      >
+      <table-tool-bar refresh-status search-status @refresh="handleQuery">
         <el-button icon="Delete" type="danger" @click="handleClean">清空</el-button>
         <el-button icon="Download" type="warning" @click="handleExport">导出</el-button>
       </table-tool-bar>

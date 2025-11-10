@@ -133,7 +133,7 @@
         </el-form>
         <table-tool-bar
           v-model:show-search="state.searchStatus"
-          :column-data="[]"
+          v-model:column-data="columnOption"
           column-status
           refresh-status
           search-status
@@ -169,99 +169,37 @@
           @selection-change="handleSelectionChange"
         >
           <el-table-column type="selection" width="55" align="center" />
-          <el-table-column type="expand">
-            <template #default="{ row }">
-              <el-descriptions :column="3" border :label-width="120">
-                <el-descriptions-item label-align="right" align="center">
-                  <template #label>
-                    <div class="cell-item">
-                      <el-icon>
-                        <User />
-                      </el-icon>
-                      真实姓名
-                    </div>
-                  </template>
-                  {{ row.profile?.realName }}
-                </el-descriptions-item>
-                <el-descriptions-item label-align="right" align="center">
-                  <template #label>
-                    <div class="cell-item">
-                      <el-icon>
-                        <Postcard />
-                      </el-icon>
-                      身份证号
-                    </div>
-                  </template>
-                  {{ row.profile?.idCardNumber }}
-                </el-descriptions-item>
-                <el-descriptions-item label-align="right" align="center">
-                  <template #label>
-                    <div class="cell-item">
-                      <el-icon>
-                        <UserFilled />
-                      </el-icon>
-                      用户性别
-                    </div>
-                  </template>
-                  {{ row.profile?.gender === 1 ? '男' : '女' }}
-                </el-descriptions-item>
-                <el-descriptions-item label-align="right" align="center">
-                  <template #label>
-                    <div class="cell-item">
-                      <el-icon>
-                        <tickets />
-                      </el-icon>
-                      出生日期
-                    </div>
-                  </template>
-                  {{ row.profile?.birthDate }}
-                </el-descriptions-item>
-                <el-descriptions-item label-align="right" align="center">
-                  <template #label>
-                    <div class="cell-item">
-                      <el-icon>
-                        <Present />
-                      </el-icon>
-                      用户年龄
-                    </div>
-                  </template>
-                  {{ row.profile?.age }}
-                </el-descriptions-item>
-                <el-descriptions-item label-align="right" align="center">
-                  <template #label>
-                    <div class="cell-item">
-                      <el-icon>
-                        <office-building />
-                      </el-icon>
-                      邮政编码
-                    </div>
-                  </template>
-                  {{ row.profile?.postalCode }}
-                </el-descriptions-item>
-                <el-descriptions-item label-align="right" align="center">
-                  <template #label>
-                    <div class="cell-item">
-                      <el-icon>
-                        <LocationFilled />
-                      </el-icon>
-                      联系地址
-                    </div>
-                  </template>
-                  {{ row.profile?.address }}
-                </el-descriptions-item>
-              </el-descriptions>
-            </template>
-          </el-table-column>
           <el-table-column :index="createTableIndex" label="序号" type="index" width="55" />
-          <el-table-column label="账号" prop="userName" />
+          <el-table-column label="账号" prop="userName" width="120" />
           <el-table-column label="昵称" prop="nickName" />
           <el-table-column label="用户状态" prop="userStatus" width="120">
             <template #default="{ row }">
               <user-status-tag :status="row.userStatus" />
             </template>
           </el-table-column>
-          <el-table-column label="创建时间" prop="createTime" width="180" />
+          <el-table-column label="真实姓名" prop="profile.realName">
+            <template #default="{ row }">{{ row.profile?.realName }}</template>
+          </el-table-column>
+          <el-table-column label="身份证号" prop="profile">
+            <template #default="{ row }">{{ row.profile?.idCardNumber }}</template>
+          </el-table-column>
+          <el-table-column label="用户性别" prop="profile">
+            <template #default="{ row }">{{ row.profile?.gender === 1 ? '男' : '女' }}</template>
+          </el-table-column>
+          <el-table-column label="出生日期" prop="profile">
+            <template #default="{ row }">{{ row.profile?.birthDate }}</template>
+          </el-table-column>
+          <el-table-column label="用户年龄" prop="profile">
+            <template #default="{ row }">{{ row.profile?.age }}</template>
+          </el-table-column>
+          <el-table-column label="邮政编码" prop="profile">
+            <template #default="{ row }">{{ row.profile?.postalCode }}</template>
+          </el-table-column>
+          <el-table-column label="联系地址" prop="profile">
+            <template #default="{ row }">{{ row.profile?.address }}</template>
+          </el-table-column>
           <el-table-column label="创建人" prop="createBy" width="160" />
+          <el-table-column label="创建时间" prop="createTime" width="180" />
           <el-table-column fixed="right" label="操作" width="200px">
             <template #default="{ row }">
               <el-space wrap>
@@ -321,6 +259,8 @@ import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { disabledTodayAndFuture } from '@/utils/moudle/element'
 import UserRoleForm from '@/views/system/user/components/user-role-form.vue'
 import DeptTree from '@/components/system/dept-tree/index.vue'
+import type { ColumnConfig } from '@/components/table-tool-bar/types'
+import { SysUserColumnOption } from '@/views/system/user/user.data'
 
 defineOptions({ name: 'SysUserViewIndex' })
 const state = reactive<TableQueryPageState<SysUserQueryRequest, SysUserResponse>>({
@@ -348,6 +288,9 @@ const userFormRef = useTemplateRef('userFormRef')
 const deptTreeRef = useTemplateRef('deptTreeRef')
 const userRoleFormRef = useTemplateRef('userRoleFormRef')
 const { cellStyle, headerCellStyle } = useTableToolHooks()
+const columnOption = ref<ColumnConfig<SysUserResponse>>({
+  ...SysUserColumnOption,
+})
 /**
  * 重置表单
  */

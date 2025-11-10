@@ -4,7 +4,7 @@
       <el-breadcrumb-item v-for="(item, index) in breadcrumbList" :key="item.path">
         <div
           v-if="index !== breadcrumbList.length - 1"
-          class="h-full flex items-center gap-2"
+          class="h-full flex items-center gap-2 cursor-pointer"
           @click="handleRedirect(item)"
         >
           <div :class="`icon-menu-${item.meta.icon}`" class="text-12px" />
