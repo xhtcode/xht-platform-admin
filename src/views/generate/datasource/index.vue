@@ -55,11 +55,9 @@
           批量删除
         </el-button>
       </table-tool-bar>
-      <el-table
+      <xht-table
         v-loading="state.loadingStatus"
-        :cell-style="cellStyle"
         :data="state.tableList"
-        :header-cell-style="headerCellStyle"
         class="flex-1"
         empty-text="请添加数据源配置！"
         @selection-change="handleSelectionChange"
@@ -86,7 +84,7 @@
             <el-button icon="delete" link type="primary" @click="handleTest(row)">测试</el-button>
           </template>
         </el-table-column>
-      </el-table>
+      </xht-table>
     </div>
     <datasource-form ref="datasourceFormRef" @success="handleQuery()" />
   </div>
@@ -94,7 +92,6 @@
 
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
-import { useTableToolHooks } from '@/hooks/use-crud-hooks'
 import DatasourceForm from './components/datasource-form.vue'
 import type {
   GenDataSourceQueryRequest,
@@ -138,7 +135,6 @@ const columnOption = ref<ColumnConfig<GenDataSourceResponse>>({
 })
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 const datasourceFormRef = useTemplateRef('datasourceFormRef')
-const { cellStyle, headerCellStyle } = useTableToolHooks()
 /**
  * 创建序号
  * @param index 索引

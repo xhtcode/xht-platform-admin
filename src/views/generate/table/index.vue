@@ -60,17 +60,15 @@
           批量下载
         </el-button>
       </table-tool-bar>
-      <el-table
+      <xht-table
         v-loading="state.loadingStatus"
-        :cell-style="cellStyle"
         :data="state.tableList"
-        :header-cell-style="headerCellStyle"
         class="flex-1"
         empty-text="系统相关表信息！"
         @selection-change="handleSelectionChange"
       >
         <el-table-column align="center" type="selection" width="55" />
-        <el-table-column :index="createTableIndex" label="序号" type="index" width="55" />
+        <xht-column-index :size="queryParams.size" :current="queryParams.current" />
         <el-table-column label="引擎名称" prop="engineName" width="100" />
         <el-table-column label="数据库表名" align="left" prop="tableName" width="220" sortable />
         <el-table-column label="表注释" prop="tableComment" width="260" show-overflow-tooltip />
@@ -88,7 +86,7 @@
             </el-button>
           </template>
         </el-table-column>
-      </el-table>
+      </xht-table>
       <xht-pagination
         v-model:current-page="state.queryParams.current"
         v-model:page-size="state.queryParams.size"
@@ -105,7 +103,7 @@
 
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
-import { useTableQueryPageHooks, useTableToolHooks } from '@/hooks/use-crud-hooks'
+import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
 import TableFrom from './components/table-from.vue'
 import type {
   GenTableInfoQueryRequest,
@@ -138,7 +136,7 @@ const state = reactive<TableQueryPageState<GenTableInfoQueryRequest, GenTableInf
   singleStatus: true, // 单个禁用
   multipleStatus: true, // 多个禁用
 })
-const { createTableIndex, handleQuery, handleSelectionChange } = useTableQueryPageHooks<
+const { handleQuery, handleSelectionChange } = useTableQueryPageHooks<
   GenTableInfoQueryRequest,
   GenTableInfoResponse
 >(state, queryExistsPage)
@@ -151,7 +149,6 @@ const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 const tableFormRef = useTemplateRef('tableFormRef')
 const importTableRef = useTemplateRef('importTableRef')
 const downloadCodeFileRef = useTemplateRef('downloadCodeFileRef')
-const { cellStyle, headerCellStyle } = useTableToolHooks()
 
 /**
  * 重置表单

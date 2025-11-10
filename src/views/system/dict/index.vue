@@ -82,17 +82,15 @@
           批量删除
         </el-button>
       </table-tool-bar>
-      <el-table
+      <xht-table
         v-loading="state.loadingStatus"
         :data="state.tableList"
-        :header-cell-style="headerCellStyle"
-        :cell-style="cellStyle"
         class="flex-1"
         empty-text="系统暂无字典！"
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="55" align="center" />
-        <el-table-column :index="createTableIndex" label="序号" type="index" width="55" />
+        <xht-column-index :size="queryParams.size" :current="queryParams.current" />
         <el-table-column label="字典名称" prop="dictName" width="120" />
         <el-table-column label="字典编码" prop="dictCode" width="120">
           <template #default="{ row }">
@@ -101,7 +99,7 @@
             </router-link>
           </template>
         </el-table-column>
-        <el-table-column label="排序序号" prop="sortOrder" width="80" />
+        <el-table-column label="排序" prop="sortOrder" width="80" />
         <el-table-column label="字典状态" prop="status" width="160" show-overflow-tooltip>
           <template #default="{ row }">
             <el-tag v-if="row.status === 1" type="success">启用</el-tag>
@@ -119,7 +117,7 @@
             <el-button icon="delete" link type="danger" @click="handleDelete(row)">删除</el-button>
           </template>
         </el-table-column>
-      </el-table>
+      </xht-table>
       <xht-pagination
         v-model:current-page="state.queryParams.current"
         v-model:page-size="state.queryParams.size"
@@ -134,7 +132,7 @@
 
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
-import { useTableQueryPageHooks, useTableToolHooks } from '@/hooks/use-crud-hooks'
+import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
 import DictForm from './components/dict-form.vue'
 import type { SysDictQueryRequest, SysDictResponse } from '@/service/model/system/dict.model'
 import { DictStatusEnums } from '@/service/model/system/dict.model'
@@ -160,7 +158,7 @@ const state = reactive<TableQueryPageState<SysDictQueryRequest, SysDictResponse>
   singleStatus: true, // 单个禁用
   multipleStatus: true, // 多个禁用
 })
-const { createTableIndex, handleQuery, handleSelectionChange } = useTableQueryPageHooks<
+const { handleQuery, handleSelectionChange } = useTableQueryPageHooks<
   SysDictQueryRequest,
   SysDictResponse
 >(state, querySysDictPage)
@@ -168,7 +166,6 @@ const { queryParams } = toRefs(state)
 
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 const dictFormRef = useTemplateRef('dictFormRef')
-const { cellStyle, headerCellStyle } = useTableToolHooks()
 const columnOption = ref<ColumnConfig<SysDictResponse>>({
   ...SysDictColumnOption,
 })

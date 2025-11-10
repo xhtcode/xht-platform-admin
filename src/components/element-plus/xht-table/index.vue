@@ -21,7 +21,7 @@ defineOptions({
   name: 'XhtTable',
 })
 
-const props = withDefaults(defineProps<XhtTableProps<T>>(), {
+const props = withDefaults(defineProps<XhtTableProps<T | any>>(), {
   data: () => [], // 表数据
   fit: true, // 列的宽度是否自撑开，默认true
   showHeader: true, // 是否显示表头，默认true

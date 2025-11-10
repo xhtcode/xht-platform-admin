@@ -54,23 +54,21 @@
         refresh-status
         @refresh="handleQuery"
       />
-      <el-table
+      <xht-table
         v-loading="state.loadingStatus"
-        :cell-style="cellStyle"
         :data="state.tableList"
-        :header-cell-style="headerCellStyle"
         class="flex-1"
         empty-text="系统相关日志！"
         @selection-change="handleSelectionChange"
       >
         <el-table-column align="center" type="selection" width="55" />
-        <el-table-column :index="createTableIndex" label="序号" type="index" width="55" />
+        <xht-column-index :size="queryParams.size" :current="queryParams.current" />
         <el-table-column align="center" label="生成批次号" prop="batchNo" />
         <el-table-column align="center" label="生成时间" prop="generateTime" />
         <el-table-column align="center" label="生成文件数量" prop="fileCount" />
         <el-table-column align="center" label="生成状态" prop="status" />
         <el-table-column align="center" label="错误信息" prop="errorMsg" />
-      </el-table>
+      </xht-table>
       <xht-pagination
         v-model:current-page="state.queryParams.current"
         v-model:page-size="state.queryParams.size"
@@ -84,7 +82,7 @@
 
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
-import { useTableQueryPageHooks, useTableToolHooks } from '@/hooks/use-crud-hooks'
+import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
 import type { GenLogQueryRequest, GenLogResponse } from '@/service/model/generate/log.model'
 import { queryGenLogPage } from '@/service/api/generate/log.api'
 import { ColumnConfig } from '@/components/table-tool-bar/types'
@@ -106,7 +104,7 @@ const state = reactive<TableQueryPageState<GenLogQueryRequest, GenLogResponse>>(
   singleStatus: true, // 单个禁用
   multipleStatus: true, // 多个禁用
 })
-const { createTableIndex, handleQuery, handleSelectionChange } = useTableQueryPageHooks<
+const { handleQuery, handleSelectionChange } = useTableQueryPageHooks<
   GenLogQueryRequest,
   GenLogResponse
 >(state, queryGenLogPage)
@@ -115,7 +113,6 @@ const columnOption = ref<ColumnConfig<GenDataSourceResponse>>({
   ...GenLogColumnOption,
 })
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
-const { cellStyle, headerCellStyle } = useTableToolHooks()
 
 /**
  * 重置表单

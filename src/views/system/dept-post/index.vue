@@ -104,11 +104,9 @@
             批量删除
           </el-button>
         </table-tool-bar>
-        <el-table
+        <xht-table
           v-loading="state.loadingStatus"
           :data="state.tableList"
-          :header-cell-style="headerCellStyle"
-          :cell-style="cellStyle"
           class="flex-1"
           current-row-key="id"
           border
@@ -116,7 +114,7 @@
           @selection-change="handleSelectionChange"
         >
           <el-table-column type="selection" width="55" align="center" />
-          <el-table-column :index="createTableIndex" label="序号" type="index" width="55" />
+          <xht-column-index :size="queryParams.size" :current="queryParams.current" />
           <el-table-column prop="postCode" label="岗位编码" width="120" />
           <el-table-column prop="postName" label="岗位名称" width="220" />
           <el-table-column prop="postLimit" label="员工统计" width="120">
@@ -153,7 +151,7 @@
               </el-button>
             </template>
           </el-table-column>
-        </el-table>
+        </xht-table>
         <xht-pagination
           v-model:current-page="state.queryParams.current"
           v-model:page-size="state.queryParams.size"
@@ -169,7 +167,7 @@
 
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
-import { useTableQueryPageHooks, useTableToolHooks } from '@/hooks/use-crud-hooks'
+import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
 import DeptPostForm from './components/dept-post-form.vue'
 import type {
   SysDeptPostQueryRequest,
@@ -202,7 +200,7 @@ const state = reactive<TableQueryPageState<SysDeptPostQueryRequest, SysDeptPostR
   singleStatus: true, // 单个禁用
   multipleStatus: true, // 多个禁用
 })
-const { createTableIndex, handleQuery, handleSelectionChange } = useTableQueryPageHooks<
+const { handleQuery, handleSelectionChange } = useTableQueryPageHooks<
   SysDeptPostQueryRequest,
   SysDeptPostResponse
 >(state, querySysDeptPostPage)
@@ -211,7 +209,6 @@ const { queryParams } = toRefs(state)
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 const deptPostFormRef = useTemplateRef('deptPostFormRef')
 const deptTreeRef = useTemplateRef('deptTreeRef')
-const { cellStyle, headerCellStyle } = useTableToolHooks()
 const columnOption = ref<ColumnConfig<SysDeptPostResponse>>({
   ...SysDeptPostColumnOption,
 })

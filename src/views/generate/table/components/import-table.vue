@@ -32,24 +32,22 @@
         </el-col>
       </el-row>
     </el-form>
-    <el-table
+    <xht-table
       ref="tableRef"
       v-loading="state.loadingStatus"
-      :cell-style="tableStyle.cellStyle"
       :data="state.tableList"
       height="65vh"
-      :header-cell-style="tableStyle.headerCellStyle"
       border
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="55" />
-      <el-table-column :index="createTableIndex" label="序号" type="index" width="55" />
+      <xht-column-index :size="queryParams.size" :current="queryParams.current" />
       <el-table-column label="表名" prop="tableName" />
       <el-table-column label="引擎" prop="engineName" />
       <el-table-column label="描述" prop="tableComment" />
       <el-table-column label="创建时间" prop="tableCreateTime" />
       <el-table-column label="更新时间" prop="tableUpdateTime" />
-    </el-table>
+    </xht-table>
     <template #footer>
       <el-button
         :disabled="state.loadingStatus || (state.checkData && state.checkData.length === 0)"
@@ -69,19 +67,11 @@ import type { FormInstance, FormRules } from 'element-plus'
 import { queryNoExistsPage } from '@/service/api/generate/table.api'
 import { useMessage } from '@/hooks/use-message'
 import ImportTableForm from '@/views/generate/table/components/import-table-form.vue'
-import { useTableToolHooks } from '@/hooks/use-crud-hooks'
 import type {
   GenTableInfoQueryRequest,
   GenTableInfoResponse,
 } from '@/service/model/generate/table.model'
 
-const tableStyle = useTableToolHooks()
-/**
- * 自定义表格索引生成
- */
-const createTableIndex = (index: number) => {
-  return ((state.queryParams.current || 1) - 1) * (state.queryParams.size || 0) + index + 1
-}
 const rules: FormRules = {
   dataSourceId: [{ required: true, message: '请选择配置名称', trigger: ['blur', 'change'] }],
 }

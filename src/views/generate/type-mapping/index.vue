@@ -59,18 +59,16 @@
           批量删除
         </el-button>
       </table-tool-bar>
-      <el-table
+      <xht-table
         v-loading="state.loadingStatus"
-        :cell-style="cellStyle"
         :data="state.tableList"
-        :header-cell-style="headerCellStyle"
         class="flex-1"
         border
         empty-text="系统相关字段类型映射！"
         @selection-change="handleSelectionChange"
       >
         <el-table-column align="center" type="selection" width="55" />
-        <el-table-column :index="createTableIndex" label="序号" type="index" width="55" />
+        <xht-column-index :size="queryParams.size" :current="queryParams.current" />
         <el-table-column align="center" label="数据库类型" prop="dbType" />
         <el-table-column align="center" label="数据库数据类型" prop="dbDataType" />
         <el-table-column align="center" label="目标编程语言" prop="targetLanguage" />
@@ -82,7 +80,7 @@
             <el-button icon="delete" link type="danger" @click="handleDelete(row)">删除</el-button>
           </template>
         </el-table-column>
-      </el-table>
+      </xht-table>
       <xht-pagination
         v-model:current-page="state.queryParams.current"
         v-model:page-size="state.queryParams.size"
@@ -97,7 +95,7 @@
 
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
-import { useTableQueryPageHooks, useTableToolHooks } from '@/hooks/use-crud-hooks'
+import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
 import TypeMappingForm from './components/type-mapping-form.vue'
 import type {
   GenTypeMappingQueryRequest,
@@ -128,7 +126,7 @@ const state = reactive<TableQueryPageState<GenTypeMappingQueryRequest, GenTypeMa
   singleStatus: true, // 单个禁用
   multipleStatus: true, // 多个禁用
 })
-const { createTableIndex, handleQuery, handleSelectionChange } = useTableQueryPageHooks<
+const { handleQuery, handleSelectionChange } = useTableQueryPageHooks<
   GenTypeMappingQueryRequest,
   GenTypeMappingResponse
 >(state, queryGenTypeMappingPage)
@@ -136,7 +134,6 @@ const { queryParams } = toRefs(state)
 
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 const typeMappingFormRef = useTemplateRef('typeMappingFormRef')
-const { cellStyle, headerCellStyle } = useTableToolHooks()
 const columnOption = ref<ColumnConfig<GenTypeMappingResponse>>({
   ...GenTypeMappingColumnOption,
 })

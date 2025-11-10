@@ -58,8 +58,8 @@ export const useUserInfoStore = defineStore('user_info', {
         getUserInfo()
           .then((res: AxiosResponse<any>) => {
             const data: any = res.data
-            // this.authorities = data.authorities
-            // this.dataScope = data.dataScope
+            this.authorities = data.authorities
+            this.dataScope = data.dataScope
             this.roles = []
             resolve(true)
           })

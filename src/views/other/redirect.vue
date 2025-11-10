@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-full"></div>
+  <div class="w-full h-full" />
 </template>
 <script lang="ts" setup>
 import { useRoute, useRouter } from 'vue-router'

@@ -82,17 +82,15 @@
           批量删除
         </el-button>
       </table-tool-bar>
-      <el-table
+      <xht-table
         v-loading="state.loadingStatus"
         :data="state.tableList"
-        :header-cell-style="headerCellStyle"
-        :cell-style="cellStyle"
         class="flex-1"
         empty-text="系统暂无字典项！"
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="55" align="center" />
-        <el-table-column :index="createTableIndex" label="序号" type="index" width="55" />
+        <xht-column-index :size="queryParams.size" :current="queryParams.current" />
         <el-table-column label="字典项编码" prop="dictCode" width="160" />
         <el-table-column label="字典项标签" prop="itemLabel" width="160" />
         <el-table-column label="字典项值" prop="itemValue" width="160" />
@@ -128,7 +126,7 @@
             <el-button icon="delete" link type="danger" @click="handleDelete(row)">删除</el-button>
           </template>
         </el-table-column>
-      </el-table>
+      </xht-table>
       <xht-pagination
         v-model:current-page="state.queryParams.current"
         v-model:page-size="state.queryParams.size"
@@ -143,7 +141,7 @@
 
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
-import { useTableQueryPageHooks, useTableToolHooks } from '@/hooks/use-crud-hooks'
+import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
 import DictItemForm from './components/dict-item-form.vue'
 import type {
   SysDictItemQueryRequest,
@@ -177,7 +175,7 @@ const handleGetSysDictItemPage = (data: SysDictItemQueryRequest) => {
   state.queryParams.dictId = route.params?.id
   return querySysDictItemPage(data)
 }
-const { createTableIndex, handleQuery, handleSelectionChange } = useTableQueryPageHooks<
+const { handleQuery, handleSelectionChange } = useTableQueryPageHooks<
   SysDictItemQueryRequest,
   SysDictItemResponse
 >(state, handleGetSysDictItemPage)
@@ -185,7 +183,6 @@ const { queryParams } = toRefs(state)
 
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 const dictItemFormRef = useTemplateRef('dictItemFormRef')
-const { cellStyle, headerCellStyle } = useTableToolHooks()
 const columnOption = ref<ColumnConfig<SysDictItemResponse>>({
   ...SysDictItemColumnOption,
 })

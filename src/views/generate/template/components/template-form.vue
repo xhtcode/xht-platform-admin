@@ -33,12 +33,12 @@
         <el-col :span="6">
           <el-form-item label="文件类型" prop="templateFileType">
             <el-select v-model="addUpdateForm.templateFileType" placeholder="请选择文件类型">
-              <el-option label="java" value="java"></el-option>
-              <el-option label="vue" value="vue"></el-option>
-              <el-option label="ts" value="ts"></el-option>
-              <el-option label="ts" value="js"></el-option>
-              <el-option label="sql" value="sql"></el-option>
-              <el-option label="txt" value="txt"></el-option>
+              <el-option label="java" value="java" />
+              <el-option label="vue" value="vue" />
+              <el-option label="ts" value="ts" />
+              <el-option label="ts" value="js" />
+              <el-option label="sql" value="sql" />
+              <el-option label="txt" value="txt" />
             </el-select>
           </el-form-item>
         </el-col>
@@ -76,14 +76,14 @@
               v-model="addUpdateForm.templateIgnoreField"
               placeholder="请输入忽略字段"
             >
-              <el-option label="id" value="id"></el-option>
-              <el-option label="tenantId" value="tenant_id"></el-option>
-              <el-option label="version" value="version"></el-option>
-              <el-option label="createBy" value="create_by"></el-option>
-              <el-option label="createTime" value="create_time"></el-option>
-              <el-option label="updateBy" value="update_by"></el-option>
-              <el-option label="updateTime" value="update_time"></el-option>
-              <el-option label="delFlag" value="del_flag"></el-option>
+              <el-option label="id" value="id" />
+              <el-option label="tenantId" value="tenant_id" />
+              <el-option label="version" value="version" />
+              <el-option label="createBy" value="create_by" />
+              <el-option label="createTime" value="create_time" />
+              <el-option label="updateBy" value="update_by" />
+              <el-option label="updateTime" value="update_time" />
+              <el-option label="delFlag" value="del_flag" />
             </el-select>
           </el-form-item>
         </el-col>

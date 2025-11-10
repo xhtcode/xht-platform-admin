@@ -43,18 +43,16 @@
           修改
         </el-button>
       </table-tool-bar>
-      <el-table
+      <xht-table
         v-loading="state.loadingStatus"
-        :cell-style="cellStyle"
         :data="state.tableList"
-        :header-cell-style="headerCellStyle"
         class="flex-1"
         ref="tableRef"
         highlight-current-row
         @current-change="handleCurrentChange"
         empty-text="系统暂无相关模板信息！"
       >
-        <el-table-column :index="createTableIndex" label="序号" type="index" width="55" />
+        <xht-column-index :size="queryParams.size" :current="queryParams.current" />
         <el-table-column label="分组名称" prop="groupName" width="200" />
         <el-table-column label="模板数量" prop="templateCount" width="80" />
         <el-table-column label="分组描述" prop="groupSort" width="80" />
@@ -68,7 +66,7 @@
             <el-button icon="delete" link type="danger" @click="handleDelete(row)">删除</el-button>
           </template>
         </el-table-column>
-      </el-table>
+      </xht-table>
       <xht-pagination
         v-model:current-page="state.queryParams.current"
         v-model:page-size="state.queryParams.size"
@@ -84,7 +82,7 @@
 
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
-import { useTableQueryPageHooks, useTableToolHooks } from '@/hooks/use-crud-hooks'
+import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
 import type {
   GenTemplateGroupQueryRequest,
   GenTemplateGroupResponse,
@@ -116,7 +114,7 @@ const state = reactive<TableQueryPageState<GenTemplateGroupQueryRequest, GenTemp
     multipleStatus: true, // 多个禁用
   }
 )
-const { createTableIndex, handleQuery, handleCurrentChange } = useTableQueryPageHooks<
+const { handleQuery, handleCurrentChange } = useTableQueryPageHooks<
   GenTemplateGroupQueryRequest,
   GenTemplateGroupResponse
 >(state, queryGenTemplateGroupPage)
@@ -126,7 +124,6 @@ const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 const tableRef = useTemplateRef('tableRef')
 const templateGroupFormRef = useTemplateRef('templateGroupFormRef')
 const templateGroupViewRef = useTemplateRef('templateGroupViewRef')
-const { cellStyle, headerCellStyle } = useTableToolHooks()
 const columnOption = ref<ColumnConfig<GenTemplateGroupResponse>>({
   ...GenTemplateGroupOperationOption,
 })

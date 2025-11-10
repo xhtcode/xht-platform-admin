@@ -38,39 +38,49 @@
         <el-button circle icon="Switch" size="small" @click="toggleSearch" />
       </el-tooltip>
       <el-tooltip class="item" content="列设置" placement="top">
-        <el-button ref="columnBtnRef" circle color="#626aef" icon="Menu" size="small" />
+        <el-button @click="show" circle color="#626aef" icon="Menu" size="small" />
       </el-tooltip>
       <slot name="before" />
     </div>
-    <el-popover
-      :virtual-ref="columnBtnRef"
+    <el-drawer
+      title="列设置"
+      v-model="visibleStatus"
       append-to="body"
-      placement="left-start"
-      trigger="click"
-      virtual-triggering
+      size="30vw"
+      :before-close="close"
       width="auto"
     >
-      <el-checkbox
-        v-model="checkAllStatus"
-        :indeterminate="indeterminateStatus"
-        @change="handleCheckAllChange"
-      >
-        全选
-      </el-checkbox>
-      <el-divider style="margin: 0" />
-      <div
-        v-for="(item, key) in columnData"
-        :key="key"
-        class="max-w-[160px] overflow-hidden ws-nowrap"
-      >
+      <template #title>
         <el-checkbox
-          v-model="item!.visible"
-          :disabled="item!.disabled"
-          :label="item!.desc"
-          @change="checkboxChange()"
-        />
+          v-model="checkAllStatus"
+          :indeterminate="indeterminateStatus"
+          @change="handleCheckAllChange"
+        >
+          全选（列）
+        </el-checkbox>
+      </template>
+      <div v-for="(item, key) in columnData" :key="key" class="w-full p-10px flex">
+        <div class="w-120px overflow-hidden ws-nowrap">
+          <el-checkbox
+            v-model="item!.visible"
+            :disabled="item!.disabled"
+            :label="item!.desc"
+            @change="checkboxChange()"
+          />
+        </div>
+        <div class="flex-1">
+          <el-input-number
+            v-model="item!.width"
+            placeholder="请输入尺寸"
+            class="w-full!"
+            :min="50"
+            :max="999"
+            :step="10"
+            :disabled="!item!.visible"
+          />
+        </div>
       </div>
-    </el-popover>
+    </el-drawer>
   </div>
 </template>
 
@@ -100,10 +110,9 @@ const columnData = defineModel<ColumnConfig<any>>('columnData', {
   required: false,
   default: {},
 })
-const columnBtnRef = useTemplateRef('columnBtnRef')
 const checkAllStatus = ref<boolean>(false)
 const indeterminateStatus = ref<boolean>(false)
-
+const visibleStatus = ref<boolean>(false)
 const checkBoxDataList = computed(() => {
   return Object.entries(columnData.value).map(([_, item]) => item) || []
 })
@@ -166,6 +175,19 @@ const checkboxChange = () => {
   indeterminateStatus.value = checkboxData.value.length > 0 && !empStatus
   checkAllStatus.value = empStatus
 }
+/**
+ * 显示列设置
+ */
+const show = () => {
+  visibleStatus.value = true
+}
+/**
+ * 隐藏列设置
+ */
+const close = () => {
+  visibleStatus.value = false
+}
+
 onMounted(() => {
   checkboxChange()
 })

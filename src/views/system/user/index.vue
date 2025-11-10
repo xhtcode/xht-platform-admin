@@ -159,17 +159,15 @@
             批量删除
           </el-button>
         </table-tool-bar>
-        <el-table
+        <xht-table
           v-loading="state.loadingStatus"
           :data="state.tableList"
-          :header-cell-style="headerCellStyle"
-          :cell-style="cellStyle"
           border
           :empty-text="queryParams.deptId ? '该部门下未添加用户信息' : '系统内暂无相关数据'"
           @selection-change="handleSelectionChange"
         >
           <el-table-column type="selection" width="55" align="center" />
-          <el-table-column :index="createTableIndex" label="序号" type="index" width="55" />
+          <xht-column-index :size="queryParams.size" :current="queryParams.current" />
           <el-table-column label="账号" prop="userName" width="120" />
           <el-table-column label="昵称" prop="nickName" />
           <el-table-column label="用户状态" prop="userStatus" width="120">
@@ -218,7 +216,7 @@
               </el-space>
             </template>
           </el-table-column>
-        </el-table>
+        </xht-table>
         <xht-pagination
           v-model:current-page="state.queryParams.current"
           v-model:page-size="state.queryParams.size"
@@ -235,7 +233,7 @@
 
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
-import { useTableQueryPageHooks, useTableToolHooks } from '@/hooks/use-crud-hooks'
+import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
 import UserForm from '@/views/system/user/components/user-form.vue'
 import type { SysUserQueryRequest, SysUserResponse } from '@/service/model/system/user.model'
 import { UserStatusEnums } from '@/service/model/system/user.model'
@@ -245,15 +243,6 @@ import {
   removeSysUserByIds,
   resetPassword,
 } from '@/service/api/system/user.api'
-import {
-  LocationFilled,
-  OfficeBuilding,
-  Postcard,
-  Present,
-  Tickets,
-  User,
-  UserFilled,
-} from '@element-plus/icons-vue'
 import type { SysDeptResponse } from '@/service/model/system/dept.model'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { disabledTodayAndFuture } from '@/utils/moudle/element'
@@ -277,7 +266,7 @@ const state = reactive<TableQueryPageState<SysUserQueryRequest, SysUserResponse>
   singleStatus: true, // 单个禁用
   multipleStatus: true, // 多个禁用
 })
-const { createTableIndex, handleQuery, handleSelectionChange } = useTableQueryPageHooks<
+const { handleQuery, handleSelectionChange } = useTableQueryPageHooks<
   SysUserQueryRequest,
   SysUserResponse
 >(state, querySysUserPage)
@@ -287,7 +276,6 @@ const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 const userFormRef = useTemplateRef('userFormRef')
 const deptTreeRef = useTemplateRef('deptTreeRef')
 const userRoleFormRef = useTemplateRef('userRoleFormRef')
-const { cellStyle, headerCellStyle } = useTableToolHooks()
 const columnOption = ref<ColumnConfig<SysUserResponse>>({
   ...SysUserColumnOption,
 })

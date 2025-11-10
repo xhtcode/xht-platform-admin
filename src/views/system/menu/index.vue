@@ -63,13 +63,11 @@
           折叠/展开
         </el-button>
       </table-tool-bar>
-      <el-table
+      <xht-table
         v-if="state.refreshTable"
         ref="tableRef"
         v-loading="state.loadingStatus"
         :data="state.tableList"
-        :default-expand-all="state.expandAllStatus"
-        :header-cell-style="tableStyle.headerCellStyle"
         :tree-props="{ children: 'children' }"
         row-key="id"
         class="flex-1"
@@ -197,7 +195,7 @@
             <el-button icon="delete" link type="danger" @click="handleDelete(row)">删除</el-button>
           </template>
         </el-table-column>
-      </el-table>
+      </xht-table>
     </div>
     <menu-form ref="menuFormRef" @success="handleQuery()" />
   </div>
@@ -221,16 +219,9 @@ import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { FormInstance } from 'element-plus'
 import MenuForm from '@/views/system/menu/components/menu-form.vue'
 import { SysMenuColumnOption } from '@/views/system/menu/menu.data'
-import { useTableToolHooks } from '@/hooks/use-crud-hooks'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 
 defineOptions({ name: 'SysMenuViewIndex' })
-
-/**
- * 定义表格通用样式
- * @returns  css
- */
-const tableStyle: TableStyle = useTableToolHooks()
 
 interface CrudOption {
   total: number

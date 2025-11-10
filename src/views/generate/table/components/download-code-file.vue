@@ -23,18 +23,16 @@
         </el-col>
       </el-row>
     </el-form>
-    <el-table
+    <xht-table
       v-loading="state.loadingStatus"
-      :cell-style="cellStyle"
       :data="state.tableList"
-      :header-cell-style="headerCellStyle"
       empty-text="系统相关表信息！"
     >
-      <el-table-column :index="createTableIndex" label="序号" type="index" width="55" />
+      <xht-column-index type="step" />
       <el-table-column label="引擎名称" prop="engineName" width="100" />
       <el-table-column label="数据库表名" align="left" prop="tableName" width="220" sortable />
       <el-table-column label="表注释" prop="tableComment" width="260" show-overflow-tooltip />
-    </el-table>
+    </xht-table>
     <template #footer>
       <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>
       <el-button @click="close">取 消</el-button>
@@ -45,7 +43,6 @@
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
 import type { GenTableInfoResponse } from '@/service/model/generate/table.model'
-import { useTableToolHooks } from '@/hooks/use-crud-hooks'
 import { downloadFileApi } from '@/service/api/generate/table.api'
 import { useMessage } from '@/hooks/use-message'
 
@@ -69,14 +66,7 @@ const state = reactive<CrudOption>({
   loadingStatus: false,
   tableList: [],
 })
-const { cellStyle, headerCellStyle } = useTableToolHooks()
 
-/**
- * 自定义表格索引生成
- */
-const createTableIndex = (index: number) => {
-  return index + 1
-}
 /**
  * 打开显示
  */
@@ -99,6 +89,7 @@ const submitForm = () => {
         addUpdateForm.value.packageName
       )
         .then((data) => {
+          console.log(data)
           useMessage().success('下载文件成功!')
         })
         .finally(() => {

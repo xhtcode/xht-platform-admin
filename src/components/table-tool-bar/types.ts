@@ -28,6 +28,7 @@ export interface ColumnOption {
   desc: string //描述
   visible: boolean //是否显示 true 显示
   disabled?: boolean //是否禁用 true 禁用
+  width?: number
 }
 
 /**

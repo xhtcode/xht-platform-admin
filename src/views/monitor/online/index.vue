@@ -63,13 +63,6 @@
           </template>
         </el-table-column>
       </el-table>
-      <pagination
-        v-if="state.total > 0"
-        v-model:page="queryParams.pageNum"
-        v-model:limit="queryParams.pageSize"
-        :total="state.total"
-        @pagination="handleQuery"
-      />
     </div>
   </div>
 </template>

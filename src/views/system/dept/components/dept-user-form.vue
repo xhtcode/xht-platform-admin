@@ -11,11 +11,9 @@
         </div>
       </div>
     </template>
-    <el-table
+    <xht-table
       ref="tableRef"
       v-loading="state.loadingStatus"
-      :header-cell-style="headerCellStyle"
-      :cell-style="cellStyle"
       border
       height="65vh"
       row-key="userId"
@@ -43,7 +41,7 @@
           <user-status-tag :status="row.userStatus" />
         </template>
       </el-table-column>
-    </el-table>
+    </xht-table>
     <template #footer>
       <span>
         <el-button @click="close">取 消</el-button>
@@ -55,7 +53,6 @@
 <script setup lang="ts">
 import type { ModeIdType } from '@/service/model/base.model'
 import { getBindUser } from '@/service/api/tools.api'
-import { useTableToolHooks } from '@/hooks/use-crud-hooks'
 import type { UserSimpleVo } from '@/service/model/system/user.model'
 import { useMessage } from '@/hooks/use-message'
 
@@ -80,7 +77,6 @@ const props = withDefaults(defineProps<DeptUserProps>(), {
   modelValue: undefined,
 })
 
-const { cellStyle, headerCellStyle } = useTableToolHooks()
 const tableRef = useTemplateRef<any>('tableRef')
 const emits = defineEmits<{
   (e: 'change', user: UserSimpleVo): void

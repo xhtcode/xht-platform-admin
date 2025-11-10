@@ -30,14 +30,14 @@ interface ImportMetaEnv {
   VITE_GENERATE_API_PREFIX: string
 }
 
-interface ImportMeta {
+export interface ImportMeta {
   readonly env: ImportMetaEnv
 }
 
 /**
  * 平台的名称、版本、运行所需的node版本、依赖、构建时间的类型提示
  */
-declare const __APP_INFO__: {
+export declare const __APP_INFO__: {
   pkg: {
     name: string
     version: string

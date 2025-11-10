@@ -1,8 +1,6 @@
 <template>
   <div class="xht-view-container">
-    <div class="xht-view-main">
-      <xht-table />
-    </div>
+    <div class="xht-view-main" />
   </div>
 </template>
 <script lang="ts" setup>

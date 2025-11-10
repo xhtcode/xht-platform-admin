@@ -36,15 +36,10 @@
         </el-form-item>
       </el-col>
     </el-row>
-    <el-table
-      border
-      :cell-style="cellStyle"
-      :data="columnInfo"
-      :header-cell-style="headerCellStyle"
-    >
+    <xht-table :data="columnInfo">
       <el-table-column label="基础信息">
         <template #default>
-          <el-table-column type="index" label="序号" :index="createIndex" width="55" />
+          <xht-column-index type="step" />
           <el-table-column prop="dbName" label="DB字段名" width="160">
             <template #default="{ row }">
               <el-text :type="row.dbPrimary === 1 ? 'danger' : ''">
@@ -90,15 +85,13 @@
           </el-select>
         </template>
       </el-table-column>
-    </el-table>
+    </xht-table>
   </div>
 </template>
 <script lang="ts" setup>
 import type { GenColumnInfoResponse } from '@/service/model/generate/column.model'
-import { useTableToolHooks } from '@/hooks/use-crud-hooks'
 import type { GenTableInfoResponse } from '@/service/model/generate/table.model'
 
-const { cellStyle, headerCellStyle } = useTableToolHooks()
 /**
  * 列信息模型，用于双向绑定列数据
  * @type {GenColumnInfoResponse[]} 列信息数组

@@ -1,11 +1,10 @@
 import type { FormRules } from 'element-plus'
-import { ColumnConfig, ColumnOption } from '@/components/table-tool-bar/types'
+import { ColumnConfig } from '@/components/table-tool-bar/types'
 import type {
   GenDataSourceOperationRequest,
   GenDataSourceResponse,
 } from '@/service/model/generate/datasource.model'
 import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
-import { SysDeptResponse } from '@/service/model/system/dept.model'
 
 /**
  * 增改页面 表单类型 默认值

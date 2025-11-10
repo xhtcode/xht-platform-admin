@@ -16,10 +16,10 @@
             :class="{ 'is-active': layoutType === 'default' }"
             @click="changeLayoutType('default')"
           >
-            <div class="layout-dark"></div>
+            <div class="layout-dark" />
             <div class="layout-container">
-              <div class="layout-light"></div>
-              <div class="layout-content"></div>
+              <div class="layout-light" />
+              <div class="layout-content" />
             </div>
             <el-icon>
               <CircleCheckFilled />
@@ -30,9 +30,9 @@
             :class="{ 'is-active': layoutType === 'columns' }"
             @click="changeLayoutType('columns')"
           >
-            <div class="layout-dark"></div>
-            <div class="layout-light"></div>
-            <div class="layout-content"></div>
+            <div class="layout-dark" />
+            <div class="layout-light" />
+            <div class="layout-content" />
             <el-icon>
               <CircleCheckFilled />
             </el-icon>

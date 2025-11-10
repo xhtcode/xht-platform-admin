@@ -1,12 +1,12 @@
 <template>
-  <el-table :cell-style="cellStyle" :data="queryColumns" :header-cell-style="headerCellStyle">
+  <el-table :data="queryColumns">
     <el-table-column>
       <template #header>
         <div class="text-left">
           <el-button type="primary" @click="handleAdd">添加{{ queryColumns.length }}</el-button>
         </div>
       </template>
-      <el-table-column type="index" label="序号" :index="createIndex" width="55" />
+      <xht-column-index type="step" />
       <el-table-column label="查询类型">
         <template #default="{ row }">
           <el-select v-model="row.queryType">
@@ -49,7 +49,6 @@
   </el-table>
 </template>
 <script lang="ts" setup>
-import { useTableToolHooks } from '@/hooks/use-crud-hooks'
 import type {
   GenColumnInfoResponse,
   GenTableColumnQueryResponse,
@@ -60,7 +59,6 @@ defineOptions({
   name: 'ColumnFormQuery',
   inheritAttrs: false,
 })
-const { cellStyle, headerCellStyle } = useTableToolHooks()
 const queryColumns = ref<GenTableColumnQueryResponse[]>([])
 const count = shallowRef(0)
 const columnInfo = defineModel<GenColumnInfoResponse[]>('columnInfo', {

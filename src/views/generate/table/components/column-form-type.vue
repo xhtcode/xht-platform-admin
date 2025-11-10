@@ -1,8 +1,8 @@
 <template>
-  <el-table :cell-style="cellStyle" :data="columnInfo" :header-cell-style="headerCellStyle">
+  <xht-table :data="columnInfo">
     <el-table-column label="基础信息">
       <template #default>
-        <el-table-column type="index" label="序号" :index="createIndex" width="55" />
+        <xht-column-index type="step" />
         <el-table-column prop="dbName" label="DB字段名" width="160">
           <template #default="{ row }">
             <el-text :type="row.dbPrimary === 1 ? 'danger' : ''">
@@ -39,14 +39,12 @@
         />
       </template>
     </el-table-column>
-  </el-table>
+  </xht-table>
 </template>
 <script lang="ts" setup>
 import { GenColumnInfoResponse } from '@/service/model/generate/column.model'
-import { useTableToolHooks } from '@/hooks/use-crud-hooks'
 import { DataBaseTypeEnums, LanguageTypeEnums } from '@/service/enums/generate/generate.enums'
 
-const { cellStyle, headerCellStyle } = useTableToolHooks()
 const columnInfo = defineModel<GenColumnInfoResponse[]>('columnInfo', {
   required: true,
   default: () => [],
