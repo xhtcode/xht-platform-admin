@@ -48,7 +48,6 @@ export default defineConfigWithVueTs(
       'vue/operator-linebreak': 'off', //关闭操作符换行规则的检查。
       'vue/html-self-closing': 'error', //强制自闭样式
     },
-  },
-  // 跳过Prettier格式化相关规则
-  skipFormatting,
+  }, // 跳过Prettier格式化相关规则
+  skipFormatting
 )
