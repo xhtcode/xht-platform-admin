@@ -7,6 +7,8 @@
     element-loading-text="拼命加载中"
     label-width="100px"
     class="flex h-full flex-direction-column"
+    scroll-to-error
+    inline-message
   >
     <div>
       <el-row>

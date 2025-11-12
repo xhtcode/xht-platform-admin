@@ -32,25 +32,17 @@ export const SysRoleOperationRules: FormRules = {
  * 列表显示配置
  */
 export const SysRoleColumnOption: ColumnConfig<SysRoleResponse> = {
-  roleName: { desc: '角色名称', visible: true, disabled: false },
+  roleName: {
+    desc: '角色名称',
+    visible: true,
+    disabled: false,
+  },
   roleCode: { desc: '角色编码', visible: true, disabled: false },
   roleStatus: { desc: '角色状态', visible: true, disabled: false },
   dataScope: { desc: '数据范围', visible: true, disabled: false },
   roleSort: { desc: '显示顺序', visible: true, disabled: false },
-  createBy: { desc: '创建人', visible: true, disabled: false },
-  createTime: {
-    desc: '创建时间',
-    visible: true,
-    disabled: false,
-  },
-  updateBy: {
-    desc: '更新人',
-    visible: false,
-    disabled: false,
-  },
-  updateTime: {
-    desc: '更新时间',
-    visible: false,
-    disabled: false,
-  },
+  createBy: { desc: '创建人', visible: false, disabled: false },
+  createTime: { desc: '创建时间', visible: false, disabled: false },
+  updateBy: { desc: '更新人', visible: false, disabled: false },
+  updateTime: { desc: '更新时间', visible: false, disabled: false },
 }

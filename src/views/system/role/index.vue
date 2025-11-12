@@ -11,7 +11,12 @@
         <el-row v-if="!state.searchStatus">
           <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
             <el-form-item label="关键字" prop="keyWord">
-              <el-input v-model="queryParams.keyWord" placeholder="请输入关键字" />
+              <el-input
+                v-model="queryParams.keyWord"
+                placeholder="请输入关键字"
+                :maxlength="100"
+                show-word-limit
+              />
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" class="text-center">
@@ -82,7 +87,7 @@
         <el-table-column type="selection" width="55" align="center" />
         <xht-column-index :size="queryParams.size" :current="queryParams.current" />
         <el-table-column label="角色名称" prop="roleName" min-width="120" />
-        <el-table-column label="角色编码" prop="roleCode" width="100" />
+        <el-table-column label="角色编码" prop="roleCode" min-width="160" />
         <el-table-column label="角色状态" prop="roleStatus" width="100">
           <template #default="{ row }">
             <el-tag :type="row.roleStatus === 0 ? 'success' : 'danger'">
@@ -102,11 +107,31 @@
             <el-tag v-if="row.dataScope === 6" color="#F2F6FC" effect="dark">仅本人数据权限</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="显示顺序" prop="roleSort" width="100" />
-        <el-table-column label="创建人" prop="createBy" width="160" />
-        <el-table-column label="创建时间" prop="createTime" width="180" />
-        <el-table-column label="更新人" prop="updateBy" width="160" />
-        <el-table-column label="更新时间" prop="updateTime" width="180" />
+        <el-table-column label="显示顺序" prop="roleSort" width="120" />
+        <el-table-column
+          label="创建人"
+          prop="createBy"
+          width="160"
+          v-if="columnOption.createBy?.visible"
+        />
+        <el-table-column
+          label="创建时间"
+          prop="createTime"
+          width="180"
+          v-if="columnOption.createTime?.visible"
+        />
+        <el-table-column
+          label="更新人"
+          prop="updateBy"
+          width="160"
+          v-if="columnOption.updateBy?.visible"
+        />
+        <el-table-column
+          label="更新时间"
+          prop="updateTime"
+          width="180"
+          v-if="columnOption.updateTime?.visible"
+        />
         <el-table-column fixed="right" label="操作" width="260px">
           <template #default="{ row }">
             <el-button icon="edit" link type="success" @click="handleEdit(row)">修改</el-button>

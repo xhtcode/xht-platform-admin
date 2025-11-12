@@ -1,6 +1,15 @@
 import type { BasicResponse, ModeIdType, PageQueryRequest } from '@/service/model/base.model'
-import type { SysDeptResponse } from '@/service/model/system/dept.model'
 import type { SysDeptPostResponse } from '@/service/model/system/dept.post.model'
+
+/**
+ * 用户类型枚举（对应 Java 的 UserTypeEnums）
+ */
+export enum UserTypeEnums {
+  // 枚举成员（对应 Java 中的枚举实例）
+  ADMIN = 1,
+  BUSINESS = 2,
+  USER = 3,
+}
 
 /**
  * 用户账号状态枚举
@@ -98,82 +107,59 @@ export const UserStatusColor: UserStatusColorType = {
 /**
  * 操作类型
  */
-export interface SysUserOperationRequest {
-  id?: ModeIdType
-  nickName: string // 用户昵称
-  leaderName: string
-  userStatus: UserStatusEnums // 用户状态
-  deptId: ModeIdType
-  postId: ModeIdType
-  profile: UserProfilesCreateRequest // 用户信息
-  dept: SysDeptResponse
-  post: SysDeptPostResponse
-
-  [key: string]: any
-}
-
-export interface UserProfilesCreateRequest {
-  realName: string //真实姓名
-  idCardNumber: string //身份证号
-  gender: number //性别
-  birthDate: any //出生日期
-  age: number //年龄
-  address: string //地址
-  postalCode: string //邮政编码
-}
+export interface SysUserOperationRequest extends SysUserVo {}
 
 /**
  * 查询请求类型
  */
 export interface SysUserQueryRequest extends PageQueryRequest {
-  userName?: string // 用户名
-  userStatus?: UserStatusEnums // 用户状态
-  nickName?: string //  用户昵称
-  realName?: string // 真实姓名
-  idCardNumber?: string // 身份证号码
-  gender?: string // 性别
-  birthDate?: string[] // 生日开始时间
-  birthDateStart?: string // 生日开始时间
-  birthDateEnd?: string // 生日结束时间
-  ageStart?: number // 年龄
-  ageEnd?: number // 年龄
-  postalCode?: string // 邮政编码
-  deptId?: ModeIdType // 部门ID
+  userType?: UserTypeEnums // 用户类型
+  userName?: string // 用户账号
+  nickName?: string // 用户昵称
+  userStatus?: UserStatusEnums // 账号状态
+  userPhone?: string // 手机号码
+  deptId?: number // 部门ID
 }
 
 /**
  * 响应类型
  */
 export interface SysUserProfileResponse extends BasicResponse {
-  id: ModeIdType //信息ID
-  realName: string //真实姓名
-  idCardNumber: string //身份证号
-  gender: number //性别
-  birthDate: Date //出生日期
-  age: number //年龄
-  address: string //地址
-  postalCode: string //邮政编码
+  id?: ModeIdType // 信息ID
+  userId?: ModeIdType // 用户id
+  realName?: string // 真实姓名
+  idCard?: string // 身份证号
+  gender?: number // 用户性别（例如：1-男，2-女，0-未知）
+  birthDate?: string // 出生日期（格式通常为 'yyyy-MM-dd'）
+  age?: number // 用户年龄
+  address?: string // 用户地址
+  postalCode?: string // 邮政编码
+  emergencyContact?: string // 紧急联系人
+  emergencyPhone?: string // 紧急联系人电话
+  nation?: string // 用户民族
 }
 
 /**
  * 响应类型
  */
 export interface SysUserResponse extends BasicResponse {
-  id: ModeIdType
-  userType: any
-  userAccount: string
-  userName: string
-  passWord: string
-  passWordSalt: string
-  phoneNumber: string
-  avatarUrl: any
-  userStatus: UserStatusEnums
-  deptId: string
-  postId: any
-  profile: SysUserProfileResponse
-  positionNature: any
-  dept: SysDeptResponse
-  post: SysDeptPostResponse
+  id: ModeIdType // 用户ID
+  userType: UserTypeEnums // 用户类型
+  userName: string // 用户名
+  nickName: string // 用户昵称
+  userStatus: UserStatusEnums // 用户状态
+  userPhone: string //手机号码
+  userAvatar: string // 头像
+  deptId: ModeIdType // 部门ID
+  deptName: string // 部门名称
+}
+
+/**
+ * 响应类型
+ */
+export interface SysUserVo extends Partial<SysUserResponse> {
+  profile: SysUserProfileResponse // 用户信息
+  postInfos: SysDeptPostResponse[] // 岗位信息
 }
 
 /**

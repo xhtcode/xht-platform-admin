@@ -71,6 +71,11 @@
 .el-form {
   user-select: none;
 }
+
+.el-form-item {
+  margin-bottom: 8px !important;
+}
+
 //=================== 表格控件样式修改 ===================
 .el-table__empty-text {
   user-select: none;

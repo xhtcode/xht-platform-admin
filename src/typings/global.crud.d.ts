@@ -4,6 +4,9 @@ import { BasicFormRequest } from '@/service/model/base.model'
  * 增删改查 基础字段设置
  */
 declare global {
+  /**
+   * 增删改查操作类型
+   */
   type OperationType = 'save' | 'update' | 'remove' | 'query'
 
   /**

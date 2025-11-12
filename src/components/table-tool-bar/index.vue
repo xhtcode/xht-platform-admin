@@ -59,27 +59,19 @@
           全选（列）
         </el-checkbox>
       </template>
-      <div v-for="(item, key) in columnData" :key="key" class="w-full p-10px flex">
-        <div class="w-120px overflow-hidden ws-nowrap">
-          <el-checkbox
-            v-model="item!.visible"
-            :disabled="item!.disabled"
-            :label="item!.desc"
-            @change="checkboxChange()"
-          />
-        </div>
-        <div class="flex-1">
-          <el-input-number
-            v-model="item!.width"
-            placeholder="请输入尺寸"
-            class="w-full!"
-            :min="50"
-            :max="999"
-            :step="10"
-            :disabled="!item!.visible"
-          />
-        </div>
+      <div
+        v-for="(item, key) in columnData"
+        :key="key"
+        class="w-full p-4px overflow-hidden ws-nowrap"
+      >
+        <el-checkbox
+          v-model="item!.visible"
+          :disabled="item!.disabled"
+          :label="item!.desc"
+          @change="checkboxChange()"
+        />
       </div>
+      {{ columnData }}
     </el-drawer>
   </div>
 </template>

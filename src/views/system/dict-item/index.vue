@@ -11,7 +11,12 @@
         <el-row v-if="!state.searchStatus">
           <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
             <el-form-item label="关键字" prop="keyWord">
-              <el-input v-model="queryParams.keyWord" placeholder="请输入关键字" />
+              <el-input
+                v-model="queryParams.keyWord"
+                placeholder="请输入关键字"
+                :maxlength="100"
+                show-word-limit
+              />
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" class="text-center">

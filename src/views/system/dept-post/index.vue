@@ -15,7 +15,12 @@
           <el-row v-if="!state.searchStatus">
             <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="4">
               <el-form-item label="关键字" prop="keyWord">
-                <el-input v-model="queryParams.keyWord" placeholder="请输入关键字" />
+                <el-input
+                  v-model="queryParams.keyWord"
+                  placeholder="请输入关键字"
+                  :maxlength="100"
+                  show-word-limit
+                />
               </el-form-item>
             </el-col>
             <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="4" class="text-center">
@@ -115,9 +120,24 @@
         >
           <el-table-column type="selection" width="55" align="center" />
           <xht-column-index :size="queryParams.size" :current="queryParams.current" />
-          <el-table-column prop="postCode" label="岗位编码" width="120" />
-          <el-table-column prop="postName" label="岗位名称" width="220" />
-          <el-table-column prop="postLimit" label="员工统计" width="120">
+          <el-table-column
+            prop="postCode"
+            label="岗位编码"
+            width="120"
+            v-if="columnOption.postCode?.visible"
+          />
+          <el-table-column
+            prop="postName"
+            label="岗位名称"
+            min-width="180"
+            v-if="columnOption.postName?.visible"
+          />
+          <el-table-column
+            prop="postLimit"
+            label="员工统计"
+            width="120"
+            v-if="columnOption.postLimit?.visible"
+          >
             <template #default="{ row }">
               <el-tag :type="row.postHave >= row.postLimit ? 'danger' : 'success'">
                 {{ row.postHave }} /
@@ -125,24 +145,65 @@
               </el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="postStatus" label="岗位状态" width="120">
+          <el-table-column
+            prop="postStatus"
+            label="岗位状态"
+            width="120"
+            v-if="columnOption.postStatus?.visible"
+          >
             <template #default="{ row }">
               <el-tag v-if="row.postStatus === 0" type="success">启用</el-tag>
               <el-tag v-else type="danger">禁用</el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="systemFlag" label="系统内置" width="100">
+          <el-table-column
+            prop="systemFlag"
+            label="系统内置"
+            width="100"
+            v-if="columnOption.systemFlag?.visible"
+          >
             <template #default="{ row }">
               <el-tag v-if="row.systemFlag === 0" type="success">是</el-tag>
               <el-tag v-else type="danger">否</el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="postSort" label="岗位排序" width="100" />
-          <el-table-column prop="remark" label="岗位描述" width="260" show-overflow-tooltip />
-          <el-table-column label="创建人" prop="createBy" width="160" />
-          <el-table-column label="创建时间" prop="createTime" width="180" />
-          <el-table-column label="更新人" prop="updateBy" width="160" />
-          <el-table-column label="更新时间" prop="updateTime" width="180" />
+          <el-table-column
+            prop="postSort"
+            label="岗位排序"
+            width="100"
+            v-if="columnOption.postSort?.visible"
+          />
+          <el-table-column
+            prop="remark"
+            label="岗位描述"
+            min-width="220"
+            show-overflow-tooltip
+            v-if="columnOption.remark?.visible"
+          />
+          <el-table-column
+            label="创建人"
+            prop="createBy"
+            width="160"
+            v-if="columnOption.createBy?.visible"
+          />
+          <el-table-column
+            label="创建时间"
+            prop="createTime"
+            width="180"
+            v-if="columnOption.createTime?.visible"
+          />
+          <el-table-column
+            label="更新人"
+            prop="updateBy"
+            width="160"
+            v-if="columnOption.updateBy?.visible"
+          />
+          <el-table-column
+            label="更新时间"
+            prop="updateTime"
+            width="180"
+            v-if="columnOption.updateTime?.visible"
+          />
           <el-table-column fixed="right" label="操作" width="260px">
             <template #default="{ row }">
               <el-button icon="edit" link type="success" @click="handleEdit(row)">修改</el-button>

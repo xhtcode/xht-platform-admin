@@ -11,7 +11,12 @@
         <el-row v-if="!state.searchStatus">
           <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
             <el-form-item label="关键字" prop="keyWord">
-              <el-input v-model="queryParams.keyWord" placeholder="请输入关键字" />
+              <el-input
+                v-model="queryParams.keyWord"
+                placeholder="请输入关键字"
+                :maxlength="100"
+                show-word-limit
+              />
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" class="text-center">
@@ -67,12 +72,19 @@
         v-if="state.refreshTable"
         ref="tableRef"
         v-loading="state.loadingStatus"
+        :default-expand-all="state.expandAllStatus"
         :data="state.tableList"
         :tree-props="{ children: 'children' }"
         row-key="id"
         class="flex-1"
       >
-        <el-table-column label="菜单类型" fixed="left" width="160" prop="menuType">
+        <el-table-column
+          label="菜单类型"
+          fixed="left"
+          min-width="160"
+          prop="menuType"
+          v-if="columnOption.menuType?.visible"
+        >
           <template #default="{ row }">
             <el-tag
               :type="
@@ -100,8 +112,15 @@
           prop="menuName"
           width="200"
           align="center"
+          v-if="columnOption.menuName?.visible"
         />
-        <el-table-column label="菜单图标" prop="menuIcon" width="80" align="center">
+        <el-table-column
+          label="菜单图标"
+          prop="menuIcon"
+          min-width="120"
+          align="center"
+          v-if="columnOption.menuIcon?.visible"
+        >
           <template #default="{ row }">
             <div
               :class="`icon-menu-${row.menuIcon}`"
@@ -109,7 +128,13 @@
             />
           </template>
         </el-table-column>
-        <el-table-column label="显示状态" prop="menuHidden" width="80" align="center">
+        <el-table-column
+          label="显示状态"
+          prop="menuHidden"
+          min-width="120"
+          align="center"
+          v-if="columnOption.menuHidden?.visible"
+        >
           <template #default="{ row }">
             <el-switch
               :model-value="row.menuHidden"
@@ -121,7 +146,13 @@
             />
           </template>
         </el-table-column>
-        <el-table-column label="缓存状态" prop="menuCache" width="80" align="center">
+        <el-table-column
+          label="缓存状态"
+          prop="menuCache"
+          min-width="120"
+          align="center"
+          v-if="columnOption.menuCache?.visible"
+        >
           <template #default="{ row }">
             <el-switch
               :model-value="row.menuCache"
@@ -134,7 +165,13 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="菜单状态" prop="menuStatus" width="80" align="center">
+        <el-table-column
+          label="菜单状态"
+          prop="menuStatus"
+          min-width="120"
+          align="center"
+          v-if="columnOption.menuStatus?.visible"
+        >
           <template #default="{ row }">
             <el-switch
               :model-value="row.menuStatus"
@@ -146,8 +183,21 @@
             />
           </template>
         </el-table-column>
-        <el-table-column label="权限标识" prop="menuAuthority" width="150" align="center" />
-        <el-table-column label="菜单排序" width="100" prop="menuSort" align="center" />
+        <el-table-column
+          label="权限标识"
+          prop="menuAuthority"
+          min-
+          width="150"
+          align="center"
+          v-if="columnOption.menuAuthority?.visible"
+        />
+        <el-table-column
+          label="排序"
+          min-width="80"
+          prop="menuSort"
+          align="center"
+          v-if="columnOption.menuSort?.visible"
+        />
         <el-table-column
           label="组件视图"
           min-width="360"
@@ -155,13 +205,20 @@
           prop="viewPath"
           align="center"
           show-overflow-tooltip
+          v-if="columnOption.viewPath?.visible"
         >
           <template #default="{ row }">
             <ElTag v-if="row.viewName" type="warning">{{ row.viewName }}</ElTag>
             <ElLink v-if="row.viewName" type="primary">{{ row.viewPath }}</ElLink>
           </template>
         </el-table-column>
-        <el-table-column label="外链" width="80" prop="frameFlag" align="center">
+        <el-table-column
+          label="外链"
+          min-width="80"
+          prop="frameFlag"
+          align="center"
+          v-if="columnOption.frameFlag?.visible"
+        >
           <template #default="{ row }">
             <el-switch
               v-model="row.frameFlag"
@@ -176,19 +233,40 @@
         <el-table-column
           label="路由地址"
           prop="menuPath"
-          width="220"
+          min-width="220"
+          width="260"
           align="center"
           show-overflow-tooltip
+          v-if="columnOption.menuPath?.visible"
         >
           <template #default="{ row }">
             <el-link type="default">{{ row.menuPath }}</el-link>
           </template>
         </el-table-column>
-        <el-table-column label="创建人" prop="createBy" width="160" />
-        <el-table-column label="创建时间" prop="createTime" width="180" />
-        <el-table-column label="更新人" prop="updateBy" width="160" />
-        <el-table-column label="更新时间" prop="updateTime" width="180" />
-
+        <el-table-column
+          label="创建人"
+          prop="createBy"
+          width="160"
+          v-if="columnOption.createBy?.visible"
+        />
+        <el-table-column
+          label="创建时间"
+          prop="createTime"
+          width="180"
+          v-if="columnOption.createTime?.visible"
+        />
+        <el-table-column
+          label="更新人"
+          prop="updateBy"
+          width="160"
+          v-if="columnOption.updateBy?.visible"
+        />
+        <el-table-column
+          label="更新时间"
+          prop="updateTime"
+          width="180"
+          v-if="columnOption.updateTime?.visible"
+        />
         <el-table-column fixed="right" label="操作" width="220px" align="center">
           <template #default="{ row }">
             <el-button icon="edit" link type="success" @click="handleEdit(row)">修改</el-button>

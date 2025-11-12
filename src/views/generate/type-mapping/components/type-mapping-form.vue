@@ -14,6 +14,8 @@
       :rules="rules"
       element-loading-text="拼命加载中"
       label-width="120px"
+      scroll-to-error
+      inline-message
     >
       <el-form-item label="数据库数据类型" prop="dbDataType">
         <el-input v-model="addUpdateForm.dbDataType" />

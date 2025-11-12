@@ -14,6 +14,8 @@
       :rules="rules"
       element-loading-text="拼命加载中"
       label-width="120px"
+      scroll-to-error
+      inline-message
     >
       <el-row :gutter="20">
         <el-col :span="24">

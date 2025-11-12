@@ -1,9 +1,10 @@
 import request from '@/utils/request'
 import type { AxiosPromise } from 'axios'
-import type {
+import {
   SysUserOperationRequest,
   SysUserQueryRequest,
   SysUserResponse,
+  SysUserVo,
 } from '@/service/model/system/user.model'
 import type { ModeIdArrayType, ModeIdType, PageResponse } from '@/service/model/base.model'
 
@@ -73,7 +74,7 @@ export const removeSysUserByIds = (ids: ModeIdArrayType): AxiosPromise<boolean> 
 /**
  * 查询单个
  */
-export const querySysUserById = (id: number): AxiosPromise<SysUserResponse> => {
+export const querySysUserById = (id: number): AxiosPromise<SysUserVo> => {
   return request({
     url: Api.QUERY_ONE + `${id}`,
     baseURL,

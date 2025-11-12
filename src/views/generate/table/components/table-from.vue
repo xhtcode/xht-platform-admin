@@ -14,6 +14,8 @@
       :rules="rules"
       element-loading-text="拼命加载中"
       label-width="100px"
+      scroll-to-error
+      inline-message
     >
       <el-tabs type="card" v-model="activeName" stretch>
         <el-tab-pane label="表信息" :name="1">

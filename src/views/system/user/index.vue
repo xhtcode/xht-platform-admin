@@ -15,7 +15,12 @@
           <el-row v-if="!state.searchStatus">
             <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="4">
               <el-form-item label="关键字" prop="keyWord">
-                <el-input v-model="queryParams.keyWord" placeholder="请输入关键字" />
+                <el-input
+                  v-model="queryParams.keyWord"
+                  placeholder="请输入关键字"
+                  :maxlength="100"
+                  show-word-limit
+                />
               </el-form-item>
             </el-col>
             <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="4" class="text-center">
@@ -25,104 +30,53 @@
           </el-row>
           <el-row v-else>
             <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="4">
+              <el-form-item label="用户类型" prop="userType">
+                <el-select v-model="queryParams.userType" placeholder="请选择用户类型">
+                  <el-option :value="UserTypeEnums.ADMIN" label="管理员" />
+                  <el-option :value="UserTypeEnums.BUSINESS" label="商家" />
+                  <el-option :value="UserTypeEnums.USER" label="用户" />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="4">
               <el-form-item label="用户账号" prop="userName">
-                <el-input v-model="queryParams.userName" placeholder="请输入用户账号" />
+                <el-input
+                  v-model="queryParams.userName"
+                  placeholder="请输入用户账号"
+                  :maxlength="50"
+                  show-word-limit
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="4">
+              <el-form-item label="用户昵称" prop="nickName">
+                <el-input
+                  v-model="queryParams.nickName"
+                  placeholder="请输入用户昵称"
+                  :maxlength="15"
+                  show-word-limit
+                />
               </el-form-item>
             </el-col>
             <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="4">
               <el-form-item label="用户状态" prop="userStatus">
                 <el-select v-model="queryParams.userStatus" placeholder="请选择用户状态">
-                  <el-option :value="UserStatusEnums.NORMAL" label="正常状态" />
-                  <el-option :value="UserStatusEnums.LOCKED" label="锁定状态" />
-                  <el-option :value="UserStatusEnums.EXPIRED" label="过期状态" />
+                  <el-option :value="UserStatusEnums.NORMAL" label="账号正常" />
+                  <el-option :value="UserStatusEnums.UNACTIVATED" label="账号未激活" />
+                  <el-option :value="UserStatusEnums.DISABLED" label="账号禁用" />
+                  <el-option :value="UserStatusEnums.LOCKED" label="账号锁定" />
+                  <el-option :value="UserStatusEnums.EXPIRED" label="账号过期" />
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="4">
-              <el-form-item label="用户昵称" prop="nickName">
-                <el-input v-model="queryParams.nickName" placeholder="请输入用户昵称" />
-              </el-form-item>
-            </el-col>
-            <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="4">
-              <el-form-item label="真实姓名" prop="realName">
-                <el-input v-model="queryParams.realName" placeholder="请输入真实姓名" />
-              </el-form-item>
-            </el-col>
-            <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="4">
-              <el-form-item label="身份证号" prop="idCardNumber">
-                <el-input v-model="queryParams.idCardNumber" placeholder="请输入身份证号" />
-              </el-form-item>
-            </el-col>
-            <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="4">
-              <el-form-item label="用户性别" prop="gender">
-                <el-select v-model="queryParams.gender" placeholder="请选择用户性别">
-                  <el-option :value="1" label="男" />
-                  <el-option :value="2" label="女" />
-                  <el-option :value="3" label="其他" />
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="4">
-              <el-form-item label="出生开始" prop="birthDateStart">
-                <el-date-picker
-                  v-model="queryParams.birthDateStart"
-                  type="date"
-                  class="w100"
-                  format="YYYY-MM-DD"
-                  value-format="YYYY-MM-DD"
-                  :disabled-date="superDisabledBeforeDate"
-                  :default-value="
-                    queryParams.birthDateStart
-                      ? formatData(queryParams.birthDateStart)
-                      : formatData(queryParams.birthDateEnd)
-                  "
-                  placeholder="选择出生开始日期"
+              <el-form-item label="手机号码" prop="userPhone">
+                <el-input
+                  v-model="queryParams.userPhone"
+                  placeholder="请输入手机号码"
+                  :maxlength="11"
+                  show-word-limit
                 />
-              </el-form-item>
-            </el-col>
-            <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="4">
-              <el-form-item label="出生截至" prop="birthDateEnd">
-                <el-date-picker
-                  v-model="queryParams.birthDateEnd"
-                  type="date"
-                  class="w100"
-                  format="YYYY-MM-DD"
-                  :disabled-date="superDisabledBeforeDate"
-                  :default-value="
-                    queryParams.birthDateEnd
-                      ? formatData(queryParams.birthDateEnd)
-                      : formatData(queryParams.birthDateStart)
-                  "
-                  value-format="YYYY-MM-DD"
-                  placeholder="选择出生截至日期"
-                />
-              </el-form-item>
-            </el-col>
-            <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="4">
-              <el-form-item label="年龄开始" prop="ageStart">
-                <el-input-number
-                  v-model="queryParams.ageStart"
-                  class="w100"
-                  :min="0"
-                  :max="queryParams.ageEnd"
-                  placeholder="请输入用户年龄"
-                />
-              </el-form-item>
-            </el-col>
-            <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="4">
-              <el-form-item label="年龄截至" prop="ageEnd">
-                <el-input-number
-                  v-model="queryParams.ageEnd"
-                  class="w100"
-                  :min="queryParams.ageStart"
-                  :max="150"
-                  placeholder="请输入用户年龄"
-                />
-              </el-form-item>
-            </el-col>
-            <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="4">
-              <el-form-item label="邮政编码" prop="postalCode">
-                <el-input v-model="queryParams.postalCode" placeholder="请输入邮政编码" />
               </el-form-item>
             </el-col>
             <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="4" class="text-center">
@@ -165,40 +119,84 @@
           border
           :empty-text="queryParams.deptId ? '该部门下未添加用户信息' : '系统内暂无相关数据'"
           @selection-change="handleSelectionChange"
+          class="flex-1"
         >
           <el-table-column type="selection" width="55" align="center" />
           <xht-column-index :size="queryParams.size" :current="queryParams.current" />
-          <el-table-column label="账号" prop="userName" width="120" />
-          <el-table-column label="昵称" prop="nickName" />
-          <el-table-column label="用户状态" prop="userStatus" width="120">
+          <el-table-column
+            label="用户头像"
+            prop="userAvatar"
+            width="100"
+            v-if="columnOption.userAvatar?.visible"
+          >
+            <template #default="{ row }">
+              <el-avatar :src="row.userAvatar" shape="circle" alt="用户头像" />
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="用户账号"
+            prop="userName"
+            min-width="160"
+            show-overflow-tooltip
+            v-if="columnOption.userName?.visible"
+          />
+          <el-table-column
+            label="用户昵称"
+            prop="nickName"
+            min-width="160"
+            v-if="columnOption.nickName?.visible"
+          />
+          <el-table-column
+            label="用户类型"
+            prop="userType"
+            min-width="100"
+            v-if="columnOption.userType?.visible"
+          >
+            <template #default="{ row }">
+              <user-type-tag :type="row.userType" />
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="用户状态"
+            prop="userStatus"
+            min-width="100"
+            v-if="columnOption.userStatus?.visible"
+          >
             <template #default="{ row }">
               <user-status-tag :status="row.userStatus" />
             </template>
           </el-table-column>
-          <el-table-column label="真实姓名" prop="profile.realName">
-            <template #default="{ row }">{{ row.profile?.realName }}</template>
-          </el-table-column>
-          <el-table-column label="身份证号" prop="profile">
-            <template #default="{ row }">{{ row.profile?.idCardNumber }}</template>
-          </el-table-column>
-          <el-table-column label="用户性别" prop="profile">
-            <template #default="{ row }">{{ row.profile?.gender === 1 ? '男' : '女' }}</template>
-          </el-table-column>
-          <el-table-column label="出生日期" prop="profile">
-            <template #default="{ row }">{{ row.profile?.birthDate }}</template>
-          </el-table-column>
-          <el-table-column label="用户年龄" prop="profile">
-            <template #default="{ row }">{{ row.profile?.age }}</template>
-          </el-table-column>
-          <el-table-column label="邮政编码" prop="profile">
-            <template #default="{ row }">{{ row.profile?.postalCode }}</template>
-          </el-table-column>
-          <el-table-column label="联系地址" prop="profile">
-            <template #default="{ row }">{{ row.profile?.address }}</template>
-          </el-table-column>
-          <el-table-column label="创建人" prop="createBy" width="160" />
-          <el-table-column label="创建时间" prop="createTime" width="180" />
-          <el-table-column fixed="right" label="操作" width="200px">
+          <el-table-column
+            label="手机号码"
+            prop="userPhone"
+            min-width="130"
+            v-if="columnOption.userPhone?.visible"
+          />
+          <el-table-column
+            label="创建人"
+            prop="createBy"
+            width="160"
+            v-if="columnOption.createBy?.visible"
+          />
+          <el-table-column
+            label="创建时间"
+            prop="createTime"
+            width="180"
+            v-if="columnOption.createTime?.visible"
+          />
+          <el-table-column
+            label="更新人"
+            prop="updateBy"
+            width="160"
+            v-if="columnOption.updateBy?.visible"
+          />
+          <el-table-column
+            label="更新时间"
+            prop="updateTime"
+            width="180"
+            v-if="columnOption.updateTime?.visible"
+          />
+          <el-table-column fixed="right" label="操作" width="220">
             <template #default="{ row }">
               <el-space wrap>
                 <el-button icon="edit" link type="success" @click="handleEdit(row)">
@@ -235,8 +233,12 @@
 import type { FormInstance } from 'element-plus'
 import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
 import UserForm from '@/views/system/user/components/user-form.vue'
-import type { SysUserQueryRequest, SysUserResponse } from '@/service/model/system/user.model'
-import { UserStatusEnums } from '@/service/model/system/user.model'
+import {
+  SysUserQueryRequest,
+  SysUserResponse,
+  UserStatusEnums,
+  UserTypeEnums,
+} from '@/service/model/system/user.model'
 import {
   querySysUserPage,
   removeSysUserById,
@@ -250,6 +252,7 @@ import UserRoleForm from '@/views/system/user/components/user-role-form.vue'
 import DeptTree from '@/components/system/dept-tree/index.vue'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { SysUserColumnOption } from '@/views/system/user/user.data'
+import UserStatusTag from '@/components/system/user-status-tag/index.vue'
 
 defineOptions({ name: 'SysUserViewIndex' })
 const state = reactive<TableQueryPageState<SysUserQueryRequest, SysUserResponse>>({
@@ -257,6 +260,7 @@ const state = reactive<TableQueryPageState<SysUserQueryRequest, SysUserResponse>
     deptId: undefined,
     current: 1,
     size: 10,
+    ascName: 'createTime',
   },
   loadingStatus: false,
   total: 0,

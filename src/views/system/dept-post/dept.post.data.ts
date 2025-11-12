@@ -36,17 +36,17 @@ export const SysDeptPostOperationRules: FormRules = {
  * 列表显示配置
  */
 export const SysDeptPostColumnOption: ColumnConfig<SysDeptPostResponse> = {
-  postCode: { desc: '岗位编码', visible: true, disabled: false },
-  postName: { desc: '岗位名称', visible: true, disabled: false },
-  postLimit: { desc: '员工统计', visible: true, disabled: false },
+  postCode: { desc: '岗位编码', visible: true, disabled: true },
+  postName: { desc: '岗位名称', visible: true, disabled: true },
+  postLimit: { desc: '员工统计', visible: false, disabled: false },
   postStatus: { desc: '岗位状态', visible: true, disabled: false },
-  systemFlag: { desc: '系统内置', visible: true, disabled: false },
+  systemFlag: { desc: '系统内置', visible: false, disabled: false },
   postSort: { desc: '岗位排序', visible: true, disabled: false },
-  remark: { desc: '岗位描述', visible: true, disabled: false },
-  createBy: { desc: '创建人', visible: true, disabled: false },
+  remark: { desc: '岗位描述', visible: false, disabled: false },
+  createBy: { desc: '创建人', visible: false, disabled: false },
   createTime: {
     desc: '创建时间',
-    visible: true,
+    visible: false,
     disabled: false,
   },
   updateBy: {

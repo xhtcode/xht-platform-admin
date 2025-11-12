@@ -11,7 +11,12 @@
         <el-row v-if="!state.searchStatus">
           <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
             <el-form-item label="关键字" prop="keyWord">
-              <el-input v-model="queryParams.keyWord" placeholder="请输入关键字" />
+              <el-input
+                v-model="queryParams.keyWord"
+                placeholder="请输入关键字"
+                :maxlength="100"
+                show-word-limit
+              />
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" class="text-center">
@@ -91,26 +96,72 @@
       >
         <el-table-column type="selection" width="55" align="center" />
         <xht-column-index :size="queryParams.size" :current="queryParams.current" />
-        <el-table-column label="字典名称" prop="dictName" width="120" />
-        <el-table-column label="字典编码" prop="dictCode" width="120">
+        <el-table-column
+          label="字典名称"
+          prop="dictName"
+          min-width="160"
+          v-if="columnOption.dictName?.visible"
+        />
+        <el-table-column
+          label="字典编码"
+          prop="dictCode"
+          min-width="160"
+          v-if="columnOption.dictCode?.visible"
+        >
           <template #default="{ row }">
             <router-link :to="`/system/dict/${row.id}`" class="link-type">
               {{ row.dictCode }}
             </router-link>
           </template>
         </el-table-column>
-        <el-table-column label="排序" prop="sortOrder" width="80" />
-        <el-table-column label="字典状态" prop="status" width="160" show-overflow-tooltip>
+        <el-table-column
+          label="排序"
+          prop="sortOrder"
+          min-width="80"
+          v-if="columnOption.sortOrder?.visible"
+        />
+        <el-table-column
+          label="字典状态"
+          prop="status"
+          min-width="160"
+          show-overflow-tooltip
+          v-if="columnOption.status?.visible"
+        >
           <template #default="{ row }">
             <el-tag v-if="row.status === 1" type="success">启用</el-tag>
             <el-tag v-else type="danger">禁用</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="字典描述" prop="remark" width="220" />
-        <el-table-column label="创建人" prop="createBy" width="160" />
-        <el-table-column label="创建时间" prop="createTime" width="180" />
-        <el-table-column label="更新人" prop="updateBy" width="160" />
-        <el-table-column label="更新时间" prop="updateTime" width="180" />
+        <el-table-column
+          label="字典描述"
+          prop="remark"
+          min-width="220"
+          v-if="columnOption.remark?.visible"
+        />
+        <el-table-column
+          label="创建人"
+          prop="createBy"
+          width="160"
+          v-if="columnOption.createBy?.visible"
+        />
+        <el-table-column
+          label="创建时间"
+          prop="createTime"
+          width="180"
+          v-if="columnOption.createTime?.visible"
+        />
+        <el-table-column
+          label="更新人"
+          prop="updateBy"
+          width="160"
+          v-if="columnOption.updateBy?.visible"
+        />
+        <el-table-column
+          label="更新时间"
+          prop="updateTime"
+          width="180"
+          v-if="columnOption.updateTime?.visible"
+        />
         <el-table-column fixed="right" label="操作" width="220px">
           <template #default="{ row }">
             <el-button icon="edit" link type="success" @click="handleEdit(row)">修改</el-button>

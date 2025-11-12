@@ -11,7 +11,12 @@
         <el-row v-if="!state.searchStatus">
           <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
             <el-form-item label="关键字" prop="keyWord">
-              <el-input v-model="queryParams.keyWord" placeholder="请输入关键字" />
+              <el-input
+                v-model="queryParams.keyWord"
+                placeholder="请输入关键字"
+                :maxlength="100"
+                show-word-limit
+              />
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" class="text-center">
@@ -58,14 +63,21 @@
         </el-button>
       </table-tool-bar>
       <xht-table
-        v-if="state.refreshTable"
         v-loading="state.loadingStatus"
         :data="state.tableList"
         class="flex-1"
+        :default-expand-all="state.expandAllStatus"
         :tree-props="{ children: 'children' }"
         row-key="id"
+        v-if="state.refreshTable"
       >
-        <el-table-column label="部门名称" fixed="left" prop="deptName" width="220">
+        <el-table-column
+          label="部门名称"
+          fixed="left"
+          prop="deptName"
+          min-width="260"
+          v-if="columnOption.deptName?.visible"
+        >
           <template #default="{ row }">
             {{ row.deptName }}
             <el-tag type="info" effect="plain">
@@ -74,20 +86,39 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="部门主管" prop="leaderName" width="160" align="center" />
-        <el-table-column label="联系电话" prop="phone" width="160" align="center" />
+        <el-table-column
+          label="部门主管"
+          prop="leaderName"
+          min-width="160"
+          align="center"
+          v-if="columnOption.leaderName?.visible"
+        />
+        <el-table-column
+          label="联系电话"
+          prop="phone"
+          min-width="160"
+          align="center"
+          v-if="columnOption.phone?.visible"
+        />
         <el-table-column
           label="联系邮箱"
           prop="email"
-          width="160"
+          min-width="160"
           align="center"
           show-overflow-tooltip
+          v-if="columnOption.email?.visible"
         >
           <template #default="{ row }">
             <ElLink>{{ row.email }}</ElLink>
           </template>
         </el-table-column>
-        <el-table-column label="部门状态" prop="deptStatus" width="80" align="center">
+        <el-table-column
+          label="部门状态"
+          prop="deptStatus"
+          width="120"
+          align="center"
+          v-if="columnOption.deptStatus?.visible"
+        >
           <template #default="{ row }">
             <el-switch
               :model-value="row.deptStatus"
@@ -99,18 +130,45 @@
             />
           </template>
         </el-table-column>
-        <el-table-column label="显示顺序" prop="deptSort" width="80" align="center" />
+        <el-table-column
+          label="显示顺序"
+          prop="deptSort"
+          width="120"
+          align="center"
+          v-if="columnOption.deptSort?.visible"
+        />
         <el-table-column
           label="部门描述"
           prop="remark"
           width="220"
           align="center"
           show-overflow-tooltip
+          v-if="columnOption.remark?.visible"
         />
-        <el-table-column label="创建人" prop="createBy" width="160" align="center" />
-        <el-table-column label="创建时间" prop="createTime" width="180" align="center" />
-        <el-table-column label="更新人" prop="updateBy" width="160" align="center" />
-        <el-table-column label="更新时间" prop="updateTime" width="180" align="center" />
+        <el-table-column
+          label="创建人"
+          prop="createBy"
+          width="160"
+          v-if="columnOption.createBy?.visible"
+        />
+        <el-table-column
+          label="创建时间"
+          prop="createTime"
+          width="180"
+          v-if="columnOption.createTime?.visible"
+        />
+        <el-table-column
+          label="更新人"
+          prop="updateBy"
+          width="160"
+          v-if="columnOption.updateBy?.visible"
+        />
+        <el-table-column
+          label="更新时间"
+          prop="updateTime"
+          width="180"
+          v-if="columnOption.updateTime?.visible"
+        />
         <el-table-column fixed="right" label="操作" width="220px" align="center">
           <template #default="{ row }">
             <el-button icon="edit" link type="success" @click="handleEdit(row)">修改</el-button>
@@ -140,6 +198,7 @@ import { ColumnConfig } from '@/components/table-tool-bar/types'
 
 defineOptions({ name: 'SysDeptViewIndex' })
 const deptFormRef = useTemplateRef('deptFormRef')
+
 /**
  * 定义表格通用样式
  * @returns  css

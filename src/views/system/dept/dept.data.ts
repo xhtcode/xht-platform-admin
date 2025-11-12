@@ -40,30 +40,18 @@ export const SysDeptOperationRules: FormRules = {
  * 列表显示配置
  */
 export const SysDeptColumnOption: ColumnConfig<SysDeptResponse> = {
-  deptName: { desc: '部门名称', visible: true, disabled: false },
-  leaderName: { desc: '部门主管', visible: true, disabled: false },
-  phone: { desc: '联系电话', visible: true, disabled: false },
-  email: { desc: '联系邮箱', visible: true, disabled: false },
+  deptName: {
+    desc: '部门名称',
+    visible: true,
+    disabled: true,
+  },
+  leaderName: { desc: '部门主管', visible: true, disabled: true },
+  phone: { desc: '联系电话', visible: true, disabled: true },
+  email: { desc: '联系邮箱', visible: false, disabled: false },
   deptStatus: { desc: '部门状态', visible: true, disabled: false },
   deptSort: { desc: '显示顺序', visible: true, disabled: false },
-  createBy: {
-    desc: '创建人',
-    visible: true,
-    disabled: false,
-  },
-  createTime: {
-    desc: '创建时间',
-    visible: true,
-    disabled: false,
-  },
-  updateBy: {
-    desc: '更新人',
-    visible: false,
-    disabled: false,
-  },
-  updateTime: {
-    desc: '更新时间',
-    visible: false,
-    disabled: false,
-  },
+  createBy: { desc: '创建人', visible: false, disabled: false },
+  createTime: { desc: '创建时间', visible: false, disabled: false },
+  updateBy: { desc: '更新人', visible: false, disabled: false },
+  updateTime: { desc: '更新时间', visible: false, disabled: false },
 }

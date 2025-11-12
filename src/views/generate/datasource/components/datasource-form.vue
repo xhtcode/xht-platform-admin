@@ -14,6 +14,8 @@
       :rules="rules"
       element-loading-text="拼命加载中"
       label-width="80px"
+      scroll-to-error
+      inline-message
     >
       <el-form-item label="名称" prop="name">
         <el-input
