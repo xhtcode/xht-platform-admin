@@ -1,9 +1,9 @@
 import type { FormRules } from 'element-plus'
+import type { GenTemplateOperationRequest } from '@/service/model/generate/template.model'
 import type {
-  GenTemplateOperationRequest,
-  GenTemplateResponse,
-} from '@/service/model/generate/template.model'
-import type { GenTemplateGroupOperationRequest } from '@/service/model/generate/template.group.model'
+  GenTemplateGroupOperationRequest,
+  GenTemplateGroupResponse,
+} from '@/service/model/generate/template.group.model'
 import { ColumnConfig } from '@/components/table-tool-bar/types'
 
 /**
@@ -15,7 +15,7 @@ export const GenTemplateOperationForm: GenTemplateOperationRequest = {
   templateContent: '',
   templateFileName: '',
   templateFilePath: '',
-  templateFileType: 'java',
+  templateFileType: 'txt',
   templateIgnoreField: [],
   templateName: '',
   templateSort: 999,
@@ -118,6 +118,13 @@ export const GenTemplateGroupOperationRules: FormRules<GenTemplateGroupOperation
 /**
  * 列表显示配置
  */
-export const GenTemplateGroupOperationOption: ColumnConfig<GenTemplateResponse> = {
-  createBy: { desc: '创建人', visible: true, disabled: false },
+export const GenTemplateGroupOperationOption: ColumnConfig<GenTemplateGroupResponse> = {
+  groupName: { desc: '分组名称', visible: true, disabled: false },
+  templateCount: { desc: '模板数量', visible: true, disabled: false },
+  groupSort: { desc: '分组描述', visible: true, disabled: false },
+  groupDesc: { desc: '分组描述', visible: true, disabled: false },
+  createBy: { desc: '创建人', visible: false, disabled: false },
+  createTime: { desc: '创建时间', visible: false, disabled: false },
+  updateBy: { desc: '更新人', visible: false, disabled: false },
+  updateTime: { desc: '更新时间', visible: false, disabled: false },
 }

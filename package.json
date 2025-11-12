@@ -22,7 +22,6 @@
     "@vueuse/core": "^13.8.0",
     "animate.css": "^4.1.1",
     "axios": "^1.11.0",
-    "default-passive-events": "^4.0.0",
     "element-plus": "^2.11.4",
     "js-cookie": "^3.0.5",
     "lodash": "^4.17.21",

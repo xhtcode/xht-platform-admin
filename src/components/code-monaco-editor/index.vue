@@ -163,7 +163,9 @@ onBeforeUnmount(() => {
   editor.value?.dispose()
 })
 onMounted(() => {
-  init()
+  nextTick(() => {
+    init()
+  })
 })
 defineExpose({
   setValue,
@@ -179,6 +181,7 @@ defineExpose({
     display: none !important;
   }
 }
+
 .error-border {
   border: 1px solid var(--el-color-danger);
 }

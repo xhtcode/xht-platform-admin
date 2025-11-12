@@ -46,7 +46,6 @@ import { queryGenTemplateList, removeGenTemplateById } from '@/service/api/gener
 import type { GenTemplateOperationRequest } from '@/service/model/generate/template.model'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { ModeIdType } from '@/service/model/base.model'
-import TemplateForm from '@/views/generate/template/components/template-form.vue'
 import { GenTemplateOperationForm } from '@/views/generate/template/template.data'
 
 defineOptions({ name: 'TemplateViewForm' })
@@ -59,6 +58,9 @@ interface Interface {
   nextTagId: number
 }
 
+const TemplateForm = defineAsyncComponent(
+  () => import('@/views/generate/template/components/template-form.vue')
+)
 const activeName = ref<ModeIdType>()
 const state = reactive<Interface>({
   groupId: null,
@@ -152,6 +154,8 @@ const close = () => {
   if (state.loadingStatus) return
   state.visibleStatus = false
   state.loadingStatus = false
+  state.data = []
+  state.nextTagId = 1
 }
 defineExpose({
   show,

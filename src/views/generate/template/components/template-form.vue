@@ -6,99 +6,98 @@
     :rules="rules"
     element-loading-text="拼命加载中"
     label-width="100px"
-    class="flex h-full flex-direction-column"
+    class="flex h-full direction-horizontal"
+    style="flex-direction: column"
     scroll-to-error
     inline-message
   >
-    <div>
-      <el-row>
-        <el-col :span="6">
-          <el-form-item label="模板名称" prop="templateName">
-            <el-input
-              v-model="addUpdateForm.templateName"
-              :maxlength="20"
-              show-word-limit
-              placeholder="请输入模板名称"
-            />
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="文件名" prop="templateFileName">
-            <el-input
-              v-model="addUpdateForm.templateFileName"
-              :maxlength="100"
-              show-word-limit
-              placeholder="请输入文件名模板"
-            />
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="文件类型" prop="templateFileType">
-            <el-select v-model="addUpdateForm.templateFileType" placeholder="请选择文件类型">
-              <el-option label="java" value="java" />
-              <el-option label="vue" value="vue" />
-              <el-option label="ts" value="ts" />
-              <el-option label="ts" value="js" />
-              <el-option label="sql" value="sql" />
-              <el-option label="txt" value="txt" />
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="模板排序" prop="templateSort">
-            <el-input-number
-              v-model="addUpdateForm.templateSort"
-              class="w100"
-              :min="0"
-              :max="999"
-              placeholder="请输入模板排序"
-            />
-          </el-form-item>
-        </el-col>
-        <el-col :span="10">
-          <el-form-item label="文件路径" prop="templateFilePath">
-            <el-input
-              v-model="addUpdateForm.templateFilePath"
-              :max="500"
-              show-word-limit
-              placeholder="请输入文件路径模板"
-            />
-          </el-form-item>
-        </el-col>
-        <el-col :span="10">
-          <el-form-item label="忽略字段" prop="templateIgnoreField">
-            <el-select
-              multiple
-              filterable
-              :allow-create="false"
-              clearable
-              collapse-tags
-              collapse-tags-tooltip
-              :max-collapse-tags="2"
-              v-model="addUpdateForm.templateIgnoreField"
-              placeholder="请输入忽略字段"
-            >
-              <el-option label="id" value="id" />
-              <el-option label="tenantId" value="tenant_id" />
-              <el-option label="version" value="version" />
-              <el-option label="createBy" value="create_by" />
-              <el-option label="createTime" value="create_time" />
-              <el-option label="updateBy" value="update_by" />
-              <el-option label="updateTime" value="update_time" />
-              <el-option label="delFlag" value="del_flag" />
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="4" class="text-center">
-          <el-button :disabled="loadingStatus" type="primary" @click="submitForm">
-            保存/修改
-          </el-button>
-        </el-col>
-      </el-row>
-    </div>
+    <el-row>
+      <el-col :span="6">
+        <el-form-item label="模板名称" prop="templateName">
+          <el-input
+            v-model="addUpdateForm.templateName"
+            :maxlength="20"
+            show-word-limit
+            placeholder="请输入模板名称"
+          />
+        </el-form-item>
+      </el-col>
+      <el-col :span="6">
+        <el-form-item label="文件名" prop="templateFileName">
+          <el-input
+            v-model="addUpdateForm.templateFileName"
+            :maxlength="100"
+            show-word-limit
+            placeholder="请输入文件名模板"
+          />
+        </el-form-item>
+      </el-col>
+      <el-col :span="6">
+        <el-form-item label="文件类型" prop="templateFileType">
+          <el-select v-model="addUpdateForm.templateFileType" placeholder="请选择文件类型">
+            <el-option label="java" value="java" />
+            <el-option label="vue" value="vue" />
+            <el-option label="ts" value="ts" />
+            <el-option label="ts" value="js" />
+            <el-option label="sql" value="sql" />
+            <el-option label="txt" value="txt" />
+          </el-select>
+        </el-form-item>
+      </el-col>
+      <el-col :span="6">
+        <el-form-item label="模板排序" prop="templateSort">
+          <el-input-number
+            v-model="addUpdateForm.templateSort"
+            class="w-full"
+            :min="0"
+            :max="999"
+            placeholder="请输入模板排序"
+          />
+        </el-form-item>
+      </el-col>
+      <el-col :span="10">
+        <el-form-item label="文件路径" prop="templateFilePath">
+          <el-input
+            v-model="addUpdateForm.templateFilePath"
+            :max="500"
+            show-word-limit
+            placeholder="请输入文件路径模板"
+          />
+        </el-form-item>
+      </el-col>
+      <el-col :span="10">
+        <el-form-item label="忽略字段" prop="templateIgnoreField">
+          <el-select
+            multiple
+            filterable
+            :allow-create="false"
+            clearable
+            collapse-tags
+            collapse-tags-tooltip
+            :max-collapse-tags="2"
+            v-model="addUpdateForm.templateIgnoreField"
+            placeholder="请输入忽略字段"
+          >
+            <el-option label="id" value="id" />
+            <el-option label="tenantId" value="tenant_id" />
+            <el-option label="version" value="version" />
+            <el-option label="createBy" value="create_by" />
+            <el-option label="createTime" value="create_time" />
+            <el-option label="updateBy" value="update_by" />
+            <el-option label="updateTime" value="update_time" />
+            <el-option label="delFlag" value="del_flag" />
+          </el-select>
+        </el-form-item>
+      </el-col>
+      <el-col :span="4" class="text-center">
+        <el-button :disabled="loadingStatus" type="primary" @click="submitForm">
+          保存/修改
+        </el-button>
+      </el-col>
+    </el-row>
     <el-form-item
       :error="validateStatus ? '请输入模板内容' : ''"
-      class="h100"
+      class="flex-1"
       label="模板内容"
       prop="templateContent"
     >

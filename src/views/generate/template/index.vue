@@ -53,12 +53,55 @@
         empty-text="系统暂无相关模板信息！"
       >
         <xht-column-index :size="queryParams.size" :current="queryParams.current" />
-        <el-table-column label="分组名称" prop="groupName" width="200" />
-        <el-table-column label="模板数量" prop="templateCount" width="80" />
-        <el-table-column label="分组描述" prop="groupSort" width="80" />
-        <el-table-column label="分组描述" prop="groupDesc" width="260" show-overflow-tooltip />
-        <el-table-column label="创建时间" prop="createTime" width="180" />
-        <el-table-column label="更新时间" prop="updateTime" width="180" />
+        <el-table-column
+          label="分组名称"
+          prop="groupName"
+          min-width="200"
+          v-if="columnOption.groupName?.visible"
+        />
+        <el-table-column
+          label="模板数量"
+          prop="templateCount"
+          min-width="80"
+          v-if="columnOption.templateCount?.visible"
+        />
+        <el-table-column
+          label="分组描述"
+          prop="groupSort"
+          min-width="80"
+          v-if="columnOption.groupSort?.visible"
+        />
+        <el-table-column
+          label="分组描述"
+          prop="groupDesc"
+          min-width="260"
+          show-overflow-tooltip
+          v-if="columnOption.groupDesc?.visible"
+        />
+        <el-table-column
+          label="创建人"
+          prop="createBy"
+          width="160"
+          v-if="columnOption.createBy?.visible"
+        />
+        <el-table-column
+          label="创建时间"
+          prop="createTime"
+          width="180"
+          v-if="columnOption.createTime?.visible"
+        />
+        <el-table-column
+          label="更新人"
+          prop="updateBy"
+          width="160"
+          v-if="columnOption.updateBy?.visible"
+        />
+        <el-table-column
+          label="更新时间"
+          prop="updateTime"
+          width="180"
+          v-if="columnOption.updateTime?.visible"
+        />
         <el-table-column align="center" fixed="right" label="操作" width="260px">
           <template #default="{ row }">
             <el-button icon="view" link type="primary" @click="handleView(row)">模板查看</el-button>
