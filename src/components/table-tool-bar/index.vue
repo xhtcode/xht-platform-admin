@@ -50,7 +50,7 @@
       :before-close="close"
       width="auto"
     >
-      <template #title>
+      <template #header>
         <el-checkbox
           v-model="checkAllStatus"
           :indeterminate="indeterminateStatus"

@@ -12,13 +12,13 @@ import { ColumnConfig } from '@/components/table-tool-bar/types'
 export const GenTemplateOperationForm: GenTemplateOperationRequest = {
   groupId: undefined,
   id: undefined,
-  templateContent: '',
+  templateContent: '${auth}',
   templateFileName: '',
-  templateFilePath: '',
-  templateFileType: 'txt',
+  templateFilePath: '/',
+  templateFileType: 'java',
   templateIgnoreField: [],
   templateName: '',
-  templateSort: 999,
+  templateSort: 1,
   isNew: false,
 }
 
@@ -119,10 +119,10 @@ export const GenTemplateGroupOperationRules: FormRules<GenTemplateGroupOperation
  * 列表显示配置
  */
 export const GenTemplateGroupOperationOption: ColumnConfig<GenTemplateGroupResponse> = {
-  groupName: { desc: '分组名称', visible: true, disabled: false },
-  templateCount: { desc: '模板数量', visible: true, disabled: false },
-  groupSort: { desc: '分组描述', visible: true, disabled: false },
-  groupDesc: { desc: '分组描述', visible: true, disabled: false },
+  groupName: { desc: '分组名称', visible: true, disabled: true },
+  templateCount: { desc: '模板数量', visible: true, disabled: true },
+  groupSort: { desc: '分组描述', visible: true, disabled: true },
+  groupDesc: { desc: '分组描述', visible: true, disabled: true },
   createBy: { desc: '创建人', visible: false, disabled: false },
   createTime: { desc: '创建时间', visible: false, disabled: false },
   updateBy: { desc: '更新人', visible: false, disabled: false },

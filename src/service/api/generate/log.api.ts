@@ -9,7 +9,7 @@ import type { GenLogQueryRequest, GenLogResponse } from '@/service/model/generat
 const baseURL: string = import.meta.env.VITE_GENERATE_API_PREFIX
 
 enum Api {
-  SAVE = '/gen/log/add',
+  SAVE = '/gen/log/create',
   UPDATE = '/gen/log/update',
   DELETE = '/gen/log/remove',
   QUERY_ONE = '/gen/log/get/',

@@ -6,7 +6,7 @@
     :rules="rules"
     element-loading-text="拼命加载中"
     label-width="100px"
-    class="flex h-full direction-horizontal"
+    class="flex h-full"
     style="flex-direction: column"
     scroll-to-error
     inline-message
@@ -48,7 +48,7 @@
         <el-form-item label="模板排序" prop="templateSort">
           <el-input-number
             v-model="addUpdateForm.templateSort"
-            class="w-full"
+            class="w-full!"
             :min="0"
             :max="999"
             placeholder="请输入模板排序"
@@ -91,7 +91,7 @@
       </el-col>
       <el-col :span="4" class="text-center">
         <el-button :disabled="loadingStatus" type="primary" @click="submitForm">
-          保存/修改
+          {{ addUpdateForm.isNew ? '保存模板' : '修改模板' }}
         </el-button>
       </el-col>
     </el-row>
@@ -125,6 +125,7 @@ defineOptions({
   name: 'TemplateForm',
   inheritAttrs: false,
 })
+const emits = defineEmits(['success'])
 const loadingStatus = defineModel<boolean>('loadingStatus', {
   required: true,
   default: false,
@@ -147,9 +148,11 @@ const submitForm = () => {
     if (valid) {
       if (addUpdateForm.value.isNew) {
         await saveGenTemplate({ ...addUpdateForm.value, id: null })
-          .then(() => {
+          .then((res) => {
             addUpdateForm.value.isNew = false
-            useMessage().success('修改模板成功')
+            addUpdateForm.value.id = res.data
+            emits('success', res.data)
+            useMessage().success('保存模板成功')
           })
           .finally(() => {
             loadingStatus.value = false
@@ -157,7 +160,7 @@ const submitForm = () => {
       } else {
         await updateGenTemplate(addUpdateForm.value)
           .then(() => {
-            useMessage().success('保存模板成功')
+            useMessage().success('修改模板成功')
           })
           .finally(() => {
             loadingStatus.value = false

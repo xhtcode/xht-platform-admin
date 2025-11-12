@@ -34,7 +34,11 @@
             {{ item.templateName }}
           </div>
         </template>
-        <template-form :loading-status="state.loadingStatus" :add-update-form="item" />
+        <template-form
+          :loading-status="state.loadingStatus"
+          :add-update-form="item"
+          @success="setActiveName"
+        />
       </el-tab-pane>
     </el-tabs>
   </el-drawer>
@@ -81,6 +85,7 @@ const show = async (groupId: ModeIdType) => {
     .then((response) => {
       if (response.data && response.data.length > 0) {
         state.data = response.data
+        activeName.value = response.data[0].id
       } else {
         addNewData()
       }
@@ -92,7 +97,12 @@ const show = async (groupId: ModeIdType) => {
       state.loadingStatus = false
     })
 }
-
+/**
+ * 设置激活的标签
+ */
+const setActiveName = (id: ModeIdType) => {
+  activeName.value = id
+}
 /**
  * 处理删除
  */
@@ -120,14 +130,14 @@ const handleRemove = async (targetId: ModeIdType) => {
           removeRequest = !tab.isNew
         }
       })
-      activeName.value = activeNameEmp
-      state.data = tabs.filter((tab) => tab.id !== targetId)
       if (removeRequest) {
         await removeGenTemplateById(targetId).then(async () => {
           useMessage().success('删除模板信息成功!')
+          activeName.value = activeNameEmp
+          state.data = tabs.filter((tab) => tab.id !== targetId)
+          state.data = state.data.filter((item) => item.id !== targetId)
         })
       }
-      state.data = state.data.filter((item) => item.id !== targetId)
     })
     .catch((_) => {})
     .finally(() => {

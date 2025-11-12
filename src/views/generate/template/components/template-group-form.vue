@@ -30,7 +30,7 @@
           class="!w-full"
           :min="1"
           :max="999"
-          readonly
+          disabled
           v-model="addUpdateForm.templateCount"
           placeholder="模板数量后台生成"
         />
@@ -107,7 +107,9 @@ const show = async (type: 'add' | 'update', id: ModeIdType) => {
     await queryGenTemplateGroupById(id)
       .then((response) => {
         const { data } = JSON.parse(JSON.stringify(response))
-        addUpdateForm.value = { ...data }
+        if (data) {
+          addUpdateForm.value = { ...data }
+        }
       })
       .catch(() => {
         useMessage().error('数据初始化加载失败')

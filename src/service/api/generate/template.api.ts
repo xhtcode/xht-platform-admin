@@ -12,7 +12,7 @@ import type {
 const baseURL: string = import.meta.env.VITE_GENERATE_API_PREFIX
 
 enum Api {
-  SAVE = '/gen/template/add',
+  SAVE = '/gen/template/create',
   UPDATE = '/gen/template/update',
   DELETE = '/gen/template/remove',
   QUERY_ONE = '/gen/template/get/',
@@ -22,7 +22,7 @@ enum Api {
 /**
  * 保存模板信息
  */
-export const saveGenTemplate = (data: GenTemplateOperationRequest): AxiosPromise<boolean> => {
+export const saveGenTemplate = (data: GenTemplateOperationRequest): AxiosPromise<ModeIdType> => {
   return request({
     url: Api.SAVE,
     baseURL,
