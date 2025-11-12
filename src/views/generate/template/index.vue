@@ -62,13 +62,13 @@
         <el-table-column
           label="模板数量"
           prop="templateCount"
-          min-width="80"
+          min-width="120"
           v-if="columnOption.templateCount?.visible"
         />
         <el-table-column
           label="分组描述"
           prop="groupSort"
-          min-width="80"
+          min-width="120"
           v-if="columnOption.groupSort?.visible"
         />
         <el-table-column
