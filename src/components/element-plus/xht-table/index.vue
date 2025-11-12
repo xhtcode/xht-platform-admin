@@ -1,5 +1,5 @@
 <template>
-  <el-table v-bind="{ ...props }">
+  <el-table v-bind="{ ...props }" ref="tableRef">
     <slot />
     <!-- 插入至表格最后一行之后的内容 -->
     <template #append>
@@ -38,5 +38,12 @@ const props = withDefaults(defineProps<XhtTableProps<T | any>>(), {
     color: 'var(--el-text-color-primary)',
     userSelect: 'none',
   }),
+})
+const tableRef = useTemplateRef('tableRef')
+const setCurrentRow = (data: any) => {
+  tableRef.value!.setCurrentRow(data)
+}
+defineExpose({
+  setCurrentRow,
 })
 </script>

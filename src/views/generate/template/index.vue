@@ -47,7 +47,6 @@
         v-loading="state.loadingStatus"
         :data="state.tableList"
         class="flex-1"
-        ref="tableRef"
         highlight-current-row
         @current-change="handleCurrentChange"
         empty-text="系统暂无相关模板信息！"
@@ -164,7 +163,6 @@ const { handleQuery, handleCurrentChange } = useTableQueryPageHooks<
 const { queryParams } = toRefs(state)
 
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
-const tableRef = useTemplateRef('tableRef')
 const templateGroupFormRef = useTemplateRef('templateGroupFormRef')
 const templateGroupViewRef = useTemplateRef('templateGroupViewRef')
 const columnOption = ref<ColumnConfig<GenTemplateGroupResponse>>({
@@ -175,7 +173,6 @@ const columnOption = ref<ColumnConfig<GenTemplateGroupResponse>>({
  */
 const resetQuery = async () => {
   queryFormRef.value?.resetFields()
-  tableRef.value!.setCurrentRow(null)
   await handleQuery()
 }
 /**
