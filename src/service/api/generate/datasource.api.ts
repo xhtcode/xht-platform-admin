@@ -15,7 +15,7 @@ const baseURL: string = import.meta.env.VITE_GENERATE_API_PREFIX
 enum Api {
   SAVE = '/gen/datasource/create',
   UPDATE = '/gen/datasource/update',
-  DELETE = '/gen/datasource/remove',
+  DELETE = '/gen/datasource/remove/',
   QUERY_ONE = '/gen/datasource/get/',
   QUERY_LIST = '/gen/datasource/list',
   CONNECTION_TEST = '/gen/datasource/connection/',

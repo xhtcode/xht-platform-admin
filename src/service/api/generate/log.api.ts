@@ -11,7 +11,7 @@ const baseURL: string = import.meta.env.VITE_GENERATE_API_PREFIX
 enum Api {
   SAVE = '/gen/log/create',
   UPDATE = '/gen/log/update',
-  DELETE = '/gen/log/remove',
+  DELETE = '/gen/log/remove/',
   QUERY_ONE = '/gen/log/get/',
   QUERY_PAGE = '/gen/log/page',
 }
