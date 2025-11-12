@@ -71,7 +71,6 @@
           @change="checkboxChange()"
         />
       </div>
-      {{ columnData }}
     </el-drawer>
   </div>
 </template>
