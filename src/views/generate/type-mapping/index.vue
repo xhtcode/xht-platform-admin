@@ -36,7 +36,6 @@
         v-model:column-data="columnOption"
         column-status
         refresh-status
-        search-status
         @refresh="handleQuery"
       >
         <el-button icon="Plus" size="small" type="primary" @click="handleAdd">新增</el-button>

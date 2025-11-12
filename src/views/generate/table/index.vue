@@ -35,7 +35,6 @@
         v-model:column-data="columnOption"
         column-status
         refresh-status
-        search-status
         @refresh="handleQuery"
       >
         <el-button icon="Download" size="small" type="primary" @click="handleImport">
