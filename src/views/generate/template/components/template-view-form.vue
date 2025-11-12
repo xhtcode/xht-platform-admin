@@ -25,13 +25,18 @@
         class="h-full"
         :label="item.templateName"
         :name="item.id"
-        v-for="item in state.data"
+        v-for="(item, index) in state.data"
         :key="item.id"
         lazy
       >
         <template #label>
-          <div class="w-120px whitespace-nowrap overflow-hidden text-ellipsis">
-            {{ item.templateName }}
+          <div class="w-120px flex">
+            <div class="font-bold text-12px text-center flex-center">{{ index + 1 }}.</div>
+            <div
+              class="flex-1 flex items-center justify-end whitespace-nowrap overflow-hidden text-ellipsis"
+            >
+              {{ item.templateName }}
+            </div>
           </div>
         </template>
         <template-form
@@ -177,5 +182,9 @@ defineExpose({
   width: 100%;
   padding: 0 10px;
   border: none;
+}
+
+:deep(.el-tabs__item) {
+  padding: 0 10px 0 0 !important;
 }
 </style>

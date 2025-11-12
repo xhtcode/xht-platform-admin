@@ -40,6 +40,7 @@
             <el-option label="ts" value="ts" />
             <el-option label="ts" value="js" />
             <el-option label="sql" value="sql" />
+            <el-option label="xml" value="xml" />
             <el-option label="txt" value="txt" />
           </el-select>
         </el-form-item>

@@ -103,8 +103,8 @@
         />
         <el-table-column align="center" fixed="right" label="操作" width="260px">
           <template #default="{ row }">
-            <el-button icon="view" link type="primary" @click="handleView(row)">模板查看</el-button>
             <el-button icon="edit" link type="success" @click="handleEdit(row)">修改</el-button>
+            <el-button icon="view" link type="primary" @click="handleView(row)">模板编辑</el-button>
             <el-button icon="delete" link type="danger" @click="handleDelete(row)">删除</el-button>
           </template>
         </el-table-column>
