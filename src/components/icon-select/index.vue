@@ -19,7 +19,6 @@
     <el-dialog
       v-model="dialogVisible"
       :before-close="closeDialog"
-      :close-on-click-modal="true"
       :title="props.title"
       modal-class="icon-select-modal"
       align-center

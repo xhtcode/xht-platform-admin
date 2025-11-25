@@ -2,6 +2,7 @@
   <el-form
     ref="loginFormRef"
     size="default"
+    inline-message
     v-loading="loading"
     :model="loginForm"
     :rules="loginRules"

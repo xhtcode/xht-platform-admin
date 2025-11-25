@@ -67,8 +67,6 @@ const openDialog = (type: 'infoRef' | 'passwordRef' | 'logout') => {
 </script>
 
 <style lang="scss" scoped>
-@use 'sass:math';
-
 .user-info-container {
   .avatar-container {
     height: 100%;

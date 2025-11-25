@@ -2,7 +2,7 @@
   <div>
     <el-row>
       <el-col :span="8">
-        <el-form-item label="页面风格">
+        <el-form-item label="页面风格" prop="tableInfo.pageStyle">
           <el-select v-model="tableInfo.pageStyle" placeholder="请选择页面风格">
             <el-option label="drawer" :value="0" />
             <el-option label="dialog" :value="1" />
@@ -10,10 +10,10 @@
         </el-form-item>
       </el-col>
       <el-col :span="8">
-        <el-form-item label="页面宽度">
+        <el-form-item label="页面宽度" prop="tableInfo.pageStyleWidth">
           <el-input-number
             v-model="tableInfo.pageStyleWidth"
-            class="w100"
+            class="w-full!"
             :min="30"
             :max="100"
             placeholder="请输入页面宽度"
@@ -25,10 +25,10 @@
         </el-form-item>
       </el-col>
       <el-col :span="8">
-        <el-form-item label="每行数量">
+        <el-form-item label="每行数量" prop="tableInfo.fromNumber">
           <el-input-number
             v-model="tableInfo.fromNumber"
-            class="w100"
+            class="w-full!"
             :min="1"
             :max="24"
             placeholder="请输入表单每行的数量"
@@ -108,11 +108,4 @@ const tableInfo = defineModel<GenTableInfoResponse>('tableInfo', {
   required: true,
   default: () => {},
 })
-/**
- * 创建序号
- * @param index 索引
- */
-const createIndex = (index: number) => {
-  return index + 1
-}
 </script>

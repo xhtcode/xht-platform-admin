@@ -2,39 +2,48 @@
   <el-drawer
     v-model="state.visibleStatus"
     :before-close="close"
-    :close-on-click-modal="false"
     title="文件下载"
-    size="45%"
+    size="46%"
     append-to-body
   >
-    <el-form
-      ref="addUpdateFormRef"
-      v-loading="state.loadingStatus"
-      :model="addUpdateForm"
-      :rules="rules"
-      element-loading-text="拼命加载中"
-      label-width="100px"
-      scroll-to-error
-      inline-message
-    >
-      <el-row>
-        <el-col :span="24">
-          <el-form-item label="包名" prop="packageName">
-            <el-input v-model="addUpdateForm.packageName" placeholder="请输入包名" />
-          </el-form-item>
-        </el-col>
-      </el-row>
-    </el-form>
-    <xht-table
-      v-loading="state.loadingStatus"
-      :data="state.tableList"
-      empty-text="系统相关表信息！"
-    >
-      <xht-column-index type="step" />
-      <el-table-column label="引擎名称" prop="engineName" width="100" />
-      <el-table-column label="数据库表名" align="left" prop="tableName" width="220" sortable />
-      <el-table-column label="表注释" prop="tableComment" width="260" show-overflow-tooltip />
-    </xht-table>
+    <div class="flex h-full flex-col overflow-hidden" style="">
+      <el-form
+        ref="addUpdateFormRef"
+        v-loading="state.loadingStatus"
+        :model="addUpdateForm"
+        :rules="rules"
+        element-loading-text="拼命加载中"
+        label-width="100px"
+        scroll-to-error
+        inline-message
+      >
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="包名" prop="packageName">
+              <el-input v-model="addUpdateForm.packageName" placeholder="请输入包名" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <xht-table
+        v-loading="state.loadingStatus"
+        :data="state.tableList"
+        class-name="flex-1"
+        empty-text="系统相关表信息！"
+      >
+        <xht-column-index type="step" />
+        <el-table-column label="引擎名称" prop="engineName" width="120" :resizable="false" />
+        <el-table-column
+          label="数据库表名"
+          align="left"
+          prop="tableName"
+          width="220"
+          sortable
+          :resizable="false"
+        />
+        <el-table-column label="表注释" prop="tableComment" :resizable="false" />
+      </xht-table>
+    </div>
     <template #footer>
       <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>
       <el-button @click="close">取 消</el-button>
@@ -47,6 +56,7 @@ import type { FormInstance, FormRules } from 'element-plus'
 import type { GenTableInfoResponse } from '@/service/model/generate/table.model'
 import { downloadFileApi } from '@/service/api/generate/table.api'
 import { useMessage } from '@/hooks/use-message'
+import { handleBlobFile } from '@/utils'
 
 interface CrudOption {
   visibleStatus: boolean
@@ -91,7 +101,8 @@ const submitForm = () => {
         addUpdateForm.value.packageName
       )
         .then((data) => {
-          console.log(data)
+          console.log(typeof data)
+          console.log(new Blob([data]))
           useMessage().success('下载文件成功!')
         })
         .finally(() => {

@@ -11,6 +11,43 @@ import {
 import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
 
 /**
+ * 代码生成核心返回结果
+ */
+export interface GenCodeCoreBo {
+  filePath: string // 文件路径
+  fileName: string // 文件名
+  tableName: string // 表名
+  code: string //生成的代码内容
+  fileType: string //文件类型
+  ignoreField: readonly string[] //忽略的字段
+}
+
+/**
+ * 代码生成核心返回结果
+ */
+export interface GenCodeCoreVo {
+  tableName: string // 表名
+  codes: GenCodeCoreBo[] //生成的代码内容
+}
+
+/**
+ * 代码预览状态管理接口
+ * 用于定义代码预览功能中的各种状态变量
+ */
+export interface CodeViewState {
+  tableIds: ModeIdType[] // 需要生成代码的表ID数组
+  packageName: string // 包名
+  visibleStatus: boolean // 控制代码预览弹窗显示状态
+  loadingStatus: boolean // 数据加载状态标识
+  codeData: GenCodeCoreVo[] // 存储获取到的代码数据
+  twoCodeData: GenCodeCoreBo[] // 当前选中表对应的代码文件列表
+  activeData: GenCodeCoreBo | null // 当前激活的代码数据
+  activeFileType: string // 当前选中文件的类型（如 java、vue等）
+  activeTableName: string // 当前激活的表名
+  activeFileName: string // 当前激活的文件名
+}
+
+/**
  * 操作类型
  */
 export interface GenTableInfoOperationRequest extends BasicFormRequest {

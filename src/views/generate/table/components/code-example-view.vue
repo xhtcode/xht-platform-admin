@@ -20,15 +20,10 @@ public class {{ tableInfo?.codeName }}Entity implements Serializable {
 
 <script setup lang="ts">
 import type { GenTableInfoResponse } from '@/service/model/generate/table.model'
-import { GenColumnInfoResponse } from '@/service/model/generate/column.model'
 
 const tableInfo = defineModel<GenTableInfoResponse>('tableInfo', {
   required: true,
   default: () => {},
-})
-const columnInfo = defineModel<GenColumnInfoResponse[]>('columnInfo', {
-  required: true,
-  default: () => [],
 })
 </script>
 

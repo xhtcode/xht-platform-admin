@@ -49,7 +49,7 @@
           v-model="row.sortOrder"
           :min="1"
           :max="999"
-          class="w100"
+          class="w-full!"
           placeholder="请输入字段排序"
         />
       </template>
@@ -63,11 +63,4 @@ const columnInfo = defineModel<GenColumnInfoResponse[]>('columnInfo', {
   required: true,
   default: () => [],
 })
-/**
- * 创建序号
- * @param index 索引
- */
-const createIndex = (index: number) => {
-  return index + 1
-}
 </script>

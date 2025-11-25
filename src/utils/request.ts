@@ -74,29 +74,16 @@ service.interceptors.request.use(
  */
 service.interceptors.response.use(
   (response: AxiosResponse): any => {
-    // 处理二进制流响应（文件下载等场景）
-    if (
-      response.config.responseType === 'blob' ||
-      response.headers['content-type']?.includes('application/octet-stream')
-    ) {
-      return response
-    }
-
     // 处理JSON响应
-    const { code, msg } = response.data
+    const { code } = response.data
     // 成功状态码（根据实际业务调整）
     if (code === 200) {
       return response.data
     }
-
-    // 业务错误处理
-    useMessage().error(msg || '操作失败，请稍后重试')
-    return Promise.reject(new Error(msg || `业务错误: ${code}`))
+    return response.data
   },
-  (error: any): Promise<any> => {
-    const { response } = error
+  ({ response }: any): Promise<any> => {
     let errorMsg = response?.data?.msg ?? response?.statusText ?? '网络请求失败，请检查网络连接'
-
     // 特定状态码处理
     if (response) {
       switch (response.status) {
@@ -110,15 +97,10 @@ service.interceptors.response.use(
         case 403:
           errorMsg = '没有操作权限，请联系管理员'
           break
-        case 500:
-          errorMsg = '服务器内部错误，请稍后重试'
-          break
       }
     }
-
     useMessage().error(errorMsg)
-    console.error('响应错误:', error)
-    return Promise.reject(error)
+    return Promise.reject(response)
   }
 )
 

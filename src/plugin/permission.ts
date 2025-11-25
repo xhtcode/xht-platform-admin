@@ -20,6 +20,7 @@ const whiteList = ['/login']
 export function setupPermission() {
   router.beforeEach(async (to, _, next) => {
     NProgress.start()
+    console.log('当前匹配路由：', to.path, ' 组件：', to.matched[0]);
     const userInfoStore = useUserInfoStore()
     const routeStore = useRouteStore()
     if (userInfoStore.hasToken) {
@@ -41,6 +42,7 @@ export function setupPermission() {
           await routeStore.generateRoutesAtBack()
           routeStore.formatRoutes.forEach((route) => {
             if (!/^(?:https?:|mailto:|tel:)/.test(route.path)) {
+              console.log('添加动态路由：', route.path)
               router.addRoute(route as RouteRecordRaw)
             }
           })

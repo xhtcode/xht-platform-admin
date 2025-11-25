@@ -6,7 +6,6 @@ import { cloneDeep } from 'lodash'
 import { MenuTypeEnums } from '@/service/model/system/menu.model'
 import pInIaPersistConfig from '@/store/pinia-persist'
 
-const LayOutIndex = import('@/layout/index.vue')
 const viewsModules: any = import.meta.glob('../../views/**/*.{vue,tsx}')
 const dynamicViewsModules: Record<string, Function> = Object.assign({}, { ...viewsModules })
 /**
@@ -99,7 +98,7 @@ export const useRouteStore = defineStore(
       if (!routes || !routes.length) return []
       return routes.map((route: any) => {
         if (route.meta.menuType === 'M') {
-          route.component = () => LayOutIndex
+          route.component =() => import('@/layout/index.vue')
         } else if (!route.meta.linkStatus) {
           if (route.component) {
             route.component = dynamicViewsModules[`../..${route.component}`]

@@ -18,4 +18,27 @@ const generateUUID = () => {
     .replace(/^(.{8})(.{4})(.{4})(.{4})(.{12})$/, '$1$2$3$4$5')
 }
 
-export { generateUUID }
+/**
+ * blob 文件流处理
+ * @param blob Blob文件流
+ * @param fileName 文件名称
+ * @returns
+ */
+const handleBlobFile = (blob: Blob, fileName: string) => {
+  if (blob && blob.size === 0) {
+    useMessage().error('内容为空，无法下载')
+    return
+  }
+  const link = document.createElement('a')
+  link.href = window.URL.createObjectURL(blob)
+  link.download = fileName
+  document.body.appendChild(link)
+  link.click()
+  window.setTimeout(function () {
+    URL.revokeObjectURL(blob)
+    document.body.removeChild(link)
+    link.remove()
+  }, 0)
+}
+
+export { generateUUID, handleBlobFile }

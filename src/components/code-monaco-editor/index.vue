@@ -36,38 +36,12 @@ const themeStore = useThemeStore()
 const { darkStatus } = storeToRefs(themeStore)
 const codeEditBox = useTemplateRef<HTMLElement>('codeEditBox')
 const editor = shallowRef<monaco.editor.IStandaloneCodeEditor | null>()
-
+const setValueStatus = shallowRef<boolean>(true)
 /**
  * 初始化编辑器
  */
 const init = () => {
   const flag = true
-  monaco.languages.typescript.typescriptDefaults.setEagerModelSync(true)
-  monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
-    target: monaco.languages.typescript.ScriptTarget.ES2020,
-    // 核心：关闭模块解析相关的严格检查
-    moduleResolution: monaco.languages.typescript.ModuleResolutionKind.NodeJs,
-    allowSyntheticDefaultImports: true, // 允许从无默认导出的模块默认导入
-    esModuleInterop: true,
-
-    // 禁用未找到模块的错误（关键）
-    skipLibCheck: true, // 跳过对库文件的类型检查
-    noResolve: true, // 完全禁用模块解析（会导致所有导入都不验证，但可能引发其他问题）
-
-    // 可选：关闭其他严格检查
-    strict: false,
-    noImplicitAny: false,
-    noUnusedLocals: false,
-    noUnusedParameters: false,
-  })
-  monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
-    noSemanticValidation: true,
-    noSyntaxValidation: false,
-  })
-  monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
-    target: monaco.languages.typescript.ScriptTarget.ES2020,
-    allowNonTsExtensions: true,
-  })
   editor.value = monaco.editor.create(codeEditBox.value!, {
     value: modelValue.value,
     language: convertLanguage(language.value),
@@ -104,6 +78,10 @@ const init = () => {
    * 监听内容改变
    */
   editor.value.onDidChangeModelContent(() => {
+    if (setValueStatus.value) {
+      setValueStatus.value = false
+      return
+    }
     const value = editor.value?.getValue()
     modelValue.value = value
     emits('change', value)
@@ -120,6 +98,7 @@ const init = () => {
  * @param newValue
  */
 const setValue = (newValue: string) => {
+  setValueStatus.value = true
   editor.value?.setValue(newValue)
 }
 watch(

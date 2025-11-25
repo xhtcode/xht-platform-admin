@@ -2,7 +2,6 @@
   <el-drawer
     v-model="state.visibleStatus"
     :before-close="close"
-    :close-on-click-modal="false"
     title="导入表结构"
     size="75%"
     append-to-body

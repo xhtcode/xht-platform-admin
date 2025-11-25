@@ -1,6 +1,5 @@
 import type { RouteRecordRaw } from 'vue-router'
 
-export const Layout = () => import('@/layout/index.vue')
 /**
  * 工作台路由
  */
@@ -25,7 +24,7 @@ const DynamicRouter: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'LayoutComponent',
-    component: Layout,
+    component:  () => import('@/layout/index.vue'),
     redirect: '/home',
     meta: {
       title: '工作台',

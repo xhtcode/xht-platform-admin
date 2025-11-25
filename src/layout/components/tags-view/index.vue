@@ -212,7 +212,8 @@ const toLastView = () => {
  * 处理标签点击事件
  */
 const handleChangeTag = (item: TabPaneName) => {
-  router.push(item as string).catch((_) => {
+  router.push(item as string)
+    .catch((_) => {
     useMessage().error('路由错误，请联系管理员!')
   })
 }

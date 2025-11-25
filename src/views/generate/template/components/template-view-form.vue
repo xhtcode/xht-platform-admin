@@ -2,7 +2,6 @@
   <el-drawer
     v-model="state.visibleStatus"
     :before-close="close"
-    :close-on-click-modal="false"
     title="模板管理"
     append-to-body
     size="100%"
@@ -56,6 +55,7 @@ import type { GenTemplateOperationRequest } from '@/service/model/generate/templ
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { ModeIdType } from '@/service/model/base.model'
 import { GenTemplateOperationForm } from '@/views/generate/template/template.data'
+import type { TabsPaneContext } from 'element-plus/es/components/tabs/src/constants'
 
 defineOptions({ name: 'TemplateViewForm' })
 
@@ -108,6 +108,7 @@ const show = async (groupId: ModeIdType) => {
 const setActiveName = (id: ModeIdType) => {
   activeName.value = id
 }
+
 /**
  * 处理删除
  */
@@ -149,6 +150,7 @@ const handleRemove = async (targetId: ModeIdType) => {
       state.loadingStatus = false
     })
 }
+
 /**
  * 新增
  */
@@ -162,6 +164,7 @@ const addNewData = () => {
     isNew: true,
   })
 }
+
 /**
  * 关闭
  */
@@ -171,7 +174,9 @@ const close = () => {
   state.loadingStatus = false
   state.data = []
   state.nextTagId = 1
+  state.groupId = null
 }
+
 defineExpose({
   show,
 })

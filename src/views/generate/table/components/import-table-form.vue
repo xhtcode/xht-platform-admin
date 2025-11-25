@@ -2,7 +2,6 @@
   <el-dialog
     v-model="addUpdatePageInit.visibleStatus"
     :before-close="close"
-    :close-on-click-modal="false"
     title="导入确定"
     append-to-body
   >

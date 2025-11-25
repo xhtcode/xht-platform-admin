@@ -68,7 +68,6 @@ onMounted(() => {
 watch(
   () => route.path,
   () => {
-    console.log(route.path)
     changeMenuList()
   }
 )

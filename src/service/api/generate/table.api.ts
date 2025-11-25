@@ -1,7 +1,8 @@
 import request from '@/utils/request'
 import type { AxiosPromise } from 'axios'
 import type { ModeIdType, PageResponse } from '@/service/model/base.model'
-import {
+import type {
+  GenCodeCoreVo,
   GenTableInfoOperationRequest,
   GenTableInfoQueryRequest,
   GenTableInfoResponse,
@@ -22,6 +23,7 @@ enum Api {
   QUERY_NO_EXISTS_PAGE = '/gen/table/info/no/exists/page',
   SYNC_TABLE = '/gen/table/info/syncTable/',
   DOWNLOAD_FILE = '/gen/code/generate',
+  VIEW_CODE = '/gen/code/view',
 }
 
 /**
@@ -119,12 +121,26 @@ export const syncTableApi = (tableId: ModeIdType[]) => {
  * @param packageName 包名
  * @returns 下载结果的Promise
  */
-export const downloadFileApi = (
-  tableIds: ModeIdType[],
-  packageName: string
-): AxiosPromise<Blob> => {
+export const downloadFileApi = (tableIds: ModeIdType[], packageName: string) => {
   return request({
     url: Api.DOWNLOAD_FILE,
+    baseURL,
+    method: 'post',
+    data: { tableIds: tableIds, packageName: packageName },
+  })
+}
+/**
+ * 预览代码
+ * @param tableIds 表ID数组
+ * @param packageName 包名
+ * @returns 预览结果的Promise
+ */
+export const viewCodeFileApi = (
+  tableIds: ModeIdType[],
+  packageName: string
+): AxiosPromise<GenCodeCoreVo[]> => {
+  return request({
+    url: Api.VIEW_CODE,
     baseURL,
     method: 'post',
     data: { tableIds: tableIds, packageName: packageName },

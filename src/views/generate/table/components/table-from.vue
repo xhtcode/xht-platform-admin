@@ -2,7 +2,6 @@
   <el-drawer
     v-model="state.visibleStatus"
     :before-close="close"
-    :close-on-click-modal="false"
     :title="state.title"
     append-to-body
     size="100%"
@@ -19,14 +18,12 @@
     >
       <el-tabs type="card" v-model="activeName" stretch>
         <el-tab-pane label="表信息" :name="1">
-          <div class="flex">
-            <table-from-basic class="flex-1" :table-info="addUpdateForm.tableInfo" />
-            <code-example-view
-              class="flex-2 p-10px"
-              :table-info="addUpdateForm.tableInfo"
-              :column-info="addUpdateForm.columnInfos"
-            />
-          </div>
+          <table-from-basic :table-info="addUpdateForm.tableInfo" />
+          <code-example-view
+            class="p-10px"
+            :table-info="addUpdateForm.tableInfo"
+            :column-info="addUpdateForm.columnInfos"
+          />
         </el-tab-pane>
         <el-tab-pane label="字段信息" :name="2">
           <column-form-basic :column-info="addUpdateForm.columnInfos" />
@@ -151,6 +148,7 @@ const close = () => {
   addUpdateForm.value = { ...GenTableInfoOperationForm }
   state.visibleStatus = false
   state.operationStatus = 'add'
+  activeName.value = 1
   state.loadingStatus = false
   addUpdateFormRef.value?.resetFields()
 }
