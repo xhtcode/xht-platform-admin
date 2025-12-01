@@ -1,9 +1,4 @@
-import type {
-  BasicResponse,
-  ModeIdType,
-  PageQueryRequest,
-  SystemFlagEnums,
-} from '@/service/model/base.model'
+import type { BasicResponse, ModeIdType, PageQueryRequest, SystemFlagEnums } from '@/service/model/base.model'
 
 /**
  * 部门状态

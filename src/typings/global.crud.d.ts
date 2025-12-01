@@ -10,23 +10,12 @@ declare global {
   type OperationType = 'save' | 'update' | 'remove' | 'query'
 
   /**
-   * 列表页面 表单查询参数
-   */
-  interface CrudQueryFrom {
-    size?: number //数量
-    current?: number //页码
-    ascName?: string //正序排序字段名称
-    descName?: string //倒序排序字段名称
-    [key: string]: any
-  }
-
-  /**
    * 新增/编辑操作配置
    */
   interface AddUpdateOption<Req extends BasicFormRequest> {
     title: string // 弹窗标题
     visibleStatus: boolean // 弹窗可见状态
-    operationStatus: 'add' | 'update' // 操作类型
+    operationStatus: 'create' | 'update' // 操作类型
     loadingStatus: boolean // 加载状态
     addUpdateForm: Req // 表单数据
     [key: string]: any // 允许扩展其他属性

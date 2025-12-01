@@ -6,10 +6,7 @@
 
 <script setup lang="ts">
 import { queryGenDataSourceList } from '@/service/api/generate/datasource.api'
-import type {
-  DataSourceSelectProps,
-  DataSourceSelectState,
-} from '@/components/generate/datasource-select/types'
+import type { DataSourceSelectProps, DataSourceSelectState } from '@/components/generate/datasource-select/types'
 import { useMessage } from '@/hooks/use-message'
 
 /**

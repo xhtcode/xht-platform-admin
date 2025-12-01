@@ -3,7 +3,7 @@
     <el-table-column label="基础信息">
       <template #default>
         <xht-column-index type="step" />
-        <el-table-column prop="dbName" label="DB字段名" width="160">
+        <el-table-column label="DB字段名" prop="dbName" width="160">
           <template #default="{ row }">
             <el-text :type="row.dbPrimary === 1 ? 'danger' : ''">
               {{ row.dbName }}
@@ -11,8 +11,8 @@
             </el-text>
           </template>
         </el-table-column>
-        <el-table-column prop="dbComment" label="DB字段注释" show-overflow-tooltip width="160" />
-        <el-table-column prop="dbLength" label="DB类型" width="160">
+        <el-table-column label="DB字段注释" prop="dbComment" show-overflow-tooltip width="160" />
+        <el-table-column label="DB类型" prop="dbLength" width="160">
           <template #default="{ row }">
             <el-text>{{ row.dbType }}</el-text>
             <el-text v-if="row.dbLength > 0">({{ row.dbLength }})</el-text>
@@ -20,27 +20,17 @@
         </el-table-column>
       </template>
     </el-table-column>
-    <el-table-column prop="codeName" label="列表字段">
+    <el-table-column label="列表字段" prop="codeName">
       <template #default="{ row }">
-        <el-input
-          v-model="row.codeName"
-          :maxlength="30"
-          show-word-limit
-          placeholder="请输入列表字段"
-        />
+        <el-input v-model="row.codeName" :maxlength="30" placeholder="请输入列表字段" show-word-limit />
       </template>
     </el-table-column>
-    <el-table-column prop="listComment" label="列表描述">
+    <el-table-column label="列表描述" prop="listComment">
       <template #default="{ row }">
-        <el-input
-          v-model="row.listComment"
-          :disabled="row.listShow !== 1"
-          :maxlength="20"
-          placeholder="请输入代码名称"
-        />
+        <el-input v-model="row.listComment" :disabled="row.listShow !== 1" :maxlength="20" placeholder="请输入代码名称" />
       </template>
     </el-table-column>
-    <el-table-column prop="listShow" label="显示" width="90">
+    <el-table-column label="显示" prop="listShow" width="90">
       <template #default="{ row }">
         <el-switch
           v-model="row.listShow"
@@ -50,22 +40,22 @@
         />
       </template>
     </el-table-column>
-    <el-table-column prop="listDisabled" label="显示禁用" width="90">
+    <el-table-column label="显示禁用" prop="listDisabled" width="90">
       <template #default="{ row }">
         <el-switch
           v-model="row.listDisabled"
-          :disabled="row.listShow !== 1"
           :active-value="GenStatusEnums.ENABLED"
+          :disabled="row.listShow !== 1"
           :inactive-value="GenStatusEnums.DISABLED"
         />
       </template>
     </el-table-column>
-    <el-table-column prop="listHidden" label="默认隐藏" width="90">
+    <el-table-column label="默认隐藏" prop="listHidden" width="90">
       <template #default="{ row }">
         <el-switch
           v-model="row.listHidden"
-          :disabled="row.listShow !== 1"
           :active-value="GenStatusEnums.ENABLED"
+          :disabled="row.listShow !== 1"
           :inactive-value="GenStatusEnums.DISABLED"
         />
       </template>
@@ -73,11 +63,7 @@
   </xht-table>
 </template>
 <script lang="ts" setup>
-import {
-  GenColumnInfoOperationRequest,
-  GenColumnInfoResponse,
-  GenStatusEnums,
-} from '@/service/model/generate/column.model'
+import { GenColumnInfoOperationRequest, GenColumnInfoResponse, GenStatusEnums } from '@/service/model/generate/column.model'
 
 /**
  * 列信息模型，用于双向绑定列数据

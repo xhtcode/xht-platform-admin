@@ -1,54 +1,34 @@
 <template>
-  <el-drawer
-    v-model="state.visibleStatus"
-    :before-close="close"
-    :title="state.title"
-    append-to-body
-    size="100%"
-  >
+  <el-drawer v-model="state.visibleStatus" :before-close="close" :title="state.title" append-to-body size="100%">
     <el-form
       ref="addUpdateFormRef"
       v-loading="state.loadingStatus"
       :model="addUpdateForm"
       :rules="rules"
       element-loading-text="拼命加载中"
+      inline-message
       label-width="100px"
       scroll-to-error
-      inline-message
     >
-      <el-tabs type="card" v-model="activeName" stretch>
-        <el-tab-pane label="表信息" :name="1">
+      <el-tabs v-model="activeName" stretch type="card">
+        <el-tab-pane :name="1" label="表信息">
           <table-from-basic :table-info="addUpdateForm.tableInfo" />
-          <code-example-view
-            class="p-10px"
-            :table-info="addUpdateForm.tableInfo"
-            :column-info="addUpdateForm.columnInfos"
-          />
+          <code-example-view :column-info="addUpdateForm.columnInfos" :table-info="addUpdateForm.tableInfo" class="p-10px" />
         </el-tab-pane>
-        <el-tab-pane label="字段信息" :name="2">
+        <el-tab-pane :name="2" label="字段信息">
           <column-form-basic :column-info="addUpdateForm.columnInfos" />
         </el-tab-pane>
-        <el-tab-pane label="字段类型" :name="3">
-          <column-form-type
-            :db-type="addUpdateForm.tableInfo.dataBaseType"
-            :column-info="addUpdateForm.columnInfos"
-          />
+        <el-tab-pane :name="3" label="字段类型">
+          <column-form-type :column-info="addUpdateForm.columnInfos" :db-type="addUpdateForm.tableInfo.dataBaseType" />
         </el-tab-pane>
-        <el-tab-pane label="表单字段" :name="4">
-          <column-form-edit
-            :table-info="addUpdateForm.tableInfo"
-            :column-info="addUpdateForm.columnInfos"
-          />
+        <el-tab-pane :name="4" label="表单字段">
+          <column-form-edit :column-info="addUpdateForm.columnInfos" :table-info="addUpdateForm.tableInfo" />
         </el-tab-pane>
-        <el-tab-pane label="列表字段" :name="5">
+        <el-tab-pane :name="5" label="列表字段">
           <column-form-list :column-info="addUpdateForm.columnInfos" />
         </el-tab-pane>
-        <el-tab-pane label="查询字段" :name="6">
-          <column-form-query
-            :table-info="addUpdateForm.tableInfo"
-            :column-info="addUpdateForm.columnInfos"
-            ref="columnFormQueryRef"
-          />
+        <el-tab-pane :name="6" label="查询字段">
+          <column-form-query ref="columnFormQueryRef" :column-info="addUpdateForm.columnInfos" :table-info="addUpdateForm.tableInfo" />
         </el-tab-pane>
       </el-tabs>
     </el-form>
@@ -62,28 +42,25 @@
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
 import { queryGenTableInfoById, updateGenTableInfo } from '@/service/api/generate/table.api'
-
 import type { GenTableInfoOperationRequest } from '@/service/model/generate/table.model'
-import {
-  GenTableInfoOperationForm,
-  GenTableInfoOperationRules,
-} from '@/views/generate/table/table.data'
+import { GenTableInfoOperationForm, GenTableInfoOperationRules } from '@/views/generate/table/table.data'
 import { useMessage } from '@/hooks/use-message'
-import { handleFormErrors } from '@/utils/moudle/element'
 import type { ModeIdType } from '@/service/model/base.model'
-import ColumnFormBasic from '@/views/generate/table/components/column-form-basic.vue'
-import ColumnFormType from '@/views/generate/table/components/column-form-type.vue'
-import ColumnFormEdit from '@/views/generate/table/components/column-form-edit.vue'
-import ColumnFormQuery from '@/views/generate/table/components/column-form-query.vue'
-import ColumnFormList from '@/views/generate/table/components/column-form-list.vue'
-import TableFromBasic from '@/views/generate/table/components/table-from-basic.vue'
-import CodeExampleView from '@/views/generate/table/components/code-example-view.vue'
 
 defineOptions({ name: 'GenTableInfoAddOrUpdate' })
+
+const columnFormBasic = defineAsyncComponent(() => import('@/views/generate/table/components/column-form-basic.vue'))
+const columnFormType = defineAsyncComponent(() => import('@/views/generate/table/components/column-form-type.vue'))
+const columnFormEdit = defineAsyncComponent(() => import('@/views/generate/table/components/column-form-edit.vue'))
+const columnFormQuery = defineAsyncComponent(() => import('@/views/generate/table/components/column-form-query.vue'))
+const columnFormList = defineAsyncComponent(() => import('@/views/generate/table/components/column-form-list.vue'))
+const tableFromBasic = defineAsyncComponent(() => import('@/views/generate/table/components/table-from-basic.vue'))
+const codeExampleView = defineAsyncComponent(() => import('@/views/generate/table/components/code-example-view.vue'))
+
 const state = reactive<AddUpdateOption<GenTableInfoOperationRequest>>({
   title: '代码配置',
   visibleStatus: false,
-  operationStatus: 'add',
+  operationStatus: 'create',
   loadingStatus: false,
   addUpdateForm: { ...GenTableInfoOperationForm },
 })
@@ -128,9 +105,6 @@ const submitForm = () => {
           emits('success')
           close()
         })
-        .catch((err: any) => {
-          handleFormErrors(err, addUpdateFormRef, addUpdateForm)
-        })
         .finally(() => {
           state.loadingStatus = false
         })
@@ -147,7 +121,7 @@ const submitForm = () => {
 const close = () => {
   addUpdateForm.value = { ...GenTableInfoOperationForm }
   state.visibleStatus = false
-  state.operationStatus = 'add'
+  state.operationStatus = 'create'
   activeName.value = 1
   state.loadingStatus = false
   addUpdateFormRef.value?.resetFields()

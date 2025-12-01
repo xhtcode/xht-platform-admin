@@ -1,12 +1,7 @@
 import type { SysMenuOperationRequest, SysMenuResponse } from '@/service/model/system/menu.model'
-import {
-  MenuCacheEnums,
-  MenuHiddenEnums,
-  MenuStatusEnums,
-  MenuTypeEnums,
-} from '@/service/model/system/menu.model'
+import { MenuCacheEnums, MenuHiddenEnums, MenuStatusEnums, MenuTypeEnums } from '@/service/model/system/menu.model'
 import type { FormRules } from 'element-plus'
-import { ColumnConfig } from '@/components/table-tool-bar/types'
+import type { ColumnConfig } from '@/components/table-tool-bar/types'
 
 /**
  * 增改页面 表单类型 默认值

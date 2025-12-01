@@ -1,16 +1,10 @@
 <template>
-  <el-dialog
-    v-model="state.visibleStatus"
-    :before-close="close"
-    title="分配权限"
-    width="45%"
-    append-to-body
-  >
+  <el-dialog v-model="state.visibleStatus" :before-close="close" align-center append-to-body title="分配权限" width="45%">
     <template #header>
       <div class="menu-role-dialog-title">
         <div>分配权限</div>
         <div class="flex mr-16">
-          <el-checkbox label="展开/折叠" checked @change="handleExpand" />
+          <el-checkbox checked label="展开/折叠" @change="handleExpand" />
           <el-checkbox label="全选/不全选" @change="handleSelectAll" />
         </div>
       </div>
@@ -19,13 +13,13 @@
       <el-tree
         ref="menuTree"
         v-loading="state.loadingStatus"
+        :check-strictly="!checkStrictly"
         :data="treeData"
         :default-checked-keys="state.checkedKeys"
-        :check-strictly="!checkStrictly"
         :default-expand-all="true"
         :props="{ children: 'children', label: 'menuName' }"
-        node-key="id"
         highlight-current
+        node-key="id"
         show-checkbox
       >
         <template #default="{ data }">
@@ -42,7 +36,7 @@
   </el-dialog>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { queryToolsMenuTree } from '@/service/api/tools.api'
 import type { CheckboxValueType } from 'element-plus'
 import { roleMenuBind, selectMenuIdByRoleId } from '@/service/api/system/role.api'
@@ -53,7 +47,7 @@ defineOptions({ name: 'MenuRoleForm' })
 const state = reactive<AddUpdateOption<any>>({
   title: '增加部门',
   visibleStatus: false,
-  operationStatus: 'add',
+  operationStatus: 'create',
   loadingStatus: false,
   addUpdateForm: {},
   treeData: [],
@@ -90,7 +84,7 @@ const show = async (roleId: ModeIdType) => {
 const close = () => {
   if (state.loadingStatus) return
   state.visibleStatus = false
-  state.operationStatus = 'add'
+  state.operationStatus = 'create'
   state.loadingStatus = false
 }
 const handleExpand = (check: CheckboxValueType) => {
@@ -132,7 +126,7 @@ defineExpose({
 })
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .menu-role-dialog-title {
   display: flex;
   align-items: center;
@@ -140,6 +134,6 @@ defineExpose({
 }
 
 .menu-role-dialog-body {
-  height: 65vh;
+  height: 55vh;
 }
 </style>

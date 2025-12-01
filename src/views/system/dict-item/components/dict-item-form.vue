@@ -1,83 +1,53 @@
 <template>
-  <el-drawer
-    v-model="state.visibleStatus"
-    :before-close="close"
-    :title="state.title"
-    size="45vw"
-    append-to-body
-  >
+  <el-drawer v-model="state.visibleStatus" :before-close="close" :title="state.title" append-to-body size="45vw">
     <el-form
       ref="addUpdateFormRef"
       v-loading="state.loadingStatus"
       :model="addUpdateForm"
       :rules="rules"
       element-loading-text="拼命加载中"
+      inline-message
       label-width="100px"
       scroll-to-error
-      inline-message
     >
       <el-row>
-        <el-col :xs="24" :sm="24" :lg="12">
+        <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="字典项标签" prop="itemLabel">
-            <el-input
-              v-model="addUpdateForm.itemLabel"
-              :maxlength="50"
-              show-word-limit
-              placeholder="请输入字典项标签"
-            />
+            <el-input v-model="addUpdateForm.itemLabel" :maxlength="50" placeholder="请输入字典项标签" show-word-limit />
           </el-form-item>
         </el-col>
-        <el-col :xs="24" :sm="24" :lg="12">
+        <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="字典项值" prop="itemValue">
-            <el-input
-              v-model="addUpdateForm.itemValue"
-              :maxlength="50"
-              show-word-limit
-              placeholder="请输入字典项值"
-            />
+            <el-input v-model="addUpdateForm.itemValue" :maxlength="50" placeholder="请输入字典项值" show-word-limit />
           </el-form-item>
         </el-col>
-        <el-col :xs="24" :sm="24" :lg="12">
+        <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="显示颜色" prop="itemColor">
             <el-color-picker
               v-model="addUpdateForm.itemColor"
+              :predefine="predefineColors"
               class="w100"
               color-format="hex"
-              :predefine="predefineColors"
               placeholder="请输入显示颜色"
             />
           </el-form-item>
         </el-col>
-        <el-col :xs="24" :sm="24" :lg="12">
+        <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="排序序号" prop="sortOrder">
-            <el-input-number
-              v-model="addUpdateForm.sortOrder"
-              class="w100"
-              :min="0"
-              :max="999"
-              placeholder="请输入排序序号"
-            />
+            <el-input-number v-model="addUpdateForm.sortOrder" :max="999" :min="0" class="w100" placeholder="请输入排序序号" />
           </el-form-item>
         </el-col>
-        <el-col :xs="24" :sm="24" :lg="12">
+        <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="状态" prop="status">
             <el-select v-model="addUpdateForm.status" placeholder="请选择字典状态">
-              <el-option label="启用" :value="DictItemStatusEnums.ENABLED" />
-              <el-option label="禁用" :value="DictItemStatusEnums.DISABLED" />
+              <el-option :value="DictItemStatusEnums.ENABLED" label="启用" />
+              <el-option :value="DictItemStatusEnums.DISABLED" label="禁用" />
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :xs="24" :sm="24" :lg="12">
+        <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="字典项描述" prop="remark">
-            <el-input
-              v-model="addUpdateForm.remark"
-              type="textarea"
-              resize="none"
-              :rows="5"
-              :maxlength="200"
-              show-word-limit
-              placeholder="请输入"
-            />
+            <el-input v-model="addUpdateForm.remark" :maxlength="200" :rows="5" placeholder="请输入" resize="none" show-word-limit type="textarea" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -91,28 +61,20 @@
 
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
-import {
-  querySysDictItemById,
-  saveSysDictItem,
-  updateSysDictItem,
-} from '@/service/api/system/dict.item.api'
-
+import { querySysDictItemById, saveSysDictItem, updateSysDictItem } from '@/service/api/system/dict.item.api'
 import type { SysDictItemOperationRequest } from '@/service/model/system/dict.item.model'
 import { DictItemStatusEnums } from '@/service/model/system/dict.item.model'
-import {
-  SysDictItemOperationForm,
-  SysDictItemOperationRules,
-} from '@/views/system/dict-item/dict.item.data'
+import { SysDictItemOperationForm, SysDictItemOperationRules } from '@/views/system/dict-item/dict.item.data'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import { handleFormErrors } from '@/utils/moudle/element'
 import { useRoute } from 'vue-router'
 import type { ModeIdType } from '@/service/model/base.model'
 
 defineOptions({ name: 'SysDictItemAddOrUpdate' })
+
 const state = reactive<AddUpdateOption<SysDictItemOperationRequest>>({
   title: '增加字典项',
   visibleStatus: false,
-  operationStatus: 'add',
+  operationStatus: 'create',
   loadingStatus: false,
   addUpdateForm: { ...SysDictItemOperationForm },
 })
@@ -121,22 +83,11 @@ const addUpdateFormRef = ref<FormInstance>()
 const { addUpdateForm } = toRefs(state)
 const emits = defineEmits(['success'])
 const rules: FormRules = SysDictItemOperationRules
-const predefineColors = ref([
-  '#409EFF',
-  '#67C23A',
-  '#E6A23C',
-  '#F56C6C',
-  '#909399',
-  '#303133',
-  '#CDD0D6',
-  '#E6E8EB',
-  '#000000',
-  '#F2F6FC',
-])
+const predefineColors = ref(['#409EFF', '#67C23A', '#E6A23C', '#F56C6C', '#909399', '#303133', '#CDD0D6', '#E6E8EB', '#000000', '#F2F6FC'])
 /**
  * 打开显示
  */
-const show = async (type: 'add' | 'update', id: ModeIdType) => {
+const show = async (type: 'create' | 'update', id: ModeIdType) => {
   state.visibleStatus = true
   await nextTick(() => {
     addUpdateFormRef.value?.resetFields()
@@ -166,7 +117,7 @@ const submitForm = () => {
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
       addUpdateForm.value.dictId = route.params?.id
-      if (state.operationStatus === 'add') {
+      if (state.operationStatus === 'create') {
         //增加
         await saveSysDictItem(addUpdateForm.value)
           .then((_) => {
@@ -174,9 +125,7 @@ const submitForm = () => {
             emits('success')
             close()
           })
-          .catch((err: any) => {
-            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
-          })
+
           .finally(() => {
             state.loadingStatus = false
           })
@@ -188,9 +137,7 @@ const submitForm = () => {
             emits('success')
             close()
           })
-          .catch((err: any) => {
-            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
-          })
+
           .finally(() => {
             state.loadingStatus = false
           })
@@ -209,7 +156,7 @@ const close = () => {
   if (state.loadingStatus) return
   addUpdateForm.value = { ...SysDictItemOperationForm }
   state.visibleStatus = false
-  state.operationStatus = 'add'
+  state.operationStatus = 'create'
   state.loadingStatus = false
   addUpdateFormRef.value?.resetFields()
 }

@@ -2,20 +2,10 @@
   <div class="header-tool-item" @click="state.visibleStatus = true">
     <div class="icon-common-theme size-20px" />
     <el-drawer v-model="state.visibleStatus" append-to-body size="360px" title="主题设置">
-      <el-form
-        ref="queryFormRef"
-        :disabled="state.loadingStatus"
-        class="user-select-display app-setting-form"
-        label-width="80px"
-        size="default"
-      >
+      <el-form ref="queryFormRef" :disabled="state.loadingStatus" class="user-select-display app-setting-form" label-width="80px" size="default">
         <el-divider>布局样式</el-divider>
         <div class="xht-layout-box">
-          <div
-            class="xht-layout-item xht-layout-default"
-            :class="{ 'is-active': layoutType === 'default' }"
-            @click="changeLayoutType('default')"
-          >
+          <div class="xht-layout-item xht-layout-default" :class="{ 'is-active': layoutType === 'default' }" @click="changeLayoutType('default')">
             <div class="layout-dark" />
             <div class="layout-container">
               <div class="layout-light" />
@@ -25,11 +15,7 @@
               <CircleCheckFilled />
             </el-icon>
           </div>
-          <div
-            class="xht-layout-item xht-layout-columns"
-            :class="{ 'is-active': layoutType === 'columns' }"
-            @click="changeLayoutType('columns')"
-          >
+          <div class="xht-layout-item xht-layout-columns" :class="{ 'is-active': layoutType === 'columns' }" @click="changeLayoutType('columns')">
             <div class="layout-dark" />
             <div class="layout-light" />
             <div class="layout-content" />
@@ -81,31 +67,13 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="面包屑">
-          <el-switch
-            v-model="breadcrumb"
-            active-text="显示"
-            inactive-text="隐藏"
-            :active-value="true"
-            :inactive-value="false"
-          />
+          <el-switch v-model="breadcrumb" active-text="显示" inactive-text="隐藏" :active-value="true" :inactive-value="false" />
         </el-form-item>
         <el-form-item label="标签页">
-          <el-switch
-            v-model="tagsViewStatus"
-            active-text="显示"
-            inactive-text="隐藏"
-            :active-value="true"
-            :inactive-value="false"
-          />
+          <el-switch v-model="tagsViewStatus" active-text="显示" inactive-text="隐藏" :active-value="true" :inactive-value="false" />
         </el-form-item>
         <el-form-item label="底部版权">
-          <el-switch
-            v-model="footerStatus"
-            active-text="显示"
-            inactive-text="隐藏"
-            :active-value="true"
-            :inactive-value="false"
-          />
+          <el-switch v-model="footerStatus" active-text="显示" inactive-text="隐藏" :active-value="true" :inactive-value="false" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -151,15 +119,7 @@ const {
 } = storeToRefs(themeStore)
 const { changeThemeColor } = useThemeColorHooks()
 const queryFormRef = useTemplateRef('queryFormRef')
-const predefineColors = ref([
-  '#409EFF',
-  '#ff4500',
-  '#ff8c00',
-  '#ffd700',
-  '#90ee90',
-  '#00ced1',
-  '#c71585',
-])
+const predefineColors = ref(['#409EFF', '#ff4500', '#ff8c00', '#ffd700', '#90ee90', '#00ced1', '#c71585'])
 /**
  * 禁用 颜色选择器
  */

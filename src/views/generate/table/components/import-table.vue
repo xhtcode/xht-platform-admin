@@ -1,20 +1,14 @@
 <template>
-  <el-drawer
-    v-model="state.visibleStatus"
-    :before-close="close"
-    title="导入表结构"
-    size="75%"
-    append-to-body
-  >
+  <el-drawer v-model="state.visibleStatus" :before-close="close" append-to-body size="75%" title="导入表结构">
     <el-form
       ref="addUpdateFormRef"
       v-loading="state.loadingStatus"
       :model="queryParams"
       :rules="rules"
       element-loading-text="拼命加载中"
+      inline-message
       label-width="100px"
       scroll-to-error
-      inline-message
     >
       <el-row>
         <el-col :span="8">
@@ -33,16 +27,9 @@
         </el-col>
       </el-row>
     </el-form>
-    <xht-table
-      ref="tableRef"
-      v-loading="state.loadingStatus"
-      :data="state.tableList"
-      height="65vh"
-      border
-      @selection-change="handleSelectionChange"
-    >
+    <xht-table ref="tableRef" v-loading="state.loadingStatus" :data="state.tableList" border height="65vh" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" />
-      <xht-column-index :size="queryParams.size" :current="queryParams.current" />
+      <xht-column-index :current="queryParams.current" :size="queryParams.size" />
       <el-table-column label="表名" prop="tableName" />
       <el-table-column label="引擎" prop="engineName" />
       <el-table-column label="描述" prop="tableComment" />
@@ -50,11 +37,7 @@
       <el-table-column label="更新时间" prop="tableUpdateTime" />
     </xht-table>
     <template #footer>
-      <el-button
-        :disabled="state.loadingStatus || (state.checkData && state.checkData.length === 0)"
-        type="primary"
-        @click="submitForm"
-      >
+      <el-button :disabled="state.loadingStatus || (state.checkData && state.checkData.length === 0)" type="primary" @click="submitForm">
         提交
       </el-button>
       <el-button @click="close">取 消</el-button>
@@ -67,11 +50,13 @@
 import type { FormInstance, FormRules } from 'element-plus'
 import { queryNoExistsPage } from '@/service/api/generate/table.api'
 import { useMessage } from '@/hooks/use-message'
-import ImportTableForm from '@/views/generate/table/components/import-table-form.vue'
-import type {
-  GenTableInfoQueryRequest,
-  GenTableInfoResponse,
-} from '@/service/model/generate/table.model'
+import type { GenTableInfoQueryRequest, GenTableInfoResponse } from '@/service/model/generate/table.model'
+
+defineOptions({
+  name: 'ImportTable',
+})
+
+const importTableForm = defineAsyncComponent(() => import('@/views/generate/table/components/import-table-form.vue'))
 
 const rules: FormRules = {
   dataSourceId: [{ required: true, message: '请选择配置名称', trigger: ['blur', 'change'] }],

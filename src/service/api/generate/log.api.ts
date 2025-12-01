@@ -29,9 +29,7 @@ export const queryGenLogById = (id: ModeIdType): AxiosPromise<GenLogResponse> =>
 /**
  * 查询全部日志
  */
-export const queryGenLogPage = (
-  data?: GenLogQueryRequest
-): AxiosPromise<PageResponse<GenLogResponse>> => {
+export const queryGenLogPage = (data?: GenLogQueryRequest): AxiosPromise<PageResponse<GenLogResponse>> => {
   return request({
     url: Api.QUERY_PAGE,
     baseURL,

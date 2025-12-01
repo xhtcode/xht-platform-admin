@@ -2,134 +2,6 @@
 
 $header-item-width: 40px !default;
 
-.layout-container {
-  width: 100%;
-  height: 100%;
-
-  .el-scrollbar {
-    width: 100%;
-  }
-
-  .layout-container-view {
-    height: 100% !important;
-
-    .el-scrollbar__view {
-      height: 100%;
-    }
-  }
-
-  .header-container-tags {
-    user-select: none;
-    position: relative;
-    display: flex;
-    border-bottom: 1px solid var(--xht-border-color);
-    box-shadow:
-      6px 2px 3px 0 rgb(0 0 0 / 12%),
-      0 0 3px 0 rgb(0 0 0 / 6%);
-
-    .tags-container {
-      position: relative;
-      width: 100%;
-      display: flex;
-      gap: 0;
-
-      :deep(.el-scrollbar__view) {
-        height: 100%;
-      }
-
-      .tags-container-view-tool {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 34px;
-        height: 34px;
-        cursor: pointer;
-        border-left: 1px solid var(--xht-border-color);
-        z-index: 2;
-
-        .tags-view-tool-icon-hover {
-          &:hover {
-            color: var(--el-color-primary) !important;
-          }
-        }
-      }
-
-      .tags-view-item {
-        height: calc(100% - 8px);
-        margin-left: 4px;
-        font-size: 12px;
-        cursor: pointer;
-        border: 1px solid var(--xht-border-color);
-        border-radius: 2px;
-        position: relative;
-        padding: 0 6px 0 8px;
-        display: flex;
-        align-items: center;
-
-        &:hover {
-          color: var(--el-color-primary);
-          background-color: var(--xht-hover-bg-color);
-        }
-
-        .tags-view-item-close {
-          border-radius: 50%;
-          opacity: 0.5;
-          padding: 1px;
-          margin-left: 5px;
-
-          &:hover {
-            background: #b4bccc;
-          }
-        }
-      }
-
-      .is-active {
-        color: var(--el-color-white);
-        background-color: var(--el-color-primary);
-        border: 1px solid var(--el-color-primary);
-
-        .tags-view-item-close {
-          :deep(span) {
-            color: var(--el-color-white) !important;
-          }
-        }
-      }
-    }
-  }
-
-  .layout-main {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    padding: 0 !important;
-    overflow: hidden;
-    background-color: var(--xht-main-bg-color);
-
-    // 内层 el-scrollbar样式，用于界面高度自适应（main.vue）
-    .layout-main-scrollbar {
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-
-      .layout-main-parent {
-        display: flex;
-        flex-direction: column;
-        flex: 1;
-        position: relative;
-      }
-    }
-  }
-
-  .layout-footer {
-    background-color: var(--xht-main-bg-color);
-    height: $footer-height;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-}
-
 .layout-padding {
   padding: 8px !important;
 }
@@ -174,6 +46,21 @@ $header-item-width: 40px !default;
       display: flex;
       align-items: center;
       justify-content: center;
+    }
+  }
+
+  .header-tool-item {
+    padding: 2px;
+    width: 36px;
+    height: $header-height;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--el-color-primary);
+      background-color: var(--xht-hover-bg-color);
     }
   }
 

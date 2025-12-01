@@ -1,50 +1,25 @@
 <template>
-  <el-form ref="phoneFormRef" size="default" :model="phoneForm" :rules="phoneRules">
-    <el-form-item prop="phone" :inline-message="false" :show-message="false">
-      <el-input
-        v-model="phoneForm.phone"
-        placeholder="请输入手机号"
-        size="large"
-        prefix-icon="Phone"
-        class="login-input"
-      />
+  <el-form ref="phoneFormRef" :model="phoneForm" :rules="phoneRules" size="default">
+    <el-form-item :inline-message="false" :show-message="false" prop="phone">
+      <el-input v-model="phoneForm.phone" class="login-input" placeholder="请输入手机号" prefix-icon="Phone" size="large" />
     </el-form-item>
 
     <el-form-item prop="code">
       <div class="sms-container">
-        <el-input
-          v-model="phoneForm.code"
-          placeholder="请输入验证码"
-          size="large"
-          class="login-input"
-        >
+        <el-input v-model="phoneForm.code" class="login-input" placeholder="请输入验证码" size="large">
           <template #prefix>
             <div class="icon-login-code h-1rem w-1rem color-[var(--color)]" />
           </template>
         </el-input>
-        <el-button
-          type="primary"
-          size="large"
-          class="sms-button"
-          :disabled="smsCountdown > 0"
-          @click="sendSMS"
-        >
+        <el-button :disabled="smsCountdown > 0" class="sms-button" size="large" type="primary" @click="sendSMS">
           {{ smsCountdown > 0 ? `${smsCountdown}s` : '发送验证码' }}
         </el-button>
       </div>
     </el-form-item>
-    <el-button
-      type="primary"
-      size="large"
-      class="login-button"
-      :loading="loading"
-      @click="handlePhoneLogin"
-    >
-      登录
-    </el-button>
+    <el-button :loading="loading" class="login-button" size="large" type="primary" @click="handlePhoneLogin">登录</el-button>
   </el-form>
 </template>
-<script setup lang="ts">
+<script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
 
 defineOptions({ name: 'PhoneForm' })

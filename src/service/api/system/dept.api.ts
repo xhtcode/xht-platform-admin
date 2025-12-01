@@ -1,11 +1,6 @@
 import request from '@/utils/request'
 import type { AxiosPromise } from 'axios'
-import type {
-  SysDeptOperationRequest,
-  SysDeptQueryRequest,
-  SysDeptResponse,
-  SysDeptTreeResponse,
-} from '@/service/model/system/dept.model'
+import type { SysDeptOperationRequest, SysDeptQueryRequest, SysDeptResponse, SysDeptTreeResponse } from '@/service/model/system/dept.model'
 import type { ModeIdType } from '@/service/model/base.model'
 
 /**
@@ -14,7 +9,7 @@ import type { ModeIdType } from '@/service/model/base.model'
 const baseURL: string = import.meta.env.VITE_ADMIN_API_PREFIX
 
 enum Api {
-  SAVE = '/sys/dept/add',
+  SAVE = '/sys/dept/create',
   UPDATE = '/sys/dept/update',
   DELETE = '/sys/dept/remove/',
   QUERY_ONE = '/sys/dept/get/',

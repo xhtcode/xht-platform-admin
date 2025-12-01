@@ -1,57 +1,33 @@
 <template>
-  <el-drawer
-    v-model="state.visibleStatus"
-    :before-close="close"
-    :title="state.title"
-    append-to-body
-    size="45%"
-  >
+  <el-drawer v-model="state.visibleStatus" :before-close="close" :title="state.title" append-to-body size="45%">
     <el-form
       ref="addUpdateFormRef"
       v-loading="state.loadingStatus"
       :model="addUpdateForm"
       :rules="rules"
       element-loading-text="拼命加载中"
+      inline-message
       label-width="100px"
       scroll-to-error
-      inline-message
     >
       <el-form-item label="分组名称" prop="groupName">
-        <el-input
-          v-model="addUpdateForm.groupName"
-          :maxlength="50"
-          show-word-limit
-          placeholder="请输入分组名称"
-        />
+        <el-input v-model="addUpdateForm.groupName" :maxlength="50" placeholder="请输入分组名称" show-word-limit />
       </el-form-item>
       <el-form-item label="模板数量" prop="templateCount">
-        <el-input-number
-          class="!w-full"
-          :min="1"
-          :max="999"
-          disabled
-          v-model="addUpdateForm.templateCount"
-          placeholder="模板数量后台生成"
-        />
+        <el-input-number v-model="addUpdateForm.templateCount" :max="999" :min="1" class="!w-full" disabled placeholder="模板数量后台生成" />
       </el-form-item>
       <el-form-item label="分组排序" prop="groupSort">
-        <el-input-number
-          class="!w-full"
-          :min="1"
-          :max="999"
-          v-model="addUpdateForm.groupSort"
-          placeholder="请输入分组排序"
-        />
+        <el-input-number v-model="addUpdateForm.groupSort" :max="999" :min="1" class="!w-full" placeholder="请输入分组排序" />
       </el-form-item>
       <el-form-item label="分组描述" prop="groupDesc">
         <el-input
           v-model="addUpdateForm.groupDesc"
-          type="textarea"
-          :rows="5"
-          resize="none"
-          placeholder="请输入分组描述"
           :maxlength="200"
+          :rows="5"
+          placeholder="请输入分组描述"
+          resize="none"
           show-word-limit
+          type="textarea"
         />
       </el-form-item>
     </el-form>
@@ -64,26 +40,18 @@
 
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
-import {
-  queryGenTemplateGroupById,
-  saveGenTemplateGroup,
-  updateGenTemplateGroup,
-} from '@/service/api/generate/template.group.api'
-
-import type { GenTemplateGroupOperationRequest } from '@/service/model/generate/template.group.model'
-import {
-  GenTemplateGroupOperationForm,
-  GenTemplateGroupOperationRules,
-} from '@/views/generate/template/template.data'
+import { queryGenTemplateGroupById, saveGenTemplateGroup, updateGenTemplateGroup } from '@/service/api/generate/template.group.api'
+import { GenTemplateGroupOperationForm, GenTemplateGroupOperationRules } from '@/views/generate/template/template.data'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import { handleFormErrors } from '@/utils/moudle/element'
 import type { ModeIdType } from '@/service/model/base.model'
+import type { GenTemplateGroupOperationRequest } from '@/service/model/generate/template.group.model'
 
 defineOptions({ name: 'TemplateGroupForm' })
+
 const state = reactive<AddUpdateOption<GenTemplateGroupOperationRequest>>({
   title: '增加模板分组',
   visibleStatus: false,
-  operationStatus: 'add',
+  operationStatus: 'create',
   loadingStatus: false,
   addUpdateForm: { ...GenTemplateGroupOperationForm },
 })
@@ -94,7 +62,7 @@ const rules: FormRules = GenTemplateGroupOperationRules
 /**
  * 打开显示
  */
-const show = async (type: 'add' | 'update', id: ModeIdType) => {
+const show = async (type: 'create' | 'update', id: ModeIdType) => {
   state.visibleStatus = true
   await nextTick(() => {
     addUpdateFormRef.value?.resetFields()
@@ -125,7 +93,7 @@ const submitForm = () => {
   state.visibleStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      if (state.operationStatus === 'add') {
+      if (state.operationStatus === 'create') {
         //增加
         await saveGenTemplateGroup(addUpdateForm.value)
           .then((_) => {
@@ -133,9 +101,7 @@ const submitForm = () => {
             emits('success')
             close()
           })
-          .catch((err: any) => {
-            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
-          })
+
           .finally(() => {
             state.loadingStatus = false
           })
@@ -147,9 +113,7 @@ const submitForm = () => {
             emits('success')
             close()
           })
-          .catch((err: any) => {
-            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
-          })
+
           .finally(() => {
             state.loadingStatus = false
           })
@@ -168,7 +132,7 @@ const close = () => {
   if (state.loadingStatus) return
   addUpdateForm.value = { ...GenTemplateGroupOperationForm }
   state.visibleStatus = false
-  state.operationStatus = 'add'
+  state.operationStatus = 'create'
   state.loadingStatus = false
   addUpdateFormRef.value?.resetFields()
 }

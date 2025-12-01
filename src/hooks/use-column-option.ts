@@ -9,13 +9,10 @@ export const useColumnOptionHooks = (
 } => {
   const sourceColumnOption = ref<ColumnOption[]>(data || [])
   const columnOption = computed<CommonObjValue<boolean>>(() => {
-    return sourceColumnOption.value.reduce(
-      (accumulator: CommonObjValue<boolean>, currentValue: ColumnOption) => {
-        accumulator[currentValue.value] = currentValue.visible
-        return accumulator
-      },
-      {}
-    )
+    return sourceColumnOption.value.reduce((accumulator: CommonObjValue<boolean>, currentValue: ColumnOption) => {
+      accumulator[currentValue.value] = currentValue.visible
+      return accumulator
+    }, {})
   })
   return {
     columnOption,

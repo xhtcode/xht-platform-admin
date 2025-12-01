@@ -1,13 +1,7 @@
 <template>
   <div class="xht-view-container">
     <div class="xht-view-main">
-      <el-form
-        ref="queryFormRef"
-        :disabled="state.loadingStatus"
-        :model="queryParams"
-        class="user-select-display"
-        label-width="120px"
-      >
+      <el-form ref="queryFormRef" :disabled="state.loadingStatus" :model="queryParams" class="user-select-display" label-width="120px">
         <el-row>
           <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
             <el-form-item label="数据库" prop="dbType">
@@ -31,49 +25,31 @@
           </el-col>
         </el-row>
       </el-form>
-      <table-tool-bar
-        v-model:show-search="state.searchStatus"
-        v-model:column-data="columnOption"
-        column-status
-        refresh-status
-        @refresh="handleQuery"
-      >
+      <table-tool-bar v-model:column-data="columnOption" v-model:show-search="state.searchStatus" column-status refresh-status @refresh="handleQuery">
         <el-button icon="Plus" size="small" type="primary" @click="handleAdd">新增</el-button>
-        <el-button
-          :disabled="state.singleStatus"
-          icon="Edit"
-          size="small"
-          type="success"
-          @click="handleEdit(state.selectedRows[0])"
-        >
-          修改
-        </el-button>
-        <el-button
-          :disabled="state.multipleStatus"
-          icon="Delete"
-          size="small"
-          type="danger"
-          @click="handleDelete(undefined)"
-        >
-          批量删除
-        </el-button>
+        <el-button :disabled="state.singleStatus" icon="Edit" size="small" type="success" @click="handleEdit(state.selectedRows[0])">修改</el-button>
+        <el-button :disabled="state.multipleStatus" icon="Delete" size="small" type="danger" @click="handleDelete(undefined)">批量删除</el-button>
       </table-tool-bar>
       <xht-table
         v-loading="state.loadingStatus"
         :data="state.tableList"
-        class="flex-1"
         border
+        class="flex-1"
         empty-text="系统相关字段类型映射！"
         @selection-change="handleSelectionChange"
       >
-        <el-table-column align="center" type="selection" width="55" />
-        <xht-column-index :size="queryParams.size" :current="queryParams.current" />
-        <el-table-column align="center" label="数据库类型" prop="dbType" />
-        <el-table-column align="center" label="数据库数据类型" prop="dbDataType" />
-        <el-table-column align="center" label="目标编程语言" prop="targetLanguage" />
-        <el-table-column align="center" label="目标语言数据类型" prop="targetDataType" />
-        <el-table-column align="center" label="导入包路径" prop="importPackage" />
-        <el-table-column align="center" label="操作" width="220px">
+        <el-table-column type="selection" width="55" />
+        <xht-column-index :current="queryParams.current" :size="queryParams.size" />
+        <el-table-column v-if="columnOption.dbType?.visible" label="数据库类型" prop="dbType" />
+        <el-table-column v-if="columnOption.dbDataType?.visible" label="数据库数据类型" prop="dbDataType" />
+        <el-table-column v-if="columnOption.targetLanguage?.visible" label="目标编程语言" prop="targetLanguage" />
+        <el-table-column v-if="columnOption.targetDataType?.visible" label="目标语言数据类型" prop="targetDataType" />
+        <el-table-column v-if="columnOption.importPackage?.visible" label="导入包路径" prop="importPackage" />
+        <el-table-column v-if="columnOption.createBy?.visible" label="创建人" prop="createBy" width="160" />
+        <el-table-column v-if="columnOption.createTime?.visible" label="创建时间" prop="createTime" width="180" />
+        <el-table-column v-if="columnOption.updateBy?.visible" label="更新人" prop="updateBy" width="160" />
+        <el-table-column v-if="columnOption.updateTime?.visible" label="更新时间" prop="updateTime" width="180" />
+        <el-table-column label="操作" width="220px">
           <template #default="{ row }">
             <el-button icon="edit" link type="success" @click="handleEdit(row)">修改</el-button>
             <el-button icon="delete" link type="danger" @click="handleDelete(row)">删除</el-button>
@@ -95,15 +71,8 @@
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
 import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
-import TypeMappingForm from './components/type-mapping-form.vue'
-import type {
-  GenTypeMappingQueryRequest,
-  GenTypeMappingResponse,
-} from '@/service/model/generate/type.mapping.model'
-import {
-  queryGenTypeMappingPage,
-  removeGenTypeMappingByIds,
-} from '@/service/api/generate/type.mapping.api'
+import type { GenTypeMappingQueryRequest, GenTypeMappingResponse } from '@/service/model/generate/type.mapping.model'
+import { queryGenTypeMappingPage, removeGenTypeMappingByIds } from '@/service/api/generate/type.mapping.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { ModeIdArrayType } from '@/service/model/base.model'
 import { DataBaseTypeEnums, LanguageTypeEnums } from '@/service/enums/generate/generate.enums'
@@ -111,6 +80,10 @@ import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { GenTypeMappingColumnOption } from '@/views/generate/type-mapping/type.mapping.data'
 
 defineOptions({ name: 'GenTypeMappingViewIndex' })
+
+const typeMappingForm = defineAsyncComponent(() => import('@/views/generate/type-mapping/components/type-mapping-form.vue'))
+const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
+const typeMappingFormRef = useTemplateRef('typeMappingFormRef')
 
 const state = reactive<TableQueryPageState<GenTypeMappingQueryRequest, GenTypeMappingResponse>>({
   queryParams: {
@@ -125,14 +98,12 @@ const state = reactive<TableQueryPageState<GenTypeMappingQueryRequest, GenTypeMa
   singleStatus: true, // 单个禁用
   multipleStatus: true, // 多个禁用
 })
-const { handleQuery, handleSelectionChange } = useTableQueryPageHooks<
-  GenTypeMappingQueryRequest,
-  GenTypeMappingResponse
->(state, queryGenTypeMappingPage)
+const { handleQuery, handleSelectionChange } = useTableQueryPageHooks<GenTypeMappingQueryRequest, GenTypeMappingResponse>(
+  state,
+  queryGenTypeMappingPage
+)
 const { queryParams } = toRefs(state)
 
-const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
-const typeMappingFormRef = useTemplateRef('typeMappingFormRef')
 const columnOption = ref<ColumnConfig<GenTypeMappingResponse>>({
   ...GenTypeMappingColumnOption,
 })
@@ -147,7 +118,7 @@ const resetQuery = async () => {
  * 处理新增
  */
 const handleAdd = () => {
-  typeMappingFormRef.value?.show('add', null)
+  typeMappingFormRef.value?.show('create', null)
 }
 
 /**

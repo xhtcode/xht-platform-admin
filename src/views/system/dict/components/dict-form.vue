@@ -1,60 +1,38 @@
 <template>
-  <el-drawer
-    v-model="state.visibleStatus"
-    :before-close="close"
-    :title="state.title"
-    size="45%"
-    append-to-body
-  >
+  <el-drawer v-model="state.visibleStatus" :before-close="close" :title="state.title" append-to-body size="45%">
     <el-form
       ref="addUpdateFormRef"
       v-loading="state.loadingStatus"
       :model="addUpdateForm"
       :rules="rules"
       element-loading-text="拼命加载中"
+      inline-message
       label-width="100px"
       scroll-to-error
-      inline-message
     >
       <el-row>
-        <el-col :xs="24" :sm="24" :lg="12">
+        <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="字典编码" prop="dictCode">
-            <el-input
-              v-model="addUpdateForm.dictCode"
-              :maxlength="50"
-              show-word-limit
-              placeholder="请输入字典编码"
-            />
+            <el-input v-model="addUpdateForm.dictCode" :maxlength="50" placeholder="请输入字典编码" show-word-limit />
           </el-form-item>
         </el-col>
-        <el-col :xs="24" :sm="24" :lg="12">
+        <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="字典名称" prop="dictName">
-            <el-input
-              v-model="addUpdateForm.dictName"
-              :maxlength="50"
-              show-word-limit
-              placeholder="请输入字典名称"
-            />
+            <el-input v-model="addUpdateForm.dictName" :maxlength="50" placeholder="请输入字典名称" show-word-limit />
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
-        <el-col :xs="24" :sm="24" :lg="12">
+        <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="排序序号" prop="sortOrder">
-            <el-input-number
-              v-model="addUpdateForm.sortOrder"
-              class="w100"
-              :min="0"
-              :max="999"
-              placeholder="请输入排序序号"
-            />
+            <el-input-number v-model="addUpdateForm.sortOrder" :max="999" :min="0" class="w100" placeholder="请输入排序序号" />
           </el-form-item>
         </el-col>
-        <el-col :xs="24" :sm="24" :lg="12">
+        <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="字典状态" prop="status">
             <el-select v-model="addUpdateForm.status" placeholder="请选择字典状态">
-              <el-option label="启用" :value="DictStatusEnums.ENABLED" />
-              <el-option label="禁用" :value="DictStatusEnums.DISABLED" />
+              <el-option :value="DictStatusEnums.ENABLED" label="启用" />
+              <el-option :value="DictStatusEnums.DISABLED" label="禁用" />
             </el-select>
           </el-form-item>
         </el-col>
@@ -64,12 +42,12 @@
           <el-form-item label="字典描述" prop="remark">
             <el-input
               v-model="addUpdateForm.remark"
-              type="textarea"
-              resize="none"
-              :rows="5"
               :maxlength="200"
-              show-word-limit
+              :rows="5"
               placeholder="请输入字典描述"
+              resize="none"
+              show-word-limit
+              type="textarea"
             />
           </el-form-item>
         </el-col>
@@ -85,20 +63,18 @@
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
 import { querySysDictById, saveSysDict, updateSysDict } from '@/service/api/system/dict.api'
-
-import type { SysDictOperationRequest } from '@/service/model/system/dict.model'
-import { DictStatusEnums } from '@/service/model/system/dict.model'
 import { SysDictOperationForm, SysDictOperationRules } from '@/views/system/dict/dict.data'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import { handleFormErrors } from '@/utils/moudle/element'
+import type { SysDictOperationRequest } from '@/service/model/system/dict.model'
 import type { ModeIdType } from '@/service/model/base.model'
+import { DictStatusEnums } from '@/service/model/system/dict.model'
 
 defineOptions({ name: 'SysDictAddOrUpdate' })
 
 const state = reactive<AddUpdateOption<SysDictOperationRequest>>({
   title: '增加字典',
   visibleStatus: false,
-  operationStatus: 'add',
+  operationStatus: 'create',
   loadingStatus: false,
   addUpdateForm: { ...SysDictOperationForm },
 })
@@ -109,7 +85,7 @@ const rules: FormRules = SysDictOperationRules
 /**
  * 打开显示
  */
-const show = async (type: 'add' | 'update', id: ModeIdType) => {
+const show = async (type: 'create' | 'update', id: ModeIdType) => {
   state.visibleStatus = true
   await nextTick(() => {
     addUpdateFormRef.value?.resetFields()
@@ -138,7 +114,7 @@ const submitForm = () => {
   state.visibleStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      if (state.operationStatus === 'add') {
+      if (state.operationStatus === 'create') {
         //增加
         await saveSysDict(addUpdateForm.value)
           .then((_) => {
@@ -146,9 +122,7 @@ const submitForm = () => {
             emits('success')
             close()
           })
-          .catch((err: any) => {
-            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
-          })
+
           .finally(() => {
             state.loadingStatus = false
           })
@@ -160,9 +134,7 @@ const submitForm = () => {
             emits('success')
             close()
           })
-          .catch((err: any) => {
-            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
-          })
+
           .finally(() => {
             state.loadingStatus = false
           })
@@ -181,7 +153,7 @@ const close = () => {
   if (state.loadingStatus) return
   addUpdateForm.value = { ...SysDictOperationForm }
   state.visibleStatus = false
-  state.operationStatus = 'add'
+  state.operationStatus = 'create'
   state.loadingStatus = false
   addUpdateFormRef.value?.resetFields()
 }

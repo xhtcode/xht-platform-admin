@@ -17,13 +17,8 @@
       </el-table-column>
       <el-table-column label="查询列">
         <template #default="{ row }">
-          <el-select v-model="row.queryColumn" value-key="id" clearable placeholder="请选择查询列">
-            <el-option
-              :label="item.dbName"
-              :value="item.id"
-              v-for="item in columnInfo"
-              :key="item.id"
-            >
+          <el-select v-model="row.queryColumn" clearable placeholder="请选择查询列" value-key="id">
+            <el-option v-for="item in columnInfo" :key="item.id" :label="item.dbName" :value="item.id">
               {{ item.dbName }}
               <el-text type="info">({{ item.dbType }})</el-text>
             </el-option>
@@ -42,17 +37,14 @@
       </el-table-column>
       <el-table-column label="字段注释">
         <template #default="{ row }">
-          <el-button @click="handleDelete(row)" type="danger">删除</el-button>
+          <el-button type="danger" @click="handleDelete(row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table-column>
   </el-table>
 </template>
 <script lang="ts" setup>
-import type {
-  GenColumnInfoResponse,
-  GenTableColumnQueryResponse,
-} from '@/service/model/generate/column.model'
+import type { GenColumnInfoResponse, GenTableColumnQueryResponse } from '@/service/model/generate/column.model'
 import type { GenTableInfoResponse } from '@/service/model/generate/table.model'
 
 defineOptions({

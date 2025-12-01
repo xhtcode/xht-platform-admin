@@ -1,11 +1,5 @@
 <template>
-  <el-dialog
-    v-model="state.visibleStatus"
-    :before-close="close"
-    title="分配角色"
-    size="45%"
-    append-to-body
-  >
+  <el-dialog v-model="state.visibleStatus" :before-close="close" append-to-body size="45%" title="分配角色">
     <template #header>
       <div class="user-role-dialog-title">
         <div>分配角色</div>
@@ -18,14 +12,14 @@
       <el-tree
         ref="roleTreeRef"
         v-loading="state.loadingStatus"
+        :check-strictly="false"
         :data="treeData"
         :default-checked-keys="state.checkedKeys"
-        :check-strictly="false"
         :default-expand-all="true"
         :props="{ children: 'children', label: 'roleName' }"
         class="filter-tree"
-        node-key="id"
         highlight-current
+        node-key="id"
         show-checkbox
       />
     </el-scrollbar>
@@ -38,7 +32,7 @@
   </el-dialog>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { queryToolsRoleList } from '@/service/api/tools.api'
 import type { CheckboxValueType } from 'element-plus'
 import { useMessage } from '@/hooks/use-message'
@@ -49,7 +43,7 @@ defineOptions({ name: 'UserRoleForm' })
 const state = reactive<AddUpdateOption<any>>({
   title: '增加部门',
   visibleStatus: false,
-  operationStatus: 'add',
+  operationStatus: 'create',
   loadingStatus: false,
   addUpdateForm: {},
   treeData: [],
@@ -87,7 +81,7 @@ const show = async (userId: ModeIdType) => {
 const close = () => {
   if (state.loadingStatus) return
   state.visibleStatus = false
-  state.operationStatus = 'add'
+  state.operationStatus = 'create'
   state.loadingStatus = false
 }
 
@@ -120,7 +114,7 @@ defineExpose({
 })
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .user-role-dialog-title {
   display: flex;
   align-items: center;

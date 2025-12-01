@@ -24,7 +24,7 @@ const DynamicRouter: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'LayoutComponent',
-    component:  () => import('@/layout/index.vue'),
+    component: () => import('@/layout/index.vue'),
     redirect: '/home',
     meta: {
       title: '工作台',

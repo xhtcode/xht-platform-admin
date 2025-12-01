@@ -1,65 +1,46 @@
 <template>
-  <el-drawer
-    v-model="state.visibleStatus"
-    :before-close="close"
-    :title="state.title"
-    size="45%"
-    append-to-body
-  >
+  <el-drawer v-model="state.visibleStatus" :before-close="close" :title="state.title" append-to-body size="45%">
     <el-form
       ref="addUpdateFormRef"
       v-loading="state.loadingStatus"
       :model="addUpdateForm"
       :rules="rules"
       element-loading-text="拼命加载中"
+      inline-message
       label-width="100px"
       scroll-to-error
-      inline-message
     >
       <el-row>
-        <el-col :xs="24" :sm="24" :lg="12">
+        <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="角色名称" prop="roleName">
             <el-input v-model="addUpdateForm.roleName" placeholder="请输入角色名称" />
           </el-form-item>
         </el-col>
-        <el-col :xs="24" :sm="24" :lg="12">
+        <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="角色编码" prop="roleCode">
             <el-input v-model="addUpdateForm.roleCode" placeholder="请输入角色编码" />
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
-        <el-col :xs="24" :sm="24" :lg="12">
-          <el-form-item label="角色状态" class="w100" prop="roleStatus">
+        <el-col :lg="12" :sm="24" :xs="24">
+          <el-form-item label="角色状态" prop="roleStatus">
             <el-select v-model="addUpdateForm.roleStatus" placeholder="请选择角色状态">
-              <el-option label="正常" :value="RoleStatusEnums.NORMAL" />
-              <el-option label="停用" :value="RoleStatusEnums.DISABLE" />
+              <el-option :value="RoleStatusEnums.NORMAL" label="正常" />
+              <el-option :value="RoleStatusEnums.DISABLE" label="停用" />
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :xs="24" :sm="24" :lg="12">
+        <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="角色排序" prop="roleSort">
-            <el-input-number
-              v-model="addUpdateForm.roleSort"
-              :min="0"
-              :max="999"
-              value-on-clear="min"
-              class="w100"
-              placeholder="请输入角色排序"
-            />
+            <el-input-number v-model="addUpdateForm.roleSort" :max="999" :min="0" class="w100!" placeholder="请输入角色排序" value-on-clear="min" />
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="24">
           <el-form-item label="备注" prop="remark">
-            <el-input
-              v-model="addUpdateForm.remark"
-              type="textarea"
-              :rows="5"
-              resize="none"
-              placeholder="请输入角色备注"
-            />
+            <el-input v-model="addUpdateForm.remark" :rows="5" placeholder="请输入角色备注" resize="none" type="textarea" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -74,19 +55,18 @@
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
 import { querySysRoleById, saveSysRole, updateSysRole } from '@/service/api/system/role.api'
-
 import type { SysRoleOperationRequest } from '@/service/model/system/role.model'
 import { RoleStatusEnums } from '@/service/model/system/role.model'
 import { SysRoleOperationForm, SysRoleOperationRules } from '@/views/system/role/role.data'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import { handleFormErrors } from '@/utils/moudle/element'
 import type { ModeIdType } from '@/service/model/base.model'
 
 defineOptions({ name: 'SysRoleAddOrUpdate' })
+
 const state = reactive<AddUpdateOption<SysRoleOperationRequest>>({
   title: '增加角色',
   visibleStatus: false,
-  operationStatus: 'add',
+  operationStatus: 'create',
   loadingStatus: false,
   addUpdateForm: { ...SysRoleOperationForm },
 })
@@ -97,7 +77,7 @@ const rules: FormRules = SysRoleOperationRules
 /**
  * 打开显示
  */
-const show = async (type: 'add' | 'update', id: ModeIdType) => {
+const show = async (type: 'create' | 'update', id: ModeIdType) => {
   state.visibleStatus = true
   await nextTick(() => {
     addUpdateFormRef.value?.resetFields()
@@ -126,7 +106,7 @@ const submitForm = () => {
   state.visibleStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      if (state.operationStatus === 'add') {
+      if (state.operationStatus === 'create') {
         //增加
         await saveSysRole(addUpdateForm.value)
           .then((_) => {
@@ -134,9 +114,7 @@ const submitForm = () => {
             emits('success')
             close()
           })
-          .catch((err: any) => {
-            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
-          })
+
           .finally(() => {
             state.loadingStatus = false
           })
@@ -148,9 +126,7 @@ const submitForm = () => {
             emits('success')
             close()
           })
-          .catch((err: any) => {
-            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
-          })
+
           .finally(() => {
             state.loadingStatus = false
           })
@@ -169,7 +145,7 @@ const close = () => {
   if (state.loadingStatus) return
   addUpdateForm.value = { ...SysRoleOperationForm }
   state.visibleStatus = false
-  state.operationStatus = 'add'
+  state.operationStatus = 'create'
   state.loadingStatus = false
   addUpdateFormRef.value?.resetFields()
 }

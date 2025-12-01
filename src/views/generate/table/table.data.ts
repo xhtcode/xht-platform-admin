@@ -1,9 +1,6 @@
 import type { FormRules } from 'element-plus'
-import { ColumnConfig } from '@/components/table-tool-bar/types'
-import type {
-  GenTableInfoOperationRequest,
-  GenTableInfoResponse,
-} from '@/service/model/generate/table.model'
+import type { ColumnConfig } from '@/components/table-tool-bar/types'
+import type { GenTableInfoOperationRequest, GenTableInfoResponse } from '@/service/model/generate/table.model'
 
 /**
  * 增改页面 表单类型 默认值

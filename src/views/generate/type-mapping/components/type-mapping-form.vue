@@ -1,20 +1,14 @@
 <template>
-  <el-drawer
-    v-model="state.visibleStatus"
-    :before-close="close"
-    :title="state.title"
-    append-to-body
-    size="45%"
-  >
+  <el-drawer v-model="state.visibleStatus" :before-close="close" :title="state.title" append-to-body size="45%">
     <el-form
       ref="addUpdateFormRef"
       v-loading="state.loadingStatus"
       :model="addUpdateForm"
       :rules="rules"
       element-loading-text="拼命加载中"
+      inline-message
       label-width="120px"
       scroll-to-error
-      inline-message
     >
       <el-form-item label="数据库数据类型" prop="dbDataType">
         <el-input v-model="addUpdateForm.dbDataType" />
@@ -47,27 +41,18 @@
 
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
-import {
-  queryGenTypeMappingById,
-  saveGenTypeMapping,
-  updateGenTypeMapping,
-} from '@/service/api/generate/type.mapping.api'
-
-import type { GenTypeMappingOperationRequest } from '@/service/model/generate/type.mapping.model'
-import {
-  GenTypeMappingOperationForm,
-  GenTypeMappingOperationRules,
-} from '@/views/generate/type-mapping/type.mapping.data'
+import { queryGenTypeMappingById, saveGenTypeMapping, updateGenTypeMapping } from '@/service/api/generate/type.mapping.api'
+import { GenTypeMappingOperationForm, GenTypeMappingOperationRules } from '@/views/generate/type-mapping/type.mapping.data'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import { handleFormErrors } from '@/utils/moudle/element'
 import type { ModeIdType } from '@/service/model/base.model'
+import type { GenTypeMappingOperationRequest } from '@/service/model/generate/type.mapping.model'
 import { DataBaseTypeEnums, LanguageTypeEnums } from '@/service/enums/generate/generate.enums'
 
 defineOptions({ name: 'GenTypeMappingAddOrUpdate' })
 const state = reactive<AddUpdateOption<GenTypeMappingOperationRequest>>({
   title: '增加字段类型映射',
   visibleStatus: false,
-  operationStatus: 'add',
+  operationStatus: 'create',
   loadingStatus: false,
   addUpdateForm: { ...GenTypeMappingOperationForm },
 })
@@ -78,7 +63,7 @@ const rules: FormRules = GenTypeMappingOperationRules
 /**
  * 打开显示
  */
-const show = async (type: 'add' | 'update', id: ModeIdType) => {
+const show = async (type: 'create' | 'update', id: ModeIdType) => {
   state.visibleStatus = true
   await nextTick(() => {
     addUpdateFormRef.value?.resetFields()
@@ -107,7 +92,7 @@ const submitForm = () => {
   state.visibleStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      if (state.operationStatus === 'add') {
+      if (state.operationStatus === 'create') {
         //增加
         await saveGenTypeMapping(addUpdateForm.value)
           .then((_) => {
@@ -115,9 +100,7 @@ const submitForm = () => {
             emits('success')
             close()
           })
-          .catch((err: any) => {
-            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
-          })
+
           .finally(() => {
             state.loadingStatus = false
           })
@@ -129,9 +112,7 @@ const submitForm = () => {
             emits('success')
             close()
           })
-          .catch((err: any) => {
-            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
-          })
+
           .finally(() => {
             state.loadingStatus = false
           })
@@ -150,7 +131,7 @@ const close = () => {
   if (state.loadingStatus) return
   addUpdateForm.value = { ...GenTypeMappingOperationForm }
   state.visibleStatus = false
-  state.operationStatus = 'add'
+  state.operationStatus = 'create'
   state.loadingStatus = false
   addUpdateFormRef.value?.resetFields()
 }

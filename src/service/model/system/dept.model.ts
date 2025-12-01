@@ -1,9 +1,4 @@
-import type {
-  BasicResponse,
-  INodeResponse,
-  ModeIdType,
-  PageQueryRequest,
-} from '@/service/model/base.model'
+import type { BasicResponse, INodeResponse, ModeIdType, PageQueryRequest } from '@/service/model/base.model'
 
 /**
  * 定义部门状态枚举类型

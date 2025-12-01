@@ -1,7 +1,3 @@
-import type { AxiosResponse } from 'axios'
-import type { FormInstance } from 'element-plus'
-import type { Ref } from 'vue'
-
 // 定义排序方向类型
 export type SortOrder = 'ascending' | 'descending' | null
 
@@ -46,29 +42,6 @@ export const handlePageParams = (queryParams: CrudQueryFrom, sortInfo?: SortInfo
       queryParams.descName = ''
       break
   }
-}
-
-/**
- * 处理表单验证错误，触发对应字段的验证提示
- * @param response 接口响应对象
- * @param formRef 表单实例引用
- * @param formData 表单数据对象引用
- */
-export const handleFormErrors = (
-  response: AxiosResponse<any>,
-  formRef: Ref<FormInstance | undefined>,
-  formData: Ref<Record<string, any>>
-): void => {
-  if (!response?.data || !formRef.value) return
-
-  // 遍历错误字段并触发验证
-  Object.keys(response.data).forEach((field) => {
-    // 触发验证前先清空再恢复值，确保验证状态更新
-    const originalValue = formData.value[field]
-    formData.value[field] = undefined
-    formRef?.value?.validateField(field)
-    formData.value[field] = originalValue
-  })
 }
 
 /**

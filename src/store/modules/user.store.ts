@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import type { LoginRequestType } from '@/service/model/login/login.model'
-import { loginInPassWord } from '@/service/api/login/api'
+import { loginInPassWord } from '@/service/api/login/login.api'
 import type { AxiosResponse } from 'axios'
 import { resetRouter } from '@/router'
 import { useMessageBox } from '@/hooks/use-message'
@@ -36,7 +36,7 @@ export const useUserInfoStore = defineStore('user_info', {
         loginInPassWord(data)
           .then((res: AxiosResponse<TokenInfoType>) => {
             this.token = { ...res.data }
-            resolve(res.data)
+            resolve(res)
           })
           .catch(() => {
             reject()

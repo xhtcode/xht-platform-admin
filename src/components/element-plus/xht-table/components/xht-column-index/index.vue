@@ -1,12 +1,5 @@
 <template>
-  <el-table-column
-    class-name="user-select-none"
-    type="index"
-    :resizable="false"
-    :width="width"
-    :label="label"
-    :index="createTableIndex"
-  />
+  <el-table-column class-name="user-select-none" type="index" :resizable="false" :width="width" :label="label" :index="createTableIndex" />
 </template>
 
 <script setup lang="ts">

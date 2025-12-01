@@ -25,7 +25,7 @@ const { loadingStatus, refreshStatus } = useRouterLoadingHooks()
 .xht-main-container {
   position: relative;
   box-sizing: border-box;
-  padding: 10px;
+  padding: 8px;
   overflow-x: hidden;
   background-color: var(--xht-page-bg-color);
 }

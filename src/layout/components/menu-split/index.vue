@@ -33,17 +33,17 @@ const menuList = computed<RouteRecordRaw[]>(() => {
   return convertRouteToMenu(DynamicRouter.concat(routeStore.routesRaw))
 })
 const activeMenuPath = ref<string>('')
+
 const handleMenuClick = (menuItem: RouteRecordRaw) => {
   if (activeMenuPath.value === menuItem.path) {
     return
   }
   activeMenuPath.value = menuItem.path
-  emits(
-    'change',
-    menuItem.children && menuItem.children.length > 0 ? menuItem.children : [menuItem],
-    true
-  )
+  emits('change', menuItem.children && menuItem.children.length > 0 ? menuItem.children : [menuItem], true)
 }
+
+
+
 const changeMenuList = () => {
   const currentMenuPath = router.currentRoute.value.matched[0]?.path
   if (activeMenuPath.value === currentMenuPath) {
@@ -52,7 +52,7 @@ const changeMenuList = () => {
   activeMenuPath.value = currentMenuPath
   menuList.value.forEach((item) => {
     if (item.path === currentMenuPath) {
-      emits('change', item.children && item.children.length > 0 ? item.children : [item], true)
+      emits('change', item.children && item.children.length > 0 ? item.children : [item], false)
       return
     }
   })
@@ -75,9 +75,9 @@ watch(
 
 <style scoped lang="scss">
 .xht-split-container {
+
   .xht-split-item-active {
     background: var(--el-color-primary);
-
     .xht-split-item-icon {
       color: #ffffff !important;
     }

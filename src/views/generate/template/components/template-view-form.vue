@@ -1,48 +1,19 @@
 <template>
-  <el-drawer
-    v-model="state.visibleStatus"
-    :before-close="close"
-    title="模板管理"
-    append-to-body
-    size="100%"
-  >
-    <el-tabs
-      v-model="activeName"
-      class="!h-full"
-      tab-position="left"
-      closable
-      addable
-      editable
-      @tab-remove="handleRemove"
-    >
+  <el-drawer v-model="state.visibleStatus" :before-close="close" append-to-body size="100%" title="模板管理">
+    <el-tabs v-model="activeName" addable class="!h-full" closable editable tab-position="left" @tab-remove="handleRemove">
       <template #add-icon>
-        <el-button class="w-full" type="primary" icon="Plus" size="small" @click="addNewData">
-          添加
-        </el-button>
+        <el-button class="w-full" icon="Plus" size="small" type="primary" @click="addNewData">添加</el-button>
       </template>
-      <el-tab-pane
-        class="h-full"
-        :label="item.templateName"
-        :name="item.id"
-        v-for="(item, index) in state.data"
-        :key="item.id"
-        lazy
-      >
+      <el-tab-pane v-for="(item, index) in state.data" :key="item.id" :label="item.templateName" :name="item.id" class="h-full" lazy>
         <template #label>
-          <div class="w-120px flex">
+          <div class="w-160px flex">
             <div class="font-bold text-12px text-center flex-center">{{ index + 1 }}.</div>
-            <div
-              class="flex-1 flex items-center justify-end whitespace-nowrap overflow-hidden text-ellipsis"
-            >
+            <div class="flex-1 flex items-center justify-end whitespace-nowrap overflow-hidden text-ellipsis">
               {{ item.templateName }}
             </div>
           </div>
         </template>
-        <template-form
-          :loading-status="state.loadingStatus"
-          :add-update-form="item"
-          @success="setActiveName"
-        />
+        <template-form :add-update-form="item" :loading-status="state.loadingStatus" @success="setActiveName" />
       </el-tab-pane>
     </el-tabs>
   </el-drawer>
@@ -50,12 +21,10 @@
 
 <script lang="ts" setup>
 import { queryGenTemplateList, removeGenTemplateById } from '@/service/api/generate/template.api'
-
-import type { GenTemplateOperationRequest } from '@/service/model/generate/template.model'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { ModeIdType } from '@/service/model/base.model'
+import type { GenTemplateOperationRequest } from '@/service/model/generate/template.model'
 import { GenTemplateOperationForm } from '@/views/generate/template/template.data'
-import type { TabsPaneContext } from 'element-plus/es/components/tabs/src/constants'
 
 defineOptions({ name: 'TemplateViewForm' })
 
@@ -67,9 +36,7 @@ interface Interface {
   nextTagId: number
 }
 
-const TemplateForm = defineAsyncComponent(
-  () => import('@/views/generate/template/components/template-form.vue')
-)
+const TemplateForm = defineAsyncComponent(() => import('@/views/generate/template/components/template-form.vue'))
 const activeName = ref<ModeIdType>()
 const state = reactive<Interface>({
   groupId: null,

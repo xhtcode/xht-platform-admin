@@ -1,10 +1,7 @@
-import type {
-  SysDeptPostOperationRequest,
-  SysDeptPostResponse,
-} from '@/service/model/system/dept.post.model'
+import type { SysDeptPostOperationRequest, SysDeptPostResponse } from '@/service/model/system/dept.post.model'
 import { SysDeptPostStatusEnums } from '@/service/model/system/dept.post.model'
 import type { FormRules } from 'element-plus'
-import { ColumnConfig } from '@/components/table-tool-bar/types'
+import type { ColumnConfig } from '@/components/table-tool-bar/types'
 
 /**
  * 增改页面 表单类型 默认值

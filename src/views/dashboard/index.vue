@@ -7,4 +7,4 @@
 defineOptions({ name: 'HomeViewComponentIndex' })
 </script>
 
-<style scoped lang="scss"></style>
+<style lang="scss" scoped></style>

@@ -1,12 +1,6 @@
 <template>
   <div class="icon-select-container w100">
-    <el-input
-      v-model="modelValue"
-      :placeholder="props.placeholder"
-      class="icon-select-input"
-      readonly
-      @click="openDialog"
-    >
+    <el-input v-model="modelValue" :placeholder="props.placeholder" class="icon-select-input" readonly @click="openDialog">
       <template #prepend>
         <div :class="`icon-menu-${modelValue}`" @click="openDialog()" />
       </template>
@@ -16,14 +10,7 @@
         </el-icon>
       </template>
     </el-input>
-    <el-dialog
-      v-model="dialogVisible"
-      :before-close="closeDialog"
-      :title="props.title"
-      modal-class="icon-select-modal"
-      align-center
-      width="45%"
-    >
+    <el-dialog v-model="dialogVisible" :before-close="closeDialog" :title="props.title" modal-class="icon-select-modal" align-center width="45%">
       <el-input
         v-model="modelValue"
         autofocus

@@ -1,21 +1,8 @@
 <template>
-  <el-dropdown
-    ref="dropdownRef"
-    :virtual-ref="triggerRef"
-    virtual-triggering
-    trigger="contextmenu"
-    placement="bottom-end"
-    @command="commandTrigger"
-  >
+  <el-dropdown ref="dropdownRef" :virtual-ref="triggerRef" virtual-triggering trigger="contextmenu" placement="bottom-end" @command="commandTrigger">
     <template #dropdown>
       <el-dropdown-menu>
-        <el-dropdown-item
-          v-for="(item, index) in menuList"
-          :key="index"
-          :command="item"
-          :disabled="item.disabled"
-          :divided="item.divided"
-        >
+        <el-dropdown-item v-for="(item, index) in menuList" :key="index" :command="item" :disabled="item.disabled" :divided="item.divided">
           <div class="user-select-none flex-center">
             <el-icon>
               <component :is="item.icon" />

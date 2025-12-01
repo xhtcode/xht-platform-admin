@@ -1,13 +1,7 @@
 <template>
   <div class="xht-view-container">
     <div class="xht-view-main">
-      <el-form
-        ref="queryFormRef"
-        :disabled="state.loadingStatus"
-        :model="queryParams"
-        class="user-select-display"
-        label-width="100px"
-      >
+      <el-form ref="queryFormRef" :disabled="state.loadingStatus" :model="queryParams" class="user-select-display" label-width="100px">
         <el-row>
           <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
             <el-form-item label="数据源" prop="dataSourceId">
@@ -21,12 +15,7 @@
           </el-col>
           <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
             <el-form-item label="表名称" prop="tableName">
-              <template-group-select
-                v-model="queryParams.tableName"
-                placeholder="请输入表名称"
-                show-word-limit
-                :maxlength="200"
-              />
+              <template-group-select v-model="queryParams.tableName" :maxlength="200" placeholder="请输入表名称" show-word-limit />
             </el-form-item>
           </el-col>
           <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24" class="text-center">
@@ -35,43 +24,11 @@
           </el-col>
         </el-row>
       </el-form>
-      <table-tool-bar
-        v-model:show-search="state.searchStatus"
-        v-model:column-data="columnOption"
-        column-status
-        refresh-status
-        @refresh="handleQuery"
-      >
-        <el-button icon="Download" size="small" type="primary" @click="handleImport">
-          导入
-        </el-button>
-        <el-button
-          :disabled="state.singleStatus"
-          icon="Edit"
-          size="small"
-          type="success"
-          @click="handleEdit(state.selectedRows[0])"
-        >
-          修改
-        </el-button>
-        <el-button
-          :disabled="state.multipleStatus"
-          icon="download"
-          size="small"
-          type="warning"
-          @click="handleDownload()"
-        >
-          批量下载
-        </el-button>
-        <el-button
-          :disabled="state.multipleStatus"
-          icon="download"
-          size="small"
-          type="warning"
-          @click="handleCodeView()"
-        >
-          代码预览
-        </el-button>
+      <table-tool-bar v-model:column-data="columnOption" v-model:show-search="state.searchStatus" column-status refresh-status @refresh="handleQuery">
+        <el-button icon="Download" size="small" type="primary" @click="handleImport">导入</el-button>
+        <el-button :disabled="state.singleStatus" icon="Edit" size="small" type="success" @click="handleEdit(state.selectedRows[0])">修改</el-button>
+        <el-button :disabled="state.multipleStatus" icon="download" size="small" type="warning" @click="handleDownload()">批量下载</el-button>
+        <el-button :disabled="state.multipleStatus" icon="download" size="small" type="warning" @click="handleCodeView()">代码预览</el-button>
       </table-tool-bar>
       <xht-table
         v-loading="state.loadingStatus"
@@ -81,64 +38,21 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column align="center" type="selection" width="55" />
-        <xht-column-index :size="queryParams.size" :current="queryParams.current" />
-        <el-table-column
-          label="引擎名称"
-          prop="engineName"
-          min-width="100"
-          v-if="columnOption.engineName?.visible"
-        />
-        <el-table-column
-          label="数据库表名"
-          align="left"
-          prop="tableName"
-          min-width="220"
-          sortable
-          v-if="columnOption.tableName?.visible"
-        />
-        <el-table-column
-          label="表注释"
-          prop="tableComment"
-          min-width="260"
-          show-overflow-tooltip
-          v-if="columnOption.tableComment?.visible"
-        />
-        <el-table-column
-          label="代码名称"
-          prop="codeName"
-          min-width="220"
-          v-if="columnOption.codeName?.visible"
-        />
-        <el-table-column
-          label="代码注释"
-          prop="codeComment"
-          min-width="260"
-          show-overflow-tooltip
-          v-if="columnOption.codeComment?.visible"
-        />
-        <el-table-column
-          label="表创建时间"
-          prop="tableCreateTime"
-          width="180"
-          sortable
-          v-if="columnOption.tableCreateTime?.visible"
-        />
-        <el-table-column
-          label="表更新时间"
-          prop="tableUpdateTime"
-          width="180"
-          sortable
-          v-if="columnOption.tableUpdateTime?.visible"
-        />
+        <xht-column-index :current="queryParams.current" :size="queryParams.size" />
+        <el-table-column v-if="columnOption.engineName?.visible" label="引擎名称" min-width="100" prop="engineName" />
+        <el-table-column v-if="columnOption.tableName?.visible" align="left" label="数据库表名" min-width="220" prop="tableName" sortable />
+        <el-table-column v-if="columnOption.tableComment?.visible" label="表注释" min-width="260" prop="tableComment" show-overflow-tooltip />
+        <el-table-column v-if="columnOption.codeName?.visible" label="代码名称" min-width="220" prop="codeName" />
+        <el-table-column v-if="columnOption.codeComment?.visible" label="代码注释" min-width="260" prop="codeComment" show-overflow-tooltip />
+        <el-table-column v-if="columnOption.tableCreateTime?.visible" label="表创建时间" prop="tableCreateTime" sortable width="180" />
+        <el-table-column v-if="columnOption.tableUpdateTime?.visible" label="表更新时间" prop="tableUpdateTime" sortable width="180" />
         <el-table-column align="center" fixed="right" label="操作" width="280px">
           <template #default="{ row }">
             <el-button icon="refresh" link type="info" @click="handleSync(row)">同步</el-button>
             <el-button icon="edit" link type="success" @click="handleEdit(row)">修改</el-button>
             <el-button icon="delete" link type="danger" @click="handleDelete(row)">删除</el-button>
             <el-button icon="view" link type="primary" @click="handleCodeView(row)">预览</el-button>
-            <el-button icon="download" link type="warning" @click="handleDownload(row)">
-              下载
-            </el-button>
+            <el-button icon="download" link type="warning" @click="handleDownload(row)">下载</el-button>
           </template>
         </el-table-column>
       </xht-table>
@@ -160,25 +74,25 @@
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
 import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
-import TableFrom from '@/views/generate/table/components/table-from.vue'
-import type {
-  GenTableInfoQueryRequest,
-  GenTableInfoResponse,
-} from '@/service/model/generate/table.model'
-import {
-  queryExistsPage,
-  removeGenTableInfoByIds,
-  syncTableApi,
-} from '@/service/api/generate/table.api'
+
+import type { GenTableInfoQueryRequest, GenTableInfoResponse } from '@/service/model/generate/table.model'
+import { queryExistsPage, removeGenTableInfoByIds, syncTableApi } from '@/service/api/generate/table.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import ImportTable from '@/views/generate/table/components/import-table.vue'
-import { ModeIdArrayType } from '@/service/model/base.model'
-import DownloadCodeFile from '@/views/generate/table/components/download-code-file.vue'
-import { ColumnConfig } from '@/components/table-tool-bar/types'
+import type { ModeIdArrayType } from '@/service/model/base.model'
+import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { GenTableInfoColumnOption } from '@/views/generate/table/table.data'
-import CodeView from '@/views/generate/table/components/code-view.vue'
 
 defineOptions({ name: 'GenTableInfoViewIndex' })
+
+const tableFrom = defineAsyncComponent(() => import('@/views/generate/table/components/table-from.vue'))
+const codeView = defineAsyncComponent(() => import('@/views/generate/table/components/code-view.vue'))
+const importTable = defineAsyncComponent(() => import('@/views/generate/table/components/import-table.vue'))
+const downloadCodeFile = defineAsyncComponent(() => import('@/views/generate/table/components/download-code-file.vue'))
+const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
+const tableFormRef = useTemplateRef('tableFormRef')
+const importTableRef = useTemplateRef('importTableRef')
+const downloadCodeFileRef = useTemplateRef('downloadCodeFileRef')
+const codeViewRef = useTemplateRef('codeViewRef')
 
 const state = reactive<TableQueryPageState<GenTableInfoQueryRequest, GenTableInfoResponse>>({
   queryParams: {
@@ -193,20 +107,12 @@ const state = reactive<TableQueryPageState<GenTableInfoQueryRequest, GenTableInf
   singleStatus: true, // 单个禁用
   multipleStatus: true, // 多个禁用
 })
-const { handleQuery, handleSelectionChange } = useTableQueryPageHooks<
-  GenTableInfoQueryRequest,
-  GenTableInfoResponse
->(state, queryExistsPage)
+const { handleQuery, handleSelectionChange } = useTableQueryPageHooks<GenTableInfoQueryRequest, GenTableInfoResponse>(state, queryExistsPage)
 const { queryParams } = toRefs(state)
 
 const columnOption = ref<ColumnConfig<GenTableInfoResponse>>({
   ...GenTableInfoColumnOption,
 })
-const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
-const tableFormRef = useTemplateRef('tableFormRef')
-const importTableRef = useTemplateRef('importTableRef')
-const downloadCodeFileRef = useTemplateRef('downloadCodeFileRef')
-const codeViewRef = useTemplateRef('codeViewRef')
 
 /**
  * 重置表单

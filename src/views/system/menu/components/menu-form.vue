@@ -1,30 +1,24 @@
 <template>
-  <el-drawer
-    v-model="state.visibleStatus"
-    :before-close="close"
-    :title="state.title"
-    size="45%"
-    append-to-body
-  >
+  <el-drawer v-model="state.visibleStatus" :before-close="close" :title="state.title" append-to-body size="45%">
     <el-form
       ref="addUpdateFormRef"
       v-loading="state.loadingStatus"
       :model="addUpdateForm"
       :rules="rules"
       element-loading-text="拼命加载中"
+      inline-message
       label-width="100px"
       scroll-to-error
-      inline-message
     >
       <el-row>
-        <el-col :xs="24" :sm="24" :lg="12">
+        <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="上级菜单" prop="parentId">
-            <menu-tree-select v-model="addUpdateForm.parentId" type="M" show-top-menu />
+            <menu-tree-select v-model="addUpdateForm.parentId" show-top-menu type="M" />
           </el-form-item>
         </el-col>
-        <el-col :xs="24" :sm="24" :lg="12">
+        <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="菜单类型" prop="menuType">
-            <el-select v-model="addUpdateForm.menuType" placeholder="请选择菜单类型" clearable>
+            <el-select v-model="addUpdateForm.menuType" clearable placeholder="请选择菜单类型">
               <el-option :value="MenuTypeEnums.M" label="目录" />
               <el-option :value="MenuTypeEnums.C" label="菜单" />
               <el-option :value="MenuTypeEnums.B" label="按钮" />
@@ -33,14 +27,14 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col :xs="24" :sm="24" :lg="12">
+        <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="菜单名称" prop="menuName">
             <el-input v-model="addUpdateForm.menuName" placeholder="请输入菜单名称" />
           </el-form-item>
         </el-col>
-        <el-col :xs="24" :sm="24" :lg="12">
+        <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="菜单状态" prop="menuStatus">
-            <el-select v-model="addUpdateForm.menuStatus" placeholder="请选择菜单状态" clearable>
+            <el-select v-model="addUpdateForm.menuStatus" clearable placeholder="请选择菜单状态">
               <el-option :value="MenuStatusEnums.NORMAL" label="正常" />
               <el-option :value="MenuStatusEnums.DISABLE" label="停用" />
             </el-select>
@@ -48,12 +42,12 @@
         </el-col>
       </el-row>
       <el-row v-if="!isB">
-        <el-col :xs="24" :sm="24" :lg="12">
+        <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="菜单图标" prop="menuIcon">
             <icon-select v-model="addUpdateForm.menuIcon" placeholder="请输入菜单图标" />
           </el-form-item>
         </el-col>
-        <el-col :xs="24" :sm="24" :lg="12">
+        <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="路由地址" prop="menuPath">
             <el-input v-model="addUpdateForm.menuPath" placeholder="请输入路由地址" />
           </el-form-item>
@@ -61,84 +55,68 @@
       </el-row>
 
       <el-row>
-        <el-col v-if="!isM" :xs="24" :sm="24" :lg="12">
+        <el-col v-if="!isM" :lg="12" :sm="24" :xs="24">
           <el-form-item label="权限标识" prop="menuAuthority">
             <el-input v-model="addUpdateForm.menuAuthority" placeholder="请输入权限标识" />
           </el-form-item>
         </el-col>
-        <el-col :xs="24" :sm="24" :lg="12">
+        <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="菜单排序" prop="menuSort">
-            <el-input-number
-              v-model="addUpdateForm.menuSort"
-              :min="0"
-              class="w100"
-              :max="999"
-              placeholder="请输入菜单排序"
-            />
+            <el-input-number v-model="addUpdateForm.menuSort" :max="999" :min="0" class="w100" placeholder="请输入菜单排序" />
           </el-form-item>
         </el-col>
       </el-row>
       <el-row v-if="isC && addUpdateForm.frameFlag === MenuLinkEnums.NO">
-        <el-col :xs="24" :sm="24" :lg="12">
+        <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="组件名称" prop="viewName">
             <el-input v-model="addUpdateForm.viewName" placeholder="请输入组件名称" />
           </el-form-item>
         </el-col>
-        <el-col :xs="24" :sm="24" :lg="12">
+        <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="组件路径" prop="viewPath">
             <el-input v-model="addUpdateForm.viewPath" placeholder="请输入组件路径" />
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
-        <el-col v-if="isC" :xs="24" :sm="24" :lg="12">
+        <el-col v-if="isC" :lg="12" :sm="24" :xs="24">
           <el-form-item label="显示状态" prop="menuHidden">
             <el-switch
               v-model="addUpdateForm.menuHidden"
-              inline-prompt
               :active-value="MenuHiddenEnums.SHOW"
               :inactive-value="MenuHiddenEnums.HIDE"
               active-text="显示"
               inactive-text="隐藏"
+              inline-prompt
             />
           </el-form-item>
         </el-col>
-        <el-col
-          v-if="isC && addUpdateForm.menuHidden === MenuHiddenEnums.HIDE"
-          :xs="24"
-          :sm="24"
-          :lg="12"
-        >
+        <el-col v-if="isC && addUpdateForm.menuHidden === MenuHiddenEnums.HIDE" :lg="12" :sm="24" :xs="24">
           <el-form-item label="高亮菜单" prop="activeMenuPath">
             <el-input v-model="addUpdateForm.activeMenuPath" placeholder="请输入高亮菜单" />
           </el-form-item>
         </el-col>
-        <el-col
-          v-if="isC && addUpdateForm.frameFlag === MenuLinkEnums.NO"
-          :xs="24"
-          :sm="24"
-          :lg="12"
-        >
+        <el-col v-if="isC && addUpdateForm.frameFlag === MenuLinkEnums.NO" :lg="12" :sm="24" :xs="24">
           <el-form-item label="缓存状态" prop="menuCache">
             <el-switch
               v-model="addUpdateForm.menuCache"
-              inline-prompt
               :active-value="MenuCacheEnums.YES"
               :inactive-value="MenuCacheEnums.NO"
               active-text="是"
               inactive-text="否"
+              inline-prompt
             />
           </el-form-item>
         </el-col>
-        <el-col v-if="isC" :xs="24" :sm="24" :lg="12">
+        <el-col v-if="isC" :lg="12" :sm="24" :xs="24">
           <el-form-item label="外链" prop="frameFlag">
             <el-switch
               v-model="addUpdateForm.frameFlag"
-              inline-prompt
               :active-value="MenuLinkEnums.YES"
               :inactive-value="MenuLinkEnums.NO"
               active-text="是"
               inactive-text="否"
+              inline-prompt
             />
           </el-form-item>
         </el-col>
@@ -155,26 +133,23 @@
 import type { FormInstance, FormRules } from 'element-plus'
 import { querySysMenuById, saveSysMenu, updateSysMenu } from '@/service/api/system/menu.api'
 import { useMessageBox } from '@/hooks/use-message'
-import { handleFormErrors } from '@/utils/moudle/element'
 import type { SysMenuOperationRequest } from '@/service/model/system/menu.model'
-import {
-  MenuCacheEnums,
-  MenuHiddenEnums,
-  MenuLinkEnums,
-  MenuStatusEnums,
-  MenuTypeEnums,
-} from '@/service/model/system/menu.model'
-import MenuTreeSelect from '@/components/system/menu-tree-select/index.vue'
+import { MenuCacheEnums, MenuHiddenEnums, MenuLinkEnums, MenuStatusEnums, MenuTypeEnums } from '@/service/model/system/menu.model'
 import { SysMenuOperationForm, SysMenuOperationRules } from '@/views/system/menu/menu.data'
-
 import { SysDeptOperationForm } from '@/views/system/dept/dept.data'
 import type { ModeIdType } from '@/service/model/base.model'
+
+defineOptions({
+  name: 'MenuForm',
+})
+
+const menuTreeSelect = defineAsyncComponent(() => import('@/components/system/menu-tree-select/index.vue'))
 
 const rules: FormRules = SysMenuOperationRules
 const state = reactive<AddUpdateOption<SysMenuOperationRequest>>({
   title: '增加部门',
   visibleStatus: false,
-  operationStatus: 'add',
+  operationStatus: 'create',
   loadingStatus: false,
   addUpdateForm: { ...SysDeptOperationForm },
 })
@@ -188,7 +163,7 @@ const isB = computed(() => addUpdateForm.value.menuType === MenuTypeEnums.B)
 /**
  * 打开显示
  */
-const show = async (type: 'add' | 'update', id: ModeIdType) => {
+const show = async (type: 'create' | 'update', id: ModeIdType) => {
   state.visibleStatus = true
   await nextTick(() => {
     addUpdateFormRef.value?.resetFields()
@@ -214,7 +189,7 @@ const submitForm = () => {
   state.visibleStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      if (state.operationStatus === 'add') {
+      if (state.operationStatus === 'create') {
         //增加
         await saveSysMenu(addUpdateForm.value)
           .then((_) => {
@@ -222,9 +197,7 @@ const submitForm = () => {
             emit('success')
             close()
           })
-          .catch((err: any) => {
-            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
-          })
+
           .finally(() => {
             state.loadingStatus = false
           })
@@ -236,9 +209,7 @@ const submitForm = () => {
             emit('success')
             close()
           })
-          .catch((err: any) => {
-            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
-          })
+
           .finally(() => {
             state.loadingStatus = false
           })
@@ -257,7 +228,7 @@ const close = () => {
   if (state.loadingStatus) return
   addUpdateForm.value = { ...SysMenuOperationForm }
   state.visibleStatus = false
-  state.operationStatus = 'add'
+  state.operationStatus = 'create'
   state.loadingStatus = false
   addUpdateFormRef.value?.resetFields()
 }

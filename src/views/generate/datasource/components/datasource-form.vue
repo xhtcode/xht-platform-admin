@@ -1,28 +1,17 @@
 <template>
-  <el-drawer
-    v-model="state.visibleStatus"
-    :before-close="close"
-    :title="state.title"
-    append-to-body
-    size="45%"
-  >
+  <el-drawer v-model="state.visibleStatus" :before-close="close" :title="state.title" append-to-body size="45%">
     <el-form
       ref="addUpdateFormRef"
       v-loading="state.loadingStatus"
       :model="addUpdateForm"
       :rules="rules"
       element-loading-text="拼命加载中"
+      inline-message
       label-width="80px"
       scroll-to-error
-      inline-message
     >
       <el-form-item label="名称" prop="name">
-        <el-input
-          v-model="addUpdateForm.name"
-          placeholder="请输入数据源名称"
-          maxlength="100"
-          show-word-limit
-        />
+        <el-input v-model="addUpdateForm.name" maxlength="100" placeholder="请输入数据源名称" show-word-limit />
       </el-form-item>
       <el-form-item label="类型" prop="dbType">
         <el-select v-model="addUpdateForm.dbType" placeholder="请选择数据库类型">
@@ -31,28 +20,13 @@
         </el-select>
       </el-form-item>
       <el-form-item label="地址" prop="url">
-        <el-input
-          v-model="addUpdateForm.url"
-          placeholder="请输入数据库连接URL"
-          maxlength="200"
-          show-word-limit
-        />
+        <el-input v-model="addUpdateForm.url" maxlength="200" placeholder="请输入数据库连接URL" show-word-limit />
       </el-form-item>
       <el-form-item label="用户名" prop="username">
-        <el-input
-          v-model="addUpdateForm.username"
-          placeholder="请输入数据库链接用户名"
-          maxlength="100"
-          show-word-limit
-        />
+        <el-input v-model="addUpdateForm.username" maxlength="100" placeholder="请输入数据库链接用户名" show-word-limit />
       </el-form-item>
       <el-form-item label="密码" prop="password">
-        <el-input
-          v-model="addUpdateForm.password"
-          placeholder="请输入数据库链接密码"
-          maxlength="100"
-          show-word-limit
-        />
+        <el-input v-model="addUpdateForm.password" maxlength="100" placeholder="请输入数据库链接密码" show-word-limit />
       </el-form-item>
       <template v-if="state.operationStatus === 'update'">
         <el-form-item label="测试结果" prop="testResult">
@@ -72,27 +46,18 @@
 
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
-import {
-  queryGenDataSourceById,
-  saveGenDataSource,
-  updateGenDataSource,
-} from '@/service/api/generate/datasource.api'
-
-import type { GenDataSourceOperationRequest } from '@/service/model/generate/datasource.model'
-import {
-  GenDataSourceOperationForm,
-  GenDataSourceOperationRules,
-} from '@/views/generate/datasource/datasource.data'
+import { queryGenDataSourceById, saveGenDataSource, updateGenDataSource } from '@/service/api/generate/datasource.api'
+import { GenDataSourceOperationForm, GenDataSourceOperationRules } from '@/views/generate/datasource/datasource.data'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import { handleFormErrors } from '@/utils/moudle/element'
-import type { ModeIdType } from '@/service/model/base.model'
 import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
+import type { ModeIdType } from '@/service/model/base.model'
+import type { GenDataSourceOperationRequest } from '@/service/model/generate/datasource.model'
 
 defineOptions({ name: 'GenDataSourceAddOrUpdate' })
 const state = reactive<AddUpdateOption<GenDataSourceOperationRequest>>({
   title: '增加数据源配置',
   visibleStatus: false,
-  operationStatus: 'add',
+  operationStatus: 'create',
   loadingStatus: false,
   addUpdateForm: { ...GenDataSourceOperationForm },
 })
@@ -103,7 +68,7 @@ const rules: FormRules = GenDataSourceOperationRules
 /**
  * 打开显示
  */
-const show = async (type: 'add' | 'update', id: ModeIdType) => {
+const show = async (type: 'create' | 'update', id: ModeIdType) => {
   state.visibleStatus = true
   await nextTick(() => {
     addUpdateFormRef.value?.resetFields()
@@ -132,16 +97,13 @@ const submitForm = () => {
   state.visibleStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      if (state.operationStatus === 'add') {
+      if (state.operationStatus === 'create') {
         //增加
         await saveGenDataSource(addUpdateForm.value)
           .then((_) => {
             useMessage().success('新增数据成功')
             emits('success')
             close()
-          })
-          .catch((err: any) => {
-            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
           })
           .finally(() => {
             state.loadingStatus = false
@@ -154,9 +116,7 @@ const submitForm = () => {
             emits('success')
             close()
           })
-          .catch((err: any) => {
-            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
-          })
+
           .finally(() => {
             state.loadingStatus = false
           })
@@ -175,7 +135,7 @@ const close = () => {
   if (state.loadingStatus) return
   addUpdateForm.value = { ...GenDataSourceOperationForm }
   state.visibleStatus = false
-  state.operationStatus = 'add'
+  state.operationStatus = 'create'
   state.loadingStatus = false
   addUpdateFormRef.value?.resetFields()
 }

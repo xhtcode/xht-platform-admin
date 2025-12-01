@@ -24,9 +24,7 @@ enum Api {
 /**
  * 保存模板信息
  */
-export const saveGenTemplateGroup = (
-  data: GenTemplateGroupOperationRequest
-): AxiosPromise<boolean> => {
+export const saveGenTemplateGroup = (data: GenTemplateGroupOperationRequest): AxiosPromise<boolean> => {
   return request({
     url: Api.SAVE,
     baseURL,
@@ -38,9 +36,7 @@ export const saveGenTemplateGroup = (
 /**
  * 修改模板信息数据
  */
-export const updateGenTemplateGroup = (
-  data: GenTemplateGroupOperationRequest
-): AxiosPromise<boolean> => {
+export const updateGenTemplateGroup = (data: GenTemplateGroupOperationRequest): AxiosPromise<boolean> => {
   return request({
     url: Api.UPDATE,
     baseURL,
@@ -63,9 +59,7 @@ export const removeGenTemplateGroupByIds = (id: ModeIdType): AxiosPromise<boolea
 /**
  * 查询单个模板信息
  */
-export const queryGenTemplateGroupById = (
-  id: ModeIdType
-): AxiosPromise<GenTemplateGroupResponse> => {
+export const queryGenTemplateGroupById = (id: ModeIdType): AxiosPromise<GenTemplateGroupResponse> => {
   return request({
     url: Api.QUERY_ONE + `${id}`,
     baseURL,
@@ -88,9 +82,7 @@ export const queryGenTemplateGroupList = (): AxiosPromise<GenTemplateGroupRespon
  * 分页查询模板信息
  * @param data
  */
-export const queryGenTemplateGroupPage = (
-  data?: GenTemplateGroupQueryRequest
-): AxiosPromise<PageResponse<GenTemplateGroupResponse>> => {
+export const queryGenTemplateGroupPage = (data?: GenTemplateGroupQueryRequest): AxiosPromise<PageResponse<GenTemplateGroupResponse>> => {
   return request({
     url: Api.QUERY_PAGE,
     baseURL,

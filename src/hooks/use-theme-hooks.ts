@@ -12,15 +12,11 @@ export const useThemeHooks = () => {
   /**
    *  DeviceEnums.DESKTOP 侧边栏状态 true 显示，false 隐藏
    */
-  const desktopShowStatus = computed(
-    () => !sidebarStatus.value && device.value === DeviceEnums.DESKTOP
-  )
+  const desktopShowStatus = computed(() => !sidebarStatus.value && device.value === DeviceEnums.DESKTOP)
   /**
    *  DeviceEnums.MOBILE 侧边栏状态 true 显示，false 隐藏
    */
-  const mobileShowStatus = computed(
-    () => sidebarStatus.value && device.value === DeviceEnums.MOBILE
-  )
+  const mobileShowStatus = computed(() => sidebarStatus.value && device.value === DeviceEnums.MOBILE)
 
   /**
    * aside 样式

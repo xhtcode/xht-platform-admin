@@ -1,12 +1,6 @@
 <template>
   <div class="xht-tags-container">
-    <el-tabs
-      @tab-change="handleChangeTag"
-      @tab-remove="removeItem"
-      v-model="activeName"
-      class="xht-tags-item"
-      type="card"
-    >
+    <el-tabs @tab-change="handleChangeTag" @tab-remove="removeItem" v-model="activeName" class="xht-tags-item" type="card">
       <el-tab-pane
         v-for="item in visitedViews"
         :key="item.path"
@@ -26,27 +20,23 @@
         <ArrowDownBold />
       </el-icon>
     </div>
-    <tags-tool-menu
-      ref="contextMenuRef"
-      :disabled="loadingStatus"
-      :menu-list="menuList"
-      @change="commandTrigger"
-    />
+    <tags-tool-menu ref="contextMenuRef" :disabled="loadingStatus" :menu-list="menuList" @change="commandTrigger" />
   </div>
 </template>
 <script lang="ts" setup>
-import { ArrowDownBold } from '@element-plus/icons-vue'
-import { useRoute, useRouter } from 'vue-router'
 import { filterAffixTagsView, formatRoute } from './helper'
 import { useRouteStore } from '@/store/modules/routes.store'
 import useTagsStore from '@/store/modules/tags.store'
 import type { ContextMenuSchemaType } from '@/layout/components/tags-view/types'
 import { useMessage } from '@/hooks/use-message'
-import TagsToolMenu from '@/layout/components/tags-view/components/tags-tool-menu.vue'
-import { TabPaneName } from 'element-plus'
+import type { TabPaneName } from 'element-plus'
 import useRouterLoadingHooks from '@/hooks/use-router-loading'
+import { useRoute, useRouter } from 'vue-router'
+import { ArrowDownBold } from '@element-plus/icons-vue'
+import { storeToRefs } from 'pinia'
 
 defineOptions({ name: 'TagsView' })
+const tagsToolMenu = defineAsyncComponent(() => import('@/layout/components/tags-view/components/tags-tool-menu.vue'))
 
 // 路由相关实例
 const router = useRouter()
@@ -55,6 +45,7 @@ const route = useRoute()
 // 状态管理实例
 const routeStore = useRouteStore()
 const tagsViewPlusStore = useTagsStore()
+const { activeName } = storeToRefs(tagsViewPlusStore)
 // 模板引用
 const contextMenuRef = useTemplateRef('contextMenuRef')
 
@@ -62,11 +53,8 @@ const contextMenuRef = useTemplateRef('contextMenuRef')
 const affixTagArr = ref<TagsViewType[]>([]) // 固定标签数组
 const visitedViews = computed(() => tagsViewPlusStore.visitedViews) // 已访问视图列表
 const menuList = shallowRef<ContextMenuSchemaType[]>([]) // 右键菜单列表
-const activeName = ref<TabPaneName>()
 const activeTab = computed<TagsViewType | undefined>(() => {
-  return tagsViewPlusStore.visitedViews.find(
-    (item) => item.path === unref(router.currentRoute).fullPath
-  )
+  return tagsViewPlusStore.visitedViews.find((item) => item.path === unref(router.currentRoute).fullPath)
 })
 const { loadingStatus, refreshRouter } = useRouterLoadingHooks()
 /**
@@ -156,9 +144,12 @@ const initTags = () => {
  * 添加新的标签页
  */
 const addTags = () => {
-  const currentRoute = router.currentRoute.value
-  if (currentRoute.name) {
+  const currentRoute = unref(router.currentRoute)
+  console.log(currentRoute)
+  if (currentRoute.name && !currentRoute.meta?.linkStatus) {
+    console.log('************************')
     tagsViewPlusStore.addVisitedViews(formatRoute(router.currentRoute.value))
+    activeName.value = currentRoute.fullPath
   }
 }
 /**
@@ -168,8 +159,7 @@ const addTags = () => {
 const removeItem = (key: TabPaneName) => {
   tagsViewPlusStore.visitedViews.forEach((item, index) => {
     if (item.path === key) {
-      const nextTab =
-        tagsViewPlusStore.visitedViews[index + 1] || tagsViewPlusStore.visitedViews[index - 1]
+      const nextTab = tagsViewPlusStore.visitedViews[index + 1] || tagsViewPlusStore.visitedViews[index - 1]
       tagsViewPlusStore.removeVisitedView(item)
       if (activeName.value === key && nextTab) {
         router.push(nextTab.path)
@@ -212,8 +202,7 @@ const toLastView = () => {
  * 处理标签点击事件
  */
 const handleChangeTag = (item: TabPaneName) => {
-  router.push(item as string)
-    .catch((_) => {
+  router.push(item as string).catch((_) => {
     useMessage().error('路由错误，请联系管理员!')
   })
 }
@@ -223,7 +212,6 @@ const handleChangeTag = (item: TabPaneName) => {
  */
 onMounted(() => {
   initTags()
-  activeName.value = activeTab.value?.path
 })
 
 /**
@@ -234,7 +222,6 @@ watch(
   (newVal) => {
     if (newVal) {
       addTags()
-      activeName.value = unref(router.currentRoute).fullPath
     }
   },
   {
@@ -243,6 +230,8 @@ watch(
 )
 </script>
 <style lang="scss">
+@use '@/styles/variables' as va;
+
 .xht-tags-container {
   $tags-tool-width: 50px;
   display: flex;
@@ -256,7 +245,7 @@ watch(
 
   .el-tabs__header {
     padding: 0 0 0 0;
-    height: $tags-height;
+    height: va.$tags-height;
     box-sizing: border-box;
     margin: 0;
     border: none;
@@ -353,7 +342,7 @@ watch(
     box-sizing: border-box;
     overflow: hidden;
     width: $tags-tool-width;
-    height: $tags-height;
+    height: va.$tags-height;
     display: flex;
     align-items: center;
     justify-content: center;

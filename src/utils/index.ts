@@ -1,3 +1,5 @@
+import { useMessage } from '@/hooks/use-message'
+
 /**
  * 生成符合 UUID v4 格式的唯一标识符
  *
@@ -35,7 +37,7 @@ const handleBlobFile = (blob: Blob, fileName: string) => {
   document.body.appendChild(link)
   link.click()
   window.setTimeout(function () {
-    URL.revokeObjectURL(blob)
+    URL.revokeObjectURL(blob as any)
     document.body.removeChild(link)
     link.remove()
   }, 0)

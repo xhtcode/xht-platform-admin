@@ -4,20 +4,14 @@
       <el-col :span="8">
         <el-form-item label="页面风格" prop="tableInfo.pageStyle">
           <el-select v-model="tableInfo.pageStyle" placeholder="请选择页面风格">
-            <el-option label="drawer" :value="0" />
-            <el-option label="dialog" :value="1" />
+            <el-option :value="0" label="drawer" />
+            <el-option :value="1" label="dialog" />
           </el-select>
         </el-form-item>
       </el-col>
       <el-col :span="8">
         <el-form-item label="页面宽度" prop="tableInfo.pageStyleWidth">
-          <el-input-number
-            v-model="tableInfo.pageStyleWidth"
-            class="w-full!"
-            :min="30"
-            :max="100"
-            placeholder="请输入页面宽度"
-          >
+          <el-input-number v-model="tableInfo.pageStyleWidth" :max="100" :min="30" class="w-full!" placeholder="请输入页面宽度">
             <template #suffix>
               <span>%</span>
             </template>
@@ -26,13 +20,7 @@
       </el-col>
       <el-col :span="8">
         <el-form-item label="每行数量" prop="tableInfo.fromNumber">
-          <el-input-number
-            v-model="tableInfo.fromNumber"
-            class="w-full!"
-            :min="1"
-            :max="24"
-            placeholder="请输入表单每行的数量"
-          />
+          <el-input-number v-model="tableInfo.fromNumber" :max="24" :min="1" class="w-full!" placeholder="请输入表单每行的数量" />
         </el-form-item>
       </el-col>
     </el-row>
@@ -40,7 +28,7 @@
       <el-table-column label="基础信息">
         <template #default>
           <xht-column-index type="step" />
-          <el-table-column prop="dbName" label="DB字段名" width="160">
+          <el-table-column label="DB字段名" prop="dbName" width="160">
             <template #default="{ row }">
               <el-text :type="row.dbPrimary === 1 ? 'danger' : ''">
                 {{ row.dbName }}
@@ -48,8 +36,8 @@
               </el-text>
             </template>
           </el-table-column>
-          <el-table-column prop="dbComment" label="DB字段注释" show-overflow-tooltip width="160" />
-          <el-table-column prop="dbLength" label="DB类型" width="160">
+          <el-table-column label="DB字段注释" prop="dbComment" show-overflow-tooltip width="160" />
+          <el-table-column label="DB类型" prop="dbLength" width="160">
             <template #default="{ row }">
               <el-text>{{ row.dbType }}</el-text>
               <el-text v-if="row.dbLength > 0">({{ row.dbLength }})</el-text>

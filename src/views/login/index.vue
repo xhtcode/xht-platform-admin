@@ -7,31 +7,25 @@
       <div class="login-form-container">
         <!-- 表单描述 -->
         <div class="mb-[1.25rem]">
-          <div class="mb-8px text-24px color-#1f2329 font-600 dark-color-white">
-            小糊涂・后台管理系统
-          </div>
-          <Transition name="text-fade" mode="out-in">
+          <div class="mb-8px text-24px color-#1f2329 font-600 dark-color-white">小糊涂・后台管理系统</div>
+          <Transition mode="out-in" name="text-fade">
             <div :key="activeLoginType" class="m-0 text-14px color-#6b7280">
               {{
-                activeLoginType === 'password'
-                  ? '密码验证 · 安全登录'
-                  : activeLoginType === 'phone'
-                    ? '手机验证 · 便捷登录'
-                    : '扫码授权 · 快捷登录'
+                activeLoginType === 'password' ? '密码验证 · 安全登录' : activeLoginType === 'phone' ? '手机验证 · 便捷登录' : '扫码授权 · 快捷登录'
               }}
             </div>
           </Transition>
         </div>
         <div class="form-container">
-          <Transition name="login-form-fade" mode="in-out">
+          <Transition mode="in-out" name="login-form-fade">
             <password-form v-if="activeLoginType === 'password'" key="password" />
           </Transition>
           <!-- 手机登录 -->
-          <Transition name="login-form-fade" mode="in-out">
+          <Transition mode="in-out" name="login-form-fade">
             <phone-form v-if="activeLoginType === 'phone'" key="phone" />
           </Transition>
           <!-- 扫码登录 -->
-          <Transition name="login-form-fade" mode="in-out">
+          <Transition mode="in-out" name="login-form-fade">
             <qrcode-form v-if="activeLoginType === 'qrcode'" key="qrcode" />
           </Transition>
         </div>
@@ -43,48 +37,43 @@
       <div class="other-party-login">
         <div class="other-party-icons">
           <div
-            class="other-party-icon-item"
             :class="{ active: activeLoginType === 'password' }"
+            class="other-party-icon-item"
             title="密码登录"
             @click="handleChangeLoginType('password')"
           >
             <div class="icon icon-login-password" />
           </div>
           <div
-            class="other-party-icon-item"
             :class="{ active: activeLoginType === 'phone' }"
+            class="other-party-icon-item"
             title="手机号登录"
             @click="handleChangeLoginType('phone')"
           >
             <div class="icon icon-login-phone" />
           </div>
           <div
-            class="other-party-icon-item"
             :class="{ active: activeLoginType === 'qrcode' }"
+            class="other-party-icon-item"
             title="扫码登录"
             @click="handleChangeLoginType('qrcode')"
           >
             <div class="icon icon-login-sm" />
           </div>
           <div
-            class="other-party-icon-item"
             :class="{ active: activeLoginType === 'wechat' }"
+            class="other-party-icon-item"
             title="微信登录"
             @click="handleChangeLoginType('wechat')"
           >
             <div class="icon icon-login-wechat" />
           </div>
-          <div
-            class="other-party-icon-item"
-            :class="{ active: activeLoginType === 'qq' }"
-            title="QQ登录"
-            @click="handleChangeLoginType('qq')"
-          >
+          <div :class="{ active: activeLoginType === 'qq' }" class="other-party-icon-item" title="QQ登录" @click="handleChangeLoginType('qq')">
             <div class="icon icon-login-qq" />
           </div>
           <div
-            class="other-party-icon-item"
             :class="{ active: activeLoginType === 'dinging' }"
+            class="other-party-icon-item"
             title="钉钉登录"
             @click="handleChangeLoginType('dinging')"
           >
@@ -103,17 +92,18 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import PasswordForm from '@/views/login/components/password-form.vue'
-import PhoneForm from '@/views/login/components/phone-form.vue'
-import QrcodeForm from '@/views/login/components/qrcode-form.vue'
-import LeftSide from '@/views/login/components/left-side.vue'
-import SwitchDark from '@/layout/components/switch-dark/index.vue'
-
+<script lang="ts" setup>
 defineOptions({
   name: 'Login',
   inheritAttrs: false,
 })
+
+const passwordForm = defineAsyncComponent(() => import('@/views/login/components/password-form.vue'))
+const phoneForm = defineAsyncComponent(() => import('@/views/login/components/phone-form.vue'))
+const qrcodeForm = defineAsyncComponent(() => import('@/views/login/components/qrcode-form.vue'))
+const leftSide = defineAsyncComponent(() => import('@/views/login/components/left-side.vue'))
+const switchDark = defineAsyncComponent(() => import('@/layout/components/switch-dark/index.vue'))
+
 // 当前激活的登录方式
 type LoginType = 'password' | 'qrcode' | 'phone' | 'wechat' | 'qq' | 'dinging'
 const activeTab = ref<LoginType>('password')
@@ -155,6 +145,7 @@ onUnmounted(() => {
   ---divider-bg-color: #636466;
   ---divider-text-color: #8d9095;
 }
+
 .login-container {
   user-select: none;
   display: flex;

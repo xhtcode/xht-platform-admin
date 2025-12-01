@@ -1,10 +1,6 @@
 import request from '@/utils/request'
 import type { AxiosPromise } from 'axios'
-import type {
-  SysDeptPostOperationRequest,
-  SysDeptPostQueryRequest,
-  SysDeptPostResponse,
-} from '@/service/model/system/dept.post.model'
+import type { SysDeptPostOperationRequest, SysDeptPostQueryRequest, SysDeptPostResponse } from '@/service/model/system/dept.post.model'
 import type { ModeIdArrayType, ModeIdType, PageResponse } from '@/service/model/base.model'
 
 /**
@@ -13,7 +9,7 @@ import type { ModeIdArrayType, ModeIdType, PageResponse } from '@/service/model/
 const baseURL: string = import.meta.env.VITE_ADMIN_API_PREFIX
 
 enum Api {
-  SAVE = '/sys/dept/post/add',
+  SAVE = '/sys/dept/post/create',
   UPDATE = '/sys/dept/post/update',
   DELETE = '/sys/dept/post/remove/',
   QUERY_ONE = '/sys/dept/post/get/',
@@ -81,9 +77,7 @@ export const querySysDeptPostById = (id: ModeIdType): AxiosPromise<SysDeptPostRe
 /**
  * 分页查询部门岗位信息
  */
-export const querySysDeptPostPage = (
-  data?: SysDeptPostQueryRequest
-): AxiosPromise<PageResponse<SysDeptPostResponse>> => {
+export const querySysDeptPostPage = (data?: SysDeptPostQueryRequest): AxiosPromise<PageResponse<SysDeptPostResponse>> => {
   return request({
     url: Api.QUERY_PAGE,
     baseURL,

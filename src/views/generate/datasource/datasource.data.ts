@@ -1,9 +1,6 @@
 import type { FormRules } from 'element-plus'
-import { ColumnConfig } from '@/components/table-tool-bar/types'
-import type {
-  GenDataSourceOperationRequest,
-  GenDataSourceResponse,
-} from '@/service/model/generate/datasource.model'
+import type { ColumnConfig } from '@/components/table-tool-bar/types'
+import type { GenDataSourceOperationRequest, GenDataSourceResponse } from '@/service/model/generate/datasource.model'
 import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
 
 /**

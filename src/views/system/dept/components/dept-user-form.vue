@@ -1,42 +1,40 @@
 <template>
-  <el-dialog v-model="state.visibleStatus" :before-close="close" width="auto" append-to-body>
+  <el-dialog v-model="state.visibleStatus" :before-close="close" append-to-body width="auto">
     <template #header>
       <div class="flex justify-between items-center">
-        <el-text tag="b" size="large">部门主管筛选</el-text>
+        <el-text size="large" tag="b">部门主管筛选</el-text>
         <div v-if="state.currentRow" class="h100 items-center flex">
           <el-text size="small">已选择:</el-text>
-          <el-tag effect="dark" size="small">
-            {{ state.currentRow?.userName }}:{{ state.currentRow?.nickName }}
-          </el-tag>
+          <el-tag effect="dark" size="small">{{ state.currentRow?.userName }}:{{ state.currentRow?.nickName }}</el-tag>
         </div>
       </div>
     </template>
     <xht-table
       ref="tableRef"
       v-loading="state.loadingStatus"
-      border
-      height="65vh"
-      row-key="userId"
-      empty-text="暂无用户数据"
-      highlight-current-row
       :data="state.userList"
       :row-class-name="
         ({ row }) => {
           return row.deptId ? '' : 'no-dept-row'
         }
       "
+      border
+      empty-text="暂无用户数据"
+      height="65vh"
+      highlight-current-row
+      row-key="userId"
       @row-dblclick="onSubmit"
       @current-change="handleCurrentChange"
     >
-      <el-table-column type="index" width="60" label="序号" />
-      <el-table-column prop="avatarUrl" label="用户头像" width="100">
+      <el-table-column label="序号" type="index" width="60" />
+      <el-table-column label="用户头像" prop="avatarUrl" width="100">
         <template #default="{ row }">
           <el-avatar :src="row.avatarUrl" alt="用户头像" />
         </template>
       </el-table-column>
-      <el-table-column prop="userName" label="用户账号" width="160" />
-      <el-table-column prop="nickName" label="用户昵称" width="160" />
-      <el-table-column prop="userStatus" label="账号状态" width="120">
+      <el-table-column label="用户账号" prop="userName" width="160" />
+      <el-table-column label="用户昵称" prop="nickName" width="160" />
+      <el-table-column label="账号状态" prop="userStatus" width="120">
         <template #default="{ row }">
           <user-status-tag :status="row.userStatus" />
         </template>
@@ -50,7 +48,7 @@
     </template>
   </el-dialog>
 </template>
-<script setup lang="ts">
+<script lang="ts" setup>
 import type { ModeIdType } from '@/service/model/base.model'
 import { getBindUser } from '@/service/api/tools.api'
 import type { UserSimpleVo } from '@/service/model/system/user.model'

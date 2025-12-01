@@ -76,9 +76,7 @@ export const queryGenTableInfoById = (id: ModeIdType): AxiosPromise<GenTableInfo
  * 分页查询已导入的表信息
  * @param data 查询参数
  */
-export const queryExistsPage = (
-  data?: GenTableInfoQueryRequest
-): AxiosPromise<PageResponse<GenTableInfoResponse>> => {
+export const queryExistsPage = (data?: GenTableInfoQueryRequest): AxiosPromise<PageResponse<GenTableInfoResponse>> => {
   return request({
     url: Api.QUERY_EXISTS_PAGE,
     baseURL,
@@ -91,9 +89,7 @@ export const queryExistsPage = (
  * 分页查询未导入的表信息
  * @param data 查询参数
  */
-export const queryNoExistsPage = (
-  data?: GenTableInfoQueryRequest
-): AxiosPromise<GenTableInfoResponse[]> => {
+export const queryNoExistsPage = (data?: GenTableInfoQueryRequest): AxiosPromise<GenTableInfoResponse[]> => {
   return request({
     url: Api.QUERY_NO_EXISTS_PAGE,
     baseURL,
@@ -135,10 +131,7 @@ export const downloadFileApi = (tableIds: ModeIdType[], packageName: string) => 
  * @param packageName 包名
  * @returns 预览结果的Promise
  */
-export const viewCodeFileApi = (
-  tableIds: ModeIdType[],
-  packageName: string
-): AxiosPromise<GenCodeCoreVo[]> => {
+export const viewCodeFileApi = (tableIds: ModeIdType[], packageName: string): AxiosPromise<GenCodeCoreVo[]> => {
   return request({
     url: Api.VIEW_CODE,
     baseURL,

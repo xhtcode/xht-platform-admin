@@ -1,19 +1,9 @@
-import type {
-  AxiosError,
-  AxiosRequestConfig,
-  AxiosResponse,
-  InternalAxiosRequestConfig,
-} from 'axios'
+import type { AxiosError, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 import axios from 'axios'
 import { useMessage } from '@/hooks/use-message'
 import qs from 'qs'
 import { useUserInfoStore } from '@/store/modules/user.store'
-import {
-  HEADER_AUTHORIZATION,
-  HEADER_TRACE_ID,
-  HEADER_USER_ACCOUNT,
-  HEADER_USER_ID,
-} from '@/service/constant'
+import { HEADER_AUTHORIZATION, HEADER_TRACE_ID, HEADER_USER_ACCOUNT, HEADER_USER_ID } from '@/service/constant'
 import { generateUUID } from '@/utils/index'
 
 // 默认配置
@@ -83,16 +73,18 @@ service.interceptors.response.use(
     return response.data
   },
   ({ response }: any): Promise<any> => {
-    let errorMsg = response?.data?.msg ?? response?.statusText ?? '网络请求失败，请检查网络连接'
+    let errorMsg = response.data?.msg ?? response.statusText ?? '网络请求失败，请检查网络连接'
     // 特定状态码处理
     if (response) {
       switch (response.status) {
         case 401:
-          // 未授权：跳转登录页（根据实际路由调整）
-          useUserInfoStore()
-            .logout()
-            .then(() => {})
-          window.location.href = '/login'
+          if (response.data?.code === 424) {
+            // 未授权：跳转登录页（根据实际路由调整）
+            useUserInfoStore()
+              .logout()
+              .then(() => {})
+            window.location.href = '/login'
+          }
           break
         case 403:
           errorMsg = '没有操作权限，请联系管理员'
@@ -100,7 +92,7 @@ service.interceptors.response.use(
       }
     }
     useMessage().error(errorMsg)
-    return Promise.reject(response)
+    return Promise.reject(response.data)
   }
 )
 

@@ -1,91 +1,54 @@
 <template>
   <div class="xht-view-container">
     <div class="xht-view-main">
-      <el-form
-        ref="queryFormRef"
-        :disabled="state.loadingStatus"
-        :model="queryParams"
-        class="user-select-display"
-        label-width="80px"
-      >
+      <el-form ref="queryFormRef" :disabled="state.loadingStatus" :model="queryParams" class="user-select-display" label-width="80px">
         <el-row v-if="!state.searchStatus">
-          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
+          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
             <el-form-item label="关键字" prop="keyWord">
-              <el-input
-                v-model="queryParams.keyWord"
-                placeholder="请输入关键字"
-                :maxlength="100"
-                show-word-limit
-              />
+              <el-input v-model="queryParams.keyWord" :maxlength="100" placeholder="请输入关键字" show-word-limit />
             </el-form-item>
           </el-col>
-          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" class="text-center">
+          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24" class="text-center">
             <el-button icon="Search" type="primary" @click="handleQuery">查询</el-button>
             <el-button icon="Refresh" @click="resetQuery">重置</el-button>
           </el-col>
         </el-row>
         <el-row v-else>
-          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
+          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
             <el-form-item label="字典编码" prop="dictCode">
-              <el-input
-                v-model="queryParams.dictCode"
-                :maxlength="50"
-                show-word-limit
-                placeholder="请输入字典编码"
-              />
+              <el-input v-model="queryParams.dictCode" :maxlength="50" placeholder="请输入字典编码" show-word-limit />
             </el-form-item>
           </el-col>
-          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
+          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
             <el-form-item label="字典名称" prop="dictName">
-              <el-input
-                v-model="queryParams.dictName"
-                :maxlength="50"
-                show-word-limit
-                placeholder="请输入字典名称"
-              />
+              <el-input v-model="queryParams.dictName" :maxlength="50" placeholder="请输入字典名称" show-word-limit />
             </el-form-item>
           </el-col>
-          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
+          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
             <el-form-item label="字典状态" prop="status">
               <el-select v-model="queryParams.status" placeholder="请选择字典状态">
-                <el-option label="启用" :value="DictStatusEnums.ENABLED" />
-                <el-option label="禁用" :value="DictStatusEnums.DISABLED" />
+                <el-option :value="DictStatusEnums.ENABLED" label="启用" />
+                <el-option :value="DictStatusEnums.DISABLED" label="禁用" />
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" class="text-center">
+          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24" class="text-center">
             <el-button icon="Search" type="primary" @click="handleQuery">查询</el-button>
             <el-button icon="Refresh" @click="resetQuery">重置</el-button>
           </el-col>
         </el-row>
       </el-form>
       <table-tool-bar
-        v-model:show-search="state.searchStatus"
         v-model:column-data="columnOption"
+        v-model:show-search="state.searchStatus"
         column-status
         refresh-status
         search-status
         @refresh="handleQuery"
       >
         <el-button icon="Plus" size="small" type="primary" @click="handleAdd">新增</el-button>
-        <el-button
-          icon="Edit"
-          size="small"
-          type="success"
-          :disabled="state.singleStatus"
-          @click="handleEdit(state.selectedRows[0])"
-        >
-          修改
-        </el-button>
-        <el-button
-          icon="Delete"
-          size="small"
-          type="danger"
-          :disabled="state.multipleStatus"
-          @click="handleDelete(undefined)"
-        >
-          批量删除
-        </el-button>
+        <el-button :disabled="state.singleStatus" icon="Edit" size="small" type="success" @click="handleEdit(state.selectedRows[0])">修改</el-button>
+        <el-button :disabled="state.multipleStatus" icon="Delete" size="small" type="danger" @click="handleDelete(undefined)">批量删除</el-button>
       </table-tool-bar>
       <xht-table
         v-loading="state.loadingStatus"
@@ -94,74 +57,28 @@
         empty-text="系统暂无字典！"
         @selection-change="handleSelectionChange"
       >
-        <el-table-column type="selection" width="55" align="center" />
-        <xht-column-index :size="queryParams.size" :current="queryParams.current" />
-        <el-table-column
-          label="字典名称"
-          prop="dictName"
-          min-width="160"
-          v-if="columnOption.dictName?.visible"
-        />
-        <el-table-column
-          label="字典编码"
-          prop="dictCode"
-          min-width="160"
-          v-if="columnOption.dictCode?.visible"
-        >
+        <el-table-column align="center" type="selection" width="55" />
+        <xht-column-index :current="queryParams.current" :size="queryParams.size" />
+        <el-table-column v-if="columnOption.dictName?.visible" label="字典名称" min-width="160" prop="dictName" />
+        <el-table-column v-if="columnOption.dictCode?.visible" label="字典编码" min-width="160" prop="dictCode">
           <template #default="{ row }">
-            <router-link :to="`/system/dict/${row.id}`" class="link-type">
+            <router-link :to="`/system/dict/${row.id}`" class="el-link el-link--primary">
               {{ row.dictCode }}
             </router-link>
           </template>
         </el-table-column>
-        <el-table-column
-          label="排序"
-          prop="sortOrder"
-          min-width="80"
-          v-if="columnOption.sortOrder?.visible"
-        />
-        <el-table-column
-          label="字典状态"
-          prop="status"
-          min-width="160"
-          show-overflow-tooltip
-          v-if="columnOption.status?.visible"
-        >
+        <el-table-column v-if="columnOption.sortOrder?.visible" label="排序" min-width="80" prop="sortOrder" />
+        <el-table-column v-if="columnOption.status?.visible" label="字典状态" min-width="160" prop="status" show-overflow-tooltip>
           <template #default="{ row }">
             <el-tag v-if="row.status === 1" type="success">启用</el-tag>
             <el-tag v-else type="danger">禁用</el-tag>
           </template>
         </el-table-column>
-        <el-table-column
-          label="字典描述"
-          prop="remark"
-          min-width="220"
-          v-if="columnOption.remark?.visible"
-        />
-        <el-table-column
-          label="创建人"
-          prop="createBy"
-          width="160"
-          v-if="columnOption.createBy?.visible"
-        />
-        <el-table-column
-          label="创建时间"
-          prop="createTime"
-          width="180"
-          v-if="columnOption.createTime?.visible"
-        />
-        <el-table-column
-          label="更新人"
-          prop="updateBy"
-          width="160"
-          v-if="columnOption.updateBy?.visible"
-        />
-        <el-table-column
-          label="更新时间"
-          prop="updateTime"
-          width="180"
-          v-if="columnOption.updateTime?.visible"
-        />
+        <el-table-column v-if="columnOption.remark?.visible" label="字典描述" min-width="220" prop="remark" />
+        <el-table-column v-if="columnOption.createBy?.visible" label="创建人" prop="createBy" width="160" />
+        <el-table-column v-if="columnOption.createTime?.visible" label="创建时间" prop="createTime" width="180" />
+        <el-table-column v-if="columnOption.updateBy?.visible" label="更新人" prop="updateBy" width="160" />
+        <el-table-column v-if="columnOption.updateTime?.visible" label="更新时间" prop="updateTime" width="180" />
         <el-table-column fixed="right" label="操作" width="220px">
           <template #default="{ row }">
             <el-button icon="edit" link type="success" @click="handleEdit(row)">修改</el-button>
@@ -184,7 +101,6 @@
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
 import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
-import DictForm from './components/dict-form.vue'
 import type { SysDictQueryRequest, SysDictResponse } from '@/service/model/system/dict.model'
 import { DictStatusEnums } from '@/service/model/system/dict.model'
 import { querySysDictPage, removeSysDictByIds } from '@/service/api/system/dict.api'
@@ -194,6 +110,10 @@ import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { SysDictColumnOption } from '@/views/system/dict/dict.data'
 
 defineOptions({ name: 'SysDictViewIndex' })
+
+const dictForm = defineAsyncComponent(() => import('@/views/system/dict/components/dict-form.vue'))
+const dictFormRef = useTemplateRef('dictFormRef')
+const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 
 const state = reactive<TableQueryPageState<SysDictQueryRequest, SysDictResponse>>({
   queryParams: {
@@ -209,14 +129,9 @@ const state = reactive<TableQueryPageState<SysDictQueryRequest, SysDictResponse>
   singleStatus: true, // 单个禁用
   multipleStatus: true, // 多个禁用
 })
-const { handleQuery, handleSelectionChange } = useTableQueryPageHooks<
-  SysDictQueryRequest,
-  SysDictResponse
->(state, querySysDictPage)
+const { handleQuery, handleSelectionChange } = useTableQueryPageHooks<SysDictQueryRequest, SysDictResponse>(state, querySysDictPage)
 const { queryParams } = toRefs(state)
 
-const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
-const dictFormRef = useTemplateRef('dictFormRef')
 const columnOption = ref<ColumnConfig<SysDictResponse>>({
   ...SysDictColumnOption,
 })
@@ -231,7 +146,7 @@ const resetQuery = async () => {
  * 处理新增
  */
 const handleAdd = () => {
-  dictFormRef.value?.show('add', null)
+  dictFormRef.value?.show('create', null)
 }
 
 /**
@@ -275,4 +190,4 @@ onMounted(async () => {
 })
 </script>
 
-<style scoped lang="scss"></style>
+<style lang="scss" scoped></style>

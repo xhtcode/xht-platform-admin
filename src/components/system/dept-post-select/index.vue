@@ -4,19 +4,8 @@
       <dept-tree-select v-model="deptId" placeholder="请选择所属部门信息" @change="handleDept" />
     </el-col>
     <el-col :span="12">
-      <el-select
-        v-model="postId"
-        v-loading="state.loadingStatus"
-        clearable
-        placeholder="请选择所属岗位信息"
-      >
-        <el-option
-          v-for="item in postData"
-          :key="item.id"
-          :value="item.id"
-          :disabled="item.postStatus !== 0"
-          :label="item.postName"
-        />
+      <el-select v-model="postId" v-loading="state.loadingStatus" clearable placeholder="请选择所属岗位信息">
+        <el-option v-for="item in postData" :key="item.id" :value="item.id" :disabled="item.postStatus !== 0" :label="item.postName" />
       </el-select>
     </el-col>
   </el-row>

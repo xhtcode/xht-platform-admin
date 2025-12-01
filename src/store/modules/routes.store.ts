@@ -98,7 +98,7 @@ export const useRouteStore = defineStore(
       if (!routes || !routes.length) return []
       return routes.map((route: any) => {
         if (route.meta.menuType === 'M') {
-          route.component =() => import('@/layout/index.vue')
+          route.component = () => import('@/layout/index.vue')
         } else if (!route.meta.linkStatus) {
           if (route.component) {
             route.component = dynamicViewsModules[`../..${route.component}`]

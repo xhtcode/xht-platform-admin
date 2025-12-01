@@ -1,11 +1,7 @@
 import request from '@/utils/request'
 import type { AxiosPromise } from 'axios'
 import type { ModeIdType, PageResponse } from '@/service/model/base.model'
-import type {
-  GenTypeMappingOperationRequest,
-  GenTypeMappingQueryRequest,
-  GenTypeMappingResponse,
-} from '@/service/model/generate/type.mapping.model'
+import type { GenTypeMappingOperationRequest, GenTypeMappingQueryRequest, GenTypeMappingResponse } from '@/service/model/generate/type.mapping.model'
 
 /**
  * 后台管理服务前缀
@@ -36,9 +32,7 @@ export const saveGenTypeMapping = (data: GenTypeMappingOperationRequest): AxiosP
 /**
  * 修改字段映射数据
  */
-export const updateGenTypeMapping = (
-  data: GenTypeMappingOperationRequest
-): AxiosPromise<boolean> => {
+export const updateGenTypeMapping = (data: GenTypeMappingOperationRequest): AxiosPromise<boolean> => {
   return request({
     url: Api.UPDATE,
     baseURL,
@@ -73,9 +67,7 @@ export const queryGenTypeMappingById = (id: ModeIdType): AxiosPromise<GenTypeMap
 /**
  * 分页查询字段映射
  */
-export const queryGenTypeMappingPage = (
-  data?: GenTypeMappingQueryRequest
-): AxiosPromise<PageResponse<GenTypeMappingResponse>> => {
+export const queryGenTypeMappingPage = (data?: GenTypeMappingQueryRequest): AxiosPromise<PageResponse<GenTypeMappingResponse>> => {
   return request({
     url: Api.QUERY_PAGE,
     baseURL,
@@ -87,9 +79,7 @@ export const queryGenTypeMappingPage = (
 /**
  * 查询全部字段映射
  */
-export const queryGenTypeMappingList = (
-  data?: GenTypeMappingQueryRequest
-): AxiosPromise<GenTypeMappingResponse[]> => {
+export const queryGenTypeMappingList = (data?: GenTypeMappingQueryRequest): AxiosPromise<GenTypeMappingResponse[]> => {
   return request({
     url: Api.QUERY_LIST,
     baseURL,

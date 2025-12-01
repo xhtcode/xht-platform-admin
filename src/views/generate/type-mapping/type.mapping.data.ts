@@ -1,9 +1,6 @@
 import type { FormRules } from 'element-plus'
-import { ColumnConfig } from '@/components/table-tool-bar/types'
-import type {
-  GenTypeMappingOperationRequest,
-  GenTypeMappingResponse,
-} from '@/service/model/generate/type.mapping.model'
+import type { ColumnConfig } from '@/components/table-tool-bar/types'
+import type { GenTypeMappingOperationRequest, GenTypeMappingResponse } from '@/service/model/generate/type.mapping.model'
 import { DataBaseTypeEnums, LanguageTypeEnums } from '@/service/enums/generate/generate.enums'
 
 /**
@@ -60,5 +57,9 @@ export const GenTypeMappingColumnOption: ColumnConfig<GenTypeMappingResponse> = 
   dbDataType: { desc: '数据库数据类型', visible: true, disabled: false },
   targetLanguage: { desc: '目标编程语言', visible: true, disabled: false },
   targetDataType: { desc: '目标语言数据类型', visible: true, disabled: false },
-  importPackage: { desc: '导入包路径', visible: true, disabled: false },
+  importPackage: { desc: '导入包路径', visible: false, disabled: false },
+  createBy: { desc: '创建人', visible: false, disabled: false },
+  createTime: { desc: '创建时间', visible: false, disabled: false },
+  updateBy: { desc: '更新人', visible: false, disabled: false },
+  updateTime: { desc: '更新时间', visible: false, disabled: false },
 }

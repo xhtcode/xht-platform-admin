@@ -1,10 +1,6 @@
 import request from '@/utils/request'
 import type { AxiosPromise } from 'axios'
-import type {
-  SysRoleOperationRequest,
-  SysRoleQueryRequest,
-  SysRoleResponse,
-} from '@/service/model/system/role.model'
+import type { SysRoleOperationRequest, SysRoleQueryRequest, SysRoleResponse } from '@/service/model/system/role.model'
 import type { ModeIdType, PageResponse } from '@/service/model/base.model'
 
 /**
@@ -13,7 +9,7 @@ import type { ModeIdType, PageResponse } from '@/service/model/base.model'
 const baseURL: string = import.meta.env.VITE_ADMIN_API_PREFIX
 
 enum Api {
-  SAVE = '/sys/role/add',
+  SAVE = '/sys/role/create',
   UPDATE = '/sys/role/update',
   DELETE = '/sys/role/remove/',
   QUERY_ONE = '/sys/role/get/',
@@ -83,9 +79,7 @@ export const querySysRoleById = (id: ModeIdType): AxiosPromise<SysRoleResponse> 
 /**
  * 查询全部
  */
-export const querySysRolePage = (
-  data?: SysRoleQueryRequest
-): AxiosPromise<PageResponse<SysRoleResponse>> => {
+export const querySysRolePage = (data?: SysRoleQueryRequest): AxiosPromise<PageResponse<SysRoleResponse>> => {
   return request({
     url: Api.QUERY_PAGE,
     baseURL,

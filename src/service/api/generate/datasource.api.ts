@@ -1,11 +1,7 @@
 import request from '@/utils/request'
 import type { AxiosPromise } from 'axios'
 import type { ModeIdType } from '@/service/model/base.model'
-import type {
-  GenDataSourceOperationRequest,
-  GenDataSourceQueryRequest,
-  GenDataSourceResponse,
-} from '@/service/model/generate/datasource.model'
+import type { GenDataSourceOperationRequest, GenDataSourceQueryRequest, GenDataSourceResponse } from '@/service/model/generate/datasource.model'
 
 /**
  * 后台管理服务前缀
@@ -71,9 +67,7 @@ export const queryGenDataSourceById = (id: ModeIdType): AxiosPromise<GenDataSour
 /**
  * 查询全部数据源配置
  */
-export const queryGenDataSourceList = (
-  data?: GenDataSourceQueryRequest
-): AxiosPromise<GenDataSourceResponse[]> => {
+export const queryGenDataSourceList = (data?: GenDataSourceQueryRequest): AxiosPromise<GenDataSourceResponse[]> => {
   return request({
     url: Api.QUERY_LIST,
     baseURL,

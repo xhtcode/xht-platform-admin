@@ -1,10 +1,7 @@
 import type { FormRules } from 'element-plus'
 import type { GenTemplateOperationRequest } from '@/service/model/generate/template.model'
-import type {
-  GenTemplateGroupOperationRequest,
-  GenTemplateGroupResponse,
-} from '@/service/model/generate/template.group.model'
-import { ColumnConfig } from '@/components/table-tool-bar/types'
+import type { GenTemplateGroupOperationRequest, GenTemplateGroupResponse } from '@/service/model/generate/template.group.model'
+import type { ColumnConfig } from '@/components/table-tool-bar/types'
 
 /**
  * 增改页面 表单类型 默认值

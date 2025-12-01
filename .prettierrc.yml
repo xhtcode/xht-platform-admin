@@ -12,8 +12,8 @@ htmlWhitespaceSensitivity: "ignore"
 insertPragma: false
 # 在 JSX 中使用双引号
 jsxSingleQuote: false
-# 每行代码的最大长度限制为 100 字符
-printWidth: 100
+# 每行代码的最大长度限制为 150 字符
+printWidth: 150
 # 在 Markdown 中保留原有的换行格式
 proseWrap: "preserve"
 # 仅在必要时添加对象属性的引号

@@ -1,11 +1,7 @@
 import request from '@/utils/request'
 import type { AxiosPromise } from 'axios'
 import type { ModeIdType, PageResponse } from '@/service/model/base.model'
-import type {
-  GenColumnInfoOperationRequest,
-  GenColumnInfoQueryRequest,
-  GenColumnInfoResponse,
-} from '@/service/model/generate/column.model'
+import type { GenColumnInfoOperationRequest, GenColumnInfoQueryRequest, GenColumnInfoResponse } from '@/service/model/generate/column.model'
 
 /**
  * 后台管理服务前缀
@@ -70,9 +66,7 @@ export const queryGenColumnInfoById = (id: ModeIdType): AxiosPromise<GenColumnIn
 /**
  * 查询全部字段信息
  */
-export const queryGenColumnInfoPage = (
-  data?: GenColumnInfoQueryRequest
-): AxiosPromise<PageResponse<GenColumnInfoResponse>> => {
+export const queryGenColumnInfoPage = (data?: GenColumnInfoQueryRequest): AxiosPromise<PageResponse<GenColumnInfoResponse>> => {
   return request({
     url: Api.QUERY_PAGE,
     baseURL,

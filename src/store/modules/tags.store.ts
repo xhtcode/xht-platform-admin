@@ -8,15 +8,18 @@ const useTagsStore = defineStore(
   'tags',
   (): TagsStoreType => {
     /**
+     * 当前激活的视图名称
+     */
+    const activeName = ref<any>(null)
+
+    /**
      * 已访问视图列表
      */
     const visitedViews = ref<TagsViewType[]>([])
     /**
      * 缓存视图列表
      */
-    const cachedViews = computed<string[] | any>(() =>
-      visitedViews.value.filter((item) => item.cacheStatus).map((item) => item.name)
-    )
+    const cachedViews = computed<string[] | any>(() => visitedViews.value.filter((item) => item.cacheStatus).map((item) => item.name))
     /**
      * 添加已访问视图到已访问视图列表中
      */
@@ -70,9 +73,7 @@ const useTagsStore = defineStore(
       if (currIndex === -1) {
         return
       }
-      visitedViews.value = visitedViews.value.filter(
-        (item, index) => !!(index >= currIndex || item?.affixStatus)
-      )
+      visitedViews.value = visitedViews.value.filter((item, index) => !!(index >= currIndex || item?.affixStatus))
     }
 
     /**
@@ -83,12 +84,11 @@ const useTagsStore = defineStore(
       if (currIndex === -1) {
         return
       }
-      visitedViews.value = visitedViews.value.filter(
-        (item, index) => !!(index <= currIndex || item?.affixStatus)
-      )
+      visitedViews.value = visitedViews.value.filter((item, index) => !!(index <= currIndex || item?.affixStatus))
     }
 
     return {
+      activeName,
       visitedViews,
       cachedViews,
       addVisitedViews,
@@ -99,6 +99,6 @@ const useTagsStore = defineStore(
       removeOtherVisitedViews,
     }
   },
-  { persist: pInIaPersistConfig('tags', ['visitedViews']) }
+  { persist: pInIaPersistConfig('tags', ['activeName', 'visitedViews']) }
 )
 export default useTagsStore

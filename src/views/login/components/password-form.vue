@@ -1,71 +1,43 @@
 <template>
-  <el-form
-    ref="loginFormRef"
-    size="default"
-    inline-message
-    v-loading="loading"
-    :model="loginForm"
-    :rules="loginRules"
-  >
+  <el-form ref="loginFormRef" v-loading="loading" :model="loginForm" :rules="loginRules" inline-message size="default" @keyup.enter="handleLogin">
     <el-form-item prop="username">
-      <el-input
-        v-model="loginForm.username"
-        placeholder="请输入用户名"
-        size="large"
-        prefix-icon="User"
-        class="login-input"
-      />
+      <el-input v-model="loginForm.username" class="login-input" placeholder="请输入用户名" prefix-icon="User" size="large" />
     </el-form-item>
 
     <el-form-item prop="password">
       <el-input
         v-model="loginForm.password"
-        type="password"
-        placeholder="请输入密码"
-        size="large"
-        prefix-icon="Lock"
         class="login-input"
+        placeholder="请输入密码"
+        prefix-icon="Lock"
         show-password
+        size="large"
+        type="password"
       />
     </el-form-item>
     <el-form-item prop="captcha_code">
       <div class="captcha-container">
-        <el-input v-model.number="loginForm.captcha_code" placeholder="验证码" class="login-input">
+        <el-input v-model.number="loginForm.captcha_code" class="login-input" placeholder="验证码">
           <template #prefix>
             <div class="icon-login-code h-1rem w-1rem color-[var(--color)]" />
           </template>
         </el-input>
         <div class="captcha-image" @click="refreshCaptcha">
-          <el-image
-            fit="fill"
-            :src="captchaUrl"
-            alt="验证码"
-            style="width: 100%; height: 100%; object-fit: cover"
-          />
+          <el-image :src="captchaUrl" alt="验证码" fit="fill" style="width: 100%; height: 100%; object-fit: cover" />
         </div>
       </div>
     </el-form-item>
 
-    <el-button
-      type="primary"
-      size="large"
-      class="login-button"
-      :loading="loading"
-      @click="handleLogin"
-    >
-      登录
-    </el-button>
+    <el-button :loading="loading" class="login-button" size="large" type="primary" @click="handleLogin">登录</el-button>
     <!-- 忘记密码 -->
     <div class="text-right">
-      <router-link to="/" class="text-14px color-#3b82f6 font-500 decoration-none">
-        忘记密码
-      </router-link>
+      <router-link class="text-14px color-#3b82f6 font-500 decoration-none" to="/">忘记密码</router-link>
     </div>
   </el-form>
 </template>
-<script setup lang="ts">
+<script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
-import { generateCaptcha } from '@/service/api/login/api'
+import { generateCaptcha } from '@/service/api/login/login.api'
 import { useMessage } from '@/hooks/use-message'
 import { useUserInfoStore } from '@/store/modules/user.store'
 import { HOME_PAGE_PATH } from '@/service/constant'
@@ -81,7 +53,7 @@ const loginForm = reactive<LoginRequestType>({
   captcha_code: '',
   captcha_key: '',
 })
-const loading = ref(false)
+const loading = ref<boolean>(false)
 const router = useRouter()
 // 表单验证规则
 const loginRules: FormRules = {
@@ -92,6 +64,8 @@ const loginRules: FormRules = {
 // 验证码相关
 const captchaUrl = ref<string>('')
 const userInfoStore = useUserInfoStore()
+// 表单引用
+const loginFormRef = useTemplateRef<FormInstance>('loginFormRef')
 /**
  * 刷新验证码
  */
@@ -106,8 +80,7 @@ const refreshCaptcha = () => {
       loading.value = false
     })
 }
-// 表单引用
-const loginFormRef = useTemplateRef<FormInstance>('loginFormRef')
+
 // 登录处理
 const handleLogin = async () => {
   loading.value = true

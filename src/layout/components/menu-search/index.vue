@@ -75,9 +75,7 @@ const filterRef = useTemplateRef('filterRef')
  * 搜索
  */
 const querySearch = (queryString: string, cb: any) => {
-  const results = queryString
-    ? state.restaurants.filter(createFilter(queryString))
-    : state.restaurants
+  const results = queryString ? state.restaurants.filter(createFilter(queryString)) : state.restaurants
   cb(results)
 }
 const createFilter = (queryString: string) => {

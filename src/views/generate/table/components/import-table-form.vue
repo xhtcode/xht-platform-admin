@@ -1,41 +1,31 @@
 <template>
-  <el-dialog
-    v-model="addUpdatePageInit.visibleStatus"
-    :before-close="close"
-    title="导入确定"
-    append-to-body
-  >
+  <el-dialog v-model="addUpdatePageInit.visibleStatus" :before-close="close" append-to-body title="导入确定">
     <el-form
-      class="h-350px"
       ref="addUpdateFormRef"
       v-loading="addUpdatePageInit.loadingStatus"
       :model="addUpdateForm"
       :rules="rules"
+      class="h-350px"
       element-loading-text="拼命加载中"
+      inline-message
       label-width="120px"
       scroll-to-error
-      inline-message
     >
       <el-row :gutter="20">
         <el-col :span="24">
           <el-form-item label="模板分组名称" prop="groupId">
-            <template-group-select
-              v-model="addUpdateForm.groupId"
-              placeholder="请选择模板分组名称"
-            />
+            <template-group-select v-model="addUpdateForm.groupId" placeholder="请选择模板分组名称" />
           </el-form-item>
         </el-col>
       </el-row>
-      <el-space wrap size="small">
+      <el-space size="small" wrap>
         <el-tag v-for="(item, index) in tableList" :key="index" size="small">
           {{ item }}
         </el-tag>
       </el-space>
     </el-form>
     <template #footer>
-      <el-button :disabled="addUpdatePageInit.loadingStatus" type="primary" @click="submitForm">
-        提交
-      </el-button>
+      <el-button :disabled="addUpdatePageInit.loadingStatus" type="primary" @click="submitForm">提交</el-button>
       <el-button @click="close">取 消</el-button>
     </template>
   </el-dialog>

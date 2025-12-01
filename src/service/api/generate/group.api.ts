@@ -23,9 +23,7 @@ enum Api {
 /**
  * 保存模板分组
  */
-export const saveGenTemplateGroup = (
-  data: GenTemplateGroupOperationRequest
-): AxiosPromise<boolean> => {
+export const saveGenTemplateGroup = (data: GenTemplateGroupOperationRequest): AxiosPromise<boolean> => {
   return request({
     url: Api.SAVE,
     baseURL,
@@ -37,9 +35,7 @@ export const saveGenTemplateGroup = (
 /**
  * 修改模板分组数据
  */
-export const updateGenTemplateGroup = (
-  data: GenTemplateGroupOperationRequest
-): AxiosPromise<boolean> => {
+export const updateGenTemplateGroup = (data: GenTemplateGroupOperationRequest): AxiosPromise<boolean> => {
   return request({
     url: Api.UPDATE,
     baseURL,
@@ -63,9 +59,7 @@ export const removeGenTemplateGroupByIds = (ids: ModeIdType[]): AxiosPromise<boo
 /**
  * 查询单个模板分组
  */
-export const queryGenTemplateGroupById = (
-  id: ModeIdType
-): AxiosPromise<GenTemplateGroupResponse> => {
+export const queryGenTemplateGroupById = (id: ModeIdType): AxiosPromise<GenTemplateGroupResponse> => {
   return request({
     url: Api.QUERY_ONE + `${id}`,
     baseURL,
@@ -76,9 +70,7 @@ export const queryGenTemplateGroupById = (
 /**
  * 查询全部模板分组
  */
-export const queryGenTemplateGroupList = (
-  data?: GenTemplateGroupQueryRequest
-): AxiosPromise<GenTemplateGroupResponse[]> => {
+export const queryGenTemplateGroupList = (data?: GenTemplateGroupQueryRequest): AxiosPromise<GenTemplateGroupResponse[]> => {
   return request({
     url: Api.QUERY_LIST,
     baseURL,

@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 defineOptions({ name: '404ViewIndex' })
 </script>
 
@@ -6,4 +6,4 @@ defineOptions({ name: '404ViewIndex' })
   <div class="flex-center font-bold">404</div>
 </template>
 
-<style scoped lang="scss"></style>
+<style lang="scss" scoped></style>

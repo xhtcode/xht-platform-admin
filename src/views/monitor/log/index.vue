@@ -1,12 +1,6 @@
 <template>
   <div class="main-container-none">
-    <el-form
-      ref="queryFormRef"
-      :disabled="state.loadingStatus"
-      :model="queryParams"
-      class="user-select-display"
-      label-width="100px"
-    >
+    <el-form ref="queryFormRef" :disabled="state.loadingStatus" :model="queryParams" class="user-select-display" label-width="100px">
       <xht-card>
         <template #default="{ footerStatus }">
           <el-row>
@@ -22,11 +16,7 @@
             </el-col>
             <el-col :span="6">
               <el-form-item label="操作类型" prop="businessType">
-                <el-select
-                  v-model="queryParams.businessType"
-                  placeholder="请选择操作类型"
-                  clearable
-                >
+                <el-select v-model="queryParams.businessType" clearable placeholder="请选择操作类型">
                   <el-option :value="0" label="其它" />
                   <el-option :value="1" label="新增" />
                   <el-option :value="2" label="修改" />
@@ -42,7 +32,7 @@
             </el-col>
             <el-col :span="6">
               <el-form-item label="操作状态" prop="status">
-                <el-select v-model="queryParams.status" placeholder="请选择操作状态" clearable>
+                <el-select v-model="queryParams.status" clearable placeholder="请选择操作状态">
                   <el-option :value="0" label="成功" />
                   <el-option :value="1" label="失败" />
                 </el-select>
@@ -54,10 +44,10 @@
               <el-form-item label="操作时间" prop="operTime">
                 <el-date-picker
                   v-model="queryParams.operTime"
-                  type="daterange"
+                  end-placeholder="结束日期"
                   range-separator="至"
                   start-placeholder="开始日期"
-                  end-placeholder="结束日期"
+                  type="daterange"
                   value-format="YYYY-MM-DD"
                 />
               </el-form-item>
@@ -77,12 +67,12 @@
       </table-tool-bar>
       <el-table
         v-loading="state.loadingStatus"
+        :cell-style="tableStyle.cellStyle"
         :data="state.tableList"
         :header-cell-style="tableStyle.headerCellStyle"
-        :cell-style="tableStyle.cellStyle"
       >
         <el-table-column label="日志编号" prop="operId" width="100" />
-        <el-table-column label="操作模块" prop="title" min-width="120" />
+        <el-table-column label="操作模块" min-width="120" prop="title" />
         <el-table-column label="操作类型" prop="businessType" width="100">
           <template #default="{ row }">
             <el-tag :type="getBusinessTypeTag(row.businessType)">
@@ -91,9 +81,9 @@
           </template>
         </el-table-column>
         <el-table-column label="请求方式" prop="requestMethod" width="100" />
-        <el-table-column label="操作人员" prop="operName" min-width="120" />
-        <el-table-column label="操作地址" prop="operIp" min-width="120" />
-        <el-table-column label="操作地点" prop="operLocation" min-width="120" />
+        <el-table-column label="操作人员" min-width="120" prop="operName" />
+        <el-table-column label="操作地址" min-width="120" prop="operIp" />
+        <el-table-column label="操作地点" min-width="120" prop="operLocation" />
         <el-table-column label="操作状态" prop="status" width="100">
           <template #default="{ row }">
             <el-tag :type="row.status === 0 ? 'success' : 'danger'">
@@ -101,7 +91,7 @@
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作时间" prop="operTime" min-width="180" />
+        <el-table-column label="操作时间" min-width="180" prop="operTime" />
         <el-table-column fixed="right" label="操作" width="120px">
           <template #default="{ row }">
             <el-button icon="view" link type="primary" @click="handleDetail(row)">详细</el-button>
@@ -117,6 +107,8 @@ import type { FormInstance } from 'element-plus'
 import { useMessageBox } from '@/hooks/use-message'
 
 defineOptions({ name: 'SysOperLogViewIndex' })
+
+const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 
 interface QueryParams {
   pageNum: number
@@ -144,8 +136,6 @@ const queryParams = reactive<QueryParams>({
   pageNum: 1,
   pageSize: 10,
 })
-
-const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 
 const tableStyle: TableStyle = {
   cellStyle: { 'text-align': 'center' },
@@ -250,4 +240,4 @@ onMounted(async () => {
 })
 </script>
 
-<style scoped lang="scss"></style>
+<style lang="scss" scoped></style>

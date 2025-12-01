@@ -1,11 +1,6 @@
 import request from '@/utils/request'
 import type { AxiosPromise } from 'axios'
-import {
-  SysUserOperationRequest,
-  SysUserQueryRequest,
-  SysUserResponse,
-  SysUserVo,
-} from '@/service/model/system/user.model'
+import { SysUserOperationRequest, SysUserQueryRequest, SysUserResponse, SysUserVo } from '@/service/model/system/user.model'
 import type { ModeIdArrayType, ModeIdType, PageResponse } from '@/service/model/base.model'
 
 /**
@@ -14,7 +9,7 @@ import type { ModeIdArrayType, ModeIdType, PageResponse } from '@/service/model/
 const baseURL: string = import.meta.env.VITE_ADMIN_API_PREFIX
 
 enum Api {
-  SAVE = '/sys/user/add',
+  SAVE = '/sys/user/create',
   UPDATE = '/sys/user/update',
   DELETE = '/sys/user/remove/',
   QUERY_ONE = '/sys/user/get/',
@@ -85,9 +80,7 @@ export const querySysUserById = (id: number): AxiosPromise<SysUserVo> => {
 /**
  * 查询全部
  */
-export const querySysUserPage = (
-  data?: SysUserQueryRequest
-): AxiosPromise<PageResponse<SysUserResponse>> => {
+export const querySysUserPage = (data?: SysUserQueryRequest): AxiosPromise<PageResponse<SysUserResponse>> => {
   return request({
     url: Api.QUERY_PAGE,
     baseURL,

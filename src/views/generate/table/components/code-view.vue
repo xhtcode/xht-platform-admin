@@ -1,19 +1,13 @@
 <template>
-  <el-drawer
-    v-model="state.visibleStatus"
-    :before-close="close"
-    title="代码预览"
-    size="100%"
-    append-to-body
-  >
+  <el-drawer v-model="state.visibleStatus" :before-close="close" append-to-body size="100%" title="代码预览">
     <div class="xht-code-view-container">
       <div class="xht-code-view-main xht-code-view-select">
         <el-scrollbar view-style="overflow-x: hidden;">
           <div
-            class="xht-code-view-item"
-            :class="{ 'xht-code-view-item-active': state.activeTableName === item.tableName }"
             v-for="(item, index) in state.codeData"
             :key="index"
+            :class="{ 'xht-code-view-item-active': state.activeTableName === item.tableName }"
+            class="xht-code-view-item"
             @click="handleClickTableName(item)"
           >
             <span>{{ item.tableName }}</span>
@@ -26,10 +20,10 @@
       <div class="xht-code-view-main xht-code-view-select">
         <el-scrollbar view-style="overflow-x: hidden;">
           <div
-            class="xht-code-view-item"
-            :class="{ 'xht-code-view-item-active': state.activeFileName === item.fileName }"
             v-for="(item, index) in state.twoCodeData"
             :key="index"
+            :class="{ 'xht-code-view-item-active': state.activeFileName === item.fileName }"
+            class="xht-code-view-item"
             @click="handleClickFileName(item)"
           >
             <span>{{ item.fileName }}</span>
@@ -54,15 +48,8 @@
           <el-text truncated>{{ state.activeData?.filePath }}</el-text>
         </el-col>
         <el-col :span="6" class="text-right">
-          <el-button icon="download" type="success" :disabled="!state.packageName">下载</el-button>
-          <el-button
-            icon="DocumentCopy"
-            type="primary"
-            @click="handleCopyCode"
-            :disabled="!state.activeData"
-          >
-            复制
-          </el-button>
+          <el-button :disabled="!state.packageName" icon="download" type="success">下载</el-button>
+          <el-button :disabled="!state.activeData" icon="DocumentCopy" type="primary" @click="handleCopyCode">复制</el-button>
           <el-button icon="delete" type="danger" @click="close">关闭</el-button>
         </el-col>
       </el-row>
@@ -70,7 +57,7 @@
   </el-drawer>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import type { ModeIdType } from '@/service/model/base.model'
 import { viewCodeFileApi } from '@/service/api/generate/table.api'
 import { ArrowRight } from '@element-plus/icons-vue'

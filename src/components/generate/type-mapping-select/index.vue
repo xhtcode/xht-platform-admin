@@ -1,28 +1,12 @@
 <template>
-  <el-select
-    v-model="value"
-    :clearable="clearable"
-    :disabled="disabled"
-    value-key="id"
-    :placeholder="placeholder"
-    filterable
-    @change="handleChange"
-  >
-    <el-option
-      v-for="item in state.tableList"
-      :key="item.id"
-      :label="item.targetDataType"
-      :value="item"
-    />
+  <el-select v-model="value" :clearable="clearable" :disabled="disabled" value-key="id" :placeholder="placeholder" filterable @change="handleChange">
+    <el-option v-for="item in state.tableList" :key="item.id" :label="item.targetDataType" :value="item" />
   </el-select>
 </template>
 
 <script setup lang="ts">
 import { onMounted, reactive } from 'vue'
-import type {
-  TypeMappingSelectProps,
-  TypeMappingSelectState,
-} from '@/components/generate/type-mapping-select/types'
+import type { TypeMappingSelectProps, TypeMappingSelectState } from '@/components/generate/type-mapping-select/types'
 import { DataBaseTypeEnums, LanguageTypeEnums } from '@/service/enums/generate/generate.enums'
 import { queryGenTypeMappingList } from '@/service/api/generate/type.mapping.api'
 import { ModeIdType } from '@/service/model/base.model'

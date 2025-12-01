@@ -3,14 +3,14 @@
     <!-- 顶部品牌Logo -->
     <div class="brand-header">
       <div class="brand-logo">
-        <el-image class="logo-icon" :fit="'cover'" :src="imageSrc" alt="系统Logo" />
+        <el-image :fit="'cover'" :src="imageSrc" alt="系统Logo" class="logo-icon" />
         <span class="brand-name">小糊涂后台管理系统</span>
       </div>
     </div>
     <!-- 品牌内容区 -->
     <div class="brand-content">
       <!-- 品牌图 -->
-      <el-image class="brand-banner" :fit="'contain'" :src="imageBgSrc" alt="品牌宣传图" />
+      <el-image :fit="'contain'" :src="imageBgSrc" alt="品牌宣传图" class="brand-banner" />
       <!-- 补充品牌文案，提升左侧内容丰富度 -->
       <div class="brand-desc">
         <h3 class="desc-title">高效 · 安全 · 便捷</h3>
@@ -19,7 +19,7 @@
     </div>
   </div>
 </template>
-<script setup lang="ts">
+<script lang="ts" setup>
 import imageSrc from '@/assets/logo.svg'
 import imageBgSrc from '@/assets/svg/system/login-bg.svg'
 
@@ -28,7 +28,7 @@ defineOptions({
 })
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 // 左侧品牌介绍区域
 .left-container {
   flex: 0 0 550px;
@@ -95,11 +95,13 @@ defineOptions({
     }
   }
 }
+
 @media (max-width: 992px) {
   .left-container {
     flex: 0 0 400px;
   }
 }
+
 @media (max-width: 768px) {
   .left-container {
     display: none;

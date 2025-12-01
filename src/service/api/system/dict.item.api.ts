@@ -1,10 +1,6 @@
 import request from '@/utils/request'
 import type { AxiosPromise } from 'axios'
-import type {
-  SysDictItemOperationRequest,
-  SysDictItemQueryRequest,
-  SysDictItemResponse,
-} from '@/service/model/system/dict.item.model'
+import type { SysDictItemOperationRequest, SysDictItemQueryRequest, SysDictItemResponse } from '@/service/model/system/dict.item.model'
 import type { ModeIdArrayType, ModeIdType, PageResponse } from '@/service/model/base.model'
 
 /**
@@ -13,7 +9,7 @@ import type { ModeIdArrayType, ModeIdType, PageResponse } from '@/service/model/
 const baseURL: string = import.meta.env.VITE_ADMIN_API_PREFIX
 
 enum Api {
-  SAVE = '/sys/dict/item/add',
+  SAVE = '/sys/dict/item/create',
   DELETE = '/sys/dict/item/remove',
   UPDATE = '/sys/dict/item/update',
   QUERY_ONE = '/sys/dict/item/get/',
@@ -68,9 +64,7 @@ export const querySysDictItemById = (id: ModeIdType): AxiosPromise<SysDictItemRe
 /**
  * 查询全部字典项
  */
-export const querySysDictItemPage = (
-  data?: SysDictItemQueryRequest
-): AxiosPromise<PageResponse<SysDictItemResponse>> => {
+export const querySysDictItemPage = (data?: SysDictItemQueryRequest): AxiosPromise<PageResponse<SysDictItemResponse>> => {
   return request({
     url: Api.QUERY_PAGE,
     baseURL,

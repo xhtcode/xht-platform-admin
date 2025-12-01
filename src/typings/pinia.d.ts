@@ -136,6 +136,10 @@ declare global {
    */
   interface TagsStoreType {
     /**
+     * 当前激活的标签页
+     */
+    activeName: any
+    /**
      * 访问过的路由
      */
     visitedViews: Ref<TagsViewType[]>

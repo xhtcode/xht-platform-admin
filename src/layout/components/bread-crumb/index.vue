@@ -2,11 +2,7 @@
   <el-breadcrumb v-if="themeStore.breadcrumb" separator="/" class="breadcrumb-container">
     <transition-group name="breadcrumb">
       <el-breadcrumb-item v-for="(item, index) in breadcrumbList" :key="item.path">
-        <div
-          v-if="index !== breadcrumbList.length - 1"
-          class="h-full flex items-center gap-2 cursor-pointer"
-          @click="handleRedirect(item)"
-        >
+        <div v-if="index !== breadcrumbList.length - 1" class="h-full flex items-center gap-2 cursor-pointer" @click="handleRedirect(item)">
           <div :class="`icon-menu-${item.meta.icon}`" class="text-12px" />
           <div class="text-14px h-full flex items-center" style="line-height: 50px">
             {{ item.meta.title }}
@@ -55,7 +51,7 @@ onMounted(() => {
 })
 watch(
   () => currentRoute.value,
-  (route: RouteLocationNormalizedLoaded) => {
+  (route: RouteLocationNormalizedLoaded | any) => {
     if (route.path.startsWith('/redirect/')) {
       return
     }

@@ -3,7 +3,7 @@
     <el-table-column label="基础信息">
       <template #default>
         <xht-column-index type="step" />
-        <el-table-column prop="dbName" label="DB字段名" width="160">
+        <el-table-column label="DB字段名" prop="dbName" width="160">
           <template #default="{ row }">
             <el-text :type="row.dbPrimary === 1 ? 'danger' : ''">
               {{ row.dbName }}
@@ -11,8 +11,8 @@
             </el-text>
           </template>
         </el-table-column>
-        <el-table-column prop="dbComment" label="DB字段注释" show-overflow-tooltip width="160" />
-        <el-table-column prop="dbLength" label="DB类型" width="160">
+        <el-table-column label="DB字段注释" prop="dbComment" show-overflow-tooltip width="160" />
+        <el-table-column label="DB类型" prop="dbLength" width="160">
           <template #default="{ row }">
             <el-text>{{ row.dbType }}</el-text>
             <el-text v-if="row.dbLength > 0">({{ row.dbLength }})</el-text>
@@ -32,11 +32,7 @@
     </el-table-column>
     <el-table-column label="TypeScript" prop="codeTs">
       <template #default="{ row }">
-        <type-mapping-select
-          v-model="row.codeTs"
-          :db-type="dbType"
-          :language-type="LanguageTypeEnums.TYPESCRIPT"
-        />
+        <type-mapping-select v-model="row.codeTs" :db-type="dbType" :language-type="LanguageTypeEnums.TYPESCRIPT" />
       </template>
     </el-table-column>
   </xht-table>
@@ -57,11 +53,4 @@ withDefaults(
     dbType: DataBaseTypeEnums.MYSQL,
   }
 )
-/**
- * 创建序号
- * @param index 索引
- */
-const createIndex = (index: number) => {
-  return index + 1
-}
 </script>

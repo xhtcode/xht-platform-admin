@@ -1,10 +1,4 @@
-import type {
-  BasicResponse,
-  BasicFormRequest,
-  INodeResponse,
-  ModeIdType,
-  PageQueryRequest,
-} from '@/service/model/base.model'
+import type { BasicResponse, BasicFormRequest, INodeResponse, ModeIdType, PageQueryRequest } from '@/service/model/base.model'
 
 /**
  * 定义菜单状态枚举类型

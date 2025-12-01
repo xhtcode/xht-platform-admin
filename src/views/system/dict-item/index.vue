@@ -1,91 +1,54 @@
 <template>
   <div class="xht-view-container">
     <div class="xht-view-main">
-      <el-form
-        ref="queryFormRef"
-        :disabled="state.loadingStatus"
-        :model="queryParams"
-        class="user-select-display"
-        label-width="80px"
-      >
+      <el-form ref="queryFormRef" :disabled="state.loadingStatus" :model="queryParams" class="user-select-display" label-width="80px">
         <el-row v-if="!state.searchStatus">
-          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
+          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
             <el-form-item label="关键字" prop="keyWord">
-              <el-input
-                v-model="queryParams.keyWord"
-                placeholder="请输入关键字"
-                :maxlength="100"
-                show-word-limit
-              />
+              <el-input v-model="queryParams.keyWord" :maxlength="100" placeholder="请输入关键字" show-word-limit />
             </el-form-item>
           </el-col>
-          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" class="text-center">
+          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24" class="text-center">
             <el-button icon="Search" type="primary" @click="handleQuery">查询</el-button>
             <el-button icon="Refresh" @click="resetQuery">重置</el-button>
           </el-col>
         </el-row>
         <el-row v-else>
-          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
+          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
             <el-form-item label="字典项Label" prop="itemLabel">
-              <el-input
-                v-model="queryParams.itemLabel"
-                :maxlength="50"
-                show-word-limit
-                placeholder="请输入字典项标签"
-              />
+              <el-input v-model="queryParams.itemLabel" :maxlength="50" placeholder="请输入字典项标签" show-word-limit />
             </el-form-item>
           </el-col>
-          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
+          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
             <el-form-item label="字典项Value" prop="itemValue">
-              <el-input
-                v-model="queryParams.itemValue"
-                :maxlength="50"
-                show-word-limit
-                placeholder="请输入字典项值"
-              />
+              <el-input v-model="queryParams.itemValue" :maxlength="50" placeholder="请输入字典项值" show-word-limit />
             </el-form-item>
           </el-col>
-          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
+          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
             <el-form-item label="字典项状态" prop="status">
               <el-select v-model="queryParams.status" placeholder="请选择字典项状态">
-                <el-option label="启用" :value="DictItemStatusEnums.ENABLED" />
-                <el-option label="禁用" :value="DictItemStatusEnums.DISABLED" />
+                <el-option :value="DictItemStatusEnums.ENABLED" label="启用" />
+                <el-option :value="DictItemStatusEnums.DISABLED" label="禁用" />
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" class="text-center">
+          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24" class="text-center">
             <el-button icon="Search" type="primary" @click="handleQuery">查询</el-button>
             <el-button icon="Refresh" @click="resetQuery">重置</el-button>
           </el-col>
         </el-row>
       </el-form>
       <table-tool-bar
-        v-model:show-search="state.searchStatus"
         v-model:column-data="columnOption"
+        v-model:show-search="state.searchStatus"
         column-status
         refresh-status
         search-status
         @refresh="handleQuery"
       >
         <el-button icon="Plus" size="small" type="primary" @click="handleAdd">新增</el-button>
-        <el-button
-          icon="Edit"
-          size="small"
-          type="success"
-          :disabled="state.singleStatus"
-          @click="handleEdit(state.selectedRows[0])"
-        >
-          修改
-        </el-button>
-        <el-button
-          icon="Delete"
-          size="small"
-          type="danger"
-          :disabled="state.multipleStatus"
-          @click="handleDelete(undefined)"
-        >
-          批量删除
-        </el-button>
+        <el-button :disabled="state.singleStatus" icon="Edit" size="small" type="success" @click="handleEdit(state.selectedRows[0])">修改</el-button>
+        <el-button :disabled="state.multipleStatus" icon="Delete" size="small" type="danger" @click="handleDelete(undefined)">批量删除</el-button>
       </table-tool-bar>
       <xht-table
         v-loading="state.loadingStatus"
@@ -94,27 +57,21 @@
         empty-text="系统暂无字典项！"
         @selection-change="handleSelectionChange"
       >
-        <el-table-column type="selection" width="55" align="center" />
-        <xht-column-index :size="queryParams.size" :current="queryParams.current" />
+        <el-table-column align="center" type="selection" width="55" />
+        <xht-column-index :current="queryParams.current" :size="queryParams.size" />
         <el-table-column label="字典项编码" prop="dictCode" width="160" />
         <el-table-column label="字典项标签" prop="itemLabel" width="160" />
         <el-table-column label="字典项值" prop="itemValue" width="160" />
         <el-table-column label="显示颜色" prop="itemColor" width="120">
           <template #default="{ row }">
             <div
-              style="
-                width: 22px;
-                height: 22px;
-                border: 1px var(--xht-border-color) solid;
-                margin: 0 auto;
-                border-radius: 5px;
-              "
               :style="{ background: row.itemColor }"
+              style="width: 22px; height: 22px; border: 1px var(--xht-border-color) solid; margin: 0 auto; border-radius: 5px"
             />
           </template>
         </el-table-column>
         <el-table-column label="排序" prop="sortOrder" width="55" />
-        <el-table-column label="描述" prop="remark" width="220" show-overflow-tooltip />
+        <el-table-column label="描述" prop="remark" show-overflow-tooltip width="220" />
         <el-table-column label="状态" prop="status" width="160">
           <template #default="{ row }">
             <el-tag v-if="row.status === 1" type="success">启用</el-tag>
@@ -147,11 +104,7 @@
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
 import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
-import DictItemForm from './components/dict-item-form.vue'
-import type {
-  SysDictItemQueryRequest,
-  SysDictItemResponse,
-} from '@/service/model/system/dict.item.model'
+import type { SysDictItemQueryRequest, SysDictItemResponse } from '@/service/model/system/dict.item.model'
 import { DictItemStatusEnums } from '@/service/model/system/dict.item.model'
 import { querySysDictItemPage, removeSysDictItemById } from '@/service/api/system/dict.item.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
@@ -161,6 +114,11 @@ import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { SysDictItemColumnOption } from '@/views/system/dict-item/dict.item.data'
 
 defineOptions({ name: 'SysDictItemViewIndex' })
+
+const dictItemForm = defineAsyncComponent(() => import('@/views/system/dict-item/components/dict-item-form.vue'))
+const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
+const dictItemFormRef = useTemplateRef('dictItemFormRef')
+
 const route = useRoute()
 const state = reactive<TableQueryPageState<SysDictItemQueryRequest, SysDictItemResponse>>({
   queryParams: {
@@ -180,14 +138,9 @@ const handleGetSysDictItemPage = (data: SysDictItemQueryRequest) => {
   state.queryParams.dictId = route.params?.id
   return querySysDictItemPage(data)
 }
-const { handleQuery, handleSelectionChange } = useTableQueryPageHooks<
-  SysDictItemQueryRequest,
-  SysDictItemResponse
->(state, handleGetSysDictItemPage)
+const { handleQuery, handleSelectionChange } = useTableQueryPageHooks<SysDictItemQueryRequest, SysDictItemResponse>(state, handleGetSysDictItemPage)
 const { queryParams } = toRefs(state)
 
-const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
-const dictItemFormRef = useTemplateRef('dictItemFormRef')
 const columnOption = ref<ColumnConfig<SysDictItemResponse>>({
   ...SysDictItemColumnOption,
 })
@@ -202,7 +155,7 @@ const resetQuery = async () => {
  * 处理新增
  */
 const handleAdd = () => {
-  dictItemFormRef.value?.show('add', null)
+  dictItemFormRef.value?.show('create', null)
 }
 
 /**
@@ -246,4 +199,4 @@ onMounted(async () => {
 })
 </script>
 
-<style scoped lang="scss"></style>
+<style lang="scss" scoped></style>

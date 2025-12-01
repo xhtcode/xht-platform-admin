@@ -1,55 +1,45 @@
 <template>
-  <el-drawer
-    v-model="state.visibleStatus"
-    :before-close="close"
-    :title="state.title"
-    size="45vw"
-    append-to-body
-  >
+  <el-drawer v-model="state.visibleStatus" :before-close="close" :title="state.title" append-to-body size="45vw">
     <el-form
       ref="addUpdateFormRef"
       v-loading="state.loadingStatus"
       :model="addUpdateForm"
       :rules="rules"
       element-loading-text="拼命加载中"
+      inline-message
       label-width="100px"
       scroll-to-error
-      inline-message
     >
       <el-row>
-        <el-col :xs="24" :sm="24" :lg="12">
+        <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="上级部门" prop="parentId">
-            <dept-tree-select
-              v-model="addUpdateForm.parentId"
-              show-top-dept
-              placeholder="请选择上级部门"
-            />
+            <dept-tree-select v-model="addUpdateForm.parentId" placeholder="请选择上级部门" show-top-dept />
           </el-form-item>
         </el-col>
-        <el-col :xs="24" :sm="24" :lg="12">
+        <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="部门主管" prop="leaderName">
-            <el-input v-model="addUpdateForm.leaderName" readonly placeholder="请选择部门主管">
+            <el-input v-model="addUpdateForm.leaderName" placeholder="请选择部门主管" readonly>
               <template #append>
-                <el-button type="primary" :icon="Search" @click="showDeptUser" />
+                <el-button :icon="Search" type="primary" @click="showDeptUser" />
               </template>
             </el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
-        <el-col :xs="24" :sm="24" :lg="12">
+        <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="部门名称" prop="deptName">
             <el-input v-model="addUpdateForm.deptName" placeholder="请输入部门名称" />
           </el-form-item>
         </el-col>
-        <el-col :xs="24" :sm="24" :lg="12">
+        <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="部门编码" prop="deptCode">
             <el-input v-model="addUpdateForm.deptCode" placeholder="请输入部门编码" />
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
-        <el-col :xs="24" :sm="24" :lg="12">
+        <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="部门状态" prop="deptStatus">
             <el-select v-model="addUpdateForm.deptStatus" placeholder="请选择部门状态">
               <el-option :value="DeptStatusEnums.NORMAL" label="正常" />
@@ -57,37 +47,21 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :xs="24" :sm="24" :lg="12">
+        <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="显示顺序" prop="deptSort">
-            <el-input-number
-              v-model="addUpdateForm.deptSort"
-              class="w100"
-              :min="0"
-              :max="999"
-              placeholder="请输入显示顺序"
-            />
+            <el-input-number v-model="addUpdateForm.deptSort" :max="999" :min="0" class="w100" placeholder="请输入显示顺序" />
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
-        <el-col :xs="24" :sm="24" :lg="12">
+        <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="联系电话" prop="phone">
-            <el-input
-              v-model="addUpdateForm.phone"
-              maxlength="11"
-              show-word-limit
-              placeholder="请输入联系电话"
-            />
+            <el-input v-model="addUpdateForm.phone" maxlength="11" placeholder="请输入联系电话" show-word-limit />
           </el-form-item>
         </el-col>
-        <el-col :xs="24" :sm="24" :lg="12">
+        <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="联系邮箱" prop="email">
-            <el-input
-              v-model="addUpdateForm.email"
-              maxlength="50"
-              show-word-limit
-              placeholder="请输入联系邮箱"
-            />
+            <el-input v-model="addUpdateForm.email" maxlength="50" placeholder="请输入联系邮箱" show-word-limit />
           </el-form-item>
         </el-col>
       </el-row>
@@ -96,12 +70,12 @@
           <el-form-item label="部门备注" prop="remark">
             <el-input
               v-model="addUpdateForm.remark"
-              type="textarea"
               :rows="5"
-              resize="none"
               maxlength="200"
-              show-word-limit
               placeholder="请输入部门备注"
+              resize="none"
+              show-word-limit
+              type="textarea"
             />
           </el-form-item>
         </el-col>
@@ -111,34 +85,28 @@
       <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>
       <el-button @click="close">取 消</el-button>
     </template>
-    <dept-user-form
-      ref="deptUserDialog"
-      v-model="addUpdateForm.leaderUserId"
-      @change="handleDeptUser"
-    />
+    <dept-user-form ref="deptUserDialog" v-model="addUpdateForm.leaderUserId" @change="handleDeptUser" />
   </el-drawer>
 </template>
 
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
 import { querySysDeptById, saveSysDept, updateSysDept } from '@/service/api/system/dept.api'
-
-import type { SysDeptOperationRequest } from '@/service/model/system/dept.model'
 import { DeptStatusEnums } from '@/service/model/system/dept.model'
 import { SysDeptOperationForm, SysDeptOperationRules } from '@/views/system/dept/dept.data'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import { handleFormErrors } from '@/utils/moudle/element'
-import type { ModeIdType } from '@/service/model/base.model'
-import DeptUserForm from '@/views/system/dept/components/dept-user-form.vue'
-import { Search } from '@element-plus/icons-vue'
 import type { UserSimpleVo } from '@/service/model/system/user.model'
+import type { ModeIdType } from '@/service/model/base.model'
+import type { SysDeptOperationRequest } from '@/service/model/system/dept.model'
 
 defineOptions({ name: 'SysDeptAddOrUpdate' })
+
+const DeptUserForm = defineAsyncComponent(() => import('@/views/system/dept/components/dept-user-form.vue'))
 
 const state = reactive<AddUpdateOption<SysDeptOperationRequest>>({
   title: '增加部门',
   visibleStatus: false,
-  operationStatus: 'add',
+  operationStatus: 'create',
   loadingStatus: false,
   addUpdateForm: { ...SysDeptOperationForm },
 })
@@ -168,7 +136,7 @@ const handleDeptUser = (user: UserSimpleVo) => {
 /**
  * 打开显示
  */
-const show = async (type: 'add' | 'update', id: ModeIdType) => {
+const show = async (type: 'create' | 'update', id: ModeIdType) => {
   state.visibleStatus = true
   await nextTick(() => {
     addUpdateFormRef.value?.resetFields()
@@ -194,7 +162,7 @@ const submitForm = () => {
   state.visibleStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      if (state.operationStatus === 'add') {
+      if (state.operationStatus === 'create') {
         //增加
         await saveSysDept(addUpdateForm.value)
           .then((_) => {
@@ -202,9 +170,7 @@ const submitForm = () => {
             emits('success')
             close()
           })
-          .catch((err: any) => {
-            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
-          })
+
           .finally(() => {
             state.loadingStatus = false
           })
@@ -216,9 +182,7 @@ const submitForm = () => {
             emits('success')
             close()
           })
-          .catch((err: any) => {
-            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
-          })
+
           .finally(() => {
             state.loadingStatus = false
           })
@@ -237,7 +201,7 @@ const close = () => {
   if (state.loadingStatus) return
   addUpdateForm.value = { ...SysDeptOperationForm }
   state.visibleStatus = false
-  state.operationStatus = 'add'
+  state.operationStatus = 'create'
   state.loadingStatus = false
   addUpdateFormRef.value?.resetFields()
 }

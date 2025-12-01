@@ -34,11 +34,7 @@
 <script lang="ts" setup>
 import { useVModel } from '@vueuse/core'
 import { querySysDeptTree } from '@/service/api/system/dept.api'
-import type {
-  SysDeptQueryRequest,
-  SysDeptResponse,
-  SysDeptTreeResponse,
-} from '@/service/model/system/dept.model'
+import type { SysDeptQueryRequest, SysDeptResponse, SysDeptTreeResponse } from '@/service/model/system/dept.model'
 import { DeptStatusEnums } from '@/service/model/system/dept.model'
 import type { AxiosResponse } from 'axios'
 import { CaretBottom, CaretTop } from '@element-plus/icons-vue'

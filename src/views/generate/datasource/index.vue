@@ -1,13 +1,7 @@
 <template>
   <div class="xht-view-container">
     <div class="xht-view-main">
-      <el-form
-        ref="queryFormRef"
-        :disabled="state.loadingStatus"
-        :model="queryParams"
-        class="user-select-display"
-        label-width="120px"
-      >
+      <el-form ref="queryFormRef" :disabled="state.loadingStatus" :model="queryParams" class="user-select-display" label-width="120px">
         <el-row>
           <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
             <el-form-item label="数据源名称" prop="name">
@@ -28,32 +22,10 @@
           </el-col>
         </el-row>
       </el-form>
-      <table-tool-bar
-        v-model:show-search="state.searchStatus"
-        v-model:column-data="columnOption"
-        column-status
-        refresh-status
-        @refresh="handleQuery"
-      >
+      <table-tool-bar v-model:column-data="columnOption" v-model:show-search="state.searchStatus" column-status refresh-status @refresh="handleQuery">
         <el-button icon="Plus" size="small" type="primary" @click="handleAdd">新增</el-button>
-        <el-button
-          :disabled="state.singleStatus"
-          icon="Edit"
-          size="small"
-          type="success"
-          @click="handleEdit(state.selectedRows[0])"
-        >
-          修改
-        </el-button>
-        <el-button
-          :disabled="state.multipleStatus"
-          icon="Delete"
-          size="small"
-          type="danger"
-          @click="handleDelete(undefined)"
-        >
-          批量删除
-        </el-button>
+        <el-button :disabled="state.singleStatus" icon="Edit" size="small" type="success" @click="handleEdit(state.selectedRows[0])">修改</el-button>
+        <el-button :disabled="state.multipleStatus" icon="Delete" size="small" type="danger" @click="handleDelete(undefined)">批量删除</el-button>
       </table-tool-bar>
       <xht-table
         v-loading="state.loadingStatus"
@@ -63,10 +35,10 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column align="center" type="selection" width="55" />
-        <el-table-column :index="createIndex" label="序号" type="index" width="55" />
+        <xht-column-index type="step" />
         <el-table-column label="数据库名称" prop="name" width="120px" />
         <el-table-column label="数据库类型" prop="dbType" width="120px" />
-        <el-table-column label="数据库地址" prop="url" width="220px" show-overflow-tooltip />
+        <el-table-column label="数据库地址" prop="url" show-overflow-tooltip width="220px" />
         <el-table-column label="数据库用户名" prop="username" width="120px" />
         <el-table-column label="数据库密码" prop="password" width="120px" />
         <el-table-column label="最后测试时间" prop="lastTestTime" width="220px">
@@ -92,26 +64,22 @@
 
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
-import DatasourceForm from './components/datasource-form.vue'
-import type {
-  GenDataSourceQueryRequest,
-  GenDataSourceResponse,
-} from '@/service/model/generate/datasource.model'
-import {
-  connectionTest,
-  queryGenDataSourceList,
-  removeGenDataSourceByIds,
-} from '@/service/api/generate/datasource.api'
+import type { GenDataSourceQueryRequest, GenDataSourceResponse } from '@/service/model/generate/datasource.model'
+import { connectionTest, queryGenDataSourceList, removeGenDataSourceByIds } from '@/service/api/generate/datasource.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import type { BasicResponse, ModeIdArrayType, PageQueryRequest } from '@/service/model/base.model'
+import type { ModeIdArrayType } from '@/service/model/base.model'
 import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
 import type { AxiosResponse } from 'axios'
 import { GenDataSourceColumnOption } from '@/views/generate/datasource/datasource.data'
-import { ColumnConfig } from '@/components/table-tool-bar/types'
+import type { ColumnConfig } from '@/components/table-tool-bar/types'
 
 defineOptions({ name: 'GenDataSourceViewIndex' })
 
-interface TableQueryState<req extends PageQueryRequest, Response extends BasicResponse> {
+const datasourceForm = defineAsyncComponent(() => import('@/views/generate/datasource/components/datasource-form.vue'))
+const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
+const datasourceFormRef = useTemplateRef('datasourceFormRef')
+
+interface TableQueryState {
   queryParams: GenDataSourceQueryRequest // 查询参数
   searchStatus?: boolean // 是否显示搜索
   tableList: GenDataSourceResponse[] // 表格数据
@@ -121,7 +89,7 @@ interface TableQueryState<req extends PageQueryRequest, Response extends BasicRe
   multipleStatus: boolean // 多个禁用
 }
 
-const state = reactive<TableQueryState<GenDataSourceQueryRequest, GenDataSourceResponse>>({
+const state = reactive<TableQueryState>({
   queryParams: {},
   loadingStatus: false,
   tableList: [],
@@ -133,15 +101,7 @@ const { queryParams } = toRefs(state)
 const columnOption = ref<ColumnConfig<GenDataSourceResponse>>({
   ...GenDataSourceColumnOption,
 })
-const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
-const datasourceFormRef = useTemplateRef('datasourceFormRef')
-/**
- * 创建序号
- * @param index 索引
- */
-const createIndex = (index: number) => {
-  return index + 1
-}
+
 /**
  * 查询表单提交
  */
@@ -170,7 +130,7 @@ const resetQuery = async () => {
  * 处理新增
  */
 const handleAdd = () => {
-  datasourceFormRef.value?.show('add', null)
+  datasourceFormRef.value?.show('create', null)
 }
 
 /**

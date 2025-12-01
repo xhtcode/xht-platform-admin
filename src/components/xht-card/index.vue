@@ -1,10 +1,6 @@
 <template>
   <div class="xht-card-container">
-    <div
-      v-if="$slots.footer"
-      class="xht-card-tool flex-center cursor-pointer"
-      @click="handlerToolChange()"
-    >
+    <div v-if="$slots.footer" class="xht-card-tool flex-center cursor-pointer" @click="handlerToolChange()">
       <el-icon :size="16">
         <Operation />
       </el-icon>

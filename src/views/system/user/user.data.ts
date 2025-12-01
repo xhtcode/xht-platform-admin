@@ -1,7 +1,7 @@
 import type { SysUserOperationRequest, SysUserResponse } from '@/service/model/system/user.model'
 import { UserStatusEnums, UserTypeEnums } from '@/service/model/system/user.model'
 import type { FormRules } from 'element-plus'
-import { ColumnConfig } from '@/components/table-tool-bar/types'
+import type { ColumnConfig } from '@/components/table-tool-bar/types'
 
 /**
  * 增改页面 表单类型 默认值

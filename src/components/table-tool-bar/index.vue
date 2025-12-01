@@ -8,31 +8,13 @@
     <div :style="style" class="top-right-btn">
       <slot name="after" />
       <el-tooltip v-if="importStatus" class="item" content="导入" placement="top">
-        <el-button
-          circle
-          icon="Upload"
-          size="small"
-          type="success"
-          @click="emitFunction('import')"
-        />
+        <el-button circle icon="Upload" size="small" type="success" @click="emitFunction('import')" />
       </el-tooltip>
       <el-tooltip v-if="exportStatus" class="item" content="导出" placement="top">
-        <el-button
-          circle
-          icon="Download"
-          size="small"
-          type="primary"
-          @click="emitFunction('export')"
-        />
+        <el-button circle icon="Download" size="small" type="primary" @click="emitFunction('export')" />
       </el-tooltip>
       <el-tooltip v-if="refreshStatus" class="item" content="刷新" placement="top">
-        <el-button
-          circle
-          icon="Refresh"
-          size="small"
-          type="info"
-          @click="emitFunction('refresh')"
-        />
+        <el-button circle icon="Refresh" size="small" type="info" @click="emitFunction('refresh')" />
       </el-tooltip>
       <el-tooltip v-if="searchStatus" class="item" content="搜索切换" placement="top">
         <el-button circle icon="Switch" size="small" @click="toggleSearch" />
@@ -42,46 +24,19 @@
       </el-tooltip>
       <slot name="before" />
     </div>
-    <el-drawer
-      title="列设置"
-      v-model="visibleStatus"
-      append-to="body"
-      size="30vw"
-      :before-close="close"
-      width="auto"
-    >
+    <el-drawer title="列设置" v-model="visibleStatus" append-to="body" size="30vw" :before-close="close" width="auto">
       <template #header>
-        <el-checkbox
-          v-model="checkAllStatus"
-          :indeterminate="indeterminateStatus"
-          @change="handleCheckAllChange"
-        >
-          全选（列）
-        </el-checkbox>
+        <el-checkbox v-model="checkAllStatus" :indeterminate="indeterminateStatus" @change="handleCheckAllChange">全选（列）</el-checkbox>
       </template>
-      <div
-        v-for="(item, key) in columnData"
-        :key="key"
-        class="w-full p-4px overflow-hidden ws-nowrap"
-      >
-        <el-checkbox
-          v-model="item!.visible"
-          :disabled="item!.disabled"
-          :label="item!.desc"
-          @change="checkboxChange()"
-        />
+      <div v-for="(item, key) in columnData" :key="key" class="w-full p-4px overflow-hidden ws-nowrap">
+        <el-checkbox v-model="item!.visible" :disabled="item!.disabled" :label="item!.desc" @change="checkboxChange()" />
       </div>
     </el-drawer>
   </div>
 </template>
 
 <script lang="ts" setup>
-import type {
-  ColumnConfig,
-  ColumnOption,
-  EmitsType,
-  RightToolbarPropsType,
-} from '@/components/table-tool-bar/types'
+import type { ColumnConfig, ColumnOption, EmitsType, RightToolbarPropsType } from '@/components/table-tool-bar/types'
 
 defineOptions({ name: 'TableToolbar' })
 const props = withDefaults(defineProps<RightToolbarPropsType>(), {

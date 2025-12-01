@@ -1,11 +1,6 @@
 import request from '@/utils/request'
 import type { AxiosPromise } from 'axios'
-import type {
-  SysMenuOperationRequest,
-  SysMenuQueryRequest,
-  SysMenuResponse,
-  SysMenuTreeResponse,
-} from '@/service/model/system/menu.model'
+import type { SysMenuOperationRequest, SysMenuQueryRequest, SysMenuResponse, SysMenuTreeResponse } from '@/service/model/system/menu.model'
 import type { ModeIdType } from '@/service/model/base.model'
 
 /**
@@ -14,7 +9,7 @@ import type { ModeIdType } from '@/service/model/base.model'
 const baseURL: string = import.meta.env.VITE_ADMIN_API_PREFIX
 
 enum Api {
-  SAVE = '/sys/menu/add',
+  SAVE = '/sys/menu/create',
   UPDATE = '/sys/menu/update',
   DELETE = '/sys/menu/remove/',
   QUERY_ONE = '/sys/menu/get/',

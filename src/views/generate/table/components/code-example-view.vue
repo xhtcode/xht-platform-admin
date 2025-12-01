@@ -18,7 +18,7 @@ public class {{ tableInfo?.codeName }}Entity implements Serializable {
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import type { GenTableInfoResponse } from '@/service/model/generate/table.model'
 
 const tableInfo = defineModel<GenTableInfoResponse>('tableInfo', {

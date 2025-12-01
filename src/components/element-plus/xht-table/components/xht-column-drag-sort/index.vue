@@ -1,10 +1,5 @@
 <template>
-  <el-table-column
-    label="排序"
-    :width="width"
-    type="default"
-    class-name="xht-table-column-drag-sort"
-  >
+  <el-table-column label="排序" :width="width" type="default" class-name="xht-table-column-drag-sort">
     <span class="xht-table-column-drag-icon">
       <el-icon class="drag-sort-icon" :size="18"><Rank /></el-icon>
     </span>
@@ -15,10 +10,7 @@
 import type { SortableEvent } from 'sortablejs'
 import Sortable from 'sortablejs'
 import { Rank } from '@element-plus/icons-vue'
-import {
-  XhtColumnDragSortEmits,
-  XhtColumnDragSortProps,
-} from '@/components/element-plus/xht-table/types'
+import { XhtColumnDragSortEmits, XhtColumnDragSortProps } from '@/components/element-plus/xht-table/types'
 import type { BasicResponse } from '@/service/model/base.model'
 
 defineOptions({

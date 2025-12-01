@@ -3,7 +3,7 @@
     <el-table-column label="基础信息">
       <template #default>
         <xht-column-index type="step" />
-        <el-table-column prop="dbName" label="DB字段名" width="160">
+        <el-table-column label="DB字段名" prop="dbName" width="160">
           <template #default="{ row }">
             <el-text :type="row.dbPrimary === 1 ? 'danger' : ''">
               {{ row.dbName }}
@@ -11,8 +11,8 @@
             </el-text>
           </template>
         </el-table-column>
-        <el-table-column prop="dbComment" label="DB字段注释" show-overflow-tooltip width="160" />
-        <el-table-column prop="dbLength" label="DB类型" width="160">
+        <el-table-column label="DB字段注释" prop="dbComment" show-overflow-tooltip width="160" />
+        <el-table-column label="DB类型" prop="dbLength" width="160">
           <template #default="{ row }">
             <el-text>{{ row.dbType }}</el-text>
             <el-text v-if="row.dbLength > 0">({{ row.dbLength }})</el-text>
@@ -20,38 +20,19 @@
         </el-table-column>
       </template>
     </el-table-column>
-    <el-table-column prop="codeName" label="代码名称">
+    <el-table-column label="代码名称" prop="codeName">
       <template #default="{ row }">
-        <el-input
-          v-model="row.codeName"
-          :maxlength="30"
-          show-word-limit
-          placeholder="请输入代码名称"
-        />
+        <el-input v-model="row.codeName" :maxlength="30" placeholder="请输入代码名称" show-word-limit />
       </template>
     </el-table-column>
-    <el-table-column prop="codeComment" label="代码注释">
+    <el-table-column label="代码注释" prop="codeComment">
       <template #default="{ row }">
-        <el-input
-          v-model="row.codeComment"
-          type="textarea"
-          :rows="2"
-          resize="none"
-          :maxlength="100"
-          show-word-limit
-          placeholder="请输入代码名称"
-        />
+        <el-input v-model="row.codeComment" :maxlength="100" :rows="2" placeholder="请输入代码名称" resize="none" show-word-limit type="textarea" />
       </template>
     </el-table-column>
-    <el-table-column prop="sortOrder" label="字段排序">
+    <el-table-column label="字段排序" prop="sortOrder">
       <template #default="{ row }">
-        <el-input-number
-          v-model="row.sortOrder"
-          :min="1"
-          :max="999"
-          class="w-full!"
-          placeholder="请输入字段排序"
-        />
+        <el-input-number v-model="row.sortOrder" :max="999" :min="1" class="w-full!" placeholder="请输入字段排序" />
       </template>
     </el-table-column>
   </xht-table>

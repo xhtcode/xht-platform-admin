@@ -1,13 +1,5 @@
-import type {
-  BasicFormRequest,
-  BasicResponse,
-  ModeIdType,
-  PageQueryRequest,
-} from '@/service/model/base.model'
-import {
-  GenColumnInfoResponse,
-  GenTableColumnQueryResponse,
-} from '@/service/model/generate/column.model'
+import type { BasicFormRequest, BasicResponse, ModeIdType, PageQueryRequest } from '@/service/model/base.model'
+import { GenColumnInfoResponse, GenTableColumnQueryResponse } from '@/service/model/generate/column.model'
 import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
 
 /**

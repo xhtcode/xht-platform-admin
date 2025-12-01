@@ -1,21 +1,15 @@
 <template>
-  <el-drawer
-    v-model="state.visibleStatus"
-    :before-close="close"
-    :title="state.title"
-    size="45%"
-    append-to-body
-  >
+  <el-drawer v-model="state.visibleStatus" :before-close="close" :title="state.title" append-to-body size="45%">
     <el-form
       ref="addUpdateFormRef"
       v-loading="state.loadingStatus"
+      :disabled="addUpdateForm.systemFlag === SystemFlagEnums.YES"
       :model="addUpdateForm"
       :rules="rules"
-      :disabled="addUpdateForm.systemFlag === SystemFlagEnums.YES"
       element-loading-text="拼命加载中"
+      inline-message
       label-width="100px"
       scroll-to-error
-      inline-message
     >
       <el-row>
         <el-col :span="24">
@@ -27,50 +21,24 @@
       <el-row>
         <el-col :span="24">
           <el-form-item label="岗位名称" prop="postName">
-            <el-input
-              v-model="addUpdateForm.postName"
-              :maxlength="50"
-              show-word-limit
-              placeholder="请输入岗位名称"
-            />
+            <el-input v-model="addUpdateForm.postName" :maxlength="50" placeholder="请输入岗位名称" show-word-limit />
           </el-form-item>
         </el-col>
         <el-col :span="24">
           <el-form-item label="岗位编码" prop="postCode">
-            <el-input
-              v-model="addUpdateForm.postCode"
-              :maxlength="50"
-              show-word-limit
-              placeholder="请输入岗位编码"
-            />
+            <el-input v-model="addUpdateForm.postCode" :maxlength="50" placeholder="请输入岗位编码" show-word-limit />
           </el-form-item>
         </el-col>
         <el-col :span="24">
           <el-form-item label="岗位排序" prop="postSort">
-            <el-input-number
-              v-model="addUpdateForm.postSort"
-              class="w100"
-              :min="0"
-              :max="999"
-              placeholder="请输入岗位排序"
-            />
+            <el-input-number v-model="addUpdateForm.postSort" :max="999" :min="0" class="w100" placeholder="请输入岗位排序" />
           </el-form-item>
         </el-col>
         <el-col :span="24">
           <el-form-item label="岗位限制" prop="postLimit">
-            <el-input-number
-              v-model="addUpdateForm.postLimit"
-              class="w100"
-              :min="1"
-              :max="999"
-              placeholder="请输入岗位限制人数"
-            >
+            <el-input-number v-model="addUpdateForm.postLimit" :max="999" :min="1" class="w100" placeholder="请输入岗位限制人数">
               <template #suffix>
-                <span>
-                  {{ addUpdateForm.postHave ? addUpdateForm.postHave : 0 }}/{{
-                    addUpdateForm.postLimit
-                  }}
-                </span>
+                <span>{{ addUpdateForm.postHave ? addUpdateForm.postHave : 0 }}/{{ addUpdateForm.postLimit }}</span>
               </template>
             </el-input-number>
           </el-form-item>
@@ -78,8 +46,8 @@
         <el-col :span="24">
           <el-form-item label="岗位状态" prop="postStatus">
             <el-select v-model="addUpdateForm.postStatus" placeholder="请选择岗位状态">
-              <el-option label="正常" :value="SysDeptPostStatusEnums.NORMAL" />
-              <el-option label="停用" :value="SysDeptPostStatusEnums.DISABLE" />
+              <el-option :value="SysDeptPostStatusEnums.NORMAL" label="正常" />
+              <el-option :value="SysDeptPostStatusEnums.DISABLE" label="停用" />
             </el-select>
           </el-form-item>
         </el-col>
@@ -87,12 +55,12 @@
           <el-form-item label="岗位描述" prop="remark">
             <el-input
               v-model="addUpdateForm.remark"
-              type="textarea"
-              resize="none"
               :maxlength="200"
               :rows="5"
-              show-word-limit
               placeholder="请输入岗位描述"
+              resize="none"
+              show-word-limit
+              type="textarea"
             />
           </el-form-item>
         </el-col>
@@ -107,28 +75,20 @@
 
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
-
-import type { SysDeptPostOperationRequest } from '@/service/model/system/dept.post.model'
 import { SysDeptPostStatusEnums } from '@/service/model/system/dept.post.model'
-import {
-  SysDeptPostOperationForm,
-  SysDeptPostOperationRules,
-} from '@/views/system/dept-post/dept.post.data'
+import { SysDeptPostOperationForm, SysDeptPostOperationRules } from '@/views/system/dept-post/dept.post.data'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import { handleFormErrors } from '@/utils/moudle/element'
-import {
-  querySysDeptPostById,
-  saveSysDeptPost,
-  updateSysDeptPost,
-} from '@/service/api/system/dept.post.api'
+import { querySysDeptPostById, saveSysDeptPost, updateSysDeptPost } from '@/service/api/system/dept.post.api'
 import type { ModeIdType } from '@/service/model/base.model'
+import type { SysDeptPostOperationRequest } from '@/service/model/system/dept.post.model'
 import { SystemFlagEnums } from '@/service/model/base.model'
 
 defineOptions({ name: 'SysDeptAddOrUpdate' })
+
 const state = reactive<AddUpdateOption<SysDeptPostOperationRequest>>({
   title: '增加部门岗位',
   visibleStatus: false,
-  operationStatus: 'add',
+  operationStatus: 'create',
   loadingStatus: false,
   addUpdateForm: { ...SysDeptPostOperationForm },
 })
@@ -139,7 +99,7 @@ const rules: FormRules = SysDeptPostOperationRules
 /**
  * 打开显示
  */
-const show = async (type: 'add' | 'update', id: ModeIdType) => {
+const show = async (type: 'create' | 'update', id: ModeIdType) => {
   state.visibleStatus = true
   await nextTick(() => {
     addUpdateFormRef.value?.resetFields()
@@ -165,7 +125,7 @@ const submitForm = () => {
   state.visibleStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      if (state.operationStatus === 'add') {
+      if (state.operationStatus === 'create') {
         //增加
         await saveSysDeptPost(addUpdateForm.value)
           .then((_) => {
@@ -173,9 +133,7 @@ const submitForm = () => {
             emits('success')
             close()
           })
-          .catch((err: any) => {
-            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
-          })
+
           .finally(() => {
             state.loadingStatus = false
           })
@@ -187,9 +145,7 @@ const submitForm = () => {
             emits('success')
             close()
           })
-          .catch((err: any) => {
-            handleFormErrors(err, addUpdateFormRef, addUpdateForm)
-          })
+
           .finally(() => {
             state.loadingStatus = false
           })
@@ -208,7 +164,7 @@ const close = () => {
   if (state.loadingStatus) return
   addUpdateForm.value = { ...SysDeptPostOperationForm }
   state.visibleStatus = false
-  state.operationStatus = 'add'
+  state.operationStatus = 'create'
   state.loadingStatus = false
   addUpdateFormRef.value?.resetFields()
 }
