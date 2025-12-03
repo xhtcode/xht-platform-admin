@@ -132,13 +132,14 @@
 
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
-import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
-import { SysUserQueryRequest, SysUserResponse, UserStatusEnums, UserTypeEnums } from '@/service/model/system/user.model'
-import { querySysUserPage, removeSysUserById, removeSysUserByIds, resetPassword } from '@/service/api/system/user.api'
-import type { SysDeptResponse } from '@/service/model/system/dept.model'
-import { useMessage, useMessageBox } from '@/hooks/use-message'
+import type { SysUserQueryRequest, SysUserResponse } from '@/service/model/system/user.model'
+import { UserStatusEnums, UserTypeEnums } from '@/service/model/system/user.model'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
+import type { SysDeptResponse } from '@/service/model/system/dept.model'
 import { SysUserColumnOption } from '@/views/system/user/user.data'
+import { querySysUserPage, removeSysUserById, removeSysUserByIds, resetPassword } from '@/service/api/system/user.api'
+import { useMessage, useMessageBox } from '@/hooks/use-message'
+import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
 
 defineOptions({ name: 'SysUserViewIndex' })
 

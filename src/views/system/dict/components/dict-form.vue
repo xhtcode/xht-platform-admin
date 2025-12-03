@@ -122,7 +122,6 @@ const submitForm = () => {
             emits('success')
             close()
           })
-
           .finally(() => {
             state.loadingStatus = false
           })
@@ -134,7 +133,6 @@ const submitForm = () => {
             emits('success')
             close()
           })
-
           .finally(() => {
             state.loadingStatus = false
           })
