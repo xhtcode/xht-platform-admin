@@ -17,7 +17,7 @@ export const SysMenuOperationForm: SysMenuOperationRequest = {
   menuCache: MenuCacheEnums.NO, // 是否缓存，默认为否
   menuStatus: MenuStatusEnums.NORMAL, // 菜单状态，默认为正常
   menuAuthority: '', // 菜单权限字符串，默认为空
-  menuSort: 0, // 菜单排序，默认为0
+  menuSort: 1, // 菜单排序，默认为1
   viewName: '', // 组件视图名称，默认为空
   viewPath: '', // 组件视图路径，默认为空
   frameFlag: 0, // 是否为外链，默认为否

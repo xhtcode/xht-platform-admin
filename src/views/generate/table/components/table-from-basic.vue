@@ -23,7 +23,7 @@
       </el-col>
       <el-col :span="6">
         <el-form-item label="代码名称" prop="tableInfo.codeName">
-          <el-input v-model="tableInfo.codeName" :maxlength="15" placeholder="请输入代码名称" show-word-limit />
+          <el-input v-model="tableInfo.codeName" :maxlength="25" placeholder="请输入代码名称" show-word-limit />
         </el-form-item>
       </el-col>
       <el-col :span="6">
@@ -37,18 +37,18 @@
         </el-form-item>
       </el-col>
       <el-col :span="6">
-        <el-form-item label="上级菜单" prop="tableInfo.parentMenuId">
-          <el-input v-model="tableInfo.parentMenuId" placeholder="请输入上级菜单" />
-        </el-form-item>
-      </el-col>
-      <el-col :span="6">
-        <el-form-item label="前端作者" prop="tableInfo.frontEndAuthor">
-          <el-input v-model="tableInfo.frontEndAuthor" :maxlength="50" placeholder="请输入前端作者" show-word-limit />
+        <el-form-item label="上级目录" prop="tableInfo.parentMenuId">
+          <menu-tree-select v-model="tableInfo.parentMenuId" show-top-menu type="C" placeholder="请选择上级目录" />
         </el-form-item>
       </el-col>
       <el-col :span="6">
         <el-form-item label="后端作者" prop="tableInfo.backEndAuthor">
           <el-input v-model="tableInfo.backEndAuthor" :maxlength="50" placeholder="请输入后端作者" show-word-limit />
+        </el-form-item>
+      </el-col>
+      <el-col :span="6">
+        <el-form-item label="前端作者" prop="tableInfo.frontEndAuthor">
+          <el-input v-model="tableInfo.frontEndAuthor" :maxlength="50" placeholder="请输入前端作者" show-word-limit />
         </el-form-item>
       </el-col>
       <el-col :span="6">
@@ -63,12 +63,12 @@
       </el-col>
       <el-col :span="6">
         <el-form-item label="请求前缀" prop="tableInfo.urlPrefix">
-          <el-input v-model="tableInfo.urlPrefix" :maxlength="20" placeholder="请输入请求前缀" show-word-limit />
+          <el-input v-model="tableInfo.urlPrefix" :maxlength="50" placeholder="请输入请求前缀" show-word-limit />
         </el-form-item>
       </el-col>
       <el-col :span="6">
         <el-form-item label="权限前缀" prop="tableInfo.permissionPrefix">
-          <el-input v-model="tableInfo.permissionPrefix" :maxlength="20" placeholder="请输入权限前缀" show-word-limit />
+          <el-input v-model="tableInfo.permissionPrefix" :maxlength="30" placeholder="请输入权限前缀" show-word-limit />
         </el-form-item>
       </el-col>
     </el-row>

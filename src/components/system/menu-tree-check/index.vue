@@ -44,7 +44,7 @@ const menuTree = ref<SysMenuTreeResponse>([])
  */
 const getMenuTree = async () => {
   try {
-    const response = await queryToolsMenuTree(props.type)
+    const response = await queryToolsMenuTree()
     let treeData = response.data
     // 如果需要显示顶级菜单选项
     if (props.showTopMenu) {

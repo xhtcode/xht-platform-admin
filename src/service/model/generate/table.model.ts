@@ -190,7 +190,7 @@ export interface GenTableInfoResponse extends BasicResponse {
   /**
    * 上级菜单
    */
-  parentMenuId: number
+  parentMenuId: ModeIdType
 
   /**
    * 页面风格

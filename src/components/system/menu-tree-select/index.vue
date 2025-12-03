@@ -5,7 +5,7 @@
     :data="menuTree"
     filterable
     :empty-text="`暂无菜单数据`"
-    :props="{ label: 'menuName', value: 'id' }"
+    :props="menuTreeProps"
     :placeholder="placeholder"
     :disabled="disabled"
     :default-expand-all="true"
@@ -20,9 +20,9 @@
 </template>
 
 <script lang="ts" setup>
-import type { SysMenuTreeResponse } from '@/service/model/system/menu.model'
-import { MenuTypeEnums } from '@/service/model/system/menu.model'
+import { MenuLinkEnums, MenuTypeEnums, SysMenuTreeResponse } from '@/service/model/system/menu.model'
 import { queryToolsMenuTree } from '@/service/api/tools.api'
+import { TreeNodeData, TreeOptionProps } from 'element-plus/es/components/tree/src/tree.type'
 
 defineOptions({ name: 'MenuTreeSelect' })
 
@@ -33,7 +33,7 @@ interface Props {
   clearable?: boolean
   showTopMenu?: boolean
   multiple?: boolean
-  type?: 'ALL' | 'M' | 'C' | 'B'
+  type?: 'M' | 'C'
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -42,19 +42,31 @@ const props = withDefaults(defineProps<Props>(), {
   clearable: true,
   disabled: false,
   showTopMenu: false,
-  type: 'M',
+  type: undefined,
 })
 const menuSelectTreeRef = ref<any>()
 const emits = defineEmits(['update:modelValue', 'change'])
 const modelValue = useVModel(props, 'modelValue', emits)
 const menuTree = ref<SysMenuTreeResponse>([])
+const menuTreeProps: TreeOptionProps = {
+  label: 'menuName',
+  disabled: (item: TreeNodeData) => {
+    if (item.frameFlag === MenuLinkEnums.YES) {
+      return true
+    }
+    if (props.type) {
+      return item.menuType === props.type
+    }
+    return false
+  },
+}
 
 /**
  * 获取菜单树数据
  */
 const getMenuTree = async () => {
   try {
-    const response = await queryToolsMenuTree(props.type)
+    const response = await queryToolsMenuTree()
     let treeData = response.data
     // 如果需要显示顶级菜单选项
     if (props.showTopMenu) {
@@ -88,4 +100,8 @@ onMounted(() => {
 })
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+* {
+  user-select: none;
+}
+</style>

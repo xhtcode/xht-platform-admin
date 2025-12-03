@@ -14,7 +14,7 @@ const baseURL: string = import.meta.env.VITE_ADMIN_API_PREFIX
  * 专用于组件调用的api
  */
 enum Api {
-  QUERY_MENU_TREE = '/sys/menu/tree/',
+  QUERY_MENU_TREE = '/sys/menu/tree/system',
   QUERY_ROLE_LIST = '/sys/role/list',
   GET_BIND_USER = '/sys/user/dept/getBindUser',
 }
@@ -22,11 +22,14 @@ enum Api {
 /**
  * 查询树形结构菜单
  */
-export const queryToolsMenuTree = (type: 'ALL' | 'M' | 'C' | 'B'): AxiosPromise<SysMenuTreeResponse> => {
+export const queryToolsMenuTree = (button?: boolean): AxiosPromise<SysMenuTreeResponse> => {
   return request({
-    url: Api.QUERY_MENU_TREE + type,
+    url: Api.QUERY_MENU_TREE,
     baseURL,
     method: 'get',
+    params: {
+      button,
+    },
   })
 }
 /**

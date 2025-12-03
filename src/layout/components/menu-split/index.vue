@@ -42,8 +42,6 @@ const handleMenuClick = (menuItem: RouteRecordRaw) => {
   emits('change', menuItem.children && menuItem.children.length > 0 ? menuItem.children : [menuItem], true)
 }
 
-
-
 const changeMenuList = () => {
   const currentMenuPath = router.currentRoute.value.matched[0]?.path
   if (activeMenuPath.value === currentMenuPath) {
@@ -75,7 +73,6 @@ watch(
 
 <style scoped lang="scss">
 .xht-split-container {
-
   .xht-split-item-active {
     background: var(--el-color-primary);
     .xht-split-item-icon {

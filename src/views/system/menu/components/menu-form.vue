@@ -13,7 +13,7 @@
       <el-row>
         <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="上级菜单" prop="parentId">
-            <menu-tree-select v-model="addUpdateForm.parentId" show-top-menu type="M" />
+            <menu-tree-select v-model="addUpdateForm.parentId" show-top-menu :type="isB ? 'M' : 'C'" />
           </el-form-item>
         </el-col>
         <el-col :lg="12" :sm="24" :xs="24">
@@ -62,7 +62,7 @@
         </el-col>
         <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="菜单排序" prop="menuSort">
-            <el-input-number v-model="addUpdateForm.menuSort" :max="999" :min="0" class="w100" placeholder="请输入菜单排序" />
+            <el-input-number v-model="addUpdateForm.menuSort" :max="999" :min="1" class="w100!" placeholder="请输入菜单排序" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -142,8 +142,6 @@ import type { ModeIdType } from '@/service/model/base.model'
 defineOptions({
   name: 'MenuForm',
 })
-
-const menuTreeSelect = defineAsyncComponent(() => import('@/components/system/menu-tree-select/index.vue'))
 
 const rules: FormRules = SysMenuOperationRules
 const state = reactive<AddUpdateOption<SysMenuOperationRequest>>({

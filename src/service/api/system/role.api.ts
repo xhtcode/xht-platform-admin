@@ -1,6 +1,12 @@
 import request from '@/utils/request'
 import type { AxiosPromise } from 'axios'
-import type { SysRoleOperationRequest, SysRoleQueryRequest, SysRoleResponse } from '@/service/model/system/role.model'
+import type {
+  RoleSelectedMenuResponse,
+  SysRoleMenuBindForm,
+  SysRoleOperationRequest,
+  SysRoleQueryRequest,
+  SysRoleResponse,
+} from '@/service/model/system/role.model'
 import type { ModeIdType, PageResponse } from '@/service/model/base.model'
 
 /**
@@ -14,7 +20,7 @@ enum Api {
   DELETE = '/sys/role/remove/',
   QUERY_ONE = '/sys/role/get/',
   QUERY_PAGE = '/sys/role/page',
-  QUERY_MENU_ID = '/sys/role/menu/',
+  QUERY_MENU_BY_ROLE_ID = '/sys/role/select/menu/',
   BIND_MENU_ROLE = '/sys/role/menu/bind',
 }
 
@@ -92,18 +98,19 @@ export const querySysRolePage = (data?: SysRoleQueryRequest): AxiosPromise<PageR
  * 查询角色菜单
  * @param roleId 角色id
  */
-export const selectMenuIdByRoleId = (roleId: any): AxiosPromise<any[]> => {
+export const selectMenuIdByRoleId = (roleId: ModeIdType): AxiosPromise<RoleSelectedMenuResponse> => {
   return request({
-    url: Api.QUERY_MENU_ID + roleId,
+    url: Api.QUERY_MENU_BY_ROLE_ID + roleId,
     baseURL,
     method: 'get',
   })
 }
+
 /**
  * 角色绑定菜单
  * @param data 角色绑定菜单数据
  */
-export const roleMenuBind = (data: any): AxiosPromise<any[]> => {
+export const roleMenuBind = (data: SysRoleMenuBindForm): AxiosPromise<any[]> => {
   return request({
     url: Api.BIND_MENU_ROLE,
     baseURL,
