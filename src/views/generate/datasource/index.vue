@@ -36,12 +36,11 @@
       >
         <el-table-column align="center" type="selection" width="55" />
         <xht-column-index type="step" />
-        <el-table-column label="数据库名称" prop="name" width="120px" />
-        <el-table-column label="数据库类型" prop="dbType" width="120px" />
-        <el-table-column label="数据库地址" prop="url" show-overflow-tooltip width="220px" />
-        <el-table-column label="数据库用户名" prop="username" width="120px" />
-        <el-table-column label="数据库密码" prop="password" width="120px" />
-        <el-table-column label="最后测试时间" prop="lastTestTime" width="220px">
+        <el-table-column label="数据库名称" prop="name" min-width="120" />
+        <el-table-column label="数据库类型" prop="dbType" min-width="120" />
+        <el-table-column label="数据库地址" prop="url" show-overflow-tooltip min-width="220" />
+        <el-table-column label="数据库用户名" prop="username" min-width="120" />
+        <el-table-column label="最后测试时间" prop="lastTestTime" min-width="220">
           <template #default="{ row }">
             <el-tag v-if="row.testResult === 'success'" type="success">
               {{ row.lastTestTime }}
@@ -49,7 +48,7 @@
             <el-tag v-else type="danger">{{ row.lastTestTime }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column align="center" fixed="right" label="操作">
+        <el-table-column align="center" fixed="right" label="操作" width="260px">
           <template #default="{ row }">
             <el-button icon="edit" link type="success" @click="handleEdit(row)">修改</el-button>
             <el-button icon="delete" link type="danger" @click="handleDelete(row)">删除</el-button>
@@ -110,6 +109,7 @@ const handleQuery = async () => {
     state.tableList = res.data
   })
 }
+
 /**
  * 多选框选中数据
  * @param selection 选中信息
@@ -119,6 +119,7 @@ const handleSelectionChange = (selection: any[]) => {
   state.singleStatus = selection.length !== 1
   state.multipleStatus = !selection.length
 }
+
 /**
  * 重置表单
  */
@@ -126,6 +127,7 @@ const resetQuery = async () => {
   queryFormRef.value?.resetFields()
   await handleQuery()
 }
+
 /**
  * 处理新增
  */
@@ -163,11 +165,11 @@ const handleDelete = async (row?: GenDataSourceResponse) => {
         await handleQuery()
       })
     })
-    .catch((_) => {})
     .finally(() => {
       state.loadingStatus = false
     })
 }
+
 /**
  * 测试链接
  */
@@ -181,6 +183,7 @@ const handleTest = (row: GenDataSourceResponse) => {
     await handleQuery()
   })
 }
+
 onMounted(async () => {
   await handleQuery()
 })

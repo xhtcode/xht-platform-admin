@@ -21,6 +21,7 @@
 </template>
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
+import { useMessage } from '@/hooks/use-message'
 
 defineOptions({ name: 'PhoneForm' })
 const loading = ref(false)
@@ -58,8 +59,7 @@ const sendSMS = async () => {
   }, 1000)
 
   // 这里添加实际的发送短信逻辑
-  console.log('发送短信验证码到:', phoneForm.phone)
-  ElMessage.success('验证码已发送')
+  useMessage().success('验证码已发送')
 }
 // 手机登录处理
 const handlePhoneLogin = async () => {
@@ -77,7 +77,7 @@ const handlePhoneLogin = async () => {
     // 模拟登录请求
     setTimeout(() => {
       loading.value = false
-      ElMessage.success('手机登录成功！')
+      useMessage().success('手机登录成功！')
       // 登录成功后的处理
     }, 1000)
   } catch (error) {

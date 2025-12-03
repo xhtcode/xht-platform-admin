@@ -92,7 +92,7 @@ const submitForm = () => {
         })
     } else {
       addUpdatePageInit.value.loadingStatus = false
-      useMessageBox().error('表单校验未通过，请重新检查提交内容')
+      useMessage().error('表单校验未通过，请重新检查提交内容')
     }
   })
 }

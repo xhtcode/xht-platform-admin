@@ -79,9 +79,6 @@ const rules: FormRules = SysRoleOperationRules
  */
 const show = async (type: 'create' | 'update', id: ModeIdType) => {
   state.visibleStatus = true
-  await nextTick(() => {
-    addUpdateFormRef.value?.resetFields()
-  })
   state.operationStatus = type
   if (type === 'update') {
     state.loadingStatus = true
@@ -131,7 +128,7 @@ const submitForm = () => {
       }
     } else {
       state.loadingStatus = false
-      useMessageBox().error('表单校验未通过，请重新检查提交内容')
+      useMessage().error('表单校验未通过，请重新检查提交内容')
     }
   })
 }

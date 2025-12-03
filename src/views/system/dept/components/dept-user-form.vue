@@ -23,7 +23,7 @@
       height="65vh"
       highlight-current-row
       row-key="userId"
-      @row-dblclick="onSubmit"
+      @row-dblclick="submitForm"
       @current-change="handleCurrentChange"
     >
       <el-table-column label="序号" type="index" width="60" />
@@ -43,7 +43,7 @@
     <template #footer>
       <span>
         <el-button @click="close">取 消</el-button>
-        <el-button type="primary" @click="onSubmit">确认</el-button>
+        <el-button type="primary" @click="submitForm">确认</el-button>
       </span>
     </template>
   </el-dialog>
@@ -82,10 +82,10 @@ const emits = defineEmits<{
 /**
  * 显示对话框
  */
-const show = (deptId: ModeIdType) => {
+const show = async (deptId: ModeIdType) => {
   state.visibleStatus = true
   state.loadingStatus = true
-  getBindUser(deptId)
+  await getBindUser(deptId)
     .then((res) => {
       state.userList = res.data
       for (const item of res.data) {
@@ -114,7 +114,7 @@ const handleCurrentChange = (val: UserSimpleVo | null) => {
 /**
  * 提交
  */
-const onSubmit = () => {
+const submitForm = () => {
   if (state.currentRow) {
     emits('change', state.currentRow)
     close()

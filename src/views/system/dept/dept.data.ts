@@ -30,7 +30,6 @@ export const SysDeptOperationRules: FormRules = {
   deptSort: [{ required: true, message: '请输入部门显示顺序', trigger: ['blur', 'change'] }], // 显示顺序
   phone: [{ required: true, message: '请输入部门联系电话', trigger: ['blur', 'change'] }], //联系电话
   email: [{ required: true, message: '请输入部门联系邮箱', trigger: ['blur', 'change'] }], //邮箱
-  remark: [{ required: true, message: '请输入部门备注', trigger: ['blur', 'change'] }], //备注
 }
 /**
  * 列表显示配置

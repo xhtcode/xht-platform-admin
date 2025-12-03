@@ -67,18 +67,16 @@ const { checkAll, treeData, checkedKeys, addUpdateForm } = toRefs(state)
  * 显示角色权限分配弹窗
  * @param roleId - 角色ID，用于获取该角色已有的菜单权限并加载菜单树
  */
-const show = (roleId: ModeIdType) => {
+const show = async (roleId: ModeIdType) => {
   state.visibleStatus = true
   addUpdateForm.value.roleId = roleId
-  nextTick(async () => {
-    state.loadingStatus = true
-    await selectMenuIdByRoleId(roleId).then((res) => {
-      checkAll.value = res.data.checkAll
-      checkedKeys.value = res.data.checkedKeys
-      treeData.value = res.data.menuList
-    })
-    state.loadingStatus = false
+  state.loadingStatus = true
+  await selectMenuIdByRoleId(roleId).then((res) => {
+    checkAll.value = res.data.checkAll
+    checkedKeys.value = res.data.checkedKeys
+    treeData.value = res.data.menuList
   })
+  state.loadingStatus = false
 }
 
 /**

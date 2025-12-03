@@ -26,7 +26,7 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="close">取 消</el-button>
-        <el-button type="primary" @click="onSubmit">提交</el-button>
+        <el-button type="primary" @click="submitForm">提交</el-button>
       </span>
     </template>
   </el-dialog>
@@ -59,21 +59,19 @@ const treeData = ref<any[]>([])
 const show = async (userId: ModeIdType) => {
   state.visibleStatus = true
   state.userId = userId
-  await nextTick(() => {
-    state.loadingStatus = true
-    selectRoleIdByUserId(userId)
-      .then((res) => {
-        state.checkedKeys = res.data
-        return queryToolsRoleList()
-      })
-      .then((res) => {
-        treeData.value = res.data
-        checkStrictly.value = state.checkedKeys.length === treeData.value.length
-      })
-      .finally(() => {
-        state.loadingStatus = false
-      })
-  })
+  state.loadingStatus = true
+  await selectRoleIdByUserId(userId)
+    .then((res) => {
+      state.checkedKeys = res.data
+      return queryToolsRoleList()
+    })
+    .then((res) => {
+      treeData.value = res.data
+      checkStrictly.value = state.checkedKeys.length === treeData.value.length
+    })
+    .finally(() => {
+      state.loadingStatus = false
+    })
 }
 /**
  * 关闭
@@ -94,7 +92,7 @@ const handleSelectAll = (check: CheckboxValueType) => {
   }
   state.loadingStatus = false
 }
-const onSubmit = () => {
+const submitForm = () => {
   state.loadingStatus = true
   const roleIds = roleTreeRef.value?.getCheckedKeys()
   UserRoleBind({ userId: state.userId, roleIds: roleIds })

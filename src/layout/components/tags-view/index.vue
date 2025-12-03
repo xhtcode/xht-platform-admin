@@ -145,9 +145,7 @@ const initTags = () => {
  */
 const addTags = () => {
   const currentRoute = unref(router.currentRoute)
-  console.log(currentRoute)
   if (currentRoute.name && !currentRoute.meta?.linkStatus) {
-    console.log('************************')
     tagsViewPlusStore.addVisitedViews(formatRoute(router.currentRoute.value))
     activeName.value = currentRoute.fullPath
   }

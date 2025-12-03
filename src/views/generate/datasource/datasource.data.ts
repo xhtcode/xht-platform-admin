@@ -66,6 +66,5 @@ export const GenDataSourceColumnOption: ColumnConfig<GenDataSourceResponse> = {
   dbType: { desc: '数据库类型', visible: true, disabled: false },
   url: { desc: '数据库地址', visible: true, disabled: false },
   username: { desc: '数据库用户名', visible: true, disabled: false },
-  password: { desc: '数据库密码', visible: true, disabled: false },
   lastTestTime: { desc: '最后测试时间', visible: true, disabled: false },
 }
