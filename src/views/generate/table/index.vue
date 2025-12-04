@@ -19,16 +19,16 @@
             </el-form-item>
           </el-col>
           <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24" class="text-center">
-            <el-button icon="Search" type="primary" @click="handleQuery()">查询</el-button>
-            <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+            <el-button :icon="Search" type="primary" @click="handleQuery()">查询</el-button>
+            <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
           </el-col>
         </el-row>
       </el-form>
       <table-tool-bar v-model:column-data="columnOption" v-model:show-search="state.searchStatus" column-status refresh-status @refresh="handleQuery">
-        <el-button icon="Download" size="small" type="primary" @click="handleImport">导入</el-button>
-        <el-button :disabled="state.singleStatus" icon="Edit" size="small" type="success" @click="handleEdit(state.selectedRows[0])">修改</el-button>
-        <el-button :disabled="state.multipleStatus" icon="download" size="small" type="warning" @click="handleDownload()">批量下载</el-button>
-        <el-button :disabled="state.multipleStatus" icon="download" size="small" type="warning" @click="handleCodeView()">代码预览</el-button>
+        <el-button :icon="Download" size="small" type="primary" @click="handleImport">导入</el-button>
+        <el-button :disabled="state.singleStatus" :icon="Edit" size="small" type="success" @click="handleEdit(state.selectedRows[0])">修改</el-button>
+        <el-button :disabled="state.multipleStatus" :icon="Download" size="small" type="warning" @click="handleDownload()">批量下载</el-button>
+        <el-button :disabled="state.multipleStatus" :icon="View" size="small" type="warning" @click="handleCodeView()">代码预览</el-button>
       </table-tool-bar>
       <xht-table
         v-loading="state.loadingStatus"
@@ -48,11 +48,11 @@
         <el-table-column v-if="columnOption.tableUpdateTime?.visible" label="表更新时间" prop="tableUpdateTime" sortable width="180" />
         <el-table-column align="center" fixed="right" label="操作" width="280px">
           <template #default="{ row }">
-            <el-button icon="refresh" link type="info" @click="handleSync(row)">同步</el-button>
-            <el-button icon="edit" link type="success" @click="handleEdit(row)">修改</el-button>
-            <el-button icon="delete" link type="danger" @click="handleDelete(row)">删除</el-button>
-            <el-button icon="view" link type="primary" @click="handleCodeView(row)">预览</el-button>
-            <el-button icon="download" link type="warning" @click="handleDownload(row)">下载</el-button>
+            <el-button :icon="Refresh" link type="info" @click="handleSync(row)">同步</el-button>
+            <el-button :icon="Edit" link type="success" @click="handleEdit(row)">修改</el-button>
+            <el-button :icon="Delete" link type="danger" @click="handleDelete(row)">删除</el-button>
+            <el-button :icon="View" link type="primary" @click="handleCodeView(row)">预览</el-button>
+            <el-button :icon="Download" link type="warning" @click="handleDownload(row)">下载</el-button>
           </template>
         </el-table-column>
       </xht-table>
@@ -80,6 +80,7 @@ import { GenTableInfoColumnOption } from '@/views/generate/table/table.data'
 import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
 import { queryExistsPage, removeGenTableInfoByIds, syncTableApi } from '@/service/api/generate/table.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
+import { Delete, Download, Edit, Refresh, Search, View } from '@element-plus/icons-vue'
 
 defineOptions({ name: 'GenTableInfoViewIndex' })
 

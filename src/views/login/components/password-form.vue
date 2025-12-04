@@ -1,7 +1,7 @@
 <template>
   <el-form ref="loginFormRef" v-loading="loading" :model="loginForm" :rules="loginRules" inline-message size="default" @keyup.enter="handleLogin">
     <el-form-item prop="username">
-      <el-input v-model="loginForm.username" class="login-input" placeholder="请输入用户名" prefix-icon="User" size="large" />
+      <el-input v-model="loginForm.username" class="login-input" placeholder="请输入用户名" :prefix-icon="User" size="large" />
     </el-form-item>
 
     <el-form-item prop="password">
@@ -9,7 +9,7 @@
         v-model="loginForm.password"
         class="login-input"
         placeholder="请输入密码"
-        prefix-icon="Lock"
+        :prefix-icon="Lock"
         show-password
         size="large"
         type="password"
@@ -43,6 +43,7 @@ import { useUserInfoStore } from '@/store/modules/user.store'
 import { HOME_PAGE_PATH } from '@/service/constant'
 import { useRouter } from 'vue-router'
 import type { LoginRequestType } from '@/service/model/login/login.model'
+import { Lock, User } from '@element-plus/icons-vue'
 
 defineOptions({ name: 'PasswordForm' })
 

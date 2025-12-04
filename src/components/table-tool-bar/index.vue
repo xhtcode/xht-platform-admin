@@ -8,19 +8,19 @@
     <div :style="style" class="top-right-btn">
       <slot name="after" />
       <el-tooltip v-if="importStatus" class="item" content="导入" placement="top">
-        <el-button circle icon="Upload" size="small" type="success" @click="emitFunction('import')" />
+        <el-button circle :icon="Upload" size="small" type="success" @click="emitFunction('import')" />
       </el-tooltip>
       <el-tooltip v-if="exportStatus" class="item" content="导出" placement="top">
-        <el-button circle icon="Download" size="small" type="primary" @click="emitFunction('export')" />
+        <el-button circle :icon="Download" size="small" type="primary" @click="emitFunction('export')" />
       </el-tooltip>
       <el-tooltip v-if="refreshStatus" class="item" content="刷新" placement="top">
-        <el-button circle icon="Refresh" size="small" type="info" @click="emitFunction('refresh')" />
+        <el-button circle :icon="Refresh" size="small" type="info" @click="emitFunction('refresh')" />
       </el-tooltip>
       <el-tooltip v-if="searchStatus" class="item" content="搜索切换" placement="top">
-        <el-button circle icon="Switch" size="small" @click="toggleSearch" />
+        <el-button circle :icon="Switch" size="small" @click="toggleSearch" />
       </el-tooltip>
       <el-tooltip class="item" content="列设置" placement="top">
-        <el-button @click="show" circle color="#626aef" icon="Menu" size="small" />
+        <el-button @click="show" circle color="#626aef" :icon="Menu" size="small" />
       </el-tooltip>
       <slot name="before" />
     </div>
@@ -37,6 +37,7 @@
 
 <script lang="ts" setup>
 import type { ColumnConfig, ColumnOption, EmitsType, RightToolbarPropsType } from '@/components/table-tool-bar/types'
+import { Download, Menu, Refresh, Switch, Upload } from '@element-plus/icons-vue'
 
 defineOptions({ name: 'TableToolbar' })
 const props = withDefaults(defineProps<RightToolbarPropsType>(), {

@@ -48,9 +48,9 @@
           <el-text truncated>{{ state.activeData?.filePath }}</el-text>
         </el-col>
         <el-col :span="6" class="text-right">
-          <el-button :disabled="!state.packageName" icon="download" type="success">下载</el-button>
-          <el-button :disabled="!state.activeData" icon="DocumentCopy" type="primary" @click="handleCopyCode">复制</el-button>
-          <el-button icon="delete" type="danger" @click="close">关闭</el-button>
+          <el-button :disabled="!state.packageName" :icon="Download" type="success">下载</el-button>
+          <el-button :disabled="!state.activeData" :icon="DocumentCopy" type="primary" @click="handleCopyCode">复制</el-button>
+          <el-button :icon="Delete" type="danger" @click="close">关闭</el-button>
         </el-col>
       </el-row>
     </template>
@@ -60,7 +60,7 @@
 <script lang="ts" setup>
 import type { ModeIdType } from '@/service/model/base.model'
 import { viewCodeFileApi } from '@/service/api/generate/table.api'
-import { ArrowRight } from '@element-plus/icons-vue'
+import { ArrowRight, Delete, DocumentCopy, Download } from '@element-plus/icons-vue'
 import type { CodeViewState } from '@/service/model/generate/table.model'
 import { useMessage } from '@/hooks/use-message'
 

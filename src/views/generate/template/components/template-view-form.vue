@@ -10,7 +10,7 @@
   >
     <el-tabs v-model="activeName" addable class="!h-full" closable editable tab-position="left" @tab-remove="handleRemove">
       <template #add-icon>
-        <el-button class="w-full" icon="Plus" size="small" type="primary" @click="addNewData">添加</el-button>
+        <el-button class="w-full" :icon="Plus" size="small" type="primary" @click="addNewData">添加</el-button>
       </template>
       <el-tab-pane v-for="(item, index) in state.data" :key="item.id" :label="item.templateName" :name="item.id" class="h-full" lazy>
         <template #label>
@@ -33,6 +33,7 @@ import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { ModeIdType } from '@/service/model/base.model'
 import type { GenTemplateOperationRequest } from '@/service/model/generate/template.model'
 import { GenTemplateOperationForm } from '@/views/generate/template/template.data'
+import { Plus } from '@element-plus/icons-vue'
 
 defineOptions({ name: 'TemplateViewForm' })
 

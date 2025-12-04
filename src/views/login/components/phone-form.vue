@@ -1,7 +1,7 @@
 <template>
   <el-form ref="phoneFormRef" :model="phoneForm" :rules="phoneRules" size="default">
     <el-form-item :inline-message="false" :show-message="false" prop="phone">
-      <el-input v-model="phoneForm.phone" class="login-input" placeholder="请输入手机号" prefix-icon="Phone" size="large" />
+      <el-input v-model="phoneForm.phone" class="login-input" placeholder="请输入手机号" :prefix-icon="Phone" size="large" />
     </el-form-item>
 
     <el-form-item prop="code">
@@ -22,6 +22,7 @@
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
 import { useMessage } from '@/hooks/use-message'
+import { Phone } from '@element-plus/icons-vue'
 
 defineOptions({ name: 'PhoneForm' })
 const loading = ref(false)

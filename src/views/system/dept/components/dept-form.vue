@@ -28,7 +28,7 @@
           <el-form-item label="部门主管" prop="leaderName">
             <el-input v-model="addUpdateForm.leaderName" placeholder="请选择部门主管" readonly>
               <template #append>
-                <el-button icon="Search" type="primary" @click="showDeptUser" />
+                <el-button :icon="Search" type="primary" @click="showDeptUser" />
               </template>
             </el-input>
           </el-form-item>

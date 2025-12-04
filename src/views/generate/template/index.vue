@@ -9,14 +9,14 @@
             </el-form-item>
           </el-col>
           <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24" class="text-center">
-            <el-button icon="Search" type="primary" @click="handleQuery()">查询</el-button>
-            <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+            <el-button :icon="Search" type="primary" @click="handleQuery()">查询</el-button>
+            <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
           </el-col>
         </el-row>
       </el-form>
       <table-tool-bar v-model:column-data="columnOption" v-model:show-search="state.searchStatus" column-status refresh-status @refresh="handleQuery">
-        <el-button icon="Plus" size="small" type="primary" @click="handleAdd">新增</el-button>
-        <el-button :disabled="state.singleStatus" icon="Edit" size="small" type="success" @click="handleEdit(state.selectedRows[0])">修改</el-button>
+        <el-button :icon="Plus" size="small" type="primary" @click="handleAdd">新增</el-button>
+        <el-button :disabled="state.singleStatus" :icon="Edit" size="small" type="success" @click="handleEdit(state.selectedRows[0])">修改</el-button>
       </table-tool-bar>
       <xht-table
         v-loading="state.loadingStatus"
@@ -37,9 +37,9 @@
         <el-table-column v-if="columnOption.updateTime?.visible" label="更新时间" prop="updateTime" width="180" />
         <el-table-column align="center" fixed="right" label="操作" width="260px">
           <template #default="{ row }">
-            <el-button icon="edit" link type="success" @click="handleEdit(row)">修改</el-button>
-            <el-button icon="view" link type="primary" @click="handleView(row)">模板编辑</el-button>
-            <el-button icon="delete" link type="danger" @click="handleDelete(row)">删除</el-button>
+            <el-button :icon="Edit" link type="success" @click="handleEdit(row)">修改</el-button>
+            <el-button :icon="View" link type="primary" @click="handleView(row)">模板编辑</el-button>
+            <el-button :icon="Delete" link type="danger" @click="handleDelete(row)">删除</el-button>
           </template>
         </el-table-column>
       </xht-table>
@@ -64,6 +64,7 @@ import { queryGenTemplateGroupPage, removeGenTemplateGroupByIds } from '@/servic
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { GenTemplateGroupOperationOption } from '@/views/generate/template/template.data'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
+import { Delete, Edit, Plus, Refresh, Search, View } from '@element-plus/icons-vue'
 
 defineOptions({ name: 'GenTemplateGroupViewIndex' })
 

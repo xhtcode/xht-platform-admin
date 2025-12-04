@@ -53,8 +53,8 @@
               </el-form-item>
             </el-col>
             <el-col v-if="!footerStatus" :span="6" class="text-center">
-              <el-button icon="Search" type="primary" @click="handleQuery">查询</el-button>
-              <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+              <el-button :icon="Search" type="primary" @click="handleQuery">查询</el-button>
+              <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
             </el-col>
           </el-row>
         </template>
@@ -62,8 +62,8 @@
     </el-form>
     <div class="main-container-auto main-container-view">
       <table-tool-bar refresh-status search-status @refresh="handleQuery">
-        <el-button icon="Delete" type="danger" @click="handleClean">清空</el-button>
-        <el-button icon="Download" type="warning" @click="handleExport">导出</el-button>
+        <el-button :icon="Delete" type="danger" @click="handleClean">清空</el-button>
+        <el-button :icon="Download" type="warning" @click="handleExport">导出</el-button>
       </table-tool-bar>
       <el-table
         v-loading="state.loadingStatus"
@@ -94,7 +94,7 @@
         <el-table-column label="操作时间" min-width="180" prop="operTime" />
         <el-table-column fixed="right" label="操作" width="120px">
           <template #default="{ row }">
-            <el-button icon="view" link type="primary" @click="handleDetail(row)">详细</el-button>
+            <el-button :icon="View" link type="primary" @click="handleDetail(row)">详细</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -105,6 +105,7 @@
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
 import { useMessageBox } from '@/hooks/use-message'
+import { Delete, Download, Refresh, Search, View } from '@element-plus/icons-vue'
 
 defineOptions({ name: 'SysOperLogViewIndex' })
 

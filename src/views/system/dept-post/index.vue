@@ -13,8 +13,8 @@
               </el-form-item>
             </el-col>
             <el-col :lg="8" :md="8" :sm="12" :xl="4" :xs="24" class="text-center">
-              <el-button icon="Search" type="primary" @click="queryPostData">查询</el-button>
-              <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+              <el-button :icon="Search" type="primary" @click="queryPostData">查询</el-button>
+              <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
             </el-col>
           </el-row>
           <el-row v-else>
@@ -45,8 +45,8 @@
               </el-form-item>
             </el-col>
             <el-col :lg="8" :md="8" :offset="8" :sm="12" :xl="4" :xs="24" class="text-center">
-              <el-button icon="Search" type="primary" @click="queryPostData">查询</el-button>
-              <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+              <el-button :icon="Search" type="primary" @click="queryPostData">查询</el-button>
+              <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
             </el-col>
           </el-row>
         </el-form>
@@ -58,11 +58,11 @@
           search-status
           @refresh="queryPostData"
         >
-          <el-button icon="Plus" size="small" type="primary" @click="handleAdd">新增</el-button>
-          <el-button :disabled="state.singleStatus" icon="Edit" size="small" type="success" @click="handleEdit(state.selectedRows[0])">
+          <el-button :icon="Plus" size="small" type="primary" @click="handleAdd">新增</el-button>
+          <el-button :disabled="state.singleStatus" :icon="Edit" size="small" type="success" @click="handleEdit(state.selectedRows[0])">
             修改
           </el-button>
-          <el-button :disabled="state.multipleStatus" icon="Delete" size="small" type="danger" @click="handleBatchDelete">批量删除</el-button>
+          <el-button :disabled="state.multipleStatus" :icon="Delete" size="small" type="danger" @click="handleBatchDelete">批量删除</el-button>
         </table-tool-bar>
         <xht-table
           v-loading="state.loadingStatus"
@@ -105,8 +105,8 @@
           <el-table-column v-if="columnOption.updateTime?.visible" label="更新时间" prop="updateTime" width="180" />
           <el-table-column fixed="right" label="操作" width="260px">
             <template #default="{ row }">
-              <el-button icon="edit" link type="success" @click="handleEdit(row)">修改</el-button>
-              <el-button icon="delete" link type="danger" @click="handleDelete(row)">删除</el-button>
+              <el-button :icon="Edit" link type="success" @click="handleEdit(row)">修改</el-button>
+              <el-button :icon="Delete" link type="danger" @click="handleDelete(row)">删除</el-button>
             </template>
           </el-table-column>
         </xht-table>
@@ -134,6 +134,7 @@ import type { SysDeptResponse } from '@/service/model/system/dept.model'
 import { SystemFlagEnums } from '@/service/model/base.model'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { SysDeptPostColumnOption } from '@/views/system/dept-post/dept.post.data'
+import { Delete, Edit, Plus, Refresh, Search } from '@element-plus/icons-vue'
 
 defineOptions({ name: 'SysDeptPostViewIndex' })
 

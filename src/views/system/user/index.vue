@@ -13,8 +13,8 @@
               </el-form-item>
             </el-col>
             <el-col :lg="8" :md="8" :sm="12" :xl="4" :xs="24" class="text-center">
-              <el-button icon="Search" type="primary" @click="handleQuery">查询</el-button>
-              <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+              <el-button :icon="Search" type="primary" @click="handleQuery">查询</el-button>
+              <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
             </el-col>
           </el-row>
           <el-row v-else>
@@ -54,8 +54,8 @@
               </el-form-item>
             </el-col>
             <el-col :lg="8" :md="8" :sm="12" :xl="4" :xs="24" class="text-center">
-              <el-button icon="Search" type="primary" @click="handleQuery">查询</el-button>
-              <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+              <el-button :icon="Search" type="primary" @click="handleQuery">查询</el-button>
+              <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
             </el-col>
           </el-row>
         </el-form>
@@ -67,11 +67,11 @@
           search-status
           @refresh="handleQuery"
         >
-          <el-button icon="Plus" size="small" type="primary" @click="handleAdd">新增</el-button>
-          <el-button :disabled="state.singleStatus" icon="Edit" size="small" type="success" @click="handleEdit(state.selectedRows[0])">
+          <el-button :icon="Plus" size="small" type="primary" @click="handleAdd">新增</el-button>
+          <el-button :disabled="state.singleStatus" :icon="Edit" size="small" type="success" @click="handleEdit(state.selectedRows[0])">
             修改
           </el-button>
-          <el-button :disabled="state.multipleStatus" icon="Delete" size="small" type="danger" @click="handleBatchDelete">批量删除</el-button>
+          <el-button :disabled="state.multipleStatus" :icon="Delete" size="small" type="danger" @click="handleBatchDelete">批量删除</el-button>
         </table-tool-bar>
         <xht-table
           v-loading="state.loadingStatus"
@@ -108,10 +108,10 @@
           <el-table-column fixed="right" label="操作" width="220">
             <template #default="{ row }">
               <el-space wrap>
-                <el-button icon="edit" link type="success" @click="handleEdit(row)">修改用户</el-button>
-                <el-button icon="delete" link type="danger" @click="handleDelete(row)">删除用户</el-button>
-                <el-button icon="key" link type="warning" @click="handleResetPwd(row)">重置密码</el-button>
-                <el-button icon="User" link type="primary" @click="handleUserRole(row)">用户授权</el-button>
+                <el-button :icon="Edit" link type="success" @click="handleEdit(row)">修改用户</el-button>
+                <el-button :icon="Delete" link type="danger" @click="handleDelete(row)">删除用户</el-button>
+                <el-button :icon="Key" link type="warning" @click="handleResetPwd(row)">重置密码</el-button>
+                <el-button :icon="User" link type="primary" @click="handleUserRole(row)">用户授权</el-button>
               </el-space>
             </template>
           </el-table-column>
@@ -140,6 +140,7 @@ import { SysUserColumnOption } from '@/views/system/user/user.data'
 import { querySysUserPage, removeSysUserById, removeSysUserByIds, resetPassword } from '@/service/api/system/user.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
+import { Delete, Edit, Key, Plus, Refresh, Search, User } from '@element-plus/icons-vue'
 
 defineOptions({ name: 'SysUserViewIndex' })
 
