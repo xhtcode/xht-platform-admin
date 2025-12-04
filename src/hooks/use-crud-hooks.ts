@@ -71,6 +71,7 @@ export const useTableQueryPageHooks = <Req extends PageQueryRequest, Res extends
     state.singleStatus = selection.length !== 1
     state.multipleStatus = selection.length === 0
   }
+
   /**
    * 处理选中行变化
    * @param selection 选中的行数据
@@ -80,6 +81,7 @@ export const useTableQueryPageHooks = <Req extends PageQueryRequest, Res extends
     state.singleStatus = !selection
     state.multipleStatus = !selection
   }
+
   return {
     createTableIndex,
     handleQuery,

@@ -1,4 +1,4 @@
-import type { BasicResponse, ModeIdType, PageQueryRequest } from '@/service/model/base.model'
+import type { BasicFormRequest, BasicResponse, ModeIdType, PageQueryRequest } from '@/service/model/base.model'
 import type { SysDeptPostResponse } from '@/service/model/system/dept.post.model'
 
 /**
@@ -105,11 +105,6 @@ export const UserStatusColor: UserStatusColorType = {
 }
 
 /**
- * 操作类型
- */
-export interface SysUserOperationRequest extends SysUserVo {}
-
-/**
  * 查询请求类型
  */
 export interface SysUserQueryRequest extends PageQueryRequest {
@@ -172,4 +167,24 @@ export interface UserSimpleVo {
   nickName: string // 昵称
   avatarUrl: string // 头像地址
   userStatus: UserStatusEnums // 账号状态
+}
+
+/**
+ * 部门用户props
+ */
+export interface DeptUserProps {
+  modelValue?: ModeIdType
+}
+
+/**
+ * 操作类型
+ */
+export interface SysUserOperationRequest extends SysUserVo, BasicFormRequest {}
+
+/**
+ * 绑定信息
+ */
+export interface UserRoleBindOperationRequest extends BasicFormRequest {
+  userId: ModeIdType
+  roleIds: ModeIdType[]
 }

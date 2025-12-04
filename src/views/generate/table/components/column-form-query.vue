@@ -3,7 +3,7 @@
     <el-table-column>
       <template #header>
         <div class="text-left">
-          <el-button type="primary" @click="handleAdd">添加{{ queryColumns.length }}</el-button>
+          <el-button type="primary" @click="handleAdd">添加</el-button>
         </div>
       </template>
       <xht-column-index type="step" />
@@ -51,6 +51,7 @@ defineOptions({
   name: 'ColumnFormQuery',
   inheritAttrs: false,
 })
+
 const queryColumns = ref<GenTableColumnQueryResponse[]>([])
 const count = shallowRef(0)
 const columnInfo = defineModel<GenColumnInfoResponse[]>('columnInfo', {
@@ -61,6 +62,7 @@ const tableInfo = defineModel<GenTableInfoResponse>('tableInfo', {
   required: true,
   default: () => {},
 })
+
 /**
  * 删除
  * @param row 删除行
@@ -68,6 +70,7 @@ const tableInfo = defineModel<GenTableInfoResponse>('tableInfo', {
 const handleDelete = (row: any) => {
   queryColumns.value = queryColumns.value.filter((item) => item.id !== row.id)
 }
+
 /**
  * 添加
  */
@@ -82,6 +85,7 @@ const handleAdd = () => {
     id: count.value++,
   })
 }
+
 /**
  * 设置查询列数据
  * @param data 查询列数据数组
@@ -91,6 +95,7 @@ const setData = (data: GenTableColumnQueryResponse[]) => {
     queryColumns.value = [...data]
   }
 }
+
 /**
  * 获取查询列数据
  * @returns 查询列数据数组的副本
@@ -98,13 +103,7 @@ const setData = (data: GenTableColumnQueryResponse[]) => {
 const getData = (): GenTableColumnQueryResponse[] => {
   return [...queryColumns.value]
 }
-/**
- * 创建序号
- * @param index 索引
- */
-const createIndex = (index: number) => {
-  return index + 1
-}
+
 defineExpose({
   setData,
   getData,

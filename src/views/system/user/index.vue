@@ -171,6 +171,7 @@ const { queryParams } = toRefs(state)
 const columnOption = ref<ColumnConfig<SysUserResponse>>({
   ...SysUserColumnOption,
 })
+
 /**
  * 重置表单
  */
@@ -201,18 +202,15 @@ const handleEdit = (row: SysUserResponse) => {
 /**
  * 处理删除
  */
-const handleDelete = async (row: SysUserResponse) => {
-  // TODO: 实现删除功能
+const handleDelete = (row: SysUserResponse) => {
   state.loadingStatus = true
-  await useMessageBox()
+  useMessageBox()
     .confirm('此操作将永久删除用户, 是否继续?')
-    .then(() => {
-      removeSysUserById(row.id).then(async () => {
-        useMessage().success('删除用户成功!')
-        await handleQuery()
-      })
+    .then(async () => {
+      await removeSysUserById(row.id)
+      await handleQuery()
+      useMessage().success('删除用户成功!')
     })
-    .catch((_) => {})
     .finally(() => {
       state.loadingStatus = false
     })
@@ -221,21 +219,19 @@ const handleDelete = async (row: SysUserResponse) => {
 /**
  * 处理批量删除
  */
-const handleBatchDelete = async () => {
+const handleBatchDelete = () => {
   const ids = state.selectedRows.map((item) => item.id)
   if (!ids || ids.length <= 0) {
     useMessage().error('请选择角色数据')
   }
   state.loadingStatus = true
-  await useMessageBox()
+  useMessageBox()
     .confirm(`此操作将批量删除${ids.length}个用户, 是否继续?`)
-    .then(() => {
-      removeSysUserByIds(ids).then(async () => {
-        useMessage().success('批量删除用户成功!')
-        await handleQuery()
-      })
+    .then(async () => {
+      await removeSysUserByIds(ids)
+      useMessage().success('批量删除用户成功!')
+      await handleQuery()
     })
-    .catch((_) => {})
     .finally(() => {
       state.loadingStatus = false
     })
@@ -244,16 +240,14 @@ const handleBatchDelete = async () => {
 /**
  * 处理重置密码
  */
-const handleResetPwd = async (row: SysUserResponse) => {
+const handleResetPwd = (row: SysUserResponse) => {
   state.loadingStatus = true
-  await useMessageBox()
+  useMessageBox()
     .confirm(`此操作将重置用户${row.userName}的密码, 是否继续?`)
-    .then(() => {
-      resetPassword(row.id).then(async () => {
-        useMessage().success(`${row.userName}用户密码重置成功!`)
-      })
+    .then(async () => {
+      await resetPassword(row.id)
+      useMessage().success(`${row.userName}用户密码重置成功!`)
     })
-    .catch((_) => {})
     .finally(() => {
       state.loadingStatus = false
     })
@@ -269,10 +263,11 @@ const handleUserRole = (row: SysUserResponse) => {
  * 部门点击事件
  * @param data
  */
-const handleDeptClick = (data: SysDeptResponse) => {
+const handleDeptClick = async (data: SysDeptResponse) => {
   queryParams.value.deptId = data.id
-  handleQuery()
+  await handleQuery()
 }
+
 onMounted(async () => {
   await handleQuery()
 })

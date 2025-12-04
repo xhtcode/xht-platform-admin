@@ -97,17 +97,21 @@ defineOptions({
   name: 'TemplateForm',
   inheritAttrs: false,
 })
+
 const emits = defineEmits(['success'])
+
 const loadingStatus = defineModel<boolean>('loadingStatus', {
   required: true,
   default: false,
 })
+
 const addUpdateForm = defineModel<GenTemplateOperationRequest>('addUpdateForm', {
   required: true,
   default: {
     ...GenTemplateOperationForm,
   },
 })
+
 const validateStatus = ref<boolean>(false)
 const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
 const rules: FormRules = GenTemplateOperationRules
@@ -116,27 +120,20 @@ const submitForm = () => {
   addUpdateFormRef.value?.validate(async (valid, invalidFields) => {
     validateStatus.value = !!(invalidFields?.templateContent && invalidFields?.templateContent.length > 0)
     if (valid) {
-      if (addUpdateForm.value.isNew) {
-        await saveGenTemplate({ ...addUpdateForm.value, id: null })
-          .then((res) => {
-            addUpdateForm.value.isNew = false
-            addUpdateForm.value.id = res.data
-            emits('success', res.data)
-            useMessage().success('保存模板成功')
-          })
-          .finally(() => {
-            loadingStatus.value = false
-          })
-      } else {
-        await updateGenTemplate(addUpdateForm.value)
-          .then(() => {
-            useMessage().success('修改模板成功')
-          })
-          .finally(() => {
-            loadingStatus.value = false
-          })
+      try {
+        if (addUpdateForm.value.isNew) {
+          const { data } = await saveGenTemplate({ ...addUpdateForm.value, id: null })
+          addUpdateForm.value.isNew = false
+          addUpdateForm.value.id = data
+          emits('success', data)
+          useMessage().success('保存模板成功')
+        } else {
+          await updateGenTemplate(addUpdateForm.value)
+          useMessage().success('修改模板成功')
+        }
+      } catch {
+        loadingStatus.value = false
       }
-      loadingStatus.value = false
     } else {
       loadingStatus.value = false
       useMessage().error('表单校验未通过，请重新检查提交内容')

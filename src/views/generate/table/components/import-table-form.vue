@@ -1,5 +1,13 @@
 <template>
-  <el-dialog v-model="addUpdatePageInit.visibleStatus" :before-close="close" append-to-body title="导入确定">
+  <el-dialog
+    v-model="addUpdatePageInit.visibleStatus"
+    title="导入确定"
+    width="45%"
+    append-to-body
+    :close-on-click-modal="false"
+    :show-close="!addUpdatePageInit.loadingStatus"
+    :before-close="close"
+  >
     <el-form
       ref="addUpdateFormRef"
       v-loading="addUpdatePageInit.loadingStatus"
@@ -19,25 +27,25 @@
         </el-col>
       </el-row>
       <el-space size="small" wrap>
-        <el-tag v-for="(item, index) in tableList" :key="index" size="small">
+        <el-tag v-for="(item, index) in tableNames" :key="index" size="small">
           {{ item }}
         </el-tag>
       </el-space>
     </el-form>
     <template #footer>
+      <el-button :disabled="addUpdatePageInit.loadingStatus" @click="close">取 消</el-button>
       <el-button :disabled="addUpdatePageInit.loadingStatus" type="primary" @click="submitForm">提交</el-button>
-      <el-button @click="close">取 消</el-button>
     </template>
   </el-dialog>
 </template>
 
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
-import { useMessageBox } from '@/hooks/use-message'
+import { useMessage } from '@/hooks/use-message'
 import { importTableInfo } from '@/service/api/generate/table.api'
-import { ModeIdType } from '@/service/model/base.model'
+import type { ModeIdType } from '@/service/model/base.model'
 
-interface addUpdateOption {
+interface AddUpdateOption {
   visibleStatus: boolean
   operationStatus: boolean
   loadingStatus: boolean
@@ -52,21 +60,22 @@ const addUpdateForm = ref<{
   groupId: null,
 })
 const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
-const tableList = ref<any[]>([])
-const dataBaseInfo = ref<any>(null)
+const tableNames = ref<string[]>([])
+const dataSourceId = ref<ModeIdType>(null)
 const emit = defineEmits(['success'])
-const addUpdatePageInit = ref<addUpdateOption>({
+const addUpdatePageInit = ref<AddUpdateOption>({
   visibleStatus: false,
   operationStatus: true,
   loadingStatus: false,
 })
+
 /**
  * 打开显示
  */
-const show = (tableData: any[], dbInfo: any) => {
+const show = (tableData: string[], dbInfo: ModeIdType) => {
   addUpdatePageInit.value.visibleStatus = true
-  tableList.value = tableData || []
-  dataBaseInfo.value = dbInfo || null
+  tableNames.value = tableData || []
+  dataSourceId.value = dbInfo
 }
 
 /**
@@ -76,20 +85,19 @@ const submitForm = () => {
   addUpdatePageInit.value.visibleStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      //修改
-      await importTableInfo({
-        tableNames: tableList.value,
-        dataSourceId: dataBaseInfo.value,
-        groupId: addUpdateForm.value.groupId,
-      })
-        .then((_) => {
-          useMessageBox().success('修改数据成功')
-          emit('success')
-          close()
+      try {
+        await importTableInfo({
+          tableNames: tableNames.value,
+          dataSourceId: dataSourceId.value,
+          groupId: addUpdateForm.value.groupId,
         })
-        .finally(() => {
-          addUpdatePageInit.value.loadingStatus = false
-        })
+        useMessage().success('修改数据成功')
+        emit('success')
+        addUpdatePageInit.value.loadingStatus = false
+        close()
+      } catch {
+        addUpdatePageInit.value.loadingStatus = false
+      }
     } else {
       addUpdatePageInit.value.loadingStatus = false
       useMessage().error('表单校验未通过，请重新检查提交内容')
@@ -102,9 +110,6 @@ const submitForm = () => {
  */
 const close = () => {
   if (addUpdatePageInit.value.loadingStatus) return
-  addUpdateForm.value = {
-    groupId: null,
-  }
   addUpdatePageInit.value = {
     visibleStatus: false,
     operationStatus: true,

@@ -1,5 +1,13 @@
 <template>
-  <el-drawer v-model="state.visibleStatus" :before-close="close" :title="state.title" append-to-body size="100%">
+  <el-drawer
+    v-model="state.visibleStatus"
+    :title="state.title"
+    size="100%"
+    append-to-body
+    :close-on-click-modal="false"
+    :show-close="!state.loadingStatus"
+    :before-close="close"
+  >
     <el-form
       ref="addUpdateFormRef"
       v-loading="state.loadingStatus"
@@ -33,7 +41,7 @@
       </el-tabs>
     </el-form>
     <template #footer>
-      <el-button @click="close">取 消</el-button>
+      <el-button :disabled="state.loadingStatus" @click="close">取 消</el-button>
       <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>
     </template>
   </el-drawer>
@@ -70,24 +78,21 @@ const { addUpdateForm } = toRefs(state)
 const emits = defineEmits(['success'])
 const columnFormQueryRef = useTemplateRef('columnFormQueryRef')
 const rules: FormRules = GenTableInfoOperationRules
+
 /**
  * 打开显示
  */
 const show = async (id: ModeIdType) => {
-  state.visibleStatus = true
   state.loadingStatus = true
-  await queryGenTableInfoById(id)
-    .then((response) => {
-      const { data } = JSON.parse(JSON.stringify(response))
-      addUpdateForm.value = { ...data }
-      state.title = '修改表信息'
-    })
-    .finally(() => {
-      state.loadingStatus = false
-    })
+  const { data } = await queryGenTableInfoById(id)
+  addUpdateForm.value = { ...data }
   await nextTick()
   columnFormQueryRef.value?.setData(addUpdateForm.value.queryColumns || [])
+  state.title = '修改表信息'
+  state.visibleStatus = true
+  state.loadingStatus = false
 }
+
 /**
  * 提交表单
  */
@@ -95,19 +100,18 @@ const submitForm = () => {
   state.visibleStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      //修改
-      await updateGenTableInfo({
-        ...addUpdateForm.value,
-        queryColumns: columnFormQueryRef.value?.getData() || [],
-      })
-        .then((_) => {
-          useMessage().success('修改数据成功')
-          emits('success')
-          close()
+      try {
+        await updateGenTableInfo({
+          ...addUpdateForm.value,
+          queryColumns: columnFormQueryRef.value?.getData() || [],
         })
-        .finally(() => {
-          state.loadingStatus = false
-        })
+        useMessage().success('修改数据成功')
+        emits('success')
+        state.loadingStatus = false
+        close()
+      } catch {
+        state.loadingStatus = false
+      }
     } else {
       state.loadingStatus = false
       useMessage().error('表单校验未通过，请重新检查提交内容')
@@ -119,13 +123,13 @@ const submitForm = () => {
  * 关闭
  */
 const close = () => {
-  addUpdateForm.value = { ...GenTableInfoOperationForm }
+  if (state.loadingStatus) return
   state.visibleStatus = false
   state.operationStatus = 'create'
   activeName.value = 1
-  state.loadingStatus = false
   addUpdateFormRef.value?.resetFields()
 }
+
 defineExpose({
   show,
 })

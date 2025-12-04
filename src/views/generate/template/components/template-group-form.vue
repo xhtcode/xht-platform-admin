@@ -1,5 +1,13 @@
 <template>
-  <el-drawer v-model="state.visibleStatus" :before-close="close" :title="state.title" append-to-body size="45%">
+  <el-drawer
+    v-model="state.visibleStatus"
+    :title="state.title"
+    size="45%"
+    append-to-body
+    :close-on-click-modal="false"
+    :show-close="!state.loadingStatus"
+    :before-close="close"
+  >
     <el-form
       ref="addUpdateFormRef"
       v-loading="state.loadingStatus"
@@ -33,7 +41,7 @@
     </el-form>
     <template #footer>
       <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>
-      <el-button @click="close">取 消</el-button>
+      <el-button :disabled="state.loadingStatus" @click="close">取 消</el-button>
     </template>
   </el-drawer>
 </template>
@@ -42,7 +50,7 @@
 import type { FormInstance, FormRules } from 'element-plus'
 import { queryGenTemplateGroupById, saveGenTemplateGroup, updateGenTemplateGroup } from '@/service/api/generate/template.group.api'
 import { GenTemplateGroupOperationForm, GenTemplateGroupOperationRules } from '@/views/generate/template/template.data'
-import { useMessage, useMessageBox } from '@/hooks/use-message'
+import { useMessage } from '@/hooks/use-message'
 import type { ModeIdType } from '@/service/model/base.model'
 import type { GenTemplateGroupOperationRequest } from '@/service/model/generate/template.group.model'
 
@@ -59,30 +67,25 @@ const addUpdateFormRef = ref<FormInstance>()
 const { addUpdateForm } = toRefs(state)
 const emits = defineEmits(['success'])
 const rules: FormRules = GenTemplateGroupOperationRules
+
 /**
  * 打开显示
  */
 const show = async (type: 'create' | 'update', id: ModeIdType) => {
-  state.visibleStatus = true
-  state.operationStatus = type
-  if (type === 'update') {
+  try {
+    state.visibleStatus = true
+    state.operationStatus = type
     state.loadingStatus = true
-    state.title = '修改模板分组'
-    await queryGenTemplateGroupById(id)
-      .then((response) => {
-        const { data } = JSON.parse(JSON.stringify(response))
-        if (data) {
-          addUpdateForm.value = { ...data }
-        }
-      })
-      .catch(() => {
-        useMessage().error('数据初始化加载失败')
-      })
-      .finally(() => {
-        state.loadingStatus = false
-      })
+    if (type === 'update') {
+      state.title = '修改模板分组'
+      const { data } = await queryGenTemplateGroupById(id)
+      addUpdateForm.value = data
+    }
+  } finally {
+    state.loadingStatus = false
   }
 }
+
 /**
  * 提交表单
  */
@@ -90,28 +93,19 @@ const submitForm = () => {
   state.visibleStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      if (state.operationStatus === 'create') {
-        //增加
-        await saveGenTemplateGroup(addUpdateForm.value)
-          .then((_) => {
-            useMessage().success('新增数据成功')
-            emits('success')
-            close()
-          })
-          .finally(() => {
-            state.loadingStatus = false
-          })
-      } else {
-        //修改
-        await updateGenTemplateGroup({ ...addUpdateForm.value })
-          .then((_) => {
-            useMessage().success('修改数据成功')
-            emits('success')
-            close()
-          })
-          .finally(() => {
-            state.loadingStatus = false
-          })
+      try {
+        if (state.operationStatus === 'create') {
+          await saveGenTemplateGroup(addUpdateForm.value)
+          useMessage().success('新增模板分组成功')
+        } else {
+          await updateGenTemplateGroup(addUpdateForm.value)
+          useMessage().success('修改模板分组成功')
+        }
+        emits('success')
+        state.loadingStatus = false
+        close()
+      } catch {
+        state.loadingStatus = false
       }
     } else {
       state.loadingStatus = false
@@ -125,12 +119,11 @@ const submitForm = () => {
  */
 const close = () => {
   if (state.loadingStatus) return
-  addUpdateForm.value = { ...GenTemplateGroupOperationForm }
   state.visibleStatus = false
   state.operationStatus = 'create'
-  state.loadingStatus = false
   addUpdateFormRef.value?.resetFields()
 }
+
 defineExpose({
   show,
 })

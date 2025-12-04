@@ -1,4 +1,4 @@
-import type { BasicResponse, INodeResponse, ModeIdType, PageQueryRequest } from '@/service/model/base.model'
+import type { BasicFormRequest, BasicResponse, INodeResponse, ModeIdType, PageQueryRequest } from '@/service/model/base.model'
 
 /**
  * 定义部门状态枚举类型
@@ -6,23 +6,6 @@ import type { BasicResponse, INodeResponse, ModeIdType, PageQueryRequest } from 
 export enum DeptStatusEnums {
   NORMAL = 0, // 激活
   DISABLE = 1, // 停用
-}
-
-/**
- * 操作类型
- */
-export interface SysDeptOperationRequest {
-  id: ModeIdType //部门id
-  parentId: ModeIdType // 父部门ID
-  leaderUserId: ModeIdType // 负责人ID
-  leaderName: string // 负责人ID
-  deptCode: string // 部门编码
-  deptName: string // 部门名称
-  deptStatus: DeptStatusEnums // 部门状态,可用值:0,1
-  deptSort: number // 显示顺序
-  phone: string //联系电话
-  email: string //邮箱
-  remark?: string //备注
 }
 
 /**
@@ -57,3 +40,8 @@ export interface SysDeptResponse extends BasicResponse {
  * 菜单树响应类型
  */
 export type SysDeptTreeResponse = INodeResponse<SysDeptResponse>[]
+
+/**
+ * 操作类型
+ */
+export interface SysDeptOperationRequest extends SysDeptResponse, BasicFormRequest {}

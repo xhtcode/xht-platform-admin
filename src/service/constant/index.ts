@@ -2,6 +2,7 @@
  * 默认主题色
  */
 export const DefaultThemeColor = 'rgb(64, 158, 255)'
+
 /**
  * 404页面名字
  */

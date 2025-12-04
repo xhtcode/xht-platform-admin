@@ -1,5 +1,13 @@
 <template>
-  <el-drawer v-model="state.visibleStatus" :before-close="close" :title="state.title" append-to-body size="45%">
+  <el-drawer
+    v-model="state.visibleStatus"
+    :title="state.title"
+    size="45%"
+    append-to-body
+    :close-on-click-modal="false"
+    :show-close="!state.loadingStatus"
+    :before-close="close"
+  >
     <el-form
       ref="addUpdateFormRef"
       v-loading="state.loadingStatus"
@@ -46,8 +54,8 @@
       </el-row>
     </el-form>
     <template #footer>
+      <el-button :disabled="state.loadingStatus" @click="close">取 消</el-button>
       <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>
-      <el-button @click="close">取 消</el-button>
     </template>
   </el-drawer>
 </template>
@@ -58,7 +66,7 @@ import { querySysRoleById, saveSysRole, updateSysRole } from '@/service/api/syst
 import type { SysRoleOperationRequest } from '@/service/model/system/role.model'
 import { RoleStatusEnums } from '@/service/model/system/role.model'
 import { SysRoleOperationForm, SysRoleOperationRules } from '@/views/system/role/role.data'
-import { useMessage, useMessageBox } from '@/hooks/use-message'
+import { useMessage } from '@/hooks/use-message'
 import type { ModeIdType } from '@/service/model/base.model'
 
 defineOptions({ name: 'SysRoleAddOrUpdate' })
@@ -74,28 +82,25 @@ const addUpdateFormRef = ref<FormInstance>()
 const { addUpdateForm } = toRefs(state)
 const emits = defineEmits(['success'])
 const rules: FormRules = SysRoleOperationRules
+
 /**
  * 打开显示
  */
 const show = async (type: 'create' | 'update', id: ModeIdType) => {
-  state.visibleStatus = true
-  state.operationStatus = type
-  if (type === 'update') {
+  try {
+    state.visibleStatus = true
+    state.operationStatus = type
     state.loadingStatus = true
-    state.title = '修改角色'
-    await querySysRoleById(id)
-      .then((response) => {
-        const { data } = JSON.parse(JSON.stringify(response))
-        addUpdateForm.value = { ...data }
-      })
-      .catch(() => {
-        useMessage().error('数据初始化加载失败')
-      })
-      .finally(() => {
-        state.loadingStatus = false
-      })
+    if (type === 'update') {
+      state.title = '修改角色'
+      const { data } = await querySysRoleById(id)
+      addUpdateForm.value = data
+    }
+  } catch {
+    state.loadingStatus = false
   }
 }
+
 /**
  * 提交表单
  */
@@ -103,28 +108,19 @@ const submitForm = () => {
   state.visibleStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      if (state.operationStatus === 'create') {
-        //增加
-        await saveSysRole(addUpdateForm.value)
-          .then((_) => {
-            useMessage().success('新增数据成功')
-            emits('success')
-            close()
-          })
-          .finally(() => {
-            state.loadingStatus = false
-          })
-      } else {
-        //修改
-        await updateSysRole({ ...addUpdateForm.value })
-          .then((_) => {
-            useMessage().success('修改数据成功')
-            emits('success')
-            close()
-          })
-          .finally(() => {
-            state.loadingStatus = false
-          })
+      try {
+        if (state.operationStatus === 'create') {
+          await saveSysRole(addUpdateForm.value)
+          useMessage().success(`新增角色：${addUpdateForm.value.roleName}成功`)
+        } else {
+          await updateSysRole(addUpdateForm.value)
+          useMessage().success(`修改角色：${addUpdateForm.value.roleName}成功`)
+        }
+        emits('success')
+        state.loadingStatus = false
+        close()
+      } catch {
+        state.loadingStatus = false
       }
     } else {
       state.loadingStatus = false
@@ -138,12 +134,11 @@ const submitForm = () => {
  */
 const close = () => {
   if (state.loadingStatus) return
-  addUpdateForm.value = { ...SysRoleOperationForm }
   state.visibleStatus = false
   state.operationStatus = 'create'
-  state.loadingStatus = false
   addUpdateFormRef.value?.resetFields()
 }
+
 defineExpose({
   show,
 })

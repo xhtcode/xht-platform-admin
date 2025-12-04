@@ -1,5 +1,13 @@
 <template>
-  <el-drawer v-model="state.visibleStatus" :before-close="close" append-to-body size="75%" title="导入表结构">
+  <el-drawer
+    v-model="state.visibleStatus"
+    title="导入表结构"
+    size="75%"
+    append-to-body
+    :close-on-click-modal="false"
+    :show-close="!state.loadingStatus"
+    :before-close="close"
+  >
     <el-form
       ref="addUpdateFormRef"
       v-loading="state.loadingStatus"
@@ -37,10 +45,10 @@
       <el-table-column label="更新时间" prop="tableUpdateTime" />
     </xht-table>
     <template #footer>
+      <el-button :disabled="state.loadingStatus" @click="close">取 消</el-button>
       <el-button :disabled="state.loadingStatus || (state.checkData && state.checkData.length === 0)" type="primary" @click="submitForm">
         提交
       </el-button>
-      <el-button @click="close">取 消</el-button>
     </template>
     <import-table-form ref="importTableFormRef" @success="handleSuccess" />
   </el-drawer>
@@ -48,9 +56,9 @@
 
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
+import type { GenTableInfoQueryRequest, GenTableInfoResponse } from '@/service/model/generate/table.model'
 import { queryNoExistsPage } from '@/service/api/generate/table.api'
 import { useMessage } from '@/hooks/use-message'
-import type { GenTableInfoQueryRequest, GenTableInfoResponse } from '@/service/model/generate/table.model'
 
 defineOptions({
   name: 'ImportTable',
@@ -61,7 +69,6 @@ const importTableForm = defineAsyncComponent(() => import('@/views/generate/tabl
 const rules: FormRules = {
   dataSourceId: [{ required: true, message: '请选择配置名称', trigger: ['blur', 'change'] }],
 }
-const addUpdateForm = ref<any>({})
 const importTableFormRef = useTemplateRef<any>('importTableFormRef')
 const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
 const emit = defineEmits(['success'])
@@ -69,7 +76,7 @@ const emit = defineEmits(['success'])
 interface CrudOption {
   visibleStatus: boolean
   operationStatus: true
-  checkData: any[]
+  checkData: string[]
   loadingStatus: boolean
   queryParams: GenTableInfoQueryRequest
   tableList: GenTableInfoResponse[]
@@ -92,9 +99,10 @@ const { queryParams } = toRefs(state)
  * 多选框选中数据
  * @param selection 选中信息
  */
-const handleSelectionChange = (selection: any[]) => {
-  state.checkData = selection.map((item: any) => item.tableName)
+const handleSelectionChange = (selection: GenTableInfoResponse[]) => {
+  state.checkData = selection.map((item: GenTableInfoResponse) => item.tableName)
 }
+
 /**
  * 查询
  */
@@ -116,6 +124,7 @@ const handleQuery = () => {
     }
   })
 }
+
 /**
  * 重置表单
  */
@@ -123,6 +132,7 @@ const resetQuery = () => {
   addUpdateFormRef.value?.resetFields()
   handleQuery()
 }
+
 /**
  * 打开显示
  */
@@ -137,25 +147,29 @@ const submitForm = () => {
   state.visibleStatus = true
   importTableFormRef.value.show(state.checkData, state.queryParams.dataSourceId)
 }
+
+/**
+ * 成功回调
+ */
 const handleSuccess = () => {
   emit('success')
   close()
 }
+
 /**
  * 关闭
  */
 const close = () => {
   if (state.loadingStatus) return
-  addUpdateForm.value = {}
   state.visibleStatus = false
   state.operationStatus = true
   state.loadingStatus = false
-  state.queryParams = {}
   state.checkData = []
   state.tableList = []
   state.loadingStatus = false
   addUpdateFormRef.value?.resetFields()
 }
+
 defineExpose({
   show,
 })

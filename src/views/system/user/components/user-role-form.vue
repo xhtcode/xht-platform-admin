@@ -1,5 +1,13 @@
 <template>
-  <el-dialog v-model="state.visibleStatus" :before-close="close" append-to-body size="45%" title="分配角色">
+  <el-dialog
+    v-model="state.visibleStatus"
+    title="分配角色"
+    width="45%"
+    append-to-body
+    :close-on-click-modal="false"
+    :show-close="!state.loadingStatus"
+    :before-close="close"
+  >
     <template #header>
       <div class="user-role-dialog-title">
         <div>分配角色</div>
@@ -25,7 +33,7 @@
     </el-scrollbar>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="close">取 消</el-button>
+        <el-button :disabled="state.loadingStatus" @click="close">取 消</el-button>
         <el-button type="primary" @click="submitForm">提交</el-button>
       </span>
     </template>
@@ -38,41 +46,46 @@ import type { CheckboxValueType } from 'element-plus'
 import { useMessage } from '@/hooks/use-message'
 import { selectRoleIdByUserId, UserRoleBind } from '@/service/api/system/user.api'
 import type { ModeIdType } from '@/service/model/base.model'
+import { UserRoleBindOperationRequest } from '@/service/model/system/user.model'
 
 defineOptions({ name: 'UserRoleForm' })
-const state = reactive<AddUpdateOption<any>>({
-  title: '增加部门',
+
+const roleTreeRef = useTemplateRef('roleTreeRef')
+const state = reactive<AddUpdateOption<UserRoleBindOperationRequest>>({
+  title: '分配角色',
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,
-  addUpdateForm: {},
+  addUpdateForm: {
+    userId: null,
+    roleIds: [],
+  },
   treeData: [],
   checkedKeys: [],
   userId: '',
 })
 const checkStrictly = ref(true)
-const roleTreeRef = useTemplateRef('roleTreeRef')
 const treeData = ref<any[]>([])
+const { addUpdateForm } = toRefs(state)
+
 /**
  * 打开显示
  */
 const show = async (userId: ModeIdType) => {
-  state.visibleStatus = true
-  state.userId = userId
-  state.loadingStatus = true
-  await selectRoleIdByUserId(userId)
-    .then((res) => {
-      state.checkedKeys = res.data
-      return queryToolsRoleList()
-    })
-    .then((res) => {
-      treeData.value = res.data
-      checkStrictly.value = state.checkedKeys.length === treeData.value.length
-    })
-    .finally(() => {
-      state.loadingStatus = false
-    })
+  try {
+    state.visibleStatus = true
+    addUpdateForm.value.userId = userId
+    state.loadingStatus = true
+    const roleIds = await selectRoleIdByUserId(userId)
+    state.checkedKeys = roleIds.data
+    const roleList = await queryToolsRoleList()
+    treeData.value = roleList.data
+    checkStrictly.value = state.checkedKeys.length === treeData.value.length
+  } finally {
+    state.loadingStatus = false
+  }
 }
+
 /**
  * 关闭
  */
@@ -83,6 +96,9 @@ const close = () => {
   state.loadingStatus = false
 }
 
+/**
+ * 角色选择
+ */
 const handleSelectAll = (check: CheckboxValueType) => {
   state.loadingStatus = true
   if (check) {
@@ -92,21 +108,22 @@ const handleSelectAll = (check: CheckboxValueType) => {
   }
   state.loadingStatus = false
 }
-const submitForm = () => {
-  state.loadingStatus = true
-  const roleIds = roleTreeRef.value?.getCheckedKeys()
-  UserRoleBind({ userId: state.userId, roleIds: roleIds })
-    .then(() => {
-      useMessage().success('当前用户分配角色成功')
-      close()
-    })
-    .catch(() => {
-      useMessage().error('当前用户分配角色失败')
-    })
-    .finally(() => {
-      state.loadingStatus = false
-    })
+
+/**
+ * 提交表单
+ */
+const submitForm = async () => {
+  try {
+    state.loadingStatus = true
+    addUpdateForm.value.roleIds = roleTreeRef.value?.getCheckedKeys() || []
+    await UserRoleBind({ userId: state.userId, roleIds: addUpdateForm.value.roleIds })
+    useMessage().success('当前用户分配角色成功')
+    close()
+  } finally {
+    state.loadingStatus = false
+  }
 }
+
 defineExpose({
   show,
 })

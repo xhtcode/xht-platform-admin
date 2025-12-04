@@ -187,24 +187,22 @@ const handleAdd = () => {
 /**
  * 处理编辑
  */
-const handleEdit = (row: any) => {
+const handleEdit = (row: SysDeptPostResponse) => {
   deptPostFormRef.value?.show('update', row.id)
 }
 
 /**
  * 处理删除
  */
-const handleDelete = async (row: any) => {
+const handleDelete = (row: SysDeptPostResponse) => {
   state.loadingStatus = true
-  await useMessageBox()
+  useMessageBox()
     .confirm('此操作将永久删除部门岗位, 是否继续?')
-    .then(() => {
-      removeSysDeptPostById(row.id).then(async () => {
-        useMessage().success('删除部门岗位成功!')
-        await queryPostData()
-      })
+    .then(async () => {
+      await removeSysDeptPostById(row.id)
+      useMessage().success('删除部门岗位成功!')
+      await queryPostData()
     })
-    .catch((_) => {})
     .finally(() => {
       state.loadingStatus = false
     })
@@ -213,19 +211,18 @@ const handleDelete = async (row: any) => {
 /**
  * 处理批量删除
  */
-const handleBatchDelete = async () => {
+const handleBatchDelete = () => {
   const ids = state.selectedRows.map((item) => item.id)
   if (!ids || ids.length <= 0) {
     useMessage().error('请选择部门岗位数据')
   }
   state.loadingStatus = true
-  await useMessageBox()
+  useMessageBox()
     .confirm('此操作将批量删除部门岗位, 是否继续?')
-    .then(() => {
-      removeSysDeptPostByIds(ids).then(async () => {
-        useMessage().success('批量删除部门岗位成功!')
-        await queryPostData()
-      })
+    .then(async () => {
+      await removeSysDeptPostByIds(ids)
+      await queryPostData()
+      useMessage().success('批量删除部门岗位成功!')
     })
     .finally(() => {
       state.loadingStatus = false
@@ -240,7 +237,6 @@ const handleDeptClick = (data: SysDeptResponse) => {
   queryParams.value.deptId = data.id
   queryPostData()
 }
-onMounted(async () => {})
 </script>
 
 <style lang="scss" scoped>

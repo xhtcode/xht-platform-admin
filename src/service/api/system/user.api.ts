@@ -1,6 +1,12 @@
 import request from '@/utils/request'
 import type { AxiosPromise } from 'axios'
-import { SysUserOperationRequest, SysUserQueryRequest, SysUserResponse, SysUserVo } from '@/service/model/system/user.model'
+import {
+  SysUserOperationRequest,
+  SysUserQueryRequest,
+  SysUserResponse,
+  SysUserVo,
+  UserRoleBindOperationRequest,
+} from '@/service/model/system/user.model'
 import type { ModeIdArrayType, ModeIdType, PageResponse } from '@/service/model/base.model'
 
 /**
@@ -53,6 +59,7 @@ export const removeSysUserById = (id: ModeIdType): AxiosPromise<boolean> => {
     method: 'post',
   })
 }
+
 /**
  * 批量删除
  * @param ids
@@ -69,7 +76,7 @@ export const removeSysUserByIds = (ids: ModeIdArrayType): AxiosPromise<boolean> 
 /**
  * 查询单个
  */
-export const querySysUserById = (id: number): AxiosPromise<SysUserVo> => {
+export const querySysUserById = (id: ModeIdType): AxiosPromise<SysUserVo> => {
   return request({
     url: Api.QUERY_ONE + `${id}`,
     baseURL,
@@ -88,6 +95,7 @@ export const querySysUserPage = (data?: SysUserQueryRequest): AxiosPromise<PageR
     params: { ...data },
   })
 }
+
 /**
  * 重置密码
  */
@@ -98,6 +106,7 @@ export const resetPassword = (userId: any): AxiosPromise<boolean> => {
     method: 'post',
   })
 }
+
 /**
  * 查询用户拥有的角色
  * @param userId 用户id
@@ -109,11 +118,12 @@ export const selectRoleIdByUserId = (userId: any): AxiosPromise<any[]> => {
     method: 'get',
   })
 }
+
 /**
  * 用户绑定角色
  * @param data 用户角色绑定数据
  */
-export const UserRoleBind = (data: any): AxiosPromise<any[]> => {
+export const UserRoleBind = (data: UserRoleBindOperationRequest): AxiosPromise<void> => {
   return request({
     url: Api.BIND_USER_ROLE,
     baseURL,

@@ -130,15 +130,14 @@ const handleEdit = (row: GenTemplateGroupResponse) => {
 /**
  * 处理删除
  */
-const handleDelete = async (row?: GenTemplateGroupResponse) => {
+const handleDelete = (row?: GenTemplateGroupResponse) => {
   state.loadingStatus = true
-  await useMessageBox()
+  useMessageBox()
     .confirm('此操作将永久删除模板信息, 是否继续?')
-    .then(() => {
-      removeGenTemplateGroupByIds(row!.id).then(async () => {
-        useMessage().success('删除模板信息成功!')
-        await handleQuery()
-      })
+    .then(async () => {
+      await removeGenTemplateGroupByIds(row!.id)
+      await handleQuery()
+      useMessage().success('删除模板信息成功!')
     })
     .catch((_) => {})
     .finally(() => {

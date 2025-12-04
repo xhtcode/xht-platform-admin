@@ -13,12 +13,16 @@
   border-top: 1px solid var(--el-border-color);
   user-select: none;
 }
+
 //=================== 弹窗 el-dialog 样式修改 ===================
 .el-dialog__header {
-  margin-bottom: 0 !important;
   padding-bottom: calc(var(--el-dialog-padding-primary) / 2) !important;
   border-bottom: 1px solid var(--el-border-color);
   user-select: none;
+}
+
+.el-dialog__body {
+  padding-top: var(--el-dialog-padding-primary);
 }
 
 .el-dialog__footer {
@@ -26,6 +30,7 @@
   border-top: 1px solid var(--el-border-color);
   user-select: none;
 }
+
 //=================== 修改数字输入框默认宽度为100% ===================
 .el-input-number {
   width: 100%;

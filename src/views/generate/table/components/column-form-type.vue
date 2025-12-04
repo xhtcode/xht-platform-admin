@@ -38,7 +38,7 @@
   </xht-table>
 </template>
 <script lang="ts" setup>
-import { GenColumnInfoResponse } from '@/service/model/generate/column.model'
+import type { GenColumnInfoResponse } from '@/service/model/generate/column.model'
 import { DataBaseTypeEnums, LanguageTypeEnums } from '@/service/enums/generate/generate.enums'
 
 const columnInfo = defineModel<GenColumnInfoResponse[]>('columnInfo', {

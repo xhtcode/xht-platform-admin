@@ -1,4 +1,4 @@
-import type { BasicResponse, ModeIdType, PageQueryRequest, SystemFlagEnums } from '@/service/model/base.model'
+import type { BasicFormRequest, BasicResponse, ModeIdType, PageQueryRequest, SystemFlagEnums } from '@/service/model/base.model'
 
 /**
  * 部门状态
@@ -12,22 +12,6 @@ export enum SysDeptPostStatusEnums {
    * 禁用
    */
   DISABLE = 1,
-}
-
-/**
- * 操作类型
- */
-export interface SysDeptPostOperationRequest {
-  id: ModeIdType // 岗位id
-  deptId: ModeIdType //  部门id
-  postCode: string //  岗位编码
-  postName: string // 岗位名称
-  postSort: number // 岗位排序
-  postLimit: number // 岗位人员限制
-  postHave?: number // 岗位已分配人员
-  remark: string // 岗位描述
-  postStatus: SysDeptPostStatusEnums // 岗位状态
-  systemFlag?: SystemFlagEnums // 系统内置
 }
 
 /**
@@ -56,3 +40,8 @@ export interface SysDeptPostResponse extends BasicResponse {
   postStatus: SysDeptPostStatusEnums // 岗位状态
   systemFlag: SystemFlagEnums // 系统内置
 }
+
+/**
+ * 操作类型
+ */
+export interface SysDeptPostOperationRequest extends SysDeptPostResponse, BasicFormRequest {}

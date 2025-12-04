@@ -55,8 +55,8 @@
       </template>
     </el-form>
     <template #footer>
-      <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>
       <el-button :disabled="state.loadingStatus" @click="close">取 消</el-button>
+      <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>
     </template>
   </el-drawer>
 </template>
@@ -91,8 +91,8 @@ const show = async (type: 'create' | 'update', id: ModeIdType) => {
   try {
     state.visibleStatus = true
     state.operationStatus = type
+    state.loadingStatus = true
     if (type === 'update') {
-      state.loadingStatus = true
       state.title = '修改数据源配置'
       const { data } = await queryGenDataSourceById(id)
       addUpdateForm.value = { ...data }

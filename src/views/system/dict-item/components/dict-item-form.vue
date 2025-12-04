@@ -1,5 +1,13 @@
 <template>
-  <el-drawer v-model="state.visibleStatus" :before-close="close" :title="state.title" append-to-body size="45vw">
+  <el-drawer
+    v-model="state.visibleStatus"
+    :title="state.title"
+    size="45%"
+    append-to-body
+    :close-on-click-modal="false"
+    :show-close="!state.loadingStatus"
+    :before-close="close"
+  >
     <el-form
       ref="addUpdateFormRef"
       v-loading="state.loadingStatus"
@@ -53,8 +61,8 @@
       </el-row>
     </el-form>
     <template #footer>
+      <el-button :disabled="state.loadingStatus" @click="close">取 消</el-button>
       <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>
-      <el-button @click="close">取 消</el-button>
     </template>
   </el-drawer>
 </template>
@@ -64,10 +72,10 @@ import type { FormInstance, FormRules } from 'element-plus'
 import { querySysDictItemById, saveSysDictItem, updateSysDictItem } from '@/service/api/system/dict.item.api'
 import type { SysDictItemOperationRequest } from '@/service/model/system/dict.item.model'
 import { DictItemStatusEnums } from '@/service/model/system/dict.item.model'
-import { SysDictItemOperationForm, SysDictItemOperationRules } from '@/views/system/dict-item/dict.item.data'
-import { useMessage, useMessageBox } from '@/hooks/use-message'
-import { useRoute } from 'vue-router'
 import type { ModeIdType } from '@/service/model/base.model'
+import { SysDictItemOperationForm, SysDictItemOperationRules } from '@/views/system/dict-item/dict.item.data'
+import { useMessage } from '@/hooks/use-message'
+import { useRoute } from 'vue-router'
 
 defineOptions({ name: 'SysDictItemAddOrUpdate' })
 
@@ -84,28 +92,25 @@ const { addUpdateForm } = toRefs(state)
 const emits = defineEmits(['success'])
 const rules: FormRules = SysDictItemOperationRules
 const predefineColors = ref(['#409EFF', '#67C23A', '#E6A23C', '#F56C6C', '#909399', '#303133', '#CDD0D6', '#E6E8EB', '#000000', '#F2F6FC'])
+
 /**
  * 打开显示
  */
 const show = async (type: 'create' | 'update', id: ModeIdType) => {
-  state.visibleStatus = true
-  state.operationStatus = type
-  if (type === 'update') {
+  try {
+    state.visibleStatus = true
+    state.operationStatus = type
     state.loadingStatus = true
-    state.title = '修改字典项'
-    await querySysDictItemById(id)
-      .then((response) => {
-        const { data } = JSON.parse(JSON.stringify(response))
-        addUpdateForm.value = { ...data }
-      })
-      .catch(() => {
-        useMessage().error('数据初始化加载失败')
-      })
-      .finally(() => {
-        state.loadingStatus = false
-      })
+    if (type === 'update') {
+      state.title = '修改字典项'
+      const { data } = await querySysDictItemById(id)
+      addUpdateForm.value = data
+    }
+  } finally {
+    state.loadingStatus = false
   }
 }
+
 /**
  * 提交表单
  */
@@ -113,29 +118,20 @@ const submitForm = () => {
   state.visibleStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      addUpdateForm.value.dictId = route.params?.id
-      if (state.operationStatus === 'create') {
-        //增加
-        await saveSysDictItem(addUpdateForm.value)
-          .then((_) => {
-            useMessage().success('新增数据成功')
-            emits('success')
-            close()
-          })
-          .finally(() => {
-            state.loadingStatus = false
-          })
-      } else {
-        //修改
-        await updateSysDictItem({ ...addUpdateForm.value })
-          .then((_) => {
-            useMessage().success('修改数据成功')
-            emits('success')
-            close()
-          })
-          .finally(() => {
-            state.loadingStatus = false
-          })
+      try {
+        addUpdateForm.value.dictId = route.params?.id
+        if (state.operationStatus === 'create') {
+          await saveSysDictItem(addUpdateForm.value)
+          useMessage().success('新增字典项成功')
+        } else {
+          await updateSysDictItem(addUpdateForm.value)
+          useMessage().success('修改字典项成功')
+        }
+        emits('success')
+        state.loadingStatus = false
+        close()
+      } catch {
+        state.loadingStatus = false
       }
     } else {
       state.loadingStatus = false
@@ -149,10 +145,8 @@ const submitForm = () => {
  */
 const close = () => {
   if (state.loadingStatus) return
-  addUpdateForm.value = { ...SysDictItemOperationForm }
   state.visibleStatus = false
   state.operationStatus = 'create'
-  state.loadingStatus = false
   addUpdateFormRef.value?.resetFields()
 }
 

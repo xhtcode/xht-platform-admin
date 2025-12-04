@@ -25,7 +25,7 @@ enum Api {
 }
 
 /**
- * 保存
+ * 保存角色
  */
 export const saveSysRole = (data: SysRoleOperationRequest): AxiosPromise<boolean> => {
   return request({
@@ -37,7 +37,7 @@ export const saveSysRole = (data: SysRoleOperationRequest): AxiosPromise<boolean
 }
 
 /**
- * 修改数据
+ * 修改角色
  */
 export const updateSysRole = (data: SysRoleOperationRequest): AxiosPromise<boolean> => {
   return request({
@@ -49,7 +49,7 @@ export const updateSysRole = (data: SysRoleOperationRequest): AxiosPromise<boole
 }
 
 /**
- * 删除
+ * 删除角色
  */
 export const removeSysRoleById = (id: ModeIdType): AxiosPromise<boolean> => {
   return request({
@@ -58,8 +58,9 @@ export const removeSysRoleById = (id: ModeIdType): AxiosPromise<boolean> => {
     method: 'post',
   })
 }
+
 /**
- * 批量删除
+ * 批量删除角色
  * @param ids
  */
 export const removeSysRoleByIds = (ids: string[]): AxiosPromise<boolean> => {
@@ -72,7 +73,7 @@ export const removeSysRoleByIds = (ids: string[]): AxiosPromise<boolean> => {
 }
 
 /**
- * 查询单个
+ * 查询单个角色
  */
 export const querySysRoleById = (id: ModeIdType): AxiosPromise<SysRoleResponse> => {
   return request({
@@ -83,7 +84,7 @@ export const querySysRoleById = (id: ModeIdType): AxiosPromise<SysRoleResponse> 
 }
 
 /**
- * 查询全部
+ * 查询全部角色
  */
 export const querySysRolePage = (data?: SysRoleQueryRequest): AxiosPromise<PageResponse<SysRoleResponse>> => {
   return request({

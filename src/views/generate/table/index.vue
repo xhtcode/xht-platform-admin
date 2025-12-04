@@ -73,14 +73,13 @@
 
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
-import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
-
 import type { GenTableInfoQueryRequest, GenTableInfoResponse } from '@/service/model/generate/table.model'
-import { queryExistsPage, removeGenTableInfoByIds, syncTableApi } from '@/service/api/generate/table.api'
-import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { ModeIdArrayType } from '@/service/model/base.model'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { GenTableInfoColumnOption } from '@/views/generate/table/table.data'
+import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
+import { queryExistsPage, removeGenTableInfoByIds, syncTableApi } from '@/service/api/generate/table.api'
+import { useMessage, useMessageBox } from '@/hooks/use-message'
 
 defineOptions({ name: 'GenTableInfoViewIndex' })
 
@@ -177,15 +176,14 @@ const handleDownload = async (row?: GenTableInfoResponse) => {
 /**
  * 处理删除
  */
-const handleDelete = async (row: GenTableInfoResponse) => {
+const handleDelete = (row: GenTableInfoResponse) => {
   state.loadingStatus = true
-  await useMessageBox()
+  useMessageBox()
     .confirm('此操作将永久删除表信息, 是否继续?')
-    .then(() => {
-      removeGenTableInfoByIds(row!.id).then(async () => {
-        useMessage().success('删除表信息成功!')
-        await handleQuery()
-      })
+    .then(async () => {
+      await removeGenTableInfoByIds(row!.id)
+      await handleQuery()
+      useMessage().success('删除表信息成功!')
     })
     .catch((_) => {})
     .finally(() => {

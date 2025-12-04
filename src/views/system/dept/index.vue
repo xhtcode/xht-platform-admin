@@ -153,14 +153,13 @@ const columnOption = ref<ColumnConfig<SysDeptResponse>>({
  * 查询数据列表
  */
 const handleQuery = async () => {
-  state.loadingStatus = true
-  querySysDeptTree(state.queryParams)
-    .then((res) => {
-      state.tableList = res.data
-    })
-    .finally(() => {
-      state.loadingStatus = false
-    })
+  try {
+    state.loadingStatus = true
+    const { data } = await querySysDeptTree(state.queryParams)
+    state.tableList = data
+  } finally {
+    state.loadingStatus = false
+  }
 }
 
 /**
@@ -170,12 +169,14 @@ const resetQuery = async () => {
   queryFormRef.value?.resetFields()
   await handleQuery()
 }
+
 /**
  * 处理新增
  */
 const handleAdd = () => {
   deptFormRef.value?.show('create', null)
 }
+
 /**
  * 处理编辑
  */
@@ -186,17 +187,15 @@ const handleEdit = (row: SysDeptResponse) => {
 /**
  * 处理删除
  */
-const handleDelete = async (row: any) => {
+const handleDelete = (row: any) => {
   state.loadingStatus = true
-  await useMessageBox()
+  useMessageBox()
     .confirm('此操作将永久删除部门, 是否继续?')
-    .then(() => {
-      removeSysDeptById(row.id).then(async () => {
-        useMessage().success('删除部门成功!')
-        await handleQuery()
-      })
+    .then(async () => {
+      await removeSysDeptById(row.id)
+      useMessage().success('删除部门成功!')
+      await handleQuery()
     })
-    .catch((_) => {})
     .finally(() => {
       state.loadingStatus = false
     })

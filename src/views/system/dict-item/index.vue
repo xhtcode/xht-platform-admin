@@ -144,6 +144,7 @@ const { queryParams } = toRefs(state)
 const columnOption = ref<ColumnConfig<SysDictItemResponse>>({
   ...SysDictItemColumnOption,
 })
+
 /**
  * 重置表单
  */
@@ -151,6 +152,7 @@ const resetQuery = async () => {
   queryFormRef.value?.resetFields()
   await handleQuery()
 }
+
 /**
  * 处理新增
  */
@@ -168,7 +170,7 @@ const handleEdit = (row: SysDictItemResponse) => {
 /**
  * 处理删除
  */
-const handleDelete = async (row?: SysDictItemResponse) => {
+const handleDelete = (row?: SysDictItemResponse) => {
   state.loadingStatus = true
   let ids: ModeIdArrayType = []
   if (row) {
@@ -180,15 +182,13 @@ const handleDelete = async (row?: SysDictItemResponse) => {
     useMessage().error('请选择字典项数据')
     return
   }
-  await useMessageBox()
+  useMessageBox()
     .confirm('此操作将永久删除字典项, 是否继续?')
-    .then(() => {
-      removeSysDictItemById(ids).then(async () => {
-        useMessage().success('删除字典项成功!')
-        await handleQuery()
-      })
+    .then(async () => {
+      await removeSysDictItemById(ids)
+      useMessage().success('删除字典项成功!')
+      await handleQuery()
     })
-    .catch((_) => {})
     .finally(() => {
       state.loadingStatus = false
     })

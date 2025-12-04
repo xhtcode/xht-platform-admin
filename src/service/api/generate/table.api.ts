@@ -1,9 +1,10 @@
 import request from '@/utils/request'
 import type { AxiosPromise } from 'axios'
 import type { ModeIdType, PageResponse } from '@/service/model/base.model'
-import type {
+import {
   GenCodeCoreVo,
   GenTableInfoOperationRequest,
+  GenTableInfoOperationResponse,
   GenTableInfoQueryRequest,
   GenTableInfoResponse,
   ImportTableFormRequest,
@@ -64,7 +65,7 @@ export const removeGenTableInfoByIds = (id: ModeIdType): AxiosPromise<boolean> =
 /**
  * 查询单个表信息
  */
-export const queryGenTableInfoById = (id: ModeIdType): AxiosPromise<GenTableInfoResponse> => {
+export const queryGenTableInfoById = (id: ModeIdType): AxiosPromise<GenTableInfoOperationResponse> => {
   return request({
     url: Api.QUERY_ONE + `${id}`,
     baseURL,

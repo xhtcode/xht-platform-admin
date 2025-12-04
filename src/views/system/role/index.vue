@@ -167,17 +167,15 @@ const handleEdit = (row: SysRoleResponse) => {
 /**
  * 处理删除
  */
-const handleDelete = async (row: SysRoleResponse) => {
+const handleDelete = (row: SysRoleResponse) => {
   state.loadingStatus = true
-  await useMessageBox()
+  useMessageBox()
     .confirm('此操作将永久删除角色, 是否继续?')
-    .then(() => {
-      removeSysRoleById(row.id).then(async () => {
-        useMessage().success('删除角色成功!')
-        await handleQuery()
-      })
+    .then(async () => {
+      await removeSysRoleById(row.id)
+      await handleQuery()
+      useMessage().success('删除角色成功!')
     })
-    .catch((_) => {})
     .finally(() => {
       state.loadingStatus = false
     })
@@ -186,21 +184,19 @@ const handleDelete = async (row: SysRoleResponse) => {
 /**
  * 处理批量删除
  */
-const handleBatchDelete = async () => {
+const handleBatchDelete = () => {
   const ids = state.selectedRows.map((item) => item.id)
   if (!ids || ids.length <= 0) {
     useMessage().error('请选择角色数据')
   }
   state.loadingStatus = true
-  await useMessageBox()
+  useMessageBox()
     .confirm(`此操作将批量删除${ids.length}个角色, 是否继续?`)
-    .then(() => {
-      removeSysRoleByIds(ids).then(async () => {
-        useMessage().success('批量删除角色成功!')
-        await handleQuery()
-      })
+    .then(async () => {
+      await removeSysRoleByIds(ids)
+      await handleQuery()
+      useMessage().success('批量删除角色成功!')
     })
-    .catch((_) => {})
     .finally(() => {
       state.loadingStatus = false
     })

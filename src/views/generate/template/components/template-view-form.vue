@@ -1,5 +1,13 @@
 <template>
-  <el-drawer v-model="state.visibleStatus" :before-close="close" append-to-body size="100%" title="模板管理">
+  <el-drawer
+    v-model="state.visibleStatus"
+    title="模板管理"
+    size="100%"
+    append-to-body
+    :close-on-click-modal="false"
+    :show-close="!state.loadingStatus"
+    :before-close="close"
+  >
     <el-tabs v-model="activeName" addable class="!h-full" closable editable tab-position="left" @tab-remove="handleRemove">
       <template #add-icon>
         <el-button class="w-full" icon="Plus" size="small" type="primary" @click="addNewData">添加</el-button>
@@ -50,24 +58,20 @@ const emits = defineEmits(['success'])
  * 打开显示
  */
 const show = async (groupId: ModeIdType) => {
-  state.visibleStatus = true
-  state.loadingStatus = true
-  state.groupId = groupId
-  await queryGenTemplateList(groupId)
-    .then((response) => {
-      if (response.data && response.data.length > 0) {
-        state.data = response.data
-        activeName.value = response.data[0].id
-      } else {
-        addNewData()
-      }
-    })
-    .catch(() => {
-      useMessage().error('数据初始化加载失败')
-    })
-    .finally(() => {
-      state.loadingStatus = false
-    })
+  try {
+    state.visibleStatus = true
+    state.loadingStatus = true
+    state.groupId = groupId
+    const { data } = await queryGenTemplateList(groupId)
+    if (data && data.length > 0) {
+      state.data = data
+      activeName.value = data[0].id
+    } else {
+      addNewData()
+    }
+  } finally {
+    state.loadingStatus = false
+  }
 }
 /**
  * 设置激活的标签
@@ -104,15 +108,13 @@ const handleRemove = async (targetId: ModeIdType) => {
         }
       })
       if (removeRequest) {
-        await removeGenTemplateById(targetId).then(async () => {
-          useMessage().success('删除模板信息成功!')
-          activeName.value = activeNameEmp
-          state.data = tabs.filter((tab) => tab.id !== targetId)
-          state.data = state.data.filter((item) => item.id !== targetId)
-        })
+        await removeGenTemplateById(targetId)
+        activeName.value = activeNameEmp
+        state.data = tabs.filter((tab) => tab.id !== targetId)
+        state.data = state.data.filter((item) => item.id !== targetId)
+        useMessage().success('删除模板信息成功!')
       }
     })
-    .catch((_) => {})
     .finally(() => {
       state.loadingStatus = false
     })

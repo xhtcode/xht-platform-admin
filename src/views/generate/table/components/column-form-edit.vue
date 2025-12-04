@@ -82,15 +82,14 @@ import type { GenTableInfoResponse } from '@/service/model/generate/table.model'
 
 /**
  * 列信息模型，用于双向绑定列数据
- * @type {GenColumnInfoResponse[]} 列信息数组
  */
 const columnInfo = defineModel<GenColumnInfoResponse[]>('columnInfo', {
   required: true,
   default: () => [],
 })
+
 /**
  * 表信息模型，用于双向绑定表数据
- * @type {GenTableInfoResponse} 表信息对象
  */
 const tableInfo = defineModel<GenTableInfoResponse>('tableInfo', {
   required: true,

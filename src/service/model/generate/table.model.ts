@@ -40,9 +40,9 @@ export interface CodeViewState {
 }
 
 /**
- * 操作类型
+ * 表信息操作响应参数
  */
-export interface GenTableInfoOperationRequest extends BasicFormRequest {
+export interface GenTableInfoOperationResponse extends BasicResponse {
   /**
    * 表信息
    */
@@ -56,6 +56,11 @@ export interface GenTableInfoOperationRequest extends BasicFormRequest {
    */
   queryColumns: GenTableColumnQueryResponse[]
 }
+
+/**
+ * 表信息操作请求参数
+ */
+export interface GenTableInfoOperationRequest extends GenTableInfoOperationResponse, BasicFormRequest {}
 
 /**
  * 导入表请求参数

@@ -1,5 +1,13 @@
 <template>
-  <el-drawer v-model="state.visibleStatus" :before-close="close" :title="state.title" append-to-body size="45%">
+  <el-drawer
+    v-model="state.visibleStatus"
+    :title="state.title"
+    size="45%"
+    append-to-body
+    :close-on-click-modal="false"
+    :show-close="!state.loadingStatus"
+    :before-close="close"
+  >
     <el-form
       ref="addUpdateFormRef"
       v-loading="state.loadingStatus"
@@ -67,20 +75,20 @@
       </el-row>
     </el-form>
     <template #footer>
+      <el-button :disabled="state.loadingStatus" @click="close">取 消</el-button>
       <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>
-      <el-button @click="close">取 消</el-button>
     </template>
   </el-drawer>
 </template>
 
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
+import type { SysDeptPostOperationRequest } from '@/service/model/system/dept.post.model'
 import { SysDeptPostStatusEnums } from '@/service/model/system/dept.post.model'
 import { SysDeptPostOperationForm, SysDeptPostOperationRules } from '@/views/system/dept-post/dept.post.data'
-import { useMessage, useMessageBox } from '@/hooks/use-message'
+import { useMessage } from '@/hooks/use-message'
 import { querySysDeptPostById, saveSysDeptPost, updateSysDeptPost } from '@/service/api/system/dept.post.api'
 import type { ModeIdType } from '@/service/model/base.model'
-import type { SysDeptPostOperationRequest } from '@/service/model/system/dept.post.model'
 import { SystemFlagEnums } from '@/service/model/base.model'
 
 defineOptions({ name: 'SysDeptAddOrUpdate' })
@@ -96,25 +104,25 @@ const addUpdateFormRef = ref<FormInstance>()
 const { addUpdateForm } = toRefs(state)
 const emits = defineEmits(['success'])
 const rules: FormRules = SysDeptPostOperationRules
+
 /**
  * 打开显示
  */
 const show = async (type: 'create' | 'update', id: ModeIdType) => {
-  state.visibleStatus = true
-  state.operationStatus = type
-  if (type === 'update') {
+  try {
+    state.visibleStatus = true
+    state.operationStatus = type
     state.loadingStatus = true
-    state.title = '修改部门'
-    await querySysDeptPostById(id)
-      .then((response) => {
-        const { data } = JSON.parse(JSON.stringify(response))
-        addUpdateForm.value = { ...data }
-      })
-      .finally(() => {
-        state.loadingStatus = false
-      })
+    if (type === 'update') {
+      state.title = '修改部门岗位'
+      const { data } = await querySysDeptPostById(id)
+      addUpdateForm.value = data
+    }
+  } finally {
+    state.loadingStatus = false
   }
 }
+
 /**
  * 提交表单
  */
@@ -122,28 +130,19 @@ const submitForm = () => {
   state.visibleStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      if (state.operationStatus === 'create') {
-        //增加
-        await saveSysDeptPost(addUpdateForm.value)
-          .then((_) => {
-            useMessage().success('新增数据成功')
-            emits('success')
-            close()
-          })
-          .finally(() => {
-            state.loadingStatus = false
-          })
-      } else {
-        //修改
-        await updateSysDeptPost({ ...addUpdateForm.value })
-          .then((_) => {
-            useMessage().success('修改数据成功')
-            emits('success')
-            close()
-          })
-          .finally(() => {
-            state.loadingStatus = false
-          })
+      try {
+        if (state.operationStatus === 'create') {
+          await saveSysDeptPost(addUpdateForm.value)
+          useMessage().success(`新增部门岗位：${addUpdateForm.value.postName}成功`)
+        } else {
+          await updateSysDeptPost(addUpdateForm.value)
+          useMessage().success(`修改部门岗位：${addUpdateForm.value.postName}成功`)
+        }
+        emits('success')
+        state.loadingStatus = false
+        close()
+      } catch {
+        state.loadingStatus = false
       }
     } else {
       state.loadingStatus = false
@@ -157,12 +156,11 @@ const submitForm = () => {
  */
 const close = () => {
   if (state.loadingStatus) return
-  addUpdateForm.value = { ...SysDeptPostOperationForm }
   state.visibleStatus = false
   state.operationStatus = 'create'
-  state.loadingStatus = false
   addUpdateFormRef.value?.resetFields()
 }
+
 defineExpose({
   show,
 })

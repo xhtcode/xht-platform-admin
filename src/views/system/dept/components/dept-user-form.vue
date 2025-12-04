@@ -1,5 +1,12 @@
 <template>
-  <el-dialog v-model="state.visibleStatus" :before-close="close" append-to-body width="auto">
+  <el-dialog
+    v-model="state.visibleStatus"
+    width="auto"
+    append-to-body
+    :close-on-click-modal="false"
+    :show-close="!state.loadingStatus"
+    :before-close="close"
+  >
     <template #header>
       <div class="flex justify-between items-center">
         <el-text size="large" tag="b">部门主管筛选</el-text>
@@ -42,7 +49,7 @@
     </xht-table>
     <template #footer>
       <span>
-        <el-button @click="close">取 消</el-button>
+        <el-button :disabled="state.loadingStatus" @click="close">取 消</el-button>
         <el-button type="primary" @click="submitForm">确认</el-button>
       </span>
     </template>
@@ -51,10 +58,12 @@
 <script lang="ts" setup>
 import type { ModeIdType } from '@/service/model/base.model'
 import { getBindUser } from '@/service/api/tools.api'
-import type { UserSimpleVo } from '@/service/model/system/user.model'
+import { DeptUserProps, UserSimpleVo } from '@/service/model/system/user.model'
 import { useMessage } from '@/hooks/use-message'
 
 defineOptions({ name: 'DeptUserForm' })
+
+const tableRef = useTemplateRef<any>('tableRef')
 const state = reactive<{
   visibleStatus: boolean
   loadingStatus: boolean
@@ -66,39 +75,33 @@ const state = reactive<{
   userList: [] as any[],
   currentRow: null,
 })
-
-interface DeptUserProps {
-  modelValue?: any
-}
-
 const props = withDefaults(defineProps<DeptUserProps>(), {
   modelValue: undefined,
 })
-
-const tableRef = useTemplateRef<any>('tableRef')
 const emits = defineEmits<{
   (e: 'change', user: UserSimpleVo): void
 }>()
+
 /**
  * 显示对话框
  */
 const show = async (deptId: ModeIdType) => {
-  state.visibleStatus = true
-  state.loadingStatus = true
-  await getBindUser(deptId)
-    .then((res) => {
-      state.userList = res.data
-      for (const item of res.data) {
-        if (item.userId === props.modelValue) {
-          tableRef.value?.setCurrentRow(item)
-          break
-        }
+  try {
+    state.visibleStatus = true
+    state.loadingStatus = true
+    const { data } = await getBindUser(deptId)
+    state.userList = data
+    for (const item of data) {
+      if (item.userId === props.modelValue) {
+        tableRef.value?.setCurrentRow(item)
+        break
       }
-    })
-    .finally(() => {
-      state.loadingStatus = false
-    })
+    }
+  } finally {
+    state.loadingStatus = false
+  }
 }
+
 /**
  * 关闭对话框
  */
@@ -108,9 +111,14 @@ const close = () => {
   state.currentRow = null
   tableRef.value?.setCurrentRow(null)
 }
+
+/**
+ * 当前行变化
+ */
 const handleCurrentChange = (val: UserSimpleVo | null) => {
   state.currentRow = val
 }
+
 /**
  * 提交
  */

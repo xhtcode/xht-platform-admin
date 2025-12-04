@@ -1,5 +1,13 @@
 <template>
-  <el-dialog v-model="state.visibleStatus" :before-close="close" align-center append-to-body title="分配权限" width="45%">
+  <el-dialog
+    v-model="state.visibleStatus"
+    title="分配权限"
+    width="45%"
+    append-to-body
+    :close-on-click-modal="false"
+    :show-close="!state.loadingStatus"
+    :before-close="close"
+  >
     <template #header>
       <div class="menu-role-dialog-title">
         <div>分配权限</div>
@@ -28,10 +36,8 @@
       </el-tree>
     </el-scrollbar>
     <template #footer>
-      <span>
-        <el-button @click="close">取 消</el-button>
-        <el-button type="primary" @click="submitForm">提交</el-button>
-      </span>
+      <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>
+      <el-button :disabled="state.loadingStatus" @click="close">取 消</el-button>
     </template>
   </el-dialog>
 </template>
@@ -63,33 +69,24 @@ const state = reactive<AddUpdateOption<SysRoleMenuBindForm>>({
 })
 
 const { checkAll, treeData, checkedKeys, addUpdateForm } = toRefs(state)
+
 /**
  * 显示角色权限分配弹窗
  * @param roleId - 角色ID，用于获取该角色已有的菜单权限并加载菜单树
  */
 const show = async (roleId: ModeIdType) => {
-  state.visibleStatus = true
-  addUpdateForm.value.roleId = roleId
-  state.loadingStatus = true
-  await selectMenuIdByRoleId(roleId).then((res) => {
-    checkAll.value = res.data.checkAll
-    checkedKeys.value = res.data.checkedKeys
-    treeData.value = res.data.menuList
-  })
-  state.loadingStatus = false
-}
-
-/**
- * 关闭角色权限分配弹窗
- */
-const close = () => {
-  if (state.loadingStatus) return
-  state.visibleStatus = false
-  state.operationStatus = 'create'
-  state.loadingStatus = false
-  checkAll.value = false
-  checkedKeys.value = []
-  treeData.value = []
+  try {
+    state.visibleStatus = true
+    addUpdateForm.value.roleId = roleId
+    state.loadingStatus = true
+    await selectMenuIdByRoleId(roleId).then((res) => {
+      checkAll.value = res.data.checkAll
+      checkedKeys.value = res.data.checkedKeys
+      treeData.value = res.data.menuList
+    })
+  } finally {
+    state.loadingStatus = false
+  }
 }
 
 /**
@@ -136,6 +133,18 @@ const submitForm = async () => {
   } finally {
     state.loadingStatus = false
   }
+}
+
+/**
+ * 关闭角色权限分配弹窗
+ */
+const close = () => {
+  if (state.loadingStatus) return
+  state.visibleStatus = false
+  state.operationStatus = 'create'
+  checkAll.value = false
+  checkedKeys.value = []
+  treeData.value = []
 }
 
 defineExpose({

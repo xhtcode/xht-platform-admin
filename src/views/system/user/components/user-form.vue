@@ -1,5 +1,13 @@
 <template>
-  <el-drawer v-model="state.visibleStatus" :before-close="close" :title="state.title" append-to-body size="45%">
+  <el-drawer
+    v-model="state.visibleStatus"
+    :title="state.title"
+    size="45%"
+    append-to-body
+    :close-on-click-modal="false"
+    :show-close="!state.loadingStatus"
+    :before-close="close"
+  >
     <el-form
       ref="addUpdateFormRef"
       v-loading="state.loadingStatus"
@@ -11,7 +19,6 @@
       scroll-to-error
     >
       <el-divider>基础信息</el-divider>
-
       <div class="flex">
         <!-- 头像上传 -->
         <div class="flex-1">
@@ -153,8 +160,8 @@
       </el-row>
     </el-form>
     <template #footer>
+      <el-button :disabled="state.loadingStatus" @click="close">取 消</el-button>
       <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>
-      <el-button @click="close">取 消</el-button>
     </template>
   </el-drawer>
 </template>
@@ -162,7 +169,7 @@
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
 import { querySysUserById, saveSysUser, updateSysUser } from '@/service/api/system/user.api'
-import { useMessage, useMessageBox } from '@/hooks/use-message'
+import { useMessage } from '@/hooks/use-message'
 import { SysUserOperationForm, SysUserOperationRules } from '@/views/system/user/user.data'
 import { SysUserOperationRequest, UserStatusEnums, UserTypeEnums } from '@/service/model/system/user.model'
 import type { ModeIdType } from '@/service/model/base.model'
@@ -183,26 +190,22 @@ const state = reactive<AddUpdateOption<SysUserOperationRequest>>({
 const addUpdateFormRef = ref<FormInstance>()
 const { addUpdateForm } = toRefs(state)
 const emits = defineEmits(['success'])
+
 /**
  * 打开显示
  */
 const show = async (type: 'create' | 'update', id: ModeIdType) => {
-  state.visibleStatus = true
-  state.operationStatus = type
-  if (type === 'update') {
+  try {
+    state.visibleStatus = true
+    state.operationStatus = type
     state.loadingStatus = true
-    state.title = '修改用户信息'
-    await querySysUserById(id)
-      .then((response) => {
-        const { data } = JSON.parse(JSON.stringify(response))
-        addUpdateForm.value = { ...data }
-      })
-      .catch(() => {
-        useMessage().error('数据初始化加载失败')
-      })
-      .finally(() => {
-        state.loadingStatus = false
-      })
+    if (type === 'update') {
+      state.title = '修改用户信息'
+      const { data } = await querySysUserById(id)
+      addUpdateForm.value = { ...data }
+    }
+  } finally {
+    state.loadingStatus = false
   }
 }
 
@@ -213,28 +216,19 @@ const submitForm = () => {
   state.visibleStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      if (state.operationStatus === 'create') {
-        //增加
-        await saveSysUser(addUpdateForm.value)
-          .then((_) => {
-            useMessageBox().success('新增数据成功')
-            emits('success')
-            close()
-          })
-          .finally(() => {
-            state.loadingStatus = false
-          })
-      } else {
-        //修改
-        await updateSysUser({ ...addUpdateForm.value })
-          .then((_) => {
-            useMessageBox().success('修改数据成功')
-            emits('success')
-            close()
-          })
-          .finally(() => {
-            state.loadingStatus = false
-          })
+      try {
+        if (state.operationStatus === 'create') {
+          await saveSysUser(addUpdateForm.value)
+          useMessage().success('新增用户成功')
+        } else {
+          await updateSysUser(addUpdateForm.value)
+          useMessage().success('修改用户成功')
+        }
+        emits('success')
+        state.loadingStatus = false
+        close()
+      } catch {
+        state.loadingStatus = false
       }
     } else {
       state.loadingStatus = false
@@ -248,13 +242,14 @@ const submitForm = () => {
  */
 const close = () => {
   if (state.loadingStatus) return
-  addUpdateForm.value = { ...SysUserOperationForm }
   state.visibleStatus = false
   state.operationStatus = 'create'
-  state.loadingStatus = false
   addUpdateFormRef.value?.resetFields()
 }
 
+/**
+ * 部门选择点击
+ */
 const handleDeptClick = (data: SysDeptResponse) => {
   addUpdateForm.value.deptId = data.id
   addUpdateForm.value.deptName = data.deptName

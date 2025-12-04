@@ -107,6 +107,7 @@ const { queryParams } = toRefs(state)
 const columnOption = ref<ColumnConfig<GenTypeMappingResponse>>({
   ...GenTypeMappingColumnOption,
 })
+
 /**
  * 重置表单
  */
@@ -114,6 +115,7 @@ const resetQuery = async () => {
   queryFormRef.value?.resetFields()
   await handleQuery()
 }
+
 /**
  * 处理新增
  */
@@ -131,7 +133,7 @@ const handleEdit = (row: GenTypeMappingResponse) => {
 /**
  * 处理删除
  */
-const handleDelete = async (row?: GenTypeMappingResponse) => {
+const handleDelete = (row?: GenTypeMappingResponse) => {
   state.loadingStatus = true
   let ids: ModeIdArrayType = []
   if (row) {
@@ -143,13 +145,12 @@ const handleDelete = async (row?: GenTypeMappingResponse) => {
     useMessage().error('请选择字段类型映射数据')
     return
   }
-  await useMessageBox()
+  useMessageBox()
     .confirm('此操作将永久删除字段类型映射, 是否继续?')
-    .then(() => {
-      removeGenTypeMappingByIds(ids).then(async () => {
-        useMessage().success('删除字段类型映射成功!')
-        await handleQuery()
-      })
+    .then(async () => {
+      await removeGenTypeMappingByIds(ids)
+      await handleQuery()
+      useMessage().success('删除字段类型映射成功!')
     })
     .catch((_) => {})
     .finally(() => {

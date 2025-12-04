@@ -1,5 +1,13 @@
 <template>
-  <el-drawer v-model="state.visibleStatus" :before-close="close" :title="state.title" append-to-body size="45%">
+  <el-drawer
+    v-model="state.visibleStatus"
+    :title="state.title"
+    size="45%"
+    append-to-body
+    :close-on-click-modal="false"
+    :show-close="!state.loadingStatus"
+    :before-close="close"
+  >
     <el-form
       ref="addUpdateFormRef"
       v-loading="state.loadingStatus"
@@ -124,7 +132,7 @@
     </el-form>
     <template #footer>
       <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>
-      <el-button @click="close">取 消</el-button>
+      <el-button :disabled="state.loadingStatus" @click="close">取 消</el-button>
     </template>
   </el-drawer>
 </template>
@@ -132,7 +140,7 @@
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
 import { querySysMenuById, saveSysMenu, updateSysMenu } from '@/service/api/system/menu.api'
-import { useMessageBox } from '@/hooks/use-message'
+import { useMessage } from '@/hooks/use-message'
 import type { SysMenuOperationRequest } from '@/service/model/system/menu.model'
 import { MenuCacheEnums, MenuHiddenEnums, MenuLinkEnums, MenuStatusEnums, MenuTypeEnums } from '@/service/model/system/menu.model'
 import { SysMenuOperationForm, SysMenuOperationRules } from '@/views/system/menu/menu.data'
@@ -143,6 +151,7 @@ defineOptions({
   name: 'MenuForm',
 })
 
+const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
 const rules: FormRules = SysMenuOperationRules
 const state = reactive<AddUpdateOption<SysMenuOperationRequest>>({
   title: '增加部门',
@@ -151,8 +160,7 @@ const state = reactive<AddUpdateOption<SysMenuOperationRequest>>({
   loadingStatus: false,
   addUpdateForm: { ...SysDeptOperationForm },
 })
-const addUpdateFormRef = ref<FormInstance>()
-const addUpdateForm = ref<SysMenuOperationRequest>({ ...SysMenuOperationForm })
+const { addUpdateForm } = toRefs(state)
 const emit = defineEmits(['success'])
 const isM = computed(() => addUpdateForm.value.menuType === MenuTypeEnums.M)
 const isC = computed(() => addUpdateForm.value.menuType === MenuTypeEnums.C)
@@ -162,21 +170,20 @@ const isB = computed(() => addUpdateForm.value.menuType === MenuTypeEnums.B)
  * 打开显示
  */
 const show = async (type: 'create' | 'update', id: ModeIdType) => {
-  state.visibleStatus = true
-  state.operationStatus = type
-  if (type === 'update') {
+  try {
+    state.visibleStatus = true
+    state.operationStatus = type
     state.loadingStatus = true
-    state.title = '修改菜单'
-    await querySysMenuById(id)
-      .then((response) => {
-        const { data } = JSON.parse(JSON.stringify(response))
-        addUpdateForm.value = { ...data }
-      })
-      .finally(() => {
-        state.loadingStatus = false
-      })
+    if (type === 'update') {
+      state.title = '修改菜单'
+      const { data } = await querySysMenuById(id)
+      addUpdateForm.value = data
+    }
+  } finally {
+    state.loadingStatus = false
   }
 }
+
 /**
  * 提交表单
  */
@@ -184,28 +191,19 @@ const submitForm = () => {
   state.visibleStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      if (state.operationStatus === 'create') {
-        //增加
-        await saveSysMenu(addUpdateForm.value)
-          .then((_) => {
-            useMessageBox().success('新增数据成功')
-            emit('success')
-            close()
-          })
-          .finally(() => {
-            state.loadingStatus = false
-          })
-      } else {
-        //修改
-        await updateSysMenu({ ...addUpdateForm.value })
-          .then((_) => {
-            useMessageBox().success('修改数据成功')
-            emit('success')
-            close()
-          })
-          .finally(() => {
-            state.loadingStatus = false
-          })
+      try {
+        if (state.operationStatus === 'create') {
+          await saveSysMenu(addUpdateForm.value)
+          useMessage().success('新增数据成功')
+        } else {
+          await updateSysMenu(addUpdateForm.value)
+          useMessage().success('修改数据成功')
+        }
+        emit('success')
+        state.loadingStatus = false
+        close()
+      } catch {
+        state.loadingStatus = false
       }
     } else {
       state.loadingStatus = false

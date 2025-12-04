@@ -145,7 +145,7 @@ const handleEdit = (row: GenDataSourceResponse) => {
 /**
  * 处理删除
  */
-const handleDelete = async (row?: GenDataSourceResponse) => {
+const handleDelete = (row?: GenDataSourceResponse) => {
   state.loadingStatus = true
   let ids: ModeIdArrayType = []
   if (row) {
@@ -157,13 +157,12 @@ const handleDelete = async (row?: GenDataSourceResponse) => {
     useMessage().error('请选择数据源配置数据')
     return
   }
-  await useMessageBox()
+  useMessageBox()
     .confirm('此操作将永久删除数据源配置, 是否继续?')
-    .then(() => {
-      removeGenDataSourceByIds(ids).then(async () => {
-        useMessage().success('删除数据源配置成功!')
-        await handleQuery()
-      })
+    .then(async () => {
+      await removeGenDataSourceByIds(ids)
+      await handleQuery()
+      useMessage().success('删除数据源配置成功!')
     })
     .finally(() => {
       state.loadingStatus = false

@@ -1,5 +1,13 @@
 <template>
-  <el-drawer v-model="state.visibleStatus" :before-close="close" append-to-body size="46%" title="文件下载">
+  <el-drawer
+    v-model="state.visibleStatus"
+    title="文件下载"
+    size="45%"
+    append-to-body
+    :close-on-click-modal="false"
+    :show-close="!state.loadingStatus"
+    :before-close="close"
+  >
     <div class="flex h-full flex-col overflow-hidden" style="">
       <el-form
         ref="addUpdateFormRef"
@@ -27,8 +35,8 @@
       </xht-table>
     </div>
     <template #footer>
+      <el-button :disabled="state.loadingStatus" @click="close">取 消</el-button>
       <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>
-      <el-button @click="close">取 消</el-button>
     </template>
   </el-drawer>
 </template>
@@ -49,7 +57,7 @@ interface CrudOption {
 const rules: FormRules = {
   packageName: [{ required: true, message: '请填写包名', trigger: ['blur', 'change'] }],
 }
-const addUpdateForm = ref<{
+const addUpdateForm = reactive<{
   packageName: string
 }>({
   packageName: 'com.xht.demo',
@@ -78,9 +86,9 @@ const submitForm = () => {
   state.loadingStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      downloadFileApi(
+      await downloadFileApi(
         state.tableList.map((item) => item.id),
-        addUpdateForm.value.packageName
+        addUpdateForm.packageName
       )
         .then((data) => {
           handleBlobFile(new Blob([data as any]), 'ZZZ.zip')
@@ -101,14 +109,12 @@ const submitForm = () => {
  */
 const close = () => {
   if (state.loadingStatus) return
-  addUpdateForm.value = {
-    packageName: 'com.xht.demo',
-  }
   state.visibleStatus = false
   state.loadingStatus = false
   state.tableList = []
   addUpdateFormRef.value?.resetFields()
 }
+
 defineExpose({
   show,
 })

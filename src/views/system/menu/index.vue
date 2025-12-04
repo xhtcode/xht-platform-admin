@@ -194,9 +194,8 @@ defineOptions({ name: 'SysMenuViewIndex' })
 const menuForm = defineAsyncComponent(() => import('@/views/system/menu/components/menu-form.vue'))
 const menuFormRef = useTemplateRef('menuFormRef')
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
-const tableRef = useTemplateRef('tableRef')
 
-interface CrudOption {
+const state = reactive<{
   total: number
   pages: number
   loadingStatus: boolean
@@ -205,9 +204,7 @@ interface CrudOption {
   searchStatus: boolean
   queryParams: SysMenuQueryRequest
   tableList: SysMenuTreeResponse
-}
-
-const state = reactive<CrudOption>({
+}>({
   total: 0,
   pages: 1,
   loadingStatus: false,
@@ -222,6 +219,7 @@ const { queryParams } = toRefs(state)
 const columnOption = ref<ColumnConfig<SysMenuResponse>>({
   ...SysMenuColumnOption,
 })
+
 /**
  * 查询数据列表
  */
@@ -243,12 +241,14 @@ const resetQuery = async () => {
   queryFormRef.value?.resetFields()
   await handleQuery()
 }
+
 /**
  * 处理新增
  */
 const handleAdd = () => {
   menuFormRef.value?.show('create', null)
 }
+
 /**
  * 处理编辑
  */
@@ -259,17 +259,15 @@ const handleEdit = (row: SysMenuResponse) => {
 /**
  * 处理删除
  */
-const handleDelete = async (row: any) => {
+const handleDelete = (row: any) => {
   state.loadingStatus = true
-  await useMessageBox()
+  useMessageBox()
     .confirm('此操作将永久删除菜单, 是否继续?')
-    .then(() => {
-      removeSysMenuById(row.id).then(async () => {
-        useMessage().success('删除菜单成功!')
-        await handleQuery()
-      })
+    .then(async () => {
+      await removeSysMenuById(row.id)
+      useMessage().success('删除菜单成功!')
+      await handleQuery()
     })
-    .catch((_) => {})
     .finally(() => {
       state.loadingStatus = false
     })

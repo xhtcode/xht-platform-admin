@@ -67,7 +67,6 @@ import { GenColumnInfoOperationRequest, GenColumnInfoResponse, GenStatusEnums } 
 
 /**
  * 列信息模型，用于双向绑定列数据
- * @type {GenColumnInfoResponse[]} 列信息数组
  */
 const columnInfo = defineModel<GenColumnInfoResponse[]>('columnInfo', {
   required: true,
@@ -84,12 +83,5 @@ const changeList = (row: GenColumnInfoOperationRequest) => {
     row.listDisabled = 0
     row.listHidden = 0
   }
-}
-/**
- * 创建序号
- * @param index 索引
- */
-const createIndex = (index: number) => {
-  return index + 1
 }
 </script>
