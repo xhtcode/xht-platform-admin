@@ -54,6 +54,7 @@
         v-loading="state.loadingStatus"
         :data="state.tableList"
         :default-expand-all="state.expandAllStatus"
+        :cell-style="{ padding: '6px' }"
         :tree-props="{ children: 'children' }"
         class="flex-1"
         row-key="id"
