@@ -2,7 +2,7 @@
   <div class="icon-select-container w100">
     <el-input v-model="modelValue" :placeholder="props.placeholder" class="icon-select-input" readonly @click="openDialog">
       <template #prepend>
-        <div :class="`icon-menu-${modelValue}`" @click="openDialog()" />
+        <div :class="`i-menu-${modelValue}`" @click="openDialog()" />
       </template>
       <template v-if="props.clearable" #suffix>
         <el-icon size="1em" @click="clearableValue">
@@ -20,7 +20,7 @@
         size="large"
       >
         <template #append>
-          <div :class="`icon-menu-${modelValue}`" />
+          <div :class="`i-menu-${modelValue}`" />
         </template>
       </el-input>
       <el-scrollbar height="270px">
@@ -33,7 +33,7 @@
             @click="selectIcon(item, false)"
             @dblclick="selectIcon(item, true)"
           >
-            <div :class="`icon-menu-${item.iconName}`" />
+            <div :class="`i-menu-${item.iconName}`" />
           </li>
         </ul>
         <el-empty v-if="iconsList.length === 0" description="未搜索到您要找的图标~" />

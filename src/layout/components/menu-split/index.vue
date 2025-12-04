@@ -8,7 +8,7 @@
       @click="handleMenuClick(item)"
     >
       <div class="xht-split-item-icon">
-        <i class="item-icon" :class="`icon-menu-${item.meta?.icon}`" />
+        <i class="item-icon" :class="`i-menu-${item.meta?.icon}`" />
       </div>
       <div class="xht-split-item-text">{{ item.meta?.title }}</div>
     </div>

@@ -8,7 +8,7 @@
       <div class="sms-container">
         <el-input v-model="phoneForm.code" class="login-input" placeholder="请输入验证码" size="large">
           <template #prefix>
-            <div class="icon-login-code h-1rem w-1rem color-[var(--color)]" />
+            <div class="i-login-code h-1rem w-1rem color-[var(--color)]" />
           </template>
         </el-input>
         <el-button :disabled="smsCountdown > 0" class="sms-button" size="large" type="primary" @click="sendSMS">

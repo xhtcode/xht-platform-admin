@@ -83,7 +83,7 @@
         />
         <el-table-column v-if="columnOption.menuIcon?.visible" align="center" label="菜单图标" min-width="120" prop="menuIcon">
           <template #default="{ row }">
-            <div :class="`icon-menu-${row.menuIcon}`" class="color-[var(--xht-svg-color)] text-16px" />
+            <div :class="`i-menu-${row.menuIcon}`" class="color-[var(--xht-svg-color)] text-16px" />
           </template>
         </el-table-column>
         <el-table-column v-if="columnOption.menuHidden?.visible" align="center" label="显示状态" min-width="120" prop="menuHidden">

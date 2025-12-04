@@ -1,7 +1,7 @@
 <template>
   <div class="header-tool-item" @click="toggleColorScheme()">
-    <div v-if="darkStatus" class="icon-common-moon size-20px" />
-    <div v-else class="icon-common-sunny size-20px" />
+    <div v-if="darkStatus" class="i-common-moon size-20px" />
+    <div v-else class="i-common-sunny size-20px" />
   </div>
 </template>
 

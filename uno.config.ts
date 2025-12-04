@@ -23,13 +23,13 @@ const generateSafeList = () => {
       ...fs
         .readdirSync(iconsDir)
         .filter((file) => file.endsWith('.svg'))
-        .map((file) => `icon-common-${file.replace('.svg', '')}`)
+        .map((file) => `i-common-${file.replace('.svg', '')}`)
     )
     result.push(
       ...fs
         .readdirSync(`${iconsDir}/menu`)
         .filter((file) => file.endsWith('.svg'))
-        .map((file) => `icon-menu-${file.replace('.svg', '')}`)
+        .map((file) => `i-menu-${file.replace('.svg', '')}`)
     )
   } catch (error) {
     console.error('无法读取图标目录:', error)
@@ -53,7 +53,7 @@ export default defineConfig({
     presetWebFonts(),
     presetIcons({
       scale: 1.2, // 图标缩放比例
-      prefix: 'icon-', // 图标前缀
+      prefix: 'i-', // 图标前缀
       warn: true, //当缺少的图标匹配时发出警告
       extraProperties: {
         // 额外属性

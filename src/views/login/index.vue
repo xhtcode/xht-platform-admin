@@ -42,7 +42,7 @@
             title="密码登录"
             @click="handleChangeLoginType('password')"
           >
-            <div class="icon icon-login-password" />
+            <div class="icon i-login-password" />
           </div>
           <div
             :class="{ active: activeLoginType === 'phone' }"
@@ -50,7 +50,7 @@
             title="手机号登录"
             @click="handleChangeLoginType('phone')"
           >
-            <div class="icon icon-login-phone" />
+            <div class="icon i-login-phone" />
           </div>
           <div
             :class="{ active: activeLoginType === 'qrcode' }"
@@ -58,7 +58,7 @@
             title="扫码登录"
             @click="handleChangeLoginType('qrcode')"
           >
-            <div class="icon icon-login-sm" />
+            <div class="icon i-login-sm" />
           </div>
           <div
             :class="{ active: activeLoginType === 'wechat' }"
@@ -66,10 +66,10 @@
             title="微信登录"
             @click="handleChangeLoginType('wechat')"
           >
-            <div class="icon icon-login-wechat" />
+            <div class="icon i-login-wechat" />
           </div>
           <div :class="{ active: activeLoginType === 'qq' }" class="other-party-icon-item" title="QQ登录" @click="handleChangeLoginType('qq')">
-            <div class="icon icon-login-qq" />
+            <div class="icon i-login-qq" />
           </div>
           <div
             :class="{ active: activeLoginType === 'dinging' }"
@@ -77,7 +77,7 @@
             title="钉钉登录"
             @click="handleChangeLoginType('dinging')"
           >
-            <div class="icon icon-login-ding-ding" />
+            <div class="icon i-login-ding-ding" />
           </div>
         </div>
       </div>
