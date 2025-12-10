@@ -3,12 +3,12 @@
     <div class="xht-view-main">
       <el-form ref="queryFormRef" :disabled="state.loadingStatus" :model="queryParams" class="user-select-display" label-width="120px">
         <el-row>
-          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24" class="text-center">
+          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
             <el-form-item label="分组名称" prop="groupName">
               <el-input v-model="queryParams.groupName" :maxlength="50" placeholder="请输入分组名称" show-word-limit />
             </el-form-item>
           </el-col>
-          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24" class="text-center">
+          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
             <el-button :icon="Search" type="primary" @click="handleQuery()">查询</el-button>
             <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
           </el-col>

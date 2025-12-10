@@ -1,8 +1,11 @@
 <template>
   <el-drawer v-model="state.visibleStatus" :before-close="close" append-to-body size="100%" title="代码预览">
-    <div class="xht-code-view-container">
-      <div class="xht-code-view-main xht-code-view-select">
-        <el-scrollbar view-style="overflow-x: hidden;">
+    <div class="xht-code-view-container" v-loading="state.loadingStatus">
+      <div class="xht-code-view-main" :style="{ width: tableWidth ? '200px' : '100px' }">
+        <div class="xht-code-view-setting" @click="tableWidth = !tableWidth">
+          {{ tableWidth ? '《《《《《《' : '》》》' }}
+        </div>
+        <el-scrollbar view-style="overflow-x: hidden;" v-if="tableWidth">
           <div
             v-for="(item, index) in state.codeData"
             :key="index"
@@ -16,9 +19,13 @@
             </span>
           </div>
         </el-scrollbar>
+        <div class="xht-code-view-empty" @click="tableWidth = !tableWidth" v-else>点击展开</div>
       </div>
-      <div class="xht-code-view-main xht-code-view-select">
-        <el-scrollbar view-style="overflow-x: hidden;">
+      <div class="xht-code-view-main" :style="{ width: codeNameWidth ? '280px' : '100px' }">
+        <div class="xht-code-view-setting" @click="codeNameWidth = !codeNameWidth">
+          {{ codeNameWidth ? '《《《《《《' : '》》》' }}
+        </div>
+        <el-scrollbar view-style="overflow-x: hidden;" view-class="flex-1" v-if="codeNameWidth">
           <div
             v-for="(item, index) in state.twoCodeData"
             :key="index"
@@ -32,24 +39,26 @@
             </span>
           </div>
         </el-scrollbar>
+        <div class="xht-code-view-empty" @click="codeNameWidth = !codeNameWidth" v-else>点击展开</div>
       </div>
       <div class="flex-1">
-        <code-monaco-editor ref="codeMonacoEditorRef" :language="state.activeFileType" readonly />
+        <code-monaco-editor ref="codeMonacoEditorRef" :language="state.activeFileType" :font-size="14" readonly />
       </div>
     </div>
     <template #footer>
-      <el-row>
+      <el-row v-loading="state.loadingStatus">
         <el-col :span="6">
-          <el-form-item label="包名">
-            <el-input v-model="state.packageName" placeholder="请输入包名" />
+          <el-form-item label="包名" required>
+            <el-input v-model="state.packageName" placeholder="请输入包名" :maxlength="200" show-word-limit />
           </el-form-item>
         </el-col>
-        <el-col :span="12" class="flex-center!">
+        <el-col :span="10" class="text-center!">
           <el-text truncated>{{ state.activeData?.filePath }}</el-text>
         </el-col>
-        <el-col :span="6" class="text-right">
-          <el-button :disabled="!state.packageName" :icon="Download" type="success">下载</el-button>
+        <el-col :span="8" class="text-right">
+          <el-button :disabled="!state.packageName" :icon="Refresh" type="info" @click="show(state.tableIds)">重新加载</el-button>
           <el-button :disabled="!state.activeData" :icon="DocumentCopy" type="primary" @click="handleCopyCode">复制</el-button>
+          <el-button :disabled="!state.packageName" :icon="Download" type="success">下载</el-button>
           <el-button :icon="Delete" type="danger" @click="close">关闭</el-button>
         </el-col>
       </el-row>
@@ -60,9 +69,10 @@
 <script lang="ts" setup>
 import type { ModeIdType } from '@/service/model/base.model'
 import { viewCodeFileApi } from '@/service/api/generate/table.api'
-import { ArrowRight, Delete, DocumentCopy, Download } from '@element-plus/icons-vue'
+import { ArrowRight, Delete, DocumentCopy, Download, Refresh } from '@element-plus/icons-vue'
 import type { CodeViewState } from '@/service/model/generate/table.model'
 import { useMessage } from '@/hooks/use-message'
+import { ElDrawer } from 'element-plus'
 
 defineOptions({
   name: 'CodeView',
@@ -89,22 +99,29 @@ const state = reactive<CodeViewState>({
   activeTableName: '', // 当前激活的表名
   activeFileName: '', // 当前激活的文件名
 })
+const tableWidth = ref<boolean>(true)
+const codeNameWidth = ref<boolean>(true)
 
 /**
  * 显示代码预览抽屉
  * @param tableIds - 需要预览代码的表ID数组
  */
-const show = (tableIds: ModeIdType[]) => {
-  state.tableIds = tableIds
-  state.visibleStatus = true
-  state.loadingStatus = true
-  viewCodeFileApi(state.tableIds, state.packageName)
-    .then((res) => {
-      state.codeData = res.data
-    })
-    .finally(() => {
-      state.loadingStatus = false
-    })
+const show = async (tableIds: ModeIdType[]) => {
+  try {
+    state.tableIds = tableIds
+    state.visibleStatus = true
+    state.loadingStatus = true
+    const { data } = await viewCodeFileApi(state.tableIds, state.packageName)
+    state.codeData = data
+    state.twoCodeData = [] // 当前选中表的代码文件列表
+    state.activeData = null
+    state.activeFileType = 'java' // 当前激活的文件类型
+    state.activeFileName = '' // 当前激活的文件名
+    await nextTick()
+    codeMonacoEditorRef.value?.setValue('')
+  } finally {
+    state.loadingStatus = false
+  }
 }
 
 /**
@@ -153,7 +170,7 @@ const close = () => {
 const handleCopyCode = () => {
   if (state.activeData && state.activeData.code) {
     copy(state.activeData?.code)
-    useMessage().success('复制成功!')
+    useMessage().success('代码复制成功!')
   } else {
     useMessage().error('请选择要复制的文件!')
   }
@@ -174,13 +191,50 @@ defineExpose({
   user-select: none;
 
   .xht-code-view-main {
-    width: 280px;
+    height: 100%;
     box-sizing: border-box;
     border: 1px solid var(--xht-border-color);
+    display: flex;
+    flex-direction: column;
+
+    .xht-code-view-setting {
+      height: 28px;
+      padding: 5px;
+      display: flex;
+      font-size: 12px;
+      color: var(--el-color-info);
+      cursor: pointer;
+      justify-content: center;
+      align-items: center;
+      border-bottom: 1px solid var(--xht-border-color);
+
+      &:hover {
+        font-weight: bold;
+        color: var(--el-color-primary);
+        background: #ebeef5;
+      }
+    }
+
+    .xht-code-view-empty {
+      display: flex;
+      height: 100%;
+      width: 100%;
+      writing-mode: vertical-rl;
+      justify-content: center;
+      align-items: center;
+      color: var(--el-color-info);
+      cursor: pointer;
+      font-size: 16px;
+
+      &:hover {
+        font-weight: bold;
+        color: var(--el-color-primary);
+      }
+    }
   }
 
   .xht-code-view-item {
-    width: 280px;
+    width: 100%;
     height: 34px;
     line-height: 34px;
     font-size: 13px;

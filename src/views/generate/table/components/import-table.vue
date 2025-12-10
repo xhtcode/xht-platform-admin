@@ -144,8 +144,9 @@ const show = () => {
  * 提交表单
  */
 const submitForm = () => {
-  state.visibleStatus = true
+  state.loadingStatus = true
   importTableFormRef.value.show(state.checkData, state.queryParams.dataSourceId)
+  state.loadingStatus = false
 }
 
 /**

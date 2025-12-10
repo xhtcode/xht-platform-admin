@@ -31,11 +31,6 @@
   user-select: none;
 }
 
-//=================== 修改数字输入框默认宽度为100% ===================
-.el-input-number {
-  width: 100%;
-}
-
 //=================== 自定义颜色选择器样式 ===================
 .custom-color-picker {
   .el-color-picker-panel__footer {
@@ -90,7 +85,7 @@
 }
 
 .el-form-item {
-  margin-bottom: 8px !important;
+  //margin-bottom: 8px !important;
 }
 
 //=================== 表格控件样式修改 ===================

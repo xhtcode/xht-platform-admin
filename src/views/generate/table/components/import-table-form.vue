@@ -82,7 +82,7 @@ const show = (tableData: string[], dbInfo: ModeIdType) => {
  * 提交表单
  */
 const submitForm = () => {
-  addUpdatePageInit.value.visibleStatus = true
+  addUpdatePageInit.value.loadingStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
       try {

@@ -3,28 +3,28 @@
     <div class="xht-view-main">
       <el-form ref="queryFormRef" :disabled="state.loadingStatus" :model="queryParams" class="user-select-display" label-width="80px">
         <el-row v-if="!state.searchStatus">
-          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
+          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
             <el-form-item label="关键字" prop="keyWord">
               <el-input v-model="queryParams.keyWord" :maxlength="100" placeholder="请输入关键字" show-word-limit />
             </el-form-item>
           </el-col>
-          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24" class="text-center">
+          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
             <el-button :icon="Search" type="primary" @click="handleQuery">查询</el-button>
             <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
           </el-col>
         </el-row>
         <el-row v-else>
-          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
+          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
             <el-form-item label="角色名称" prop="roleName">
               <el-input v-model="queryParams.roleName" placeholder="请输入角色名称" />
             </el-form-item>
           </el-col>
-          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
+          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
             <el-form-item label="角色编码" prop="roleCode">
               <el-input v-model="queryParams.roleCode" placeholder="请输入角色编码" />
             </el-form-item>
           </el-col>
-          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
+          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
             <el-form-item label="角色状态" prop="roleStatus">
               <el-select v-model="queryParams.roleStatus" clearable placeholder="请选择角色状态">
                 <el-option :value="RoleStatusEnums.NORMAL" label="正常" />
@@ -32,7 +32,7 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24" class="text-center">
+          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
             <el-button :icon="Search" type="primary" @click="handleQuery">查询</el-button>
             <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
           </el-col>
@@ -59,16 +59,16 @@
       >
         <el-table-column align="center" type="selection" width="55" />
         <xht-column-index :current="queryParams.current" :size="queryParams.size" />
-        <el-table-column label="角色名称" min-width="120" prop="roleName" />
-        <el-table-column label="角色编码" min-width="160" prop="roleCode" />
-        <el-table-column label="角色状态" prop="roleStatus" width="100">
+        <el-table-column v-if="columnOption.roleName?.visible" label="角色名称" min-width="120" prop="roleName" />
+        <el-table-column v-if="columnOption.roleCode?.visible" label="角色编码" min-width="160" prop="roleCode" />
+        <el-table-column v-if="columnOption.roleStatus?.visible" label="角色状态" prop="roleStatus" width="100">
           <template #default="{ row }">
             <el-tag :type="row.roleStatus === 0 ? 'success' : 'danger'">
               {{ row.roleStatus === 0 ? '正常' : '停用' }}
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="数据范围" prop="dataScope" width="160">
+        <el-table-column v-if="columnOption.dataScope?.visible" label="数据范围" prop="dataScope" width="160">
           <template #default="{ row }">
             <el-tag v-if="row.dataScope === 1" effect="dark" type="primary">全部数据权限</el-tag>
             <el-tag v-if="row.dataScope === 2" effect="dark" type="success">自定数据权限</el-tag>
@@ -78,7 +78,7 @@
             <el-tag v-if="row.dataScope === 6" color="#F2F6FC" effect="dark">仅本人数据权限</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="显示顺序" prop="roleSort" width="120" />
+        <el-table-column v-if="columnOption.roleSort?.visible" label="显示顺序" prop="roleSort" width="120" />
         <el-table-column v-if="columnOption.createBy?.visible" label="创建人" prop="createBy" width="160" />
         <el-table-column v-if="columnOption.createTime?.visible" label="创建时间" prop="createTime" width="180" />
         <el-table-column v-if="columnOption.updateBy?.visible" label="更新人" prop="updateBy" width="160" />

@@ -33,7 +33,7 @@
       </el-col>
       <el-col :span="6">
         <el-form-item label="模板分组" prop="tableInfo.groupId">
-          <el-input v-model="tableInfo.groupId" placeholder="请输入分组id" />
+          <template-group-select v-model="tableInfo.groupId" placeholder="请选择模板分组" />
         </el-form-item>
       </el-col>
       <el-col :span="6">

@@ -3,12 +3,12 @@
     <div class="xht-view-main">
       <el-form ref="queryFormRef" :disabled="state.loadingStatus" :model="queryParams" class="user-select-display" label-width="120px">
         <el-row>
-          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
+          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
             <el-form-item label="数据源名称" prop="name">
               <el-input v-model="queryParams.name" clearable placeholder="请输入数据源名称" />
             </el-form-item>
           </el-col>
-          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
+          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
             <el-form-item label="数据库类型" prop="dbType">
               <el-select v-model="queryParams.dbType" placeholder="请选择数据库类型">
                 <el-option :value="DataBaseTypeEnums.MYSQL" label="MySql" />
@@ -16,7 +16,7 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24" class="text-center">
+          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
             <el-button :icon="Search" type="primary" @click="handleQuery()">查询</el-button>
             <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
           </el-col>

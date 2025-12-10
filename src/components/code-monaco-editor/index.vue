@@ -41,7 +41,6 @@ const setValueStatus = shallowRef<boolean>(true)
  * 初始化编辑器
  */
 const init = () => {
-  const flag = true
   editor.value = monaco.editor.create(codeEditBox.value!, {
     value: modelValue.value,
     language: convertLanguage(language.value),
@@ -56,7 +55,7 @@ const init = () => {
     domReadOnly: true,
     readOnlyMessage: {
       isTrusted: false,
-      value: '正在预览中，此刻内容仅供查看，暂无法编辑 ✨!',
+      value: '暂无文件编辑权限 ✨!',
       supportThemeIcons: false,
       supportHtml: false,
     }, // 为只读时编辑内日提示词
@@ -64,14 +63,61 @@ const init = () => {
     automaticLayout: true, // // 设置是否启用自动布局，使编辑器在容器尺寸变化时自动调整大小。
     formatOnPaste: true, //是否启用粘贴时自动格式化
     formatOnType: false, //是否启用输入时自动格式化
-    contextmenu: true, //是否启用自定义右键菜单。
-    wordWrap: flag ? 'wordWrapColumn' : 'off', //是否换行
+    contextmenu: false, //是否启用自定义右键菜单。
+    wordWrap: 'off', //是否换行
     wordWrapColumn: 120,
     stickyScroll: {
       enabled: false,
     },
+    lineNumbers: 'on', // 行号
+    lineNumbersMinChars: 3,
     mouseWheelZoom: true, //使用鼠标滚轮结合 Ctrl 键缩放字体
     scrollBeyondLastLine: false, // 滚动完最后一行后不准再滚动一屏幕
+    scrollbar: {
+      /**
+       * 箭头的大小（如果显示的话）。
+       * 默认值为11。
+       * **注意**：此选项无法通过 `updateOptions()` 更新
+       */
+      arrowSize: 5,
+      /**
+       * 渲染垂直滚动条。
+       * 默认值为'auto'。
+       */
+      vertical: 'visible',
+      /**
+       * 渲染水平滚动条。
+       * 默认值为'auto'，鼠标移出会隐藏
+       */
+      horizontal: 'visible',
+      /**
+       * 水平滚动条的高度（像素）。
+       * 默认值为10（像素）。
+       */
+      horizontalScrollbarSize: 5,
+      /**
+       * 垂直滚动条的宽度（像素）。
+       * 默认值为10（像素）。
+       */
+      verticalScrollbarSize: 5,
+      /**
+       * 垂直滑块的宽度（像素）。
+       * 默认值等于 `verticalScrollbarSize`。
+       * **注意**：此选项无法通过 `updateOptions()` 更新
+       */
+      verticalSliderSize: 5,
+      /**
+       * 水平滑块的高度（像素）。
+       * 默认值等于 `horizontalScrollbarSize`。
+       * **注意**：此选项无法通过 `updateOptions()` 更新
+       */
+      horizontalSliderSize: 5,
+      /**
+       * 设置后，水平滚动条不会影响编辑器的内容高度
+       * 默认值为false，会占用编辑器的内容高度
+       */
+      ignoreHorizontalScrollbarInContentHeight: false,
+    },
   })
 
   /**
@@ -90,7 +136,7 @@ const init = () => {
    * 监听只读编辑
    */
   editor.value.onDidAttemptReadOnlyEdit((_) => {
-    useMessage().error('正在预览中，此刻内容仅供查看，暂无法编辑 ✨!')
+    useMessage().error('暂无文件编辑权限 ✨!')
   })
 }
 /**

@@ -3,28 +3,28 @@
     <div class="xht-view-main">
       <el-form ref="queryFormRef" :disabled="state.loadingStatus" :model="queryParams" class="user-select-display" label-width="80px">
         <el-row v-if="!state.searchStatus">
-          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
+          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
             <el-form-item label="关键字" prop="keyWord">
               <el-input v-model="queryParams.keyWord" :maxlength="100" placeholder="请输入关键字" show-word-limit />
             </el-form-item>
           </el-col>
-          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24" class="text-center">
+          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
             <el-button :icon="Search" type="primary" @click="handleQuery">查询</el-button>
             <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
           </el-col>
         </el-row>
         <el-row v-else>
-          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
+          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
             <el-form-item label="字典编码" prop="dictCode">
               <el-input v-model="queryParams.dictCode" :maxlength="50" placeholder="请输入字典编码" show-word-limit />
             </el-form-item>
           </el-col>
-          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
+          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
             <el-form-item label="字典名称" prop="dictName">
               <el-input v-model="queryParams.dictName" :maxlength="50" placeholder="请输入字典名称" show-word-limit />
             </el-form-item>
           </el-col>
-          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
+          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
             <el-form-item label="字典状态" prop="status">
               <el-select v-model="queryParams.status" placeholder="请选择字典状态">
                 <el-option :value="DictStatusEnums.ENABLED" label="启用" />
@@ -32,7 +32,7 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24" class="text-center">
+          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
             <el-button :icon="Search" type="primary" @click="handleQuery">查询</el-button>
             <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
           </el-col>

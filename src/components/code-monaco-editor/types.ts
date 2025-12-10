@@ -65,7 +65,7 @@ export interface EditorProps {
   width?: string // 宽度
   height?: string // 高度
   theme?: Theme // 主题
-  placeholder?: string
+  placeholder?: string // 占位符
   fontSize?: number // 字体大小
   minimap?: boolean // 是否显示小地图
   validateStatus?: boolean // 校验状态

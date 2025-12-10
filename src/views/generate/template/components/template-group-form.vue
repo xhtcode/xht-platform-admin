@@ -90,7 +90,7 @@ const show = async (type: 'create' | 'update', id: ModeIdType) => {
  * 提交表单
  */
 const submitForm = () => {
-  state.visibleStatus = true
+  state.loadingStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
       try {

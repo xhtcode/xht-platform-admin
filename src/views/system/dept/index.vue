@@ -3,28 +3,28 @@
     <div class="xht-view-main">
       <el-form ref="queryFormRef" :disabled="state.loadingStatus" :model="queryParams" class="user-select-display" label-width="80px">
         <el-row v-if="!state.searchStatus">
-          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
+          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
             <el-form-item label="关键字" prop="keyWord">
               <el-input v-model="queryParams.keyWord" :maxlength="100" placeholder="请输入关键字" show-word-limit />
             </el-form-item>
           </el-col>
-          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24" class="text-center">
+          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
             <el-button :icon="Search" type="primary" @click="handleQuery()">查询</el-button>
             <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
           </el-col>
         </el-row>
         <el-row v-else>
-          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
+          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
             <el-form-item label="部门名称" prop="deptName">
               <el-input v-model="queryParams.deptName" placeholder="请输入部门名称" />
             </el-form-item>
           </el-col>
-          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
+          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
             <el-form-item label="部门编码" prop="deptCode">
               <el-input v-model="queryParams.deptCode" placeholder="请输入部门编码" />
             </el-form-item>
           </el-col>
-          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
+          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
             <el-form-item label="部门状态" prop="deptStatus">
               <el-select v-model="queryParams.deptStatus" placeholder="请选择部门状态">
                 <el-option :value="DeptStatusEnums.NORMAL" label="正常" />
@@ -32,7 +32,7 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24" class="text-center">
+          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
             <el-button :icon="Search" type="primary" @click="handleQuery()">查询</el-button>
             <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
           </el-col>

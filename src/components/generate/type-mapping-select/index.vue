@@ -1,6 +1,6 @@
 <template>
   <el-select v-model="value" :clearable="clearable" :disabled="disabled" value-key="id" :placeholder="placeholder" filterable @change="handleChange">
-    <el-option v-for="item in state.tableList" :key="item.id" :label="item.targetDataType" :value="item" />
+    <el-option v-for="item in tableList" :key="item.id" :label="item.targetDataType" :value="item" />
   </el-select>
 </template>
 
@@ -43,6 +43,7 @@ const state = reactive<TypeMappingSelectState>({
   tableList: [],
   loading: false,
 })
+const tableList = useSessionStorage<GenTypeMappingResponse[]>('type:mapping2:' + props.dbType + ':' + props.languageType, [])
 
 /**
  * 查询类型映射信息列表
@@ -51,12 +52,14 @@ const handleQuery = async () => {
   // 设置加载状态
   state.loading = true
   try {
-    const res = await queryGenTypeMappingList({
-      dbType: props.dbType,
-      targetLanguage: props.languageType,
-    })
-    state.tableList = res.data || []
-    state.tableList.forEach((item) => {
+    if (!tableList.value || tableList.value.length <= 0) {
+      const res = await queryGenTypeMappingList({
+        dbType: props.dbType,
+        targetLanguage: props.languageType,
+      })
+      tableList.value = res.data || []
+    }
+    tableList.value.forEach((item) => {
       if (modelValue.value === item.targetDataType) {
         value.value = item
         return

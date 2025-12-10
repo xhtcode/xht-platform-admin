@@ -38,6 +38,8 @@ export const saveSysRole = (data: SysRoleOperationRequest): AxiosPromise<boolean
 
 /**
  * 修改角色
+ *
+ * @param id
  */
 export const updateSysRole = (data: SysRoleOperationRequest): AxiosPromise<boolean> => {
   return request({
@@ -97,6 +99,7 @@ export const querySysRolePage = (data?: SysRoleQueryRequest): AxiosPromise<PageR
 
 /**
  * 查询角色菜单
+ *
  * @param roleId 角色id
  */
 export const selectMenuIdByRoleId = (roleId: ModeIdType): AxiosPromise<RoleSelectedMenuResponse> => {

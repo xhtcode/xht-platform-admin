@@ -3,7 +3,7 @@
     <div class="xht-view-main">
       <el-form ref="queryFormRef" :disabled="state.loadingStatus" :model="queryParams" class="user-select-display" label-width="120px">
         <el-row>
-          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
+          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
             <el-form-item label="数据库" prop="dbType">
               <el-select v-model="queryParams.dbType" placeholder="请选择数据库类型">
                 <el-option :value="DataBaseTypeEnums.MYSQL" label="MySql" />
@@ -11,7 +11,7 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24">
+          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
             <el-form-item label="编程语言" prop="targetLanguage">
               <el-select v-model="queryParams.targetLanguage" placeholder="请选择编程语言类型">
                 <el-option :value="LanguageTypeEnums.JAVA" label="Java" />
@@ -19,7 +19,7 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24" class="text-center">
+          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
             <el-button :icon="Search" type="primary" @click="handleQuery()">查询</el-button>
             <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
           </el-col>
