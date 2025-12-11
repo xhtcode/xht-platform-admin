@@ -53,7 +53,7 @@
       </el-col>
       <el-col :span="6">
         <el-form-item label="模块名称" prop="tableInfo.moduleName">
-          <el-input v-model="tableInfo.moduleName" :maxlength="10" placeholder="请输入模块名称" show-word-limit />
+          <el-autocomplete v-model="tableInfo.moduleName" placeholder="请输入模块名称" :fetch-suggestions="querySearch" clearable />
         </el-form-item>
       </el-col>
       <el-col :span="6">
@@ -111,6 +111,19 @@ const tableInfo = defineModel<GenTableInfoResponse>('tableInfo', {
   required: true,
   default: () => {},
 })
+const restaurants = ref<any[]>([{ value: 'system' }, { value: 'generate' }])
+/**
+ * 搜索
+ */
+const querySearch = (queryString: string, cb: any) => {
+  const results = queryString ? restaurants.value.filter(createFilter(queryString)) : restaurants.value
+  cb(results)
+}
+const createFilter = (queryString: string) => {
+  return (restaurant: any) => {
+    return restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
+  }
+}
 </script>
 
 <style lang="scss" scoped></style>
