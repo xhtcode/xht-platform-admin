@@ -9,10 +9,10 @@ import type { GenTypeMappingOperationRequest, GenTypeMappingQueryRequest, GenTyp
 const baseURL: string = import.meta.env.VITE_GENERATE_API_PREFIX
 
 enum Api {
-  SAVE = '/gen/type/mapping/create',
+  CREATE = '/gen/type/mapping/create',
   UPDATE = '/gen/type/mapping/update',
-  DELETE = '/gen/type/mapping/remove/',
-  QUERY_ONE = '/gen/type/mapping/get/',
+  REMOVE = '/gen/type/mapping/remove/',
+  QUERY_BYID = '/gen/type/mapping/get/',
   QUERY_PAGE = '/gen/type/mapping/page',
   QUERY_LIST = '/gen/type/mapping/list',
 }
@@ -22,7 +22,7 @@ enum Api {
  */
 export const saveGenTypeMapping = (data: GenTypeMappingOperationRequest): AxiosPromise<boolean> => {
   return request({
-    url: Api.SAVE,
+    url: Api.CREATE,
     baseURL,
     method: 'post',
     data: data,
@@ -46,7 +46,7 @@ export const updateGenTypeMapping = (data: GenTypeMappingOperationRequest): Axio
  */
 export const removeGenTypeMappingByIds = (ids: ModeIdType[]): AxiosPromise<boolean> => {
   return request({
-    url: Api.DELETE,
+    url: Api.REMOVE,
     baseURL,
     method: 'post',
     data: ids,
@@ -58,7 +58,7 @@ export const removeGenTypeMappingByIds = (ids: ModeIdType[]): AxiosPromise<boole
  */
 export const queryGenTypeMappingById = (id: ModeIdType): AxiosPromise<GenTypeMappingResponse> => {
   return request({
-    url: Api.QUERY_ONE + `${id}`,
+    url: Api.QUERY_BYID + `${id}`,
     baseURL,
     method: 'get',
   })

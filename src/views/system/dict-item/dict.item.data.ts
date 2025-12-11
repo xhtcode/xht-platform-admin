@@ -7,6 +7,7 @@ import type { ColumnConfig } from '@/components/table-tool-bar/types'
  * 增改页面 表单类型 默认值
  */
 export const SysDictItemOperationForm: SysDictItemOperationRequest = {
+  dictCode: '',
   id: null, // 字典项ID
   dictId: null, // 所属字典ID
   itemLabel: '', // 字典项标签

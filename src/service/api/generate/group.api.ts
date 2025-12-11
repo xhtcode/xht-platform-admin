@@ -13,10 +13,10 @@ import type {
 const baseURL: string = import.meta.env.VITE_GENERATE_API_PREFIX
 
 enum Api {
-  SAVE = '/gen/template/group/create',
+  CREATE = '/gen/template/group/create',
   UPDATE = '/gen/template/group/update',
-  DELETE = '/gen/template/group/remove/',
-  QUERY_ONE = '/gen/template/group/get/',
+  REMOVE = '/gen/template/group/remove/',
+  QUERY_BYID = '/gen/template/group/get/',
   QUERY_LIST = '/gen/template/group/list',
 }
 
@@ -25,7 +25,7 @@ enum Api {
  */
 export const saveGenTemplateGroup = (data: GenTemplateGroupOperationRequest): AxiosPromise<boolean> => {
   return request({
-    url: Api.SAVE,
+    url: Api.CREATE,
     baseURL,
     method: 'post',
     data: data,
@@ -49,7 +49,7 @@ export const updateGenTemplateGroup = (data: GenTemplateGroupOperationRequest): 
  */
 export const removeGenTemplateGroupByIds = (ids: ModeIdType[]): AxiosPromise<boolean> => {
   return request({
-    url: Api.DELETE,
+    url: Api.REMOVE,
     baseURL,
     method: 'post',
     data: ids,
@@ -61,7 +61,7 @@ export const removeGenTemplateGroupByIds = (ids: ModeIdType[]): AxiosPromise<boo
  */
 export const queryGenTemplateGroupById = (id: ModeIdType): AxiosPromise<GenTemplateGroupResponse> => {
   return request({
-    url: Api.QUERY_ONE + `${id}`,
+    url: Api.QUERY_BYID + `${id}`,
     baseURL,
     method: 'get',
   })

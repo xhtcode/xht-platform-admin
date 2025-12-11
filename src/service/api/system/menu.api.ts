@@ -9,10 +9,10 @@ import type { ModeIdType } from '@/service/model/base.model'
 const baseURL: string = import.meta.env.VITE_ADMIN_API_PREFIX
 
 enum Api {
-  SAVE = '/sys/menu/create',
+  CREATE = '/sys/menu/create',
   UPDATE = '/sys/menu/update',
-  DELETE = '/sys/menu/remove/',
-  QUERY_ONE = '/sys/menu/get/',
+  REMOVE = '/sys/menu/remove/',
+  QUERY_BYID = '/sys/menu/get/',
   QUERY_TREE = '/sys/menu/tree',
 }
 
@@ -21,7 +21,7 @@ enum Api {
  */
 export const saveSysMenu = (data: SysMenuOperationRequest): AxiosPromise<boolean> => {
   return request({
-    url: Api.SAVE,
+    url: Api.CREATE,
     baseURL,
     method: 'post',
     data: data,
@@ -45,7 +45,7 @@ export const updateSysMenu = (data: SysMenuOperationRequest): AxiosPromise<boole
  */
 export const removeSysMenuById = (id: ModeIdType): AxiosPromise<boolean> => {
   return request({
-    url: Api.DELETE + `${id}`,
+    url: Api.REMOVE + `${id}`,
     baseURL,
     method: 'post',
   })
@@ -56,7 +56,7 @@ export const removeSysMenuById = (id: ModeIdType): AxiosPromise<boolean> => {
  */
 export const querySysMenuById = (id: ModeIdType): AxiosPromise<SysMenuResponse> => {
   return request({
-    url: Api.QUERY_ONE + `${id}`,
+    url: Api.QUERY_BYID + `${id}`,
     baseURL,
     method: 'get',
   })

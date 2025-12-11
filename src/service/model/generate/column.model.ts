@@ -89,7 +89,7 @@ export interface GenTableColumnQueryResponse {
   /**
    * 主键
    */
-  id: number
+  id: ModeIdType
 
   /**
    * 表id
@@ -99,7 +99,7 @@ export interface GenTableColumnQueryResponse {
   /**
    * 表名称(冗余字段)
    */
-  tableName?: string
+  tableName: string
 
   /**
    * 字段id
@@ -109,17 +109,17 @@ export interface GenTableColumnQueryResponse {
   /**
    * 字段名称
    */
-  columnName?: string
+  columnName: string
 
   /**
    * 表单输入长度（可为null，故设为可选）
    */
-  fromLength?: number
+  fromLength: number
 
   /**
    * 查询类型（如等于、不等于、大于、小于等）
    */
-  queryType?: string
+  queryType: string
 
   /**
    * 条件标签（显示用的文本）
@@ -127,9 +127,9 @@ export interface GenTableColumnQueryResponse {
   conditionLabel: string
 
   /**
-   * 字段值（条件值）
+   * 字段值（字段命名）
    */
-  conditionValue?: string
+  conditionValue: string
 
   /**
    * 字段排序

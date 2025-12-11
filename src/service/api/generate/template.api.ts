@@ -9,10 +9,10 @@ import type { GenTemplateOperationRequest, GenTemplateResponse } from '@/service
 const baseURL: string = import.meta.env.VITE_GENERATE_API_PREFIX
 
 enum Api {
-  SAVE = '/gen/template/create',
+  CREATE = '/gen/template/create',
   UPDATE = '/gen/template/update',
-  DELETE = '/gen/template/remove/',
-  QUERY_ONE = '/gen/template/get/',
+  REMOVE = '/gen/template/remove/',
+  QUERY_BYID = '/gen/template/get/',
   QUERY_LIST = '/gen/template/list/',
 }
 
@@ -21,7 +21,7 @@ enum Api {
  */
 export const saveGenTemplate = (data: GenTemplateOperationRequest): AxiosPromise<ModeIdType> => {
   return request({
-    url: Api.SAVE,
+    url: Api.CREATE,
     baseURL,
     method: 'post',
     data: data,
@@ -45,20 +45,9 @@ export const updateGenTemplate = (data: GenTemplateOperationRequest): AxiosPromi
  */
 export const removeGenTemplateById = (id: ModeIdType): AxiosPromise<boolean> => {
   return request({
-    url: Api.DELETE + `${id}`,
+    url: Api.REMOVE + `${id}`,
     baseURL,
     method: 'post',
-  })
-}
-
-/**
- * 查询单个模板信息
- */
-export const queryGenTemplateById = (id: ModeIdType): AxiosPromise<GenTemplateResponse> => {
-  return request({
-    url: Api.QUERY_ONE + `${id}`,
-    baseURL,
-    method: 'get',
   })
 }
 

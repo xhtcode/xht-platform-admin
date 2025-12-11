@@ -14,7 +14,7 @@
     <el-row>
       <el-col :span="6">
         <el-form-item label="模板名称" prop="templateName">
-          <el-input v-model="addUpdateForm.templateName" :maxlength="20" placeholder="请输入模板名称" show-word-limit />
+          <el-input v-model="addUpdateForm.templateName" :maxlength="50" placeholder="请输入模板名称" show-word-limit />
         </el-form-item>
       </el-col>
       <el-col :span="6">
@@ -76,12 +76,7 @@
       </el-col>
     </el-row>
     <el-form-item :error="validateStatus ? '请输入模板内容' : ''" class="flex-1" label="模板内容" prop="templateContent">
-      <code-monaco-editor
-        v-model="addUpdateForm.templateContent"
-        :language="addUpdateForm.templateFileType"
-        :validate-status="validateStatus"
-        @change="codeChange"
-      />
+      <code-monaco-editor v-model="addUpdateForm.templateContent" language="java" :validate-status="validateStatus" @change="codeChange" />
     </el-form-item>
   </el-form>
 </template>
@@ -131,7 +126,7 @@ const submitForm = () => {
           await updateGenTemplate(addUpdateForm.value)
           useMessage().success('修改模板成功')
         }
-      } catch {
+      } finally {
         loadingStatus.value = false
       }
     } else {

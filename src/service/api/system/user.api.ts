@@ -15,10 +15,10 @@ import type { ModeIdArrayType, ModeIdType, PageResponse } from '@/service/model/
 const baseURL: string = import.meta.env.VITE_ADMIN_API_PREFIX
 
 enum Api {
-  SAVE = '/sys/user/create',
+  CREATE = '/sys/user/create',
   UPDATE = '/sys/user/update',
-  DELETE = '/sys/user/remove/',
-  QUERY_ONE = '/sys/user/get/',
+  REMOVE = '/sys/user/remove/',
+  QUERY_BYID = '/sys/user/get/',
   QUERY_PAGE = '/sys/user/page',
   RESET_PASSWORD = `/sys/user/reset/`,
   QUERY_ROLE_ID = '/sys/user/role/',
@@ -30,7 +30,7 @@ enum Api {
  */
 export const saveSysUser = (data: SysUserOperationRequest): AxiosPromise<boolean> => {
   return request({
-    url: Api.SAVE,
+    url: Api.CREATE,
     baseURL,
     method: 'post',
     data: data,
@@ -54,7 +54,7 @@ export const updateSysUser = (data: SysUserOperationRequest): AxiosPromise<boole
  */
 export const removeSysUserById = (id: ModeIdType): AxiosPromise<boolean> => {
   return request({
-    url: Api.DELETE + `${id}`,
+    url: Api.REMOVE + `${id}`,
     baseURL,
     method: 'post',
   })
@@ -66,7 +66,7 @@ export const removeSysUserById = (id: ModeIdType): AxiosPromise<boolean> => {
  */
 export const removeSysUserByIds = (ids: ModeIdArrayType): AxiosPromise<boolean> => {
   return request({
-    url: Api.DELETE,
+    url: Api.REMOVE,
     baseURL,
     method: 'post',
     data: ids,
@@ -78,7 +78,7 @@ export const removeSysUserByIds = (ids: ModeIdArrayType): AxiosPromise<boolean> 
  */
 export const querySysUserById = (id: ModeIdType): AxiosPromise<SysUserVo> => {
   return request({
-    url: Api.QUERY_ONE + `${id}`,
+    url: Api.QUERY_BYID + `${id}`,
     baseURL,
     method: 'get',
   })

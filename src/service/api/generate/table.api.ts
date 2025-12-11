@@ -18,8 +18,8 @@ const baseURL: string = import.meta.env.VITE_GENERATE_API_PREFIX
 enum Api {
   IMPORT_TABLE = '/gen/table/info/import',
   UPDATE = '/gen/table/info/update',
-  DELETE = '/gen/table/info/remove/',
-  QUERY_ONE = '/gen/table/info/get/',
+  REMOVE = '/gen/table/info/remove/',
+  QUERY_BYID = '/gen/table/info/get/',
   QUERY_EXISTS_PAGE = '/gen/table/info/exists/page',
   QUERY_NO_EXISTS_PAGE = '/gen/table/info/no/exists/page',
   SYNC_TABLE = '/gen/table/info/syncTable/',
@@ -56,7 +56,7 @@ export const updateGenTableInfo = (data: GenTableInfoOperationRequest): AxiosPro
  */
 export const removeGenTableInfoByIds = (id: ModeIdType): AxiosPromise<boolean> => {
   return request({
-    url: Api.DELETE + `${id}`,
+    url: Api.REMOVE + `${id}`,
     baseURL,
     method: 'post',
   })
@@ -67,7 +67,7 @@ export const removeGenTableInfoByIds = (id: ModeIdType): AxiosPromise<boolean> =
  */
 export const queryGenTableInfoById = (id: ModeIdType): AxiosPromise<GenTableInfoOperationResponse> => {
   return request({
-    url: Api.QUERY_ONE + `${id}`,
+    url: Api.QUERY_BYID + `${id}`,
     baseURL,
     method: 'get',
   })

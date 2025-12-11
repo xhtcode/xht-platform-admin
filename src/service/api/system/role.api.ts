@@ -15,10 +15,10 @@ import type { ModeIdType, PageResponse } from '@/service/model/base.model'
 const baseURL: string = import.meta.env.VITE_ADMIN_API_PREFIX
 
 enum Api {
-  SAVE = '/sys/role/create',
+  CREATE = '/sys/role/create',
   UPDATE = '/sys/role/update',
-  DELETE = '/sys/role/remove/',
-  QUERY_ONE = '/sys/role/get/',
+  REMOVE = '/sys/role/remove/',
+  QUERY_BYID = '/sys/role/get/',
   QUERY_PAGE = '/sys/role/page',
   QUERY_MENU_BY_ROLE_ID = '/sys/role/select/menu/',
   BIND_MENU_ROLE = '/sys/role/menu/bind',
@@ -29,7 +29,7 @@ enum Api {
  */
 export const saveSysRole = (data: SysRoleOperationRequest): AxiosPromise<boolean> => {
   return request({
-    url: Api.SAVE,
+    url: Api.CREATE,
     baseURL,
     method: 'post',
     data: data,
@@ -55,7 +55,7 @@ export const updateSysRole = (data: SysRoleOperationRequest): AxiosPromise<boole
  */
 export const removeSysRoleById = (id: ModeIdType): AxiosPromise<boolean> => {
   return request({
-    url: Api.DELETE + `${id}`,
+    url: Api.REMOVE + `${id}`,
     baseURL,
     method: 'post',
   })
@@ -67,7 +67,7 @@ export const removeSysRoleById = (id: ModeIdType): AxiosPromise<boolean> => {
  */
 export const removeSysRoleByIds = (ids: string[]): AxiosPromise<boolean> => {
   return request({
-    url: Api.DELETE,
+    url: Api.REMOVE,
     baseURL,
     method: 'post',
     data: ids,
@@ -79,7 +79,7 @@ export const removeSysRoleByIds = (ids: string[]): AxiosPromise<boolean> => {
  */
 export const querySysRoleById = (id: ModeIdType): AxiosPromise<SysRoleResponse> => {
   return request({
-    url: Api.QUERY_ONE + `${id}`,
+    url: Api.QUERY_BYID + `${id}`,
     baseURL,
     method: 'get',
   })

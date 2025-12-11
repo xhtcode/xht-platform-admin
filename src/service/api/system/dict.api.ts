@@ -9,10 +9,10 @@ import type { ModeIdType, PageResponse } from '@/service/model/base.model'
 const baseURL: string = import.meta.env.VITE_ADMIN_API_PREFIX
 
 enum Api {
-  SAVE = '/sys/dict/types/create',
+  CREATE = '/sys/dict/types/create',
   UPDATE = '/sys/dict/types/update',
-  DELETE = '/sys/dict/types/remove',
-  QUERY_ONE = '/sys/dict/types/get/',
+  REMOVE = '/sys/dict/types/remove',
+  QUERY_BYID = '/sys/dict/types/get/',
   QUERY_LIST = '/sys/dict/types/page',
 }
 
@@ -21,7 +21,7 @@ enum Api {
  */
 export const saveSysDict = (data: SysDictOperationRequest): AxiosPromise<boolean> => {
   return request({
-    url: Api.SAVE,
+    url: Api.CREATE,
     baseURL,
     method: 'post',
     data: data,
@@ -45,7 +45,7 @@ export const updateSysDict = (data: SysDictOperationRequest): AxiosPromise<boole
  */
 export const removeSysDictByIds = (ids: ModeIdType[]): AxiosPromise<boolean> => {
   return request({
-    url: Api.DELETE,
+    url: Api.REMOVE,
     baseURL,
     method: 'post',
     data: ids,
@@ -57,7 +57,7 @@ export const removeSysDictByIds = (ids: ModeIdType[]): AxiosPromise<boolean> => 
  */
 export const querySysDictById = (id: ModeIdType): AxiosPromise<SysDictResponse> => {
   return request({
-    url: Api.QUERY_ONE + `${id}`,
+    url: Api.QUERY_BYID + `${id}`,
     baseURL,
     method: 'get',
   })

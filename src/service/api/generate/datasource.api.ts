@@ -9,10 +9,10 @@ import type { GenDataSourceOperationRequest, GenDataSourceQueryRequest, GenDataS
 const baseURL: string = import.meta.env.VITE_GENERATE_API_PREFIX
 
 enum Api {
-  SAVE = '/gen/datasource/create',
+  CREATE = '/gen/datasource/create',
   UPDATE = '/gen/datasource/update',
-  DELETE = '/gen/datasource/remove/',
-  QUERY_ONE = '/gen/datasource/get/',
+  REMOVE = '/gen/datasource/remove/',
+  QUERY_BYID = '/gen/datasource/get/',
   QUERY_LIST = '/gen/datasource/list',
   CONNECTION_TEST = '/gen/datasource/connection/',
 }
@@ -22,7 +22,7 @@ enum Api {
  */
 export const saveGenDataSource = (data: GenDataSourceOperationRequest): AxiosPromise<boolean> => {
   return request({
-    url: Api.SAVE,
+    url: Api.CREATE,
     baseURL,
     method: 'post',
     data: data,
@@ -46,7 +46,7 @@ export const updateGenDataSource = (data: GenDataSourceOperationRequest): AxiosP
  */
 export const removeGenDataSourceByIds = (ids: ModeIdType[]): AxiosPromise<boolean> => {
   return request({
-    url: Api.DELETE,
+    url: Api.REMOVE,
     baseURL,
     method: 'post',
     data: ids,
@@ -58,7 +58,7 @@ export const removeGenDataSourceByIds = (ids: ModeIdType[]): AxiosPromise<boolea
  */
 export const queryGenDataSourceById = (id: ModeIdType): AxiosPromise<GenDataSourceResponse> => {
   return request({
-    url: Api.QUERY_ONE + `${id}`,
+    url: Api.QUERY_BYID + `${id}`,
     baseURL,
     method: 'get',
   })
