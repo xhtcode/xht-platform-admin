@@ -22,6 +22,7 @@
         v-loading="state.loadingStatus"
         :data="state.tableList"
         class="flex-1"
+        row-key="id"
         empty-text="系统暂无相关模板信息！"
         highlight-current-row
         @current-change="handleCurrentChange"

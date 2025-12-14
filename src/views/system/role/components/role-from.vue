@@ -96,6 +96,7 @@ const show = async (type: 'create' | 'update', id: ModeIdType) => {
       const { data } = await querySysRoleById(id)
       addUpdateForm.value = data
     }
+    state.loadingStatus = false
   } catch {
     state.loadingStatus = false
   }

@@ -1,4 +1,4 @@
-import type { BasicResponse, ModeIdType, PageQueryRequest } from '@/service/model/base.model'
+import type { BasicResponse, ModeIdType } from '@/service/model/base.model'
 
 export enum GenStatusEnums {
   DISABLED = 0, // 不显示/非必填/禁用/隐藏
@@ -60,9 +60,6 @@ export interface GenColumnInfoResponse extends BasicResponse {
   /** 列表显示：0-不显示，1-显示 */
   listShow: GenStatusEnums
 
-  /** 列表描述 */
-  listComment: string
-
   /** 显示切换禁用：0-不禁用，1-禁用 */
   listDisabled: GenStatusEnums
 
@@ -78,9 +75,15 @@ export interface GenColumnInfoResponse extends BasicResponse {
   /** ts类型 */
   codeTs: string
 
+  /**
+   * 字典编码
+   */
+  dictCode: string
+
   /** 字段排序 */
   sortOrder: number
 }
+
 /**
  * 代码生成器-查询条件
  * 对应Java类：GenTableColumnQueryResponse
@@ -132,21 +135,20 @@ export interface GenTableColumnQueryResponse {
   conditionValue: string
 
   /**
+   * 表单组件
+   */
+  fromComponent: string
+  /**
+   * 字典编码
+   */
+  dictCode: string | null
+  /**
    * 字段排序
    */
   sortOrder: number
 }
+
 /**
  * 操作类型
  */
 export interface GenColumnInfoOperationRequest extends Partial<GenColumnInfoResponse> {}
-
-/**
- * 查询请求类型
- */
-export interface GenColumnInfoQueryRequest extends PageQueryRequest {
-  /**
-   *表ID
-   */
-  tableId?: ModeIdType
-}

@@ -1,8 +1,10 @@
 <template>
-  <el-table-column label="排序" :width="width" type="default" class-name="xht-table-column-drag-sort">
-    <span class="xht-table-column-drag-icon">
-      <el-icon class="drag-sort-icon" :size="18"><Rank /></el-icon>
-    </span>
+  <el-table-column :label="label" :width="width" type="default" class-name="xht-table-column-drag-sort">
+    <template #default>
+      <span class="xht-table-column-drag-icon">
+        <el-icon class="drag-sort-icon" :size="18"><Rank /></el-icon>
+      </span>
+    </template>
   </el-table-column>
 </template>
 
@@ -15,9 +17,11 @@ import type { BasicResponse } from '@/service/model/base.model'
 
 defineOptions({
   name: 'XhtColumnDragSort',
+  inheritAttrs: false,
 })
 
 const props = withDefaults(defineProps<XhtColumnDragSortProps>(), {
+  label: '排序',
   width: 55,
 })
 const emits = defineEmits<XhtColumnDragSortEmits>()
@@ -29,15 +33,10 @@ const rowDrop = () => {
   const element = props.tableRef?.$el?.querySelector('.el-table__body-wrapper tbody')
   const config: Sortable.Options = {
     handle: '.xht-table-column-drag-sort',
-    animation: 150,
-    group: 'box',
-    easing: 'cubic-bezier(1, 0, 0, 1)',
-    chosenClass: 'sortable-chosen',
-    forceFallback: true,
     onEnd({ newIndex, oldIndex }: SortableEvent) {
       const targetRow = data.value.splice(oldIndex!, 1)[0]
       data.value.splice(newIndex!, 0, targetRow)
-      emits('dragEnd', newIndex!, oldIndex!)
+      emits('dragEnd', oldIndex!, newIndex!)
     },
   }
   Sortable.create(element as HTMLElement, config)

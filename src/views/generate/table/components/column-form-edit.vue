@@ -24,10 +24,10 @@
         </el-form-item>
       </el-col>
     </el-row>
-    <xht-table :data="columnInfo">
+    <xht-table :data="columnInfo" row-key="id">
+      <el-table-column label="#" prop="sortOrder" width="55" />
       <el-table-column label="基础信息">
         <template #default>
-          <xht-column-index type="step" />
           <el-table-column label="DB字段名" prop="dbName" width="160">
             <template #default="{ row }">
               <el-text :type="row.dbPrimary === 1 ? 'danger' : ''">
@@ -47,30 +47,22 @@
       </el-table-column>
       <el-table-column label="必填">
         <template #default="{ row }">
-          <el-switch v-model="row.fromFill" :active-value="1" :inactive-value="0" />
+          <el-switch
+            v-model="row.fromFill"
+            :active-value="1"
+            :inactive-value="0"
+            :disabled="['id', 'create_by', 'create_time', 'update_by', 'update_time', 'del_flag', 'version', 'tenant_id'].includes(row.dbName)"
+          />
         </template>
       </el-table-column>
       <el-table-column label="新增">
         <template #default="{ row }">
-          <el-switch v-model="row.fromInsert" :active-value="1" :inactive-value="0" />
+          <el-switch v-model="row.fromInsert" :active-value="1" :inactive-value="0" :disabled="row.fromFill !== 1" />
         </template>
       </el-table-column>
       <el-table-column label="更新">
         <template #default="{ row }">
-          <el-switch v-model="row.fromUpdate" :active-value="1" :inactive-value="0" />
-        </template>
-      </el-table-column>
-      <el-table-column label="前端组件">
-        <template #default="{ row }">
-          <el-select v-model="row.fromComponent">
-            <el-option label="输入框" value="input" />
-            <el-option label="下拉框" value="select" />
-            <el-option label="多选框" value="checkbox" />
-            <el-option label="单选框" value="radio" />
-            <el-option label="日期选择" value="date" />
-            <el-option label="时间选择" value="time" />
-            <el-option label="图片上传" value="upload" />
-          </el-select>
+          <el-switch v-model="row.fromUpdate" :active-value="1" :inactive-value="0" :disabled="row.fromFill !== 1" />
         </template>
       </el-table-column>
     </xht-table>

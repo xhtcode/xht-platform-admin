@@ -34,6 +34,7 @@
         v-loading="state.loadingStatus"
         :data="state.tableList"
         class="flex-1"
+        row-key="id"
         empty-text="系统相关表信息！"
         @selection-change="handleSelectionChange"
       >

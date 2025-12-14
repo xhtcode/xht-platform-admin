@@ -1,18 +1,13 @@
 import type { FormRules } from 'element-plus'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import type { GenTypeMappingOperationRequest, GenTypeMappingResponse } from '@/service/model/generate/type.mapping.model'
-import { DataBaseTypeEnums, LanguageTypeEnums } from '@/service/enums/generate/generate.enums'
+import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
 
 /**
  * 增改页面 表单类型 默认值
  */
 export const GenTypeMappingOperationForm: GenTypeMappingOperationRequest = {
-  id: undefined,
-  dbDataType: '',
   dbType: DataBaseTypeEnums.MYSQL,
-  importPackage: '',
-  targetDataType: '',
-  targetLanguage: LanguageTypeEnums.JAVA,
 }
 
 /**
@@ -33,17 +28,17 @@ export const GenTypeMappingOperationRules: FormRules<GenTypeMappingOperationRequ
       trigger: ['blur', 'change'],
     },
   ],
-  targetLanguage: [
+  javaType: [
     {
       required: true,
-      message: '请选择目标编程语言',
+      message: '请选择java类型语言类型',
       trigger: ['blur', 'change'],
     },
   ],
-  targetDataType: [
+  tsType: [
     {
       required: true,
-      message: '请输入目标语言数据类型',
+      message: '请选择ts类型语言类型',
       trigger: ['blur', 'change'],
     },
   ],
@@ -55,9 +50,9 @@ export const GenTypeMappingOperationRules: FormRules<GenTypeMappingOperationRequ
 export const GenTypeMappingColumnOption: ColumnConfig<GenTypeMappingResponse> = {
   dbType: { desc: '数据库类型', visible: true, disabled: false },
   dbDataType: { desc: '数据库数据类型', visible: true, disabled: false },
-  targetLanguage: { desc: '目标编程语言', visible: true, disabled: false },
-  targetDataType: { desc: '目标语言数据类型', visible: true, disabled: false },
+  javaType: { desc: 'Java类型', visible: true, disabled: false },
   importPackage: { desc: '导入包路径', visible: false, disabled: false },
+  tsType: { desc: 'Ts类型', visible: true, disabled: false },
   createBy: { desc: '创建人', visible: false, disabled: false },
   createTime: { desc: '创建时间', visible: false, disabled: false },
   updateBy: { desc: '更新人', visible: false, disabled: false },

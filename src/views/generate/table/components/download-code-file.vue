@@ -27,7 +27,7 @@
           </el-col>
         </el-row>
       </el-form>
-      <xht-table v-loading="state.loadingStatus" :data="state.tableList" class-name="flex-1" empty-text="系统相关表信息！">
+      <xht-table v-loading="state.loadingStatus" row-key="id" :data="state.tableList" class-name="flex-1" empty-text="系统相关表信息！">
         <xht-column-index type="step" />
         <el-table-column :resizable="false" label="引擎名称" prop="engineName" width="120" />
         <el-table-column :resizable="false" align="left" label="数据库表名" prop="tableName" sortable width="220" />

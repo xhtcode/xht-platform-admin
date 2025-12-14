@@ -35,7 +35,15 @@
         </el-col>
       </el-row>
     </el-form>
-    <xht-table ref="tableRef" v-loading="state.loadingStatus" :data="state.tableList" border height="65vh" @selection-change="handleSelectionChange">
+    <xht-table
+      ref="tableRef"
+      row-key="tableName"
+      v-loading="state.loadingStatus"
+      :data="state.tableList"
+      border
+      height="65vh"
+      @selection-change="handleSelectionChange"
+    >
       <el-table-column type="selection" width="55" />
       <xht-column-index :current="queryParams.current" :size="queryParams.size" />
       <el-table-column label="表名" prop="tableName" />

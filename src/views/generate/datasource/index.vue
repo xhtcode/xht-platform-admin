@@ -31,6 +31,7 @@
         v-loading="state.loadingStatus"
         :data="state.tableList"
         class="flex-1"
+        row-key="id"
         empty-text="请添加数据源配置！"
         @selection-change="handleSelectionChange"
       >

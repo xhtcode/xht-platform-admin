@@ -21,22 +21,22 @@
       <el-tabs v-model="activeName" stretch type="card">
         <el-tab-pane :name="1" label="表信息">
           <table-from-basic :table-info="addUpdateForm.tableInfo" />
-          <code-example-view :column-info="addUpdateForm.columnInfos" :table-info="addUpdateForm.tableInfo" class="p-10px" />
+          <code-example-view v-model:column-info="addUpdateForm.columnInfos" v-model:table-info="addUpdateForm.tableInfo" class="p-10px" />
         </el-tab-pane>
         <el-tab-pane :name="2" label="字段信息">
-          <column-form-basic :column-info="addUpdateForm.columnInfos" />
+          <column-form-basic v-model:column-info="addUpdateForm.columnInfos" />
         </el-tab-pane>
-        <el-tab-pane :name="3" label="字段类型">
-          <column-form-type :column-info="addUpdateForm.columnInfos" :db-type="addUpdateForm.tableInfo.dataBaseType" />
+        <el-tab-pane :name="3" label="字段配置">
+          <column-form-config v-model:column-info="addUpdateForm.columnInfos" :db-type="addUpdateForm.tableInfo.dataBaseType" />
         </el-tab-pane>
         <el-tab-pane :name="4" label="表单字段">
-          <column-form-edit :column-info="addUpdateForm.columnInfos" :table-info="addUpdateForm.tableInfo" />
+          <column-form-edit v-model:column-info="addUpdateForm.columnInfos" v-model:table-info="addUpdateForm.tableInfo" />
         </el-tab-pane>
         <el-tab-pane :name="5" label="列表字段">
-          <column-form-list :column-info="addUpdateForm.columnInfos" />
+          <column-form-list v-model:column-info="addUpdateForm.columnInfos" />
         </el-tab-pane>
         <el-tab-pane :name="6" label="查询字段">
-          <column-form-query ref="columnFormQueryRef" :column-info="addUpdateForm.columnInfos" :table-info="addUpdateForm.tableInfo" />
+          <column-form-query ref="columnFormQueryRef" :column-info="addUpdateForm.columnInfos" v-model:table-info="addUpdateForm.tableInfo" />
         </el-tab-pane>
       </el-tabs>
     </el-form>
@@ -58,7 +58,7 @@ import type { ModeIdType } from '@/service/model/base.model'
 defineOptions({ name: 'GenTableInfoAddOrUpdate' })
 
 const columnFormBasic = defineAsyncComponent(() => import('@/views/generate/table/components/column-form-basic.vue'))
-const columnFormType = defineAsyncComponent(() => import('@/views/generate/table/components/column-form-type.vue'))
+const columnFormConfig = defineAsyncComponent(() => import('@/views/generate/table/components/column-form-config.vue'))
 const columnFormEdit = defineAsyncComponent(() => import('@/views/generate/table/components/column-form-edit.vue'))
 const columnFormQuery = defineAsyncComponent(() => import('@/views/generate/table/components/column-form-query.vue'))
 const columnFormList = defineAsyncComponent(() => import('@/views/generate/table/components/column-form-list.vue'))

@@ -54,6 +54,7 @@
         v-loading="state.loadingStatus"
         :data="state.tableList"
         class="flex-1"
+        row-key="id"
         empty-text="系统暂无字典！"
         @selection-change="handleSelectionChange"
       >

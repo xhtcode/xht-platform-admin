@@ -70,6 +70,7 @@
           :empty-text="queryParams.deptId ? '该部门下未添加岗位信息' : '未选择要查询的部门'"
           border
           class="flex-1"
+          row-key="id"
           current-row-key="id"
           @selection-change="handleSelectionChange"
         >

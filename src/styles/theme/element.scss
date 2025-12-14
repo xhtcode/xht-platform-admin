@@ -49,6 +49,24 @@
 //=================== 菜单样式修改 ===================
 .el-menu--collapse {
   width: $menu-collapse-width !important;
+
+  .el-menu-item {
+    padding: 0 !important;
+  }
+
+  .el-menu-tooltip__trigger {
+    padding: 0 !important;
+    justify-content: center;
+  }
+
+  .el-sub-menu__title {
+    padding: 0 !important;
+    justify-content: center;
+
+    span {
+      display: none !important;
+    }
+  }
 }
 
 .el-menu {
@@ -65,15 +83,10 @@
     }
   }
 
-  .el-menu--collapse {
-    width: 64px !important;
-  }
-
   .el-menu-item .menu-icon,
   .el-sub-menu .menu-icon {
-    display: inline-block;
+    display: block;
     vertical-align: middle;
-    margin-right: 5px;
     text-align: center;
     justify-content: center;
   }

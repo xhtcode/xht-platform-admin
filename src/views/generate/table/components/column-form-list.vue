@@ -1,8 +1,8 @@
 <template>
-  <xht-table :data="columnInfo">
+  <xht-table :data="columnInfo" row-key="id">
+    <el-table-column label="#" prop="sortOrder" width="55" />
     <el-table-column label="基础信息">
       <template #default>
-        <xht-column-index type="step" />
         <el-table-column label="DB字段名" prop="dbName" width="160">
           <template #default="{ row }">
             <el-text :type="row.dbPrimary === 1 ? 'danger' : ''">
@@ -20,14 +20,26 @@
         </el-table-column>
       </template>
     </el-table-column>
-    <el-table-column label="列表字段" prop="codeName">
+    <el-table-column label="代码名称" prop="codeName">
       <template #default="{ row }">
-        <el-input v-model="row.codeName" :maxlength="30" placeholder="请输入列表字段" show-word-limit />
+        <el-input
+          v-model="row.codeName"
+          :maxlength="30"
+          placeholder="请输入代码名称"
+          show-word-limit
+          :disabled="['id', 'version', 'tenant_id', 'del_flag'].includes(row.dbName)"
+        />
       </template>
     </el-table-column>
-    <el-table-column label="列表描述" prop="listComment">
+    <el-table-column label="代码描述" prop="codeComment">
       <template #default="{ row }">
-        <el-input v-model="row.listComment" :disabled="row.listShow !== 1" :maxlength="20" placeholder="请输入代码名称" />
+        <el-input
+          v-model="row.codeComment"
+          :maxlength="100"
+          placeholder="请输入代码名称"
+          show-word-limit
+          :disabled="['id', 'version', 'tenant_id', 'del_flag'].includes(row.dbName)"
+        />
       </template>
     </el-table-column>
     <el-table-column label="显示" prop="listShow" width="90">
@@ -36,6 +48,7 @@
           v-model="row.listShow"
           :active-value="GenStatusEnums.ENABLED"
           :inactive-value="GenStatusEnums.DISABLED"
+          :disabled="['id', 'version', 'tenant_id', 'del_flag'].includes(row.dbName)"
           @change="changeList(row)"
         />
       </template>
@@ -45,8 +58,8 @@
         <el-switch
           v-model="row.listDisabled"
           :active-value="GenStatusEnums.ENABLED"
-          :disabled="row.listShow !== 1"
           :inactive-value="GenStatusEnums.DISABLED"
+          :disabled="row.listShow !== 1"
         />
       </template>
     </el-table-column>
@@ -55,8 +68,8 @@
         <el-switch
           v-model="row.listHidden"
           :active-value="GenStatusEnums.ENABLED"
-          :disabled="row.listShow !== 1"
           :inactive-value="GenStatusEnums.DISABLED"
+          :disabled="row.listShow !== 1"
         />
       </template>
     </el-table-column>

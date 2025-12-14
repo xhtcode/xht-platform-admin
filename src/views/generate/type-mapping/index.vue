@@ -35,6 +35,7 @@
         :data="state.tableList"
         border
         class="flex-1"
+        row-key="id"
         empty-text="系统相关字段类型映射！"
         @selection-change="handleSelectionChange"
       >
@@ -42,9 +43,9 @@
         <xht-column-index :current="queryParams.current" :size="queryParams.size" />
         <el-table-column v-if="columnOption.dbType?.visible" label="数据库类型" prop="dbType" />
         <el-table-column v-if="columnOption.dbDataType?.visible" label="数据库数据类型" prop="dbDataType" />
-        <el-table-column v-if="columnOption.targetLanguage?.visible" label="目标编程语言" prop="targetLanguage" />
-        <el-table-column v-if="columnOption.targetDataType?.visible" label="目标语言数据类型" prop="targetDataType" />
-        <el-table-column v-if="columnOption.importPackage?.visible" label="导入包路径" prop="importPackage" />
+        <el-table-column v-if="columnOption.javaType?.visible" label="java类型" prop="javaType" />
+        <el-table-column v-if="columnOption.importPackage?.visible" label="java包路径" prop="importPackage" />
+        <el-table-column v-if="columnOption.tsType?.visible" label="ts类型" prop="tsType" />
         <el-table-column v-if="columnOption.createBy?.visible" label="创建人" prop="createBy" width="160" />
         <el-table-column v-if="columnOption.createTime?.visible" label="创建时间" prop="createTime" width="180" />
         <el-table-column v-if="columnOption.updateBy?.visible" label="更新人" prop="updateBy" width="160" />

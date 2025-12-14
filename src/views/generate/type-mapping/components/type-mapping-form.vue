@@ -27,22 +27,19 @@
           <el-option :value="DataBaseTypeEnums.ORACLE" label="Oracle" />
         </el-select>
       </el-form-item>
-      <el-form-item label="编程语言" prop="targetLanguage">
-        <el-select v-model="addUpdateForm.targetLanguage" placeholder="请选择目标编程语言">
-          <el-option :value="LanguageTypeEnums.JAVA" label="Java" />
-          <el-option :value="LanguageTypeEnums.TYPESCRIPT" label="TypeScript" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="编程语言类型" prop="targetDataType">
-        <el-input v-model="addUpdateForm.targetDataType" />
+      <el-form-item label="Java类型" prop="javaType">
+        <el-input v-model="addUpdateForm.javaType" placeholder="请输入Java类型" />
       </el-form-item>
       <el-form-item label="导入包路径" prop="importPackage">
         <el-input v-model="addUpdateForm.importPackage" />
       </el-form-item>
+      <el-form-item label="Ts类型" prop="tsType">
+        <el-input v-model="addUpdateForm.tsType" placeholder="请输入Ts类型" />
+      </el-form-item>
     </el-form>
     <template #footer>
-      <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>
       <el-button :disabled="state.loadingStatus" @click="close">取 消</el-button>
+      <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>
     </template>
   </el-drawer>
 </template>
@@ -54,7 +51,7 @@ import { GenTypeMappingOperationForm, GenTypeMappingOperationRules } from '@/vie
 import { useMessage } from '@/hooks/use-message'
 import type { ModeIdType } from '@/service/model/base.model'
 import type { GenTypeMappingOperationRequest } from '@/service/model/generate/type.mapping.model'
-import { DataBaseTypeEnums, LanguageTypeEnums } from '@/service/enums/generate/generate.enums'
+import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
 
 defineOptions({ name: 'GenTypeMappingAddOrUpdate' })
 const state = reactive<AddUpdateOption<GenTypeMappingOperationRequest>>({

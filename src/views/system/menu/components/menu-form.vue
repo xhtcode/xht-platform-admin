@@ -131,8 +131,8 @@
       </el-row>
     </el-form>
     <template #footer>
-      <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>
       <el-button :disabled="state.loadingStatus" @click="close">取 消</el-button>
+      <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>
     </template>
   </el-drawer>
 </template>

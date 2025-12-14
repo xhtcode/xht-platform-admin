@@ -79,6 +79,7 @@
           :empty-text="queryParams.deptId ? '该部门下未添加用户信息' : '系统内暂无相关数据'"
           border
           class="flex-1"
+          row-key="id"
           @selection-change="handleSelectionChange"
         >
           <el-table-column align="center" type="selection" width="55" />

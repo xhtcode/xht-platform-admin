@@ -14,6 +14,7 @@ export interface XhtTableProps<T extends BasicResponse> extends Partial<TablePro
  * 列拖拽排序组件属性接口
  */
 export interface XhtColumnDragSortProps {
+  label?: string
   /**
    * 列宽度
    */
@@ -31,10 +32,10 @@ export interface XhtColumnDragSortEmits {
   /**
    * 拖拽结束事件
    * @param e 事件名称 'dragEnd'
-   * @param newIndex 新位置索引
    * @param oldIndex 原始位置索引
+   * @param newIndex 新位置索引
    */
-  (e: 'dragEnd', newIndex: number, oldIndex: number): void
+  (e: 'dragEnd', oldIndex: number, newIndex: number): void
 }
 
 /**

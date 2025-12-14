@@ -1,8 +1,9 @@
 <template>
-  <xht-table :data="columnInfo">
+  <xht-table :data="columnInfo" row-key="id" ref="columnFormRef" v-if="loading">
+    <xht-column-drag-sort label="" v-model:data="columnInfo" :table-ref="columnFormRef" @drag-end="handleDragEnd" />
     <el-table-column label="基础信息">
       <template #default>
-        <xht-column-index type="step" />
+        <el-table-column label="#" prop="sortOrder" width="55" />
         <el-table-column label="DB字段名" prop="dbName" width="160">
           <template #default="{ row }">
             <el-text :type="row.dbPrimary === 1 ? 'danger' : ''">
@@ -22,26 +23,42 @@
     </el-table-column>
     <el-table-column label="代码名称" prop="codeName">
       <template #default="{ row }">
-        <el-input v-model="row.codeName" :maxlength="30" placeholder="请输入代码名称" show-word-limit />
+        <el-input
+          v-model="row.codeName"
+          :maxlength="30"
+          placeholder="请输入代码名称"
+          show-word-limit
+          :disabled="['id', 'version', 'tenant_id', 'del_flag'].includes(row.dbName)"
+        />
       </template>
     </el-table-column>
-    <el-table-column label="代码注释" prop="codeComment">
+    <el-table-column label="代码描述" prop="codeComment">
       <template #default="{ row }">
-        <el-input v-model="row.codeComment" :maxlength="100" :rows="2" placeholder="请输入代码名称" resize="none" show-word-limit type="textarea" />
-      </template>
-    </el-table-column>
-    <el-table-column label="字段排序" prop="sortOrder">
-      <template #default="{ row }">
-        <el-input-number v-model="row.sortOrder" :max="999" :min="1" class="w-full!" placeholder="请输入字段排序" />
+        <el-input
+          v-model="row.codeComment"
+          :maxlength="100"
+          placeholder="请输入代码名称"
+          show-word-limit
+          :disabled="['id', 'version', 'tenant_id', 'del_flag'].includes(row.dbName)"
+        />
       </template>
     </el-table-column>
   </xht-table>
 </template>
 <script lang="ts" setup>
 import { GenColumnInfoResponse } from '@/service/model/generate/column.model'
+import type { TableInstance } from 'element-plus'
 
 const columnInfo = defineModel<GenColumnInfoResponse[]>('columnInfo', {
   required: true,
   default: () => [],
 })
+const loading = ref(true)
+const columnFormRef = useTemplateRef<TableInstance>('columnFormRef')
+
+const handleDragEnd = () => {
+  for (const index in columnInfo.value) {
+    columnInfo.value[index].sortOrder = parseInt(index) + 1
+  }
+}
 </script>

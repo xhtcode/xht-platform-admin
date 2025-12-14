@@ -33,8 +33,8 @@
     </el-scrollbar>
     <template #footer>
       <span class="dialog-footer">
-        <el-button :disabled="state.loadingStatus" @click="close">取 消</el-button>
         <el-button type="primary" @click="submitForm">提交</el-button>
+        <el-button :disabled="state.loadingStatus" @click="close">取 消</el-button>
       </span>
     </template>
   </el-dialog>
