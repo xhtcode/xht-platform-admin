@@ -15,7 +15,9 @@ const dictOptions: ColumnFormSelectOptionType[] = [
  */
 const commonOptions: ColumnFormSelectOptionType[] = [
   { label: '输入框', value: 'input' },
-  { label: '密码框', value: 'input' },
+  { label: '文本框', value: 'textarea' },
+  { label: '数字框', value: 'number' },
+  { label: '密码框', value: 'password' },
   { label: '下拉框', value: 'select' },
   { label: '单选按钮', value: 'radio' },
   { label: '多选框', value: 'checkbox' },
