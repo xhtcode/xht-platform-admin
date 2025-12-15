@@ -49,7 +49,7 @@ export interface RoleSelectedMenuResponse {
 /**
  * 操作类型
  */
-export interface SysRoleOperationRequest extends SysRoleResponse, BasicFormRequest {}
+export interface SysRoleOperationRequest extends Partial<SysRoleResponse>, BasicFormRequest {}
 
 /**
  * 角色菜单绑定请求参数

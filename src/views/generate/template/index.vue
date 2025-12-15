@@ -141,7 +141,6 @@ const handleDelete = (row?: GenTemplateGroupResponse) => {
       await handleQuery()
       useMessage().success('删除模板信息成功!')
     })
-    .catch((_) => {})
     .finally(() => {
       state.loadingStatus = false
     })

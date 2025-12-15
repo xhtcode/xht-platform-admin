@@ -89,6 +89,7 @@ import { storeToRefs } from 'pinia'
 import useThemeColorHooks from '@/hooks/use-theme-hooks'
 import { DefaultThemeColor } from '@/service/constant'
 import { CircleCheckFilled } from '@element-plus/icons-vue'
+import { ElLoading } from 'element-plus'
 
 defineOptions({
   name: 'AppSetting',

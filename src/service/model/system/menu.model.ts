@@ -78,6 +78,6 @@ export type SysMenuTreeResponse = INodeResponse<SysMenuResponse>[]
 /**
  * 菜单操作类型
  */
-export interface SysMenuOperationRequest extends SysMenuResponse, BasicFormRequest {
+export interface SysMenuOperationRequest extends Partial<SysMenuResponse>, BasicFormRequest {
   activeMenuPath?: string // 高亮菜单
 }

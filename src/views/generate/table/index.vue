@@ -150,7 +150,6 @@ const handleSync = async (row: GenTableInfoResponse) => {
         await handleQuery()
       })
     })
-    .catch((_) => {})
     .finally(() => {
       state.loadingStatus = false
     })
@@ -187,7 +186,6 @@ const handleDelete = (row: GenTableInfoResponse) => {
       await handleQuery()
       useMessage().success('删除表信息成功!')
     })
-    .catch((_) => {})
     .finally(() => {
       state.loadingStatus = false
     })

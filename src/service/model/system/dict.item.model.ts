@@ -37,4 +37,4 @@ export interface SysDictItemResponse extends BasicResponse {
 /**
  * 操作类型
  */
-export interface SysDictItemOperationRequest extends SysDictItemResponse, BasicFormRequest {}
+export interface SysDictItemOperationRequest extends Partial<SysDictItemResponse>, BasicFormRequest {}

@@ -1,4 +1,4 @@
-import type { BasicResponse, ModeIdType, PageQueryRequest } from '@/service/model/base.model'
+import type { BasicFormRequest, BasicResponse, ModeIdType, PageQueryRequest } from '@/service/model/base.model'
 import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
 
 /**
@@ -44,4 +44,4 @@ export interface GenTypeMappingResponse extends BasicResponse {
 /**
  * 操作类型
  */
-export interface GenTypeMappingOperationRequest extends Partial<GenTypeMappingResponse> {}
+export interface GenTypeMappingOperationRequest extends Partial<GenTypeMappingResponse>, BasicFormRequest {}

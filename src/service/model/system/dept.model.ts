@@ -44,4 +44,4 @@ export type SysDeptTreeResponse = INodeResponse<SysDeptResponse>[]
 /**
  * 操作类型
  */
-export interface SysDeptOperationRequest extends SysDeptResponse, BasicFormRequest {}
+export interface SysDeptOperationRequest extends Partial<SysDeptResponse>, BasicFormRequest {}

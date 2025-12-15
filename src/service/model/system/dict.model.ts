@@ -32,4 +32,4 @@ export interface SysDictResponse extends BasicResponse {
 /**
  * 操作类型
  */
-export interface SysDictOperationRequest extends SysDictResponse, BasicFormRequest {}
+export interface SysDictOperationRequest extends Partial<SysDictResponse>, BasicFormRequest {}

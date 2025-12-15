@@ -44,4 +44,4 @@ export interface SysDeptPostResponse extends BasicResponse {
 /**
  * 操作类型
  */
-export interface SysDeptPostOperationRequest extends SysDeptPostResponse, BasicFormRequest {}
+export interface SysDeptPostOperationRequest extends Partial<SysDeptPostResponse>, BasicFormRequest {}

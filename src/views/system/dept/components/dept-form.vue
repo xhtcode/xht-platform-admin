@@ -106,6 +106,7 @@ import type { UserSimpleVo } from '@/service/model/system/user.model'
 import type { ModeIdType } from '@/service/model/base.model'
 import { SysDeptOperationForm, SysDeptOperationRules } from '@/views/system/dept/dept.data'
 import { useMessage } from '@/hooks/use-message'
+import { Search } from '@element-plus/icons-vue'
 
 defineOptions({ name: 'SysDeptAddOrUpdate' })
 

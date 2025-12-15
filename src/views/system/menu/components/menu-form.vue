@@ -144,7 +144,6 @@ import { useMessage } from '@/hooks/use-message'
 import type { SysMenuOperationRequest } from '@/service/model/system/menu.model'
 import { MenuCacheEnums, MenuHiddenEnums, MenuLinkEnums, MenuStatusEnums, MenuTypeEnums } from '@/service/model/system/menu.model'
 import { SysMenuOperationForm, SysMenuOperationRules } from '@/views/system/menu/menu.data'
-import { SysDeptOperationForm } from '@/views/system/dept/dept.data'
 import type { ModeIdType } from '@/service/model/base.model'
 
 defineOptions({
@@ -158,7 +157,7 @@ const state = reactive<AddUpdateOption<SysMenuOperationRequest>>({
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,
-  addUpdateForm: { ...SysDeptOperationForm },
+  addUpdateForm: { ...SysMenuOperationForm },
 })
 const { addUpdateForm } = toRefs(state)
 const emit = defineEmits(['success'])

@@ -20,11 +20,7 @@
       ref="tableRef"
       v-loading="state.loadingStatus"
       :data="state.userList"
-      :row-class-name="
-        ({ row }) => {
-          return row.deptId ? '' : 'no-dept-row'
-        }
-      "
+      :row-class-name="handleRowClassName"
       border
       empty-text="暂无用户数据"
       height="65vh"
@@ -117,6 +113,14 @@ const close = () => {
  */
 const handleCurrentChange = (val: UserSimpleVo | null) => {
   state.currentRow = val
+}
+
+/**
+ * 表格行样式
+ */
+const handleRowClassName = (data: any) => {
+  const { row } = data
+  return row?.deptId ? '' : 'no-dept-row'
 }
 
 /**

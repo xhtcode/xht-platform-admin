@@ -1,4 +1,4 @@
-import type { BasicResponse, ModeIdType, PageQueryRequest } from '@/service/model/base.model'
+import type { BasicFormRequest, BasicResponse, ModeIdType, PageQueryRequest } from '@/service/model/base.model'
 
 /**
  * 查询请求类型
@@ -55,6 +55,6 @@ export interface GenTemplateResponse extends BasicResponse {
 /**
  * 操作类型
  */
-export interface GenTemplateOperationRequest extends Partial<GenTemplateResponse> {
+export interface GenTemplateOperationRequest extends Partial<GenTemplateResponse>, BasicFormRequest {
   isNew?: boolean
 }

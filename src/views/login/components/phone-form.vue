@@ -47,7 +47,7 @@ const phoneRules: FormRules = {
 // 发送短信验证码
 const sendSMS = async () => {
   if (!phoneForm.phone || !/^1[3-9]\d{9}$/.test(phoneForm.phone)) {
-    ElMessage.error('请输入正确的手机号')
+    useMessage().error('请输入正确的手机号')
     return
   }
 

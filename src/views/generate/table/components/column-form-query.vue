@@ -24,7 +24,13 @@
       </el-table-column>
       <el-table-column label="查询列">
         <template #default="{ row }">
-          <el-select v-model="row.columnId" clearable placeholder="请选择查询列" value-key="id" @change="(value) => handleColumnChange(value, row)">
+          <el-select
+            v-model="row.columnId"
+            clearable
+            placeholder="请选择查询列"
+            value-key="id"
+            @change="(value: any) => handleColumnChange(value, row)"
+          >
             <el-option v-for="item in columnInfoSelect" :key="item.id" :label="item.dbName" :value="item.id" class="query-class">
               <el-text tag="b" size="default" class="user-select-none">
                 {{ item.dbName }}
