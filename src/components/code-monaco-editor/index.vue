@@ -61,7 +61,7 @@ const init = () => {
     }, // 为只读时编辑内日提示词
     quickSuggestions: true,
     automaticLayout: true, // // 设置是否启用自动布局，使编辑器在容器尺寸变化时自动调整大小。
-    formatOnPaste: true, //是否启用粘贴时自动格式化
+    formatOnPaste: false, //是否启用粘贴时自动格式化
     formatOnType: false, //是否启用输入时自动格式化
     contextmenu: false, //是否启用自定义右键菜单。
     wordWrap: 'off', //是否换行

@@ -76,7 +76,7 @@
       </el-col>
     </el-row>
     <el-form-item :error="validateStatus ? '请输入模板内容' : ''" class="flex-1" label="模板内容" prop="templateContent">
-      <code-monaco-editor v-model="addUpdateForm.templateContent" language="java" :validate-status="validateStatus" @change="codeChange" />
+      <code-monaco-editor v-model="addUpdateForm.templateContent" language="java" :font-size="12" :validate-status="validateStatus" @change="codeChange" />
     </el-form-item>
   </el-form>
 </template>

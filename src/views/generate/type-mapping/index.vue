@@ -12,11 +12,13 @@
             </el-form-item>
           </el-col>
           <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
-            <el-form-item label="编程语言" prop="targetLanguage">
-              <el-select v-model="queryParams.targetLanguage" placeholder="请选择编程语言类型">
-                <el-option :value="LanguageTypeEnums.JAVA" label="Java" />
-                <el-option :value="LanguageTypeEnums.TYPESCRIPT" label="TypeScript" />
-              </el-select>
+            <el-form-item label="编程语言" prop="dbDataType">
+              <el-autocomplete
+                v-model="queryParams.dbDataType"
+                clearable
+                :fetch-suggestions="handleAutoComplete"
+                placeholder="请输入数据库数据类型"
+              />
             </el-form-item>
           </el-col>
           <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
@@ -76,9 +78,9 @@ import type { GenTypeMappingQueryRequest, GenTypeMappingResponse } from '@/servi
 import { queryGenTypeMappingPage, removeGenTypeMappingByIds } from '@/service/api/generate/type.mapping.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { ModeIdArrayType } from '@/service/model/base.model'
-import { DataBaseTypeEnums, LanguageTypeEnums } from '@/service/enums/generate/generate.enums'
+import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
-import { GenTypeMappingColumnOption } from '@/views/generate/type-mapping/type.mapping.data'
+import { DbDataTypeList, GenTypeMappingColumnOption } from '@/views/generate/type-mapping/type.mapping.data'
 import { Delete, Edit, Plus, Refresh, Search } from '@element-plus/icons-vue'
 
 defineOptions({ name: 'GenTypeMappingViewIndex' })
@@ -109,6 +111,21 @@ const { queryParams } = toRefs(state)
 const columnOption = ref<ColumnConfig<GenTypeMappingResponse>>({
   ...GenTypeMappingColumnOption,
 })
+
+/**
+ * 表单自动提示
+ */
+const handleAutoComplete = (queryString: string, cb: any) => {
+  const results = queryString ? DbDataTypeList.filter(createFilter(queryString)) : DbDataTypeList
+  console.log(results)
+  cb(results)
+}
+
+const createFilter = (queryString: string) => {
+  return (restaurant: any) => {
+    return restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) >= 0
+  }
+}
 
 /**
  * 重置表单

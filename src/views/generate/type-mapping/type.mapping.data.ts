@@ -1,6 +1,9 @@
 import type { FormRules } from 'element-plus'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
-import type { GenTypeMappingOperationRequest, GenTypeMappingResponse } from '@/service/model/generate/type.mapping.model'
+import type {
+  GenTypeMappingOperationRequest,
+  GenTypeMappingResponse,
+} from '@/service/model/generate/type.mapping.model'
 import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
 
 /**
@@ -58,3 +61,39 @@ export const GenTypeMappingColumnOption: ColumnConfig<GenTypeMappingResponse> = 
   updateBy: { desc: '更新人', visible: false, disabled: false },
   updateTime: { desc: '更新时间', visible: false, disabled: false },
 }
+
+/**
+ * 数据库数据类型
+ */
+export const DbDataTypeList: any[] = [
+  { value: 'bigint' },
+  { value: 'binary' },
+  { value: 'bit' },
+  { value: 'blob' },
+  { value: 'char' },
+  { value: 'date' },
+  { value: 'datetime' },
+  { value: 'decimal' },
+  { value: 'double' },
+  { value: 'enum' },
+  { value: 'float' },
+  { value: 'int' },
+  { value: 'json' },
+  { value: 'longblob' },
+  { value: 'longtext' },
+  { value: 'mediumblob' },
+  { value: 'mediumint' },
+  { value: 'mediumtext' },
+  { value: 'numeric' },
+  { value: 'set' },
+  { value: 'smallint' },
+  { value: 'text' },
+  { value: 'time' },
+  { value: 'timestamp' },
+  { value: 'tinyblob' },
+  { value: 'tinyint' },
+  { value: 'tinytext' },
+  { value: 'varbinary' },
+  { value: 'varchar' },
+  { value: 'year' },
+]

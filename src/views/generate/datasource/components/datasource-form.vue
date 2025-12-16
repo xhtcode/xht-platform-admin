@@ -22,7 +22,7 @@
         <el-input v-model="addUpdateForm.name" maxlength="100" placeholder="请输入数据源名称" show-word-limit />
       </el-form-item>
       <el-form-item label="类型" prop="dbType">
-        <el-select v-model="addUpdateForm.dbType" placeholder="请选择数据库类型">
+        <el-select v-model="addUpdateForm.dbType" placeholder="请选择数据库类型" clearable>
           <el-option :value="DataBaseTypeEnums.MYSQL" label="MySql" />
           <el-option :value="DataBaseTypeEnums.ORACLE" label="Oracle" />
         </el-select>
@@ -40,7 +40,7 @@
           :rows="5"
           :spellcheck="false"
           resize="none"
-          maxlength="200"
+          :maxlength="200"
           placeholder="请输入数据库连接URL"
           show-word-limit
         />

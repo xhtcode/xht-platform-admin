@@ -1,4 +1,9 @@
-import type { BasicFormRequest, BasicResponse, ModeIdType, PageQueryRequest } from '@/service/model/base.model'
+import type {
+  BasicFormRequest,
+  BasicResponse,
+  ModeIdType,
+  PageQueryRequest,
+} from '@/service/model/base.model'
 import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
 
 /**
@@ -9,6 +14,10 @@ export interface GenTypeMappingQueryRequest extends PageQueryRequest {
    * 数据库类型
    */
   dbType?: string
+  /**
+   * 数据库数据类型
+   */
+  dbDataType?: string
 }
 
 /**
