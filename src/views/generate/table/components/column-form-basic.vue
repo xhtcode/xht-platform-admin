@@ -1,3 +1,21 @@
+<script lang="ts" setup>
+import { GenColumnInfoResponse } from '@/service/model/generate/column.model'
+import type { TableInstance } from 'element-plus'
+
+const columnInfo = defineModel<GenColumnInfoResponse[]>('columnInfo', {
+  required: true,
+  default: () => [],
+})
+const loading = ref(true)
+const columnFormRef = useTemplateRef<TableInstance>('columnFormRef')
+
+const handleDragEnd = () => {
+  for (const index in columnInfo.value) {
+    columnInfo.value[index].sortOrder = parseInt(index) + 1
+  }
+}
+</script>
+
 <template>
   <xht-table :data="columnInfo" row-key="id" ref="columnFormRef" v-if="loading">
     <xht-column-drag-sort label="" v-model:data="columnInfo" :table-ref="columnFormRef" @drag-end="handleDragEnd" />
@@ -45,20 +63,3 @@
     </el-table-column>
   </xht-table>
 </template>
-<script lang="ts" setup>
-import { GenColumnInfoResponse } from '@/service/model/generate/column.model'
-import type { TableInstance } from 'element-plus'
-
-const columnInfo = defineModel<GenColumnInfoResponse[]>('columnInfo', {
-  required: true,
-  default: () => [],
-})
-const loading = ref(true)
-const columnFormRef = useTemplateRef<TableInstance>('columnFormRef')
-
-const handleDragEnd = () => {
-  for (const index in columnInfo.value) {
-    columnInfo.value[index].sortOrder = parseInt(index) + 1
-  }
-}
-</script>

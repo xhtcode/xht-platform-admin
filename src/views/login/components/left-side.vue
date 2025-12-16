@@ -1,3 +1,12 @@
+<script lang="ts" setup>
+import imageSrc from '@/assets/logo.svg'
+import imageBgSrc from '@/assets/svg/system/login-bg.svg'
+
+defineOptions({
+  inheritAttrs: false,
+})
+</script>
+
 <template>
   <div class="left-container">
     <!-- 顶部品牌Logo -->
@@ -19,14 +28,6 @@
     </div>
   </div>
 </template>
-<script lang="ts" setup>
-import imageSrc from '@/assets/logo.svg'
-import imageBgSrc from '@/assets/svg/system/login-bg.svg'
-
-defineOptions({
-  inheritAttrs: false,
-})
-</script>
 
 <style lang="scss" scoped>
 // 左侧品牌介绍区域

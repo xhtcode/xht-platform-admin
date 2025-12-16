@@ -1,19 +1,3 @@
-<template>
-  <el-select
-    v-model="state.selectId"
-    value-key="id"
-    :placeholder="props.placeholder"
-    :clearable="props.clearable"
-    :disabled="props.disabled"
-    @change="handleChange"
-  >
-    <el-option v-for="item in state.tableList" :key="item.id" :value="item.id" :label="item.tsType">
-      <el-text size="large" tag="b" class="user-select-none">{{ item.dbDataType }}</el-text>
-      <el-text size="small" type="info" class="float-right user-select-none">{{ item.tsType }}</el-text>
-    </el-option>
-  </el-select>
-</template>
-
 <script setup lang="ts">
 import type { GenTypeMappingResponse } from '@/service/model/generate/type.mapping.model'
 import { MappingTsSelectProps, MappingTsSelectState } from '@/components/generate/mapping-ts-select/types'
@@ -24,10 +8,6 @@ defineOptions({
   name: 'MappingTsSelect',
 })
 /**
- * ts 类型
- */
-const codeTs = defineModel<string>('codeTs', { required: true })
-/**
  * 定义组件属性
  */
 const props = withDefaults(defineProps<MappingTsSelectProps>(), {
@@ -37,6 +17,10 @@ const props = withDefaults(defineProps<MappingTsSelectProps>(), {
   clearable: true,
   disabled: false,
 })
+/**
+ * ts 类型
+ */
+const codeTs = defineModel<string>('codeTs', { required: true })
 /**
  * 组件状态管理
  */
@@ -79,5 +63,21 @@ onMounted(() => {
   handleQuery()
 })
 </script>
+
+<template>
+  <el-select
+    v-model="state.selectId"
+    value-key="id"
+    :placeholder="props.placeholder"
+    :clearable="props.clearable"
+    :disabled="props.disabled"
+    @change="handleChange"
+  >
+    <el-option v-for="item in state.tableList" :key="item.id" :value="item.id" :label="item.tsType">
+      <el-text size="large" tag="b" class="user-select-none">{{ item.dbDataType }}</el-text>
+      <el-text size="small" type="info" class="user-select-none float-right">{{ item.tsType }}</el-text>
+    </el-option>
+  </el-select>
+</template>
 
 <style scoped lang="scss"></style>

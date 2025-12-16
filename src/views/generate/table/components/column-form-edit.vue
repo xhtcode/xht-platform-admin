@@ -1,3 +1,24 @@
+<script lang="ts" setup>
+import type { GenColumnInfoResponse } from '@/service/model/generate/column.model'
+import type { GenTableInfoResponse } from '@/service/model/generate/table.model'
+
+/**
+ * 列信息模型，用于双向绑定列数据
+ */
+const columnInfo = defineModel<GenColumnInfoResponse[]>('columnInfo', {
+  required: true,
+  default: () => [],
+})
+
+/**
+ * 表信息模型，用于双向绑定表数据
+ */
+const tableInfo = defineModel<GenTableInfoResponse>('tableInfo', {
+  required: true,
+  default: () => {},
+})
+</script>
+
 <template>
   <div>
     <el-row>
@@ -68,23 +89,3 @@
     </xht-table>
   </div>
 </template>
-<script lang="ts" setup>
-import type { GenColumnInfoResponse } from '@/service/model/generate/column.model'
-import type { GenTableInfoResponse } from '@/service/model/generate/table.model'
-
-/**
- * 列信息模型，用于双向绑定列数据
- */
-const columnInfo = defineModel<GenColumnInfoResponse[]>('columnInfo', {
-  required: true,
-  default: () => [],
-})
-
-/**
- * 表信息模型，用于双向绑定表数据
- */
-const tableInfo = defineModel<GenTableInfoResponse>('tableInfo', {
-  required: true,
-  default: () => {},
-})
-</script>

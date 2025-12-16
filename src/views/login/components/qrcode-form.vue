@@ -1,3 +1,7 @@
+<script lang="ts" setup>
+import qrcodeUrl from '@/assets/images/qr-code.png'
+</script>
+
 <template>
   <div class="qrcode-login text-center">
     <div class="qrcode-image">
@@ -8,9 +12,7 @@
     </div>
   </div>
 </template>
-<script lang="ts" setup>
-import qrcodeUrl from '@/assets/images/qr-code.png'
-</script>
+
 <style lang="scss" scoped>
 // 扫码登录样式
 .qrcode-login {

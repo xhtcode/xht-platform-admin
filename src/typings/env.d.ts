@@ -49,3 +49,10 @@ export declare const __APP_INFO__: {
   }
   buildTimestamp: number
 }
+
+declare module '*.vue' {
+  import type { DefineComponent } from 'vue'
+
+  const component: DefineComponent<object, object, any>
+  export default component
+}

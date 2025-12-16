@@ -1,49 +1,3 @@
-<template>
-  <el-drawer
-    v-model="state.visibleStatus"
-    :title="state.title"
-    size="45%"
-    append-to-body
-    :close-on-click-modal="false"
-    :show-close="!state.loadingStatus"
-    :before-close="close"
-  >
-    <el-form
-      ref="addUpdateFormRef"
-      v-loading="state.loadingStatus"
-      :model="addUpdateForm"
-      :rules="rules"
-      element-loading-text="拼命加载中"
-      inline-message
-      label-width="120px"
-      scroll-to-error
-    >
-      <el-form-item label="数据库数据类型" prop="dbDataType">
-        <el-input v-model="addUpdateForm.dbDataType" />
-      </el-form-item>
-      <el-form-item label="数据库类型" prop="dbType">
-        <el-select v-model="addUpdateForm.dbType" placeholder="请选择数据库类型">
-          <el-option :value="DataBaseTypeEnums.MYSQL" label="MySql" />
-          <el-option :value="DataBaseTypeEnums.ORACLE" label="Oracle" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="Java类型" prop="javaType">
-        <el-input v-model="addUpdateForm.javaType" placeholder="请输入Java类型" />
-      </el-form-item>
-      <el-form-item label="导入包路径" prop="importPackage">
-        <el-input v-model="addUpdateForm.importPackage" />
-      </el-form-item>
-      <el-form-item label="Ts类型" prop="tsType">
-        <el-input v-model="addUpdateForm.tsType" placeholder="请输入Ts类型" />
-      </el-form-item>
-    </el-form>
-    <template #footer>
-      <el-button :disabled="state.loadingStatus" @click="close">取 消</el-button>
-      <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>
-    </template>
-  </el-drawer>
-</template>
-
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
 import { queryGenTypeMappingById, saveGenTypeMapping, updateGenTypeMapping } from '@/service/api/generate/type.mapping.api'
@@ -54,6 +8,7 @@ import type { GenTypeMappingOperationRequest } from '@/service/model/generate/ty
 import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
 
 defineOptions({ name: 'GenTypeMappingAddOrUpdate' })
+const emits = defineEmits(['success'])
 const state = reactive<AddUpdateOption<GenTypeMappingOperationRequest>>({
   title: '增加字段类型映射',
   visibleStatus: false,
@@ -63,7 +18,6 @@ const state = reactive<AddUpdateOption<GenTypeMappingOperationRequest>>({
 })
 const addUpdateFormRef = ref<FormInstance>()
 const { addUpdateForm } = toRefs(state)
-const emits = defineEmits(['success'])
 const rules: FormRules = GenTypeMappingOperationRules
 
 /**
@@ -125,5 +79,51 @@ defineExpose({
   show,
 })
 </script>
+
+<template>
+  <el-drawer
+    v-model="state.visibleStatus"
+    :title="state.title"
+    size="45%"
+    append-to-body
+    :close-on-click-modal="false"
+    :show-close="!state.loadingStatus"
+    :before-close="close"
+  >
+    <el-form
+      ref="addUpdateFormRef"
+      v-loading="state.loadingStatus"
+      :model="addUpdateForm"
+      :rules="rules"
+      element-loading-text="拼命加载中"
+      inline-message
+      label-width="120px"
+      scroll-to-error
+    >
+      <el-form-item label="数据库数据类型" prop="dbDataType">
+        <el-input v-model="addUpdateForm.dbDataType" />
+      </el-form-item>
+      <el-form-item label="数据库类型" prop="dbType">
+        <el-select v-model="addUpdateForm.dbType" placeholder="请选择数据库类型">
+          <el-option :value="DataBaseTypeEnums.MYSQL" label="MySql" />
+          <el-option :value="DataBaseTypeEnums.ORACLE" label="Oracle" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="Java类型" prop="javaType">
+        <el-input v-model="addUpdateForm.javaType" placeholder="请输入Java类型" />
+      </el-form-item>
+      <el-form-item label="导入包路径" prop="importPackage">
+        <el-input v-model="addUpdateForm.importPackage" />
+      </el-form-item>
+      <el-form-item label="Ts类型" prop="tsType">
+        <el-input v-model="addUpdateForm.tsType" placeholder="请输入Ts类型" />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <el-button :disabled="state.loadingStatus" @click="close">取 消</el-button>
+      <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>
+    </template>
+  </el-drawer>
+</template>
 
 <style scoped></style>

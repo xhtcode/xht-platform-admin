@@ -1,7 +1,3 @@
-<template>
-  <el-table-column class-name="user-select-none" type="index" :resizable="false" :width="width" :label="label" :index="createTableIndex" />
-</template>
-
 <script setup lang="ts">
 import type { XhtColumnIndexProps } from '@/components/element-plus/xht-table/types'
 
@@ -31,5 +27,9 @@ const createTableIndex = (index: number): number => {
   return (current - 1) * size + index + 1
 }
 </script>
+
+<template>
+  <el-table-column class-name="user-select-none" type="index" :resizable="false" :width="width" :label="label" :index="createTableIndex" />
+</template>
 
 <style scoped lang="scss"></style>

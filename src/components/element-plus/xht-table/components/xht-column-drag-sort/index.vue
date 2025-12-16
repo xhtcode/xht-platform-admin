@@ -1,18 +1,8 @@
-<template>
-  <el-table-column :label="label" :width="width" type="default" class-name="xht-table-column-drag-sort">
-    <template #default>
-      <span class="xht-table-column-drag-icon">
-        <el-icon class="drag-sort-icon" :size="18"><Rank /></el-icon>
-      </span>
-    </template>
-  </el-table-column>
-</template>
-
 <script setup lang="ts" generic="T extends BasicResponse">
 import type { SortableEvent } from 'sortablejs'
 import Sortable from 'sortablejs'
 import { Rank } from '@element-plus/icons-vue'
-import { XhtColumnDragSortEmits, XhtColumnDragSortProps } from '@/components/element-plus/xht-table/types'
+import type { XhtColumnDragSortEmits, XhtColumnDragSortProps } from '@/components/element-plus/xht-table/types'
 import type { BasicResponse } from '@/service/model/base.model'
 
 defineOptions({
@@ -47,6 +37,17 @@ onMounted(() => {
   })
 })
 </script>
+
+<template>
+  <el-table-column :label="label" :width="width" type="default" class-name="xht-table-column-drag-sort">
+    <template #default>
+      <span class="xht-table-column-drag-icon">
+        <el-icon class="drag-sort-icon" :size="18"><Rank /></el-icon>
+      </span>
+    </template>
+  </el-table-column>
+</template>
+
 <style lang="scss">
 .el-table__body {
   .xht-table-column-drag-sort {

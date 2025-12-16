@@ -1,3 +1,9 @@
+<script setup lang="ts">
+defineOptions({
+  name: 'LayoutFooter',
+})
+</script>
+
 <template>
   <el-footer class="xht-footer-container">
     <div class="xht-footer-main">
@@ -5,12 +11,6 @@
     </div>
   </el-footer>
 </template>
-
-<script setup lang="ts">
-defineOptions({
-  name: 'LayoutFooter',
-})
-</script>
 
 <style scoped lang="scss">
 .xht-footer-container {

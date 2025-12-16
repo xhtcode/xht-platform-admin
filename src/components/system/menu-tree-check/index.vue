@@ -1,31 +1,9 @@
-<template>
-  <el-tree
-    ref="menuTreeRef"
-    :data="menuTree"
-    :props="{ children: 'children', label: 'menuName' }"
-    :disabled="disabled"
-    :default-expand-all="true"
-    :show-checkbox="true"
-    check-strictly
-    node-key="id"
-    class="user-select-display menu-tree"
-    @check="handleCheck"
-  />
-</template>
-
 <script lang="ts" setup>
 import type { SysMenuTreeResponse } from '@/service/model/system/menu.model'
 import { MenuTypeEnums } from '@/service/model/system/menu.model'
 import { queryToolsMenuTree } from '@/service/api/tools.api'
 
 defineOptions({ name: 'MenuTree' })
-
-interface Props {
-  modelValue?: string[]
-  disabled?: boolean
-  showTopMenu?: boolean
-  type?: 'ALL' | 'M' | 'C' | 'B'
-}
 
 const props = withDefaults(defineProps<Props>(), {
   modelValue: () => [],
@@ -34,8 +12,16 @@ const props = withDefaults(defineProps<Props>(), {
   type: 'ALL',
 })
 
-const menuTreeRef = ref<any>()
 const emits = defineEmits(['update:modelValue', 'change'])
+
+interface Props {
+  modelValue?: string[]
+  disabled?: boolean
+  showTopMenu?: boolean
+  type?: 'ALL' | 'M' | 'C' | 'B'
+}
+
+const menuTreeRef = ref<any>()
 const modelValue = useVModel(props, 'modelValue', emits)
 const menuTree = ref<SysMenuTreeResponse>([])
 
@@ -94,6 +80,21 @@ defineExpose({
   getCheckedNodes,
 })
 </script>
+
+<template>
+  <el-tree
+    ref="menuTreeRef"
+    :data="menuTree"
+    :props="{ children: 'children', label: 'menuName' }"
+    :disabled="disabled"
+    :default-expand-all="true"
+    :show-checkbox="true"
+    check-strictly
+    node-key="id"
+    class="user-select-display menu-tree"
+    @check="handleCheck"
+  />
+</template>
 
 <style scoped lang="scss">
 .menu-tree {

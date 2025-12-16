@@ -1,71 +1,3 @@
-<template>
-  <el-drawer v-model="state.visibleStatus" :before-close="close" append-to-body size="100%" title="代码预览">
-    <div class="xht-code-view-container" v-loading="state.loadingStatus">
-      <div class="xht-code-view-main" :style="{ width: tableWidth ? '200px' : '100px' }">
-        <div class="xht-code-view-setting" @click="tableWidth = !tableWidth">
-          {{ tableWidth ? '《《《《《《' : '》》》' }}
-        </div>
-        <el-scrollbar view-style="overflow-x: hidden;" v-if="tableWidth">
-          <div
-            v-for="(item, index) in state.codeData"
-            :key="index"
-            :class="{ 'xht-code-view-item-active': state.activeTableName === item.tableName }"
-            class="xht-code-view-item"
-            @click="handleClickTableName(item)"
-          >
-            <span>{{ item.tableName }}</span>
-            <span>
-              <el-icon><arrow-right /></el-icon>
-            </span>
-          </div>
-        </el-scrollbar>
-        <div class="xht-code-view-empty" @click="tableWidth = !tableWidth" v-else>点击展开</div>
-      </div>
-      <div class="xht-code-view-main" :style="{ width: codeNameWidth ? '280px' : '100px' }">
-        <div class="xht-code-view-setting" @click="codeNameWidth = !codeNameWidth">
-          {{ codeNameWidth ? '《《《《《《' : '》》》' }}
-        </div>
-        <el-scrollbar view-style="overflow-x: hidden;" view-class="flex-1" v-if="codeNameWidth">
-          <div
-            v-for="(item, index) in state.twoCodeData"
-            :key="index"
-            :class="{ 'xht-code-view-item-active': state.activeFileName === item.fileName }"
-            class="xht-code-view-item"
-            @click="handleClickFileName(item)"
-          >
-            <span>{{ item.fileName }}</span>
-            <span>
-              <el-icon><arrow-right /></el-icon>
-            </span>
-          </div>
-        </el-scrollbar>
-        <div class="xht-code-view-empty" @click="codeNameWidth = !codeNameWidth" v-else>点击展开</div>
-      </div>
-      <div class="flex-1">
-        <code-monaco-editor ref="codeMonacoEditorRef" :language="state.activeFileType" :font-size="14" readonly />
-      </div>
-    </div>
-    <template #footer>
-      <el-row v-loading="state.loadingStatus">
-        <el-col :span="6">
-          <el-form-item label="包名" required>
-            <el-input v-model="state.packageName" placeholder="请输入包名" :maxlength="200" show-word-limit />
-          </el-form-item>
-        </el-col>
-        <el-col :span="10" class="text-center!">
-          <el-text truncated>{{ state.activeData?.filePath }}</el-text>
-        </el-col>
-        <el-col :span="8" class="text-right">
-          <el-button :disabled="!state.packageName" :icon="Refresh" type="info" @click="show(state.tableIds)">重新加载</el-button>
-          <el-button :disabled="!state.activeData" :icon="DocumentCopy" type="primary" @click="handleCopyCode">复制</el-button>
-          <el-button :disabled="!state.packageName" :icon="Download" type="success">下载</el-button>
-          <el-button :icon="Delete" type="danger" @click="close">关闭</el-button>
-        </el-col>
-      </el-row>
-    </template>
-  </el-drawer>
-</template>
-
 <script lang="ts" setup>
 import type { ModeIdType } from '@/service/model/base.model'
 import { viewCodeFileApi } from '@/service/api/generate/table.api'
@@ -180,6 +112,74 @@ defineExpose({
   show,
 })
 </script>
+
+<template>
+  <el-drawer v-model="state.visibleStatus" :before-close="close" append-to-body size="100%" title="代码预览">
+    <div class="xht-code-view-container" v-loading="state.loadingStatus">
+      <div class="xht-code-view-main" :style="{ width: tableWidth ? '200px' : '100px' }">
+        <div class="xht-code-view-setting" @click="tableWidth = !tableWidth">
+          {{ tableWidth ? '《《《《《《' : '》》》' }}
+        </div>
+        <el-scrollbar view-style="overflow-x: hidden;" v-if="tableWidth">
+          <div
+            v-for="(item, index) in state.codeData"
+            :key="index"
+            :class="{ 'xht-code-view-item-active': state.activeTableName === item.tableName }"
+            class="xht-code-view-item"
+            @click="handleClickTableName(item)"
+          >
+            <span>{{ item.tableName }}</span>
+            <span>
+              <el-icon><arrow-right /></el-icon>
+            </span>
+          </div>
+        </el-scrollbar>
+        <div class="xht-code-view-empty" @click="tableWidth = !tableWidth" v-else>点击展开</div>
+      </div>
+      <div class="xht-code-view-main" :style="{ width: codeNameWidth ? '280px' : '100px' }">
+        <div class="xht-code-view-setting" @click="codeNameWidth = !codeNameWidth">
+          {{ codeNameWidth ? '《《《《《《' : '》》》' }}
+        </div>
+        <el-scrollbar view-style="overflow-x: hidden;" view-class="flex-1" v-if="codeNameWidth">
+          <div
+            v-for="(item, index) in state.twoCodeData"
+            :key="index"
+            :class="{ 'xht-code-view-item-active': state.activeFileName === item.fileName }"
+            class="xht-code-view-item"
+            @click="handleClickFileName(item)"
+          >
+            <span>{{ item.fileName }}</span>
+            <span>
+              <el-icon><arrow-right /></el-icon>
+            </span>
+          </div>
+        </el-scrollbar>
+        <div class="xht-code-view-empty" @click="codeNameWidth = !codeNameWidth" v-else>点击展开</div>
+      </div>
+      <div class="flex-1">
+        <code-monaco-editor ref="codeMonacoEditorRef" :language="state.activeFileType" :font-size="14" readonly />
+      </div>
+    </div>
+    <template #footer>
+      <el-row v-loading="state.loadingStatus">
+        <el-col :span="6">
+          <el-form-item label="包名" required>
+            <el-input v-model="state.packageName" placeholder="请输入包名" :maxlength="200" show-word-limit />
+          </el-form-item>
+        </el-col>
+        <el-col :span="10" class="text-center!">
+          <el-text truncated>{{ state.activeData?.filePath }}</el-text>
+        </el-col>
+        <el-col :span="8" class="text-right">
+          <el-button :disabled="!state.packageName" :icon="Refresh" type="info" @click="show(state.tableIds)">重新加载</el-button>
+          <el-button :disabled="!state.activeData" :icon="DocumentCopy" type="primary" @click="handleCopyCode">复制</el-button>
+          <el-button :disabled="!state.packageName" :icon="Download" type="success">下载</el-button>
+          <el-button :icon="Delete" type="danger" @click="close">关闭</el-button>
+        </el-col>
+      </el-row>
+    </template>
+  </el-drawer>
+</template>
 
 <style lang="scss" scoped>
 .xht-code-view-container {

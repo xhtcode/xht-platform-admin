@@ -1,36 +1,3 @@
-<template>
-  <div class="dept-tree-container">
-    <div class="dept-tree-container-filter">
-      <el-input v-model="filterText" placeholder="请输入部门名称">
-        <template #append>
-          <el-icon size="20" @click="toggleRowExpansionAll(!expandAll)">
-            <CaretTop v-if="expandAll" />
-            <CaretBottom v-else />
-          </el-icon>
-        </template>
-      </el-input>
-    </div>
-    <div class="dept-tree-container-tree">
-      <el-scrollbar class="w100">
-        <el-tree
-          ref="treeRef"
-          v-loading="loading"
-          :check-strictly="true"
-          :expand-on-click-node="false"
-          :current-node-key="modelValue"
-          :data="treeData"
-          :filter-node-method="filterNode"
-          :props="defaultProps"
-          highlight-current
-          node-key="id"
-          :default-expand-all="expandAll"
-          @node-click="handleNodeClick"
-        />
-      </el-scrollbar>
-    </div>
-  </div>
-</template>
-
 <script lang="ts" setup>
 import { useVModel } from '@vueuse/core'
 import { querySysDeptTree } from '@/service/api/system/dept.api'
@@ -40,25 +7,26 @@ import type { AxiosResponse } from 'axios'
 import { CaretBottom, CaretTop } from '@element-plus/icons-vue'
 
 defineOptions({ name: 'DeptTree' })
+const props = withDefaults(defineProps<DeptSelectTreeProps>(), {
+  modelValue: undefined,
+})
+
+const emits = defineEmits<{
+  (e: 'clickNode', data: SysDeptResponse): void
+  (e: 'update:modelValue', value: any): void
+}>()
+
 const expandAll = ref<boolean>(true)
 
 interface DeptSelectTreeProps {
   modelValue?: any
 }
 
-const props = withDefaults(defineProps<DeptSelectTreeProps>(), {
-  modelValue: undefined,
-})
-
 const defaultProps: any = {
   children: 'children',
   label: 'deptName',
 }
 
-const emits = defineEmits<{
-  (e: 'clickNode', data: SysDeptResponse): void
-  (e: 'update:modelValue', value: any): void
-}>()
 const modelValue = useVModel(props, 'modelValue', emits)
 const loading = ref<boolean>(false)
 const filterText = ref<string>('')
@@ -124,6 +92,40 @@ defineExpose({
   resetHighlightCurrent,
 })
 </script>
+
+<template>
+  <div class="dept-tree-container">
+    <div class="dept-tree-container-filter">
+      <el-input v-model="filterText" placeholder="请输入部门名称">
+        <template #append>
+          <el-icon size="20" @click="toggleRowExpansionAll(!expandAll)">
+            <CaretTop v-if="expandAll" />
+            <CaretBottom v-else />
+          </el-icon>
+        </template>
+      </el-input>
+    </div>
+    <div class="dept-tree-container-tree">
+      <el-scrollbar class="w100">
+        <el-tree
+          ref="treeRef"
+          v-loading="loading"
+          :check-strictly="true"
+          :expand-on-click-node="false"
+          :current-node-key="modelValue"
+          :data="treeData"
+          :filter-node-method="filterNode"
+          :props="defaultProps"
+          highlight-current
+          node-key="id"
+          :default-expand-all="expandAll"
+          @node-click="handleNodeClick"
+        />
+      </el-scrollbar>
+    </div>
+  </div>
+</template>
+
 <style lang="scss" scoped>
 .dept-tree-container {
   height: 100%;

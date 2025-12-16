@@ -1,3 +1,78 @@
+<script setup lang="ts">
+import { useThemeStore } from '@/store'
+import { AppLanguageEnums, ComponentSizeEnums } from '@/service/enums'
+import { storeToRefs } from 'pinia'
+import useThemeColorHooks from '@/hooks/use-theme-hooks'
+import { DefaultThemeColor } from '@/service/constant'
+import { CircleCheckFilled } from '@element-plus/icons-vue'
+import { ElLoading } from 'element-plus'
+
+defineOptions({
+  name: 'AppSetting',
+})
+
+interface StateType {
+  visibleStatus: boolean
+  loadingStatus: boolean
+}
+
+const state = reactive<StateType>({
+  visibleStatus: false,
+  loadingStatus: false,
+})
+const themeStore = useThemeStore()
+const {
+  layoutType,
+  darkStatus,
+  breadcrumb,
+  tagsViewStatus,
+  footerStatus,
+  watermarkContent,
+  languageType,
+  sizeType,
+  colorType,
+  mournModeStatus,
+  colorWeaknessModeStatus,
+} = storeToRefs(themeStore)
+const { changeThemeColor } = useThemeColorHooks()
+const queryFormRef = useTemplateRef('queryFormRef')
+const predefineColors = ref(['#409EFF', '#ff4500', '#ff8c00', '#ffd700', '#90ee90', '#00ced1', '#c71585'])
+/**
+ * 禁用 颜色选择器
+ */
+const displayColorPicker = computed(() => mournModeStatus.value || colorWeaknessModeStatus.value)
+
+/**
+ * 切换布局类型
+ */
+const changeLayoutType = (args: 'default' | 'columns') => {
+  if (args === layoutType.value) return
+  const loadingInstance = ElLoading.service({
+    text: '正在处理中...',
+    fullscreen: true,
+  })
+  window.setTimeout(() => {
+    layoutType.value = args
+    loadingInstance.close()
+  }, 500)
+}
+/**
+ * 恢复默认配置
+ */
+const resetSetting = () => {
+  layoutType.value = 'default'
+  darkStatus.value = false
+  breadcrumb.value = true
+  tagsViewStatus.value = true
+  footerStatus.value = true
+  languageType.value = AppLanguageEnums.EN
+  sizeType.value = ComponentSizeEnums.DEFAULT
+  colorType.value = DefaultThemeColor
+  mournModeStatus.value = false
+  colorWeaknessModeStatus.value = false
+}
+</script>
+
 <template>
   <div class="header-tool-item" @click="state.visibleStatus = true">
     <div class="i-common-theme size-20px" />
@@ -82,80 +157,7 @@
     </el-drawer>
   </div>
 </template>
-<script setup lang="ts">
-import { useThemeStore } from '@/store'
-import { AppLanguageEnums, ComponentSizeEnums } from '@/service/enums'
-import { storeToRefs } from 'pinia'
-import useThemeColorHooks from '@/hooks/use-theme-hooks'
-import { DefaultThemeColor } from '@/service/constant'
-import { CircleCheckFilled } from '@element-plus/icons-vue'
-import { ElLoading } from 'element-plus'
 
-defineOptions({
-  name: 'AppSetting',
-})
-
-interface StateType {
-  visibleStatus: boolean
-  loadingStatus: boolean
-}
-
-const state = reactive<StateType>({
-  visibleStatus: false,
-  loadingStatus: false,
-})
-const themeStore = useThemeStore()
-const {
-  layoutType,
-  darkStatus,
-  breadcrumb,
-  tagsViewStatus,
-  footerStatus,
-  watermarkContent,
-  languageType,
-  sizeType,
-  colorType,
-  mournModeStatus,
-  colorWeaknessModeStatus,
-} = storeToRefs(themeStore)
-const { changeThemeColor } = useThemeColorHooks()
-const queryFormRef = useTemplateRef('queryFormRef')
-const predefineColors = ref(['#409EFF', '#ff4500', '#ff8c00', '#ffd700', '#90ee90', '#00ced1', '#c71585'])
-/**
- * 禁用 颜色选择器
- */
-const displayColorPicker = computed(() => mournModeStatus.value || colorWeaknessModeStatus.value)
-
-/**
- * 切换布局类型
- */
-const changeLayoutType = (args: 'default' | 'columns') => {
-  if (args === layoutType.value) return
-  const loadingInstance = ElLoading.service({
-    text: '正在处理中...',
-    fullscreen: true,
-  })
-  window.setTimeout(() => {
-    layoutType.value = args
-    loadingInstance.close()
-  }, 500)
-}
-/**
- * 恢复默认配置
- */
-const resetSetting = () => {
-  layoutType.value = 'default'
-  darkStatus.value = false
-  breadcrumb.value = true
-  tagsViewStatus.value = true
-  footerStatus.value = true
-  languageType.value = AppLanguageEnums.EN
-  sizeType.value = ComponentSizeEnums.DEFAULT
-  colorType.value = DefaultThemeColor
-  mournModeStatus.value = false
-  colorWeaknessModeStatus.value = false
-}
-</script>
 <style lang="scss" scoped>
 .xht-layout-box {
   position: relative;

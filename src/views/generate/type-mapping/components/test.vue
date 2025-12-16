@@ -1,58 +1,3 @@
-<template>
-  <el-0
-    v-model="state.visibleStatus"
-    :title="state.title"
-    size="45%"
-    append-to-body
-    :close-on-click-modal="false"
-    :show-close="!state.loadingStatus"
-    :before-close="close"
-  >
-    <el-form
-      ref="addUpdateFormRef"
-      v-loading="state.loadingStatus"
-      :model="addUpdateForm"
-      :rules="rules"
-      element-loading-text="拼命加载中"
-      inline-message
-      label-width="100px"
-      scroll-to-error
-    >
-      <el-row>
-        <el-col :span="4">
-          <el-form-item label="字典编码" prop="dictCode">
-            <el-input v-model="addUpdateForm.dictCode" :maxlength="64" placeholder="请输入字典编码" show-word-limit />
-          </el-form-item>
-        </el-col>
-        <el-col :span="4">
-          <el-form-item label="字典名称" prop="dictName">
-            <el-input v-model="addUpdateForm.dictName" :maxlength="128" placeholder="请输入字典名称" show-word-limit />
-          </el-form-item>
-        </el-col>
-        <el-col :span="4">
-          <el-form-item label="排序序号" prop="sortOrder">
-            <el-input v-model="addUpdateForm.sortOrder" :maxlength="0" placeholder="请输入排序序号" show-word-limit />
-          </el-form-item>
-        </el-col>
-        <el-col :span="4">
-          <el-form-item label="字典描述" prop="remark">
-            <el-input v-model="addUpdateForm.remark" :maxlength="512" placeholder="请输入字典描述" show-word-limit />
-          </el-form-item>
-        </el-col>
-        <el-col :span="4">
-          <el-form-item label="状态" prop="status">
-            <el-input v-model="addUpdateForm.status" :maxlength="0" placeholder="请输入状态" show-word-limit />
-          </el-form-item>
-        </el-col>
-      </el-row>
-    </el-form>
-    <template #footer>
-      <el-button :disabled="state.loadingStatus" @click="close">取 消</el-button>
-      <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>
-    </template>
-  </el-0>
-</template>
-
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
 import { querySysDictById, saveSysDict, updateSysDict } from '@/service/api/demo/dict.api'
@@ -63,6 +8,7 @@ import type { ModeIdType } from '@/service/model/base.model'
 
 defineOptions({ name: 'SysDictAddOrUpdate' })
 
+const emits = defineEmits(['success'])
 const state = reactive<AddUpdateOption<SysDictOperationRequest>>({
   title: '增加系统管理-字典表',
   visibleStatus: false,
@@ -72,7 +18,6 @@ const state = reactive<AddUpdateOption<SysDictOperationRequest>>({
 })
 const addUpdateFormRef = ref<FormInstance>()
 const { addUpdateForm } = toRefs(state)
-const emits = defineEmits(['success'])
 const rules: FormRules = SysDictOperationRules
 
 /**
@@ -135,5 +80,60 @@ defineExpose({
   show,
 })
 </script>
+
+<template>
+  <el-0
+    v-model="state.visibleStatus"
+    :title="state.title"
+    size="45%"
+    append-to-body
+    :close-on-click-modal="false"
+    :show-close="!state.loadingStatus"
+    :before-close="close"
+  >
+    <el-form
+      ref="addUpdateFormRef"
+      v-loading="state.loadingStatus"
+      :model="addUpdateForm"
+      :rules="rules"
+      element-loading-text="拼命加载中"
+      inline-message
+      label-width="100px"
+      scroll-to-error
+    >
+      <el-row>
+        <el-col :span="4">
+          <el-form-item label="字典编码" prop="dictCode">
+            <el-input v-model="addUpdateForm.dictCode" :maxlength="64" placeholder="请输入字典编码" show-word-limit />
+          </el-form-item>
+        </el-col>
+        <el-col :span="4">
+          <el-form-item label="字典名称" prop="dictName">
+            <el-input v-model="addUpdateForm.dictName" :maxlength="128" placeholder="请输入字典名称" show-word-limit />
+          </el-form-item>
+        </el-col>
+        <el-col :span="4">
+          <el-form-item label="排序序号" prop="sortOrder">
+            <el-input v-model="addUpdateForm.sortOrder" :maxlength="0" placeholder="请输入排序序号" show-word-limit />
+          </el-form-item>
+        </el-col>
+        <el-col :span="4">
+          <el-form-item label="字典描述" prop="remark">
+            <el-input v-model="addUpdateForm.remark" :maxlength="512" placeholder="请输入字典描述" show-word-limit />
+          </el-form-item>
+        </el-col>
+        <el-col :span="4">
+          <el-form-item label="状态" prop="status">
+            <el-input v-model="addUpdateForm.status" :maxlength="0" placeholder="请输入状态" show-word-limit />
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-form>
+    <template #footer>
+      <el-button :disabled="state.loadingStatus" @click="close">取 消</el-button>
+      <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>
+    </template>
+  </el-0>
+</template>
 
 <style lang="scss" scoped></style>

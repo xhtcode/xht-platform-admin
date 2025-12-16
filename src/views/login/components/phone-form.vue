@@ -1,24 +1,3 @@
-<template>
-  <el-form ref="phoneFormRef" :model="phoneForm" :rules="phoneRules" size="default">
-    <el-form-item :inline-message="false" :show-message="false" prop="phone">
-      <el-input v-model="phoneForm.phone" class="login-input" placeholder="请输入手机号" :prefix-icon="Phone" size="large" />
-    </el-form-item>
-
-    <el-form-item prop="code">
-      <div class="sms-container">
-        <el-input v-model="phoneForm.code" class="login-input" placeholder="请输入验证码" size="large">
-          <template #prefix>
-            <div class="i-login-code h-1rem w-1rem color-[var(--color)]" />
-          </template>
-        </el-input>
-        <el-button :disabled="smsCountdown > 0" class="sms-button" size="large" type="primary" @click="sendSMS">
-          {{ smsCountdown > 0 ? `${smsCountdown}s` : '发送验证码' }}
-        </el-button>
-      </div>
-    </el-form-item>
-    <el-button :loading="loading" class="login-button" size="large" type="primary" @click="handlePhoneLogin">登录</el-button>
-  </el-form>
-</template>
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
 import { useMessage } from '@/hooks/use-message'
@@ -86,6 +65,29 @@ const handlePhoneLogin = async () => {
   }
 }
 </script>
+
+<template>
+  <el-form ref="phoneFormRef" :model="phoneForm" :rules="phoneRules" size="default">
+    <el-form-item :inline-message="false" :show-message="false" prop="phone">
+      <el-input v-model="phoneForm.phone" class="login-input" placeholder="请输入手机号" :prefix-icon="Phone" size="large" />
+    </el-form-item>
+
+    <el-form-item prop="code">
+      <div class="sms-container">
+        <el-input v-model="phoneForm.code" class="login-input" placeholder="请输入验证码" size="large">
+          <template #prefix>
+            <div class="i-login-code h-1rem w-1rem color-[var(--color)]" />
+          </template>
+        </el-input>
+        <el-button :disabled="smsCountdown > 0" class="sms-button" size="large" type="primary" @click="sendSMS">
+          {{ smsCountdown > 0 ? `${smsCountdown}s` : '发送验证码' }}
+        </el-button>
+      </div>
+    </el-form-item>
+    <el-button :loading="loading" class="login-button" size="large" type="primary" @click="handlePhoneLogin">登录</el-button>
+  </el-form>
+</template>
+
 <style lang="scss" scoped>
 .login-input {
   :deep(.el-input__wrapper) {

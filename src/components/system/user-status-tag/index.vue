@@ -1,9 +1,3 @@
-<template>
-  <el-tag class="user-status-tag" :color="getTagColor(props.status)">
-    {{ getStatusLabel(props.status) }}
-  </el-tag>
-</template>
-
 <script lang="ts" setup>
 import { UserStatusColor, UserStatusDesc, UserStatusEnums } from '@/service/model/system/user.model'
 import type { UserStatusTagProps } from '@/components/system/user-status-tag/types'
@@ -21,6 +15,13 @@ const getStatusLabel = (status: UserStatusEnums) => {
   return UserStatusDesc[status]
 }
 </script>
+
+<template>
+  <el-tag class="user-status-tag" :color="getTagColor(props.status)">
+    {{ getStatusLabel(props.status) }}
+  </el-tag>
+</template>
+
 <style lang="scss" scoped>
 .user-status-tag {
   border-width: 0 !important;

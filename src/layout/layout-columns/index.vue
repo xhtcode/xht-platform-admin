@@ -1,33 +1,3 @@
-<template>
-  <el-container class="xht-layout-container">
-    <div class="xht-aside-split">
-      <el-scrollbar>
-        <menu-split @change="handleMenuClick" />
-      </el-scrollbar>
-    </div>
-    <layout-aside :child-menu-list="menuList" />
-    <el-container class="w-full h-full">
-      <el-header class="xht-header-container">
-        <div class="xht-header-item">
-          <menu-lock />
-          <bread-crumb />
-        </div>
-        <div class="xht-header-item">
-          <switch-dark />
-          <page-full-screen />
-          <menu-search />
-          <app-setting />
-          <user-avatar />
-        </div>
-      </el-header>
-      <div class="tabs-box-container">
-        <tags-view />
-      </div>
-      <layout-main />
-      <layout-footer />
-    </el-container>
-  </el-container>
-</template>
 <script setup lang="ts">
 import BreadCrumb from '@/layout/components/bread-crumb/index.vue'
 import TagsView from '@/layout/components/tags-view/index.vue'
@@ -60,13 +30,45 @@ const handleMenuClick = async (menuItems: RouteRecordRaw[], linkStatus: boolean)
   if (linkStatus) {
     const menuChildrenFirst = findMenuChildrenFirst(menuItems)
     if (menuChildrenFirst) {
-      await router.push(menuChildrenFirst.path).catch((_) => {
+      await router.push(menuChildrenFirst.path).catch((err) => {
+        console.log(err)
         useMessage().error('路由错误，请联系管理员!')
       })
     }
   }
 }
 </script>
+
+<template>
+  <el-container class="xht-layout-container">
+    <div class="xht-aside-split">
+      <el-scrollbar>
+        <menu-split @change="handleMenuClick" />
+      </el-scrollbar>
+    </div>
+    <layout-aside :child-menu-list="menuList" />
+    <el-container class="h-full w-full">
+      <el-header class="xht-header-container">
+        <div class="xht-header-item">
+          <menu-lock />
+          <bread-crumb />
+        </div>
+        <div class="xht-header-item">
+          <switch-dark />
+          <page-full-screen />
+          <menu-search />
+          <app-setting />
+          <user-avatar />
+        </div>
+      </el-header>
+      <div class="tabs-box-container">
+        <tags-view />
+      </div>
+      <layout-main />
+      <layout-footer />
+    </el-container>
+  </el-container>
+</template>
 
 <style lang="scss" scoped>
 .xht-layout-container {

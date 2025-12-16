@@ -1,67 +1,3 @@
-<template>
-  <div class="xht-view-container">
-    <div class="xht-view-main">
-      <el-form ref="queryFormRef" :disabled="state.loadingStatus" :model="queryParams" class="user-select-display" label-width="120px">
-        <el-row>
-          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
-            <el-form-item label="数据源名称" prop="name">
-              <el-input v-model="queryParams.name" clearable placeholder="请输入数据源名称" />
-            </el-form-item>
-          </el-col>
-          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
-            <el-form-item label="数据库类型" prop="dbType">
-              <el-select v-model="queryParams.dbType" placeholder="请选择数据库类型">
-                <el-option :value="DataBaseTypeEnums.MYSQL" label="MySql" />
-                <el-option :value="DataBaseTypeEnums.ORACLE" label="Oracle" />
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
-            <el-button :icon="Search" type="primary" @click="handleQuery()">查询</el-button>
-            <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
-          </el-col>
-        </el-row>
-      </el-form>
-      <table-tool-bar v-model:column-data="columnOption" v-model:show-search="state.searchStatus" column-status refresh-status @refresh="handleQuery">
-        <el-button :icon="Plus" size="small" type="primary" @click="handleAdd">新增</el-button>
-        <el-button :disabled="state.singleStatus" :icon="Edit" size="small" type="success" @click="handleEdit(state.selectedRows[0])">修改</el-button>
-        <el-button :disabled="state.multipleStatus" :icon="Delete" size="small" type="danger" @click="handleDelete(undefined)">批量删除</el-button>
-      </table-tool-bar>
-      <xht-table
-        v-loading="state.loadingStatus"
-        :data="state.tableList"
-        class="flex-1"
-        row-key="id"
-        empty-text="请添加数据源配置！"
-        @selection-change="handleSelectionChange"
-      >
-        <el-table-column align="center" type="selection" width="55" />
-        <xht-column-index type="step" />
-        <el-table-column label="数据库名称" prop="name" min-width="120" />
-        <el-table-column label="数据库类型" prop="dbType" min-width="120" />
-        <el-table-column label="数据库地址" prop="url" show-overflow-tooltip min-width="220" />
-        <el-table-column label="数据库用户名" prop="username" min-width="120" />
-        <el-table-column label="最后测试时间" prop="lastTestTime" min-width="220">
-          <template #default="{ row }">
-            <el-tag v-if="row.testResult === 'success'" type="success">
-              {{ row.lastTestTime }}
-            </el-tag>
-            <el-tag v-else type="danger">{{ row.lastTestTime }}</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column align="center" fixed="right" label="操作" width="260px">
-          <template #default="{ row }">
-            <el-button :icon="Edit" link type="success" @click="handleEdit(row)">修改</el-button>
-            <el-button :icon="Delete" link type="danger" @click="handleDelete(row)">删除</el-button>
-            <el-button :icon="Delete" link type="primary" @click="handleTest(row)">测试</el-button>
-          </template>
-        </el-table-column>
-      </xht-table>
-    </div>
-    <datasource-form ref="datasourceFormRef" @success="handleQuery()" />
-  </div>
-</template>
-
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
 import type { GenDataSourceQueryRequest, GenDataSourceResponse } from '@/service/model/generate/datasource.model'
@@ -189,4 +125,69 @@ onMounted(async () => {
   await handleQuery()
 })
 </script>
+
+<template>
+  <div class="xht-view-container">
+    <div class="xht-view-main">
+      <el-form ref="queryFormRef" :disabled="state.loadingStatus" :model="queryParams" class="user-select-display" label-width="120px">
+        <el-row>
+          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
+            <el-form-item label="数据源名称" prop="name">
+              <el-input v-model="queryParams.name" clearable placeholder="请输入数据源名称" />
+            </el-form-item>
+          </el-col>
+          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
+            <el-form-item label="数据库类型" prop="dbType">
+              <el-select v-model="queryParams.dbType" placeholder="请选择数据库类型">
+                <el-option :value="DataBaseTypeEnums.MYSQL" label="MySql" />
+                <el-option :value="DataBaseTypeEnums.ORACLE" label="Oracle" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
+            <el-button :icon="Search" type="primary" @click="handleQuery()">查询</el-button>
+            <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
+          </el-col>
+        </el-row>
+      </el-form>
+      <table-tool-bar v-model:column-data="columnOption" v-model:show-search="state.searchStatus" column-status refresh-status @refresh="handleQuery">
+        <el-button :icon="Plus" size="small" type="primary" @click="handleAdd">新增</el-button>
+        <el-button :disabled="state.singleStatus" :icon="Edit" size="small" type="success" @click="handleEdit(state.selectedRows[0])">修改</el-button>
+        <el-button :disabled="state.multipleStatus" :icon="Delete" size="small" type="danger" @click="handleDelete(undefined)">批量删除</el-button>
+      </table-tool-bar>
+      <xht-table
+        v-loading="state.loadingStatus"
+        :data="state.tableList"
+        class-name="flex-1"
+        row-key="id"
+        empty-text="请添加数据源配置！"
+        @selection-change="handleSelectionChange"
+      >
+        <el-table-column align="center" type="selection" width="55" />
+        <xht-column-index type="step" />
+        <el-table-column label="数据库名称" prop="name" min-width="120" />
+        <el-table-column label="数据库类型" prop="dbType" min-width="120" />
+        <el-table-column label="数据库地址" prop="url" show-overflow-tooltip min-width="220" />
+        <el-table-column label="数据库用户名" prop="username" min-width="120" />
+        <el-table-column label="最后测试时间" prop="lastTestTime" min-width="220">
+          <template #default="{ row }">
+            <el-tag v-if="row.testResult === 'success'" type="success">
+              {{ row.lastTestTime }}
+            </el-tag>
+            <el-tag v-else type="danger">{{ row.lastTestTime }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" fixed="right" label="操作" width="260px">
+          <template #default="{ row }">
+            <el-button :icon="Edit" link type="success" @click="handleEdit(row)">修改</el-button>
+            <el-button :icon="Delete" link type="danger" @click="handleDelete(row)">删除</el-button>
+            <el-button :icon="Delete" link type="primary" @click="handleTest(row)">测试</el-button>
+          </template>
+        </el-table-column>
+      </xht-table>
+    </div>
+    <datasource-form ref="datasourceFormRef" @success="handleQuery()" />
+  </div>
+</template>
+
 <style lang="scss" scoped></style>

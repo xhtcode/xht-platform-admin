@@ -1,3 +1,12 @@
+<script lang="ts" setup>
+import type { GenTableInfoResponse } from '@/service/model/generate/table.model'
+
+const tableInfo = defineModel<GenTableInfoResponse>('tableInfo', {
+  required: true,
+  default: () => {},
+})
+</script>
+
 <template>
   <div>
     <div class="preview-title">代码示例</div>
@@ -17,15 +26,6 @@ public class {{ tableInfo?.codeName }}Entity implements Serializable {
     </pre>
   </div>
 </template>
-
-<script lang="ts" setup>
-import type { GenTableInfoResponse } from '@/service/model/generate/table.model'
-
-const tableInfo = defineModel<GenTableInfoResponse>('tableInfo', {
-  required: true,
-  default: () => {},
-})
-</script>
 
 <style lang="scss" scoped>
 .preview-title {

@@ -1,10 +1,73 @@
+<script lang="ts" setup>
+import type { FormInstance, FormRules } from 'element-plus'
+import { GenTemplateOperationForm, GenTemplateOperationRules } from '@/views/generate/template/template.data'
+import type { GenTemplateOperationRequest } from '@/service/model/generate/template.model'
+import { useMessage } from '@/hooks/use-message'
+import { saveGenTemplate, updateGenTemplate } from '@/service/api/generate/template.api'
+
+defineOptions({
+  name: 'TemplateForm',
+  inheritAttrs: false,
+})
+
+const emits = defineEmits(['success'])
+
+const loadingStatus = defineModel<boolean>('loadingStatus', {
+  required: true,
+  default: false,
+})
+
+const addUpdateForm = defineModel<GenTemplateOperationRequest>('addUpdateForm', {
+  required: true,
+  default: {
+    ...GenTemplateOperationForm,
+  },
+})
+
+const validateStatus = ref<boolean>(false)
+const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
+const rules: FormRules = GenTemplateOperationRules
+const submitForm = () => {
+  loadingStatus.value = true
+  addUpdateFormRef.value?.validate(async (valid, invalidFields) => {
+    validateStatus.value = !!(invalidFields?.templateContent && invalidFields?.templateContent.length > 0)
+    if (valid) {
+      try {
+        if (addUpdateForm.value.isNew) {
+          const { data } = await saveGenTemplate({ ...addUpdateForm.value, id: null })
+          addUpdateForm.value.isNew = false
+          addUpdateForm.value.id = data
+          emits('success', data)
+          useMessage().success('保存模板成功')
+        } else {
+          await updateGenTemplate(addUpdateForm.value)
+          useMessage().success('修改模板成功')
+        }
+      } finally {
+        loadingStatus.value = false
+      }
+    } else {
+      loadingStatus.value = false
+      useMessage().error('表单校验未通过，请重新检查提交内容')
+    }
+  })
+}
+/**
+ * 模板内容改变
+ * @param value 改变后的内容
+ */
+const codeChange = (value?: string) => {
+  validateStatus.value = !value
+}
+</script>
+
 <template>
   <el-form
     ref="addUpdateFormRef"
     v-loading="loadingStatus"
     :model="addUpdateForm"
     :rules="rules"
-    class="flex h-full"
+    class="h-full flex"
     element-loading-text="拼命加载中"
     inline-message
     label-width="100px"
@@ -86,68 +149,5 @@
     </el-form-item>
   </el-form>
 </template>
-
-<script lang="ts" setup>
-import type { FormInstance, FormRules } from 'element-plus'
-import { GenTemplateOperationForm, GenTemplateOperationRules } from '@/views/generate/template/template.data'
-import type { GenTemplateOperationRequest } from '@/service/model/generate/template.model'
-import { useMessage } from '@/hooks/use-message'
-import { saveGenTemplate, updateGenTemplate } from '@/service/api/generate/template.api'
-
-defineOptions({
-  name: 'TemplateForm',
-  inheritAttrs: false,
-})
-
-const emits = defineEmits(['success'])
-
-const loadingStatus = defineModel<boolean>('loadingStatus', {
-  required: true,
-  default: false,
-})
-
-const addUpdateForm = defineModel<GenTemplateOperationRequest>('addUpdateForm', {
-  required: true,
-  default: {
-    ...GenTemplateOperationForm,
-  },
-})
-
-const validateStatus = ref<boolean>(false)
-const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
-const rules: FormRules = GenTemplateOperationRules
-const submitForm = () => {
-  loadingStatus.value = true
-  addUpdateFormRef.value?.validate(async (valid, invalidFields) => {
-    validateStatus.value = !!(invalidFields?.templateContent && invalidFields?.templateContent.length > 0)
-    if (valid) {
-      try {
-        if (addUpdateForm.value.isNew) {
-          const { data } = await saveGenTemplate({ ...addUpdateForm.value, id: null })
-          addUpdateForm.value.isNew = false
-          addUpdateForm.value.id = data
-          emits('success', data)
-          useMessage().success('保存模板成功')
-        } else {
-          await updateGenTemplate(addUpdateForm.value)
-          useMessage().success('修改模板成功')
-        }
-      } finally {
-        loadingStatus.value = false
-      }
-    } else {
-      loadingStatus.value = false
-      useMessage().error('表单校验未通过，请重新检查提交内容')
-    }
-  })
-}
-/**
- * 模板内容改变
- * @param value 改变后的内容
- */
-const codeChange = (value?: string) => {
-  validateStatus.value = !value
-}
-</script>
 
 <style lang="scss" scoped></style>

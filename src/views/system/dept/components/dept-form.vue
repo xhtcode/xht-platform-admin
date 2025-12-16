@@ -1,3 +1,110 @@
+<script lang="ts" setup>
+import type { FormInstance, FormRules } from 'element-plus'
+import { querySysDeptById, saveSysDept, updateSysDept } from '@/service/api/system/dept.api'
+import type { SysDeptOperationRequest } from '@/service/model/system/dept.model'
+import { DeptStatusEnums } from '@/service/model/system/dept.model'
+import type { UserSimpleVo } from '@/service/model/system/user.model'
+import type { ModeIdType } from '@/service/model/base.model'
+import { SysDeptOperationForm, SysDeptOperationRules } from '@/views/system/dept/dept.data'
+import { useMessage } from '@/hooks/use-message'
+import { Search } from '@element-plus/icons-vue'
+
+defineOptions({ name: 'SysDeptAddOrUpdate' })
+
+const emits = defineEmits(['success'])
+
+const DeptUserForm = defineAsyncComponent(() => import('@/views/system/dept/components/dept-user-form.vue'))
+
+const state = reactive<AddUpdateOption<SysDeptOperationRequest>>({
+  title: '增加部门',
+  visibleStatus: false,
+  operationStatus: 'create',
+  loadingStatus: false,
+  addUpdateForm: { ...SysDeptOperationForm },
+})
+const addUpdateFormRef = ref<FormInstance>()
+const { addUpdateForm } = toRefs(state)
+const rules: FormRules = SysDeptOperationRules
+const useDeptUserDialog = useTemplateRef('deptUserDialog')
+const currentUser = ref<UserSimpleVo>()
+/**
+ * 打开部门主管选择
+ */
+const showDeptUser = () => {
+  useDeptUserDialog.value?.show(addUpdateForm.value.id)
+}
+
+/**
+ * 部门主管选择
+ * @param user 用户信息
+ */
+const handleDeptUser = (user: UserSimpleVo) => {
+  currentUser.value = user
+  addUpdateForm.value.leaderUserId = user.userId
+  addUpdateForm.value.leaderName = user.userName
+}
+
+/**
+ * 打开显示
+ */
+const show = async (type: 'create' | 'update', id: ModeIdType) => {
+  try {
+    state.visibleStatus = true
+    state.operationStatus = type
+    state.loadingStatus = true
+    if (type === 'update') {
+      state.title = '修改系统部门'
+      const { data } = await querySysDeptById(id)
+      addUpdateForm.value = data
+    }
+  } finally {
+    state.loadingStatus = false
+  }
+}
+
+/**
+ * 提交表单
+ */
+const submitForm = () => {
+  state.loadingStatus = true
+  addUpdateFormRef.value?.validate(async (valid) => {
+    if (valid) {
+      try {
+        if (state.operationStatus === 'create') {
+          await saveSysDept(addUpdateForm.value)
+          useMessage().success(`新增部门:${addUpdateForm.value.deptName}成功`)
+        } else {
+          await updateSysDept(addUpdateForm.value)
+          useMessage().success(`修改部门:${addUpdateForm.value.deptName}成功`)
+        }
+        emits('success')
+        state.loadingStatus = false
+        close()
+      } catch {
+        state.loadingStatus = false
+      }
+    } else {
+      state.loadingStatus = false
+      useMessage().error('表单校验未通过，请重新检查提交内容')
+    }
+  })
+}
+
+/**
+ * 关闭
+ */
+const close = () => {
+  if (state.loadingStatus) return
+  state.visibleStatus = false
+  state.operationStatus = 'create'
+  addUpdateFormRef.value?.resetFields()
+}
+
+defineExpose({
+  show,
+})
+</script>
+
 <template>
   <el-drawer
     v-model="state.visibleStatus"
@@ -96,111 +203,5 @@
     <dept-user-form ref="deptUserDialog" v-model="addUpdateForm.leaderUserId" @change="handleDeptUser" />
   </el-drawer>
 </template>
-
-<script lang="ts" setup>
-import type { FormInstance, FormRules } from 'element-plus'
-import { querySysDeptById, saveSysDept, updateSysDept } from '@/service/api/system/dept.api'
-import type { SysDeptOperationRequest } from '@/service/model/system/dept.model'
-import { DeptStatusEnums } from '@/service/model/system/dept.model'
-import type { UserSimpleVo } from '@/service/model/system/user.model'
-import type { ModeIdType } from '@/service/model/base.model'
-import { SysDeptOperationForm, SysDeptOperationRules } from '@/views/system/dept/dept.data'
-import { useMessage } from '@/hooks/use-message'
-import { Search } from '@element-plus/icons-vue'
-
-defineOptions({ name: 'SysDeptAddOrUpdate' })
-
-const DeptUserForm = defineAsyncComponent(() => import('@/views/system/dept/components/dept-user-form.vue'))
-
-const state = reactive<AddUpdateOption<SysDeptOperationRequest>>({
-  title: '增加部门',
-  visibleStatus: false,
-  operationStatus: 'create',
-  loadingStatus: false,
-  addUpdateForm: { ...SysDeptOperationForm },
-})
-const addUpdateFormRef = ref<FormInstance>()
-const { addUpdateForm } = toRefs(state)
-const emits = defineEmits(['success'])
-const rules: FormRules = SysDeptOperationRules
-const useDeptUserDialog = useTemplateRef('deptUserDialog')
-const currentUser = ref<UserSimpleVo>()
-/**
- * 打开部门主管选择
- */
-const showDeptUser = () => {
-  useDeptUserDialog.value?.show(addUpdateForm.value.id)
-}
-
-/**
- * 部门主管选择
- * @param user 用户信息
- */
-const handleDeptUser = (user: UserSimpleVo) => {
-  currentUser.value = user
-  addUpdateForm.value.leaderUserId = user.userId
-  addUpdateForm.value.leaderName = user.userName
-}
-
-/**
- * 打开显示
- */
-const show = async (type: 'create' | 'update', id: ModeIdType) => {
-  try {
-    state.visibleStatus = true
-    state.operationStatus = type
-    state.loadingStatus = true
-    if (type === 'update') {
-      state.title = '修改系统部门'
-      const { data } = await querySysDeptById(id)
-      addUpdateForm.value = data
-    }
-  } finally {
-    state.loadingStatus = false
-  }
-}
-
-/**
- * 提交表单
- */
-const submitForm = () => {
-  state.loadingStatus = true
-  addUpdateFormRef.value?.validate(async (valid) => {
-    if (valid) {
-      try {
-        if (state.operationStatus === 'create') {
-          await saveSysDept(addUpdateForm.value)
-          useMessage().success(`新增部门:${addUpdateForm.value.deptName}成功`)
-        } else {
-          await updateSysDept(addUpdateForm.value)
-          useMessage().success(`修改部门:${addUpdateForm.value.deptName}成功`)
-        }
-        emits('success')
-        state.loadingStatus = false
-        close()
-      } catch {
-        state.loadingStatus = false
-      }
-    } else {
-      state.loadingStatus = false
-      useMessage().error('表单校验未通过，请重新检查提交内容')
-    }
-  })
-}
-
-/**
- * 关闭
- */
-const close = () => {
-  if (state.loadingStatus) return
-  state.visibleStatus = false
-  state.operationStatus = 'create'
-  addUpdateFormRef.value?.resetFields()
-}
-
-defineExpose({
-  show,
-})
-</script>
 
 <style scoped></style>

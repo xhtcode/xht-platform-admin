@@ -1,3 +1,87 @@
+<script lang="ts" setup>
+import type { FormInstance, FormRules } from 'element-plus'
+import { querySysDictById, saveSysDict, updateSysDict } from '@/service/api/system/dict.api'
+import { SysDictOperationForm, SysDictOperationRules } from '@/views/system/dict/dict.data'
+import { useMessage } from '@/hooks/use-message'
+import type { SysDictOperationRequest } from '@/service/model/system/dict.model'
+import { DictStatusEnums } from '@/service/model/system/dict.model'
+import type { ModeIdType } from '@/service/model/base.model'
+
+defineOptions({ name: 'SysDictAddOrUpdate' })
+
+const emits = defineEmits(['success'])
+const state = reactive<AddUpdateOption<SysDictOperationRequest>>({
+  title: '增加字典',
+  visibleStatus: false,
+  operationStatus: 'create',
+  loadingStatus: false,
+  addUpdateForm: { ...SysDictOperationForm },
+})
+const addUpdateFormRef = ref<FormInstance>()
+const { addUpdateForm } = toRefs(state)
+const rules: FormRules = SysDictOperationRules
+
+/**
+ * 打开显示
+ */
+const show = async (type: 'create' | 'update', id: ModeIdType) => {
+  try {
+    state.visibleStatus = true
+    state.operationStatus = type
+    state.loadingStatus = true
+    if (type === 'update') {
+      state.title = '修改字典'
+      const { data } = await querySysDictById(id)
+      addUpdateForm.value = data
+    }
+  } finally {
+    state.loadingStatus = false
+  }
+}
+
+/**
+ * 提交表单
+ */
+const submitForm = () => {
+  state.loadingStatus = true
+  addUpdateFormRef.value?.validate(async (valid) => {
+    if (valid) {
+      try {
+        if (state.operationStatus === 'create') {
+          await saveSysDict(addUpdateForm.value)
+          useMessage().success('新增字典成功')
+        } else {
+          await updateSysDict({ ...addUpdateForm.value })
+          useMessage().success('修改字典成功')
+        }
+        emits('success')
+        state.loadingStatus = false
+        close()
+      } catch {
+        state.loadingStatus = false
+      }
+    } else {
+      state.loadingStatus = false
+      useMessage().error('表单校验未通过，请重新检查提交内容')
+    }
+  })
+}
+
+/**
+ * 关闭
+ */
+const close = () => {
+  if (state.loadingStatus) return
+  state.visibleStatus = false
+  state.operationStatus = 'create'
+  addUpdateFormRef.value?.resetFields()
+}
+
+defineExpose({
+  show,
+})
+</script>
+
 <template>
   <el-drawer
     v-model="state.visibleStatus"
@@ -67,89 +151,5 @@
     </template>
   </el-drawer>
 </template>
-
-<script lang="ts" setup>
-import type { FormInstance, FormRules } from 'element-plus'
-import { querySysDictById, saveSysDict, updateSysDict } from '@/service/api/system/dict.api'
-import { SysDictOperationForm, SysDictOperationRules } from '@/views/system/dict/dict.data'
-import { useMessage } from '@/hooks/use-message'
-import type { SysDictOperationRequest } from '@/service/model/system/dict.model'
-import { DictStatusEnums } from '@/service/model/system/dict.model'
-import type { ModeIdType } from '@/service/model/base.model'
-
-defineOptions({ name: 'SysDictAddOrUpdate' })
-
-const state = reactive<AddUpdateOption<SysDictOperationRequest>>({
-  title: '增加字典',
-  visibleStatus: false,
-  operationStatus: 'create',
-  loadingStatus: false,
-  addUpdateForm: { ...SysDictOperationForm },
-})
-const addUpdateFormRef = ref<FormInstance>()
-const { addUpdateForm } = toRefs(state)
-const emits = defineEmits(['success'])
-const rules: FormRules = SysDictOperationRules
-
-/**
- * 打开显示
- */
-const show = async (type: 'create' | 'update', id: ModeIdType) => {
-  try {
-    state.visibleStatus = true
-    state.operationStatus = type
-    state.loadingStatus = true
-    if (type === 'update') {
-      state.title = '修改字典'
-      const { data } = await querySysDictById(id)
-      addUpdateForm.value = data
-    }
-  } finally {
-    state.loadingStatus = false
-  }
-}
-
-/**
- * 提交表单
- */
-const submitForm = () => {
-  state.loadingStatus = true
-  addUpdateFormRef.value?.validate(async (valid) => {
-    if (valid) {
-      try {
-        if (state.operationStatus === 'create') {
-          await saveSysDict(addUpdateForm.value)
-          useMessage().success('新增字典成功')
-        } else {
-          await updateSysDict({ ...addUpdateForm.value })
-          useMessage().success('修改字典成功')
-        }
-        emits('success')
-        state.loadingStatus = false
-        close()
-      } catch {
-        state.loadingStatus = false
-      }
-    } else {
-      state.loadingStatus = false
-      useMessage().error('表单校验未通过，请重新检查提交内容')
-    }
-  })
-}
-
-/**
- * 关闭
- */
-const close = () => {
-  if (state.loadingStatus) return
-  state.visibleStatus = false
-  state.operationStatus = 'create'
-  addUpdateFormRef.value?.resetFields()
-}
-
-defineExpose({
-  show,
-})
-</script>
 
 <style scoped></style>

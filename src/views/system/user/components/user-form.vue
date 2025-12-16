@@ -1,3 +1,96 @@
+<script lang="ts" setup>
+import type { FormInstance, FormRules } from 'element-plus'
+import { querySysUserById, saveSysUser, updateSysUser } from '@/service/api/system/user.api'
+import { useMessage } from '@/hooks/use-message'
+import { SysUserOperationForm, SysUserOperationRules } from '@/views/system/user/user.data'
+import { SysUserOperationRequest, UserStatusEnums, UserTypeEnums } from '@/service/model/system/user.model'
+import type { ModeIdType } from '@/service/model/base.model'
+import type { SysDeptResponse } from '@/service/model/system/dept.model'
+
+defineOptions({
+  name: 'UserForm',
+})
+
+const emits = defineEmits(['success'])
+const rules: FormRules = SysUserOperationRules
+const state = reactive<AddUpdateOption<SysUserOperationRequest>>({
+  title: '增加用户信息',
+  visibleStatus: false,
+  operationStatus: 'create',
+  loadingStatus: false,
+  addUpdateForm: { ...SysUserOperationForm },
+})
+const addUpdateFormRef = ref<FormInstance>()
+const { addUpdateForm } = toRefs(state)
+/**
+ * 打开显示
+ */
+const show = async (type: 'create' | 'update', id: ModeIdType) => {
+  try {
+    state.visibleStatus = true
+    state.operationStatus = type
+    state.loadingStatus = true
+    if (type === 'update') {
+      state.title = '修改用户信息'
+      const { data } = await querySysUserById(id)
+      addUpdateForm.value = { ...data }
+    }
+  } finally {
+    state.loadingStatus = false
+  }
+}
+
+/**
+ * 提交表单
+ */
+const submitForm = () => {
+  state.loadingStatus = true
+  addUpdateFormRef.value?.validate(async (valid) => {
+    if (valid) {
+      try {
+        if (state.operationStatus === 'create') {
+          await saveSysUser(addUpdateForm.value)
+          useMessage().success('新增用户成功')
+        } else {
+          await updateSysUser(addUpdateForm.value)
+          useMessage().success('修改用户成功')
+        }
+        emits('success')
+        state.loadingStatus = false
+        close()
+      } catch {
+        state.loadingStatus = false
+      }
+    } else {
+      state.loadingStatus = false
+      useMessage().error('表单校验未通过，请重新检查提交内容')
+    }
+  })
+}
+
+/**
+ * 关闭
+ */
+const close = () => {
+  if (state.loadingStatus) return
+  state.visibleStatus = false
+  state.operationStatus = 'create'
+  addUpdateFormRef.value?.resetFields()
+}
+
+/**
+ * 部门选择点击
+ */
+const handleDeptClick = (data: SysDeptResponse) => {
+  addUpdateForm.value.deptId = data.id
+  addUpdateForm.value.deptName = data.deptName
+}
+
+defineExpose({
+  show,
+})
+</script>
+
 <template>
   <el-drawer
     v-model="state.visibleStatus"
@@ -165,99 +258,5 @@
     </template>
   </el-drawer>
 </template>
-
-<script lang="ts" setup>
-import type { FormInstance, FormRules } from 'element-plus'
-import { querySysUserById, saveSysUser, updateSysUser } from '@/service/api/system/user.api'
-import { useMessage } from '@/hooks/use-message'
-import { SysUserOperationForm, SysUserOperationRules } from '@/views/system/user/user.data'
-import { SysUserOperationRequest, UserStatusEnums, UserTypeEnums } from '@/service/model/system/user.model'
-import type { ModeIdType } from '@/service/model/base.model'
-import type { SysDeptResponse } from '@/service/model/system/dept.model'
-
-defineOptions({
-  name: 'UserForm',
-})
-
-const rules: FormRules = SysUserOperationRules
-const state = reactive<AddUpdateOption<SysUserOperationRequest>>({
-  title: '增加用户信息',
-  visibleStatus: false,
-  operationStatus: 'create',
-  loadingStatus: false,
-  addUpdateForm: { ...SysUserOperationForm },
-})
-const addUpdateFormRef = ref<FormInstance>()
-const { addUpdateForm } = toRefs(state)
-const emits = defineEmits(['success'])
-
-/**
- * 打开显示
- */
-const show = async (type: 'create' | 'update', id: ModeIdType) => {
-  try {
-    state.visibleStatus = true
-    state.operationStatus = type
-    state.loadingStatus = true
-    if (type === 'update') {
-      state.title = '修改用户信息'
-      const { data } = await querySysUserById(id)
-      addUpdateForm.value = { ...data }
-    }
-  } finally {
-    state.loadingStatus = false
-  }
-}
-
-/**
- * 提交表单
- */
-const submitForm = () => {
-  state.loadingStatus = true
-  addUpdateFormRef.value?.validate(async (valid) => {
-    if (valid) {
-      try {
-        if (state.operationStatus === 'create') {
-          await saveSysUser(addUpdateForm.value)
-          useMessage().success('新增用户成功')
-        } else {
-          await updateSysUser(addUpdateForm.value)
-          useMessage().success('修改用户成功')
-        }
-        emits('success')
-        state.loadingStatus = false
-        close()
-      } catch {
-        state.loadingStatus = false
-      }
-    } else {
-      state.loadingStatus = false
-      useMessage().error('表单校验未通过，请重新检查提交内容')
-    }
-  })
-}
-
-/**
- * 关闭
- */
-const close = () => {
-  if (state.loadingStatus) return
-  state.visibleStatus = false
-  state.operationStatus = 'create'
-  addUpdateFormRef.value?.resetFields()
-}
-
-/**
- * 部门选择点击
- */
-const handleDeptClick = (data: SysDeptResponse) => {
-  addUpdateForm.value.deptId = data.id
-  addUpdateForm.value.deptName = data.deptName
-}
-
-defineExpose({
-  show,
-})
-</script>
 
 <style scoped></style>

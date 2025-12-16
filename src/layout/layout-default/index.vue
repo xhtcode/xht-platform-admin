@@ -1,32 +1,3 @@
-<template>
-  <el-container class="xht-layout-container">
-    <div v-if="mobileShowStatus" class="layout__overlay" @click="handleCloseSidebar" />
-    <div v-if="mobileShowStatus" class="layout__sidebar" :style="asideStyle">
-      <layout-aside />
-    </div>
-    <layout-aside v-if="desktopShowStatus" />
-    <el-container class="w-full h-full overflow-hidden">
-      <el-header class="xht-header-container">
-        <div class="xht-header-item">
-          <menu-lock />
-          <bread-crumb />
-        </div>
-        <div class="xht-header-item">
-          <switch-dark />
-          <page-full-screen />
-          <menu-search />
-          <app-setting />
-          <user-avatar />
-        </div>
-      </el-header>
-      <div class="tabs-box-container">
-        <tags-view />
-      </div>
-      <layout-main />
-      <layout-footer />
-    </el-container>
-  </el-container>
-</template>
 <script setup lang="ts">
 import { useThemeStore } from '@/store'
 import { storeToRefs } from 'pinia'
@@ -55,6 +26,36 @@ function handleCloseSidebar() {
   sidebarStatus.value = false
 }
 </script>
+
+<template>
+  <el-container class="xht-layout-container">
+    <div v-if="mobileShowStatus" class="layout__overlay" @click="handleCloseSidebar" />
+    <div v-if="mobileShowStatus" class="layout__sidebar" :style="asideStyle">
+      <layout-aside />
+    </div>
+    <layout-aside v-if="desktopShowStatus" />
+    <el-container class="h-full w-full overflow-hidden">
+      <el-header class="xht-header-container">
+        <div class="xht-header-item">
+          <menu-lock />
+          <bread-crumb />
+        </div>
+        <div class="xht-header-item">
+          <switch-dark />
+          <page-full-screen />
+          <menu-search />
+          <app-setting />
+          <user-avatar />
+        </div>
+      </el-header>
+      <div class="tabs-box-container">
+        <tags-view />
+      </div>
+      <layout-main />
+      <layout-footer />
+    </el-container>
+  </el-container>
+</template>
 
 <style lang="scss" scoped>
 @use '@/styles/variables.scss';

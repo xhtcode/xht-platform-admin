@@ -1,3 +1,12 @@
+<script setup lang="ts">
+import useRouterLoadingHooks from '@/hooks/use-router-loading'
+
+defineOptions({
+  name: 'LayoutMain',
+})
+const { loadingStatus, refreshStatus } = useRouterLoadingHooks()
+</script>
+
 <template>
   <el-main class="xht-main-container" v-loading="loadingStatus">
     <router-view>
@@ -11,15 +20,6 @@
     </router-view>
   </el-main>
 </template>
-
-<script setup lang="ts">
-import useRouterLoadingHooks from '@/hooks/use-router-loading'
-
-defineOptions({
-  name: 'LayoutMain',
-})
-const { loadingStatus, refreshStatus } = useRouterLoadingHooks()
-</script>
 
 <style scoped lang="scss">
 .xht-main-container {

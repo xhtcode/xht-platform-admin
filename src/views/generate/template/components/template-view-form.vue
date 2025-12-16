@@ -1,32 +1,3 @@
-<template>
-  <el-drawer
-    v-model="state.visibleStatus"
-    title="模板管理"
-    size="100%"
-    append-to-body
-    :close-on-click-modal="false"
-    :show-close="!state.loadingStatus"
-    :before-close="close"
-  >
-    <el-tabs v-model="activeName" addable class="!h-full" closable editable tab-position="left" @tab-remove="handleRemove">
-      <template #add-icon>
-        <el-button class="w-full" :icon="Plus" size="small" type="primary" @click="addNewData">添加</el-button>
-      </template>
-      <el-tab-pane v-for="(item, index) in state.data" :key="item.id" :label="item.templateName" :name="item.id" class="h-full" lazy>
-        <template #label>
-          <div class="w-160px flex">
-            <div class="font-bold text-12px text-center flex-center">{{ index + 1 }}.</div>
-            <div class="flex-1 flex items-center justify-end whitespace-nowrap overflow-hidden text-ellipsis">
-              {{ item.templateName }}
-            </div>
-          </div>
-        </template>
-        <template-form :add-update-form="item" :loading-status="state.loadingStatus" @success="setActiveName" />
-      </el-tab-pane>
-    </el-tabs>
-  </el-drawer>
-</template>
-
 <script lang="ts" setup>
 import { queryGenTemplateList, removeGenTemplateById } from '@/service/api/generate/template.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
@@ -36,6 +7,8 @@ import { GenTemplateOperationForm } from '@/views/generate/template/template.dat
 import { Plus } from '@element-plus/icons-vue'
 
 defineOptions({ name: 'TemplateViewForm' })
+
+const emits = defineEmits(['success'])
 
 interface Interface {
   groupId: ModeIdType
@@ -54,7 +27,6 @@ const state = reactive<Interface>({
   loadingStatus: false,
   nextTagId: 1,
 })
-const emits = defineEmits(['success'])
 /**
  * 打开显示
  */
@@ -151,6 +123,35 @@ defineExpose({
   show,
 })
 </script>
+
+<template>
+  <el-drawer
+    v-model="state.visibleStatus"
+    title="模板管理"
+    size="100%"
+    append-to-body
+    :close-on-click-modal="false"
+    :show-close="!state.loadingStatus"
+    :before-close="close"
+  >
+    <el-tabs v-model="activeName" addable class="!h-full" closable editable tab-position="left" @tab-remove="handleRemove">
+      <template #add-icon>
+        <el-button class="w-full" :icon="Plus" size="small" type="primary" @click="addNewData">添加</el-button>
+      </template>
+      <el-tab-pane v-for="(item, index) in state.data" :key="item.id" :label="item.templateName" :name="item.id" class="h-full" lazy>
+        <template #label>
+          <div class="w-160px flex">
+            <div class="flex-center text-center text-12px font-bold">{{ index + 1 }}.</div>
+            <div class="flex flex-1 items-center justify-end overflow-hidden text-ellipsis whitespace-nowrap">
+              {{ item.templateName }}
+            </div>
+          </div>
+        </template>
+        <template-form :add-update-form="item" :loading-status="state.loadingStatus" @success="setActiveName" />
+      </el-tab-pane>
+    </el-tabs>
+  </el-drawer>
+</template>
 
 <style lang="scss" scoped>
 :deep(.el-tabs__new-tab) {

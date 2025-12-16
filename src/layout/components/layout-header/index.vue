@@ -1,3 +1,22 @@
+<script setup lang="ts">
+import MenuLock from '@/layout/components/menu-lock/index.vue'
+import BreadCrumb from '@/layout/components/bread-crumb/index.vue'
+import UserAvatar from '@/layout/components/user-avatar/index.vue'
+import PageFullScreen from '@/layout/components/page-full-screen/index.vue'
+import SwitchDark from '@/layout/components/switch-dark/index.vue'
+import TagsViewComponent from '@/layout/components/tags-view/index.vue'
+import { useThemeStore } from '@/store'
+import { storeToRefs } from 'pinia'
+import MenuSearch from '@/layout/components/menu-search/index.vue'
+import AppSetting from '@/layout/components/app-setting/index.vue'
+import { useThemeHooks } from '@/hooks/use-theme-hooks'
+
+defineOptions({ name: 'LayoutHeader' })
+const themeStore = useThemeStore()
+const { tagsViewStatus } = storeToRefs(themeStore)
+const { desktopShowStatus } = useThemeHooks()
+</script>
+
 <template>
   <el-header class="layout-header">
     <div class="layout-header-container">
@@ -20,24 +39,7 @@
     </div>
   </el-header>
 </template>
-<script setup lang="ts">
-import MenuLock from '@/layout/components/menu-lock/index.vue'
-import BreadCrumb from '@/layout/components/bread-crumb/index.vue'
-import UserAvatar from '@/layout/components/user-avatar/index.vue'
-import PageFullScreen from '@/layout/components/page-full-screen/index.vue'
-import SwitchDark from '@/layout/components/switch-dark/index.vue'
-import TagsViewComponent from '@/layout/components/tags-view/index.vue'
-import { useThemeStore } from '@/store'
-import { storeToRefs } from 'pinia'
-import MenuSearch from '@/layout/components/menu-search/index.vue'
-import AppSetting from '@/layout/components/app-setting/index.vue'
-import { useThemeHooks } from '@/hooks/use-theme-hooks'
 
-defineOptions({ name: 'LayoutHeader' })
-const themeStore = useThemeStore()
-const { tagsViewStatus } = storeToRefs(themeStore)
-const { desktopShowStatus } = useThemeHooks()
-</script>
 <style scoped lang="scss">
 .layout-header {
   display: flex;

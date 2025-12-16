@@ -13,6 +13,7 @@ import { FileSystemIconLoader } from '@iconify/utils/lib/loader/node-loaders'
 import fs from 'node:fs'
 // 本地SVG图标目录
 const iconsDir = './src/assets/icons'
+
 /**
  * 读取本地 SVG 目录，自动生成 safelist
  */
@@ -36,6 +37,7 @@ const generateSafeList = () => {
   }
   return result
 }
+
 /**
  * SVG图标转换函数
  * @param svg SVG图标内容
@@ -50,7 +52,13 @@ export default defineConfig({
     presetUno(), // 添加 UnoCSS 的默认样式预设
     presetAttributify({}),
     presetTypography(),
-    presetWebFonts(),
+    presetWebFonts({
+      fonts: {
+        sans: 'DM Sans',
+        serif: 'DM Serif Display',
+        mono: 'DM Mono',
+      },
+    }),
     presetIcons({
       scale: 1.2, // 图标缩放比例
       prefix: 'i-', // 图标前缀

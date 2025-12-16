@@ -1,3 +1,27 @@
+<script lang="ts" setup>
+import { GenColumnInfoOperationRequest, GenColumnInfoResponse, GenStatusEnums } from '@/service/model/generate/column.model'
+
+/**
+ * 列信息模型，用于双向绑定列数据
+ */
+const columnInfo = defineModel<GenColumnInfoResponse[]>('columnInfo', {
+  required: true,
+  default: () => [],
+})
+
+/**
+ * 当列表显示状态改变时的处理函数
+ * 如果列表不显示，则重置禁用和隐藏状态
+ * @param row 需要处理的列信息对象
+ */
+const changeList = (row: GenColumnInfoOperationRequest) => {
+  if (row.listShow !== 1) {
+    row.listDisabled = 0
+    row.listHidden = 0
+  }
+}
+</script>
+
 <template>
   <xht-table :data="columnInfo" row-key="id">
     <el-table-column label="#" prop="sortOrder" width="55" />
@@ -75,26 +99,3 @@
     </el-table-column>
   </xht-table>
 </template>
-<script lang="ts" setup>
-import { GenColumnInfoOperationRequest, GenColumnInfoResponse, GenStatusEnums } from '@/service/model/generate/column.model'
-
-/**
- * 列信息模型，用于双向绑定列数据
- */
-const columnInfo = defineModel<GenColumnInfoResponse[]>('columnInfo', {
-  required: true,
-  default: () => [],
-})
-
-/**
- * 当列表显示状态改变时的处理函数
- * 如果列表不显示，则重置禁用和隐藏状态
- * @param row 需要处理的列信息对象
- */
-const changeList = (row: GenColumnInfoOperationRequest) => {
-  if (row.listShow !== 1) {
-    row.listDisabled = 0
-    row.listHidden = 0
-  }
-}
-</script>

@@ -1,7 +1,3 @@
-<template>
-  <span>{{ userType }}</span>
-</template>
-
 <script lang="ts" setup>
 import { UserTypeTagProps } from '@/components/system/user-type-tag/types'
 import { UserTypeEnums } from '@/service/model/system/user.model'
@@ -22,6 +18,11 @@ const userType = computed<string>(() => {
   return result
 })
 </script>
+
+<template>
+  <span>{{ userType }}</span>
+</template>
+
 <style lang="scss" scoped>
 .user-status-tag {
   border-width: 0 !important;

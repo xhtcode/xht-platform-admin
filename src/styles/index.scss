@@ -1,15 +1,22 @@
 @charset "UTF-8";
-@use '@/styles/variables/var.scss' as *;
-@use '@/styles/variables/var.dark.scss' as *;
 @use '@/styles/theme/element.scss';
 @use '@/styles/theme/layout.scss';
 @use 'sass:math';
+@use 'element-plus/theme-chalk/src/dark/css-vars.scss' as *;
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   outline: none !important;
+}
+
+body {
+  font-family:
+    Inter, system-ui, Avenir, 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
 }
 
 html,

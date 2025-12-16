@@ -1,15 +1,3 @@
-<template>
-  <el-row :gutter="20">
-    <el-col :span="12">
-      <dept-tree-select v-model="deptId" placeholder="请选择所属部门信息" @change="handleDept" />
-    </el-col>
-    <el-col :span="12">
-      <el-select v-model="postId" v-loading="state.loadingStatus" clearable placeholder="请选择所属岗位信息">
-        <el-option v-for="item in postData" :key="item.id" :value="item.id" :disabled="item.postStatus !== 0" :label="item.postName" />
-      </el-select>
-    </el-col>
-  </el-row>
-</template>
 <script setup lang="ts">
 import type { ModeIdType } from '@/service/model/base.model'
 import { findListByDeptId } from '@/service/api/system/dept.post.api'
@@ -21,9 +9,6 @@ interface DeptPostSelectTreeProps {
 }
 
 defineOptions({ name: 'DeptPostSelect' })
-const state = reactive({
-  loadingStatus: false,
-})
 const props = withDefaults(defineProps<DeptPostSelectTreeProps>(), {
   deptId: undefined,
   postId: undefined,
@@ -32,6 +17,9 @@ const emits = defineEmits<{
   (e: 'update:deptId'): void
   (e: 'update:postId'): void
 }>()
+const state = reactive({
+  loadingStatus: false,
+})
 const { deptId, postId } = useVModels(props, emits)
 const postData = ref<SysDeptPostResponse[]>([])
 
@@ -66,5 +54,18 @@ watch(
   }
 )
 </script>
+
+<template>
+  <el-row :gutter="20">
+    <el-col :span="12">
+      <dept-tree-select v-model="deptId" placeholder="请选择所属部门信息" @change="handleDept" />
+    </el-col>
+    <el-col :span="12">
+      <el-select v-model="postId" v-loading="state.loadingStatus" clearable placeholder="请选择所属岗位信息">
+        <el-option v-for="item in postData" :key="item.id" :value="item.id" :disabled="item.postStatus !== 0" :label="item.postName" />
+      </el-select>
+    </el-col>
+  </el-row>
+</template>
 
 <style scoped lang="scss"></style>

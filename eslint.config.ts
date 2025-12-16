@@ -2,6 +2,7 @@
 import { globalIgnores } from 'eslint/config'
 import eslintPluginVue from 'eslint-plugin-vue' // Vue.js的ESLint插件
 import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript' // Vue+TypeScript的ESLint配置
+import unoCss from '@unocss/eslint-config/flat'
 import skipFormatting from '@vue/eslint-config-prettier/skip-formatting' // 跳过Prettier格式化的配置
 // 导出ESLint配置
 export default defineConfigWithVueTs(
@@ -18,7 +19,7 @@ export default defineConfigWithVueTs(
 
   // 应用Vue+TypeScript的推荐规则集
   vueTsConfigs.recommended,
-
+  unoCss,
   {
     languageOptions: {
       parserOptions: {
@@ -48,8 +49,34 @@ export default defineConfigWithVueTs(
       'vue/require-default-prop': 'error', // props设置默认值
       'vue/operator-linebreak': 'off', //关闭操作符换行规则的检查。
       'vue/html-self-closing': 'error', //强制自闭样式
+      'vue/max-attributes-per-line': [
+        'error',
+        {
+          singleline: 3, // 单行最多 3 个属性
+          multiline: {
+            max: 1, // 每行最多一个属性
+            allowFirstLine: false, // 不允许属性出现在第一行
+          },
+        },
+      ],
+      'vue/no-deprecated-inline-template': 'error', // 禁止使用弃用属性
+      'vue/no-multi-spaces': 'error', // 禁止使用多个空格
+      'vue/no-export-in-script-setup': 'error', // 禁止在script setup中导出变量
+      'vue/attributes-order': 'off', // 属性顺序
+      'vue/block-order': [
+        'error',
+        {
+          order: ['script', 'template', 'style'],
+        },
+      ], // 块顺序
+      'vue/padding-line-between-blocks': 'error', // 块之间添加空行
+      'vue/define-macros-order': [
+        'error',
+        {
+          order: ['defineOptions', 'defineProps', 'defineEmits', 'defineSlots'],
+        },
+      ], // 宏定义顺序
     },
   },
-  // 跳过Prettier格式化相关规则
-  skipFormatting
+  skipFormatting // 跳过Prettier格式化相关规则
 )

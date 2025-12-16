@@ -1,3 +1,17 @@
+<script lang="ts" setup>
+import { Operation } from '@element-plus/icons-vue'
+
+defineOptions({ name: 'XhtCard' })
+
+const state = reactive({
+  footerStatus: false,
+})
+
+const handlerToolChange = () => {
+  state.footerStatus = !state.footerStatus
+}
+</script>
+
 <template>
   <div class="xht-card-container">
     <div v-if="$slots.footer" class="xht-card-tool flex-center cursor-pointer" @click="handlerToolChange()">
@@ -13,20 +27,6 @@
     </div>
   </div>
 </template>
-
-<script lang="ts" setup>
-import { Operation } from '@element-plus/icons-vue'
-
-defineOptions({ name: 'XhtCard' })
-
-const state = reactive({
-  footerStatus: false,
-})
-
-const handlerToolChange = () => {
-  state.footerStatus = !state.footerStatus
-}
-</script>
 
 <style lang="scss" scoped>
 .xht-card-container {

@@ -1,9 +1,3 @@
-<template>
-  <el-select v-bind="{ ...$attrs, ...props, loading: state.loading }" v-model="modelValue">
-    <el-option v-for="item in state.tableList" :key="item.id" :label="item.groupName" :value="item.id" />
-  </el-select>
-</template>
-
 <script setup lang="ts">
 import { queryGenTemplateGroupList } from '@/service/api/generate/template.group.api'
 import type { GenTemplateGroupSelectProps, GenTemplateGroupSelectState } from '@/components/generate/template-group-select/types'
@@ -57,5 +51,11 @@ onMounted(() => {
   handleQuery()
 })
 </script>
+
+<template>
+  <el-select v-bind="{ ...$attrs, ...props, loading: state.loading }" v-model="modelValue">
+    <el-option v-for="item in state.tableList" :key="item.id" :label="item.groupName" :value="item.id" />
+  </el-select>
+</template>
 
 <style scoped lang="scss"></style>

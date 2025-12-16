@@ -1,3 +1,25 @@
+<script lang="ts" setup>
+import { CaretBottom, List, Lock, SwitchButton, UserFilled } from '@element-plus/icons-vue'
+import aa from '@/assets/images/title-boy.jpg'
+
+defineOptions({ name: 'UserAvatar' })
+
+/**
+ * 打开操作
+ * @param type
+ */
+const openDialog = (type: 'infoRef' | 'passwordRef' | 'logout') => {
+  switch (type) {
+    case 'infoRef':
+      break
+    case 'passwordRef':
+      break
+    case 'logout':
+      break
+  }
+}
+</script>
+
 <template>
   <div class="user-info-container layout-header-top-item">
     <el-dropdown trigger="click" size="default">
@@ -43,28 +65,6 @@
     </el-dropdown>
   </div>
 </template>
-
-<script lang="ts" setup>
-import { CaretBottom, List, Lock, SwitchButton, UserFilled } from '@element-plus/icons-vue'
-import aa from '@/assets/images/title-boy.jpg'
-
-defineOptions({ name: 'UserAvatar' })
-
-/**
- * 打开操作
- * @param type
- */
-const openDialog = (type: 'infoRef' | 'passwordRef' | 'logout') => {
-  switch (type) {
-    case 'infoRef':
-      break
-    case 'passwordRef':
-      break
-    case 'logout':
-      break
-  }
-}
-</script>
 
 <style lang="scss" scoped>
 .user-info-container {

@@ -1,30 +1,20 @@
-<template>
-  <el-tree-select
-    ref="menuSelectTreeRef"
-    v-model="modelValue"
-    :data="menuTree"
-    filterable
-    :empty-text="`暂无菜单数据`"
-    :props="menuTreeProps"
-    :placeholder="placeholder"
-    :disabled="disabled"
-    :default-expand-all="true"
-    :clearable="clearable"
-    :show-checkbox="multiple"
-    check-strictly
-    highlight-current
-    class="user-select-display"
-    node-key="id"
-    @change="handleChange()"
-  />
-</template>
-
 <script lang="ts" setup>
 import { MenuLinkEnums, MenuTypeEnums, SysMenuTreeResponse } from '@/service/model/system/menu.model'
 import { queryToolsMenuTree } from '@/service/api/tools.api'
 import { TreeNodeData, TreeOptionProps } from 'element-plus/es/components/tree/src/tree.type'
 
 defineOptions({ name: 'MenuTreeSelect' })
+
+const props = withDefaults(defineProps<Props>(), {
+  modelValue: '0',
+  placeholder: '请选择父菜单',
+  clearable: true,
+  disabled: false,
+  showTopMenu: false,
+  type: undefined,
+})
+
+const emits = defineEmits(['update:modelValue', 'change'])
 
 interface Props {
   modelValue?: string
@@ -36,16 +26,7 @@ interface Props {
   type?: 'M' | 'C'
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  modelValue: '0',
-  placeholder: '请选择父菜单',
-  clearable: true,
-  disabled: false,
-  showTopMenu: false,
-  type: undefined,
-})
 const menuSelectTreeRef = ref<any>()
-const emits = defineEmits(['update:modelValue', 'change'])
 const modelValue = useVModel(props, 'modelValue', emits)
 const menuTree = ref<SysMenuTreeResponse>([])
 const menuTreeProps: TreeOptionProps = {
@@ -99,6 +80,27 @@ onMounted(() => {
   getMenuTree()
 })
 </script>
+
+<template>
+  <el-tree-select
+    ref="menuSelectTreeRef"
+    v-model="modelValue"
+    :data="menuTree"
+    filterable
+    :empty-text="`暂无菜单数据`"
+    :props="menuTreeProps"
+    :placeholder="placeholder"
+    :disabled="disabled"
+    :default-expand-all="true"
+    :clearable="clearable"
+    :show-checkbox="multiple"
+    check-strictly
+    highlight-current
+    class="user-select-display"
+    node-key="id"
+    @change="handleChange()"
+  />
+</template>
 
 <style scoped lang="scss">
 * {

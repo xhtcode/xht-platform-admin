@@ -1,19 +1,3 @@
-<template>
-  <el-select
-    v-model="state.selectId"
-    value-key="id"
-    :placeholder="props.placeholder"
-    :clearable="props.clearable"
-    :disabled="props.disabled"
-    @change="handleChange"
-  >
-    <el-option v-for="item in state.tableList" :key="item.id" :value="item.id" :label="item.javaType">
-      <el-text size="large" tag="b" class="user-select-none">{{ item.dbDataType }}</el-text>
-      <el-text size="small" type="info" class="float-right user-select-none">{{ item.javaType }}</el-text>
-    </el-option>
-  </el-select>
-</template>
-
 <script setup lang="ts">
 import { MappingJavaSelectProps, MappingJavaSelectState } from '@/components/generate/mapping-java-select/types'
 import { GenTypeMappingResponse } from '@/service/model/generate/type.mapping.model'
@@ -24,14 +8,6 @@ defineOptions({
   name: 'MappingJavaSelect',
 })
 /**
- * java类型
- */
-const codeJava = defineModel<string>('codeJava', { required: true })
-/**
- * java包类型
- */
-const codeJavaPackage = defineModel<string>('codeJavaPackage', { required: false })
-/**
  * 定义组件属性
  */
 const props = withDefaults(defineProps<MappingJavaSelectProps>(), {
@@ -41,6 +17,14 @@ const props = withDefaults(defineProps<MappingJavaSelectProps>(), {
   clearable: true,
   disabled: false,
 })
+/**
+ * java类型
+ */
+const codeJava = defineModel<string>('codeJava', { required: true })
+/**
+ * java包类型
+ */
+const codeJavaPackage = defineModel<string>('codeJavaPackage', { required: false })
 /**
  * 组件状态管理
  */
@@ -84,5 +68,21 @@ onMounted(() => {
   handleQuery()
 })
 </script>
+
+<template>
+  <el-select
+    v-model="state.selectId"
+    value-key="id"
+    :placeholder="props.placeholder"
+    :clearable="props.clearable"
+    :disabled="props.disabled"
+    @change="handleChange"
+  >
+    <el-option v-for="item in state.tableList" :key="item.id" :value="item.id" :label="item.javaType">
+      <el-text size="large" tag="b" class="user-select-none">{{ item.dbDataType }}</el-text>
+      <el-text size="small" type="info" class="user-select-none float-right">{{ item.javaType }}</el-text>
+    </el-option>
+  </el-select>
+</template>
 
 <style scoped lang="scss"></style>

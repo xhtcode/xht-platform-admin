@@ -1,70 +1,3 @@
-<template>
-  <xht-table :data="queryColumns" row-key="id">
-    <xht-column-index type="step" />
-    <el-table-column>
-      <template #header>
-        <div class="text-left">
-          <el-button type="primary" @click="handleAdd" class="w-120px">添加</el-button>
-        </div>
-      </template>
-      <el-table-column label="查询类型">
-        <template #default="{ row }">
-          <el-select v-model="row.queryType">
-            <el-option label="=" value="eq" />
-            <el-option label="!=" value="ne" />
-            <el-option label=">" value="gt" />
-            <el-option label=">=" value="ge" />
-            <el-option label="<" value="lt" />
-            <el-option label="<=" value="le" />
-            <el-option label="like" value="like" />
-            <el-option label="left like" value="likeLeft" />
-            <el-option label="right like" value="likeRight" />
-          </el-select>
-        </template>
-      </el-table-column>
-      <el-table-column label="查询列">
-        <template #default="{ row }">
-          <el-select
-            v-model="row.columnId"
-            clearable
-            placeholder="请选择查询列"
-            value-key="id"
-            @change="(value: any) => handleColumnChange(value, row)"
-          >
-            <el-option v-for="item in columnInfoSelect" :key="item.id" :label="item.dbName" :value="item.id" class="query-class">
-              <el-text tag="b" size="default" class="user-select-none">
-                {{ item.dbName }}
-              </el-text>
-              <el-text type="info" size="small" class="user-select-none float-right">
-                {{ item.dbType }}
-              </el-text>
-            </el-option>
-          </el-select>
-        </template>
-      </el-table-column>
-      <el-table-column label="条件标签">
-        <template #default="{ row }">
-          <el-input v-model="row.conditionLabel" placeholder="请输入条件标签" />
-        </template>
-      </el-table-column>
-      <el-table-column label="字段命名">
-        <template #default="{ row }">
-          <el-input v-model="row.conditionValue" placeholder="请输入字段命名" />
-        </template>
-      </el-table-column>
-      <el-table-column label="前端组件" prop="fromComponent">
-        <template #default="{ row }">
-          <column-form-select v-model="row.fromComponent" v-model:dict-code="row.dictCode" />
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" width="120">
-        <template #default="{ row }">
-          <el-button type="danger" @click="handleDelete(row)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table-column>
-  </xht-table>
-</template>
 <script lang="ts" setup>
 import type { GenColumnInfoResponse, GenTableColumnQueryResponse } from '@/service/model/generate/column.model'
 import type { GenTableInfoResponse } from '@/service/model/generate/table.model'
@@ -169,3 +102,71 @@ defineExpose({
   getData,
 })
 </script>
+
+<template>
+  <xht-table :data="queryColumns" row-key="id">
+    <xht-column-index type="step" />
+    <el-table-column>
+      <template #header>
+        <div class="text-left">
+          <el-button type="primary" @click="handleAdd" class="w-120px">添加</el-button>
+        </div>
+      </template>
+      <el-table-column label="查询类型">
+        <template #default="{ row }">
+          <el-select v-model="row.queryType">
+            <el-option label="=" value="eq" />
+            <el-option label="!=" value="ne" />
+            <el-option label=">" value="gt" />
+            <el-option label=">=" value="ge" />
+            <el-option label="<" value="lt" />
+            <el-option label="<=" value="le" />
+            <el-option label="like" value="like" />
+            <el-option label="left like" value="likeLeft" />
+            <el-option label="right like" value="likeRight" />
+          </el-select>
+        </template>
+      </el-table-column>
+      <el-table-column label="查询列">
+        <template #default="{ row }">
+          <el-select
+            v-model="row.columnId"
+            clearable
+            placeholder="请选择查询列"
+            value-key="id"
+            @change="(value: any) => handleColumnChange(value, row)"
+          >
+            <el-option v-for="item in columnInfoSelect" :key="item.id" :label="item.dbName" :value="item.id" class="query-class">
+              <el-text tag="b" size="default" class="user-select-none">
+                {{ item.dbName }}
+              </el-text>
+              <el-text type="info" size="small" class="user-select-none float-right">
+                {{ item.dbType }}
+              </el-text>
+            </el-option>
+          </el-select>
+        </template>
+      </el-table-column>
+      <el-table-column label="条件标签">
+        <template #default="{ row }">
+          <el-input v-model="row.conditionLabel" placeholder="请输入条件标签" />
+        </template>
+      </el-table-column>
+      <el-table-column label="字段命名">
+        <template #default="{ row }">
+          <el-input v-model="row.conditionValue" placeholder="请输入字段命名" />
+        </template>
+      </el-table-column>
+      <el-table-column label="前端组件" prop="fromComponent">
+        <template #default="{ row }">
+          <column-form-select v-model="row.fromComponent" v-model:dict-code="row.dictCode" />
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" width="120">
+        <template #default="{ row }">
+          <el-button type="danger" @click="handleDelete(row)">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table-column>
+  </xht-table>
+</template>

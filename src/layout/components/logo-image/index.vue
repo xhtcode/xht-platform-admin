@@ -1,3 +1,10 @@
+<script lang="ts" setup>
+import { useThemeHooks } from '@/hooks/use-theme-hooks'
+
+defineOptions({ name: 'LogoImage' })
+const { menuCollapse } = useThemeHooks()
+</script>
+
 <template>
   <div class="layout-container-logo">
     <transition enter-active-class="animate__animated animate__fadeInLeft">
@@ -8,13 +15,6 @@
     </transition>
   </div>
 </template>
-
-<script lang="ts" setup>
-import { useThemeHooks } from '@/hooks/use-theme-hooks'
-
-defineOptions({ name: 'LogoImage' })
-const { menuCollapse } = useThemeHooks()
-</script>
 
 <style lang="scss" scoped>
 .layout-container-logo {

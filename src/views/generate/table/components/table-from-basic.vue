@@ -1,3 +1,25 @@
+<script lang="ts" setup>
+import type { GenTableInfoResponse } from '@/service/model/generate/table.model'
+
+const tableInfo = defineModel<GenTableInfoResponse>('tableInfo', {
+  required: true,
+  default: () => {},
+})
+const restaurants = ref<any[]>([{ value: 'system' }, { value: 'generate' }])
+/**
+ * 搜索
+ */
+const querySearch = (queryString: string, cb: any) => {
+  const results = queryString ? restaurants.value.filter(createFilter(queryString)) : restaurants.value
+  cb(results)
+}
+const createFilter = (queryString: string) => {
+  return (restaurant: any) => {
+    return restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
+  }
+}
+</script>
+
 <template>
   <div>
     <el-row>
@@ -103,27 +125,5 @@
     </el-row>
   </div>
 </template>
-
-<script lang="ts" setup>
-import type { GenTableInfoResponse } from '@/service/model/generate/table.model'
-
-const tableInfo = defineModel<GenTableInfoResponse>('tableInfo', {
-  required: true,
-  default: () => {},
-})
-const restaurants = ref<any[]>([{ value: 'system' }, { value: 'generate' }])
-/**
- * 搜索
- */
-const querySearch = (queryString: string, cb: any) => {
-  const results = queryString ? restaurants.value.filter(createFilter(queryString)) : restaurants.value
-  cb(results)
-}
-const createFilter = (queryString: string) => {
-  return (restaurant: any) => {
-    return restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
-  }
-}
-</script>
 
 <style lang="scss" scoped></style>

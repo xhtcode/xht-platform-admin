@@ -1,3 +1,96 @@
+<script lang="ts" setup>
+import type { FormInstance } from 'element-plus'
+import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
+import type { SysDictQueryRequest, SysDictResponse } from '@/service/model/system/dict.model'
+import { DictStatusEnums } from '@/service/model/system/dict.model'
+import { querySysDictPage, removeSysDictByIds } from '@/service/api/system/dict.api'
+import { useMessage, useMessageBox } from '@/hooks/use-message'
+import type { ModeIdArrayType } from '@/service/model/base.model'
+import type { ColumnConfig } from '@/components/table-tool-bar/types'
+import { SysDictColumnOption } from '@/views/system/dict/dict.data'
+import { Delete, Edit, Plus, Refresh, Search } from '@element-plus/icons-vue'
+
+defineOptions({ name: 'SysDictViewIndex' })
+
+const dictForm = defineAsyncComponent(() => import('@/views/system/dict/components/dict-form.vue'))
+const dictFormRef = useTemplateRef('dictFormRef')
+const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
+
+const state = reactive<TableQueryPageState<SysDictQueryRequest, SysDictResponse>>({
+  queryParams: {
+    current: 1,
+    size: 10,
+    ascName: 'sortOrder',
+  },
+  loadingStatus: false,
+  total: 0,
+  pages: 0,
+  tableList: [],
+  selectedRows: [],
+  singleStatus: true, // 单个禁用
+  multipleStatus: true, // 多个禁用
+})
+const { handleQuery, handleSelectionChange } = useTableQueryPageHooks<SysDictQueryRequest, SysDictResponse>(state, querySysDictPage)
+const { queryParams } = toRefs(state)
+
+const columnOption = ref<ColumnConfig<SysDictResponse>>({
+  ...SysDictColumnOption,
+})
+
+/**
+ * 重置表单
+ */
+const resetQuery = async () => {
+  queryFormRef.value?.resetFields()
+  await handleQuery()
+}
+
+/**
+ * 处理新增
+ */
+const handleAdd = () => {
+  dictFormRef.value?.show('create', null)
+}
+
+/**
+ * 处理编辑
+ */
+const handleEdit = (row: SysDictResponse) => {
+  dictFormRef.value?.show('update', row.id)
+}
+
+/**
+ * 处理删除
+ */
+const handleDelete = (row?: SysDictResponse) => {
+  state.loadingStatus = true
+  let ids: ModeIdArrayType = []
+  if (row) {
+    ids = [row.id]
+  } else {
+    ids = state.selectedRows.map((item) => item.id)
+  }
+  if (!ids || ids.length <= 0) {
+    useMessage().error('请选择字典数据')
+    return
+  }
+  useMessageBox()
+    .confirm('此操作将永久删除字典, 是否继续?')
+    .then(async () => {
+      await removeSysDictByIds(ids)
+      useMessage().success('删除字典成功!')
+      await handleQuery()
+    })
+    .finally(() => {
+      state.loadingStatus = false
+    })
+}
+
+onMounted(async () => {
+  await handleQuery()
+})
+</script>
+
 <template>
   <div class="xht-view-container">
     <div class="xht-view-main">
@@ -98,98 +191,5 @@
     <dict-form ref="dictFormRef" @success="handleQuery" />
   </div>
 </template>
-
-<script lang="ts" setup>
-import type { FormInstance } from 'element-plus'
-import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
-import type { SysDictQueryRequest, SysDictResponse } from '@/service/model/system/dict.model'
-import { DictStatusEnums } from '@/service/model/system/dict.model'
-import { querySysDictPage, removeSysDictByIds } from '@/service/api/system/dict.api'
-import { useMessage, useMessageBox } from '@/hooks/use-message'
-import type { ModeIdArrayType } from '@/service/model/base.model'
-import type { ColumnConfig } from '@/components/table-tool-bar/types'
-import { SysDictColumnOption } from '@/views/system/dict/dict.data'
-import { Delete, Edit, Plus, Refresh, Search } from '@element-plus/icons-vue'
-
-defineOptions({ name: 'SysDictViewIndex' })
-
-const dictForm = defineAsyncComponent(() => import('@/views/system/dict/components/dict-form.vue'))
-const dictFormRef = useTemplateRef('dictFormRef')
-const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
-
-const state = reactive<TableQueryPageState<SysDictQueryRequest, SysDictResponse>>({
-  queryParams: {
-    current: 1,
-    size: 10,
-    ascName: 'sortOrder',
-  },
-  loadingStatus: false,
-  total: 0,
-  pages: 0,
-  tableList: [],
-  selectedRows: [],
-  singleStatus: true, // 单个禁用
-  multipleStatus: true, // 多个禁用
-})
-const { handleQuery, handleSelectionChange } = useTableQueryPageHooks<SysDictQueryRequest, SysDictResponse>(state, querySysDictPage)
-const { queryParams } = toRefs(state)
-
-const columnOption = ref<ColumnConfig<SysDictResponse>>({
-  ...SysDictColumnOption,
-})
-
-/**
- * 重置表单
- */
-const resetQuery = async () => {
-  queryFormRef.value?.resetFields()
-  await handleQuery()
-}
-
-/**
- * 处理新增
- */
-const handleAdd = () => {
-  dictFormRef.value?.show('create', null)
-}
-
-/**
- * 处理编辑
- */
-const handleEdit = (row: SysDictResponse) => {
-  dictFormRef.value?.show('update', row.id)
-}
-
-/**
- * 处理删除
- */
-const handleDelete = (row?: SysDictResponse) => {
-  state.loadingStatus = true
-  let ids: ModeIdArrayType = []
-  if (row) {
-    ids = [row.id]
-  } else {
-    ids = state.selectedRows.map((item) => item.id)
-  }
-  if (!ids || ids.length <= 0) {
-    useMessage().error('请选择字典数据')
-    return
-  }
-  useMessageBox()
-    .confirm('此操作将永久删除字典, 是否继续?')
-    .then(async () => {
-      await removeSysDictByIds(ids)
-      useMessage().success('删除字典成功!')
-      await handleQuery()
-    })
-    .finally(() => {
-      state.loadingStatus = false
-    })
-}
-
-onMounted(async () => {
-  await handleQuery()
-})
-</script>
 
 <style lang="scss" scoped></style>

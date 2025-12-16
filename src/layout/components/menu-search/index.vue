@@ -1,50 +1,3 @@
-<template>
-  <div class="header-tool-item" @click="show">
-    <div class="i-common-search size-20px" />
-    <el-dialog
-      v-model="state.visibleStatus"
-      :before-close="close"
-      destroy-on-close
-      append-to-body
-      :show-close="false"
-      modal-class="menu-search-dialog"
-      header-class="menu-search-dialog-header"
-      body-class="menu-search-dialog-body"
-      footer-class="menu-search-dialog-footer"
-    >
-      <template #footer>
-        <el-autocomplete
-          ref="filterRef"
-          v-model="state.search"
-          size="large"
-          class="w100"
-          :fetch-suggestions="querySearch"
-          placeholder="菜单搜索：支持菜单名称、路由路径"
-          :fit-input-width="true"
-          popper-class="menu-search-select"
-          @select="handleSelect"
-        >
-          <template #prefix>
-            <el-icon>
-              <Search />
-            </el-icon>
-          </template>
-          <template #default="{ item }">
-            <div
-              class="menu-search-item"
-              :class="{
-                'menu-search-is-active': activeMenuPath === item.path,
-              }"
-            >
-              <div :class="`i-menu-${item.icon}`" class="mr5" />
-              {{ item.title }}
-            </div>
-          </template>
-        </el-autocomplete>
-      </template>
-    </el-dialog>
-  </div>
-</template>
 <script setup lang="ts">
 import { useRouteStore } from '@/store/modules/routes.store'
 import { useRoute, useRouter } from 'vue-router'
@@ -146,6 +99,55 @@ const initRestaurants = (data: RouteRecordRaw[]) => {
   }
 }
 </script>
+
+<template>
+  <div class="header-tool-item" @click="show">
+    <div class="i-common-search size-20px" />
+    <el-dialog
+      v-model="state.visibleStatus"
+      :before-close="close"
+      destroy-on-close
+      append-to-body
+      :show-close="false"
+      modal-class="menu-search-dialog"
+      header-class="menu-search-dialog-header"
+      body-class="menu-search-dialog-body"
+      footer-class="menu-search-dialog-footer"
+    >
+      <template #footer>
+        <el-autocomplete
+          ref="filterRef"
+          v-model="state.search"
+          size="large"
+          class="w100"
+          :fetch-suggestions="querySearch"
+          placeholder="菜单搜索：支持菜单名称、路由路径"
+          :fit-input-width="true"
+          popper-class="menu-search-select"
+          @select="handleSelect"
+        >
+          <template #prefix>
+            <el-icon>
+              <Search />
+            </el-icon>
+          </template>
+          <template #default="{ item }">
+            <div
+              class="menu-search-item"
+              :class="{
+                'menu-search-is-active': activeMenuPath === item.path,
+              }"
+            >
+              <div :class="`i-menu-${item.icon}`" class="mr5" />
+              {{ item.title }}
+            </div>
+          </template>
+        </el-autocomplete>
+      </template>
+    </el-dialog>
+  </div>
+</template>
+
 <style lang="scss">
 .menu-search-dialog {
   .el-dialog {

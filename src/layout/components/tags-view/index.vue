@@ -1,28 +1,3 @@
-<template>
-  <div class="xht-tags-container">
-    <el-tabs @tab-change="handleChangeTag" @tab-remove="removeItem" v-model="activeName" class="xht-tags-item" type="card">
-      <el-tab-pane
-        v-for="item in visitedViews"
-        :key="item.path"
-        :label="item.title"
-        :name="item.path"
-        style="display: none"
-        :closable="!item.affixStatus"
-      >
-        <template #label>
-          <i class="xht-tabs-icon" :class="`i-menu-${item.icon}`" />
-          {{ item.title }}
-        </template>
-      </el-tab-pane>
-    </el-tabs>
-    <div class="xht-tags-tool" @click="handleContextmenu($event)">
-      <el-icon :size="22">
-        <ArrowDownBold />
-      </el-icon>
-    </div>
-    <tags-tool-menu ref="contextMenuRef" :disabled="loadingStatus" :menu-list="menuList" @change="commandTrigger" />
-  </div>
-</template>
 <script lang="ts" setup>
 import { filterAffixTagsView, formatRoute } from './helper'
 import { useRouteStore } from '@/store/modules/routes.store'
@@ -36,6 +11,8 @@ import { ArrowDownBold } from '@element-plus/icons-vue'
 import { storeToRefs } from 'pinia'
 
 defineOptions({ name: 'TagsView' })
+const emits = defineEmits(['refresh'])
+
 const tagsToolMenu = defineAsyncComponent(() => import('@/layout/components/tags-view/components/tags-tool-menu.vue'))
 
 // 路由相关实例
@@ -175,7 +152,6 @@ const closeSelectedTag = () => {
   tagsViewPlusStore.removeVisitedView(activeTab.value!)
   toLastView()
 }
-const emits = defineEmits(['refresh'])
 /**
  * 刷新当前选中的标签页
  */
@@ -227,6 +203,33 @@ watch(
   }
 )
 </script>
+
+<template>
+  <div class="xht-tags-container">
+    <el-tabs @tab-change="handleChangeTag" @tab-remove="removeItem" v-model="activeName" class="xht-tags-item" type="card">
+      <el-tab-pane
+        v-for="item in visitedViews"
+        :key="item.path"
+        :label="item.title"
+        :name="item.path"
+        style="display: none"
+        :closable="!item.affixStatus"
+      >
+        <template #label>
+          <i class="xht-tabs-icon" :class="`i-menu-${item.icon}`" />
+          {{ item.title }}
+        </template>
+      </el-tab-pane>
+    </el-tabs>
+    <div class="xht-tags-tool" @click="handleContextmenu($event)">
+      <el-icon :size="22">
+        <ArrowDownBold />
+      </el-icon>
+    </div>
+    <tags-tool-menu ref="contextMenuRef" :disabled="loadingStatus" :menu-list="menuList" @change="commandTrigger" />
+  </div>
+</template>
+
 <style lang="scss">
 @use '@/styles/variables' as va;
 

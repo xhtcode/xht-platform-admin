@@ -1,47 +1,3 @@
-<template>
-  <div class="icon-select-container w100">
-    <el-input v-model="modelValue" :placeholder="props.placeholder" class="icon-select-input" readonly @click="openDialog">
-      <template #prepend>
-        <div :class="`i-menu-${modelValue}`" @click="openDialog()" />
-      </template>
-      <template v-if="props.clearable" #suffix>
-        <el-icon size="1em" @click="clearableValue">
-          <circle-close />
-        </el-icon>
-      </template>
-    </el-input>
-    <el-dialog v-model="dialogVisible" :before-close="closeDialog" :title="props.title" modal-class="icon-select-modal" align-center width="45%">
-      <el-input
-        v-model="modelValue"
-        autofocus
-        clearable
-        :placeholder="modelValue ? modelValue : '请输入要搜索图标的提示'"
-        prefix-icon="Search"
-        size="large"
-      >
-        <template #append>
-          <div :class="`i-menu-${modelValue}`" />
-        </template>
-      </el-input>
-      <el-scrollbar height="270px">
-        <ul class="icon-container">
-          <li
-            v-for="(item, index) in iconsList"
-            :key="index"
-            class="icon-item"
-            :class="[{ 'is-active': item.iconName === modelValue }]"
-            @click="selectIcon(item, false)"
-            @dblclick="selectIcon(item, true)"
-          >
-            <div :class="`i-menu-${item.iconName}`" />
-          </li>
-        </ul>
-        <el-empty v-if="iconsList.length === 0" description="未搜索到您要找的图标~" />
-      </el-scrollbar>
-    </el-dialog>
-  </div>
-</template>
-
 <script lang="ts" setup>
 import { CircleClose } from '@element-plus/icons-vue'
 import type { IconItemOptions, IconSelectProps } from '@/components/icon-select/types'
@@ -119,6 +75,51 @@ onMounted(() => {
   initSvg()
 })
 </script>
+
+<template>
+  <div class="icon-select-container w100">
+    <el-input v-model="modelValue" :placeholder="props.placeholder" class="icon-select-input" readonly @click="openDialog">
+      <template #prepend>
+        <div :class="`i-menu-${modelValue}`" @click="openDialog()" />
+      </template>
+      <template v-if="props.clearable" #suffix>
+        <el-icon size="1em" @click="clearableValue">
+          <circle-close />
+        </el-icon>
+      </template>
+    </el-input>
+    <el-dialog v-model="dialogVisible" :before-close="closeDialog" :title="props.title" modal-class="icon-select-modal" align-center width="45%">
+      <el-input
+        v-model="modelValue"
+        autofocus
+        clearable
+        :placeholder="modelValue ? modelValue : '请输入要搜索图标的提示'"
+        prefix-icon="Search"
+        size="large"
+      >
+        <template #append>
+          <div :class="`i-menu-${modelValue}`" />
+        </template>
+      </el-input>
+      <el-scrollbar height="270px">
+        <ul class="icon-container">
+          <li
+            v-for="(item, index) in iconsList"
+            :key="index"
+            class="icon-item"
+            :class="[{ 'is-active': item.iconName === modelValue }]"
+            @click="selectIcon(item, false)"
+            @dblclick="selectIcon(item, true)"
+          >
+            <div :class="`i-menu-${item.iconName}`" />
+          </li>
+        </ul>
+        <el-empty v-if="iconsList.length === 0" description="未搜索到您要找的图标~" />
+      </el-scrollbar>
+    </el-dialog>
+  </div>
+</template>
+
 <style lang="scss" scoped>
 .icon-selector-popover {
   width: 90% !important;

@@ -1,24 +1,3 @@
-<template>
-  <el-breadcrumb v-if="themeStore.breadcrumb" separator="/" class="breadcrumb-container">
-    <transition-group name="breadcrumb">
-      <el-breadcrumb-item v-for="(item, index) in breadcrumbList" :key="item.path">
-        <div v-if="index !== breadcrumbList.length - 1" class="h-full flex items-center gap-2 cursor-pointer" @click="handleRedirect(item)">
-          <div :class="`i-menu-${item.meta.icon}`" class="text-12px" />
-          <div class="text-14px h-full flex items-center" style="line-height: 50px">
-            {{ item.meta.title }}
-          </div>
-        </div>
-        <div v-else class="h-full flex items-center gap-2">
-          <div :class="`i-menu-${item.meta.icon}`" class="text-12px" />
-          <div class="text-14px h-full flex items-center" style="line-height: 50px">
-            {{ item.meta.title }}
-          </div>
-        </div>
-      </el-breadcrumb-item>
-    </transition-group>
-  </el-breadcrumb>
-</template>
-
 <script lang="ts" setup>
 import type { RouteLocationNormalizedLoaded } from 'vue-router'
 import { useRoute, useRouter } from 'vue-router'
@@ -62,6 +41,27 @@ watch(
   }
 )
 </script>
+
+<template>
+  <el-breadcrumb v-if="themeStore.breadcrumb" separator="/" class="breadcrumb-container">
+    <transition-group name="breadcrumb">
+      <el-breadcrumb-item v-for="(item, index) in breadcrumbList" :key="item.path">
+        <div v-if="index !== breadcrumbList.length - 1" class="h-full flex cursor-pointer items-center gap-2" @click="handleRedirect(item)">
+          <div :class="`i-menu-${item.meta.icon}`" class="text-12px" />
+          <div class="h-full flex items-center text-14px" style="line-height: 50px">
+            {{ item.meta.title }}
+          </div>
+        </div>
+        <div v-else class="h-full flex items-center gap-2">
+          <div :class="`i-menu-${item.meta.icon}`" class="text-12px" />
+          <div class="h-full flex items-center text-14px" style="line-height: 50px">
+            {{ item.meta.title }}
+          </div>
+        </div>
+      </el-breadcrumb-item>
+    </transition-group>
+  </el-breadcrumb>
+</template>
 
 <style lang="scss" scoped>
 @use '@/styles/variables.scss' as *;

@@ -1,3 +1,21 @@
+<script lang="ts" setup>
+import type { GenColumnInfoResponse } from '@/service/model/generate/column.model'
+import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
+
+withDefaults(
+  defineProps<{
+    dbType: DataBaseTypeEnums
+  }>(),
+  {
+    dbType: DataBaseTypeEnums.MYSQL,
+  }
+)
+const columnInfo = defineModel<GenColumnInfoResponse[]>('columnInfo', {
+  required: true,
+  default: () => [],
+})
+</script>
+
 <template>
   <xht-table :data="columnInfo" row-key="id">
     <el-table-column label="#" prop="sortOrder" width="55" />
@@ -53,20 +71,3 @@
     </el-table-column>
   </xht-table>
 </template>
-<script lang="ts" setup>
-import type { GenColumnInfoResponse } from '@/service/model/generate/column.model'
-import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
-
-const columnInfo = defineModel<GenColumnInfoResponse[]>('columnInfo', {
-  required: true,
-  default: () => [],
-})
-withDefaults(
-  defineProps<{
-    dbType: DataBaseTypeEnums
-  }>(),
-  {
-    dbType: DataBaseTypeEnums.MYSQL,
-  }
-)
-</script>

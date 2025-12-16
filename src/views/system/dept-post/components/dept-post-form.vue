@@ -1,3 +1,88 @@
+<script lang="ts" setup>
+import type { FormInstance, FormRules } from 'element-plus'
+import type { SysDeptPostOperationRequest } from '@/service/model/system/dept.post.model'
+import { SysDeptPostStatusEnums } from '@/service/model/system/dept.post.model'
+import { SysDeptPostOperationForm, SysDeptPostOperationRules } from '@/views/system/dept-post/dept.post.data'
+import { useMessage } from '@/hooks/use-message'
+import { querySysDeptPostById, saveSysDeptPost, updateSysDeptPost } from '@/service/api/system/dept.post.api'
+import type { ModeIdType } from '@/service/model/base.model'
+import { SystemFlagEnums } from '@/service/model/base.model'
+
+defineOptions({ name: 'SysDeptAddOrUpdate' })
+
+const emits = defineEmits(['success'])
+const state = reactive<AddUpdateOption<SysDeptPostOperationRequest>>({
+  title: '增加部门岗位',
+  visibleStatus: false,
+  operationStatus: 'create',
+  loadingStatus: false,
+  addUpdateForm: { ...SysDeptPostOperationForm },
+})
+const addUpdateFormRef = ref<FormInstance>()
+const { addUpdateForm } = toRefs(state)
+const rules: FormRules = SysDeptPostOperationRules
+
+/**
+ * 打开显示
+ */
+const show = async (type: 'create' | 'update', id: ModeIdType) => {
+  try {
+    state.visibleStatus = true
+    state.operationStatus = type
+    state.loadingStatus = true
+    if (type === 'update') {
+      state.title = '修改部门岗位'
+      const { data } = await querySysDeptPostById(id)
+      addUpdateForm.value = data
+    }
+  } finally {
+    state.loadingStatus = false
+  }
+}
+
+/**
+ * 提交表单
+ */
+const submitForm = () => {
+  state.loadingStatus = true
+  addUpdateFormRef.value?.validate(async (valid) => {
+    if (valid) {
+      try {
+        if (state.operationStatus === 'create') {
+          await saveSysDeptPost(addUpdateForm.value)
+          useMessage().success(`新增部门岗位：${addUpdateForm.value.postName}成功`)
+        } else {
+          await updateSysDeptPost(addUpdateForm.value)
+          useMessage().success(`修改部门岗位：${addUpdateForm.value.postName}成功`)
+        }
+        emits('success')
+        state.loadingStatus = false
+        close()
+      } catch {
+        state.loadingStatus = false
+      }
+    } else {
+      state.loadingStatus = false
+      useMessage().error('表单校验未通过，请重新检查提交内容')
+    }
+  })
+}
+
+/**
+ * 关闭
+ */
+const close = () => {
+  if (state.loadingStatus) return
+  state.visibleStatus = false
+  state.operationStatus = 'create'
+  addUpdateFormRef.value?.resetFields()
+}
+
+defineExpose({
+  show,
+})
+</script>
+
 <template>
   <el-drawer
     v-model="state.visibleStatus"
@@ -80,90 +165,5 @@
     </template>
   </el-drawer>
 </template>
-
-<script lang="ts" setup>
-import type { FormInstance, FormRules } from 'element-plus'
-import type { SysDeptPostOperationRequest } from '@/service/model/system/dept.post.model'
-import { SysDeptPostStatusEnums } from '@/service/model/system/dept.post.model'
-import { SysDeptPostOperationForm, SysDeptPostOperationRules } from '@/views/system/dept-post/dept.post.data'
-import { useMessage } from '@/hooks/use-message'
-import { querySysDeptPostById, saveSysDeptPost, updateSysDeptPost } from '@/service/api/system/dept.post.api'
-import type { ModeIdType } from '@/service/model/base.model'
-import { SystemFlagEnums } from '@/service/model/base.model'
-
-defineOptions({ name: 'SysDeptAddOrUpdate' })
-
-const state = reactive<AddUpdateOption<SysDeptPostOperationRequest>>({
-  title: '增加部门岗位',
-  visibleStatus: false,
-  operationStatus: 'create',
-  loadingStatus: false,
-  addUpdateForm: { ...SysDeptPostOperationForm },
-})
-const addUpdateFormRef = ref<FormInstance>()
-const { addUpdateForm } = toRefs(state)
-const emits = defineEmits(['success'])
-const rules: FormRules = SysDeptPostOperationRules
-
-/**
- * 打开显示
- */
-const show = async (type: 'create' | 'update', id: ModeIdType) => {
-  try {
-    state.visibleStatus = true
-    state.operationStatus = type
-    state.loadingStatus = true
-    if (type === 'update') {
-      state.title = '修改部门岗位'
-      const { data } = await querySysDeptPostById(id)
-      addUpdateForm.value = data
-    }
-  } finally {
-    state.loadingStatus = false
-  }
-}
-
-/**
- * 提交表单
- */
-const submitForm = () => {
-  state.loadingStatus = true
-  addUpdateFormRef.value?.validate(async (valid) => {
-    if (valid) {
-      try {
-        if (state.operationStatus === 'create') {
-          await saveSysDeptPost(addUpdateForm.value)
-          useMessage().success(`新增部门岗位：${addUpdateForm.value.postName}成功`)
-        } else {
-          await updateSysDeptPost(addUpdateForm.value)
-          useMessage().success(`修改部门岗位：${addUpdateForm.value.postName}成功`)
-        }
-        emits('success')
-        state.loadingStatus = false
-        close()
-      } catch {
-        state.loadingStatus = false
-      }
-    } else {
-      state.loadingStatus = false
-      useMessage().error('表单校验未通过，请重新检查提交内容')
-    }
-  })
-}
-
-/**
- * 关闭
- */
-const close = () => {
-  if (state.loadingStatus) return
-  state.visibleStatus = false
-  state.operationStatus = 'create'
-  addUpdateFormRef.value?.resetFields()
-}
-
-defineExpose({
-  show,
-})
-</script>
 
 <style scoped></style>

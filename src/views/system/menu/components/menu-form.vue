@@ -1,3 +1,94 @@
+<script lang="ts" setup>
+import type { FormInstance, FormRules } from 'element-plus'
+import { querySysMenuById, saveSysMenu, updateSysMenu } from '@/service/api/system/menu.api'
+import { useMessage } from '@/hooks/use-message'
+import type { SysMenuOperationRequest } from '@/service/model/system/menu.model'
+import { MenuCacheEnums, MenuHiddenEnums, MenuLinkEnums, MenuStatusEnums, MenuTypeEnums } from '@/service/model/system/menu.model'
+import { SysMenuOperationForm, SysMenuOperationRules } from '@/views/system/menu/menu.data'
+import type { ModeIdType } from '@/service/model/base.model'
+
+defineOptions({
+  name: 'MenuForm',
+})
+
+const emit = defineEmits(['success'])
+const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
+const rules: FormRules = SysMenuOperationRules
+const state = reactive<AddUpdateOption<SysMenuOperationRequest>>({
+  title: '增加部门',
+  visibleStatus: false,
+  operationStatus: 'create',
+  loadingStatus: false,
+  addUpdateForm: { ...SysMenuOperationForm },
+})
+const { addUpdateForm } = toRefs(state)
+const isM = computed(() => addUpdateForm.value.menuType === MenuTypeEnums.M)
+const isC = computed(() => addUpdateForm.value.menuType === MenuTypeEnums.C)
+const isB = computed(() => addUpdateForm.value.menuType === MenuTypeEnums.B)
+
+/**
+ * 打开显示
+ */
+const show = async (type: 'create' | 'update', id: ModeIdType) => {
+  try {
+    state.visibleStatus = true
+    state.operationStatus = type
+    state.loadingStatus = true
+    if (type === 'update') {
+      state.title = '修改菜单'
+      const { data } = await querySysMenuById(id)
+      addUpdateForm.value = data
+    }
+  } finally {
+    state.loadingStatus = false
+  }
+}
+
+/**
+ * 提交表单
+ */
+const submitForm = () => {
+  state.loadingStatus = true
+  addUpdateFormRef.value?.validate(async (valid) => {
+    if (valid) {
+      try {
+        if (state.operationStatus === 'create') {
+          await saveSysMenu(addUpdateForm.value)
+          useMessage().success('新增数据成功')
+        } else {
+          await updateSysMenu(addUpdateForm.value)
+          useMessage().success('修改数据成功')
+        }
+        emit('success')
+        state.loadingStatus = false
+        close()
+      } catch {
+        state.loadingStatus = false
+      }
+    } else {
+      state.loadingStatus = false
+      useMessage().error('表单校验未通过，请重新检查提交内容')
+    }
+  })
+}
+
+/**
+ * 关闭
+ */
+const close = () => {
+  if (state.loadingStatus) return
+  addUpdateForm.value = { ...SysMenuOperationForm }
+  state.visibleStatus = false
+  state.operationStatus = 'create'
+  state.loadingStatus = false
+  addUpdateFormRef.value?.resetFields()
+}
+
+defineExpose({
+  show,
+})
+</script>
+
 <template>
   <el-drawer
     v-model="state.visibleStatus"
@@ -136,96 +227,5 @@
     </template>
   </el-drawer>
 </template>
-
-<script lang="ts" setup>
-import type { FormInstance, FormRules } from 'element-plus'
-import { querySysMenuById, saveSysMenu, updateSysMenu } from '@/service/api/system/menu.api'
-import { useMessage } from '@/hooks/use-message'
-import type { SysMenuOperationRequest } from '@/service/model/system/menu.model'
-import { MenuCacheEnums, MenuHiddenEnums, MenuLinkEnums, MenuStatusEnums, MenuTypeEnums } from '@/service/model/system/menu.model'
-import { SysMenuOperationForm, SysMenuOperationRules } from '@/views/system/menu/menu.data'
-import type { ModeIdType } from '@/service/model/base.model'
-
-defineOptions({
-  name: 'MenuForm',
-})
-
-const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
-const rules: FormRules = SysMenuOperationRules
-const state = reactive<AddUpdateOption<SysMenuOperationRequest>>({
-  title: '增加部门',
-  visibleStatus: false,
-  operationStatus: 'create',
-  loadingStatus: false,
-  addUpdateForm: { ...SysMenuOperationForm },
-})
-const { addUpdateForm } = toRefs(state)
-const emit = defineEmits(['success'])
-const isM = computed(() => addUpdateForm.value.menuType === MenuTypeEnums.M)
-const isC = computed(() => addUpdateForm.value.menuType === MenuTypeEnums.C)
-const isB = computed(() => addUpdateForm.value.menuType === MenuTypeEnums.B)
-
-/**
- * 打开显示
- */
-const show = async (type: 'create' | 'update', id: ModeIdType) => {
-  try {
-    state.visibleStatus = true
-    state.operationStatus = type
-    state.loadingStatus = true
-    if (type === 'update') {
-      state.title = '修改菜单'
-      const { data } = await querySysMenuById(id)
-      addUpdateForm.value = data
-    }
-  } finally {
-    state.loadingStatus = false
-  }
-}
-
-/**
- * 提交表单
- */
-const submitForm = () => {
-  state.loadingStatus = true
-  addUpdateFormRef.value?.validate(async (valid) => {
-    if (valid) {
-      try {
-        if (state.operationStatus === 'create') {
-          await saveSysMenu(addUpdateForm.value)
-          useMessage().success('新增数据成功')
-        } else {
-          await updateSysMenu(addUpdateForm.value)
-          useMessage().success('修改数据成功')
-        }
-        emit('success')
-        state.loadingStatus = false
-        close()
-      } catch {
-        state.loadingStatus = false
-      }
-    } else {
-      state.loadingStatus = false
-      useMessage().error('表单校验未通过，请重新检查提交内容')
-    }
-  })
-}
-
-/**
- * 关闭
- */
-const close = () => {
-  if (state.loadingStatus) return
-  addUpdateForm.value = { ...SysMenuOperationForm }
-  state.visibleStatus = false
-  state.operationStatus = 'create'
-  state.loadingStatus = false
-  addUpdateFormRef.value?.resetFields()
-}
-
-defineExpose({
-  show,
-})
-</script>
 
 <style scoped></style>

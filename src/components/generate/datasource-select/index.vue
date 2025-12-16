@@ -1,9 +1,3 @@
-<template>
-  <el-select v-bind="{ ...$attrs, ...props, loading: state.loading }">
-    <el-option v-for="item in state.tableList" :key="item.id" :label="item.name" :value="item.id" />
-  </el-select>
-</template>
-
 <script setup lang="ts">
 import { queryGenDataSourceList } from '@/service/api/generate/datasource.api'
 import type { DataSourceSelectProps, DataSourceSelectState } from '@/components/generate/datasource-select/types'
@@ -63,5 +57,11 @@ onMounted(() => {
   handleQuery()
 })
 </script>
+
+<template>
+  <el-select v-bind="{ ...$attrs, ...props, loading: state.loading }">
+    <el-option v-for="item in state.tableList" :key="item.id" :label="item.name" :value="item.id" />
+  </el-select>
+</template>
 
 <style scoped lang="scss"></style>

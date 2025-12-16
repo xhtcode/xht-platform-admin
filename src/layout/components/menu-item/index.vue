@@ -1,23 +1,3 @@
-<template>
-  <template v-for="(val, index) in menuLists">
-    <el-sub-menu v-if="val.children && val.children.length > 0" :key="val.path" :index="val.path">
-      <template #title>
-        <div :class="`i-menu-${val.meta?.icon}`" class="menu-icon text-12px" />
-        <span class="ml-3">{{ val.meta?.title }}</span>
-      </template>
-      <MenuItem :menu-list="val.children" />
-    </el-sub-menu>
-    <template v-else>
-      <el-menu-item :key="index" :index="val.path" @click="handleClickMenu(val)">
-        <div :class="`i-menu-${val.meta?.icon}`" class="menu-icon text-12px" />
-        <template #title>
-          <span class="ml-3">{{ val.meta?.title }}</span>
-        </template>
-      </el-menu-item>
-    </template>
-  </template>
-</template>
-
 <script lang="ts" setup>
 import MenuItem from '@/layout/components/menu-item/index.vue'
 import type { RouteRecordRaw } from 'vue-router'
@@ -26,7 +6,6 @@ import RegularUtil from '@/utils/moudle/RegularUtils'
 import { useMessage } from '@/hooks/use-message'
 
 defineOptions({ name: 'MenuItemComponent' })
-const router = useRouter()
 // 定义父组件传过来的值
 const props = defineProps({
   // 菜单列表
@@ -35,6 +14,7 @@ const props = defineProps({
     default: () => [],
   },
 })
+const router = useRouter()
 // 获取父级菜单数据
 const menuLists = computed<any>(() => {
   return props.menuList
@@ -58,3 +38,23 @@ const handleClickMenu = (subItem: RouteRecordRaw) => {
   })
 }
 </script>
+
+<template>
+  <template v-for="(val, index) in menuLists">
+    <el-sub-menu v-if="val.children && val.children.length > 0" :key="val.path" :index="val.path">
+      <template #title>
+        <div :class="`i-menu-${val.meta?.icon}`" class="menu-icon text-12px" />
+        <span class="ml-3">{{ val.meta?.title }}</span>
+      </template>
+      <MenuItem :menu-list="val.children" />
+    </el-sub-menu>
+    <template v-else>
+      <el-menu-item :key="index" :index="val.path" @click="handleClickMenu(val)">
+        <div :class="`i-menu-${val.meta?.icon}`" class="menu-icon text-12px" />
+        <template #title>
+          <span class="ml-3">{{ val.meta?.title }}</span>
+        </template>
+      </el-menu-item>
+    </template>
+  </template>
+</template>

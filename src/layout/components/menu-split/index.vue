@@ -1,20 +1,3 @@
-<template>
-  <div class="xht-split-container">
-    <div
-      v-for="item in menuList"
-      :key="item.path"
-      :class="item.path === activeMenuPath ? 'xht-split-item-active' : ''"
-      class="xht-split-item"
-      @click="handleMenuClick(item)"
-    >
-      <div class="xht-split-item-icon">
-        <i class="item-icon" :class="`i-menu-${item.meta?.icon}`" />
-      </div>
-      <div class="xht-split-item-text">{{ item.meta?.title }}</div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { convertRouteToMenu } from '@/layout/components/helper'
 import DynamicRouter from '@/router/modules/dynamic'
@@ -25,9 +8,9 @@ import type { EmitsType } from '@/layout/components/menu-split/types'
 defineOptions({
   name: 'MenuSplit',
 })
+const emits = defineEmits<EmitsType>()
 const route = useRoute()
 const router = useRouter()
-const emits = defineEmits<EmitsType>()
 const routeStore = useRouteStore()
 const menuList = computed<RouteRecordRaw[]>(() => {
   return convertRouteToMenu(DynamicRouter.concat(routeStore.routesRaw))
@@ -70,6 +53,23 @@ watch(
   }
 )
 </script>
+
+<template>
+  <div class="xht-split-container">
+    <div
+      v-for="item in menuList"
+      :key="item.path"
+      :class="item.path === activeMenuPath ? 'xht-split-item-active' : ''"
+      class="xht-split-item"
+      @click="handleMenuClick(item)"
+    >
+      <div class="xht-split-item-icon">
+        <i class="item-icon" :class="`i-menu-${item.meta?.icon}`" />
+      </div>
+      <div class="xht-split-item-text">{{ item.meta?.title }}</div>
+    </div>
+  </div>
+</template>
 
 <style scoped lang="scss">
 .xht-split-container {

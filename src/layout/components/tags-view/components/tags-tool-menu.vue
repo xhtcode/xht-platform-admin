@@ -1,38 +1,22 @@
-<template>
-  <el-dropdown ref="dropdownRef" :virtual-ref="triggerRef" virtual-triggering trigger="contextmenu" placement="bottom-end" @command="commandTrigger">
-    <template #dropdown>
-      <el-dropdown-menu>
-        <el-dropdown-item v-for="(item, index) in menuList" :key="index" :command="item" :disabled="item.disabled" :divided="item.divided">
-          <div class="user-select-none flex-center">
-            <el-icon>
-              <component :is="item.icon" />
-            </el-icon>
-            <span>{{ item.label }}</span>
-          </div>
-        </el-dropdown-item>
-      </el-dropdown-menu>
-    </template>
-  </el-dropdown>
-</template>
 <script lang="ts" setup>
 import type { ContextMenuSchemaType, PropsTypes } from '@/layout/components/tags-view/types'
 import { ref, shallowRef, useTemplateRef } from 'vue'
 
 defineOptions({ name: 'TagsContextMenu' })
 
-// 获取dropdown组件的引用
-const dropdownRef = useTemplateRef('dropdownRef')
+// 定义组件props，默认值设置
+const props = withDefaults(defineProps<PropsTypes>(), {
+  trigger: 'contextmenu', // 触发方式，默认右键菜单
+  disabled: false, // 是否禁用，默认不禁用
+})
 
 // 定义事件发射器
 const emits = defineEmits<{
   (e: 'change', type: OperationType | string): void
 }>()
 
-// 定义组件props，默认值设置
-const props = withDefaults(defineProps<PropsTypes>(), {
-  trigger: 'contextmenu', // 触发方式，默认右键菜单
-  disabled: false, // 是否禁用，默认不禁用
-})
+// 获取dropdown组件的引用
+const dropdownRef = useTemplateRef('dropdownRef')
 
 // 菜单位置状态
 const position = ref<Partial<DOMRect>>({})
@@ -83,3 +67,20 @@ defineExpose({
   openContextmenu,
 })
 </script>
+
+<template>
+  <el-dropdown ref="dropdownRef" :virtual-ref="triggerRef" virtual-triggering trigger="contextmenu" placement="bottom-end" @command="commandTrigger">
+    <template #dropdown>
+      <el-dropdown-menu>
+        <el-dropdown-item v-for="(item, index) in menuList" :key="index" :command="item" :disabled="item.disabled" :divided="item.divided">
+          <div class="user-select-none flex-center">
+            <el-icon>
+              <component :is="item.icon" />
+            </el-icon>
+            <span>{{ item.label }}</span>
+          </div>
+        </el-dropdown-item>
+      </el-dropdown-menu>
+    </template>
+  </el-dropdown>
+</template>

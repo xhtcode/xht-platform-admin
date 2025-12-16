@@ -1,6 +1,3 @@
-<template>
-  <div ref="codeEditBox" class="code-edit-box" :class="validateStatus ? 'error-border' : ''" />
-</template>
 <script lang="ts" setup>
 import type { EditorProps, LanguageType } from '@/components/code-monaco-editor/types'
 import { customSuggestOptions } from '@/components/code-monaco-editor/data'
@@ -14,7 +11,6 @@ defineOptions({
   name: 'CodeMonacoEditor',
   inheritAttrs: false,
 })
-const emits = defineEmits(['change'])
 const props = withDefaults(defineProps<EditorProps>(), {
   width: '100%',
   height: '100%',
@@ -23,6 +19,7 @@ const props = withDefaults(defineProps<EditorProps>(), {
   minimap: false,
   validateStatus: false,
 })
+const emits = defineEmits(['change'])
 const modelValue = defineModel<string>('modelValue')
 const language = defineModel<LanguageType>('language', {
   default: null,
@@ -196,6 +193,11 @@ defineExpose({
   setValue,
 })
 </script>
+
+<template>
+  <div ref="codeEditBox" class="code-edit-box" :class="validateStatus ? 'error-border' : ''" />
+</template>
+
 <style lang="scss" scoped>
 .code-edit-box {
   border: 1px solid var(--el-border-color);

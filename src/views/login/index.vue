@@ -1,3 +1,51 @@
+<script lang="ts" setup>
+defineOptions({
+  name: 'Login',
+  inheritAttrs: false,
+})
+
+const passwordForm = defineAsyncComponent(() => import('@/views/login/components/password-form.vue'))
+const phoneForm = defineAsyncComponent(() => import('@/views/login/components/phone-form.vue'))
+const qrcodeForm = defineAsyncComponent(() => import('@/views/login/components/qrcode-form.vue'))
+const leftSide = defineAsyncComponent(() => import('@/views/login/components/left-side.vue'))
+const switchDark = defineAsyncComponent(() => import('@/layout/components/switch-dark/index.vue'))
+
+// 当前激活的登录方式
+type LoginType = 'password' | 'qrcode' | 'phone' | 'wechat' | 'qq' | 'dinging'
+const activeTab = ref<LoginType>('password')
+
+// 第三方登录
+const activeLoginType = ref<LoginType>('password')
+
+/**
+ * 切换登录方式
+ * @param type 登录方式
+ */
+const handleChangeLoginType = (type: LoginType) => {
+  if (type === 'password' || type === 'phone' || type === 'qrcode') {
+    activeLoginType.value = type
+  }
+}
+
+// 回车登录
+const handleKeyPress = (event: KeyboardEvent) => {
+  if (event.key === 'Enter') {
+    if (activeTab.value === 'password') {
+    } else if (activeTab.value === 'phone') {
+    }
+  }
+}
+
+// 添加键盘监听
+onMounted(() => {
+  document.addEventListener('keypress', handleKeyPress)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('keypress', handleKeyPress)
+})
+</script>
+
 <template>
   <div class="login-container">
     <!-- 左侧品牌介绍区域 -->
@@ -91,54 +139,6 @@
     </div>
   </div>
 </template>
-
-<script lang="ts" setup>
-defineOptions({
-  name: 'Login',
-  inheritAttrs: false,
-})
-
-const passwordForm = defineAsyncComponent(() => import('@/views/login/components/password-form.vue'))
-const phoneForm = defineAsyncComponent(() => import('@/views/login/components/phone-form.vue'))
-const qrcodeForm = defineAsyncComponent(() => import('@/views/login/components/qrcode-form.vue'))
-const leftSide = defineAsyncComponent(() => import('@/views/login/components/left-side.vue'))
-const switchDark = defineAsyncComponent(() => import('@/layout/components/switch-dark/index.vue'))
-
-// 当前激活的登录方式
-type LoginType = 'password' | 'qrcode' | 'phone' | 'wechat' | 'qq' | 'dinging'
-const activeTab = ref<LoginType>('password')
-
-// 第三方登录
-const activeLoginType = ref<LoginType>('password')
-
-/**
- * 切换登录方式
- * @param type 登录方式
- */
-const handleChangeLoginType = (type: LoginType) => {
-  if (type === 'password' || type === 'phone' || type === 'qrcode') {
-    activeLoginType.value = type
-  }
-}
-
-// 回车登录
-const handleKeyPress = (event: KeyboardEvent) => {
-  if (event.key === 'Enter') {
-    if (activeTab.value === 'password') {
-    } else if (activeTab.value === 'phone') {
-    }
-  }
-}
-
-// 添加键盘监听
-onMounted(() => {
-  document.addEventListener('keypress', handleKeyPress)
-})
-
-onUnmounted(() => {
-  document.removeEventListener('keypress', handleKeyPress)
-})
-</script>
 
 <style lang="scss" scoped>
 .login-container.dark {

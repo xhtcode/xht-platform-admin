@@ -1,6 +1,3 @@
-<template>
-  <div class="w-full h-full" />
-</template>
 <script lang="ts" setup>
 import { useRoute, useRouter } from 'vue-router'
 
@@ -12,3 +9,7 @@ const { params, query } = route
 const { path } = params
 router.replace({ path: '/' + path, query })
 </script>
+
+<template>
+  <div class="h-full w-full" />
+</template>

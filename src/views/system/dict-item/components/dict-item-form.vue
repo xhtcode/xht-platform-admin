@@ -1,3 +1,91 @@
+<script lang="ts" setup>
+import type { FormInstance, FormRules } from 'element-plus'
+import { querySysDictItemById, saveSysDictItem, updateSysDictItem } from '@/service/api/system/dict.item.api'
+import type { SysDictItemOperationRequest } from '@/service/model/system/dict.item.model'
+import { DictItemStatusEnums } from '@/service/model/system/dict.item.model'
+import type { ModeIdType } from '@/service/model/base.model'
+import { SysDictItemOperationForm, SysDictItemOperationRules } from '@/views/system/dict-item/dict.item.data'
+import { useMessage } from '@/hooks/use-message'
+import { useRoute } from 'vue-router'
+
+defineOptions({ name: 'SysDictItemAddOrUpdate' })
+
+const emits = defineEmits(['success'])
+const state = reactive<AddUpdateOption<SysDictItemOperationRequest>>({
+  title: '增加字典项',
+  visibleStatus: false,
+  operationStatus: 'create',
+  loadingStatus: false,
+  addUpdateForm: { ...SysDictItemOperationForm },
+})
+const route = useRoute()
+const addUpdateFormRef = ref<FormInstance>()
+const { addUpdateForm } = toRefs(state)
+const rules: FormRules = SysDictItemOperationRules
+const predefineColors = ref(['#409EFF', '#67C23A', '#E6A23C', '#F56C6C', '#909399', '#303133', '#CDD0D6', '#E6E8EB', '#000000', '#F2F6FC'])
+
+/**
+ * 打开显示
+ */
+const show = async (type: 'create' | 'update', id: ModeIdType) => {
+  try {
+    state.visibleStatus = true
+    state.operationStatus = type
+    state.loadingStatus = true
+    if (type === 'update') {
+      state.title = '修改字典项'
+      const { data } = await querySysDictItemById(id)
+      addUpdateForm.value = data
+    }
+  } finally {
+    state.loadingStatus = false
+  }
+}
+
+/**
+ * 提交表单
+ */
+const submitForm = () => {
+  state.loadingStatus = true
+  addUpdateFormRef.value?.validate(async (valid) => {
+    if (valid) {
+      try {
+        addUpdateForm.value.dictId = route.params?.id
+        if (state.operationStatus === 'create') {
+          await saveSysDictItem(addUpdateForm.value)
+          useMessage().success('新增字典项成功')
+        } else {
+          await updateSysDictItem(addUpdateForm.value)
+          useMessage().success('修改字典项成功')
+        }
+        emits('success')
+        state.loadingStatus = false
+        close()
+      } catch {
+        state.loadingStatus = false
+      }
+    } else {
+      state.loadingStatus = false
+      useMessage().error('表单校验未通过，请重新检查提交内容')
+    }
+  })
+}
+
+/**
+ * 关闭
+ */
+const close = () => {
+  if (state.loadingStatus) return
+  state.visibleStatus = false
+  state.operationStatus = 'create'
+  addUpdateFormRef.value?.resetFields()
+}
+
+defineExpose({
+  show,
+})
+</script>
+
 <template>
   <el-drawer
     v-model="state.visibleStatus"
@@ -66,91 +154,3 @@
     </template>
   </el-drawer>
 </template>
-
-<script lang="ts" setup>
-import type { FormInstance, FormRules } from 'element-plus'
-import { querySysDictItemById, saveSysDictItem, updateSysDictItem } from '@/service/api/system/dict.item.api'
-import type { SysDictItemOperationRequest } from '@/service/model/system/dict.item.model'
-import { DictItemStatusEnums } from '@/service/model/system/dict.item.model'
-import type { ModeIdType } from '@/service/model/base.model'
-import { SysDictItemOperationForm, SysDictItemOperationRules } from '@/views/system/dict-item/dict.item.data'
-import { useMessage } from '@/hooks/use-message'
-import { useRoute } from 'vue-router'
-
-defineOptions({ name: 'SysDictItemAddOrUpdate' })
-
-const state = reactive<AddUpdateOption<SysDictItemOperationRequest>>({
-  title: '增加字典项',
-  visibleStatus: false,
-  operationStatus: 'create',
-  loadingStatus: false,
-  addUpdateForm: { ...SysDictItemOperationForm },
-})
-const route = useRoute()
-const addUpdateFormRef = ref<FormInstance>()
-const { addUpdateForm } = toRefs(state)
-const emits = defineEmits(['success'])
-const rules: FormRules = SysDictItemOperationRules
-const predefineColors = ref(['#409EFF', '#67C23A', '#E6A23C', '#F56C6C', '#909399', '#303133', '#CDD0D6', '#E6E8EB', '#000000', '#F2F6FC'])
-
-/**
- * 打开显示
- */
-const show = async (type: 'create' | 'update', id: ModeIdType) => {
-  try {
-    state.visibleStatus = true
-    state.operationStatus = type
-    state.loadingStatus = true
-    if (type === 'update') {
-      state.title = '修改字典项'
-      const { data } = await querySysDictItemById(id)
-      addUpdateForm.value = data
-    }
-  } finally {
-    state.loadingStatus = false
-  }
-}
-
-/**
- * 提交表单
- */
-const submitForm = () => {
-  state.loadingStatus = true
-  addUpdateFormRef.value?.validate(async (valid) => {
-    if (valid) {
-      try {
-        addUpdateForm.value.dictId = route.params?.id
-        if (state.operationStatus === 'create') {
-          await saveSysDictItem(addUpdateForm.value)
-          useMessage().success('新增字典项成功')
-        } else {
-          await updateSysDictItem(addUpdateForm.value)
-          useMessage().success('修改字典项成功')
-        }
-        emits('success')
-        state.loadingStatus = false
-        close()
-      } catch {
-        state.loadingStatus = false
-      }
-    } else {
-      state.loadingStatus = false
-      useMessage().error('表单校验未通过，请重新检查提交内容')
-    }
-  })
-}
-
-/**
- * 关闭
- */
-const close = () => {
-  if (state.loadingStatus) return
-  state.visibleStatus = false
-  state.operationStatus = 'create'
-  addUpdateFormRef.value?.resetFields()
-}
-
-defineExpose({
-  show,
-})
-</script>

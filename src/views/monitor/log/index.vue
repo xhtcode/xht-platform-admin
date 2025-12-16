@@ -1,3 +1,142 @@
+<script lang="ts" setup>
+import type { FormInstance } from 'element-plus'
+import { useMessageBox } from '@/hooks/use-message'
+import { Delete, Download, Refresh, Search, View } from '@element-plus/icons-vue'
+
+defineOptions({ name: 'SysOperLogViewIndex' })
+
+const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
+
+interface QueryParams {
+  pageNum: number
+  pageSize: number
+  title?: string
+  operName?: string
+  businessType?: number
+  status?: number
+  operTime?: string[]
+}
+
+interface State {
+  loadingStatus: boolean
+  total: number
+  tableList: any[]
+}
+
+const state = reactive<State>({
+  loadingStatus: false,
+  total: 0,
+  tableList: [],
+})
+
+const queryParams = reactive<QueryParams>({
+  pageNum: 1,
+  pageSize: 10,
+})
+
+const tableStyle: any = {
+  cellStyle: { 'text-align': 'center' },
+  headerCellStyle: {
+    textAlign: 'center',
+    background: 'var(--el-table-row-hover-bg-color)',
+    color: 'var(--el-text-color-primary)',
+    userSelect: 'none',
+  },
+}
+
+/**
+ * 获取操作类型标签
+ */
+const getBusinessTypeLabel = (type: number) => {
+  const types: Record<number, string> = {
+    0: '其它',
+    1: '新增',
+    2: '修改',
+    3: '删除',
+    4: '授权',
+    5: '导出',
+    6: '导入',
+    7: '强退',
+    8: '生成代码',
+    9: '清空数据',
+  }
+  return types[type] || '其它'
+}
+
+/**
+ * 获取操作类型标签样式
+ */
+const getBusinessTypeTag = (type: number): any => {
+  const types: Record<number, string> = {
+    0: 'info',
+    1: 'success',
+    2: 'warning',
+    3: 'danger',
+    4: 'primary',
+    5: 'success',
+    6: 'warning',
+    7: 'danger',
+    8: 'primary',
+    9: 'danger',
+  }
+  return types[type] || 'info'
+}
+
+/**
+ * 查询数据列表
+ */
+const handleQuery = async () => {
+  state.loadingStatus = true
+  try {
+    // TODO: 调用查询接口
+    state.loadingStatus = false
+  } catch (error) {
+    state.loadingStatus = false
+  }
+}
+
+/**
+ * 重置表单
+ */
+const resetQuery = async () => {
+  queryFormRef.value?.resetFields()
+  await handleQuery()
+}
+
+/**
+ * 处理清空
+ */
+const handleClean = () => {
+  useMessageBox()
+    .confirm('是否确认清空所有操作日志数据项?')
+    .then(() => {
+      // TODO: 调用清空接口
+      console.log('清空日志')
+    })
+    .catch(() => {})
+}
+
+/**
+ * 处理导出
+ */
+const handleExport = () => {
+  // TODO: 调用导出接口
+  console.log('导出日志')
+}
+
+/**
+ * 处理详细
+ */
+const handleDetail = (row: any) => {
+  // TODO: 显示详细信息
+  console.log('查看详情', row)
+}
+
+onMounted(async () => {
+  await handleQuery()
+})
+</script>
+
 <template>
   <div class="main-container-none">
     <el-form ref="queryFormRef" :disabled="state.loadingStatus" :model="queryParams" class="user-select-display" label-width="100px">
@@ -101,144 +240,5 @@
     </div>
   </div>
 </template>
-
-<script lang="ts" setup>
-import type { FormInstance } from 'element-plus'
-import { useMessageBox } from '@/hooks/use-message'
-import { Delete, Download, Refresh, Search, View } from '@element-plus/icons-vue'
-
-defineOptions({ name: 'SysOperLogViewIndex' })
-
-const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
-
-interface QueryParams {
-  pageNum: number
-  pageSize: number
-  title?: string
-  operName?: string
-  businessType?: number
-  status?: number
-  operTime?: string[]
-}
-
-interface State {
-  loadingStatus: boolean
-  total: number
-  tableList: any[]
-}
-
-const state = reactive<State>({
-  loadingStatus: false,
-  total: 0,
-  tableList: [],
-})
-
-const queryParams = reactive<QueryParams>({
-  pageNum: 1,
-  pageSize: 10,
-})
-
-const tableStyle: TableStyle = {
-  cellStyle: { 'text-align': 'center' },
-  headerCellStyle: {
-    textAlign: 'center',
-    background: 'var(--el-table-row-hover-bg-color)',
-    color: 'var(--el-text-color-primary)',
-    userSelect: 'none',
-  },
-}
-
-/**
- * 获取操作类型标签
- */
-const getBusinessTypeLabel = (type: number) => {
-  const types: Record<number, string> = {
-    0: '其它',
-    1: '新增',
-    2: '修改',
-    3: '删除',
-    4: '授权',
-    5: '导出',
-    6: '导入',
-    7: '强退',
-    8: '生成代码',
-    9: '清空数据',
-  }
-  return types[type] || '其它'
-}
-
-/**
- * 获取操作类型标签样式
- */
-const getBusinessTypeTag = (type: number): any => {
-  const types: Record<number, string> = {
-    0: 'info',
-    1: 'success',
-    2: 'warning',
-    3: 'danger',
-    4: 'primary',
-    5: 'success',
-    6: 'warning',
-    7: 'danger',
-    8: 'primary',
-    9: 'danger',
-  }
-  return types[type] || 'info'
-}
-
-/**
- * 查询数据列表
- */
-const handleQuery = async () => {
-  state.loadingStatus = true
-  try {
-    // TODO: 调用查询接口
-    state.loadingStatus = false
-  } catch (error) {
-    state.loadingStatus = false
-  }
-}
-
-/**
- * 重置表单
- */
-const resetQuery = async () => {
-  queryFormRef.value?.resetFields()
-  await handleQuery()
-}
-
-/**
- * 处理清空
- */
-const handleClean = () => {
-  useMessageBox()
-    .confirm('是否确认清空所有操作日志数据项?')
-    .then(() => {
-      // TODO: 调用清空接口
-      console.log('清空日志')
-    })
-    .catch(() => {})
-}
-
-/**
- * 处理导出
- */
-const handleExport = () => {
-  // TODO: 调用导出接口
-  console.log('导出日志')
-}
-
-/**
- * 处理详细
- */
-const handleDetail = (row: any) => {
-  // TODO: 显示详细信息
-  console.log('查看详情', row)
-}
-
-onMounted(async () => {
-  await handleQuery()
-})
-</script>
 
 <style lang="scss" scoped></style>

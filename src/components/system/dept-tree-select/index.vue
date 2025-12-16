@@ -1,24 +1,3 @@
-<template>
-  <el-tree-select
-    ref="menuSelectTreeRef"
-    v-model="modelValue"
-    :clearable="clearable"
-    :data="menuTree"
-    :disabled="disabled"
-    :default-expand-all="true"
-    :empty-text="`暂无部门数据`"
-    :placeholder="placeholder"
-    :props="{ label: 'deptName', value: 'id' }"
-    check-strictly
-    highlight-current
-    class="user-select-display"
-    filterable
-    node-key="id"
-    v-bind="$attrs"
-    @node-click="handleNodeClick"
-  />
-</template>
-
 <script lang="ts" setup>
 import { querySysDeptTree } from '@/service/api/system/dept.api'
 import type { SysDeptResponse, SysDeptTreeResponse } from '@/service/model/system/dept.model'
@@ -26,6 +5,15 @@ import { DeptStatusEnums } from '@/service/model/system/dept.model'
 import type { ModeIdType } from '@/service/model/base.model'
 
 defineOptions({ name: 'DeptTreeSelect' })
+
+const props = withDefaults(defineProps<Props>(), {
+  placeholder: '请选择父部门',
+  clearable: true,
+  disabled: false,
+  showTopDept: false,
+})
+
+const emits = defineEmits(['update:modelValue', 'clickNode'])
 
 interface Props {
   modelValue: ModeIdType
@@ -35,14 +23,7 @@ interface Props {
   showTopDept?: boolean
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  placeholder: '请选择父部门',
-  clearable: true,
-  disabled: false,
-  showTopDept: false,
-})
 const menuSelectTreeRef = useTemplateRef('menuSelectTreeRef')
-const emits = defineEmits(['update:modelValue', 'clickNode'])
 const modelValue = useVModel(props, 'modelValue', emits)
 const menuTree = ref<SysDeptTreeResponse>([])
 
@@ -92,5 +73,26 @@ onMounted(() => {
   })
 })
 </script>
+
+<template>
+  <el-tree-select
+    ref="menuSelectTreeRef"
+    v-model="modelValue"
+    :clearable="clearable"
+    :data="menuTree"
+    :disabled="disabled"
+    :default-expand-all="true"
+    :empty-text="`暂无部门数据`"
+    :placeholder="placeholder"
+    :props="{ label: 'deptName', value: 'id' }"
+    check-strictly
+    highlight-current
+    class="user-select-display"
+    filterable
+    node-key="id"
+    v-bind="$attrs"
+    @node-click="handleNodeClick"
+  />
+</template>
 
 <style lang="scss" scoped></style>

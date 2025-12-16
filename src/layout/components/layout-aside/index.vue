@@ -1,11 +1,3 @@
-<template>
-  <el-aside :style="asideStyle" class="xht-aside-container">
-    <Logo />
-    <el-scrollbar>
-      <menu-main :menu-list="menuList" />
-    </el-scrollbar>
-  </el-aside>
-</template>
 <script setup lang="ts">
 import Logo from '@/layout/components/logo-image/index.vue'
 import MenuMain from '@/layout/components/menu-main/index.vue'
@@ -18,10 +10,6 @@ import { useThemeStore } from '@/store'
 import { storeToRefs } from 'pinia'
 
 defineOptions({ name: 'LayoutAside' })
-const { asideStyle } = useThemeHooks()
-const themeStore = useThemeStore()
-const { layoutType } = storeToRefs(themeStore)
-const routeStore = useRouteStore()
 const props = withDefaults(
   defineProps<{
     childMenuList?: RouteRecordRaw[]
@@ -30,6 +18,10 @@ const props = withDefaults(
     childMenuList: () => [],
   }
 )
+const { asideStyle } = useThemeHooks()
+const themeStore = useThemeStore()
+const { layoutType } = storeToRefs(themeStore)
+const routeStore = useRouteStore()
 const menuList = computed(() => {
   if (layoutType.value === 'columns') {
     return props.childMenuList || []
@@ -37,6 +29,15 @@ const menuList = computed(() => {
   return convertRouteToMenu(DynamicRouter.concat(routeStore.routesRaw))
 })
 </script>
+
+<template>
+  <el-aside :style="asideStyle" class="xht-aside-container">
+    <Logo />
+    <el-scrollbar>
+      <menu-main :menu-list="menuList" />
+    </el-scrollbar>
+  </el-aside>
+</template>
 
 <style scoped lang="scss">
 .xht-aside-container {

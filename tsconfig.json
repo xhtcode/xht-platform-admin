@@ -1,17 +1,16 @@
 {
-  "extends": "@tsconfig/node22/tsconfig.json",
+  "extends": "@tsconfig/node24/tsconfig.json",
   "compilerOptions": {
-    "target": "ES2023",
+    "target": "esnext",
     // 将代码编译为最新版本的 JS
-    "module": "ESNext",
+    "module": "esnext",
     // 使用 ES Module 格式打包编译后的文件
     "moduleResolution": "bundler",
-    "moduleDetection":"force",
+    "moduleDetection": "force",
     // 使用 Node/bundler 的模块解析策略
     "lib": [
-      "ES2023",
-      "ESNext",
-      "DOM"
+      "esnext",
+      "dom"
     ],
     // 引入 ES 最新特性和 DOM 接口的类型定义
     "baseUrl": ".",
@@ -46,6 +45,9 @@
         "./src/*"
       ]
     }
+  },
+  "vueCompilerOptions": {
+    "target": 3
   },
   "include": [
     "vite.config.*",

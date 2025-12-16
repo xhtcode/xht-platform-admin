@@ -1,12 +1,3 @@
-<template>
-  <div class="header-tool-item" @click="changeMenuStatus">
-    <el-icon :size="20">
-      <expand v-if="menuStatus" />
-      <fold v-else />
-    </el-icon>
-  </div>
-</template>
-
 <script lang="ts" setup>
 import { Expand, Fold } from '@element-plus/icons-vue'
 import { useThemeStore } from '@/store'
@@ -27,3 +18,12 @@ const changeMenuStatus = () => {
   }
 }
 </script>
+
+<template>
+  <div class="header-tool-item" @click="changeMenuStatus">
+    <el-icon :size="20">
+      <expand v-if="menuStatus" />
+      <fold v-else />
+    </el-icon>
+  </div>
+</template>

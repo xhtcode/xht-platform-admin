@@ -1,45 +1,3 @@
-<template>
-  <el-dialog
-    v-model="state.visibleStatus"
-    title="分配角色"
-    width="45%"
-    append-to-body
-    :close-on-click-modal="false"
-    :show-close="!state.loadingStatus"
-    :before-close="close"
-  >
-    <template #header>
-      <div class="user-role-dialog-title">
-        <div>分配角色</div>
-        <div class="flex mr-16">
-          <el-checkbox v-model="checkStrictly" label="全选/不全选" @change="handleSelectAll" />
-        </div>
-      </div>
-    </template>
-    <el-scrollbar class="user-role-dialog-body">
-      <el-tree
-        ref="roleTreeRef"
-        v-loading="state.loadingStatus"
-        :check-strictly="false"
-        :data="treeData"
-        :default-checked-keys="state.checkedKeys"
-        :default-expand-all="true"
-        :props="{ children: 'children', label: 'roleName' }"
-        class="filter-tree"
-        highlight-current
-        node-key="id"
-        show-checkbox
-      />
-    </el-scrollbar>
-    <template #footer>
-      <span class="dialog-footer">
-        <el-button type="primary" @click="submitForm">提交</el-button>
-        <el-button :disabled="state.loadingStatus" @click="close">取 消</el-button>
-      </span>
-    </template>
-  </el-dialog>
-</template>
-
 <script lang="ts" setup>
 import { queryToolsRoleList } from '@/service/api/tools.api'
 import type { CheckboxValueType } from 'element-plus'
@@ -128,6 +86,48 @@ defineExpose({
   show,
 })
 </script>
+
+<template>
+  <el-dialog
+    v-model="state.visibleStatus"
+    title="分配角色"
+    width="45%"
+    append-to-body
+    :close-on-click-modal="false"
+    :show-close="!state.loadingStatus"
+    :before-close="close"
+  >
+    <template #header>
+      <div class="user-role-dialog-title">
+        <div>分配角色</div>
+        <div class="mr-16 flex">
+          <el-checkbox v-model="checkStrictly" label="全选/不全选" @change="handleSelectAll" />
+        </div>
+      </div>
+    </template>
+    <el-scrollbar class="user-role-dialog-body">
+      <el-tree
+        ref="roleTreeRef"
+        v-loading="state.loadingStatus"
+        :check-strictly="false"
+        :data="treeData"
+        :default-checked-keys="state.checkedKeys"
+        :default-expand-all="true"
+        :props="{ children: 'children', label: 'roleName' }"
+        class="filter-tree"
+        highlight-current
+        node-key="id"
+        show-checkbox
+      />
+    </el-scrollbar>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button type="primary" @click="submitForm">提交</el-button>
+        <el-button :disabled="state.loadingStatus" @click="close">取 消</el-button>
+      </span>
+    </template>
+  </el-dialog>
+</template>
 
 <style lang="scss" scoped>
 .user-role-dialog-title {

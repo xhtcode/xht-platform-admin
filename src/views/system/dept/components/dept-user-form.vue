@@ -1,56 +1,3 @@
-<template>
-  <el-dialog
-    v-model="state.visibleStatus"
-    width="auto"
-    append-to-body
-    :close-on-click-modal="false"
-    :show-close="!state.loadingStatus"
-    :before-close="close"
-  >
-    <template #header>
-      <div class="flex justify-between items-center">
-        <el-text size="large" tag="b">部门主管筛选</el-text>
-        <div v-if="state.currentRow" class="h100 items-center flex">
-          <el-text size="small">已选择:</el-text>
-          <el-tag effect="dark" size="small">{{ state.currentRow?.userName }}:{{ state.currentRow?.nickName }}</el-tag>
-        </div>
-      </div>
-    </template>
-    <xht-table
-      ref="tableRef"
-      v-loading="state.loadingStatus"
-      :data="state.userList"
-      :row-class-name="handleRowClassName"
-      border
-      empty-text="暂无用户数据"
-      height="65vh"
-      highlight-current-row
-      row-key="userId"
-      @row-dblclick="submitForm"
-      @current-change="handleCurrentChange"
-    >
-      <el-table-column label="序号" type="index" width="60" />
-      <el-table-column label="用户头像" prop="avatarUrl" width="100">
-        <template #default="{ row }">
-          <el-avatar :src="row.avatarUrl" alt="用户头像" />
-        </template>
-      </el-table-column>
-      <el-table-column label="用户账号" prop="userName" width="160" />
-      <el-table-column label="用户昵称" prop="nickName" width="160" />
-      <el-table-column label="账号状态" prop="userStatus" width="120">
-        <template #default="{ row }">
-          <user-status-tag :status="row.userStatus" />
-        </template>
-      </el-table-column>
-    </xht-table>
-    <template #footer>
-      <span>
-        <el-button :disabled="state.loadingStatus" @click="close">取 消</el-button>
-        <el-button type="primary" @click="submitForm">确认</el-button>
-      </span>
-    </template>
-  </el-dialog>
-</template>
 <script lang="ts" setup>
 import type { ModeIdType } from '@/service/model/base.model'
 import { getBindUser } from '@/service/api/tools.api'
@@ -59,6 +6,12 @@ import { useMessage } from '@/hooks/use-message'
 
 defineOptions({ name: 'DeptUserForm' })
 
+const props = withDefaults(defineProps<DeptUserProps>(), {
+  modelValue: undefined,
+})
+const emits = defineEmits<{
+  (e: 'change', user: UserSimpleVo): void
+}>()
 const tableRef = useTemplateRef<any>('tableRef')
 const state = reactive<{
   visibleStatus: boolean
@@ -71,13 +24,6 @@ const state = reactive<{
   userList: [] as any[],
   currentRow: null,
 })
-const props = withDefaults(defineProps<DeptUserProps>(), {
-  modelValue: undefined,
-})
-const emits = defineEmits<{
-  (e: 'change', user: UserSimpleVo): void
-}>()
-
 /**
  * 显示对话框
  */
@@ -139,6 +85,60 @@ defineExpose({
   show,
 })
 </script>
+
+<template>
+  <el-dialog
+    v-model="state.visibleStatus"
+    width="auto"
+    append-to-body
+    :close-on-click-modal="false"
+    :show-close="!state.loadingStatus"
+    :before-close="close"
+  >
+    <template #header>
+      <div class="flex items-center justify-between">
+        <el-text size="large" tag="b">部门主管筛选</el-text>
+        <div v-if="state.currentRow" class="h100 flex items-center">
+          <el-text size="small">已选择:</el-text>
+          <el-tag effect="dark" size="small">{{ state.currentRow?.userName }}:{{ state.currentRow?.nickName }}</el-tag>
+        </div>
+      </div>
+    </template>
+    <xht-table
+      ref="tableRef"
+      v-loading="state.loadingStatus"
+      :data="state.userList"
+      :row-class-name="handleRowClassName"
+      empty-text="暂无用户数据"
+      height="65vh"
+      highlight-current-row
+      border
+      row-key="userId"
+      @row-dblclick="submitForm"
+      @current-change="handleCurrentChange"
+    >
+      <el-table-column label="序号" type="index" width="60" />
+      <el-table-column label="用户头像" prop="avatarUrl" width="100">
+        <template #default="{ row }">
+          <el-avatar :src="row.avatarUrl" alt="用户头像" />
+        </template>
+      </el-table-column>
+      <el-table-column label="用户账号" prop="userName" width="160" />
+      <el-table-column label="用户昵称" prop="nickName" width="160" />
+      <el-table-column label="账号状态" prop="userStatus" width="120">
+        <template #default="{ row }">
+          <user-status-tag :status="row.userStatus" />
+        </template>
+      </el-table-column>
+    </xht-table>
+    <template #footer>
+      <span>
+        <el-button :disabled="state.loadingStatus" @click="close">取 消</el-button>
+        <el-button type="primary" @click="submitForm">确认</el-button>
+      </span>
+    </template>
+  </el-dialog>
+</template>
 
 <style lang="scss" scoped>
 :deep(.no-dept-row) {

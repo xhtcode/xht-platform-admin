@@ -1,47 +1,3 @@
-<template>
-  <el-dialog
-    v-model="state.visibleStatus"
-    title="分配权限"
-    width="45%"
-    append-to-body
-    :close-on-click-modal="false"
-    :show-close="!state.loadingStatus"
-    :before-close="close"
-  >
-    <template #header>
-      <div class="menu-role-dialog-title">
-        <div>分配权限</div>
-        <div class="flex mr-16">
-          <el-checkbox checked label="展开/折叠" @change="handleExpand" />
-          <el-checkbox v-model="checkAll" label="全选/不全选" @change="handleSelectAll" />
-        </div>
-      </div>
-    </template>
-    <el-scrollbar class="menu-role-dialog-body">
-      <el-tree
-        ref="menuTree"
-        v-loading="state.loadingStatus"
-        :check-strictly="false"
-        :data="treeData"
-        :default-checked-keys="checkedKeys"
-        :default-expand-all="true"
-        :props="{ children: 'children', label: 'menuName' }"
-        highlight-current
-        node-key="id"
-        show-checkbox
-      >
-        <template #default="{ data }">
-          <div>{{ data.menuName }}</div>
-        </template>
-      </el-tree>
-    </el-scrollbar>
-    <template #footer>
-      <el-button :disabled="state.loadingStatus" @click="close">取 消</el-button>
-      <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>
-    </template>
-  </el-dialog>
-</template>
-
 <script lang="ts" setup>
 import type { CheckboxValueType } from 'element-plus'
 import type { ModeIdType } from '@/service/model/base.model'
@@ -151,6 +107,50 @@ defineExpose({
   show,
 })
 </script>
+
+<template>
+  <el-dialog
+    v-model="state.visibleStatus"
+    title="分配权限"
+    width="45%"
+    append-to-body
+    :close-on-click-modal="false"
+    :show-close="!state.loadingStatus"
+    :before-close="close"
+  >
+    <template #header>
+      <div class="menu-role-dialog-title">
+        <div>分配权限</div>
+        <div class="mr-16 flex">
+          <el-checkbox checked label="展开/折叠" @change="handleExpand" />
+          <el-checkbox v-model="checkAll" label="全选/不全选" @change="handleSelectAll" />
+        </div>
+      </div>
+    </template>
+    <el-scrollbar class="menu-role-dialog-body">
+      <el-tree
+        ref="menuTree"
+        v-loading="state.loadingStatus"
+        :check-strictly="false"
+        :data="treeData"
+        :default-checked-keys="checkedKeys"
+        :default-expand-all="true"
+        :props="{ children: 'children', label: 'menuName' }"
+        highlight-current
+        node-key="id"
+        show-checkbox
+      >
+        <template #default="{ data }">
+          <div>{{ data.menuName }}</div>
+        </template>
+      </el-tree>
+    </el-scrollbar>
+    <template #footer>
+      <el-button :disabled="state.loadingStatus" @click="close">取 消</el-button>
+      <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>
+    </template>
+  </el-dialog>
+</template>
 
 <style lang="scss" scoped>
 .menu-role-dialog-title {

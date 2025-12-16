@@ -1,10 +1,3 @@
-<template>
-  <div class="header-tool-item" @click="toggleColorScheme()">
-    <div v-if="darkStatus" class="i-common-moon size-20px" />
-    <div v-else class="i-common-sunny size-20px" />
-  </div>
-</template>
-
 <script lang="ts" setup>
 import { useThemeStore } from '@/store/modules/theme.store'
 import { isDark, toggleDark } from '@/utils/dark'
@@ -24,3 +17,10 @@ function toggleColorScheme() {
   themeStore.colorWeaknessModeStatus = false
 }
 </script>
+
+<template>
+  <div class="header-tool-item" @click="toggleColorScheme()">
+    <div v-if="darkStatus" class="i-common-moon size-20px" />
+    <div v-else class="i-common-sunny size-20px" />
+  </div>
+</template>

@@ -14,4 +14,5 @@ const { layoutType } = storeToRefs(themeStore)
 <template>
   <component :is="LayoutComponents[layoutType]" />
 </template>
+
 <style lang="scss"></style>
