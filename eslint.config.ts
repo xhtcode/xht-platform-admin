@@ -22,7 +22,7 @@ export default defineConfigWithVueTs(
   {
     languageOptions: {
       parserOptions: {
-        ecmaVersion: 2020,
+        ecmaVersion: 'latest',
         ecmaFeatures: {
           jsx: true,
         },
