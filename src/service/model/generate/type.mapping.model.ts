@@ -1,9 +1,4 @@
-import type {
-  BasicFormRequest,
-  BasicResponse,
-  ModeIdType,
-  PageQueryRequest,
-} from '@/service/model/base.model'
+import type { BasicFormRequest, BasicResponse, ModeIdType, PageQueryRequest } from '@/service/model/base.model'
 import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
 
 /**

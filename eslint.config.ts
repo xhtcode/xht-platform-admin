@@ -12,14 +12,7 @@ export default defineConfigWithVueTs(
   },
 
   // 指定需要忽略的文件
-  globalIgnores([
-    '**/dist/**',
-    '**/dist-ssr/**',
-    '**/coverage/**',
-    '**/node_modules/**',
-    '**/auto-imports.d.ts',
-    '**/components.d.ts',
-  ]),
+  globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**', '**/node_modules/**', '**/auto-imports.d.ts', '**/components.d.ts']),
   // 应用Vue.js的基本规则集
   eslintPluginVue.configs['flat/essential'],
 
@@ -27,6 +20,14 @@ export default defineConfigWithVueTs(
   vueTsConfigs.recommended,
 
   {
+    languageOptions: {
+      parserOptions: {
+        ecmaVersion: 2020,
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
     rules: {
       '@typescript-eslint/no-explicit-any': 'off', // 允许使用any类型，方便开发
       '@typescript-eslint/no-empty-function': 'off',
@@ -48,6 +49,7 @@ export default defineConfigWithVueTs(
       'vue/operator-linebreak': 'off', //关闭操作符换行规则的检查。
       'vue/html-self-closing': 'error', //强制自闭样式
     },
-  }, // 跳过Prettier格式化相关规则
+  },
+  // 跳过Prettier格式化相关规则
   skipFormatting
 )

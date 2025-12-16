@@ -89,7 +89,7 @@
               <el-avatar :src="row.userAvatar" alt="用户头像" shape="circle" />
             </template>
           </el-table-column>
-          <el-table-column v-if="columnOption.userName?.visible" label="用户账号" min-width="160" prop="userName" show-overflow-tooltip sortable/>
+          <el-table-column v-if="columnOption.userName?.visible" label="用户账号" min-width="160" prop="userName" show-overflow-tooltip sortable />
           <el-table-column v-if="columnOption.nickName?.visible" label="用户昵称" min-width="160" prop="nickName" />
           <el-table-column v-if="columnOption.userType?.visible" label="用户类型" min-width="100" prop="userType">
             <template #default="{ row }">
