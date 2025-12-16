@@ -62,8 +62,7 @@
         :data="state.tableList"
         :default-expand-all="state.expandAllStatus"
         :tree-props="{ children: 'children' }"
-        class="flex-1"
-        :cell-style="{ padding: '6px' }"
+        class-name="flex-1"
         row-key="id"
       >
         <el-table-column v-if="columnOption.menuType?.visible" fixed="left" label="菜单类型" min-width="160" prop="menuType">

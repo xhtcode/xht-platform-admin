@@ -12,7 +12,7 @@
 import type { SortableEvent } from 'sortablejs'
 import Sortable from 'sortablejs'
 import { Rank } from '@element-plus/icons-vue'
-import { XhtColumnDragSortEmits, XhtColumnDragSortProps } from '@/components/element-plus/xht-table/types'
+import type { XhtColumnDragSortEmits, XhtColumnDragSortProps } from '@/components/element-plus/xht-table/types'
 import type { BasicResponse } from '@/service/model/base.model'
 
 defineOptions({

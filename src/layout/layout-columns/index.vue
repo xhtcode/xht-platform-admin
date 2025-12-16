@@ -60,7 +60,8 @@ const handleMenuClick = async (menuItems: RouteRecordRaw[], linkStatus: boolean)
   if (linkStatus) {
     const menuChildrenFirst = findMenuChildrenFirst(menuItems)
     if (menuChildrenFirst) {
-      await router.push(menuChildrenFirst.path).catch((_) => {
+      await router.push(menuChildrenFirst.path).catch((err) => {
+        console.log(err)
         useMessage().error('路由错误，请联系管理员!')
       })
     }

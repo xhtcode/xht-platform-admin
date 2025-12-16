@@ -53,7 +53,7 @@
       <xht-table
         v-loading="state.loadingStatus"
         :data="state.tableList"
-        class="flex-1"
+        class-name="flex-1"
         row-key="id"
         empty-text="系统暂无角色！"
         @selection-change="handleSelectionChange"

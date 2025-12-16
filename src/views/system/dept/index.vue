@@ -56,7 +56,7 @@
         :default-expand-all="state.expandAllStatus"
         :cell-style="{ padding: '6px' }"
         :tree-props="{ children: 'children' }"
-        class="flex-1"
+        class-name="flex-1"
         row-key="id"
       >
         <el-table-column v-if="columnOption.deptName?.visible" fixed="left" label="部门名称" min-width="260" prop="deptName">

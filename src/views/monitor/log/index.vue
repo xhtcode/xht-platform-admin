@@ -138,7 +138,7 @@ const queryParams = reactive<QueryParams>({
   pageSize: 10,
 })
 
-const tableStyle: TableStyle = {
+const tableStyle: any = {
   cellStyle: { 'text-align': 'center' },
   headerCellStyle: {
     textAlign: 'center',

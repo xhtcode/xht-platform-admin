@@ -104,19 +104,3 @@ const mergeDefaultOptions = (options: any, props: any): TableQueryPageState<any,
   }
   return props
 }
-
-/**
- * 表格样式Hooks
- * @returns 统一的表格样式配置
- */
-export const useTableToolHooks = (): TableStyle => {
-  return {
-    cellStyle: { textAlign: 'center' },
-    headerCellStyle: {
-      textAlign: 'center',
-      background: 'var(--el-table-row-hover-bg-color)',
-      color: 'var(--el-text-color-primary)',
-      userSelect: 'none',
-    },
-  }
-}

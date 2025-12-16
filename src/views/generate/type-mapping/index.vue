@@ -36,7 +36,7 @@
         v-loading="state.loadingStatus"
         :data="state.tableList"
         border
-        class="flex-1"
+        class-name="flex-1"
         row-key="id"
         empty-text="系统相关字段类型映射！"
         @selection-change="handleSelectionChange"
