@@ -12,7 +12,7 @@ enum Api {
   CREATE = '/sys/dict/types/create',
   UPDATE = '/sys/dict/types/update',
   REMOVE = '/sys/dict/types/remove',
-  QUERY_BYID = '/sys/dict/types/get/',
+  QUERY_BY_ID = '/sys/dict/types/get/',
   QUERY_LIST = '/sys/dict/types/page',
 }
 
@@ -36,7 +36,7 @@ export const updateSysDict = (data: SysDictOperationRequest): AxiosPromise<boole
     url: Api.UPDATE,
     baseURL,
     method: 'post',
-    data: { ...data },
+    data: data,
   })
 }
 
@@ -57,7 +57,7 @@ export const removeSysDictByIds = (ids: ModeIdType[]): AxiosPromise<boolean> => 
  */
 export const querySysDictById = (id: ModeIdType): AxiosPromise<SysDictResponse> => {
   return request({
-    url: Api.QUERY_BYID + `${id}`,
+    url: Api.QUERY_BY_ID + `${id}`,
     baseURL,
     method: 'get',
   })
@@ -71,6 +71,6 @@ export const querySysDictPage = (data?: SysDictQueryRequest): AxiosPromise<PageR
     url: Api.QUERY_LIST,
     baseURL,
     method: 'get',
-    params: { ...data },
+    params: data,
   })
 }

@@ -12,7 +12,7 @@ enum Api {
   CREATE = '/sys/dept/create',
   UPDATE = '/sys/dept/update',
   REMOVE = '/sys/dept/remove/',
-  QUERY_BYID = '/sys/dept/get/',
+  QUERY_BY_ID = '/sys/dept/get/',
   QUERY_TREE = '/sys/dept/tree',
 }
 
@@ -36,7 +36,7 @@ export const updateSysDept = (data: SysDeptOperationRequest): AxiosPromise<boole
     url: Api.UPDATE,
     baseURL,
     method: 'post',
-    data: { ...data },
+    data: data,
   })
 }
 
@@ -56,7 +56,7 @@ export const removeSysDeptById = (id: ModeIdType): AxiosPromise<boolean> => {
  */
 export const querySysDeptById = (id: ModeIdType): AxiosPromise<SysDeptResponse> => {
   return request({
-    url: Api.QUERY_BYID + `${id}`,
+    url: Api.QUERY_BY_ID + `${id}`,
     baseURL,
     method: 'get',
   })
@@ -70,6 +70,6 @@ export const querySysDeptTree = (data?: SysDeptQueryRequest): AxiosPromise<SysDe
     url: Api.QUERY_TREE,
     baseURL,
     method: 'get',
-    params: { ...data },
+    params: data,
   })
 }

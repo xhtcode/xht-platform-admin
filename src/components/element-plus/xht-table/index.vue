@@ -58,7 +58,7 @@ defineExpose({
     :show-summary="showSummary"
     :highlight-current-row="highlightCurrentRow"
     @selection-change="
-      (value) => {
+      (value: any) => {
         emits('selectionChange', value)
       }
     "

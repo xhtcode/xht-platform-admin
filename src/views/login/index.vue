@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { useMessage } from '@/hooks/use-message'
+
 defineOptions({
   name: 'Login',
   inheritAttrs: false,
@@ -24,6 +26,8 @@ const activeLoginType = ref<LoginType>('password')
 const handleChangeLoginType = (type: LoginType) => {
   if (type === 'password' || type === 'phone' || type === 'qrcode') {
     activeLoginType.value = type
+  } else {
+    useMessage().error('暂不支持第三方登录')
   }
 }
 

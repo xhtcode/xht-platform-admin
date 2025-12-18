@@ -12,7 +12,7 @@ enum Api {
   CREATE = '/sys/menu/create',
   UPDATE = '/sys/menu/update',
   REMOVE = '/sys/menu/remove/',
-  QUERY_BYID = '/sys/menu/get/',
+  QUERY_BY_ID = '/sys/menu/get/',
   QUERY_TREE = '/sys/menu/tree',
 }
 
@@ -36,7 +36,7 @@ export const updateSysMenu = (data: SysMenuOperationRequest): AxiosPromise<boole
     url: Api.UPDATE,
     baseURL,
     method: 'post',
-    data: { ...data },
+    data: data,
   })
 }
 
@@ -56,7 +56,7 @@ export const removeSysMenuById = (id: ModeIdType): AxiosPromise<boolean> => {
  */
 export const querySysMenuById = (id: ModeIdType): AxiosPromise<SysMenuResponse> => {
   return request({
-    url: Api.QUERY_BYID + `${id}`,
+    url: Api.QUERY_BY_ID + `${id}`,
     baseURL,
     method: 'get',
   })
@@ -70,6 +70,6 @@ export const querySysMenuTree = (data?: SysMenuQueryRequest): AxiosPromise<SysMe
     url: Api.QUERY_TREE,
     baseURL,
     method: 'get',
-    params: { ...data },
+    params: data,
   })
 }

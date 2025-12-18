@@ -79,12 +79,12 @@ const init = () => {
       arrowSize: 5,
       /**
        * 渲染垂直滚动条。
-       * 默认值为'auto'。
+       * 默认值为 'auto'。
        */
       vertical: 'visible',
       /**
        * 渲染水平滚动条。
-       * 默认值为'auto'，鼠标移出会隐藏
+       * 默认值为 'auto'，鼠标移出会隐藏
        */
       horizontal: 'visible',
       /**

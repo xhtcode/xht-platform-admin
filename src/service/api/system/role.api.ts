@@ -18,7 +18,7 @@ enum Api {
   CREATE = '/sys/role/create',
   UPDATE = '/sys/role/update',
   REMOVE = '/sys/role/remove/',
-  QUERY_BYID = '/sys/role/get/',
+  QUERY_BY_ID = '/sys/role/get/',
   QUERY_PAGE = '/sys/role/page',
   QUERY_MENU_BY_ROLE_ID = '/sys/role/select/menu/',
   BIND_MENU_ROLE = '/sys/role/menu/bind',
@@ -39,14 +39,14 @@ export const saveSysRole = (data: SysRoleOperationRequest): AxiosPromise<boolean
 /**
  * 修改角色
  *
- * @param id
+ * @param data 角色
  */
 export const updateSysRole = (data: SysRoleOperationRequest): AxiosPromise<boolean> => {
   return request({
     url: Api.UPDATE,
     baseURL,
     method: 'post',
-    data: { ...data },
+    data: data,
   })
 }
 
@@ -79,7 +79,7 @@ export const removeSysRoleByIds = (ids: string[]): AxiosPromise<boolean> => {
  */
 export const querySysRoleById = (id: ModeIdType): AxiosPromise<SysRoleResponse> => {
   return request({
-    url: Api.QUERY_BYID + `${id}`,
+    url: Api.QUERY_BY_ID + `${id}`,
     baseURL,
     method: 'get',
   })
@@ -93,7 +93,7 @@ export const querySysRolePage = (data?: SysRoleQueryRequest): AxiosPromise<PageR
     url: Api.QUERY_PAGE,
     baseURL,
     method: 'get',
-    params: { ...data },
+    params: data,
   })
 }
 

@@ -12,7 +12,7 @@ enum Api {
   CREATE = '/gen/datasource/create',
   UPDATE = '/gen/datasource/update',
   REMOVE = '/gen/datasource/remove/',
-  QUERY_BYID = '/gen/datasource/get/',
+  QUERY_BY_ID = '/gen/datasource/get/',
   QUERY_LIST = '/gen/datasource/list',
   CONNECTION_TEST = '/gen/datasource/connection/',
 }
@@ -37,7 +37,7 @@ export const updateGenDataSource = (data: GenDataSourceOperationRequest): AxiosP
     url: Api.UPDATE,
     baseURL,
     method: 'post',
-    data: { ...data },
+    data: data,
   })
 }
 
@@ -58,7 +58,7 @@ export const removeGenDataSourceByIds = (ids: ModeIdType[]): AxiosPromise<boolea
  */
 export const queryGenDataSourceById = (id: ModeIdType): AxiosPromise<GenDataSourceResponse> => {
   return request({
-    url: Api.QUERY_BYID + `${id}`,
+    url: Api.QUERY_BY_ID + `${id}`,
     baseURL,
     method: 'get',
   })
@@ -72,7 +72,7 @@ export const queryGenDataSourceList = (data?: GenDataSourceQueryRequest): AxiosP
     url: Api.QUERY_LIST,
     baseURL,
     method: 'get',
-    params: { ...data },
+    params: data,
   })
 }
 

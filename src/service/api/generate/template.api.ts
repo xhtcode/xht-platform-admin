@@ -12,7 +12,7 @@ enum Api {
   CREATE = '/gen/template/create',
   UPDATE = '/gen/template/update',
   REMOVE = '/gen/template/remove/',
-  QUERY_BYID = '/gen/template/get/',
+  QUERY_BY_ID = '/gen/template/get/',
   QUERY_LIST = '/gen/template/list/',
 }
 
@@ -36,7 +36,7 @@ export const updateGenTemplate = (data: GenTemplateOperationRequest): AxiosPromi
     url: Api.UPDATE,
     baseURL,
     method: 'post',
-    data: { ...data },
+    data: data,
   })
 }
 

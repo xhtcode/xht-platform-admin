@@ -12,7 +12,7 @@ enum Api {
   CREATE = '/sys/dept/post/create',
   UPDATE = '/sys/dept/post/update',
   REMOVE = '/sys/dept/post/remove/',
-  QUERY_BYID = '/sys/dept/post/get/',
+  QUERY_BY_ID = '/sys/dept/post/get/',
   QUERY_PAGE = '/sys/dept/post/page',
   LIST_POST = '/sys/dept/post/list/',
 }
@@ -37,7 +37,7 @@ export const updateSysDeptPost = (data: SysDeptPostOperationRequest): AxiosPromi
     url: Api.UPDATE,
     baseURL,
     method: 'post',
-    data: { ...data },
+    data: data,
   })
 }
 
@@ -68,7 +68,7 @@ export const removeSysDeptPostByIds = (ids: ModeIdArrayType): AxiosPromise<boole
  */
 export const querySysDeptPostById = (id: ModeIdType): AxiosPromise<SysDeptPostResponse> => {
   return request({
-    url: Api.QUERY_BYID + `${id}`,
+    url: Api.QUERY_BY_ID + `${id}`,
     baseURL,
     method: 'get',
   })
@@ -82,7 +82,7 @@ export const querySysDeptPostPage = (data?: SysDeptPostQueryRequest): AxiosPromi
     url: Api.QUERY_PAGE,
     baseURL,
     method: 'get',
-    params: { ...data },
+    params: data,
   })
 }
 /**

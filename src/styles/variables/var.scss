@@ -1,3 +1,5 @@
+@use '@/styles/variables/var.dark.scss';
+
 :root {
   // border 相关
   --xht-border-radius-base: 4px;
@@ -36,5 +38,3 @@
   --xht-page-bg-color: #f2f3f5;
   --xht-hover-bg-color: #f5f7fa;
 }
-
-@use '@/styles/variables/var.dark.scss';

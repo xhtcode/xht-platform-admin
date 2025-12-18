@@ -16,7 +16,7 @@ enum Api {
   CREATE = '/gen/template/group/create',
   UPDATE = '/gen/template/group/update',
   REMOVE = '/gen/template/group/remove/',
-  QUERY_BYID = '/gen/template/group/get/',
+  QUERY_BY_ID = '/gen/template/group/get/',
   QUERY_PAGE = '/gen/template/group/page',
   QUERY_LIST = '/gen/template/group/list',
 }
@@ -41,7 +41,7 @@ export const updateGenTemplateGroup = (data: GenTemplateGroupOperationRequest): 
     url: Api.UPDATE,
     baseURL,
     method: 'post',
-    data: { ...data },
+    data: data,
   })
 }
 
@@ -61,7 +61,7 @@ export const removeGenTemplateGroupByIds = (id: ModeIdType): AxiosPromise<boolea
  */
 export const queryGenTemplateGroupById = (id: ModeIdType): AxiosPromise<GenTemplateGroupResponse> => {
   return request({
-    url: Api.QUERY_BYID + `${id}`,
+    url: Api.QUERY_BY_ID + `${id}`,
     baseURL,
     method: 'get',
   })
@@ -87,6 +87,6 @@ export const queryGenTemplateGroupPage = (data?: GenTemplateGroupQueryRequest): 
     url: Api.QUERY_PAGE,
     baseURL,
     method: 'get',
-    params: { ...data },
+    params: data,
   })
 }

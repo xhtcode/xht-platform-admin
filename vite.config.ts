@@ -111,7 +111,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
           }),
         ],
         eslintrc: {
-          enabled: false,
+          enabled: true,
           filepath: './.eslintrc-auto-import.json',
           globalsPropValue: true,
         },

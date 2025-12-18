@@ -19,7 +19,7 @@ enum Api {
   IMPORT_TABLE = '/gen/table/info/import',
   UPDATE = '/gen/table/info/update',
   REMOVE = '/gen/table/info/remove/',
-  QUERY_BYID = '/gen/table/info/get/',
+  QUERY_BY_ID = '/gen/table/info/get/',
   QUERY_EXISTS_PAGE = '/gen/table/info/exists/page',
   QUERY_NO_EXISTS_PAGE = '/gen/table/info/no/exists/page',
   SYNC_TABLE = '/gen/table/info/syncTable/',
@@ -47,7 +47,7 @@ export const updateGenTableInfo = (data: GenTableInfoOperationRequest): AxiosPro
     url: Api.UPDATE,
     baseURL,
     method: 'post',
-    data: { ...data },
+    data: data,
   })
 }
 
@@ -67,7 +67,7 @@ export const removeGenTableInfoByIds = (id: ModeIdType): AxiosPromise<boolean> =
  */
 export const queryGenTableInfoById = (id: ModeIdType): AxiosPromise<GenTableInfoOperationResponse> => {
   return request({
-    url: Api.QUERY_BYID + `${id}`,
+    url: Api.QUERY_BY_ID + `${id}`,
     baseURL,
     method: 'get',
   })
@@ -82,7 +82,7 @@ export const queryExistsPage = (data?: GenTableInfoQueryRequest): AxiosPromise<P
     url: Api.QUERY_EXISTS_PAGE,
     baseURL,
     method: 'get',
-    params: { ...data },
+    params: data,
   })
 }
 
@@ -95,7 +95,7 @@ export const queryNoExistsPage = (data?: GenTableInfoQueryRequest): AxiosPromise
     url: Api.QUERY_NO_EXISTS_PAGE,
     baseURL,
     method: 'get',
-    params: { ...data },
+    params: data,
   })
 }
 

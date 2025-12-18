@@ -12,7 +12,7 @@ enum Api {
   CREATE = '/sys/dict/item/create',
   REMOVE = '/sys/dict/item/remove',
   UPDATE = '/sys/dict/item/update',
-  QUERY_BYID = '/sys/dict/item/get/',
+  QUERY_BY_ID = '/sys/dict/item/get/',
   QUERY_PAGE = '/sys/dict/item/page',
 }
 
@@ -46,7 +46,7 @@ export const updateSysDictItem = (data: SysDictItemOperationRequest): AxiosPromi
     url: Api.UPDATE,
     baseURL,
     method: 'post',
-    data: { ...data },
+    data: data,
   })
 }
 
@@ -55,7 +55,7 @@ export const updateSysDictItem = (data: SysDictItemOperationRequest): AxiosPromi
  */
 export const querySysDictItemById = (id: ModeIdType): AxiosPromise<SysDictItemResponse> => {
   return request({
-    url: Api.QUERY_BYID + `${id}`,
+    url: Api.QUERY_BY_ID + `${id}`,
     baseURL,
     method: 'get',
   })
@@ -69,6 +69,6 @@ export const querySysDictItemPage = (data?: SysDictItemQueryRequest): AxiosPromi
     url: Api.QUERY_PAGE,
     baseURL,
     method: 'get',
-    params: { ...data },
+    params: data,
   })
 }

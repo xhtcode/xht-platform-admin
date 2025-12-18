@@ -51,6 +51,7 @@ class RegularUtils {
    * @returns {Boolean}
    */
   public isHttp(url: string): boolean {
+    // @ts-ignore
     return url.indexOf('http://') !== -1 || url.indexOf('https://') !== -1
   }
 

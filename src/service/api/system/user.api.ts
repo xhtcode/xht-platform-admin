@@ -18,7 +18,7 @@ enum Api {
   CREATE = '/sys/user/create',
   UPDATE = '/sys/user/update',
   REMOVE = '/sys/user/remove/',
-  QUERY_BYID = '/sys/user/get/',
+  QUERY_BY_ID = '/sys/user/get/',
   QUERY_PAGE = '/sys/user/page',
   RESET_PASSWORD = `/sys/user/reset/`,
   QUERY_ROLE_ID = '/sys/user/role/',
@@ -45,7 +45,7 @@ export const updateSysUser = (data: SysUserOperationRequest): AxiosPromise<boole
     url: Api.UPDATE,
     baseURL,
     method: 'post',
-    data: { ...data },
+    data: data,
   })
 }
 
@@ -75,10 +75,11 @@ export const removeSysUserByIds = (ids: ModeIdArrayType): AxiosPromise<boolean> 
 
 /**
  * 查询单个
+ * @param id  id
  */
 export const querySysUserById = (id: ModeIdType): AxiosPromise<SysUserVo> => {
   return request({
-    url: Api.QUERY_BYID + `${id}`,
+    url: Api.QUERY_BY_ID + `${id}`,
     baseURL,
     method: 'get',
   })
@@ -92,12 +93,13 @@ export const querySysUserPage = (data?: SysUserQueryRequest): AxiosPromise<PageR
     url: Api.QUERY_PAGE,
     baseURL,
     method: 'get',
-    params: { ...data },
+    params: data,
   })
 }
 
 /**
  * 重置密码
+ * @param userId 用户id
  */
 export const resetPassword = (userId: any): AxiosPromise<boolean> => {
   return request({

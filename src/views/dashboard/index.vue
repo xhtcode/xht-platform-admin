@@ -4,7 +4,7 @@ defineOptions({ name: 'HomeViewComponentIndex' })
 
 <template>
   <div class="xht-view-container">
-    <div class="xht-view-main" />
+    <div class="xht-view-main"></div>
   </div>
 </template>
 

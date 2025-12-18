@@ -12,7 +12,7 @@ enum Api {
   CREATE = '/gen/type/mapping/create',
   UPDATE = '/gen/type/mapping/update',
   REMOVE = '/gen/type/mapping/remove/',
-  QUERY_BYID = '/gen/type/mapping/get/',
+  QUERY_BY_ID = '/gen/type/mapping/get/',
   QUERY_PAGE = '/gen/type/mapping/page',
   QUERY_LIST = '/gen/type/mapping/list',
 }
@@ -37,7 +37,7 @@ export const updateGenTypeMapping = (data: GenTypeMappingOperationRequest): Axio
     url: Api.UPDATE,
     baseURL,
     method: 'post',
-    data: { ...data },
+    data: data,
   })
 }
 
@@ -58,7 +58,7 @@ export const removeGenTypeMappingByIds = (ids: ModeIdType[]): AxiosPromise<boole
  */
 export const queryGenTypeMappingById = (id: ModeIdType): AxiosPromise<GenTypeMappingResponse> => {
   return request({
-    url: Api.QUERY_BYID + `${id}`,
+    url: Api.QUERY_BY_ID + `${id}`,
     baseURL,
     method: 'get',
   })
@@ -72,7 +72,7 @@ export const queryGenTypeMappingPage = (data?: GenTypeMappingQueryRequest): Axio
     url: Api.QUERY_PAGE,
     baseURL,
     method: 'get',
-    params: { ...data },
+    params: data,
   })
 }
 
@@ -84,6 +84,6 @@ export const queryGenTypeMappingList = (data?: GenTypeMappingQueryRequest): Axio
     url: Api.QUERY_LIST,
     baseURL,
     method: 'get',
-    params: { ...data },
+    params: data,
   })
 }

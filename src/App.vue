@@ -7,7 +7,6 @@ import { useThemeDeviceHooks } from '@/hooks/use-theme-hooks'
 const themeStore = useThemeStore()
 const { sizeType } = storeToRefs(themeStore)
 useThemeDeviceHooks()
-const x = () => {}
 </script>
 
 <template>
