@@ -157,6 +157,7 @@ defineExpose({
     flex: 1;
     width: 100%;
     overflow: hidden;
+    border: 1px solid var(--xht-border-color);
   }
 }
 </style>

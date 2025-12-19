@@ -2,6 +2,7 @@ import request from '@/utils/request'
 import type { AxiosPromise } from 'axios'
 import type { SysDictItemOperationRequest, SysDictItemQueryRequest, SysDictItemResponse } from '@/service/model/system/dict.item.model'
 import type { ModeIdArrayType, ModeIdType, PageResponse } from '@/service/model/base.model'
+import { DictVo } from '@/store/modules/dict.store'
 
 /**
  * 后台管理服务前缀
@@ -14,6 +15,7 @@ enum Api {
   UPDATE = '/sys/dict/item/update',
   QUERY_BY_ID = '/sys/dict/item/get/',
   QUERY_PAGE = '/sys/dict/item/page',
+  QUERY_BY_DICT_CODE = '/sys/dict/item/code/',
 }
 
 /**
@@ -70,5 +72,17 @@ export const querySysDictItemPage = (data?: SysDictItemQueryRequest): AxiosPromi
     baseURL,
     method: 'get',
     params: data,
+  })
+}
+
+/**
+ * 根据字典编码查询字典项
+ * @param dictCode 字典编码
+ */
+export const queryByDictCode = (dictCode: string): AxiosPromise<DictVo[]> => {
+  return request({
+    url: Api.QUERY_BY_DICT_CODE + `${dictCode}`,
+    baseURL,
+    method: 'get',
   })
 }

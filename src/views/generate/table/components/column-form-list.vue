@@ -77,6 +77,16 @@ const changeList = (row: GenColumnInfoOperationRequest) => {
         />
       </template>
     </el-table-column>
+    <el-table-column label="列表排序" prop="listSortable" width="90">
+      <template #default="{ row }">
+        <el-switch
+          v-model="row.listSortable"
+          :active-value="GenStatusEnums.ENABLED"
+          :inactive-value="GenStatusEnums.DISABLED"
+          :disabled="row.listShow !== 1"
+        />
+      </template>
+    </el-table-column>
     <el-table-column label="显示禁用" prop="listDisabled" width="90">
       <template #default="{ row }">
         <el-switch

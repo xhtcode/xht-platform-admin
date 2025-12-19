@@ -9,70 +9,119 @@ export enum GenStatusEnums {
  * 响应类型
  */
 export interface GenColumnInfoResponse extends BasicResponse {
-  /** 主键 */
-  id: number
+  /**
+   * 主键
+   */
+  id: ModeIdType
 
-  /** 表id */
-  tableId: number
+  /**
+   * 表id
+   */
+  tableId: ModeIdType
 
-  /** 表名称(冗余字段) */
+  /**
+   * 表名称(冗余字段)
+   */
   tableName: string
 
-  /** 字段名 */
+  /**
+   * 字段名
+   */
   dbName: string
 
-  /** 字段类型 */
+  /**
+   * 字段类型
+   */
   dbType: string
 
-  /** 字段主键：0-非主键，1-主键 */
+  /**
+   * 字段主键：0-非主键，1-主键
+   */
   dbPrimary: GenStatusEnums
 
-  /** 字段必填：0-非必填，1-必填 */
+  /**
+   * 字段必填：0-非必填，1-必填
+   */
   dbRequired: GenStatusEnums
 
-  /** 字段注释 */
+  /**
+   * 字段注释
+   */
   dbComment: string
 
-  /** 字段长度 */
+  /**
+   * 字段长度
+   */
   dbLength: number
 
-  /** 代码名称 */
+  /**
+   * 代码名称
+   */
   codeName: string
 
-  /** 代码注释 */
+  /**
+   * 代码注释
+   */
   codeComment: string
 
-  /** 表单新增：0-不显示，1-显示 */
+  /**
+   * 表单新增：0-不显示，1-显示
+   */
   fromInsert: GenStatusEnums
 
-  /** 表单更新：0-不显示，1-显示 */
+  /**
+   * 表单更新：0-不显示，1-显示
+   */
   fromUpdate: GenStatusEnums
 
-  /** 表单输入长度 */
+  /**
+   * 表单输入长度
+   */
   fromLength?: number // 允许为null，故设为可选
 
-  /** 表单必填：0-非必填，1-必填 */
+  /**
+   * 表单必填：0-非必填，1-必填
+   */
   fromFill: GenStatusEnums
 
-  /** 表单组件 */
+  /**
+   * 表单组件
+   */
   fromComponent: string
 
-  /** 列表显示：0-不显示，1-显示 */
+  /**
+   * 列表显示：0-不显示，1-显示
+   */
   listShow: GenStatusEnums
 
-  /** 显示切换禁用：0-不禁用，1-禁用 */
+  /**
+   * 列表禁用：0-不禁用，1-禁用
+   */
   listDisabled: GenStatusEnums
 
-  /** 默认隐藏：0-不隐藏，1-隐藏 */
+  /**
+   * 默认隐藏：0-不隐藏，1-隐藏
+   */
   listHidden: GenStatusEnums
 
-  /** java类型 */
+  /**
+   * java类型
+   */
   codeJava: string
 
-  /** java类型 包地址 */
+  /**
+   * 列表排序
+   */
+  listSortable: GenStatusEnums
+
+  /**
+   * java类型 包地址
+   */
   codeJavaPackage: string
 
-  /** ts类型 */
+  /**
+   * ts类型
+   */
   codeTs: string
 
   /**
@@ -80,7 +129,9 @@ export interface GenColumnInfoResponse extends BasicResponse {
    */
   dictCode: string
 
-  /** 字段排序 */
+  /**
+   * 字段排序
+   */
   sortOrder: number
 }
 

@@ -67,6 +67,7 @@ const handleColumnChange = (id: ModeIdType, row: GenTableColumnQueryResponse) =>
   }
   columnInfo.value.forEach((item) => {
     if (item.id === id) {
+      console.log(item)
       row.columnId = item.id
       row.columnName = item.codeName
       row.conditionLabel = item.codeComment
@@ -155,6 +156,15 @@ defineExpose({
       <el-table-column label="字段命名">
         <template #default="{ row }">
           <el-input v-model="row.conditionValue" placeholder="请输入字段命名" />
+        </template>
+      </el-table-column>
+      <el-table-column label="字典类型" prop="dictCode">
+        <template #default="{ row }">
+          <column-dict-select
+            v-model="row.dictCode"
+            v-model:from-component="row.fromComponent"
+            :disabled="['id', 'version', 'tenant_id', 'del_flag'].includes(row.dbName)"
+          />
         </template>
       </el-table-column>
       <el-table-column label="前端组件" prop="fromComponent">

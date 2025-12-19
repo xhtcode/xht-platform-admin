@@ -150,7 +150,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
     server: {
       host: '0.0.0.0', // 服务器主机名，如果允许外部访问，可设置为 "0.0.0.0"
       port: +Number(env.VITE_APP_PORT) || 3000, // 设置服务启动端口号
-      open: true, // 是否自动在浏览器中打开应用程序
+      open: false, // 是否自动在浏览器中打开应用程序
       cors: true, // 是否允许跨域
       // 跨域代理配置
       proxy: {

@@ -20,13 +20,3 @@ const { loadingStatus, refreshStatus } = useRouterLoadingHooks()
     </router-view>
   </el-main>
 </template>
-
-<style scoped lang="scss">
-.xht-main-container {
-  position: relative;
-  box-sizing: border-box;
-  padding: 8px;
-  overflow-x: hidden;
-  background-color: var(--xht-page-bg-color);
-}
-</style>

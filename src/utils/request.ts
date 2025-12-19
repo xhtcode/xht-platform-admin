@@ -91,6 +91,13 @@ service.interceptors.response.use(
           break
       }
     }
+    if (errorMsg == 'Network Error') {
+      errorMsg = '后端接口连接异常'
+    } else if (errorMsg.includes('timeout')) {
+      errorMsg = '系统接口请求超时'
+    } else if (errorMsg.includes('Request failed with status code')) {
+      errorMsg = '系统服务未知异常'
+    }
     useMessage().error(errorMsg)
     return Promise.reject(response.data)
   }

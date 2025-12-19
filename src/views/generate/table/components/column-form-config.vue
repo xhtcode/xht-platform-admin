@@ -10,6 +10,7 @@ withDefaults(
     dbType: DataBaseTypeEnums.MYSQL,
   }
 )
+
 const columnInfo = defineModel<GenColumnInfoResponse[]>('columnInfo', {
   required: true,
   default: () => [],
@@ -61,12 +62,20 @@ const columnInfo = defineModel<GenColumnInfoResponse[]>('columnInfo', {
     </el-table-column>
     <el-table-column label="字典类型" prop="dictCode">
       <template #default="{ row }">
-        <column-dict-select v-model="row.dictCode" v-model:from-component="row.fromComponent" />
+        <column-dict-select
+          v-model="row.dictCode"
+          v-model:from-component="row.fromComponent"
+          :disabled="['id', 'version', 'tenant_id', 'del_flag'].includes(row.dbName)"
+        />
       </template>
     </el-table-column>
     <el-table-column label="前端组件" prop="fromComponent">
       <template #default="{ row }">
-        <column-form-select v-model="row.fromComponent" v-model:dict-code="row.dictCode" />
+        <column-form-select
+          v-model="row.fromComponent"
+          v-model:dict-code="row.dictCode"
+          :disabled="['id', 'version', 'tenant_id', 'del_flag'].includes(row.dbName)"
+        />
       </template>
     </el-table-column>
   </xht-table>
