@@ -1,23 +1,17 @@
 <script lang="ts" setup>
-import { generateUUID } from '@/utils'
+import { useDictStore } from '@/store/modules/dict.store'
 
 defineOptions({ name: 'HomeViewComponentIndex' })
-const a = ref<any>()
-const b = ref<any>(generateUUID())
+const a = ref<any>('user_status')
+const dictStore = useDictStore()
 </script>
 
 <template>
   <div class="xht-view-container-none">
     <div class="xht-view-main">
-      <div />
-      <column-dict-select v-model="a" :dict-code="generateUUID()" />
-      <column-dict-select v-model="a" :dict-code="generateUUID()" />
-      <column-dict-select v-model="a" :dict-code="generateUUID()" />
-      <column-dict-select v-model="a" :dict-code="generateUUID()" />
-      <column-dict-select v-model="a" :dict-code="generateUUID()" />
-      <column-dict-select v-model="a" :dict-code="generateUUID()" />
-      <column-dict-select v-model="a" dict-code="b" />
-      <column-dict-select v-model="a" dict-code="bsssss" />
+      <el-button @click="dictStore.removeDict('order_status')">删除</el-button>
+      {{ a }}
+      <column-dict-select v-model="a" dict-code="order_status" />
     </div>
   </div>
 </template>

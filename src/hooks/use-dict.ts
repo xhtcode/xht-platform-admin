@@ -1,33 +1,26 @@
-import { useDictStore } from '@/store/modules/dict.store'
-import { queryByDictCode } from '@/service/api/system/dict.item.api'
-
-let timer: any
+import { DictVo, useDictStore } from '@/store/modules/dict.store'
 
 /**
  * 字典
  * @param dictCode 字典项编码
- * @param loadingStatus 加载状态
  */
-export const useDictHooks = (dictCode: string, loadingStatus: boolean) => {
+export const useDictHooks = (
+  dictCode: string
+): {
+  dictData: ComputedRef<DictVo[]>
+} => {
   /**
    * 字典Store
    */
   const dictStore = useDictStore()
 
-  const dictData = computed(() => dictStore.getDict(dictCode))
+  const dictData = computed<DictVo[]>(() => dictStore.getDict(dictCode))
 
-  const initData = () => {
-    loadingStatus = true
-    queryByDictCode(dictCode)
-      .then((res) => {
-        dictStore.setDict(dictCode, res.data)
-      })
-      .finally(() => {
-        loadingStatus = true
-      })
-  }
-  onMounted(() => {
-    initData()
+  onMounted(async () => {
+    await dictStore.refreshDict(dictCode)
   })
-  return dictData
+
+  return {
+    dictData,
+  }
 }

@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { queryByDictCode } from '@/service/api/system/dict.item.api'
 
 export interface DictVo {
   label: string // 字典项标签
@@ -7,8 +8,9 @@ export interface DictVo {
 }
 
 export interface DictStore {
-  setDict: (dictCode: string, data: DictVo[]) => void
+  refreshDict: (dictCode: string) => Promise<void>
   removeDict: (dictCode: string) => void
+  clearDict: () => void
   getDict: (dictCode: string) => DictVo[]
 }
 
@@ -16,15 +18,31 @@ const useDictStore = defineStore('dict', (): DictStore => {
   /**
    * 字典数据
    */
-  const dictData = reactive<Map<string, DictVo[]>>(new Map())
+  const dictMap = ref<Map<string, DictVo[]>>(new Map())
+
+  /**
+   *  请求队列（防止重复请求）
+   */
+  const requestQueue: Record<string, Promise<void>> = {}
 
   /**
    * 设置字典数据
    * @param dictCode 字典项编码
-   * @param values 字典项数据
    */
-  const setDict = (dictCode: string, values: DictVo[]) => {
-    dictData.set(dictCode, values)
+  const refreshDict = async (dictCode: string) => {
+    if (dictMap.value.get(dictCode)) return
+    // 防止重复请求
+    if (!requestQueue[dictCode]) {
+      requestQueue[dictCode] = queryByDictCode(dictCode)
+        .then((res) => {
+          dictMap.value.set(dictCode, res.data || [])
+          Reflect.deleteProperty(requestQueue, dictCode)
+        })
+        .catch(() => {
+          Reflect.deleteProperty(requestQueue, dictCode)
+        })
+    }
+    await requestQueue[dictCode]
   }
 
   /**
@@ -32,7 +50,14 @@ const useDictStore = defineStore('dict', (): DictStore => {
    * @param dictCode 字典项编码
    */
   const removeDict = (dictCode: string) => {
-    dictData.delete(dictCode)
+    dictMap.value.delete(dictCode)
+  }
+
+  /**
+   * 清空字典数据
+   */
+  const clearDict = () => {
+    dictMap.value.clear()
   }
 
   /**
@@ -41,12 +66,13 @@ const useDictStore = defineStore('dict', (): DictStore => {
    * @returns 字典项数据
    */
   const getDict = (dictCode: string) => {
-    return (dictCode && dictData.get(dictCode)) || []
+    return (dictCode && dictMap.value.get(dictCode)) || []
   }
 
   return {
-    setDict,
+    refreshDict,
     removeDict,
+    clearDict,
     getDict,
   }
 })

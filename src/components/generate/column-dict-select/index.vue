@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { useDictHooks } from '@/hooks/use-dict'
+import { querySysDictPage } from '@/service/api/system/dict.api'
+import { DictStatusEnums, SysDictResponse } from '@/service/model/system/dict.model'
 
 defineOptions({
   name: 'ColumnDictSelect',
   inheritAttrs: false,
 })
-const props = withDefaults(
+withDefaults(
   defineProps<{
-    dictCode: string
     disabled?: boolean
   }>(),
   {
@@ -20,15 +20,16 @@ const props = withDefaults(
 const modelValue = defineModel<string>('modelValue', {
   required: false,
 })
-const loading = ref<boolean>(false)
+
 /**
  * 表单组件
  */
 const fromComponent = defineModel<string>('fromComponent', {
   required: false,
 })
+const dictData = ref<SysDictResponse[]>([])
+const loading = ref<boolean>(false)
 
-const dictHooks = useDictHooks(props.dictCode, loading.value)
 /**
  * 字典编码改变
  */
@@ -39,15 +40,62 @@ const handleChange = (value: string | any) => {
     fromComponent.value = 'input'
   }
 }
+const remoteMethod = (queryString: string | undefined) => {
+  if (queryString) {
+    loading.value = true
+    querySysDictPage({
+      pageNum: 1,
+      pageSize: 10,
+      keyWord: queryString,
+      descName: 'sortOrder',
+      status: DictStatusEnums.ENABLED,
+    })
+      .then((res) => {
+        dictData.value = res.data?.records || []
+      })
+      .finally(() => {
+        loading.value = false
+      })
+  } else {
+    dictData.value = []
+  }
+}
+onMounted(() => {
+  remoteMethod(modelValue.value)
+})
 </script>
 
 <template>
-  {{ dictHooks }}
-  <el-select v-model="modelValue" @change="handleChange" :disabled="disabled" v-loading="loading" clearable placeholder="请选择字典类型">
-    <el-option label="1" value="1" />
-    <el-option label="2" value="2" />
-    <el-option label="3" value="3" />
-    <el-option label="5" value="5" />
+  <el-select
+    v-model="modelValue"
+    filterable
+    remote
+    value-key="id"
+    reserve-keyword
+    placeholder="请输入关键字，选择字典项目"
+    :remote-method="remoteMethod"
+    :loading="loading"
+    :disabled="disabled"
+    clearable
+    :debounce="500"
+    remote-show-suffix
+    default-first-option
+    @change="handleChange"
+  >
+    <el-option
+      v-for="item in dictData"
+      :key="item.id"
+      :value="item.dictCode"
+      :label="item.dictName"
+      :disabled="item.status === DictStatusEnums.DISABLED"
+    >
+      <div class="flex items-center justify-between">
+        <div>{{ item.dictCode }}</div>
+        <div>{{ item.dictName }}</div>
+      </div>
+    </el-option>
+    <template #loading>正在搜索请稍等......</template>
+    <template #empty>暂无匹配的字典，请更换关键字</template>
   </el-select>
 </template>
 
