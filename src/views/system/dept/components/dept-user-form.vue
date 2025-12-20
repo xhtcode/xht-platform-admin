@@ -104,7 +104,7 @@ defineExpose({
         </div>
       </div>
     </template>
-    <xht-table
+    <el-table
       ref="tableRef"
       v-loading="state.loadingStatus"
       :data="state.userList"
@@ -130,7 +130,7 @@ defineExpose({
           <user-status-tag :status="row.userStatus" />
         </template>
       </el-table-column>
-    </xht-table>
+    </el-table>
     <template #footer>
       <span>
         <el-button :disabled="state.loadingStatus" @click="close">取 消</el-button>

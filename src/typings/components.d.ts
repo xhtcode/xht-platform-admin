@@ -85,10 +85,9 @@ declare module 'vue' {
     UserStatusTag: typeof import('./../components/system/user-status-tag/index.vue')['default']
     UserTypeTag: typeof import('./../components/system/user-type-tag/index.vue')['default']
     XhtCard: typeof import('./../components/xht-card/index.vue')['default']
-    XhtColumnDragSort: typeof import('./../components/element-plus/xht-table/components/xht-column-drag-sort/index.vue')['default']
-    XhtColumnIndex: typeof import('./../components/element-plus/xht-table/components/xht-column-index/index.vue')['default']
+    XhtColumnDragSort: typeof import('./../components/element-plus/xht-column-drag-sort/index.vue')['default']
+    XhtColumnIndex: typeof import('./../components/element-plus/xht-column-index/index.vue')['default']
     XhtPagination: typeof import('./../components/element-plus/xht-pagination/index.vue')['default']
-    XhtTable: typeof import('./../components/element-plus/xht-table/index.vue')['default']
   }
   export interface GlobalDirectives {
     vLoading: typeof import('element-plus/es')['ElLoadingDirective']
@@ -170,8 +169,7 @@ declare global {
   const UserStatusTag: typeof import('./../components/system/user-status-tag/index.vue')['default']
   const UserTypeTag: typeof import('./../components/system/user-type-tag/index.vue')['default']
   const XhtCard: typeof import('./../components/xht-card/index.vue')['default']
-  const XhtColumnDragSort: typeof import('./../components/element-plus/xht-table/components/xht-column-drag-sort/index.vue')['default']
-  const XhtColumnIndex: typeof import('./../components/element-plus/xht-table/components/xht-column-index/index.vue')['default']
+  const XhtColumnDragSort: typeof import('./../components/element-plus/xht-column-drag-sort/index.vue')['default']
+  const XhtColumnIndex: typeof import('./../components/element-plus/xht-column-index/index.vue')['default']
   const XhtPagination: typeof import('./../components/element-plus/xht-pagination/index.vue')['default']
-  const XhtTable: typeof import('./../components/element-plus/xht-table/index.vue')['default']
 }

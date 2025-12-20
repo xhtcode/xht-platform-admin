@@ -157,13 +157,13 @@ defineExpose({
         </el-col>
       </el-row>
     </el-form>
-    <xht-table
+    <el-table
       ref="tableRef"
-      row-key="tableName"
+      height="65vh"
       v-loading="state.loadingStatus"
       :data="state.tableList"
       border
-      height="65vh"
+      row-key="id"
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="55" />
@@ -173,7 +173,7 @@ defineExpose({
       <el-table-column label="描述" prop="tableComment" />
       <el-table-column label="创建时间" prop="tableCreateTime" />
       <el-table-column label="更新时间" prop="tableUpdateTime" />
-    </xht-table>
+    </el-table>
     <template #footer>
       <el-button :disabled="state.loadingStatus" @click="close">取 消</el-button>
       <el-button :disabled="state.loadingStatus || (state.checkData && state.checkData.length === 0)" type="primary" @click="submitForm">

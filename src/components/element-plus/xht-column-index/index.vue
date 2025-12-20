@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { XhtColumnIndexProps } from '@/components/element-plus/xht-table/types'
+import type { XhtColumnIndexProps } from '@/components/element-plus/xht-column-index/types'
 
 defineOptions({
   name: 'XhtColumnIndex',

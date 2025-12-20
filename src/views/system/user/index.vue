@@ -217,13 +217,12 @@ onMounted(async () => {
           </el-button>
           <el-button :disabled="state.multipleStatus" :icon="Delete" size="small" type="danger" @click="handleBatchDelete">批量删除</el-button>
         </table-tool-bar>
-        <xht-table
+        <el-table
           v-loading="state.loadingStatus"
           :data="state.tableList"
-          :empty-text="queryParams.deptId ? '该部门下未添加用户信息' : '系统内暂无相关数据'"
           border
-          class="flex-1"
           row-key="id"
+          :empty-text="queryParams.deptId ? '该部门下未添加用户信息' : '系统内暂无相关数据'"
           @selection-change="handleSelectionChange"
         >
           <el-table-column align="center" type="selection" width="55" />
@@ -260,7 +259,7 @@ onMounted(async () => {
               </el-space>
             </template>
           </el-table-column>
-        </xht-table>
+        </el-table>
         <xht-pagination
           v-model:current-page="state.queryParams.current"
           v-model:page-size="state.queryParams.size"

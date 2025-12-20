@@ -165,17 +165,17 @@ onMounted(async () => {
         <el-button :icon="Plus" size="small" type="primary" @click="handleAdd">增加</el-button>
         <el-button :icon="Sort" size="small" type="info" @click="handleExpandAll">折叠/展开</el-button>
       </table-tool-bar>
-      <xht-table
+      <el-table
         v-if="state.refreshTable"
         ref="tableRef"
         v-loading="state.loadingStatus"
         :data="state.tableList"
         :default-expand-all="state.expandAllStatus"
         :tree-props="{ children: 'children' }"
-        class-name="flex-1"
         row-key="id"
+        empty-text="暂无匹配系统菜单数据 🔍 试试调整筛选条件吧！"
       >
-        <el-table-column v-if="columnOption.menuType?.visible" fixed="left" label="菜单类型" min-width="160" prop="menuType">
+        <el-table-column v-if="columnOption.menuType?.visible" align="left" fixed="left" label="菜单类型" min-width="160" prop="menuType">
           <template #default="{ row }">
             <el-tag :type="row.menuType === MenuTypeEnums.M ? 'success' : row.menuType === MenuTypeEnums.C ? 'warning' : 'info'">
               {{ row.menuType === MenuTypeEnums.M ? '目录' : row.menuType === MenuTypeEnums.C ? '菜单' : '按钮' }}
@@ -283,7 +283,7 @@ onMounted(async () => {
             <el-button :icon="Delete" link type="danger" @click="handleDelete(row)">删除</el-button>
           </template>
         </el-table-column>
-      </xht-table>
+      </el-table>
     </div>
     <menu-form ref="menuFormRef" @success="handleQuery()" />
   </div>

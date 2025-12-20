@@ -167,10 +167,10 @@ onMounted(async () => {
         <el-button :disabled="state.multipleStatus" :icon="Download" size="small" type="warning" @click="handleDownload()">批量下载</el-button>
         <el-button :disabled="state.multipleStatus" :icon="View" size="small" type="warning" @click="handleCodeView()">代码预览</el-button>
       </table-tool-bar>
-      <xht-table
+      <el-table
         v-loading="state.loadingStatus"
         :data="state.tableList"
-        class-name="flex-1"
+        border
         row-key="id"
         empty-text="系统相关表信息！"
         @selection-change="handleSelectionChange"
@@ -193,7 +193,7 @@ onMounted(async () => {
             <el-button :icon="Download" link type="warning" @click="handleDownload(row)">下载</el-button>
           </template>
         </el-table-column>
-      </xht-table>
+      </el-table>
       <xht-pagination
         v-model:current-page="state.queryParams.current"
         v-model:page-size="state.queryParams.size"

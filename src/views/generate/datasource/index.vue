@@ -155,10 +155,10 @@ onMounted(async () => {
         <el-button :disabled="state.singleStatus" :icon="Edit" size="small" type="success" @click="handleEdit(state.selectedRows[0])">修改</el-button>
         <el-button :disabled="state.multipleStatus" :icon="Delete" size="small" type="danger" @click="handleDelete(undefined)">批量删除</el-button>
       </table-tool-bar>
-      <xht-table
+      <el-table
         v-loading="state.loadingStatus"
         :data="state.tableList"
-        class-name="flex-1"
+        border
         row-key="id"
         empty-text="请添加数据源配置！"
         @selection-change="handleSelectionChange"
@@ -184,7 +184,7 @@ onMounted(async () => {
             <el-button :icon="Delete" link type="primary" @click="handleTest(row)">测试</el-button>
           </template>
         </el-table-column>
-      </xht-table>
+      </el-table>
     </div>
     <datasource-form ref="datasourceFormRef" @success="handleQuery()" />
   </div>

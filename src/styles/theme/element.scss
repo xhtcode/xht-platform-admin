@@ -102,6 +102,26 @@
 }
 
 //=================== 表格控件样式修改 ===================
+.el-table {
+  flex: 1;
+  .el-table__header {
+    th {
+      text-align: center;
+      user-select: none;
+    }
+  }
+
+  .el-table__row {
+    td {
+      text-align: center;
+    }
+
+    td.is-left {
+      text-align: left !important;
+    }
+  }
+}
+
 .el-table__empty-text {
   user-select: none;
 }

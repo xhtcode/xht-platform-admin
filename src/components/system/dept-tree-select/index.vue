@@ -84,7 +84,7 @@ onMounted(() => {
     :default-expand-all="true"
     :empty-text="`暂无部门数据`"
     :placeholder="placeholder"
-    :props="{ label: 'deptName', value: 'id' }"
+    :props="{ label: 'deptName' }"
     check-strictly
     highlight-current
     class="user-select-display"

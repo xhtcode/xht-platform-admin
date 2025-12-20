@@ -1,4 +1,21 @@
 @use '@/styles/variables/var.dark.scss';
+@use 'sass:map';
+@forward 'element-plus/theme-chalk/src/common/var.scss' with (
+  $table: (
+    'header-bg-color': 'var(--el-table-row-hover-bg-color)',
+    'header-text-color': 'var(--el-text-color-primary)',
+  ),
+  $table-padding: (
+    'large': 8px 0,
+    'default': 6px 0,
+    'small': 2px 0,
+  ),
+  $table-cell-padding: (
+    'large': 0 8px,
+    'default': 0 6px,
+    'small': 0 4px,
+  )
+);
 
 :root {
   // border 相关

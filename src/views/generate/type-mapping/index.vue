@@ -142,11 +142,10 @@ onMounted(async () => {
         <el-button :disabled="state.singleStatus" :icon="Edit" size="small" type="success" @click="handleEdit(state.selectedRows[0])">修改</el-button>
         <el-button :disabled="state.multipleStatus" :icon="Delete" size="small" type="danger" @click="handleDelete(undefined)">批量删除</el-button>
       </table-tool-bar>
-      <xht-table
+      <el-table
         v-loading="state.loadingStatus"
         :data="state.tableList"
         border
-        class-name="flex-1"
         row-key="id"
         empty-text="系统相关字段类型映射！"
         @selection-change="handleSelectionChange"
@@ -168,7 +167,7 @@ onMounted(async () => {
             <el-button icon="Delete" link type="danger" @click="handleDelete(row)">删除</el-button>
           </template>
         </el-table-column>
-      </xht-table>
+      </el-table>
       <xht-pagination
         v-model:current-page="state.queryParams.current"
         v-model:page-size="state.queryParams.size"

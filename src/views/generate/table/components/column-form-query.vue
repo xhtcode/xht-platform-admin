@@ -105,7 +105,7 @@ defineExpose({
 </script>
 
 <template>
-  <xht-table :data="queryColumns" row-key="id">
+  <el-table :data="queryColumns" border row-key="id">
     <xht-column-index type="step" />
     <el-table-column>
       <template #header>
@@ -178,5 +178,5 @@ defineExpose({
         </template>
       </el-table-column>
     </el-table-column>
-  </xht-table>
+  </el-table>
 </template>

@@ -163,22 +163,22 @@ onMounted(async () => {
         <el-button :icon="Plus" size="small" type="primary" @click="handleAdd">增加</el-button>
         <el-button :icon="Sort" size="small" type="info" @click="handleExpandAll">折叠/展开</el-button>
       </table-tool-bar>
-      <xht-table
+      <el-table
         v-if="state.refreshTable"
+        ref="tableRef"
         v-loading="state.loadingStatus"
         :data="state.tableList"
         :default-expand-all="state.expandAllStatus"
-        :cell-style="{ padding: '6px' }"
         :tree-props="{ children: 'children' }"
-        class-name="flex-1"
         row-key="id"
+        empty-text="暂无匹配部门数据 🔍 试试调整筛选条件吧！"
       >
-        <el-table-column v-if="columnOption.deptName?.visible" fixed="left" label="部门名称" min-width="260" prop="deptName">
+        <el-table-column v-if="columnOption.deptName?.visible" align="left" fixed="left" label="部门名称" min-width="260" prop="deptName">
           <template #default="{ row }">
-            {{ row.deptName }}
-            <el-tag effect="plain" type="info">
+            <el-text size="large">{{ row.deptName }}：</el-text>
+            <el-text type="info" size="small" class="ml-5">
               {{ row.deptCode }}
-            </el-tag>
+            </el-text>
           </template>
         </el-table-column>
 
@@ -213,7 +213,7 @@ onMounted(async () => {
             <el-button :icon="Delete" link type="danger" @click="handleDelete(row)">删除</el-button>
           </template>
         </el-table-column>
-      </xht-table>
+      </el-table>
     </div>
     <dept-form ref="deptFormRef" @success="handleQuery()" />
   </div>

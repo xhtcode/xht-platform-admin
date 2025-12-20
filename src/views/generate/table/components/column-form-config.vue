@@ -18,7 +18,7 @@ const columnInfo = defineModel<GenColumnInfoResponse[]>('columnInfo', {
 </script>
 
 <template>
-  <xht-table :data="columnInfo" row-key="id">
+  <el-table :data="columnInfo" border row-key="id">
     <el-table-column label="#" prop="sortOrder" width="55" />
     <el-table-column label="基础信息">
       <template #default>
@@ -78,5 +78,5 @@ const columnInfo = defineModel<GenColumnInfoResponse[]>('columnInfo', {
         />
       </template>
     </el-table-column>
-  </xht-table>
+  </el-table>
 </template>

@@ -17,7 +17,7 @@ const handleDragEnd = () => {
 </script>
 
 <template>
-  <xht-table :data="columnInfo" row-key="id" ref="columnFormRef" v-if="loading">
+  <el-table :data="columnInfo" ref="columnFormRef" v-if="loading" border row-key="id">
     <xht-column-drag-sort label="" v-model:data="columnInfo" :table-ref="columnFormRef" @drag-end="handleDragEnd" />
     <el-table-column label="基础信息">
       <template #default>
@@ -61,5 +61,5 @@ const handleDragEnd = () => {
         />
       </template>
     </el-table-column>
-  </xht-table>
+  </el-table>
 </template>

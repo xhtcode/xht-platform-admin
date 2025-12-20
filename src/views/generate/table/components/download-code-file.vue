@@ -106,12 +106,12 @@ defineExpose({
           </el-col>
         </el-row>
       </el-form>
-      <xht-table v-loading="state.loadingStatus" row-key="id" :data="state.tableList" class-name="flex-1" empty-text="系统相关表信息！">
+      <el-table v-loading="state.loadingStatus" :data="state.tableList" border row-key="id" empty-text="系统相关表信息！">
         <xht-column-index type="step" />
         <el-table-column :resizable="false" label="引擎名称" prop="engineName" width="120" />
         <el-table-column :resizable="false" align="left" label="数据库表名" prop="tableName" sortable width="220" />
         <el-table-column :resizable="false" label="表注释" prop="tableComment" />
-      </xht-table>
+      </el-table>
     </div>
     <template #footer>
       <el-button :disabled="state.loadingStatus" @click="close">取 消</el-button>

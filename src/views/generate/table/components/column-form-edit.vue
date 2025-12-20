@@ -45,7 +45,7 @@ const tableInfo = defineModel<GenTableInfoResponse>('tableInfo', {
         </el-form-item>
       </el-col>
     </el-row>
-    <xht-table :data="columnInfo" row-key="id">
+    <el-table :data="columnInfo" border row-key="id">
       <el-table-column label="#" prop="sortOrder" width="55" />
       <el-table-column label="基础信息">
         <template #default>
@@ -86,6 +86,6 @@ const tableInfo = defineModel<GenTableInfoResponse>('tableInfo', {
           <el-switch v-model="row.fromUpdate" :active-value="1" :inactive-value="0" :disabled="row.fromFill !== 1" />
         </template>
       </el-table-column>
-    </xht-table>
+    </el-table>
   </div>
 </template>

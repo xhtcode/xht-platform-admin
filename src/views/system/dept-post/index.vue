@@ -181,14 +181,13 @@ const handleDeptClick = (data: SysDeptResponse) => {
           </el-button>
           <el-button :disabled="state.multipleStatus" :icon="Delete" size="small" type="danger" @click="handleBatchDelete">批量删除</el-button>
         </table-tool-bar>
-        <xht-table
+        <el-table
           v-loading="state.loadingStatus"
           :data="state.tableList"
-          :empty-text="queryParams.deptId ? '该部门下未添加岗位信息' : '未选择要查询的部门'"
           border
-          class-name="flex-1"
           row-key="id"
           current-row-key="id"
+          :empty-text="queryParams.deptId ? '该部门下未添加岗位信息' : '未选择要查询的部门'"
           @selection-change="handleSelectionChange"
         >
           <el-table-column align="center" type="selection" width="55" />
@@ -227,7 +226,7 @@ const handleDeptClick = (data: SysDeptResponse) => {
               <el-button :icon="Delete" link type="danger" @click="handleDelete(row)">删除</el-button>
             </template>
           </el-table-column>
-        </xht-table>
+        </el-table>
         <xht-pagination
           v-model:current-page="state.queryParams.current"
           v-model:page-size="state.queryParams.size"
