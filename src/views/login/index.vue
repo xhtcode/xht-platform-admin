@@ -14,7 +14,6 @@ const switchDark = defineAsyncComponent(() => import('@/layout/components/switch
 
 // 当前激活的登录方式
 type LoginType = 'password' | 'qrcode' | 'phone' | 'wechat' | 'qq' | 'dinging'
-const activeTab = ref<LoginType>('password')
 
 // 第三方登录
 const activeLoginType = ref<LoginType>('password')
@@ -30,24 +29,6 @@ const handleChangeLoginType = (type: LoginType) => {
     useMessage().error('暂不支持第三方登录')
   }
 }
-
-// 回车登录
-const handleKeyPress = (event: KeyboardEvent) => {
-  if (event.key === 'Enter') {
-    if (activeTab.value === 'password') {
-    } else if (activeTab.value === 'phone') {
-    }
-  }
-}
-
-// 添加键盘监听
-onMounted(() => {
-  document.addEventListener('keypress', handleKeyPress)
-})
-
-onUnmounted(() => {
-  document.removeEventListener('keypress', handleKeyPress)
-})
 </script>
 
 <template>

@@ -7,7 +7,7 @@ defineOptions({
 <template>
   <el-footer class="xht-footer-container">
     <div class="xht-footer-main">
-      <div class="xht-footer-main-item flex-center">小糊涂后台管理系统</div>
+      <div class="xht-footer-main-item">小糊涂后台管理系统</div>
     </div>
   </el-footer>
 </template>
@@ -37,6 +37,7 @@ defineOptions({
       height: 100%;
       display: flex;
       align-items: center;
+      justify-content: center;
     }
   }
 }
