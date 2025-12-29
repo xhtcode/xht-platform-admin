@@ -156,7 +156,7 @@ defineExpose({
         </el-scrollbar>
         <div class="xht-code-view-empty" @click="codeNameWidth = !codeNameWidth" v-else>点击展开</div>
       </div>
-      <div class="flex-1">
+      <div class="flex-1" style="overflow: hidden">
         <code-monaco-editor ref="codeMonacoEditorRef" :language="state.activeFileType" :font-size="14" readonly />
       </div>
     </div>
@@ -244,12 +244,13 @@ defineExpose({
     justify-content: space-between;
 
     &:hover {
-      background: var(--el-fill-color-light);
+      background: var(--el-color-primary-light-9);
     }
   }
 
   .xht-code-view-item-active {
     color: var(--el-color-primary);
+    background: var(--el-color-primary-light-9);
     font-weight: bold;
   }
 }

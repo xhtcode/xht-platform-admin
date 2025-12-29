@@ -156,8 +156,8 @@ onMounted(async () => {
         <el-table-column v-if="columnOption.dictName?.visible" label="字典名称" min-width="160" prop="dictName" />
         <el-table-column v-if="columnOption.dictCode?.visible" label="字典编码" min-width="160" prop="dictCode">
           <template #default="{ row }">
-            <router-link :to="`/system/dict/${row.id}`" class="el-link el-link--primary">
-              {{ row.dictCode }}
+            <router-link :to="`/system/dict/${row.id}?tagName=字典项(${row.dictName})`">
+              <el-link>{{ row.dictCode }}</el-link>
             </router-link>
           </template>
         </el-table-column>

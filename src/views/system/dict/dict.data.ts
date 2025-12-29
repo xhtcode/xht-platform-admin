@@ -6,19 +6,15 @@ import type { ColumnConfig } from '@/components/table-tool-bar/types'
 /**
  * 增改页面 表单类型 默认值
  */
-export const SysDictOperationForm: SysDictOperationRequest = {
-  id: null, //字典ID
-  dictCode: '', //字典编码
-  dictName: '', //字典名称
+export const SysDictOperationForm: Partial<SysDictOperationRequest> = {
   sortOrder: 0, //排序序号
-  remark: '', //字典描述
   status: DictStatusEnums.ENABLED, //状态(1:启用 0:禁用)
 }
 
 /**
  * 增改页面 表单类型 表单校验
  */
-export const SysDictOperationRules: FormRules = {
+export const SysDictOperationRules: FormRules<SysDictOperationRequest> = {
   dictCode: [
     { required: true, message: '字典编码不能为空', trigger: 'blur' },
     { pattern: /^[a-zA-Z0-9_]+$/, message: '字典编码只能包含字母、数字和下划线', trigger: 'blur' },

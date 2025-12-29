@@ -137,6 +137,7 @@ const removeItem = (key: TabPaneName) => {
       const nextTab = tagsViewPlusStore.visitedViews[index + 1] || tagsViewPlusStore.visitedViews[index - 1]
       tagsViewPlusStore.removeVisitedView(item)
       if (activeName.value === key && nextTab) {
+        activeName.value = nextTab.path
         router.push(nextTab.path)
       }
       return

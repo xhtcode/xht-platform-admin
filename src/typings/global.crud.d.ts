@@ -17,7 +17,7 @@ declare global {
     visibleStatus: boolean // 弹窗可见状态
     operationStatus: 'create' | 'update' // 操作类型
     loadingStatus: boolean // 加载状态
-    addUpdateForm: Req // 表单数据
+    addUpdateForm: Partial<Req> // 表单数据
     [key: string]: any // 允许扩展其他属性
   }
 

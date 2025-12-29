@@ -122,7 +122,7 @@ defineExpose({
             <el-color-picker
               v-model="addUpdateForm.itemColor"
               :predefine="predefineColors"
-              class="w100"
+              class="w100!"
               color-format="hex"
               placeholder="请输入显示颜色"
             />
@@ -130,7 +130,7 @@ defineExpose({
         </el-col>
         <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="排序序号" prop="sortOrder">
-            <el-input-number v-model="addUpdateForm.sortOrder" :max="999" :min="0" class="w100" placeholder="请输入排序序号" />
+            <el-input-number v-model="addUpdateForm.sortOrder" :max="999" :min="0" class="w100!" placeholder="请输入排序序号" />
           </el-form-item>
         </el-col>
         <el-col :lg="12" :sm="24" :xs="24">

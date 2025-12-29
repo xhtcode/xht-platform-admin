@@ -6,13 +6,7 @@ import type { ColumnConfig } from '@/components/table-tool-bar/types'
 /**
  * 增改页面 表单类型 默认值
  */
-export const SysDictItemOperationForm: SysDictItemOperationRequest = {
-  dictCode: '',
-  id: null, // 字典项ID
-  dictId: null, // 所属字典ID
-  itemLabel: '', // 字典项标签
-  itemValue: '', // 字典项值
-  itemColor: '', // 显示颜色
+export const SysDictItemOperationForm: Partial<SysDictItemOperationRequest> = {
   sortOrder: 0, // 排序序号
   remark: '暂无', // 字典项描述
   status: DictItemStatusEnums.ENABLED, //状态(1:启用 0:禁用)

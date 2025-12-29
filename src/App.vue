@@ -21,9 +21,7 @@ const linkConfig: LinkConfigContext = {
 const dialogConfig: DialogConfigContext = {}
 const messageConfig: MessageConfigContext = {
   max: 5,
-  duration: 3000,
-  showClose: true,
-  plain: true,
+  duration: 5000,
 }
 </script>
 

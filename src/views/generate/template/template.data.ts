@@ -6,15 +6,11 @@ import type { ColumnConfig } from '@/components/table-tool-bar/types'
 /**
  * 增改页面 表单类型 默认值
  */
-export const GenTemplateOperationForm: GenTemplateOperationRequest = {
-  groupId: undefined,
-  id: undefined,
+export const GenTemplateOperationForm: Partial<GenTemplateOperationRequest> = {
   templateContent: '${auth}',
-  templateFileName: '',
   templateFilePath: '/',
   templateFileType: 'java',
   templateIgnoreField: [],
-  templateName: '',
   templateSort: 1,
   isNew: false,
 }

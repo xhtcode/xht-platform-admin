@@ -6,11 +6,7 @@ import type { ColumnConfig } from '@/components/table-tool-bar/types'
 /**
  * 增改页面 表单类型 默认值
  */
-export const SysDeptPostOperationForm: SysDeptPostOperationRequest = {
-  id: null, // 岗位id
-  deptId: null, //  部门id
-  postCode: '', //  岗位编码
-  postName: '', // 岗位名称
+export const SysDeptPostOperationForm: Partial<SysDeptPostOperationRequest> = {
   postSort: 0, // 岗位排序
   postStatus: SysDeptPostStatusEnums.NORMAL, //  岗位状态
   postLimit: 999, // 岗位人员限制

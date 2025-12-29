@@ -6,10 +6,7 @@ import type { ColumnConfig } from '@/components/table-tool-bar/types'
 /**
  * 增改页面 表单类型 默认值
  */
-export const SysRoleOperationForm: SysRoleOperationRequest = {
-  id: 0, // 角色ID
-  roleCode: '', //角色编码
-  roleName: '', //角色名称
+export const SysRoleOperationForm: Partial<SysRoleOperationRequest> = {
   remark: '暂无', //角色描述
   dataScope: 0, //数据范围（1全部数据权限 2自定数据权限 3本部门数据权限 4本部门及以下数据权限 5本岗位数据权限  6仅本人数据权限）
   roleStatus: RoleStatusEnums.NORMAL, //状态（0正常 1停用）,可用值:0,1

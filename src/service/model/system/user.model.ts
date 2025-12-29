@@ -153,8 +153,8 @@ export interface SysUserResponse extends BasicResponse {
  * 响应类型
  */
 export interface SysUserVo extends Partial<SysUserResponse> {
-  profile: SysUserProfileResponse // 用户信息
-  postInfos: SysDeptPostResponse[] // 岗位信息
+  profile: Partial<SysUserProfileResponse> // 用户信息
+  postInfos: Partial<SysDeptPostResponse>[] // 岗位信息
 }
 
 /**

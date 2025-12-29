@@ -5,7 +5,7 @@ import type { GenTableInfoOperationRequest, GenTableInfoResponse } from '@/servi
 /**
  * 增改页面 表单类型 默认值
  */
-export const GenTableInfoOperationForm: GenTableInfoOperationRequest = {
+export const GenTableInfoOperationForm: Partial<any> = {
   tableInfo: {} as GenTableInfoResponse,
   columnInfos: [],
   queryColumns: [],

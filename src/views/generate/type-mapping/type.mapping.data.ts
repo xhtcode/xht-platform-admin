@@ -6,7 +6,7 @@ import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
 /**
  * 增改页面 表单类型 默认值
  */
-export const GenTypeMappingOperationForm: GenTypeMappingOperationRequest = {
+export const GenTypeMappingOperationForm: Partial<GenTypeMappingOperationRequest> = {
   dbType: DataBaseTypeEnums.MYSQL,
 }
 
