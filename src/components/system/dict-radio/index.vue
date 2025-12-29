@@ -1,0 +1,41 @@
+<script setup lang="ts">
+import { useDictHooks } from '@/hooks/use-dict'
+import type { DictRadioEmits, DictRadioProps } from '@/components/system/dict-radio/types'
+
+defineOptions({
+  name: 'DictRadio',
+  inheritAttrs: false,
+})
+
+const props = withDefaults(defineProps<DictRadioProps>(), {
+  border: false,
+})
+
+const emits = defineEmits<DictRadioEmits>()
+
+/**
+ * 字典项编码
+ */
+const modelValue = defineModel<string | undefined>('modelValue', {
+  required: true,
+})
+/**
+ * 字典数据
+ */
+const { loadingStatus, dictData } = useDictHooks(props.dictCode)
+
+/**
+ * 字典单选组件发生改变的时候
+ */
+const handlerChange = (value?: string) => {
+  emits('change', value)
+}
+</script>
+
+<template>
+  <el-radio-group v-model="modelValue" v-loading="loadingStatus" @change="handlerChange">
+    <el-radio v-for="item in dictData" :border="border" :key="item.value" :label="item.label" :value="item.value" :disabled="item.disabled" />
+  </el-radio-group>
+</template>
+
+<style scoped lang="scss"></style>

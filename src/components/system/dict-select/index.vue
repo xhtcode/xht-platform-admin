@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useDictHooks } from '@/hooks/use-dict'
-import type { DictSelectProps } from '@/components/system/dict-select/types'
+import type { DictSelectEmits, DictSelectProps } from '@/components/system/dict-select/types'
 
 defineOptions({
   name: 'DictSelect',
@@ -18,10 +18,12 @@ const props = withDefaults(defineProps<DictSelectProps>(), {
   maxCollapseTags: 1, // 多选时最多显示多少Tag
 })
 
+const emits = defineEmits<DictSelectEmits>()
+
 /**
- * 字典编码
+ * 字典项编码
  */
-const modelValue = defineModel<string | string[]>('modelValue', {
+const modelValue = defineModel<string | string[] | undefined>('modelValue', {
   required: true,
 })
 
@@ -36,6 +38,21 @@ const { loadingStatus, dictData } = useDictHooks(props.dictCode)
  */
 const filterMethod = (value: string) => {
   return dictData.value.some((item) => item.label.includes(value) || item.value.includes(value))
+}
+
+/**
+ * 字典单选组件发生改变的时候
+ */
+const handlerChange = (value?: string | string[]) => {
+  emits('change', value)
+}
+
+/**
+ * 字典单选组件发生改变的时候
+ */
+const handlerRemoveTag = (value: string) => {
+  console.log(value)
+  emits('remove-tag', value)
 }
 </script>
 
@@ -53,11 +70,16 @@ const filterMethod = (value: string) => {
     :collapse-tags="collapseTags"
     :collapse-tags-tooltip="collapseTagsTooltip"
     :max-collapse-tags="maxCollapseTags"
+    @change="handlerChange"
+    @remove-tag="handlerRemoveTag"
   >
-    <el-option v-for="item in dictData" :label="item.label" :value="item.value" :key="item.label">
-      <el-text size="large" tag="b" class="user-select-none">{{ item.label }}</el-text>
-      <el-text size="small" type="info" class="user-select-none float-right">{{ item.value }}</el-text>
-    </el-option>
+    <el-option v-for="item in dictData" :label="item.label" :value="item.value" :key="item.label" :disabled="item.disabled" />
     <template #empty>暂无字典项数据，请联系系统管理员</template>
   </el-select>
 </template>
+
+<style scoped lang="scss">
+.dict-disabled-text {
+  color: var(--el-disabled-text-color);
+}
+</style>
