@@ -152,7 +152,7 @@ onMounted(async () => {
           </el-col>
           <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
             <el-form-item label="表名称" prop="tableName">
-              <template-group-select v-model="queryParams.tableName" :maxlength="200" placeholder="请输入表名称" show-word-limit />
+              <el-input v-model="queryParams.tableName" :maxlength="200" placeholder="请输入表名称" show-word-limit />
             </el-form-item>
           </el-col>
           <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
