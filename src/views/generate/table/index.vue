@@ -178,7 +178,7 @@ onMounted(async () => {
         <el-table-column align="center" type="selection" width="55" />
         <xht-column-index :current="queryParams.current" :size="queryParams.size" />
         <el-table-column v-if="columnOption.engineName?.visible" label="引擎名称" min-width="100" prop="engineName" />
-        <el-table-column v-if="columnOption.tableName?.visible" align="left" label="数据库表名" min-width="220" prop="tableName" sortable />
+        <el-table-column v-if="columnOption.tableName?.visible" label="数据库表名" min-width="220" prop="tableName" sortable />
         <el-table-column v-if="columnOption.tableComment?.visible" label="表注释" min-width="260" prop="tableComment" show-overflow-tooltip />
         <el-table-column v-if="columnOption.codeName?.visible" label="代码名称" min-width="220" prop="codeName" />
         <el-table-column v-if="columnOption.codeComment?.visible" label="代码注释" min-width="260" prop="codeComment" show-overflow-tooltip />
