@@ -74,7 +74,7 @@ const handleQuery = () => {
  */
 const resetQuery = () => {
   addUpdateFormRef.value?.resetFields()
-  handleQuery()
+  state.tableList = []
 }
 
 /**
@@ -130,50 +130,54 @@ defineExpose({
     :show-close="!state.loadingStatus"
     :before-close="close"
   >
-    <el-form
-      ref="addUpdateFormRef"
-      v-loading="state.loadingStatus"
-      :model="queryParams"
-      :rules="rules"
-      element-loading-text="拼命加载中"
-      inline-message
-      label-width="100px"
-      scroll-to-error
-    >
-      <el-row>
-        <el-col :span="8">
-          <el-form-item label="表名" prop="tableName">
-            <el-input v-model="queryParams.tableName" placeholder="请输入表名" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="数据库" prop="dataSourceId">
-            <datasource-select v-model="queryParams.dataSourceId" placeholder="请选择配置名称" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="8" style="text-align: center">
-          <el-button type="primary" @click="handleQuery">查询</el-button>
-          <el-button @click="resetQuery">重置</el-button>
-        </el-col>
-      </el-row>
-    </el-form>
-    <el-table
-      ref="tableRef"
-      height="65vh"
-      v-loading="state.loadingStatus"
-      :data="state.tableList"
-      border
-      row-key="id"
-      @selection-change="handleSelectionChange"
-    >
-      <el-table-column type="selection" width="55" />
-      <xht-column-index :current="queryParams.current" :size="queryParams.size" />
-      <el-table-column label="表名" prop="tableName" />
-      <el-table-column label="引擎" prop="engineName" />
-      <el-table-column label="描述" prop="tableComment" />
-      <el-table-column label="创建时间" prop="tableCreateTime" />
-      <el-table-column label="更新时间" prop="tableUpdateTime" />
-    </el-table>
+    <div class="h-full w-full flex flex-col">
+      <el-form
+        ref="addUpdateFormRef"
+        v-loading="state.loadingStatus"
+        :model="queryParams"
+        :rules="rules"
+        element-loading-text="拼命加载中"
+        inline-message
+        label-width="100px"
+        scroll-to-error
+      >
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="数据库" prop="dataSourceId">
+              <datasource-select v-model="queryParams.dataSourceId" placeholder="请选择配置名称" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="表名" prop="tableName">
+              <el-input v-model="queryParams.tableName" placeholder="请输入表名" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8" style="text-align: center">
+            <el-button type="primary" @click="handleQuery">查询</el-button>
+            <el-button @click="resetQuery">重置</el-button>
+          </el-col>
+        </el-row>
+      </el-form>
+      <el-table
+        ref="tableRef"
+        class="flex-1"
+        v-loading="state.loadingStatus"
+        :data="state.tableList"
+        border
+        row-key="tableName"
+        empty-text="暂无匹配数据 🔍 试试调整筛选条件吧"
+        @selection-change="handleSelectionChange"
+      >
+        <el-table-column type="selection" width="55" />
+        <xht-column-index :current="queryParams.current" :size="queryParams.size" />
+        <el-table-column label="表名" prop="tableName" />
+        <el-table-column label="引擎" prop="engineName" />
+        <el-table-column label="描述" prop="tableComment" />
+        <el-table-column label="创建时间" prop="tableCreateTime" />
+        <el-table-column label="更新时间" prop="tableUpdateTime" />
+      </el-table>
+    </div>
+
     <template #footer>
       <el-button :disabled="state.loadingStatus" @click="close">取 消</el-button>
       <el-button :disabled="state.loadingStatus || (state.checkData && state.checkData.length === 0)" type="primary" @click="submitForm">
