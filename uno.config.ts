@@ -4,7 +4,7 @@ import {
   presetAttributify,
   presetIcons,
   presetTypography,
-  presetUno,
+  presetWind3,
   presetWebFonts,
   transformerDirectives,
   transformerVariantGroup,
@@ -49,15 +49,11 @@ const transform = (svg: string) => {
 // noinspection JSUnusedGlobalSymbols
 export default defineConfig({
   presets: [
-    presetUno(), // 添加 UnoCSS 的默认样式预设
+    presetWind3(), // 添加 UnoCSS 的默认样式预设
     presetAttributify({}),
     presetTypography(),
     presetWebFonts({
-      fonts: {
-        sans: 'DM Sans',
-        serif: 'DM Serif Display',
-        mono: 'DM Mono',
-      },
+      fonts: {},
     }),
     presetIcons({
       scale: 1.2, // 图标缩放比例
