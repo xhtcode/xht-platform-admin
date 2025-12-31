@@ -1,4 +1,7 @@
 // src/types/env.d.ts
+import type { Directive } from 'vue'
+import { ElementLoading, LoadingBinding } from 'element-plus/es/components/loading/src/directive'
+
 interface ImportMetaEnv {
   /**
    * 应用标题
@@ -52,7 +55,8 @@ export declare const __APP_INFO__: {
 
 declare module '*.vue' {
   import type { DefineComponent } from 'vue'
-
   const component: DefineComponent<object, object, any>
   export default component
 }
+
+export {}

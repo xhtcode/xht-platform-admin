@@ -5,6 +5,7 @@ import qs from 'qs'
 import { useUserInfoStore } from '@/store/modules/user.store'
 import { HEADER_AUTHORIZATION, HEADER_TRACE_ID, HEADER_USER_ACCOUNT, HEADER_USER_ID } from '@/service/constant'
 import { generateUUID } from '@/utils/index'
+import { storeToRefs } from 'pinia'
 
 // 默认配置
 const defaultConfig: AxiosRequestConfig = {
@@ -33,23 +34,20 @@ service.defaults.params = {
 service.interceptors.request.use(
   (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
     const userStore = useUserInfoStore()
-
+    const { userInfo, hasToken, getAccessToken } = storeToRefs(userStore)
     // 设置认证信息（跳过不需要认证的请求）
-    if (!config.headers?.auth && userStore.hasToken) {
-      config.headers.set(HEADER_AUTHORIZATION, `Bearer ${userStore.getToken}`)
+    if (!config.headers?.auth && hasToken.value) {
+      config.headers.set(HEADER_AUTHORIZATION, `Bearer ${getAccessToken.value}`)
     }
-
     // 设置链路追踪ID
     config.headers.set(HEADER_TRACE_ID, generateUUID())
-
     // 修正用户信息头映射（避免原代码中的赋值错误）
-    if (userStore.getUserId) {
-      config.headers.set(HEADER_USER_ID, userStore.getUserId)
+    if (userInfo.value.userId) {
+      config.headers.set(HEADER_USER_ID, userInfo.value.userId)
     }
-    if (userStore.getUserName) {
-      config.headers.set(HEADER_USER_ACCOUNT, userStore.getUserName)
+    if (userInfo.value.userName) {
+      config.headers.set(HEADER_USER_ACCOUNT, userInfo.value.userName)
     }
-
     return config
   },
   (error: AxiosError): Promise<AxiosError> => {

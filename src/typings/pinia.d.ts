@@ -1,4 +1,5 @@
 import { AppLanguageEnums, ComponentSizeEnums } from '@/service/enums'
+import { UserStatusEnums } from '@/service/model/system/user.model'
 
 /**
  * pinia自定义ts类型
@@ -12,11 +13,11 @@ declare global {
     /**
      * 访问令牌
      */
-    access_token: string | null
+    access_token?: string
     /**
      * 刷新令牌
      */
-    refresh_token: string | null
+    refresh_token?: string
     /**
      * 权限范围
      */
@@ -24,11 +25,11 @@ declare global {
     /**
      * 令牌类型
      */
-    token_type: string | null
+    token_type?: string
     /**
      * 过期时间
      */
-    expires_in: number | null
+    expires_in?: number
     /**
      * 附加参数
      */
@@ -99,35 +100,112 @@ declare global {
    * 用户信息store
    * 存储当前登录用户的信息
    */
-  interface UserInfoStoreType {
+  interface UserStoreType {
     /**
-     * 用户id
+     * 用户信息状态
+     * 包含用户的基本信息、角色和权限
      */
-    userId: ModeIdType
+    userInfo: Ref<UserInfoType>
     /**
-     * 用户名称
+     * 认证令牌状态
+     * 包含访问令牌、刷新令牌等认证信息
      */
-    userName: string | null
+    token: Ref<TokenInfoType>
     /**
-     * 用户账号
+     * 是否为管理员的计算属性
+     * 检查用户是否拥有admin角色
      */
-    userAccount: string | null
+    isAdmin: ComputedRef<boolean>
     /**
-     * 数据权限
+     * 是否存在访问令牌的计算属性
+     * 检查当前是否已登录
      */
-    dataScope: number | null
+    hasToken: ComputedRef<boolean>
     /**
-     * 角色code
+     * 是否存在角色的计算属性
+     * 检查用户是否有分配的角色
      */
-    roles: string[]
+    hasRoles: ComputedRef<boolean>
     /**
-     * 权限code
+     * 获取访问令牌的计算属性
+     * 返回当前的访问令牌
      */
-    authorities: string[]
+    getAccessToken: ComputedRef<string>
     /**
-     * token信息
+     * 用户登录方法
+     * 通过用户名密码进行登录，获取认证令牌
      */
-    token: TokenInfoType
+    login: (data: LoginRequestType) => Promise<void>
+    /**
+     * 用户登出方法
+     * 清除用户认证信息并重置路由
+     */
+    logout: () => Promise<void>
+    /**
+     * 获取用户信息方法
+     * 从服务端获取当前登录用户的信息
+     */
+    getUserInfos: () => Promise<void>
+    /**
+     * 重置用户认证信息方法
+     * 清除用户信息、认证令牌及本地存储，并重置路由
+     */
+    resetToken: () => Promise<void>
+  }
+
+  interface UserInfoType {
+    /**
+     * 用户ID
+     */
+    userId?: number
+    /**
+     * 用户类型
+     */
+    userType?: UserTypeEnums
+    /**
+     * 用户名
+     */
+    userName?: string
+    /**
+     * 用户昵称
+     */
+    nickName?: string
+    /**
+     * 账号状态(0-正常,1-未激活,2-禁用,3-锁定,4-过期)
+     */
+    userStatus?: UserStatusEnums
+    /**
+     * 手机号
+     */
+    userPhone?: string
+    /**
+     * 头像
+     */
+    userAvatar?: string
+    /**
+     * 部门id
+     */
+    deptId?: number
+    /**
+     * 部门名称
+     */
+    deptName?: string
+    /**
+     * 注册日期
+     */
+    registerDate?: string
+    /**
+     * 角色列表
+     */
+    roleCodes: string[]
+    /**
+     * 权限列表
+     */
+    menuButtonCodes: string[]
+    /**
+     * 数据范围(1-全部数据权限,2-自定数据权限,3-本部门数据权限,4-本部门及以下数据权限,5-仅本人数据权限)
+     */
+    dataScope?: number
   }
 
   /**

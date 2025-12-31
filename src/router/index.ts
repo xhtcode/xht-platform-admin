@@ -15,7 +15,9 @@ const router = createRouter({
 /**
  * 重置路由
  */
-export async function resetRouter() {}
+export async function resetRouter() {
+  router.clearRoutes()
+}
 
 // 全局注册 router
 export function setupRouter(app: App<Element>) {

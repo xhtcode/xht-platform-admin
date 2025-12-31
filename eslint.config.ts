@@ -36,7 +36,7 @@ export default defineConfigWithVueTs(
       '@typescript-eslint/ban-ts-comment': 'off',
       '@typescript-eslint/no-non-null-assertion': 'off',
       '@typescript-eslint/no-unused-vars': 'off', // 关闭未使用变量警告
-      '@typescript-eslint/no-unused-expressions': 'warn', // 降级为警告
+      '@typescript-eslint/no-unused-expressions': 'off', // 降级为警告
       '@typescript-eslint/no-import-type-side-effects': 'error',
       '@typescript-eslint/no-unsafe-function-type': 'off',
       'no-unused-vars': 'off', // 关闭未使用变量警告

@@ -5,7 +5,7 @@ import type { GenTableInfoOperationRequest, GenTableInfoResponse } from '@/servi
 /**
  * 增改页面 表单类型 默认值
  */
-export const GenTableInfoOperationForm: Partial<any> = {
+export const GenTableInfoOperationForm: GenTableInfoOperationRequest = {
   tableInfo: {} as GenTableInfoResponse,
   columnInfos: [],
   queryColumns: [],
@@ -15,22 +15,22 @@ export const GenTableInfoOperationForm: Partial<any> = {
  * 增改页面 表单类型 表单校验
  */
 export const GenTableInfoOperationRules: FormRules<GenTableInfoOperationRequest> = {
-  'tableInfo.groupId': [{ required: true, message: '请输入分组id', trigger: 'change' }],
-  'tableInfo.dataBaseType': [{ required: true, message: '请输入数据库类型', trigger: 'change' }],
-  'tableInfo.tableName': [{ required: true, message: '请输入数据库表名', trigger: 'change' }],
-  'tableInfo.tableComment': [{ required: true, message: '请输入表注释', trigger: 'change' }],
-  'tableInfo.moduleName': [{ required: true, message: '请输入模块名称', trigger: 'change' }],
-  'tableInfo.serviceName': [{ required: true, message: '请输入业务名称', trigger: 'change' }],
-  'tableInfo.codeName': [{ required: true, message: '请输入代码名称', trigger: 'change' }],
-  'tableInfo.codeComment': [{ required: true, message: '请输入代码注释', trigger: 'change' }],
-  'tableInfo.backEndAuthor': [{ required: true, message: '请输入后端作者', trigger: 'change' }],
-  'tableInfo.frontEndAuthor': [{ required: true, message: '请输入前端作者', trigger: 'change' }],
-  'tableInfo.urlPrefix': [{ required: true, message: '请输入请求前缀', trigger: 'change' }],
-  'tableInfo.permissionPrefix': [{ required: true, message: '请输入权限前缀', trigger: 'change' }],
-  'tableInfo.parentMenuId': [{ required: true, message: '请输入上级菜单', trigger: 'change' }],
-  'tableInfo.pageStyle': [{ required: true, message: '请输入页面风格', trigger: 'change' }],
-  'tableInfo.pageStyleWidth': [{ required: true, message: '请输入页面宽度', trigger: 'change' }],
-  'tableInfo.fromNumber': [{ required: true, message: '请输入每行数量', trigger: 'change' }],
+  'tableInfo.groupId': [{ required: true, message: '请选择分组id', trigger: 'change' }],
+  'tableInfo.dataBaseType': [{ required: true, message: '请选择数据库类型', trigger: 'change' }],
+  'tableInfo.tableName': [{ required: true, message: '请输入数据库表名', trigger: 'blur' }],
+  'tableInfo.tableComment': [{ required: true, message: '请输入表注释', trigger: 'blur' }],
+  'tableInfo.moduleName': [{ required: true, message: '请输入模块名称', trigger: 'blur' }],
+  'tableInfo.serviceName': [{ required: true, message: '请输入业务名称', trigger: 'blur' }],
+  'tableInfo.codeName': [{ required: true, message: '请输入代码名称', trigger: 'blur' }],
+  'tableInfo.codeComment': [{ required: true, message: '请输入代码注释', trigger: 'blur' }],
+  'tableInfo.backEndAuthor': [{ required: true, message: '请输入后端作者', trigger: 'blur' }],
+  'tableInfo.frontEndAuthor': [{ required: true, message: '请输入前端作者', trigger: 'blur' }],
+  'tableInfo.urlPrefix': [{ required: true, message: '请输入请求前缀', trigger: 'blur' }],
+  'tableInfo.permissionPrefix': [{ required: true, message: '请输入权限前缀', trigger: 'blur' }],
+  'tableInfo.parentMenuId': [{ required: true, message: '请选择上级菜单', trigger: 'blur' }],
+  'tableInfo.pageStyle': [{ required: true, message: '请输入页面风格', trigger: 'blur' }],
+  'tableInfo.pageStyleWidth': [{ required: true, message: '请输入页面宽度', trigger: 'blur' }],
+  'tableInfo.fromNumber': [{ required: true, message: '请输入每行数量', trigger: 'blur' }],
 }
 
 /**

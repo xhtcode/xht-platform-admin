@@ -83,7 +83,7 @@ const submitForm = async () => {
   state.loadingStatus = true
   try {
     addUpdateForm.value.menuIds = menuTree.value?.getCheckedKeys() || []
-    await roleMenuBind(addUpdateForm.value)
+    await roleMenuBind(addUpdateForm.value!)
     useMessage().success('当前角色分配菜单权限成功')
     close()
   } finally {

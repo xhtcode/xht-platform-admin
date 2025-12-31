@@ -18,7 +18,7 @@ export const getRouters = (): AxiosPromise<RouteRecordRaw[]> => {
 /**
  * 获取用户信息
  */
-export const getUserInfo = (): AxiosPromise<any> => {
+export const getUserInfo = (): AxiosPromise<UserInfoType> => {
   return request({
     url: '/sys/user/profile',
     baseURL: baseURL,
