@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import { CaretBottom, List, Lock, SwitchButton, UserFilled } from '@element-plus/icons-vue'
 import aa from '@/assets/images/title-boy.jpg'
+import { useUserInfoStore } from '@/store/modules/user.store'
+import { storeToRefs } from 'pinia'
 
 defineOptions({ name: 'UserAvatar' })
 
@@ -18,6 +20,9 @@ const openDialog = (type: 'infoRef' | 'passwordRef' | 'logout') => {
       break
   }
 }
+
+const permissions = useUserInfoStore()
+const { userInfo } = storeToRefs(permissions)
 </script>
 
 <template>
@@ -25,10 +30,10 @@ const openDialog = (type: 'infoRef' | 'passwordRef' | 'logout') => {
     <el-dropdown trigger="click" size="default">
       <div class="avatar-container flex-center">
         <div class="flex-center">
-          <el-avatar alt="avatar" class="avatar-image user-select-none" :src="aa" />
+          <el-avatar alt="avatar" class="avatar-image user-select-none" :src="userInfo.userAvatar" />
         </div>
         <div class="user-select-none">
-          小糊涂胡须撒旦
+          {{ userInfo.nickName }}
           <el-icon>
             <CaretBottom />
           </el-icon>

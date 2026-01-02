@@ -2,7 +2,6 @@
 import type { RouteLocationNormalizedLoaded } from 'vue-router'
 import { useRoute, useRouter } from 'vue-router'
 import { useThemeStore } from '@/store/modules/theme.store'
-import { HomeDynamicRouter } from '@/router/modules/dynamic'
 
 defineOptions({ name: 'BreadCrumb' })
 const themeStore = useThemeStore()
@@ -12,13 +11,11 @@ const router = useRouter()
 const { currentRoute } = useRouter()
 const initBreadCrumb = (to: any) => {
   const currentRoute = to ? to : route
-  const breadcrumbListEmp = currentRoute.matched
-    .filter((item: RouteLocationNormalizedLoaded) => !['/', '/home'].includes(item.path))
-    .filter((item: RouteLocationNormalizedLoaded) => !item.meta?.breadcrumb)
+  const breadcrumbListEmp = currentRoute.matched.filter((item: RouteLocationNormalizedLoaded) => !item.meta?.breadcrumb)
   if (breadcrumbListEmp.length > 0) {
-    breadcrumbList.value = [HomeDynamicRouter, ...breadcrumbListEmp]
+    breadcrumbList.value = [...breadcrumbListEmp]
   } else {
-    breadcrumbList.value = [HomeDynamicRouter]
+    breadcrumbList.value = []
   }
 }
 const handleRedirect = (item: any) => {

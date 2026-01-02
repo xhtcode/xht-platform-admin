@@ -27,7 +27,7 @@ export function setupPermission() {
         if (to.path === PAGE_PATH_LOGIN) {
           // 如果已登录状态下，进入登录页会强制跳转到主页
           next({
-            path: HOME_PAGE_PATH,
+            path: HOME_PAGE_PATH + (userInfoStore.isAdmin ? '/admin' : null),
             replace: true,
           })
           return

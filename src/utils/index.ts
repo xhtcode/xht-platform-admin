@@ -1,5 +1,5 @@
 import { useMessage } from '@/hooks/use-message'
-
+import _ from 'lodash'
 /**
  * 生成符合 UUID v4 格式的唯一标识符
  *
@@ -43,4 +43,16 @@ const handleBlobFile = (blob: Blob, fileName: string) => {
   }, 0)
 }
 
-export { generateUUID, handleBlobFile }
+/**
+ * 获取交集长度
+ * @param dataArray 数据数组
+ * @param checkArray 检查数组
+ */
+function getIntersectionLength(dataArray: string[], checkArray: string[]): number {
+  if (!dataArray || !checkArray) {
+    return 0
+  }
+  return _.intersection(dataArray, checkArray)?.length || 0
+}
+
+export { generateUUID, handleBlobFile, getIntersectionLength }

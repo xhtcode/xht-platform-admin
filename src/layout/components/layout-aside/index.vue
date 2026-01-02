@@ -3,7 +3,6 @@ import Logo from '@/layout/components/logo-image/index.vue'
 import MenuMain from '@/layout/components/menu-main/index.vue'
 import { useThemeHooks } from '@/hooks/use-theme-hooks'
 import { useRouteStore } from '@/store/modules/routes.store'
-import DynamicRouter from '@/router/modules/dynamic'
 import { convertRouteToMenu } from '@/layout/components/helper'
 import type { RouteRecordRaw } from 'vue-router'
 import { useThemeStore } from '@/store'
@@ -26,7 +25,7 @@ const menuList = computed(() => {
   if (layoutType.value === 'columns') {
     return props.childMenuList || []
   }
-  return convertRouteToMenu(DynamicRouter.concat(routeStore.routesRaw))
+  return convertRouteToMenu(routeStore.routesRaw)
 })
 </script>
 

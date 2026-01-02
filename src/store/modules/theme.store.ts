@@ -12,7 +12,7 @@ export const useThemeStore = defineStore(
     /**
      * 布局类型
      */
-    const layoutType = ref<'default' | 'columns'>('columns')
+    const layoutType = ref<'default' | 'columns'>('default')
     /**
      * 设备类型
      */
@@ -30,7 +30,7 @@ export const useThemeStore = defineStore(
     /**
      * 菜单状态
      */
-    const menuStatus = ref<boolean>(false)
+    const menuStatus = ref<boolean>(true)
 
     /**
      * 面包屑显示状态

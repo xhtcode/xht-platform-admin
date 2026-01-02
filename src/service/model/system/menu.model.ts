@@ -18,27 +18,11 @@ export enum MenuTypeEnums {
 }
 
 /**
- * 显示状态枚举
+ * 菜单公共属性
  */
-export enum MenuHiddenEnums {
-  SHOW = 0, // 显示
-  HIDE = 1, // 隐藏
-}
-
-/**
- * 是否缓存枚举
- */
-export enum MenuCacheEnums {
-  YES = 0, // 是
-  NO = 1, // 否
-}
-
-/**
- * 菜单外联链枚举
- */
-export enum MenuLinkEnums {
-  YES = 0, // 是
-  NO = 1, // 否
+export enum MenuCommonStatus {
+  NO = 0, // 否
+  YES = 1, // 是
 }
 
 /**
@@ -60,14 +44,15 @@ export interface SysMenuResponse extends BasicResponse {
   menuName?: string // 菜单名称
   menuIcon?: string // 菜单图标
   menuPath?: string // 路由地址
-  menuHidden?: MenuHiddenEnums // 显示状态 (0显示 1隐藏)
-  menuCache?: MenuCacheEnums // 是否缓存 （0是 1否）
+  menuHidden?: MenuCommonStatus // 显示状态 (0显示 1隐藏)
+  menuCache?: MenuCommonStatus // 是否缓存 （0是 1否）
   menuStatus?: MenuStatusEnums // 菜单状态 （0正常 1停用）
   menuAuthority?: string // 菜单权限字符串
   menuSort?: number // 菜单排序
   viewName?: string // 组件视图名称
   viewPath?: string // 组件视图路径
-  frameFlag?: MenuLinkEnums // 是否为外链
+  frameFlag?: MenuCommonStatus // 是否为外链
+  affixStatus?: MenuCommonStatus // 菜单固定状态
 }
 
 /**

@@ -169,7 +169,7 @@ const toLastView = () => {
   if (latestView) {
     router.push({ path: latestView.path })
   } else {
-    router.replace({ path: '/redirect/home' })
+    router.replace({ path: '/redirect/' })
   }
 }
 

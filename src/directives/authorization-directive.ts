@@ -7,7 +7,7 @@ import _ from 'lodash'
  * @param el DOM元素
  * @param binding 绑定对象
  */
-export const vPermission: VPermissionDirectives = (el, binding) => {
+export const vPermission: VAuthorizationDirectives = (el, binding) => {
   const checkPermission = binding.value || []
   const args = binding.arg || 'all'
   const permissions = useUserInfoStore()

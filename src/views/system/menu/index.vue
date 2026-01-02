@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { querySysMenuTree, removeSysMenuById } from '@/service/api/system/menu.api'
-import type { SysMenuQueryRequest, SysMenuResponse, SysMenuTreeResponse } from '@/service/model/system/menu.model'
-import { MenuCacheEnums, MenuHiddenEnums, MenuLinkEnums, MenuStatusEnums, MenuTypeEnums } from '@/service/model/system/menu.model'
+import { MenuCommonStatus, SysMenuQueryRequest, SysMenuResponse, SysMenuTreeResponse } from '@/service/model/system/menu.model'
+import { MenuStatusEnums, MenuTypeEnums } from '@/service/model/system/menu.model'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { FormInstance } from 'element-plus'
 import { SysMenuColumnOption } from '@/views/system/menu/menu.data'
@@ -198,8 +198,8 @@ onMounted(async () => {
         <el-table-column v-if="columnOption.menuHidden?.visible" align="center" label="显示状态" min-width="120" prop="menuHidden">
           <template #default="{ row }">
             <el-switch
-              :active-value="MenuHiddenEnums.SHOW"
-              :inactive-value="MenuHiddenEnums.HIDE"
+              :active-value="MenuCommonStatus.YES"
+              :inactive-value="MenuCommonStatus.NO"
               :model-value="row.menuHidden"
               active-text="显示"
               inactive-text="隐藏"
@@ -210,8 +210,8 @@ onMounted(async () => {
         <el-table-column v-if="columnOption.menuCache?.visible" align="center" label="缓存状态" min-width="120" prop="menuCache">
           <template #default="{ row }">
             <el-switch
-              :active-value="MenuCacheEnums.YES"
-              :inactive-value="MenuCacheEnums.NO"
+              :active-value="MenuCommonStatus.YES"
+              :inactive-value="MenuCommonStatus.NO"
               :model-value="row.menuCache"
               active-text="是"
               inactive-text="否"
@@ -252,8 +252,8 @@ onMounted(async () => {
           <template #default="{ row }">
             <el-switch
               v-model="row.frameFlag"
-              :active-value="MenuLinkEnums.YES"
-              :inactive-value="MenuLinkEnums.NO"
+              :active-value="MenuCommonStatus.YES"
+              :inactive-value="MenuCommonStatus.NO"
               active-text="是"
               inactive-text="否"
               inline-prompt

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { convertRouteToMenu } from '@/layout/components/helper'
-import DynamicRouter from '@/router/modules/dynamic'
 import { useRouteStore } from '@/store/modules/routes.store'
 import { RouteRecordRaw, useRoute, useRouter } from 'vue-router'
 import type { EmitsType } from '@/layout/components/menu-split/types'
@@ -13,7 +12,7 @@ const route = useRoute()
 const router = useRouter()
 const routeStore = useRouteStore()
 const menuList = computed<RouteRecordRaw[]>(() => {
-  return convertRouteToMenu(DynamicRouter.concat(routeStore.routesRaw))
+  return convertRouteToMenu(routeStore.routesRaw)
 })
 const activeMenuPath = ref<string>('')
 

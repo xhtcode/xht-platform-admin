@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import type { RouteRecordRaw } from 'vue-router'
 import { getRouters } from '@/service/api/permission'
-import DynamicRouter from '@/router/modules/dynamic'
 import { cloneDeep } from 'lodash'
 import { MenuTypeEnums } from '@/service/model/system/menu.model'
 import pInIaPersistConfig from '@/store/pinia-persist'
@@ -20,7 +19,7 @@ export const useRouteStore = defineStore(
     const isGenerate = ref(false) // 是否生成路由
     const routesRaw = ref<any[]>([]) // 原始路由
     const formatRoutes = ref<RouteRecordRaw[]>([]) //添加路由时使用
-    const allRoutes = computed(() => DynamicRouter.concat(routesRaw.value))
+    const allRoutes = computed(() => routesRaw.value)
     /**
      * 路由状态
      */
@@ -39,6 +38,7 @@ export const useRouteStore = defineStore(
         })
         returnRoutes.forEach((item) => {
           if (item.children) {
+            item.redirect = item.children[0]?.path
             const result: RouteRecordRaw[] = []
             formatFlatteningRoutes(result, item.children)
             item.children = result
@@ -46,7 +46,7 @@ export const useRouteStore = defineStore(
           return item
         })
       }
-      return DynamicRouter.concat(returnRoutes)
+      return returnRoutes
     }
 
     /**

@@ -7,7 +7,7 @@ import type { RouteRecordRaw } from 'vue-router'
 const convertRouteToMenu = (routes: any[]): RouteRecordRaw[] => {
   const returnMenus: any[] = []
   routes
-    .filter((item: any) => !item.meta?.hiddenStatus)
+    .filter((item: any) => item.meta?.hiddenStatus)
     .forEach((item) => {
       const menuItem: any = {
         path: item.path,

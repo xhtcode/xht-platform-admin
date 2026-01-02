@@ -1,5 +1,5 @@
-import type { SysMenuOperationRequest, SysMenuResponse } from '@/service/model/system/menu.model'
-import { MenuCacheEnums, MenuHiddenEnums, MenuStatusEnums, MenuTypeEnums } from '@/service/model/system/menu.model'
+import { MenuCommonStatus, SysMenuOperationRequest, SysMenuResponse } from '@/service/model/system/menu.model'
+import { MenuStatusEnums, MenuTypeEnums } from '@/service/model/system/menu.model'
 import type { FormRules } from 'element-plus'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 
@@ -9,11 +9,12 @@ import type { ColumnConfig } from '@/components/table-tool-bar/types'
 export const SysMenuOperationForm: Partial<SysMenuOperationRequest> = {
   parentId: '0', // 父菜单ID
   menuType: MenuTypeEnums.M, // 类型，默认为目录
-  menuHidden: MenuHiddenEnums.SHOW, // 显示状态，默认为显示
-  menuCache: MenuCacheEnums.NO, // 是否缓存，默认为否
+  menuHidden: MenuCommonStatus.YES, // 显示状态，默认为显示
+  menuCache: MenuCommonStatus.YES, // 是否缓存，默认为否
   menuStatus: MenuStatusEnums.NORMAL, // 菜单状态，默认为正常
   menuSort: 1, // 菜单排序，默认为1
-  frameFlag: 0, // 是否为外链，默认为否
+  frameFlag: MenuCommonStatus.NO, // 是否为外链，默认为否
+  affixStatus: MenuCommonStatus.NO, // 菜单固定状态，默认为否
 }
 
 /**
@@ -41,6 +42,7 @@ export const SysMenuOperationRules: FormRules = {
   ],
   viewName: [{ required: true, message: '组件视图名称可以为空', trigger: 'blur' }],
   viewPath: [{ required: true, message: '组件视图路径可以为空', trigger: 'blur' }],
+  affixStatus: [{ required: true, message: '请选择菜单固定状态', trigger: 'change' }],
   frameFlag: [
     { required: true, message: '是否为外链不能为空', trigger: 'change' },
     { type: 'number', message: '是否为外链必须为数字', trigger: 'blur' },

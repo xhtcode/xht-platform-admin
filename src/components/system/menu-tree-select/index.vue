@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { MenuLinkEnums, MenuTypeEnums, SysMenuTreeResponse } from '@/service/model/system/menu.model'
+import { MenuCommonStatus, MenuTypeEnums, SysMenuTreeResponse } from '@/service/model/system/menu.model'
 import { queryToolsMenuTree } from '@/service/api/tools.api'
 import { TreeNodeData, TreeOptionProps } from 'element-plus/es/components/tree/src/tree.type'
 
@@ -32,7 +32,7 @@ const menuTree = ref<SysMenuTreeResponse>([])
 const menuTreeProps: TreeOptionProps = {
   label: 'menuName',
   disabled: (item: TreeNodeData) => {
-    if (item.frameFlag === MenuLinkEnums.YES) {
+    if (item.frameFlag === MenuCommonStatus.YES) {
       return true
     }
     if (props.type) {
