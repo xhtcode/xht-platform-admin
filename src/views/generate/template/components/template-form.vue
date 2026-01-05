@@ -133,7 +133,7 @@ const codeChange = (value?: string) => {
         </el-form-item>
       </el-col>
       <el-col :span="4" class="text-center">
-        <el-button :disabled="loadingStatus" type="primary" @click="submitForm">
+        <el-button type="primary" :disabled="loadingStatus" @click="submitForm">
           {{ addUpdateForm.isNew ? '保存模板' : '修改模板' }}
         </el-button>
       </el-col>

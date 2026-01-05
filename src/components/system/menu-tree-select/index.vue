@@ -1,12 +1,14 @@
 <script lang="ts" setup>
-import { MenuCommonStatus, MenuTypeEnums, SysMenuTreeResponse } from '@/service/model/system/menu.model'
+import { MenuCommonStatus, MenuTypeEnums, type SysMenuTreeResponse } from '@/service/model/system/menu.model'
 import { queryToolsMenuTree } from '@/service/api/tools.api'
-import { TreeNodeData, TreeOptionProps } from 'element-plus/es/components/tree/src/tree.type'
+import type { TreeNodeData, TreeOptionProps } from 'element-plus/es/components/tree/src/tree.type'
+import type { MenuTreeSelectProps } from '@/components/system/menu-tree-select/types'
+import type { TreeInstance } from 'element-plus'
 
 defineOptions({ name: 'MenuTreeSelect' })
 
-const props = withDefaults(defineProps<Props>(), {
-  modelValue: '0',
+const props = withDefaults(defineProps<MenuTreeSelectProps>(), {
+  id: undefined,
   placeholder: '请选择父菜单',
   clearable: true,
   disabled: false,
@@ -14,24 +16,17 @@ const props = withDefaults(defineProps<Props>(), {
   type: undefined,
 })
 
-const emits = defineEmits(['update:modelValue', 'change'])
+const emits = defineEmits(['change'])
 
-interface Props {
-  modelValue?: string
-  placeholder?: string
-  disabled?: boolean
-  clearable?: boolean
-  showTopMenu?: boolean
-  multiple?: boolean
-  type?: 'M' | 'C'
-}
-
-const menuSelectTreeRef = ref<any>()
-const modelValue = useVModel(props, 'modelValue', emits)
+const menuSelectTreeRef = useTemplateRef<TreeInstance>('menuSelectTreeRef')
+const modelValue = defineModel<string>('modelValue')
 const menuTree = ref<SysMenuTreeResponse>([])
 const menuTreeProps: TreeOptionProps = {
   label: 'menuName',
   disabled: (item: TreeNodeData) => {
+    if (item.id === props.id) {
+      return true
+    }
     if (item.frameFlag === MenuCommonStatus.YES) {
       return true
     }
@@ -67,13 +62,13 @@ const getMenuTree = async () => {
 /**
  * 选择时进行数据双向绑定
  */
-const handleChange = () => {
+const handleChange = (item: TreeNodeData) => {
   if (!modelValue.value) return
   if (!props.multiple) {
-    const menuNode = menuSelectTreeRef.value.getNode(modelValue.value)?.data
+    const menuNode = menuSelectTreeRef.value?.getNode(item)?.data
     emits('change', menuNode)
   } else {
-    emits('change', JSON.stringify(menuSelectTreeRef.value.getCheckedNodes()))
+    emits('change', menuSelectTreeRef.value?.getCheckedNodes() || [])
   }
 }
 onMounted(() => {
@@ -98,7 +93,7 @@ onMounted(() => {
     highlight-current
     class="user-select-display"
     node-key="id"
-    @change="handleChange()"
+    @change="handleChange"
   />
 </template>
 

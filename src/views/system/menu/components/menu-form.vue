@@ -126,7 +126,7 @@ defineExpose({
       <el-row>
         <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="上级菜单" prop="parentId">
-            <menu-tree-select v-model="addUpdateForm.parentId" show-top-menu :type="isB ? 'M' : 'C'" />
+            <menu-tree-select v-model="addUpdateForm.parentId" :id="addUpdateForm.id" show-top-menu :type="isB ? 'M' : 'C'" />
           </el-form-item>
         </el-col>
         <el-col :lg="12" :sm="24" :xs="24">

@@ -1,4 +1,4 @@
-import { BasicFormRequest } from '@/service/model/base.model'
+import { BasicFormRequest, type INodeResponse } from '@/service/model/base.model'
 
 /**
  * 增删改查 基础字段设置
@@ -42,6 +42,21 @@ declare global {
     loadingStatus: boolean // 加载状态
     singleStatus: boolean // 单个操作禁用状态
     multipleStatus: boolean // 多个操作禁用状态
+    [key: string]: T
+  }
+
+  /**
+   * 表格查询树形状态
+   */
+  export interface TableQueryTreeState<Req extends PageQueryRequest, Res extends BasicResponse> {
+    total: number // 总条目数
+    pages: number // 总页数
+    loadingStatus: boolean // 加载状态
+    refreshTable: boolean // 刷新表格状态
+    expandAllStatus: boolean // 展开所有状态
+    searchStatus: boolean // 是否显示搜索区域
+    queryParams: Req // 查询参数
+    tableList: INodeResponse<Res>[] // 表格数据列表
   }
 }
 export {}

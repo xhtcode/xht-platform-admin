@@ -139,9 +139,27 @@ onMounted(async () => {
         search-status
         @refresh="handleQuery"
       >
-        <el-button :icon="Plus" size="small" type="primary" @click="handleAdd">新增</el-button>
-        <el-button :disabled="state.singleStatus" :icon="Edit" size="small" type="success" @click="handleEdit(state.selectedRows[0])">修改</el-button>
-        <el-button :disabled="state.multipleStatus" :icon="Delete" size="small" type="danger" @click="handleDelete(undefined)">批量删除</el-button>
+        <el-button :icon="Plus" size="small" type="primary" @click="handleAdd" v-authorization="['sys:dict:create']">新增</el-button>
+        <el-button
+          :icon="Edit"
+          size="small"
+          type="success"
+          :disabled="state.singleStatus"
+          @click="handleEdit(state.selectedRows[0])"
+          v-authorization="['sys:dict:update']"
+        >
+          修改
+        </el-button>
+        <el-button
+          :icon="Delete"
+          size="small"
+          type="danger"
+          :disabled="state.multipleStatus"
+          @click="handleDelete(undefined)"
+          v-authorization="['sys:dict:remove']"
+        >
+          批量删除
+        </el-button>
       </table-tool-bar>
       <el-table
         v-loading="state.loadingStatus"

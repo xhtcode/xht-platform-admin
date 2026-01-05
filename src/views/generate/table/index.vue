@@ -163,7 +163,7 @@ onMounted(async () => {
       </el-form>
       <table-tool-bar v-model:column-data="columnOption" v-model:show-search="state.searchStatus" column-status refresh-status @refresh="handleQuery">
         <el-button :icon="Download" size="small" type="primary" @click="handleImport">导入</el-button>
-        <el-button :disabled="state.singleStatus" :icon="Edit" size="small" type="success" @click="handleEdit(state.selectedRows[0])">修改</el-button>
+        <el-button :icon="Edit" size="small" type="success" :disabled="state.singleStatus" @click="handleEdit(state.selectedRows[0])">修改</el-button>
         <el-button :disabled="state.multipleStatus" :icon="Download" size="small" type="warning" @click="handleDownload()">批量下载</el-button>
         <el-button :disabled="state.multipleStatus" :icon="View" size="small" type="warning" @click="handleCodeView()">代码预览</el-button>
       </table-tool-bar>

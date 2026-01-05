@@ -175,11 +175,27 @@ const handleDeptClick = (data: SysDeptResponse) => {
           search-status
           @refresh="queryPostData"
         >
-          <el-button :icon="Plus" size="small" type="primary" @click="handleAdd">新增</el-button>
-          <el-button :disabled="state.singleStatus" :icon="Edit" size="small" type="success" @click="handleEdit(state.selectedRows[0])">
+          <el-button :icon="Plus" size="small" type="primary" @click="handleAdd" v-authorization="['sys:dict:create']">新增</el-button>
+          <el-button
+            :icon="Edit"
+            size="small"
+            type="success"
+            :disabled="state.singleStatus"
+            @click="handleEdit(state.selectedRows[0])"
+            v-authorization="['sys:post:update']"
+          >
             修改
           </el-button>
-          <el-button :disabled="state.multipleStatus" :icon="Delete" size="small" type="danger" @click="handleBatchDelete">批量删除</el-button>
+          <el-button
+            :icon="Delete"
+            size="small"
+            type="danger"
+            :disabled="state.multipleStatus"
+            @click="handleBatchDelete"
+            v-authorization="['sys:post:remove']"
+          >
+            批量删除
+          </el-button>
         </table-tool-bar>
         <el-table
           v-loading="state.loadingStatus"
@@ -222,8 +238,8 @@ const handleDeptClick = (data: SysDeptResponse) => {
           <el-table-column v-if="columnOption.updateTime?.visible" label="更新时间" prop="updateTime" width="180" />
           <el-table-column fixed="right" label="操作" width="260px">
             <template #default="{ row }">
-              <el-button :icon="Edit" link type="success" @click="handleEdit(row)">修改</el-button>
-              <el-button :icon="Delete" link type="danger" @click="handleDelete(row)">删除</el-button>
+              <el-button :icon="Edit" link type="success" @click="handleEdit(row)" v-authorization="['sys:post:update']">修改</el-button>
+              <el-button :icon="Delete" link type="danger" @click="handleDelete(row)" v-authorization="['sys:post:remove']">删除</el-button>
             </template>
           </el-table-column>
         </el-table>

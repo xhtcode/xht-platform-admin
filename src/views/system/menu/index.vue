@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { querySysMenuTree, removeSysMenuById } from '@/service/api/system/menu.api'
-import { MenuCommonStatus, SysMenuQueryRequest, SysMenuResponse, SysMenuTreeResponse } from '@/service/model/system/menu.model'
+import { SysMenuQueryRequest, SysMenuResponse, SysMenuTreeResponse } from '@/service/model/system/menu.model'
 import { MenuStatusEnums, MenuTypeEnums } from '@/service/model/system/menu.model'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { FormInstance } from 'element-plus'
@@ -162,7 +162,7 @@ onMounted(async () => {
         search-status
         @refresh="handleQuery"
       >
-        <el-button :icon="Plus" size="small" type="primary" @click="handleAdd">增加</el-button>
+        <el-button :icon="Plus" size="small" type="primary" @click="handleAdd" v-authorization="['sys:menu:create']">增加</el-button>
         <el-button :icon="Sort" size="small" type="info" @click="handleExpandAll">折叠/展开</el-button>
       </table-tool-bar>
       <el-table
@@ -175,7 +175,7 @@ onMounted(async () => {
         row-key="id"
         empty-text="暂无匹配系统菜单数据 🔍 试试调整筛选条件吧！"
       >
-        <el-table-column v-if="columnOption.menuType?.visible" align="left" fixed="left" label="菜单类型" min-width="160" prop="menuType">
+        <el-table-column v-if="columnOption.menuType?.visible" align="left" fixed="left" label="菜单类型" width="160" prop="menuType">
           <template #default="{ row }">
             <el-tag :type="row.menuType === MenuTypeEnums.M ? 'success' : row.menuType === MenuTypeEnums.C ? 'warning' : 'info'">
               {{ row.menuType === MenuTypeEnums.M ? '目录' : row.menuType === MenuTypeEnums.C ? '菜单' : '按钮' }}
@@ -195,31 +195,6 @@ onMounted(async () => {
             <div :class="`i-menu-${row.menuIcon}`" class="text-16px color-[var(--xht-svg-color)]" />
           </template>
         </el-table-column>
-        <el-table-column v-if="columnOption.menuHidden?.visible" align="center" label="显示状态" min-width="120" prop="menuHidden">
-          <template #default="{ row }">
-            <el-switch
-              :active-value="MenuCommonStatus.YES"
-              :inactive-value="MenuCommonStatus.NO"
-              :model-value="row.menuHidden"
-              active-text="显示"
-              inactive-text="隐藏"
-              inline-prompt
-            />
-          </template>
-        </el-table-column>
-        <el-table-column v-if="columnOption.menuCache?.visible" align="center" label="缓存状态" min-width="120" prop="menuCache">
-          <template #default="{ row }">
-            <el-switch
-              :active-value="MenuCommonStatus.YES"
-              :inactive-value="MenuCommonStatus.NO"
-              :model-value="row.menuCache"
-              active-text="是"
-              inactive-text="否"
-              inline-prompt
-            />
-          </template>
-        </el-table-column>
-
         <el-table-column v-if="columnOption.menuStatus?.visible" align="center" label="菜单状态" min-width="120" prop="menuStatus">
           <template #default="{ row }">
             <el-switch
@@ -232,55 +207,16 @@ onMounted(async () => {
             />
           </template>
         </el-table-column>
-        <el-table-column v-if="columnOption.menuAuthority?.visible" align="center" label="权限标识" min- prop="menuAuthority" width="150" />
+        <el-table-column v-if="columnOption.menuAuthority?.visible" align="center" label="权限标识" prop="menuAuthority" width="150" />
         <el-table-column v-if="columnOption.menuSort?.visible" align="center" label="排序" min-width="80" prop="menuSort" />
-        <el-table-column
-          v-if="columnOption.viewPath?.visible"
-          align="center"
-          label="组件视图"
-          min-width="360"
-          prop="viewPath"
-          show-overflow-tooltip
-          width="400"
-        >
-          <template #default="{ row }">
-            <ElTag v-if="row.viewName" type="warning">{{ row.viewName }}</ElTag>
-            <ElLink v-if="row.viewName" type="primary">{{ row.viewPath }}</ElLink>
-          </template>
-        </el-table-column>
-        <el-table-column v-if="columnOption.frameFlag?.visible" align="center" label="外链" min-width="80" prop="frameFlag">
-          <template #default="{ row }">
-            <el-switch
-              v-model="row.frameFlag"
-              :active-value="MenuCommonStatus.YES"
-              :inactive-value="MenuCommonStatus.NO"
-              active-text="是"
-              inactive-text="否"
-              inline-prompt
-            />
-          </template>
-        </el-table-column>
-        <el-table-column
-          v-if="columnOption.menuPath?.visible"
-          align="center"
-          label="路由地址"
-          min-width="220"
-          prop="menuPath"
-          show-overflow-tooltip
-          width="260"
-        >
-          <template #default="{ row }">
-            <el-link type="default">{{ row.menuPath }}</el-link>
-          </template>
-        </el-table-column>
         <el-table-column v-if="columnOption.createBy?.visible" label="创建人" prop="createBy" width="160" />
         <el-table-column v-if="columnOption.createTime?.visible" label="创建时间" prop="createTime" width="180" />
         <el-table-column v-if="columnOption.updateBy?.visible" label="更新人" prop="updateBy" width="160" />
         <el-table-column v-if="columnOption.updateTime?.visible" label="更新时间" prop="updateTime" width="180" />
         <el-table-column align="center" fixed="right" label="操作" width="220px">
           <template #default="{ row }">
-            <el-button :icon="Edit" link type="success" @click="handleEdit(row)">修改</el-button>
-            <el-button :icon="Delete" link type="danger" @click="handleDelete(row)">删除</el-button>
+            <el-button :icon="Edit" link type="success" @click="handleEdit(row)" v-authorization="['sys:menu:update']">修改</el-button>
+            <el-button :icon="Delete" link type="danger" @click="handleDelete(row)" v-authorization="['sys:menu:remove']">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
