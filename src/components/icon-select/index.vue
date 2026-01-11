@@ -88,7 +88,7 @@ onMounted(() => {
         </el-icon>
       </template>
     </el-input>
-    <el-dialog v-model="dialogVisible" :before-close="closeDialog" :title="props.title" modal-class="icon-select-modal" align-center width="45%">
+    <el-dialog v-model="dialogVisible" width="45%" :before-close="closeDialog" :title="props.title" modal-class="icon-select-modal" align-center>
       <el-input
         v-model="modelValue"
         autofocus

@@ -1,10 +1,15 @@
 <script lang="ts" setup>
 import { CaretBottom, List, Lock, SwitchButton, UserFilled } from '@element-plus/icons-vue'
-import aa from '@/assets/images/title-boy.jpg'
 import { useUserInfoStore } from '@/store/modules/user.store'
 import { storeToRefs } from 'pinia'
+import { useRouter } from 'vue-router'
+import { useMessage } from '@/hooks/use-message'
 
 defineOptions({ name: 'UserAvatar' })
+
+const router = useRouter()
+const permissions = useUserInfoStore()
+const { userInfo, getUserInfoPage } = storeToRefs(permissions)
 
 /**
  * 打开操作
@@ -13,6 +18,9 @@ defineOptions({ name: 'UserAvatar' })
 const openDialog = (type: 'infoRef' | 'passwordRef' | 'logout') => {
   switch (type) {
     case 'infoRef':
+      router.push(getUserInfoPage.value).catch((_) => {
+        useMessage().error('路由错误，请联系管理员!')
+      })
       break
     case 'passwordRef':
       break
@@ -20,9 +28,6 @@ const openDialog = (type: 'infoRef' | 'passwordRef' | 'logout') => {
       break
   }
 }
-
-const permissions = useUserInfoStore()
-const { userInfo } = storeToRefs(permissions)
 </script>
 
 <template>

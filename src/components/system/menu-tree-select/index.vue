@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { MenuCommonStatus, MenuTypeEnums, type SysMenuTreeResponse } from '@/service/model/system/menu.model'
-import { queryToolsMenuTree } from '@/service/api/tools.api'
+import { queryToolsMenuTree } from '@/service/api/system/menu.api'
 import type { TreeNodeData, TreeOptionProps } from 'element-plus/es/components/tree/src/tree.type'
 import type { MenuTreeSelectProps } from '@/components/system/menu-tree-select/types'
 import type { TreeInstance } from 'element-plus'
@@ -21,6 +21,7 @@ const emits = defineEmits(['change'])
 const menuSelectTreeRef = useTemplateRef<TreeInstance>('menuSelectTreeRef')
 const modelValue = defineModel<string>('modelValue')
 const menuTree = ref<SysMenuTreeResponse>([])
+const loadingStatus = ref<boolean>(false)
 const menuTreeProps: TreeOptionProps = {
   label: 'menuName',
   disabled: (item: TreeNodeData) => {
@@ -42,6 +43,7 @@ const menuTreeProps: TreeOptionProps = {
  */
 const getMenuTree = async () => {
   try {
+    loadingStatus.value = true
     const response = await queryToolsMenuTree()
     let treeData = response.data
     // 如果需要显示顶级菜单选项
@@ -57,6 +59,8 @@ const getMenuTree = async () => {
     menuTree.value = treeData
   } catch (error) {
     console.error('获取菜单树数据失败:', error)
+  } finally {
+    loadingStatus.value = false
   }
 }
 /**
@@ -80,6 +84,7 @@ onMounted(() => {
   <el-tree-select
     ref="menuSelectTreeRef"
     v-model="modelValue"
+    v-loading="loadingStatus"
     :data="menuTree"
     filterable
     :empty-text="`暂无菜单数据`"

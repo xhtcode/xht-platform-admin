@@ -111,124 +111,122 @@ onMounted(async () => {
 
 <template>
   <div class="xht-view-container">
-    <div class="xht-view-main">
-      <el-form ref="queryFormRef" :disabled="state.loadingStatus" :model="queryParams" class="user-select-display" label-width="80px">
-        <el-row v-if="!state.searchStatus">
-          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
-            <el-form-item label="关键字" prop="keyWord">
-              <el-input v-model="queryParams.keyWord" :maxlength="100" placeholder="请输入关键字" show-word-limit />
-            </el-form-item>
-          </el-col>
-          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
-            <el-button :icon="Search" type="primary" @click="handleQuery">查询</el-button>
-            <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
-          </el-col>
-        </el-row>
-        <el-row v-else>
-          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
-            <el-form-item label="角色名称" prop="roleName">
-              <el-input v-model="queryParams.roleName" placeholder="请输入角色名称" />
-            </el-form-item>
-          </el-col>
-          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
-            <el-form-item label="角色编码" prop="roleCode">
-              <el-input v-model="queryParams.roleCode" placeholder="请输入角色编码" />
-            </el-form-item>
-          </el-col>
-          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
-            <el-form-item label="角色状态" prop="roleStatus">
-              <el-select v-model="queryParams.roleStatus" clearable placeholder="请选择角色状态">
-                <el-option :value="RoleStatusEnums.NORMAL" label="正常" />
-                <el-option :value="RoleStatusEnums.DISABLE" label="停用" />
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
-            <el-button :icon="Search" type="primary" @click="handleQuery">查询</el-button>
-            <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
-          </el-col>
-        </el-row>
-      </el-form>
-      <table-tool-bar
-        v-model:column-data="columnOption"
-        v-model:show-search="state.searchStatus"
-        column-status
-        refresh-status
-        search-status
-        @refresh="handleQuery"
+    <el-form ref="queryFormRef" :disabled="state.loadingStatus" :model="queryParams" class="user-select-display" label-width="80px">
+      <el-row v-if="!state.searchStatus">
+        <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
+          <el-form-item label="关键字" prop="keyWord">
+            <el-input v-model="queryParams.keyWord" :maxlength="100" placeholder="请输入关键字" show-word-limit />
+          </el-form-item>
+        </el-col>
+        <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
+          <el-button :icon="Search" type="primary" @click="handleQuery">查询</el-button>
+          <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
+        </el-col>
+      </el-row>
+      <el-row v-else>
+        <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
+          <el-form-item label="角色名称" prop="roleName">
+            <el-input v-model="queryParams.roleName" placeholder="请输入角色名称" />
+          </el-form-item>
+        </el-col>
+        <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
+          <el-form-item label="角色编码" prop="roleCode">
+            <el-input v-model="queryParams.roleCode" placeholder="请输入角色编码" />
+          </el-form-item>
+        </el-col>
+        <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
+          <el-form-item label="角色状态" prop="roleStatus">
+            <el-select v-model="queryParams.roleStatus" clearable placeholder="请选择角色状态">
+              <el-option :value="RoleStatusEnums.NORMAL" label="正常" />
+              <el-option :value="RoleStatusEnums.DISABLE" label="停用" />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
+          <el-button :icon="Search" type="primary" @click="handleQuery">查询</el-button>
+          <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
+        </el-col>
+      </el-row>
+    </el-form>
+    <table-tool-bar
+      v-model:column-data="columnOption"
+      v-model:show-search="state.searchStatus"
+      column-status
+      refresh-status
+      search-status
+      @refresh="handleQuery"
+    >
+      <el-button :icon="Plus" size="small" type="primary" @click="handleAdd" v-authorization="['sys:role:create']">新增</el-button>
+      <el-button
+        :icon="Edit"
+        size="small"
+        type="success"
+        :disabled="state.singleStatus"
+        @click="handleEdit(state.selectedRows[0])"
+        v-authorization="['sys:role:update']"
       >
-        <el-button :icon="Plus" size="small" type="primary" @click="handleAdd" v-authorization="['sys:role:create']">新增</el-button>
-        <el-button
-          :icon="Edit"
-          size="small"
-          type="success"
-          :disabled="state.singleStatus"
-          @click="handleEdit(state.selectedRows[0])"
-          v-authorization="['sys:role:update']"
-        >
-          修改
-        </el-button>
-        <el-button
-          :icon="Delete"
-          size="small"
-          type="danger"
-          :disabled="state.multipleStatus"
-          @click="handleBatchDelete"
-          v-authorization="['sys:role:remove']"
-        >
-          批量删除
-        </el-button>
-      </table-tool-bar>
-      <el-table
-        v-loading="state.loadingStatus"
-        :data="state.tableList"
-        border
-        row-key="id"
-        empty-text="系统暂无角色！"
-        @selection-change="handleSelectionChange"
+        修改
+      </el-button>
+      <el-button
+        :icon="Delete"
+        size="small"
+        type="danger"
+        :disabled="state.multipleStatus"
+        @click="handleBatchDelete"
+        v-authorization="['sys:role:remove']"
       >
-        <el-table-column align="center" type="selection" width="55" />
-        <xht-column-index :current="queryParams.current" :size="queryParams.size" />
-        <el-table-column v-if="columnOption.roleName?.visible" label="角色名称" min-width="120" prop="roleName" />
-        <el-table-column v-if="columnOption.roleCode?.visible" label="角色编码" min-width="160" prop="roleCode" />
-        <el-table-column v-if="columnOption.roleStatus?.visible" label="角色状态" prop="roleStatus" width="100">
-          <template #default="{ row }">
-            <el-tag :type="row.roleStatus === 0 ? 'success' : 'danger'">
-              {{ row.roleStatus === 0 ? '正常' : '停用' }}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column v-if="columnOption.dataScope?.visible" label="数据范围" prop="dataScope" width="160">
-          <template #default="{ row }">
-            <el-tag v-if="row.dataScope === 1" effect="dark" type="primary">全部数据权限</el-tag>
-            <el-tag v-if="row.dataScope === 2" effect="dark" type="success">自定数据权限</el-tag>
-            <el-tag v-if="row.dataScope === 3" effect="dark" type="info">本部门数据权限</el-tag>
-            <el-tag v-if="row.dataScope === 4" effect="dark" type="warning">本部门及以下数据权限</el-tag>
-            <el-tag v-if="row.dataScope === 5" effect="dark" type="danger">本岗位数据权限</el-tag>
-            <el-tag v-if="row.dataScope === 6" color="#F2F6FC" effect="dark">仅本人数据权限</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column v-if="columnOption.roleSort?.visible" label="显示顺序" prop="roleSort" width="120" />
-        <el-table-column v-if="columnOption.createBy?.visible" label="创建人" prop="createBy" width="160" />
-        <el-table-column v-if="columnOption.createTime?.visible" label="创建时间" prop="createTime" width="180" />
-        <el-table-column v-if="columnOption.updateBy?.visible" label="更新人" prop="updateBy" width="160" />
-        <el-table-column v-if="columnOption.updateTime?.visible" label="更新时间" prop="updateTime" width="180" />
-        <el-table-column fixed="right" label="操作" width="260px">
-          <template #default="{ row }">
-            <el-button icon="Edit" link type="success" @click="handleEdit(row)" v-authorization="['sys:role:update']">修改</el-button>
-            <el-button icon="Delete" link type="danger" @click="handleDelete(row)" v-authorization="['sys:role:remove']">删除</el-button>
-            <el-button icon="setting" link type="warning" @click="handleAuth(row)" v-authorization="['sys:role:menu:bind']">分配权限</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <xht-pagination
-        v-model:current-page="state.queryParams.current"
-        v-model:page-size="state.queryParams.size"
-        :page-count="state.pages"
-        :total="state.total"
-        @pagination="handleQuery"
-      />
-    </div>
+        批量删除
+      </el-button>
+    </table-tool-bar>
+    <el-table
+      v-loading="state.loadingStatus"
+      :data="state.tableList"
+      border
+      row-key="id"
+      empty-text="系统暂无角色！"
+      @selection-change="handleSelectionChange"
+    >
+      <el-table-column align="center" type="selection" width="55" />
+      <xht-column-index :current="queryParams.current" :size="queryParams.size" />
+      <el-table-column v-if="columnOption.roleName?.visible" label="角色名称" min-width="120" prop="roleName" />
+      <el-table-column v-if="columnOption.roleCode?.visible" label="角色编码" min-width="160" prop="roleCode" />
+      <el-table-column v-if="columnOption.roleStatus?.visible" label="角色状态" prop="roleStatus" width="100">
+        <template #default="{ row }">
+          <el-tag :type="row.roleStatus === 0 ? 'success' : 'danger'">
+            {{ row.roleStatus === 0 ? '正常' : '停用' }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column v-if="columnOption.dataScope?.visible" label="数据范围" prop="dataScope" width="160">
+        <template #default="{ row }">
+          <el-tag v-if="row.dataScope === 1" effect="dark" type="primary">全部数据权限</el-tag>
+          <el-tag v-if="row.dataScope === 2" effect="dark" type="success">自定数据权限</el-tag>
+          <el-tag v-if="row.dataScope === 3" effect="dark" type="info">本部门数据权限</el-tag>
+          <el-tag v-if="row.dataScope === 4" effect="dark" type="warning">本部门及以下数据权限</el-tag>
+          <el-tag v-if="row.dataScope === 5" effect="dark" type="danger">本岗位数据权限</el-tag>
+          <el-tag v-if="row.dataScope === 6" color="#F2F6FC" effect="dark">仅本人数据权限</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column v-if="columnOption.roleSort?.visible" label="显示顺序" prop="roleSort" width="120" />
+      <el-table-column v-if="columnOption.createBy?.visible" label="创建人" prop="createBy" width="160" />
+      <el-table-column v-if="columnOption.createTime?.visible" label="创建时间" prop="createTime" width="180" />
+      <el-table-column v-if="columnOption.updateBy?.visible" label="更新人" prop="updateBy" width="160" />
+      <el-table-column v-if="columnOption.updateTime?.visible" label="更新时间" prop="updateTime" width="180" />
+      <el-table-column fixed="right" label="操作" width="260px">
+        <template #default="{ row }">
+          <el-button icon="Edit" link type="success" @click="handleEdit(row)" v-authorization="['sys:role:update']">修改</el-button>
+          <el-button icon="Delete" link type="danger" @click="handleDelete(row)" v-authorization="['sys:role:remove']">删除</el-button>
+          <el-button icon="setting" link type="warning" @click="handleAuth(row)" v-authorization="['sys:role:menu:bind']">分配权限</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <xht-pagination
+      v-model:current-page="state.queryParams.current"
+      v-model:page-size="state.queryParams.size"
+      :page-count="state.pages"
+      :total="state.total"
+      @pagination="handleQuery"
+    />
     <role-from ref="roleFormRef" @success="handleQuery" />
     <menu-role-form ref="menuRoleFormRef" />
   </div>

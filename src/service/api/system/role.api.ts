@@ -22,6 +22,7 @@ enum Api {
   QUERY_PAGE = '/sys/role/page',
   QUERY_MENU_BY_ROLE_ID = '/sys/role/select/menu/',
   BIND_MENU_ROLE = '/sys/role/menu/bind',
+  QUERY_ROLE_LIST = '/sys/role/list',
 }
 
 /**
@@ -120,5 +121,16 @@ export const roleMenuBind = (data: SysRoleMenuBindForm): AxiosPromise<any[]> => 
     baseURL,
     method: 'post',
     data: data,
+  })
+}
+
+/**
+ * 查询树形结构菜单
+ */
+export const queryToolsRoleList = (): AxiosPromise<SysRoleResponse[]> => {
+  return request({
+    url: Api.QUERY_ROLE_LIST,
+    baseURL,
+    method: 'get',
   })
 }

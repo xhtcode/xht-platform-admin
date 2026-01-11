@@ -3,9 +3,7 @@ defineOptions({ name: 'HomeCommonViewIndex' })
 </script>
 
 <template>
-  <div class="xht-view-container-none">
-    <div class="xht-view-main">HomeCommonViewIndex</div>
-  </div>
+  <div class="xht-view-container-none">HomeCommonViewIndex</div>
 </template>
 
 <style lang="scss" scoped></style>

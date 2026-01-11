@@ -26,11 +26,7 @@ const useTagsStore = defineStore(
     const addVisitedViews = (view: TagsViewType) => {
       if (!view) return
       if (visitedViews.value.some((v) => v.path === view.path)) return
-      if (view.affixStatus) {
-        visitedViews.value.unshift(view)
-      } else {
-        visitedViews.value.push(view)
-      }
+      visitedViews.value.push(view)
     }
 
     /**

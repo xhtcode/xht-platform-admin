@@ -84,7 +84,7 @@ export const SysUserColumnOption: ColumnConfig<SysUserResponse> = {
   nickName: { desc: '用户昵称', visible: true, disabled: true },
   userType: { desc: '用户类型', visible: true, disabled: false },
   userStatus: { desc: '用户状态', visible: true, disabled: false },
-  userPhone: { desc: '手机号码', visible: true, disabled: false },
+  userPhone: { desc: '手机号码', visible: false, disabled: false },
   createBy: { desc: '创建人', visible: false, disabled: false },
   createTime: { desc: '创建时间', visible: false, disabled: false },
   updateBy: { desc: '更新人', visible: false, disabled: false },

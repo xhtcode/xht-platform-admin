@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { SysMenuTreeResponse } from '@/service/model/system/menu.model'
 import { MenuTypeEnums } from '@/service/model/system/menu.model'
-import { queryToolsMenuTree } from '@/service/api/tools.api'
+import { queryToolsMenuTree } from '@/service/api/system/menu.api'
 
 defineOptions({ name: 'MenuTree' })
 

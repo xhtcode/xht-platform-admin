@@ -52,6 +52,11 @@ export const useUserInfoStore = defineStore(
     const getAccessToken = computed<string>(() => token.value.access_token!)
 
     /**
+     * 获取用户信息页面的计算属性
+     */
+    const getUserInfoPage = computed<string>(() => (isAdmin.value ? '/home/user/admin' : '/home/user'))
+
+    /**
      * 用户登录方法
      * 通过用户名密码进行登录，获取认证令牌
      * @param data 登录请求数据
@@ -132,6 +137,7 @@ export const useUserInfoStore = defineStore(
       hasToken,
       hasRoles,
       getAccessToken,
+      getUserInfoPage,
       login,
       logout,
       getUserInfos,

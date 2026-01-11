@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import type { ModeIdType } from '@/service/model/base.model'
-import { getBindUser } from '@/service/api/tools.api'
 import { DeptUserProps, UserSimpleVo } from '@/service/model/system/user.model'
 import { useMessage } from '@/hooks/use-message'
 
@@ -31,14 +30,14 @@ const show = async (deptId: ModeIdType) => {
   try {
     state.visibleStatus = true
     state.loadingStatus = true
-    const { data } = await getBindUser(deptId)
-    state.userList = data
-    for (const item of data) {
-      if (item.userId === props.modelValue) {
-        tableRef.value?.setCurrentRow(item)
-        break
-      }
-    }
+    // const { data } = await getBindUser(deptId)
+    // state.userList = data
+    // for (const item of data) {
+    //   if (item.userId === props.modelValue) {
+    //     tableRef.value?.setCurrentRow(item)
+    //     break
+    //   }
+    // }
   } finally {
     state.loadingStatus = false
   }
@@ -89,7 +88,7 @@ defineExpose({
 <template>
   <el-dialog
     v-model="state.visibleStatus"
-    width="auto"
+    width="80%"
     append-to-body
     :close-on-click-modal="false"
     :show-close="!state.loadingStatus"
@@ -110,22 +109,21 @@ defineExpose({
       :data="state.userList"
       :row-class-name="handleRowClassName"
       empty-text="暂无用户数据"
-      height="65vh"
       highlight-current-row
       border
       row-key="userId"
       @row-dblclick="submitForm"
       @current-change="handleCurrentChange"
     >
-      <el-table-column label="序号" type="index" width="60" />
-      <el-table-column label="用户头像" prop="avatarUrl" width="100">
+      <el-table-column label="序号" type="index" />
+      <el-table-column label="用户头像" prop="avatarUrl">
         <template #default="{ row }">
           <el-avatar :src="row.avatarUrl" alt="用户头像" />
         </template>
       </el-table-column>
-      <el-table-column label="用户账号" prop="userName" width="160" />
-      <el-table-column label="用户昵称" prop="nickName" width="160" />
-      <el-table-column label="账号状态" prop="userStatus" width="120">
+      <el-table-column label="用户账号" prop="userName" />
+      <el-table-column label="用户昵称" prop="nickName" />
+      <el-table-column label="账号状态" prop="userStatus">
         <template #default="{ row }">
           <user-status-tag :status="row.userStatus" />
         </template>

@@ -14,6 +14,7 @@ enum Api {
   REMOVE = '/sys/menu/remove/',
   QUERY_BY_ID = '/sys/menu/get/',
   QUERY_TREE = '/sys/menu/tree',
+  QUERY_MENU_TREE = '/sys/menu/tree/system',
 }
 
 /**
@@ -71,5 +72,16 @@ export const querySysMenuTree = (data?: SysMenuQueryRequest): AxiosPromise<SysMe
     baseURL,
     method: 'get',
     params: data,
+  })
+}
+
+/**
+ * 查询树形结构菜单
+ */
+export const queryToolsMenuTree = (): AxiosPromise<SysMenuTreeResponse> => {
+  return request({
+    url: Api.QUERY_MENU_TREE,
+    baseURL,
+    method: 'get',
   })
 }

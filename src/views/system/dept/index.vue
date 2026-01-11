@@ -99,107 +99,105 @@ onMounted(async () => {
 
 <template>
   <div class="xht-view-container">
-    <div class="xht-view-main">
-      <el-form ref="queryFormRef" :disabled="state.loadingStatus" :model="queryParams" class="user-select-display" label-width="80px">
-        <el-row v-if="!state.searchStatus">
-          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
-            <el-form-item label="关键字" prop="keyWord">
-              <el-input v-model="queryParams.keyWord" :maxlength="100" placeholder="请输入关键字" show-word-limit />
-            </el-form-item>
-          </el-col>
-          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
-            <el-button :icon="Search" type="primary" @click="handleQuery()">查询</el-button>
-            <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
-          </el-col>
-        </el-row>
-        <el-row v-else>
-          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
-            <el-form-item label="部门名称" prop="deptName">
-              <el-input v-model="queryParams.deptName" placeholder="请输入部门名称" />
-            </el-form-item>
-          </el-col>
-          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
-            <el-form-item label="部门编码" prop="deptCode">
-              <el-input v-model="queryParams.deptCode" placeholder="请输入部门编码" />
-            </el-form-item>
-          </el-col>
-          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
-            <el-form-item label="部门状态" prop="deptStatus">
-              <el-select v-model="queryParams.deptStatus" placeholder="请选择部门状态">
-                <el-option :value="DeptStatusEnums.NORMAL" label="正常" />
-                <el-option :value="DeptStatusEnums.DISABLE" label="停用" />
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
-            <el-button :icon="Search" type="primary" @click="handleQuery()">查询</el-button>
-            <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
-          </el-col>
-        </el-row>
-      </el-form>
-      <table-tool-bar
-        v-model:column-data="columnOption"
-        v-model:show-search="state.searchStatus"
-        column-status
-        refresh-status
-        search-status
-        @refresh="handleQuery"
-      >
-        <el-button :icon="Plus" size="small" type="primary" @click="handleAdd" v-authorization="['sys:dept:create']">增加</el-button>
-        <el-button :icon="Sort" size="small" type="info" @click="handleExpandAll">折叠/展开</el-button>
-      </table-tool-bar>
-      <el-table
-        v-if="state.refreshTable"
-        ref="tableRef"
-        v-loading="state.loadingStatus"
-        :data="state.tableList"
-        :default-expand-all="state.expandAllStatus"
-        :tree-props="{ children: 'children' }"
-        row-key="id"
-        empty-text="暂无匹配部门数据 🔍 试试调整筛选条件吧！"
-      >
-        <el-table-column v-if="columnOption.deptName?.visible" align="left" fixed="left" label="部门名称" min-width="260" prop="deptName">
-          <template #default="{ row }">
-            <el-text size="large">{{ row.deptName }}：</el-text>
-            <el-text type="info" size="small" class="ml-5">
-              {{ row.deptCode }}
-            </el-text>
-          </template>
-        </el-table-column>
+    <el-form ref="queryFormRef" :disabled="state.loadingStatus" :model="queryParams" class="user-select-display" label-width="80px">
+      <el-row v-if="!state.searchStatus">
+        <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
+          <el-form-item label="关键字" prop="keyWord">
+            <el-input v-model="queryParams.keyWord" :maxlength="100" placeholder="请输入关键字" show-word-limit />
+          </el-form-item>
+        </el-col>
+        <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
+          <el-button :icon="Search" type="primary" @click="handleQuery()">查询</el-button>
+          <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
+        </el-col>
+      </el-row>
+      <el-row v-else>
+        <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
+          <el-form-item label="部门名称" prop="deptName">
+            <el-input v-model="queryParams.deptName" placeholder="请输入部门名称" />
+          </el-form-item>
+        </el-col>
+        <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
+          <el-form-item label="部门编码" prop="deptCode">
+            <el-input v-model="queryParams.deptCode" placeholder="请输入部门编码" />
+          </el-form-item>
+        </el-col>
+        <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
+          <el-form-item label="部门状态" prop="deptStatus">
+            <el-select v-model="queryParams.deptStatus" placeholder="请选择部门状态">
+              <el-option :value="DeptStatusEnums.NORMAL" label="正常" />
+              <el-option :value="DeptStatusEnums.DISABLE" label="停用" />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
+          <el-button :icon="Search" type="primary" @click="handleQuery()">查询</el-button>
+          <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
+        </el-col>
+      </el-row>
+    </el-form>
+    <table-tool-bar
+      v-model:column-data="columnOption"
+      v-model:show-search="state.searchStatus"
+      column-status
+      refresh-status
+      search-status
+      @refresh="handleQuery"
+    >
+      <el-button :icon="Plus" size="small" type="primary" @click="handleAdd" v-authorization="['sys:dept:create']">增加</el-button>
+      <el-button :icon="Sort" size="small" type="info" @click="handleExpandAll">折叠/展开</el-button>
+    </table-tool-bar>
+    <el-table
+      v-if="state.refreshTable"
+      ref="tableRef"
+      v-loading="state.loadingStatus"
+      :data="state.tableList"
+      :default-expand-all="state.expandAllStatus"
+      :tree-props="{ children: 'children' }"
+      row-key="id"
+      empty-text="暂无匹配部门数据 🔍 试试调整筛选条件吧！"
+    >
+      <el-table-column v-if="columnOption.deptName?.visible" align="left" fixed="left" label="部门名称" min-width="260" prop="deptName">
+        <template #default="{ row }">
+          <el-text size="large">{{ row.deptName }}：</el-text>
+          <el-text type="info" size="small" class="ml-5">
+            {{ row.deptCode }}
+          </el-text>
+        </template>
+      </el-table-column>
 
-        <el-table-column v-if="columnOption.leaderName?.visible" align="center" label="部门主管" min-width="160" prop="leaderName" />
-        <el-table-column v-if="columnOption.phone?.visible" align="center" label="联系电话" min-width="160" prop="phone" />
-        <el-table-column v-if="columnOption.email?.visible" align="center" label="联系邮箱" min-width="160" prop="email" show-overflow-tooltip>
-          <template #default="{ row }">
-            <ElLink>{{ row.email }}</ElLink>
-          </template>
-        </el-table-column>
-        <el-table-column v-if="columnOption.deptStatus?.visible" align="center" label="部门状态" prop="deptStatus" width="120">
-          <template #default="{ row }">
-            <el-switch
-              :active-value="DeptStatusEnums.NORMAL"
-              :inactive-value="DeptStatusEnums.DISABLE"
-              :model-value="row.deptStatus"
-              active-text="正常"
-              inactive-text="停用"
-              inline-prompt
-            />
-          </template>
-        </el-table-column>
-        <el-table-column v-if="columnOption.deptSort?.visible" align="center" label="显示顺序" prop="deptSort" width="120" />
-        <el-table-column v-if="columnOption.remark?.visible" align="center" label="部门描述" prop="remark" show-overflow-tooltip width="220" />
-        <el-table-column v-if="columnOption.createBy?.visible" label="创建人" prop="createBy" width="160" />
-        <el-table-column v-if="columnOption.createTime?.visible" label="创建时间" prop="createTime" width="180" />
-        <el-table-column v-if="columnOption.updateBy?.visible" label="更新人" prop="updateBy" width="160" />
-        <el-table-column v-if="columnOption.updateTime?.visible" label="更新时间" prop="updateTime" width="180" />
-        <el-table-column align="center" fixed="right" label="操作" width="220px">
-          <template #default="{ row }">
-            <el-button :icon="Edit" link type="success" @click="handleEdit(row)" v-authorization="['sys:dept:update']">修改</el-button>
-            <el-button :icon="Delete" link type="danger" @click="handleDelete(row)" v-authorization="['sys:dept:remove']">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
+      <el-table-column v-if="columnOption.leaderName?.visible" align="center" label="部门主管" min-width="160" prop="leaderName" />
+      <el-table-column v-if="columnOption.phone?.visible" align="center" label="联系电话" min-width="160" prop="phone" />
+      <el-table-column v-if="columnOption.email?.visible" align="center" label="联系邮箱" min-width="160" prop="email" show-overflow-tooltip>
+        <template #default="{ row }">
+          <ElLink>{{ row.email }}</ElLink>
+        </template>
+      </el-table-column>
+      <el-table-column v-if="columnOption.deptStatus?.visible" align="center" label="部门状态" prop="deptStatus" width="120">
+        <template #default="{ row }">
+          <el-switch
+            :active-value="DeptStatusEnums.NORMAL"
+            :inactive-value="DeptStatusEnums.DISABLE"
+            :model-value="row.deptStatus"
+            active-text="正常"
+            inactive-text="停用"
+            inline-prompt
+          />
+        </template>
+      </el-table-column>
+      <el-table-column v-if="columnOption.deptSort?.visible" align="center" label="显示顺序" prop="deptSort" width="120" />
+      <el-table-column v-if="columnOption.remark?.visible" align="center" label="部门描述" prop="remark" show-overflow-tooltip width="220" />
+      <el-table-column v-if="columnOption.createBy?.visible" label="创建人" prop="createBy" width="160" />
+      <el-table-column v-if="columnOption.createTime?.visible" label="创建时间" prop="createTime" width="180" />
+      <el-table-column v-if="columnOption.updateBy?.visible" label="更新人" prop="updateBy" width="160" />
+      <el-table-column v-if="columnOption.updateTime?.visible" label="更新时间" prop="updateTime" width="180" />
+      <el-table-column align="center" fixed="right" label="操作" width="220px">
+        <template #default="{ row }">
+          <el-button :icon="Edit" link type="success" @click="handleEdit(row)" v-authorization="['sys:dept:update']">修改</el-button>
+          <el-button :icon="Delete" link type="danger" @click="handleDelete(row)" v-authorization="['sys:dept:remove']">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
     <dept-form ref="deptFormRef" @success="handleQuery()" />
   </div>
 </template>

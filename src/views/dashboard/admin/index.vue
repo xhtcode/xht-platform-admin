@@ -4,7 +4,8 @@ defineOptions({ name: 'HomeAdminViewIndex' })
 
 <template>
   <div class="xht-view-container-none">
-    <div class="xht-view-main">HomeAdminViewIndex</div>
+    <div>1</div>
+    <div>2</div>
   </div>
 </template>
 

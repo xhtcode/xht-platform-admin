@@ -21,7 +21,7 @@ const { copy } = useClipboard()
  */
 const state = reactive<CodeViewState>({
   tableIds: [], // 表ID列表
-  packageName: 'com.xht.demo', // 包名
+  packageName: 'com.xht.modules', // 包名
   visibleStatus: false, // 抽屉可见状态
   loadingStatus: false, // 加载状态
   codeData: [], // 代码数据列表
@@ -85,7 +85,7 @@ const handleClickFileName = (item: any) => {
  */
 const close = () => {
   state.tableIds = [] // 表ID列表
-  state.packageName = 'com.xht.demo' // 包名
+  state.packageName = 'com.xht.modules' // 包名
   state.visibleStatus = false // 抽屉可见状态
   state.loadingStatus = false // 加载状态
   state.codeData = [] // 代码数据列表

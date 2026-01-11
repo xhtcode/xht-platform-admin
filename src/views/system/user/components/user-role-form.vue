@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { queryToolsRoleList } from '@/service/api/tools.api'
+import { queryToolsRoleList } from '@/service/api/system/role.api'
 import type { CheckboxValueType } from 'element-plus'
 import { useMessage } from '@/hooks/use-message'
 import { selectRoleIdByUserId, UserRoleBind } from '@/service/api/system/user.api'

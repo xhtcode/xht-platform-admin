@@ -134,7 +134,6 @@ defineExpose({
   justify-content: center;
   user-select: none;
   background: var(--xht-bg-color);
-  padding: 8px;
 
   .dept-tree-container-filter {
     display: flex;
