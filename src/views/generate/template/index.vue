@@ -122,7 +122,7 @@ onMounted(async () => {
       <xht-column-index :current="queryParams.current" :size="queryParams.size" />
       <el-table-column v-if="columnOption.groupName?.visible" label="分组名称" min-width="200" prop="groupName" />
       <el-table-column v-if="columnOption.templateCount?.visible" label="模板数量" min-width="120" prop="templateCount" />
-      <el-table-column v-if="columnOption.groupSort?.visible" label="分组描述" min-width="120" prop="groupSort" />
+      <el-table-column v-if="columnOption.groupSort?.visible" label="分组排序" min-width="120" prop="groupSort" />
       <el-table-column v-if="columnOption.groupDesc?.visible" label="分组描述" min-width="260" prop="groupDesc" show-overflow-tooltip />
       <el-table-column v-if="columnOption.createBy?.visible" label="创建人" prop="createBy" width="160" />
       <el-table-column v-if="columnOption.createTime?.visible" label="创建时间" prop="createTime" width="180" />

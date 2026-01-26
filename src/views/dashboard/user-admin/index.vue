@@ -2,14 +2,13 @@
 import { DataLine, List, Lock, Message, User } from '@element-plus/icons-vue'
 
 defineOptions({
-  name: 'UserAdmin',
+  name: 'UserCommon',
 })
-type UserInfoType = 'UserInfo' | 'PassWord' | 'MyMessage' | 'ToDoWork' | 'LoginLog'
+type UserInfoType = 'UserInfo' | 'PassWord' | 'MyMessage' | 'LoginLog'
 const userInfoComponents: Record<UserInfoType, Component> = {
   UserInfo: defineAsyncComponent(() => import('@/views/dashboard/components/user-info.vue')),
   PassWord: defineAsyncComponent(() => import('@/views/dashboard/components/pass-word.vue')),
   MyMessage: defineAsyncComponent(() => import('@/views/dashboard/components/my-message.vue')),
-  ToDoWork: defineAsyncComponent(() => import('@/views/dashboard/components/to-do-work.vue')),
   LoginLog: defineAsyncComponent(() => import('@/views/dashboard/components/login-log.vue')),
 }
 const activeName = ref<UserInfoType>('UserInfo')
@@ -37,12 +36,8 @@ function handlerClick(type: UserInfoType) {
       </div>
       <div class="user-info-item" :class="activeName === 'MyMessage' ? 'user-info-item-active' : ''" @click="handlerClick('MyMessage')">
         <el-icon><Message /></el-icon>
-        <span class="flex-1">我的信息</span>
+        <span class="flex-1">系统通知</span>
         <el-badge :value="3" />
-      </div>
-      <div class="user-info-item" :class="activeName === 'ToDoWork' ? 'user-info-item-active' : ''" @click="handlerClick('ToDoWork')">
-        <el-icon><List /></el-icon>
-        <span>待办工作</span>
       </div>
       <div class="user-info-item" :class="activeName === 'LoginLog' ? 'user-info-item-active' : ''" @click="handlerClick('LoginLog')">
         <el-icon><DataLine /></el-icon>

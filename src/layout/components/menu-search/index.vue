@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 import RegularUtil from '@/utils/moudle/RegularUtils'
 import { useMessage } from '@/hooks/use-message'
+import { Search } from '@element-plus/icons-vue'
 
 defineOptions({
   name: 'MenuSearch',
@@ -85,7 +86,7 @@ const close = () => {
 const initRestaurants = (data: RouteRecordRaw[]) => {
   if (data) {
     data.forEach((item) => {
-      if (item.meta && !item.meta.hiddenStatus) {
+      if (item.meta && item.meta.hiddenStatus) {
         state.restaurants.push({
           icon: item.meta.icon,
           title: item.meta.title,

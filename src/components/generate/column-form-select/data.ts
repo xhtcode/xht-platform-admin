@@ -24,7 +24,7 @@ const commonOptions: ColumnFormSelectOptionType[] = [
   { label: '日期控件', value: 'date' },
   { label: '图片上传', value: 'image' },
   { label: '文件上传', value: 'file' },
-  { label: '富文本', value: 'upload' },
+  { label: '富文本', value: 'richText' },
 ]
 
 export { dictOptions, commonOptions }

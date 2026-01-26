@@ -118,7 +118,7 @@ defineExpose({
       <el-row>
         <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="角色状态" prop="roleStatus">
-            <el-select v-model="addUpdateForm.roleStatus" placeholder="请选择角色状态">
+            <el-select v-model="addUpdateForm.roleStatus" clearable placeholder="请选择角色状态">
               <el-option :value="RoleStatusEnums.NORMAL" label="正常" />
               <el-option :value="RoleStatusEnums.DISABLE" label="停用" />
             </el-select>
@@ -126,7 +126,7 @@ defineExpose({
         </el-col>
         <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="角色排序" prop="roleSort">
-            <el-input-number v-model="addUpdateForm.roleSort" :max="999" :min="0" class="w100!" placeholder="请输入角色排序" value-on-clear="min" />
+            <el-input-number v-model="addUpdateForm.roleSort" :max="999" :min="0" class="w100!" value-on-clear="min" placeholder="请输入角色排序" />
           </el-form-item>
         </el-col>
       </el-row>

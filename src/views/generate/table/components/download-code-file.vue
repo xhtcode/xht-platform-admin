@@ -17,7 +17,7 @@ const rules: FormRules = {
 const addUpdateForm = reactive<{
   packageName: string
 }>({
-  packageName: 'com.xht.modules',
+  packageName: 'com.xht.demo',
 })
 const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
 const state = reactive<CrudOption>({
