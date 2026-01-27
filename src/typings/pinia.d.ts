@@ -150,11 +150,6 @@ declare global {
      * 从服务端获取当前登录用户的信息
      */
     getUserInfos: () => Promise<void>
-    /**
-     * 重置用户认证信息方法
-     * 清除用户信息、认证令牌及本地存储，并重置路由
-     */
-    resetToken: () => Promise<void>
   }
 
   interface UserInfoType {

@@ -1,5 +1,6 @@
 import { useMessage } from '@/hooks/use-message'
 import _ from 'lodash'
+import { AxiosResponse } from 'axios'
 /**
  * 生成符合 UUID v4 格式的唯一标识符
  *
@@ -22,24 +23,27 @@ const generateUUID = () => {
 
 /**
  * blob 文件流处理
- * @param blob Blob文件流
- * @param fileName 文件名称
+ * @param response axios 请求返回的响应
+ * @param fileName 文件名
  * @returns
  */
-const handleBlobFile = (blob: Blob, fileName: string) => {
-  if (blob && blob.size === 0) {
-    useMessage().error('内容为空，无法下载')
-    return
-  }
+const handleDownloadFile = (response: AxiosResponse, fileName?: string) => {
+  // 获取返回类型
+  const contentType = _.isUndefined(response.headers['content-type']) ? response.headers['Content-Type'] : response.headers['content-type']
+  // 构建下载数据
+  const url = window.URL.createObjectURL(new Blob([response.data], { type: contentType }))
   const link = document.createElement('a')
-  link.href = window.URL.createObjectURL(blob)
-  link.download = fileName
+  link.style.display = 'none'
+  link.href = url
+  link.setAttribute('download', decodeURIComponent(_.isUndefined(fileName) ? response.headers['xht-download-filename'] : fileName))
+  // 触发点击下载
   document.body.appendChild(link)
   link.click()
+  // 下载完释放
   window.setTimeout(function () {
-    URL.revokeObjectURL(blob as any)
-    document.body.removeChild(link)
-    link.remove()
+    // @ts-ignore
+    document.body.removeChild(link) // 下载完成移除元素
+    window.URL.revokeObjectURL(url) // 释放掉blob对象
   }, 0)
 }
 
@@ -55,4 +59,4 @@ function getIntersectionLength(dataArray: string[], checkArray: string[]): numbe
   return _.intersection(dataArray, checkArray)?.length || 0
 }
 
-export { generateUUID, handleBlobFile, getIntersectionLength }
+export { generateUUID, handleDownloadFile, getIntersectionLength }

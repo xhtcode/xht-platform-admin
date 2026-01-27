@@ -11,6 +11,7 @@ declare module 'axios' {
     success: boolean
     code: number
     data: T
+    encryptData?: string
     message: string
     type?: string
 

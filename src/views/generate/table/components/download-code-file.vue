@@ -3,7 +3,7 @@ import type { FormInstance, FormRules } from 'element-plus'
 import type { GenTableInfoResponse } from '@/service/model/generate/table.model'
 import { downloadFileApi } from '@/service/api/generate/table.api'
 import { useMessage } from '@/hooks/use-message'
-import { handleBlobFile } from '@/utils'
+import { handleDownloadFile } from '@/utils'
 
 interface CrudOption {
   visibleStatus: boolean
@@ -47,9 +47,8 @@ const submitForm = () => {
         state.tableList.map((item) => item.id),
         addUpdateForm.packageName
       )
-        .then((data) => {
-          handleBlobFile(new Blob([data as any]), 'ZZZ.zip')
-          useMessage().success('下载文件成功!')
+        .then((response) => {
+          handleDownloadFile(response)
         })
         .finally(() => {
           state.loadingStatus = false

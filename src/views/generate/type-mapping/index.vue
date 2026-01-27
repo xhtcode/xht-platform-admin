@@ -44,7 +44,6 @@ const columnOption = ref<ColumnConfig<GenTypeMappingResponse>>({
  */
 const handleAutoComplete = (queryString: string, cb: any) => {
   const results = queryString ? DbDataTypeList.filter(createFilter(queryString)) : DbDataTypeList
-  console.log(results)
   cb(results)
 }
 

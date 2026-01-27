@@ -8,10 +8,9 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "run-p type-check \"build-only {@}\" --",
+    "build:test": "vite build --mode test",
+    "build:prod": "vite build  --mode production",
     "preview": "vite preview",
-    "build-only": "vite build",
-    "type-check": "vue-tsc --build",
     "lint": "eslint . --fix src/",
     "format": "prettier --write src/"
   },

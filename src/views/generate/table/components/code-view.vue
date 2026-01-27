@@ -1,10 +1,11 @@
 <script lang="ts" setup>
 import type { ModeIdType } from '@/service/model/base.model'
-import { viewCodeFileApi } from '@/service/api/generate/table.api'
+import { downloadFileApi, viewCodeFileApi } from '@/service/api/generate/table.api'
 import { ArrowRight, Delete, DocumentCopy, Download, Refresh } from '@element-plus/icons-vue'
 import type { CodeViewState } from '@/service/model/generate/table.model'
 import { useMessage } from '@/hooks/use-message'
 import { ElDrawer } from 'element-plus'
+import { handleDownloadFile } from '@/utils'
 
 defineOptions({
   name: 'CodeView',
@@ -108,6 +109,20 @@ const handleCopyCode = () => {
   }
 }
 
+/**
+ * 下载代码
+ */
+const handleDownload = () => {
+  state.loadingStatus = true
+  downloadFileApi(state.tableIds, state.packageName)
+    .then((response) => {
+      handleDownloadFile(response)
+    })
+    .finally(() => {
+      state.loadingStatus = false
+    })
+}
+
 defineExpose({
   show,
 })
@@ -173,7 +188,7 @@ defineExpose({
         <el-col :span="8" class="text-right">
           <el-button :disabled="!state.packageName" :icon="Refresh" type="info" @click="show(state.tableIds)">重新加载</el-button>
           <el-button :disabled="!state.activeData" :icon="DocumentCopy" type="primary" @click="handleCopyCode">复制</el-button>
-          <el-button :disabled="!state.packageName" :icon="Download" type="success">下载</el-button>
+          <el-button :disabled="!state.packageName" :icon="Download" type="success" @click="handleDownload">下载</el-button>
           <el-button :icon="Delete" type="danger" @click="close">关闭</el-button>
         </el-col>
       </el-row>

@@ -23,7 +23,7 @@ interface Props {
   showTopDept?: boolean
 }
 
-const menuSelectTreeRef = useTemplateRef('menuSelectTreeRef')
+const menuSelectTreeRef = useTemplateRef<any>('menuSelectTreeRef')
 const modelValue = useVModel(props, 'modelValue', emits)
 const menuTree = ref<SysDeptTreeResponse>([])
 

@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import type { AxiosPromise } from 'axios'
+import type { AxiosPromise, AxiosResponse } from 'axios'
 import type { ModeIdType, PageResponse } from '@/service/model/base.model'
 import {
   GenCodeCoreVo,
@@ -118,11 +118,12 @@ export const syncTableApi = (tableId: ModeIdType[]) => {
  * @param packageName 包名
  * @returns 下载结果的Promise
  */
-export const downloadFileApi = (tableIds: ModeIdType[], packageName: string) => {
+export const downloadFileApi = (tableIds: ModeIdType[], packageName: string): AxiosPromise<AxiosResponse> => {
   return request({
     url: Api.DOWNLOAD_FILE,
     baseURL,
     method: 'post',
+    responseType: 'blob',
     data: { tableIds: tableIds, packageName: packageName },
   })
 }

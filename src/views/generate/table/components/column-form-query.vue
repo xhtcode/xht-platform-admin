@@ -67,7 +67,6 @@ const handleColumnChange = (id: ModeIdType, row: GenTableColumnQueryResponse) =>
   }
   columnInfo.value.forEach((item) => {
     if (item.id === id) {
-      console.log(item)
       row.columnId = item.id
       row.columnName = item.codeName
       row.conditionLabel = item.codeComment

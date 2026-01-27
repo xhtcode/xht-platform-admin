@@ -1,5 +1,6 @@
-import type { AxiosError, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios'
+import { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, CreateAxiosDefaults, InternalAxiosRequestConfig } from 'axios'
 import axios from 'axios'
+import _ from 'lodash'
 import { useMessage } from '@/hooks/use-message'
 import qs from 'qs'
 import { useUserInfoStore } from '@/store/modules/user.store'
@@ -42,10 +43,10 @@ service.interceptors.request.use(
     // 设置链路追踪ID
     config.headers.set(HEADER_TRACE_ID, generateUUID())
     // 修正用户信息头映射（避免原代码中的赋值错误）
-    if (userInfo.value.userId) {
+    if (userInfo.value?.userId) {
       config.headers.set(HEADER_USER_ID, userInfo.value.userId)
     }
-    if (userInfo.value.userName) {
+    if (userInfo.value?.userName) {
       config.headers.set(HEADER_USER_ACCOUNT, userInfo.value.userName)
     }
     return config
@@ -62,43 +63,50 @@ service.interceptors.request.use(
  */
 service.interceptors.response.use(
   (response: AxiosResponse): any => {
-    // 处理JSON响应
-    const { code } = response.data
-    // 成功状态码（根据实际业务调整）
-    if (code === 200) {
+    const contentType = response.headers['content-type'] ? response.headers['content-type'] : response.headers['Content-Type']
+    if (contentType?.indexOf('application/json') === -1) {
+      return response
+    }
+    // 如果是加密数据
+    if (response.data.dataType === 10) {
+      response.data.encryptData = response.data.data
+      const decryptStr = JSON.stringify(response.data.data)
+      if (decryptStr) {
+        response.data.data = JSON.parse(decryptStr)
+      }
+    }
+    if (response.data.code && response.data.code !== 200) {
+      if (response.data.code === 424) {
+        logout()
+        return Promise.reject(response.data)
+      }
+      useMessage().error(response.data.msg)
       return response.data
     }
     return response.data
   },
-  ({ response }: any): Promise<any> => {
-    let errorMsg = response.data?.msg ?? response.statusText ?? '网络请求失败，请检查网络连接'
-    // 特定状态码处理
-    if (response) {
-      switch (response.status) {
-        case 401:
-          if (response.data?.code === 424) {
-            // 未授权：跳转登录页（根据实际路由调整）
-            useUserInfoStore()
-              .logout()
-              .then(() => {})
-            window.location.href = '/login'
-          }
-          break
-        case 403:
-          errorMsg = '没有操作权限，请联系管理员'
-          break
-      }
+  (error: any): Promise<any> => {
+    // 对响应错误做点什么
+    if (error.message.indexOf('timeout') !== -1) {
+      useMessage().error('服务器正在伸懒腰，请稍后再来~')
+    } else if (error.message === 'Network Error') {
+      useMessage().error('请求传递过程中超时了，就像寄快递路上堵车了~')
+    } else if (error.message.indexOf('Request') !== -1) {
+      useMessage().error('网络连接异常，请求未成功发送，请检查网络后重试~')
     }
-    if (errorMsg == 'Network Error') {
-      errorMsg = '后端接口连接异常'
-    } else if (errorMsg.includes('timeout')) {
-      errorMsg = '系统接口请求超时'
-    } else if (errorMsg.includes('Request failed with status code')) {
-      errorMsg = '系统服务未知异常'
-    }
-    useMessage().error(errorMsg)
-    return Promise.reject(response.data)
+    return Promise.reject(error.response)
   }
 )
+
+/**
+ * 退出登录
+ */
+const logout = () => {
+  // 未授权：跳转登录页（根据实际路由调整）
+  useUserInfoStore()
+    .logout()
+    .then(() => {})
+  window.location.href = '/login'
+}
 
 export default service

@@ -141,7 +141,6 @@ export const useUserInfoStore = defineStore(
       login,
       logout,
       getUserInfos,
-      resetToken,
     }
   },
   {

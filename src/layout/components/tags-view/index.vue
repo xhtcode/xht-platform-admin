@@ -110,7 +110,6 @@ const handleContextmenu = (event: MouseEvent) => {
  */
 const initTags = () => {
   affixTagArr.value = filterAffixTagsView(routeStore.allRoutes)
-  console.log('affixTagArr', affixTagArr.value)
   for (const tag of unref(affixTagArr)) {
     if (tag.name) {
       tagsViewPlusStore.addVisitedViews(tag)
