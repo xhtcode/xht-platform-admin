@@ -172,6 +172,8 @@ const convertLanguage = (language?: string | null): string => {
     return 'txt'
   }
   switch (language) {
+    case 'sql':
+      return 'sql'
     case 'vue':
     case 'ts':
       return 'typescript'

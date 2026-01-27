@@ -59,11 +59,6 @@ const createFilter = (queryString: string) => {
         </el-form-item>
       </el-col>
       <el-col :span="6">
-        <el-form-item label="上级目录" prop="tableInfo.parentMenuId">
-          <menu-tree-select v-model="tableInfo.parentMenuId" show-top-menu type="C" placeholder="请选择上级目录" />
-        </el-form-item>
-      </el-col>
-      <el-col :span="6">
         <el-form-item label="后端作者" prop="tableInfo.backEndAuthor">
           <el-input v-model="tableInfo.backEndAuthor" :maxlength="50" placeholder="请输入后端作者" show-word-limit />
         </el-form-item>
@@ -91,6 +86,21 @@ const createFilter = (queryString: string) => {
       <el-col :span="6">
         <el-form-item label="权限前缀" prop="tableInfo.permissionPrefix">
           <el-input v-model="tableInfo.permissionPrefix" :maxlength="30" placeholder="请输入权限前缀" show-word-limit />
+        </el-form-item>
+      </el-col>
+      <el-col :span="6">
+        <el-form-item label="上级目录" prop="tableInfo.parentMenuId">
+          <menu-tree-select v-model="tableInfo.parentMenuId" show-top-menu type="C" placeholder="请选择上级目录" />
+        </el-form-item>
+      </el-col>
+      <el-col :span="6">
+        <el-form-item label="菜单图标" prop="tableInfo.menuIcon">
+          <icon-select v-model="tableInfo.menuIcon" placeholder="请输入菜单图标" />
+        </el-form-item>
+      </el-col>
+      <el-col :span="6">
+        <el-form-item label="菜单地址" prop="tableInfo.menuPath">
+          <el-input v-model="tableInfo.menuPath" :maxlength="100" show-word-limit placeholder="请输入菜单地址" />
         </el-form-item>
       </el-col>
     </el-row>

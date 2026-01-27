@@ -198,6 +198,16 @@ export interface GenTableInfoResponse extends BasicResponse {
   parentMenuId: ModeIdType
 
   /**
+   * 菜单图标
+   */
+  menuIcon?: string
+
+  /**
+   * 菜单路径
+   */
+  menuPath?: string
+
+  /**
    * 页面风格
    */
   pageStyle: string

@@ -20,6 +20,7 @@ const state = reactive<TableQueryPageState<GenTemplateGroupQueryRequest, GenTemp
   queryParams: {
     current: 1,
     size: 10,
+    desc: 'groupSort',
   },
   loadingStatus: false,
   total: 0,

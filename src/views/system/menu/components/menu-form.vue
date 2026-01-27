@@ -142,7 +142,7 @@ defineExpose({
       <el-row>
         <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="菜单名称" prop="menuName">
-            <el-input v-model="addUpdateForm.menuName" placeholder="请输入菜单名称" />
+            <el-input v-model="addUpdateForm.menuName" :maxlength="50" show-word-limit placeholder="请输入菜单名称" />
           </el-form-item>
         </el-col>
         <el-col :lg="12" :sm="24" :xs="24">
@@ -162,7 +162,7 @@ defineExpose({
         </el-col>
         <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="路由地址" prop="menuPath">
-            <el-input v-model="addUpdateForm.menuPath" placeholder="请输入路由地址" />
+            <el-input v-model="addUpdateForm.menuPath" :maxlength="100" show-word-limit placeholder="请输入路由地址" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -170,7 +170,7 @@ defineExpose({
       <el-row>
         <el-col v-if="!isM" :lg="12" :sm="24" :xs="24">
           <el-form-item label="权限标识" prop="menuAuthority">
-            <el-input v-model="addUpdateForm.menuAuthority" placeholder="请输入权限标识" />
+            <el-input v-model="addUpdateForm.menuAuthority" :maxlength="100" show-word-limit placeholder="请输入权限标识" />
           </el-form-item>
         </el-col>
         <el-col :lg="12" :sm="24" :xs="24">
