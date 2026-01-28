@@ -44,6 +44,7 @@ const show = async (tableIds: ModeIdType[]) => {
     state.tableIds = tableIds
     state.visibleStatus = true
     state.loadingStatus = true
+    state.activeTableName = ''
     const { data } = await viewCodeFileApi(state.tableIds, state.packageName)
     state.codeData = data
     state.twoCodeData = [] // 当前选中表的代码文件列表

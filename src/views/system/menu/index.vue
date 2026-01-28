@@ -191,7 +191,7 @@ onMounted(async () => {
       />
       <el-table-column v-if="columnOption.menuIcon?.visible" align="center" label="菜单图标" min-width="120" prop="menuIcon">
         <template #default="{ row }">
-          <div :class="`i-menu-${row.menuIcon}`" class="text-16px color-[var(--xht-svg-color)]" />
+          <div :class="`${row.menuIcon}`" class="text-16px color-[var(--xht-svg-color)]" />
         </template>
       </el-table-column>
       <el-table-column v-if="columnOption.menuStatus?.visible" align="center" label="菜单状态" min-width="120" prop="menuStatus">

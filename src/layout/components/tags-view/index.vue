@@ -217,7 +217,7 @@ watch(
         :closable="!item.affixStatus"
       >
         <template #label>
-          <i class="xht-tabs-icon" :class="`i-menu-${item.icon}`" />
+          <i class="xht-tabs-icon" :class="`${item.icon}`" />
           {{ item.title }}
         </template>
       </el-tab-pane>

@@ -30,6 +30,7 @@ const generateUUID = () => {
 const handleDownloadFile = (response: AxiosResponse, fileName?: string) => {
   // 获取返回类型
   const contentType = _.isUndefined(response.headers['content-type']) ? response.headers['Content-Type'] : response.headers['content-type']
+  console.log(response.headers)
   // 构建下载数据
   const url = window.URL.createObjectURL(new Blob([response.data], { type: contentType }))
   const link = document.createElement('a')

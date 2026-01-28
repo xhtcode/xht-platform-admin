@@ -4,6 +4,7 @@ import { getRouters } from '@/service/api/permission'
 import { cloneDeep } from 'lodash'
 import { MenuTypeEnums } from '@/service/model/system/menu.model'
 import pInIaPersistConfig from '@/store/pinia-persist'
+import DynamicRouter from '@/router/modules/dynamic'
 
 const viewsModules: any = import.meta.glob('../../views/**/*.{vue,tsx}')
 const dynamicViewsModules: Record<string, Function> = Object.assign({}, { ...viewsModules })
@@ -80,6 +81,7 @@ export const useRouteStore = defineStore(
           // 设置 routes 数据
           routesRaw.value = formatBackRoutes(res.data)
           formatRoutes.value = genFormatRoutes()
+          formatRoutes.value.push(...DynamicRouter)
           // 创建路由匹配器
           isGenerate.value = true
         })

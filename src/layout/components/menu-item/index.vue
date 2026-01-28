@@ -43,14 +43,14 @@ const handleClickMenu = (subItem: RouteRecordRaw) => {
   <template v-for="(val, index) in menuLists">
     <el-sub-menu v-if="val.children && val.children.length > 0" :key="val.path" :index="val.path">
       <template #title>
-        <div :class="`i-menu-${val.meta?.icon}`" class="menu-icon text-12px" />
+        <div :class="`${val.meta?.icon}`" class="menu-icon text-12px" />
         <span class="ml-3">{{ val.meta?.title }}</span>
       </template>
       <MenuItem :menu-list="val.children" />
     </el-sub-menu>
     <template v-else>
       <el-menu-item :key="index" :index="val.path" @click="handleClickMenu(val)">
-        <div :class="`i-menu-${val.meta?.icon}`" class="menu-icon text-12px" />
+        <div :class="`${val.meta?.icon}`" class="menu-icon text-12px" />
         <template #title>
           <span class="ml-3">{{ val.meta?.title }}</span>
         </template>

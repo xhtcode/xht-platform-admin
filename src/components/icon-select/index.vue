@@ -10,13 +10,18 @@ const props = withDefaults(defineProps<IconSelectProps>(), {
   clearable: false, // 禁用
 })
 const modelValue = defineModel<string>('modelValue')
+const activeName = ref<string | null>()
 const dialogVisible = ref<boolean>(false)
 const iconItems = ref<IconItemOptions[]>([])
 const initSvg = () => {
   iconItems.value = []
-  for (const icon in import.meta.glob('../../assets/icons/menu/*.svg')) {
-    const iconName = icon.split('assets/icons/menu/')[1].split('.svg')[0].replace('/', '-')
-    iconItems.value?.push({ itemType: 'svg', iconName: iconName })
+  for (const icon in import.meta.glob('../../assets/icons/**/*.svg')) {
+    let iconPathName = icon.split('assets/icons/')[1].split('.svg')[0]
+    if (iconPathName.indexOf('/') === -1) {
+      iconPathName = `common/${iconPathName}`
+    }
+    const iconName = iconPathName.replace('/', '-')
+    iconItems.value?.push({ itemType: 'svg', iconName: `i-${iconName}` })
   }
 }
 
@@ -40,15 +45,19 @@ const closeDialog = () => {
   dialogVisible.value = false
 }
 /**
+ * 激活
+ * @param item
+ */
+const handlerActive = (item: IconItemOptions) => {
+  activeName.value = item.iconName
+}
+/**
  * 选中图标
  * @param item
- * @param collapse
  */
-const selectIcon = (item: IconItemOptions, collapse: boolean) => {
+const selectIcon = (item: IconItemOptions) => {
   modelValue.value = item.iconName
-  if (collapse) {
-    closeDialog()
-  }
+  closeDialog()
 }
 /**
  * 初始化图标 并且根据搜索值计算图标有多少
@@ -72,6 +81,7 @@ const handleChangeIconItem = () => {
 }
 
 onMounted(() => {
+  activeName.value = modelValue.value
   initSvg()
 })
 </script>
@@ -80,7 +90,7 @@ onMounted(() => {
   <div class="icon-select-container w100">
     <el-input v-model="modelValue" :placeholder="props.placeholder" class="icon-select-input" readonly @click="openDialog">
       <template #prepend>
-        <div :class="`i-menu-${modelValue}`" @click="openDialog()" />
+        <div :class="`${modelValue}`" @click="openDialog()" />
       </template>
       <template v-if="props.clearable" #suffix>
         <el-icon size="1em" @click="clearableValue">
@@ -98,21 +108,16 @@ onMounted(() => {
         size="large"
       >
         <template #append>
-          <div :class="`i-menu-${modelValue}`" />
+          <div :class="`${modelValue}`" />
         </template>
       </el-input>
       <el-scrollbar height="270px">
         <ul class="icon-container">
-          <li
-            v-for="(item, index) in iconsList"
-            :key="index"
-            class="icon-item"
-            :class="[{ 'is-active': item.iconName === modelValue }]"
-            @click="selectIcon(item, false)"
-            @dblclick="selectIcon(item, true)"
-          >
-            <div :class="`i-menu-${item.iconName}`" />
-          </li>
+          <el-tooltip :content="item.iconName" trigger="click" v-for="(item, index) in iconsList" :key="index">
+            <li class="icon-item" :class="[{ 'is-active': item.iconName === activeName }]" @click="handlerActive(item)" @dblclick="selectIcon(item)">
+              <div :class="`${item.iconName}`" />
+            </li>
+          </el-tooltip>
         </ul>
         <el-empty v-if="iconsList.length === 0" description="未搜索到您要找的图标~" />
       </el-scrollbar>
@@ -136,7 +141,7 @@ onMounted(() => {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 4px;
+    padding: 8px;
     margin: 4px;
     cursor: pointer;
     border: 1px solid #dcdfe6;
