@@ -6,7 +6,7 @@ import type { ColumnConfig } from '@/components/table-tool-bar/types'
 /**
  * 增改页面 表单类型 默认值
  */
-export const SysDictOperationForm: Partial<SysDictOperationRequest> = {
+export const sysDictOperationForm: Partial<SysDictOperationRequest> = {
   sortOrder: 0, //排序序号
   status: DictStatusEnums.ENABLED, //状态(1:启用 0:禁用)
 }
@@ -14,7 +14,7 @@ export const SysDictOperationForm: Partial<SysDictOperationRequest> = {
 /**
  * 增改页面 表单类型 表单校验
  */
-export const SysDictOperationRules: FormRules<SysDictOperationRequest> = {
+export const sysDictOperationRules: FormRules<Required<SysDictOperationRequest>> = {
   dictCode: [
     { required: true, message: '字典编码不能为空', trigger: 'blur' },
     { pattern: /^[a-zA-Z0-9_]+$/, message: '字典编码只能包含字母、数字和下划线', trigger: 'blur' },
@@ -47,7 +47,7 @@ export const SysDictOperationRules: FormRules<SysDictOperationRequest> = {
 /**
  * 列表显示配置
  */
-export const SysDictColumnOption: ColumnConfig<SysDictResponse> = {
+export const sysDictColumnOption: ColumnConfig<SysDictResponse> = {
   dictName: {
     desc: '字典名称',
     visible: true,

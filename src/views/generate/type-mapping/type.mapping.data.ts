@@ -6,14 +6,14 @@ import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
 /**
  * 增改页面 表单类型 默认值
  */
-export const GenTypeMappingOperationForm: Partial<GenTypeMappingOperationRequest> = {
+export const genTypeMappingOperationForm: Partial<GenTypeMappingOperationRequest> = {
   dbType: DataBaseTypeEnums.MYSQL,
 }
 
 /**
  * 增改页面 表单类型 表单校验
  */
-export const GenTypeMappingOperationRules: FormRules<GenTypeMappingOperationRequest> = {
+export const genTypeMappingOperationRules: FormRules<Required<GenTypeMappingOperationRequest>> = {
   dbType: [
     {
       required: true,
@@ -47,7 +47,7 @@ export const GenTypeMappingOperationRules: FormRules<GenTypeMappingOperationRequ
 /**
  * 列表显示配置
  */
-export const GenTypeMappingColumnOption: ColumnConfig<GenTypeMappingResponse> = {
+export const genTypeMappingColumnOption: ColumnConfig<GenTypeMappingResponse> = {
   dbType: { desc: '数据库类型', visible: true, disabled: false },
   dbDataType: { desc: '数据库数据类型', visible: true, disabled: false },
   javaType: { desc: 'Java类型', visible: true, disabled: false },
@@ -62,7 +62,7 @@ export const GenTypeMappingColumnOption: ColumnConfig<GenTypeMappingResponse> = 
 /**
  * 数据库数据类型
  */
-export const DbDataTypeList: any[] = [
+export const dbDataTypeList: any[] = [
   { value: 'bigint' },
   { value: 'binary' },
   { value: 'bit' },

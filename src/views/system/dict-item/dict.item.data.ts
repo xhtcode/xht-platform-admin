@@ -6,7 +6,7 @@ import type { ColumnConfig } from '@/components/table-tool-bar/types'
 /**
  * 增改页面 表单类型 默认值
  */
-export const SysDictItemOperationForm: Partial<SysDictItemOperationRequest> = {
+export const sysDictItemOperationForm: Partial<SysDictItemOperationRequest> = {
   sortOrder: 0, // 排序序号
   remark: '暂无', // 字典项描述
   status: DictItemStatusEnums.ENABLED, //状态(1:启用 0:禁用)
@@ -15,7 +15,7 @@ export const SysDictItemOperationForm: Partial<SysDictItemOperationRequest> = {
 /**
  * 增改页面 表单类型 表单校验
  */
-export const SysDictItemOperationRules: FormRules = {
+export const sysDictItemOperationRules: FormRules<Required<SysDictItemOperationRequest>> = {
   dictId: [{ required: true, message: '所属字典ID不能为空', trigger: 'blur' }],
   itemLabel: [
     { required: true, message: '字典项标签不能为空', trigger: 'blur' },
@@ -55,7 +55,7 @@ export const SysDictItemOperationRules: FormRules = {
 /**
  * 列表显示配置
  */
-export const SysDictItemColumnOption: ColumnConfig<SysDictItemResponse> = {
+export const sysDictItemColumnOption: ColumnConfig<SysDictItemResponse> = {
   dictCode: { desc: '字典项编码', visible: true, disabled: false },
   itemLabel: { desc: '字典项标签', visible: true, disabled: false },
   itemValue: { desc: '字典项值', visible: true, disabled: false },

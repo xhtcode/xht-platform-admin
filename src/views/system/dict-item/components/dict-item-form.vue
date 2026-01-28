@@ -4,7 +4,7 @@ import { querySysDictItemById, saveSysDictItem, updateSysDictItem } from '@/serv
 import type { SysDictItemOperationRequest } from '@/service/model/system/dict.item.model'
 import { DictItemStatusEnums } from '@/service/model/system/dict.item.model'
 import type { ModeIdType } from '@/service/model/base.model'
-import { SysDictItemOperationForm, SysDictItemOperationRules } from '@/views/system/dict-item/dict.item.data'
+import { sysDictItemOperationForm, sysDictItemOperationRules } from '@/views/system/dict-item/dict.item.data'
 import { useMessage } from '@/hooks/use-message'
 import { useRoute } from 'vue-router'
 
@@ -16,12 +16,12 @@ const state = reactive<AddUpdateOption<SysDictItemOperationRequest>>({
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,
-  addUpdateForm: { ...SysDictItemOperationForm },
+  addUpdateForm: { ...sysDictItemOperationForm },
 })
 const route = useRoute()
-const addUpdateFormRef = ref<FormInstance>()
+const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
 const { addUpdateForm } = toRefs(state)
-const rules: FormRules = SysDictItemOperationRules
+const rules: FormRules<Required<SysDictItemOperationRequest>> = sysDictItemOperationRules
 const predefineColors = ref(['#409EFF', '#67C23A', '#E6A23C', '#F56C6C', '#909399', '#303133', '#CDD0D6', '#E6E8EB', '#000000', '#F2F6FC'])
 
 /**

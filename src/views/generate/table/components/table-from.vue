@@ -2,7 +2,7 @@
 import type { FormInstance, FormRules } from 'element-plus'
 import { queryGenTableInfoById, updateGenTableInfo } from '@/service/api/generate/table.api'
 import type { GenTableInfoOperationRequest } from '@/service/model/generate/table.model'
-import { GenTableInfoOperationForm, GenTableInfoOperationRules } from '@/views/generate/table/table.data'
+import { genTableInfoOperationForm, genTableInfoOperationRules } from '@/views/generate/table/table.data'
 import { useMessage } from '@/hooks/use-message'
 import type { ModeIdType } from '@/service/model/base.model'
 
@@ -22,13 +22,13 @@ const state = reactive<AddUpdateOption<GenTableInfoOperationRequest>>({
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,
-  addUpdateForm: { ...GenTableInfoOperationForm },
+  addUpdateForm: { ...genTableInfoOperationForm },
 })
 const activeName = ref<number>(1)
 const addUpdateFormRef = ref<FormInstance>()
 const { addUpdateForm } = toRefs(state)
 const columnFormQueryRef = useTemplateRef('columnFormQueryRef')
-const rules: FormRules = GenTableInfoOperationRules
+const rules: FormRules = genTableInfoOperationRules
 
 /**
  * 打开显示

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
 import { querySysDictById, saveSysDict, updateSysDict } from '@/service/api/system/dict.api'
-import { SysDictOperationForm, SysDictOperationRules } from '@/views/system/dict/dict.data'
+import { sysDictOperationForm, sysDictOperationRules } from '@/views/system/dict/dict.data'
 import { useMessage } from '@/hooks/use-message'
 import type { SysDictOperationRequest } from '@/service/model/system/dict.model'
 import { DictStatusEnums } from '@/service/model/system/dict.model'
@@ -15,11 +15,11 @@ const state = reactive<AddUpdateOption<SysDictOperationRequest>>({
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,
-  addUpdateForm: { ...SysDictOperationForm },
+  addUpdateForm: { ...sysDictOperationForm },
 })
-const addUpdateFormRef = ref<FormInstance>()
+const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
 const { addUpdateForm } = toRefs(state)
-const rules: FormRules = SysDictOperationRules
+const rules: FormRules<Required<SysDictOperationRequest>> = sysDictOperationRules
 
 /**
  * 打开显示

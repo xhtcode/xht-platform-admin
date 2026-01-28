@@ -4,7 +4,7 @@ import { querySysMenuById, saveSysMenu, updateSysMenu } from '@/service/api/syst
 import { useMessage } from '@/hooks/use-message'
 import { MenuCommonStatus, SysMenuOperationRequest } from '@/service/model/system/menu.model'
 import { MenuStatusEnums, MenuTypeEnums } from '@/service/model/system/menu.model'
-import { SysMenuOperationForm, SysMenuOperationRules } from '@/views/system/menu/menu.data'
+import { sysMenuOperationForm, sysMenuOperationRules } from '@/views/system/menu/menu.data'
 import type { ModeIdType } from '@/service/model/base.model'
 
 defineOptions({
@@ -13,13 +13,13 @@ defineOptions({
 
 const emit = defineEmits(['success'])
 const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
-const rules: FormRules = SysMenuOperationRules
+const rules: FormRules<Required<SysMenuOperationRequest>> = sysMenuOperationRules
 const state = reactive<AddUpdateOption<SysMenuOperationRequest>>({
   title: '增加部门',
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,
-  addUpdateForm: { ...SysMenuOperationForm },
+  addUpdateForm: { ...sysMenuOperationForm },
 })
 const { addUpdateForm } = toRefs(state)
 const isM = computed(() => addUpdateForm.value.menuType === MenuTypeEnums.M)

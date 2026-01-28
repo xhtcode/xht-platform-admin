@@ -4,7 +4,7 @@ import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
 import type { GenTemplateGroupQueryRequest, GenTemplateGroupResponse } from '@/service/model/generate/template.group.model'
 import { queryGenTemplateGroupPage, removeGenTemplateGroupByIds } from '@/service/api/generate/template.group.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import { GenTemplateGroupOperationOption } from '@/views/generate/template/template.data'
+import { genTemplateGroupOperationOption } from '@/views/generate/template/template.data'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { Delete, Edit, Plus, Refresh, Search, View } from '@element-plus/icons-vue'
 
@@ -39,7 +39,7 @@ const { handleQuery, handleCurrentChange } = useTableQueryPageHooks<GenTemplateG
 const { queryParams } = toRefs(state)
 
 const columnOption = ref<ColumnConfig<GenTemplateGroupResponse>>({
-  ...GenTemplateGroupOperationOption,
+  ...genTemplateGroupOperationOption,
 })
 
 /**

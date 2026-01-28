@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
-import { GenTemplateOperationForm, GenTemplateOperationRules } from '@/views/generate/template/template.data'
+import { genTemplateOperationForm, genTemplateOperationRules } from '@/views/generate/template/template.data'
 import type { GenTemplateOperationRequest } from '@/service/model/generate/template.model'
 import { useMessage } from '@/hooks/use-message'
 import { saveGenTemplate, updateGenTemplate } from '@/service/api/generate/template.api'
@@ -20,13 +20,13 @@ const loadingStatus = defineModel<boolean>('loadingStatus', {
 const addUpdateForm = defineModel<GenTemplateOperationRequest>('addUpdateForm', {
   required: true,
   default: {
-    ...GenTemplateOperationForm,
+    ...genTemplateOperationForm,
   },
 })
 
 const validateStatus = ref<boolean>(false)
 const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
-const rules: FormRules = GenTemplateOperationRules
+const rules: FormRules<Required<GenTemplateOperationRequest>> = genTemplateOperationRules
 const submitForm = () => {
   loadingStatus.value = true
   addUpdateFormRef.value?.validate(async (valid, invalidFields) => {

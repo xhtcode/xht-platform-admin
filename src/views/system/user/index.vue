@@ -4,7 +4,7 @@ import type { SysUserQueryRequest, SysUserResponse } from '@/service/model/syste
 import { UserStatusEnums, UserTypeEnums } from '@/service/model/system/user.model'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import type { SysDeptResponse } from '@/service/model/system/dept.model'
-import { SysUserColumnOption } from '@/views/system/user/user.data'
+import { sysUserColumnOption } from '@/views/system/user/user.data'
 import { querySysUserPage, removeSysUserById, removeSysUserByIds, resetPassword } from '@/service/api/system/user.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
@@ -38,7 +38,7 @@ const { handleQuery, handleSelectionChange } = useTableQueryPageHooks<SysUserQue
 const { queryParams } = toRefs(state)
 
 const columnOption = ref<ColumnConfig<SysUserResponse>>({
-  ...SysUserColumnOption,
+  ...sysUserColumnOption,
 })
 
 /**

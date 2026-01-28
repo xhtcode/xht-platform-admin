@@ -5,7 +5,7 @@ import type { GenTableInfoOperationRequest, GenTableInfoResponse } from '@/servi
 /**
  * 增改页面 表单类型 默认值
  */
-export const GenTableInfoOperationForm: GenTableInfoOperationRequest = {
+export const genTableInfoOperationForm: GenTableInfoOperationRequest = {
   tableInfo: {} as GenTableInfoResponse,
   columnInfos: [],
   queryColumns: [],
@@ -14,7 +14,7 @@ export const GenTableInfoOperationForm: GenTableInfoOperationRequest = {
 /**
  * 增改页面 表单类型 表单校验
  */
-export const GenTableInfoOperationRules: FormRules<GenTableInfoOperationRequest> = {
+export const genTableInfoOperationRules: FormRules<Required<GenTableInfoOperationRequest>> = {
   'tableInfo.groupId': [{ required: true, message: '请选择分组id', trigger: 'change' }],
   'tableInfo.dataBaseType': [{ required: true, message: '请选择数据库类型', trigger: 'change' }],
   'tableInfo.tableName': [{ required: true, message: '请输入数据库表名', trigger: 'blur' }],
@@ -36,7 +36,7 @@ export const GenTableInfoOperationRules: FormRules<GenTableInfoOperationRequest>
 /**
  * 列表显示配置
  */
-export const GenTableInfoColumnOption: ColumnConfig<GenTableInfoResponse> = {
+export const genTableInfoColumnOption: ColumnConfig<GenTableInfoResponse> = {
   engineName: { desc: '引擎名称', visible: true, disabled: true },
   tableName: { desc: '数据库表名', visible: true, disabled: true },
   tableComment: { desc: '表注释', visible: true, disabled: true },

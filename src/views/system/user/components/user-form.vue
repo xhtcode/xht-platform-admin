@@ -2,7 +2,7 @@
 import type { FormInstance, FormRules } from 'element-plus'
 import { querySysUserById, saveSysUser, updateSysUser } from '@/service/api/system/user.api'
 import { useMessage } from '@/hooks/use-message'
-import { SysUserOperationForm, SysUserOperationRules } from '@/views/system/user/user.data'
+import { sysUserOperationForm, sysUserOperationRules } from '@/views/system/user/user.data'
 import { SysUserOperationRequest, UserStatusEnums, UserTypeEnums } from '@/service/model/system/user.model'
 import type { ModeIdType } from '@/service/model/base.model'
 import type { SysDeptResponse } from '@/service/model/system/dept.model'
@@ -12,15 +12,15 @@ defineOptions({
 })
 
 const emits = defineEmits(['success'])
-const rules: FormRules = SysUserOperationRules
+const rules: FormRules<Required<SysUserOperationRequest>> = sysUserOperationRules
 const state = reactive<AddUpdateOption<SysUserOperationRequest>>({
   title: '增加用户信息',
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,
-  addUpdateForm: { ...SysUserOperationForm },
+  addUpdateForm: { ...sysUserOperationForm },
 })
-const addUpdateFormRef = ref<FormInstance>()
+const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
 const { addUpdateForm } = toRefs(state)
 /**
  * 打开显示

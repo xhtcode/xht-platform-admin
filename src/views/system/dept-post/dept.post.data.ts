@@ -6,7 +6,7 @@ import type { ColumnConfig } from '@/components/table-tool-bar/types'
 /**
  * 增改页面 表单类型 默认值
  */
-export const SysDeptPostOperationForm: Partial<SysDeptPostOperationRequest> = {
+export const sysDeptPostOperationForm: Partial<SysDeptPostOperationRequest> = {
   postSort: 0, // 岗位排序
   postStatus: SysDeptPostStatusEnums.NORMAL, //  岗位状态
   postLimit: 999, // 岗位人员限制
@@ -16,7 +16,7 @@ export const SysDeptPostOperationForm: Partial<SysDeptPostOperationRequest> = {
 /**
  * 增改页面 表单类型 表单校验
  */
-export const SysDeptPostOperationRules: FormRules = {
+export const sysDeptPostOperationRules: FormRules<Required<SysDeptPostOperationRequest>> = {
   deptId: [{ required: true, message: '请选择所属部门', trigger: ['blur', 'change'] }],
   postCode: [{ required: true, message: '请输入岗位编码', trigger: ['blur', 'change'] }],
   postName: [{ required: true, message: '请输入岗位名称', trigger: ['blur', 'change'] }],
@@ -28,7 +28,7 @@ export const SysDeptPostOperationRules: FormRules = {
 /**
  * 列表显示配置
  */
-export const SysDeptPostColumnOption: ColumnConfig<SysDeptPostResponse> = {
+export const sysDeptPostColumnOption: ColumnConfig<SysDeptPostResponse> = {
   postCode: { desc: '岗位编码', visible: true, disabled: true },
   postName: { desc: '岗位名称', visible: true, disabled: true },
   postLimit: { desc: '员工统计', visible: false, disabled: false },

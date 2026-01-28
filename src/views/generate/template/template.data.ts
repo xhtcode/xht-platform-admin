@@ -6,7 +6,7 @@ import type { ColumnConfig } from '@/components/table-tool-bar/types'
 /**
  * 增改页面 表单类型 默认值
  */
-export const GenTemplateOperationForm: Partial<GenTemplateOperationRequest> = {
+export const genTemplateOperationForm: Partial<GenTemplateOperationRequest> = {
   templateContent: '${auth}',
   templateFilePath: '/',
   templateFileType: 'java',
@@ -18,7 +18,7 @@ export const GenTemplateOperationForm: Partial<GenTemplateOperationRequest> = {
 /**
  * 增改页面 表单类型 表单校验
  */
-export const GenTemplateOperationRules: FormRules<GenTemplateOperationRequest> = {
+export const genTemplateOperationRules: FormRules<Required<GenTemplateOperationRequest>> = {
   templateName: [
     {
       required: true,
@@ -66,7 +66,7 @@ export const GenTemplateOperationRules: FormRules<GenTemplateOperationRequest> =
 /**
  * 列表显示配置
  */
-export const GenTemplateGroupOperationForm: GenTemplateGroupOperationRequest = {
+export const genTemplateGroupOperationForm: GenTemplateGroupOperationRequest = {
   templateCount: 0,
   groupSort: 0,
   groupDesc: '',
@@ -77,7 +77,7 @@ export const GenTemplateGroupOperationForm: GenTemplateGroupOperationRequest = {
 /**
  * 模板分组rules配置
  */
-export const GenTemplateGroupOperationRules: FormRules<GenTemplateGroupOperationRequest> = {
+export const genTemplateGroupOperationRules: FormRules<Required<GenTemplateGroupOperationRequest>> = {
   groupName: [
     {
       required: true,
@@ -111,7 +111,7 @@ export const GenTemplateGroupOperationRules: FormRules<GenTemplateGroupOperation
 /**
  * 列表显示配置
  */
-export const GenTemplateGroupOperationOption: ColumnConfig<GenTemplateGroupResponse> = {
+export const genTemplateGroupOperationOption: ColumnConfig<GenTemplateGroupResponse> = {
   groupName: { desc: '分组名称', visible: true, disabled: true },
   templateCount: { desc: '模板数量', visible: true, disabled: true },
   groupSort: { desc: '分组描述', visible: true, disabled: true },

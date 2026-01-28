@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
 import { queryGenTemplateGroupById, saveGenTemplateGroup, updateGenTemplateGroup } from '@/service/api/generate/template.group.api'
-import { GenTemplateGroupOperationForm, GenTemplateGroupOperationRules } from '@/views/generate/template/template.data'
+import { genTemplateGroupOperationForm, genTemplateGroupOperationRules } from '@/views/generate/template/template.data'
 import { useMessage } from '@/hooks/use-message'
 import type { ModeIdType } from '@/service/model/base.model'
 import type { GenTemplateGroupOperationRequest } from '@/service/model/generate/template.group.model'
@@ -14,11 +14,11 @@ const state = reactive<AddUpdateOption<GenTemplateGroupOperationRequest>>({
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,
-  addUpdateForm: { ...GenTemplateGroupOperationForm },
+  addUpdateForm: { ...genTemplateGroupOperationForm },
 })
 const addUpdateFormRef = ref<FormInstance>()
 const { addUpdateForm } = toRefs(state)
-const rules: FormRules = GenTemplateGroupOperationRules
+const rules: FormRules<Required<GenTemplateGroupOperationRequest>> = genTemplateGroupOperationRules
 
 /**
  * 打开显示

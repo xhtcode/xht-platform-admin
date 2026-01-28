@@ -6,7 +6,7 @@ import type { ColumnConfig } from '@/components/table-tool-bar/types'
 /**
  * 增改页面 表单类型 默认值
  */
-export const SysMenuOperationForm: Partial<SysMenuOperationRequest> = {
+export const sysMenuOperationForm: Partial<SysMenuOperationRequest> = {
   parentId: '0', // 父菜单ID
   menuType: MenuTypeEnums.M, // 类型，默认为目录
   menuHidden: MenuCommonStatus.YES, // 显示状态，默认为显示
@@ -20,7 +20,7 @@ export const SysMenuOperationForm: Partial<SysMenuOperationRequest> = {
 /**
  * 增改页面 表单类型 表单校验
  */
-export const SysMenuOperationRules: FormRules = {
+export const sysMenuOperationRules: FormRules<Required<SysMenuOperationRequest>> = {
   parentId: [{ required: true, message: '父菜单ID不能为空', trigger: 'change' }],
   menuType: [{ required: true, message: '菜单类型不能为空', trigger: 'change' }],
   menuName: [
@@ -52,7 +52,7 @@ export const SysMenuOperationRules: FormRules = {
 /**
  * 列表显示配置
  */
-export const SysMenuColumnOption: ColumnConfig<SysMenuResponse> = {
+export const sysMenuColumnOption: ColumnConfig<SysMenuResponse> = {
   menuType: { desc: '菜单类型', visible: true, disabled: true },
   menuName: { desc: '菜单名称', visible: true, disabled: true },
   menuIcon: { desc: '菜单图标', visible: true, disabled: true },

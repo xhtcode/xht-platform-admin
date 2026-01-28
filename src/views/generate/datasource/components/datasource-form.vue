@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
 import { queryGenDataSourceById, saveGenDataSource, updateGenDataSource } from '@/service/api/generate/datasource.api'
-import { GenDataSourceOperationForm, GenDataSourceOperationRules } from '@/views/generate/datasource/datasource.data'
+import { genDataSourceOperationForm, genDataSourceOperationRules } from '@/views/generate/datasource/datasource.data'
 import { useMessage } from '@/hooks/use-message'
 import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
 import type { ModeIdType } from '@/service/model/base.model'
@@ -15,11 +15,11 @@ const state = reactive<AddUpdateOption<GenDataSourceOperationRequest>>({
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,
-  addUpdateForm: { ...GenDataSourceOperationForm },
+  addUpdateForm: { ...genDataSourceOperationForm },
 })
 const addUpdateFormRef = ref<FormInstance>()
 const { addUpdateForm } = toRefs(state)
-const rules: FormRules = GenDataSourceOperationRules
+const rules: FormRules<Required<GenDataSourceOperationRequest>> = genDataSourceOperationRules
 
 /**
  * 打开显示

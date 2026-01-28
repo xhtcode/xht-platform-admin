@@ -7,7 +7,7 @@ import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { ModeIdArrayType } from '@/service/model/base.model'
 import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
-import { DbDataTypeList, GenTypeMappingColumnOption } from '@/views/generate/type-mapping/type.mapping.data'
+import { dbDataTypeList, genTypeMappingColumnOption } from '@/views/generate/type-mapping/type.mapping.data'
 import { Delete, Edit, Plus, Refresh, Search } from '@element-plus/icons-vue'
 
 defineOptions({ name: 'GenTypeMappingViewIndex' })
@@ -36,14 +36,14 @@ const { handleQuery, handleSelectionChange } = useTableQueryPageHooks<GenTypeMap
 const { queryParams } = toRefs(state)
 
 const columnOption = ref<ColumnConfig<GenTypeMappingResponse>>({
-  ...GenTypeMappingColumnOption,
+  ...genTypeMappingColumnOption,
 })
 
 /**
  * 表单自动提示
  */
 const handleAutoComplete = (queryString: string, cb: any) => {
-  const results = queryString ? DbDataTypeList.filter(createFilter(queryString)) : DbDataTypeList
+  const results = queryString ? dbDataTypeList.filter(createFilter(queryString)) : dbDataTypeList
   cb(results)
 }
 

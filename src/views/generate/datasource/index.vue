@@ -6,7 +6,7 @@ import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { ModeIdArrayType } from '@/service/model/base.model'
 import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
 import type { AxiosResponse } from 'axios'
-import { GenDataSourceColumnOption } from '@/views/generate/datasource/datasource.data'
+import { genDataSourceColumnOption } from '@/views/generate/datasource/datasource.data'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { Delete, Edit, Plus, Refresh, Search } from '@element-plus/icons-vue'
 
@@ -36,7 +36,7 @@ const state = reactive<TableQueryState>({
 })
 const { queryParams } = toRefs(state)
 const columnOption = ref<ColumnConfig<GenDataSourceResponse>>({
-  ...GenDataSourceColumnOption,
+  ...genDataSourceColumnOption,
 })
 
 /**

@@ -5,7 +5,7 @@ import type { SysDeptOperationRequest } from '@/service/model/system/dept.model'
 import { DeptStatusEnums } from '@/service/model/system/dept.model'
 import type { UserSimpleVo } from '@/service/model/system/user.model'
 import type { ModeIdType } from '@/service/model/base.model'
-import { SysDeptOperationForm, SysDeptOperationRules } from '@/views/system/dept/dept.data'
+import { sysDeptOperationForm, sysDeptOperationRules } from '@/views/system/dept/dept.data'
 import { useMessage } from '@/hooks/use-message'
 import { Search } from '@element-plus/icons-vue'
 
@@ -20,11 +20,11 @@ const state = reactive<AddUpdateOption<SysDeptOperationRequest>>({
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,
-  addUpdateForm: { ...SysDeptOperationForm },
+  addUpdateForm: { ...sysDeptOperationForm },
 })
-const addUpdateFormRef = ref<FormInstance>()
+const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
 const { addUpdateForm } = toRefs(state)
-const rules: FormRules = SysDeptOperationRules
+const rules: FormRules<Required<SysDeptOperationRequest>> = sysDeptOperationRules
 const useDeptUserDialog = useTemplateRef('deptUserDialog')
 const currentUser = ref<UserSimpleVo>()
 /**

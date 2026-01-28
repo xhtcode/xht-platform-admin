@@ -6,7 +6,7 @@ import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
 /**
  * 增改页面 表单类型 默认值
  */
-export const GenDataSourceOperationForm: Partial<GenDataSourceOperationRequest> = {
+export const genDataSourceOperationForm: Partial<GenDataSourceOperationRequest> = {
   name: '测试链接', // 默认空名称（需用户输入）
   dbType: DataBaseTypeEnums.MYSQL, // 默认MySQL（项目常用数据库类型）
   url: 'jdbc:mysql://localhost:3306/test', // 默认MySQL连接地址模板
@@ -16,7 +16,7 @@ export const GenDataSourceOperationForm: Partial<GenDataSourceOperationRequest> 
 /**
  * 增改页面 表单类型 表单校验
  */
-export const GenDataSourceOperationRules: FormRules<GenDataSourceOperationRequest> = {
+export const genDataSourceOperationRules: FormRules<Required<GenDataSourceOperationRequest>> = {
   dbType: [
     {
       required: true,
@@ -57,7 +57,7 @@ export const GenDataSourceOperationRules: FormRules<GenDataSourceOperationReques
 /**
  * 列表显示配置
  */
-export const GenDataSourceColumnOption: ColumnConfig<GenDataSourceResponse> = {
+export const genDataSourceColumnOption: ColumnConfig<GenDataSourceResponse> = {
   name: { desc: '数据库名称', visible: true, disabled: false },
   dbType: { desc: '数据库类型', visible: true, disabled: false },
   url: { desc: '数据库地址', visible: true, disabled: false },

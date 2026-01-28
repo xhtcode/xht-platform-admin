@@ -6,7 +6,7 @@ import type { ColumnConfig } from '@/components/table-tool-bar/types'
 /**
  * 增改页面 表单类型 默认值
  */
-export const SysRoleOperationForm: Partial<SysRoleOperationRequest> = {
+export const sysRoleOperationForm: Partial<SysRoleOperationRequest> = {
   remark: '暂无', //角色描述
   dataScope: 0, //数据范围（1全部数据权限 2自定数据权限 3本部门数据权限 4本部门及以下数据权限 5本岗位数据权限  6仅本人数据权限）
   roleStatus: RoleStatusEnums.NORMAL, //状态（0正常 1停用）,可用值:0,1
@@ -16,7 +16,7 @@ export const SysRoleOperationForm: Partial<SysRoleOperationRequest> = {
 /**
  * 增改页面 表单类型 表单校验
  */
-export const SysRoleOperationRules: FormRules = {
+export const sysRoleOperationRules: FormRules<Required<SysRoleOperationRequest>> = {
   roleCode: [{ required: true, message: '请输入角色编码', trigger: ['blur', 'change'] }],
   roleName: [{ required: true, message: '请输入角色名称', trigger: ['blur', 'change'] }],
   roleSort: [{ required: true, message: '请输入显示顺序', trigger: ['blur', 'change'] }],
@@ -28,7 +28,7 @@ export const SysRoleOperationRules: FormRules = {
 /**
  * 列表显示配置
  */
-export const SysRoleColumnOption: ColumnConfig<SysRoleResponse> = {
+export const sysRoleColumnOption: ColumnConfig<SysRoleResponse> = {
   roleName: {
     desc: '角色名称',
     visible: true,

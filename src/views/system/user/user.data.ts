@@ -6,7 +6,7 @@ import type { ColumnConfig } from '@/components/table-tool-bar/types'
 /**
  * 增改页面 表单类型 默认值
  */
-export const SysUserOperationForm: SysUserOperationRequest = {
+export const sysUserOperationForm: SysUserOperationRequest = {
   userType: UserTypeEnums.USER,
   userStatus: UserStatusEnums.NORMAL,
   profile: {},
@@ -16,7 +16,7 @@ export const SysUserOperationForm: SysUserOperationRequest = {
 /**
  * 增改页面 表单类型 表单校验
  */
-export const SysUserOperationRules: FormRules<SysUserOperationRequest> = {
+export const sysUserOperationRules: FormRules<Required<SysUserOperationRequest>> = {
   userName: [
     { required: true, message: '请输入登录账号', trigger: ['blur', 'change'] },
     { pattern: /^[a-zA-Z0-9_]+$/, message: '账号只能包含字母、数字和下划线', trigger: 'blur' },
@@ -74,7 +74,7 @@ export const SysUserOperationRules: FormRules<SysUserOperationRequest> = {
 /**
  * 列表显示配置
  */
-export const SysUserColumnOption: ColumnConfig<SysUserResponse> = {
+export const sysUserColumnOption: ColumnConfig<SysUserResponse> = {
   userAvatar: {
     desc: '用户头像',
     visible: true,

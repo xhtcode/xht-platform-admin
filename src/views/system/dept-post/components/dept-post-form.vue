@@ -2,7 +2,7 @@
 import type { FormInstance, FormRules } from 'element-plus'
 import type { SysDeptPostOperationRequest } from '@/service/model/system/dept.post.model'
 import { SysDeptPostStatusEnums } from '@/service/model/system/dept.post.model'
-import { SysDeptPostOperationForm, SysDeptPostOperationRules } from '@/views/system/dept-post/dept.post.data'
+import { sysDeptPostOperationForm, sysDeptPostOperationRules } from '@/views/system/dept-post/dept.post.data'
 import { useMessage } from '@/hooks/use-message'
 import { querySysDeptPostById, saveSysDeptPost, updateSysDeptPost } from '@/service/api/system/dept.post.api'
 import type { ModeIdType } from '@/service/model/base.model'
@@ -16,11 +16,11 @@ const state = reactive<AddUpdateOption<SysDeptPostOperationRequest>>({
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,
-  addUpdateForm: { ...SysDeptPostOperationForm },
+  addUpdateForm: { ...sysDeptPostOperationForm },
 })
-const addUpdateFormRef = ref<FormInstance>()
+const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
 const { addUpdateForm } = toRefs(state)
-const rules: FormRules = SysDeptPostOperationRules
+const rules: FormRules = sysDeptPostOperationRules
 
 /**
  * 打开显示

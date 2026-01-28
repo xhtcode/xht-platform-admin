@@ -3,7 +3,7 @@ import type { FormInstance } from 'element-plus'
 import type { GenTableInfoQueryRequest, GenTableInfoResponse } from '@/service/model/generate/table.model'
 import type { ModeIdArrayType } from '@/service/model/base.model'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
-import { GenTableInfoColumnOption } from '@/views/generate/table/table.data'
+import { genTableInfoColumnOption } from '@/views/generate/table/table.data'
 import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
 import { queryExistsPage, removeGenTableInfoByIds, syncTableApi } from '@/service/api/generate/table.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
@@ -38,7 +38,7 @@ const { handleQuery, handleSelectionChange } = useTableQueryPageHooks<GenTableIn
 const { queryParams } = toRefs(state)
 
 const columnOption = ref<ColumnConfig<GenTableInfoResponse>>({
-  ...GenTableInfoColumnOption,
+  ...genTableInfoColumnOption,
 })
 
 /**

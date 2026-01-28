@@ -3,7 +3,7 @@ import { queryGenTemplateList, removeGenTemplateById } from '@/service/api/gener
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { ModeIdType } from '@/service/model/base.model'
 import type { GenTemplateOperationRequest } from '@/service/model/generate/template.model'
-import { GenTemplateOperationForm } from '@/views/generate/template/template.data'
+import { genTemplateOperationForm } from '@/views/generate/template/template.data'
 import { Plus } from '@element-plus/icons-vue'
 
 defineOptions({ name: 'TemplateViewForm' })
@@ -99,7 +99,7 @@ const handleRemove = async (targetId: ModeIdType) => {
 const addNewData = () => {
   activeName.value = state.nextTagId++
   state.data.push({
-    ...GenTemplateOperationForm,
+    ...genTemplateOperationForm,
     id: activeName.value,
     groupId: state.groupId,
     templateName: `NewTemplate${activeName.value}`,

@@ -8,7 +8,7 @@ import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { SysDeptResponse } from '@/service/model/system/dept.model'
 import { SystemFlagEnums } from '@/service/model/base.model'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
-import { SysDeptPostColumnOption } from '@/views/system/dept-post/dept.post.data'
+import { sysDeptPostColumnOption } from '@/views/system/dept-post/dept.post.data'
 import { Delete, Edit, Plus, Refresh, Search } from '@element-plus/icons-vue'
 
 defineOptions({ name: 'SysDeptPostViewIndex' })
@@ -35,7 +35,7 @@ const { handleQuery, handleSelectionChange } = useTableQueryPageHooks<SysDeptPos
 const { queryParams } = toRefs(state)
 
 const columnOption = ref<ColumnConfig<SysDeptPostResponse>>({
-  ...SysDeptPostColumnOption,
+  ...sysDeptPostColumnOption,
 })
 
 /**

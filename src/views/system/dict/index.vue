@@ -7,7 +7,7 @@ import { querySysDictPage, removeSysDictByIds } from '@/service/api/system/dict.
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { ModeIdArrayType } from '@/service/model/base.model'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
-import { SysDictColumnOption } from '@/views/system/dict/dict.data'
+import { sysDictColumnOption } from '@/views/system/dict/dict.data'
 import { Delete, Edit, Plus, Refresh, Search } from '@element-plus/icons-vue'
 
 defineOptions({ name: 'SysDictViewIndex' })
@@ -34,7 +34,7 @@ const { handleQuery, handleSelectionChange } = useTableQueryPageHooks<SysDictQue
 const { queryParams } = toRefs(state)
 
 const columnOption = ref<ColumnConfig<SysDictResponse>>({
-  ...SysDictColumnOption,
+  ...sysDictColumnOption,
 })
 
 /**

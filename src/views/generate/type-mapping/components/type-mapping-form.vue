@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
 import { queryGenTypeMappingById, saveGenTypeMapping, updateGenTypeMapping } from '@/service/api/generate/type.mapping.api'
-import { GenTypeMappingOperationForm, GenTypeMappingOperationRules } from '@/views/generate/type-mapping/type.mapping.data'
+import { genTypeMappingOperationForm, genTypeMappingOperationRules } from '@/views/generate/type-mapping/type.mapping.data'
 import { useMessage } from '@/hooks/use-message'
 import type { ModeIdType } from '@/service/model/base.model'
 import type { GenTypeMappingOperationRequest } from '@/service/model/generate/type.mapping.model'
@@ -14,11 +14,11 @@ const state = reactive<AddUpdateOption<GenTypeMappingOperationRequest>>({
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,
-  addUpdateForm: { ...GenTypeMappingOperationForm },
+  addUpdateForm: { ...genTypeMappingOperationForm },
 })
-const addUpdateFormRef = ref<FormInstance>()
+const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
 const { addUpdateForm } = toRefs(state)
-const rules: FormRules = GenTypeMappingOperationRules
+const rules: FormRules<Required<GenTypeMappingOperationRequest>> = genTypeMappingOperationRules
 
 /**
  * 打开显示

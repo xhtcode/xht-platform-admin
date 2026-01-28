@@ -4,7 +4,7 @@ import type { SysDeptQueryRequest, SysDeptResponse } from '@/service/model/syste
 import { DeptStatusEnums } from '@/service/model/system/dept.model'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { FormInstance } from 'element-plus'
-import { SysDeptColumnOption } from '@/views/system/dept/dept.data'
+import { sysDeptColumnOption } from '@/views/system/dept/dept.data'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { Delete, Edit, Plus, Refresh, Search, Sort } from '@element-plus/icons-vue'
 
@@ -27,7 +27,7 @@ const state = reactive<TableQueryTreeState<SysDeptQueryRequest, SysDeptResponse>
 
 const { queryParams } = toRefs(state)
 const columnOption = ref<ColumnConfig<SysDeptResponse>>({
-  ...SysDeptColumnOption,
+  ...sysDeptColumnOption,
 })
 /**
  * 查询数据列表

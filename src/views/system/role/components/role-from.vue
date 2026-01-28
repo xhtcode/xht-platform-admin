@@ -3,7 +3,7 @@ import type { FormInstance, FormRules } from 'element-plus'
 import { querySysRoleById, saveSysRole, updateSysRole } from '@/service/api/system/role.api'
 import type { SysRoleOperationRequest } from '@/service/model/system/role.model'
 import { RoleStatusEnums } from '@/service/model/system/role.model'
-import { SysRoleOperationForm, SysRoleOperationRules } from '@/views/system/role/role.data'
+import { sysRoleOperationForm, sysRoleOperationRules } from '@/views/system/role/role.data'
 import { useMessage } from '@/hooks/use-message'
 import type { ModeIdType } from '@/service/model/base.model'
 
@@ -15,11 +15,11 @@ const state = reactive<AddUpdateOption<SysRoleOperationRequest>>({
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,
-  addUpdateForm: { ...SysRoleOperationForm },
+  addUpdateForm: { ...sysRoleOperationForm },
 })
-const addUpdateFormRef = ref<FormInstance>()
+const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
 const { addUpdateForm } = toRefs(state)
-const rules: FormRules = SysRoleOperationRules
+const rules: FormRules<Required<SysRoleOperationRequest>> = sysRoleOperationRules
 
 /**
  * 打开显示

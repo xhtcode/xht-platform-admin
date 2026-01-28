@@ -4,7 +4,7 @@ import { SysMenuQueryRequest, SysMenuResponse, SysMenuTreeResponse } from '@/ser
 import { MenuStatusEnums, MenuTypeEnums } from '@/service/model/system/menu.model'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { FormInstance } from 'element-plus'
-import { SysMenuColumnOption } from '@/views/system/menu/menu.data'
+import { sysMenuColumnOption } from '@/views/system/menu/menu.data'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { Delete, Edit, Plus, Refresh, Search, Sort } from '@element-plus/icons-vue'
 
@@ -36,7 +36,7 @@ const state = reactive<{
 
 const { queryParams } = toRefs(state)
 const columnOption = ref<ColumnConfig<SysMenuResponse>>({
-  ...SysMenuColumnOption,
+  ...sysMenuColumnOption,
 })
 
 /**

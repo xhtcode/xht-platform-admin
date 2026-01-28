@@ -5,7 +5,7 @@ import type { ColumnConfig } from '@/components/table-tool-bar/types'
 /**
  * 增改页面 表单类型 默认值
  */
-export const SysDeptOperationForm: Partial<SysDeptOperationRequest> = {
+export const sysDeptOperationForm: Partial<SysDeptOperationRequest> = {
   parentId: '0', // 父部门ID
   deptStatus: DeptStatusEnums.NORMAL, // 部门状态,可用值:0,1
   deptSort: 0, // 显示顺序
@@ -14,7 +14,7 @@ export const SysDeptOperationForm: Partial<SysDeptOperationRequest> = {
 /**
  * 增改页面 表单类型 表单校验
  */
-export const SysDeptOperationRules: FormRules = {
+export const sysDeptOperationRules: FormRules<Required<SysDeptOperationRequest>> = {
   parentId: [{ required: true, message: '请选择上级部门', trigger: ['blur', 'change'] }],
   deptCode: [{ required: true, message: '请输入部门编码', trigger: ['blur', 'change'] }], // 部门编码
   deptName: [{ required: true, message: '请输入部门名称', trigger: ['blur', 'change'] }], // 部门名称
@@ -26,7 +26,7 @@ export const SysDeptOperationRules: FormRules = {
 /**
  * 列表显示配置
  */
-export const SysDeptColumnOption: ColumnConfig<SysDeptResponse> = {
+export const sysDeptColumnOption: ColumnConfig<SysDeptResponse> = {
   deptName: {
     desc: '部门名称',
     visible: true,

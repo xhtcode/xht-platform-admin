@@ -6,7 +6,7 @@ import { RoleStatusEnums } from '@/service/model/system/role.model'
 import { querySysRolePage, removeSysRoleById, removeSysRoleByIds } from '@/service/api/system/role.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
-import { SysRoleColumnOption } from '@/views/system/role/role.data'
+import { sysRoleColumnOption } from '@/views/system/role/role.data'
 import { Delete, Edit, Plus, Refresh, Search } from '@element-plus/icons-vue'
 
 defineOptions({ name: 'SysRoleViewIndex' })
@@ -34,7 +34,7 @@ const { handleQuery, handleSelectionChange } = useTableQueryPageHooks<SysRoleQue
 const { queryParams } = toRefs(state)
 
 const columnOption = ref<ColumnConfig<SysRoleResponse>>({
-  ...SysRoleColumnOption,
+  ...sysRoleColumnOption,
 })
 
 /**
