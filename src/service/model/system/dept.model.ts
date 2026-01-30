@@ -1,5 +1,3 @@
-import type { BasicFormRequest, BasicResponse, INodeResponse, ModeIdType, PageQueryRequest } from '@/service/model/base.model'
-
 /**
  * 定义部门状态枚举类型
  */
@@ -20,7 +18,7 @@ export interface SysDeptQueryRequest extends PageQueryRequest {
 /**
  * 响应类型
  */
-export interface SysDeptResponse extends BasicResponse {
+export interface SysDeptResponse extends MetaResponse {
   id: ModeIdType //部门id
   parentId: ModeIdType // 父部门ID
   deptCode: string // 部门编码
@@ -35,11 +33,6 @@ export interface SysDeptResponse extends BasicResponse {
   remark?: string //备注
   hashChild?: boolean
 }
-
-/**
- * 菜单树响应类型
- */
-export type SysDeptTreeResponse = INodeResponse<SysDeptResponse>[]
 
 /**
  * 操作类型

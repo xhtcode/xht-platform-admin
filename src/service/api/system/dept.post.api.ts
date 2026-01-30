@@ -1,7 +1,6 @@
 import request from '@/utils/request'
 import type { AxiosPromise } from 'axios'
 import type { SysDeptPostOperationRequest, SysDeptPostQueryRequest, SysDeptPostResponse } from '@/service/model/system/dept.post.model'
-import type { ModeIdArrayType, ModeIdType, PageResponse } from '@/service/model/base.model'
 
 /**
  * 后台管理服务前缀

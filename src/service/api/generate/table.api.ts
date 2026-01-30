@@ -1,6 +1,5 @@
 import request from '@/utils/request'
 import type { AxiosPromise, AxiosResponse } from 'axios'
-import type { ModeIdType, PageResponse } from '@/service/model/base.model'
 import {
   GenCodeCoreVo,
   GenTableInfoOperationRequest,

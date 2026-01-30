@@ -5,7 +5,6 @@ import type { SysDictItemQueryRequest, SysDictItemResponse } from '@/service/mod
 import { DictItemStatusEnums } from '@/service/model/system/dict.item.model'
 import { querySysDictItemPage, removeSysDictItemById } from '@/service/api/system/dict.item.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import type { ModeIdArrayType } from '@/service/model/base.model'
 import { useRoute } from 'vue-router'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { sysDictItemColumnOption } from '@/views/system/dict-item/dict.item.data'
@@ -20,23 +19,27 @@ const dictItemFormRef = useTemplateRef('dictItemFormRef')
 const route = useRoute()
 const state = reactive<TableQueryPageState<SysDictItemQueryRequest, SysDictItemResponse>>({
   queryParams: {
-    current: 1,
-    size: 10,
     dictId: undefined,
-  },
-  loadingStatus: false,
-  total: 0,
-  pages: 0,
-  tableList: [],
-  selectedRows: [],
-  singleStatus: true, // 单个禁用
-  multipleStatus: true, // 多个禁用
+  }, // 查询参数
+  total: 0, // 总条目数
+  pages: 0, // 总页数
+  searchStatus: false, // 是否显示搜索区域
+  tableList: [], // 表格数据列表
+  selectedRows: [], // 选中行数据
+  loadingStatus: false, // 加载状态
+  singleStatus: true, // 单个操作禁用状态
+  multipleStatus: true, // 多个操作禁用状态
 })
+
 const handleGetSysDictItemPage = (data: SysDictItemQueryRequest) => {
   state.queryParams.dictId = route.params?.id
   return querySysDictItemPage(data)
 }
-const { handleQuery, handleSelectionChange } = useTableQueryPageHooks<SysDictItemQueryRequest, SysDictItemResponse>(state, handleGetSysDictItemPage)
+
+const { handlePageQuery, handleSelectionChange } = useTableQueryPageHooks<SysDictItemQueryRequest, SysDictItemResponse>(
+  state,
+  handleGetSysDictItemPage
+)
 const { queryParams } = toRefs(state)
 
 const columnOption = ref<ColumnConfig<SysDictItemResponse>>({
@@ -48,7 +51,10 @@ const columnOption = ref<ColumnConfig<SysDictItemResponse>>({
  */
 const resetQuery = async () => {
   queryFormRef.value?.resetFields()
-  await handleQuery()
+  queryParams.value = {
+    dictId: route.params?.id,
+  }
+  await handlePageQuery()
 }
 
 /**
@@ -85,7 +91,7 @@ const handleDelete = (row?: SysDictItemResponse) => {
     .then(async () => {
       await removeSysDictItemById(ids)
       useMessage().success('删除字典项成功!')
-      await handleQuery()
+      await handlePageQuery()
     })
     .finally(() => {
       state.loadingStatus = false
@@ -93,7 +99,7 @@ const handleDelete = (row?: SysDictItemResponse) => {
 }
 
 onMounted(async () => {
-  await handleQuery()
+  await handlePageQuery()
 })
 </script>
 
@@ -107,7 +113,7 @@ onMounted(async () => {
           </el-form-item>
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
-          <el-button :icon="Search" type="primary" @click="handleQuery">查询</el-button>
+          <el-button :icon="Search" type="primary" @click="handlePageQuery">查询</el-button>
           <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
         </el-col>
       </el-row>
@@ -131,7 +137,7 @@ onMounted(async () => {
           </el-form-item>
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
-          <el-button :icon="Search" type="primary" @click="handleQuery">查询</el-button>
+          <el-button :icon="Search" type="primary" @click="handlePageQuery">查询</el-button>
           <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
         </el-col>
       </el-row>
@@ -142,7 +148,7 @@ onMounted(async () => {
       column-status
       refresh-status
       search-status
-      @refresh="handleQuery"
+      @refresh="resetQuery"
     >
       <el-button :icon="Plus" size="small" type="primary" @click="handleAdd" v-authorization="['sys:dict:item:create']">新增</el-button>
       <el-button
@@ -171,7 +177,7 @@ onMounted(async () => {
       :data="state.tableList"
       border
       row-key="id"
-      empty-text="系统暂无字典项！"
+      empty-text="暂无匹配数据 🔍 试试调整筛选条件吧！"
       @selection-change="handleSelectionChange"
     >
       <el-table-column align="center" type="selection" width="55" />
@@ -199,10 +205,12 @@ onMounted(async () => {
       <el-table-column label="创建时间" prop="createTime" width="180" />
       <el-table-column label="更新人" prop="updateBy" width="160" />
       <el-table-column label="更新时间" prop="updateTime" width="180" />
-      <el-table-column fixed="right" label="操作" width="260px">
+      <el-table-column label="操作" fixed="right" width="220">
         <template #default="{ row }">
-          <el-button :icon="Edit" link type="success" @click="handleEdit(row)" v-authorization="['sys:dict:item:update']">修改</el-button>
-          <el-button :icon="Delete" link type="danger" @click="handleDelete(row)" v-authorization="['sys:dict:item:remove']">删除</el-button>
+          <el-space wrap class="flex-center">
+            <el-button :icon="Edit" link type="success" @click="handleEdit(row)" v-authorization="['sys:dict:item:update']">修改</el-button>
+            <el-button :icon="Delete" link type="danger" @click="handleDelete(row)" v-authorization="['sys:dict:item:remove']">删除</el-button>
+          </el-space>
         </template>
       </el-table-column>
     </el-table>
@@ -211,9 +219,9 @@ onMounted(async () => {
       v-model:page-size="state.queryParams.size"
       :page-count="state.pages"
       :total="state.total"
-      @pagination="handleQuery"
+      @pagination="handlePageQuery"
     />
-    <dict-item-form ref="dictItemFormRef" @success="handleQuery" />
+    <dict-item-form ref="dictItemFormRef" @success="handlePageQuery" />
   </div>
 </template>
 

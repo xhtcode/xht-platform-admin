@@ -5,7 +5,6 @@ import type { SysDictQueryRequest, SysDictResponse } from '@/service/model/syste
 import { DictStatusEnums } from '@/service/model/system/dict.model'
 import { querySysDictPage, removeSysDictByIds } from '@/service/api/system/dict.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import type { ModeIdArrayType } from '@/service/model/base.model'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { sysDictColumnOption } from '@/views/system/dict/dict.data'
 import { Delete, Edit, Plus, Refresh, Search } from '@element-plus/icons-vue'
@@ -18,19 +17,18 @@ const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 
 const state = reactive<TableQueryPageState<SysDictQueryRequest, SysDictResponse>>({
   queryParams: {
-    current: 1,
-    size: 10,
     ascName: 'sortOrder',
-  },
-  loadingStatus: false,
-  total: 0,
-  pages: 0,
-  tableList: [],
-  selectedRows: [],
-  singleStatus: true, // 单个禁用
-  multipleStatus: true, // 多个禁用
+  }, // 查询参数
+  total: 0, // 总条目数
+  pages: 0, // 总页数
+  searchStatus: false, // 是否显示搜索区域
+  tableList: [], // 表格数据列表
+  selectedRows: [], // 选中行数据
+  loadingStatus: false, // 加载状态
+  singleStatus: true, // 单个操作禁用状态
+  multipleStatus: true, // 多个操作禁用状态
 })
-const { handleQuery, handleSelectionChange } = useTableQueryPageHooks<SysDictQueryRequest, SysDictResponse>(state, querySysDictPage)
+const { handlePageQuery, handleSelectionChange } = useTableQueryPageHooks<SysDictQueryRequest, SysDictResponse>(state, querySysDictPage)
 const { queryParams } = toRefs(state)
 
 const columnOption = ref<ColumnConfig<SysDictResponse>>({
@@ -42,7 +40,8 @@ const columnOption = ref<ColumnConfig<SysDictResponse>>({
  */
 const resetQuery = async () => {
   queryFormRef.value?.resetFields()
-  await handleQuery()
+  queryParams.value = {}
+  await handlePageQuery()
 }
 
 /**
@@ -79,7 +78,7 @@ const handleDelete = (row?: SysDictResponse) => {
     .then(async () => {
       await removeSysDictByIds(ids)
       useMessage().success('删除字典成功!')
-      await handleQuery()
+      await handlePageQuery()
     })
     .finally(() => {
       state.loadingStatus = false
@@ -87,7 +86,7 @@ const handleDelete = (row?: SysDictResponse) => {
 }
 
 onMounted(async () => {
-  await handleQuery()
+  await handlePageQuery()
 })
 </script>
 
@@ -101,7 +100,7 @@ onMounted(async () => {
           </el-form-item>
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
-          <el-button :icon="Search" type="primary" @click="handleQuery">查询</el-button>
+          <el-button :icon="Search" type="primary" @click="handlePageQuery">查询</el-button>
           <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
         </el-col>
       </el-row>
@@ -125,7 +124,7 @@ onMounted(async () => {
           </el-form-item>
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
-          <el-button :icon="Search" type="primary" @click="handleQuery">查询</el-button>
+          <el-button :icon="Search" type="primary" @click="handlePageQuery">查询</el-button>
           <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
         </el-col>
       </el-row>
@@ -136,7 +135,7 @@ onMounted(async () => {
       column-status
       refresh-status
       search-status
-      @refresh="handleQuery"
+      @refresh="resetQuery"
     >
       <el-button :icon="Plus" size="small" type="primary" @click="handleAdd" v-authorization="['sys:dict:create']">新增</el-button>
       <el-button
@@ -165,7 +164,7 @@ onMounted(async () => {
       :data="state.tableList"
       border
       row-key="id"
-      empty-text="系统暂无字典！"
+      empty-text="暂无匹配数据 🔍 试试调整筛选条件吧！"
       @selection-change="handleSelectionChange"
     >
       <el-table-column align="center" type="selection" width="55" />
@@ -190,10 +189,12 @@ onMounted(async () => {
       <el-table-column v-if="columnOption.createTime?.visible" label="创建时间" prop="createTime" width="180" />
       <el-table-column v-if="columnOption.updateBy?.visible" label="更新人" prop="updateBy" width="160" />
       <el-table-column v-if="columnOption.updateTime?.visible" label="更新时间" prop="updateTime" width="180" />
-      <el-table-column fixed="right" label="操作" width="220px">
+      <el-table-column label="操作" fixed="right" width="220">
         <template #default="{ row }">
-          <el-button :icon="Edit" link type="success" @click="handleEdit(row)">修改</el-button>
-          <el-button :icon="Delete" link type="danger" @click="handleDelete(row)">删除</el-button>
+          <el-space wrap class="flex-center">
+            <el-button :icon="Edit" link type="success" @click="handleEdit(row)">修改</el-button>
+            <el-button :icon="Delete" link type="danger" @click="handleDelete(row)">删除</el-button>
+          </el-space>
         </template>
       </el-table-column>
     </el-table>
@@ -202,9 +203,9 @@ onMounted(async () => {
       v-model:page-size="state.queryParams.size"
       :page-count="state.pages"
       :total="state.total"
-      @pagination="handleQuery"
+      @pagination="handlePageQuery"
     />
-    <dict-form ref="dictFormRef" @success="handleQuery" />
+    <dict-form ref="dictFormRef" @success="handlePageQuery" />
   </div>
 </template>
 

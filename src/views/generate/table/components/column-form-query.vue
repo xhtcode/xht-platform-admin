@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import type { GenColumnInfoResponse, GenTableColumnQueryResponse } from '@/service/model/generate/column.model'
 import type { GenTableInfoResponse } from '@/service/model/generate/table.model'
-import { ModeIdType } from '@/service/model/base.model'
 import { generateUUID } from '@/utils'
 
 defineOptions({
@@ -171,7 +170,7 @@ defineExpose({
           <column-form-select v-model="row.fromComponent" v-model:dict-code="row.dictCode" />
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="120">
+      <el-table-column label="操作" fixed="right" align="center" width="120">
         <template #default="{ row }">
           <el-button type="danger" @click="handleDelete(row)">删除</el-button>
         </template>

@@ -2,7 +2,6 @@
 import type { FormInstance, FormRules } from 'element-plus'
 import { useMessage } from '@/hooks/use-message'
 import { importTableInfo } from '@/service/api/generate/table.api'
-import type { ModeIdType } from '@/service/model/base.model'
 
 interface AddUpdateOption {
   visibleStatus: boolean

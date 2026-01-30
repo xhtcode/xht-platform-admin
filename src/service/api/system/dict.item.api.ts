@@ -1,7 +1,6 @@
 import request from '@/utils/request'
 import type { AxiosPromise } from 'axios'
 import type { SysDictItemOperationRequest, SysDictItemQueryRequest, SysDictItemResponse } from '@/service/model/system/dict.item.model'
-import type { ModeIdArrayType, ModeIdType, PageResponse } from '@/service/model/base.model'
 import { DictVo } from '@/store/modules/dict.store'
 
 /**

@@ -81,9 +81,9 @@ service.interceptors.response.use(
         return Promise.reject(response.data)
       }
       useMessage().error(response.data.msg)
-      return response.data
+      return Promise.reject(response.data)
     }
-    return response.data
+    return Promise.resolve(response.data)
   },
   (error: any): Promise<any> => {
     // 对响应错误做点什么

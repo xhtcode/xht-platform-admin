@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { queryGenTemplateList, removeGenTemplateById } from '@/service/api/generate/template.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import type { ModeIdType } from '@/service/model/base.model'
 import type { GenTemplateOperationRequest } from '@/service/model/generate/template.model'
 import { genTemplateOperationForm } from '@/views/generate/template/template.data'
 import { Plus } from '@element-plus/icons-vue'

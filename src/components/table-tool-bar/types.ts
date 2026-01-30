@@ -1,5 +1,3 @@
-import type { BasicResponse } from '@/service/model/base.model'
-
 /**
  * 右边工作区props类型
  */
@@ -47,4 +45,6 @@ export interface EmitsType {
   (e: 'export'): void
 
   (e: 'refresh'): void
+
+  (e: 'column'): void
 }

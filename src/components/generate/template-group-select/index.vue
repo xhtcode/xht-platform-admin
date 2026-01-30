@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { queryGenTemplateGroupList } from '@/service/api/generate/template.group.api'
 import type { GenTemplateGroupSelectProps, GenTemplateGroupSelectState } from '@/components/generate/template-group-select/types'
-import type { ModeIdType } from '@/service/model/base.model'
 
 /**
  * 定义组件选项

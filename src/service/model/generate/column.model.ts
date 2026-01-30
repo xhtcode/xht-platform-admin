@@ -1,5 +1,3 @@
-import type { BasicResponse, ModeIdType } from '@/service/model/base.model'
-
 export enum GenStatusEnums {
   DISABLED = 0, // 不显示/非必填/禁用/隐藏
   ENABLED = 1, // 显示/必填/启用/不隐藏
@@ -8,7 +6,7 @@ export enum GenStatusEnums {
 /**
  * 响应类型
  */
-export interface GenColumnInfoResponse extends BasicResponse {
+export interface GenColumnInfoResponse extends MetaResponse {
   /**
    * 主键
    */

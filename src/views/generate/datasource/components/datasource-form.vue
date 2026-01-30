@@ -4,7 +4,6 @@ import { queryGenDataSourceById, saveGenDataSource, updateGenDataSource } from '
 import { genDataSourceOperationForm, genDataSourceOperationRules } from '@/views/generate/datasource/datasource.data'
 import { useMessage } from '@/hooks/use-message'
 import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
-import type { ModeIdType } from '@/service/model/base.model'
 import type { GenDataSourceOperationRequest } from '@/service/model/generate/datasource.model'
 
 defineOptions({ name: 'GenDataSourceAddOrUpdate' })

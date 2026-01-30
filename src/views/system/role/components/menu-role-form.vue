@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import type { CheckboxValueType } from 'element-plus'
-import type { ModeIdType } from '@/service/model/base.model'
 import type { SysMenuResponse } from '@/service/model/system/menu.model'
 import type { SysRoleMenuBindForm } from '@/service/model/system/role.model'
 import { roleMenuBind, selectMenuIdByRoleId } from '@/service/api/system/role.api'

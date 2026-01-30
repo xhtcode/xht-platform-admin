@@ -4,7 +4,6 @@ import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
 import type { GenTypeMappingQueryRequest, GenTypeMappingResponse } from '@/service/model/generate/type.mapping.model'
 import { queryGenTypeMappingPage, removeGenTypeMappingByIds } from '@/service/api/generate/type.mapping.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import type { ModeIdArrayType } from '@/service/model/base.model'
 import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { dbDataTypeList, genTypeMappingColumnOption } from '@/views/generate/type-mapping/type.mapping.data'
@@ -17,19 +16,17 @@ const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 const typeMappingFormRef = useTemplateRef('typeMappingFormRef')
 
 const state = reactive<TableQueryPageState<GenTypeMappingQueryRequest, GenTypeMappingResponse>>({
-  queryParams: {
-    current: 1,
-    size: 10,
-  },
-  loadingStatus: false,
-  total: 0,
-  pages: 0,
-  tableList: [],
-  selectedRows: [],
-  singleStatus: true, // 单个禁用
-  multipleStatus: true, // 多个禁用
+  queryParams: {}, // 查询参数
+  total: 0, // 总条目数
+  pages: 0, // 总页数
+  searchStatus: false, // 是否显示搜索区域
+  tableList: [], // 表格数据列表
+  selectedRows: [], // 选中行数据
+  loadingStatus: false, // 加载状态
+  singleStatus: true, // 单个操作禁用状态
+  multipleStatus: true, // 多个操作禁用状态
 })
-const { handleQuery, handleSelectionChange } = useTableQueryPageHooks<GenTypeMappingQueryRequest, GenTypeMappingResponse>(
+const { handlePageQuery, handleSelectionChange } = useTableQueryPageHooks<GenTypeMappingQueryRequest, GenTypeMappingResponse>(
   state,
   queryGenTypeMappingPage
 )
@@ -58,7 +55,8 @@ const createFilter = (queryString: string) => {
  */
 const resetQuery = async () => {
   queryFormRef.value?.resetFields()
-  await handleQuery()
+  queryParams.value = {}
+  await handlePageQuery()
 }
 
 /**
@@ -94,7 +92,7 @@ const handleDelete = (row?: GenTypeMappingResponse) => {
     .confirm('此操作将永久删除字段类型映射, 是否继续?')
     .then(async () => {
       await removeGenTypeMappingByIds(ids)
-      await handleQuery()
+      await handlePageQuery()
       useMessage().success('删除字段类型映射成功!')
     })
     .finally(() => {
@@ -103,7 +101,7 @@ const handleDelete = (row?: GenTypeMappingResponse) => {
 }
 
 onMounted(async () => {
-  await handleQuery()
+  await handlePageQuery()
 })
 </script>
 
@@ -125,12 +123,12 @@ onMounted(async () => {
           </el-form-item>
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
-          <el-button :icon="Search" type="primary" @click="handleQuery()">查询</el-button>
+          <el-button :icon="Search" type="primary" @click="handlePageQuery()">查询</el-button>
           <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
         </el-col>
       </el-row>
     </el-form>
-    <table-tool-bar v-model:column-data="columnOption" v-model:show-search="state.searchStatus" column-status refresh-status @refresh="handleQuery">
+    <table-tool-bar v-model:column-data="columnOption" v-model:show-search="state.searchStatus" column-status refresh-status @refresh="resetQuery">
       <el-button :icon="Plus" size="small" type="primary" @click="handleAdd">新增</el-button>
       <el-button :icon="Edit" size="small" type="success" :disabled="state.singleStatus" @click="handleEdit(state.selectedRows[0])">修改</el-button>
       <el-button :icon="Delete" size="small" type="danger" :disabled="state.multipleStatus" @click="handleDelete(undefined)">批量删除</el-button>
@@ -140,7 +138,7 @@ onMounted(async () => {
       :data="state.tableList"
       border
       row-key="id"
-      empty-text="系统相关字段类型映射！"
+      empty-text="暂无匹配数据 🔍 试试调整筛选条件吧！"
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="55" />
@@ -154,10 +152,12 @@ onMounted(async () => {
       <el-table-column v-if="columnOption.createTime?.visible" label="创建时间" prop="createTime" width="180" />
       <el-table-column v-if="columnOption.updateBy?.visible" label="更新人" prop="updateBy" width="160" />
       <el-table-column v-if="columnOption.updateTime?.visible" label="更新时间" prop="updateTime" width="180" />
-      <el-table-column label="操作" width="220px">
+      <el-table-column label="操作" fixed="right" width="220">
         <template #default="{ row }">
-          <el-button icon="Edit" link type="success" @click="handleEdit(row)">修改</el-button>
-          <el-button icon="Delete" link type="danger" @click="handleDelete(row)">删除</el-button>
+          <el-space wrap class="flex-center">
+            <el-button icon="Edit" link type="success" @click="handleEdit(row)">修改</el-button>
+            <el-button icon="Delete" link type="danger" @click="handleDelete(row)">删除</el-button>
+          </el-space>
         </template>
       </el-table-column>
     </el-table>
@@ -166,9 +166,9 @@ onMounted(async () => {
       v-model:page-size="state.queryParams.size"
       :page-count="state.pages"
       :total="state.total"
-      @pagination="handleQuery"
+      @pagination="handlePageQuery"
     />
-    <type-mapping-form ref="typeMappingFormRef" @success="handleQuery()" />
+    <type-mapping-form ref="typeMappingFormRef" @success="handlePageQuery()" />
   </div>
 </template>
 

@@ -5,7 +5,6 @@ import { sysDictOperationForm, sysDictOperationRules } from '@/views/system/dict
 import { useMessage } from '@/hooks/use-message'
 import type { SysDictOperationRequest } from '@/service/model/system/dict.model'
 import { DictStatusEnums } from '@/service/model/system/dict.model'
-import type { ModeIdType } from '@/service/model/base.model'
 
 defineOptions({ name: 'SysDictAddOrUpdate' })
 

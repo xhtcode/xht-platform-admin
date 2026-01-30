@@ -5,7 +5,6 @@ import { SysDeptPostStatusEnums } from '@/service/model/system/dept.post.model'
 import { sysDeptPostOperationForm, sysDeptPostOperationRules } from '@/views/system/dept-post/dept.post.data'
 import { useMessage } from '@/hooks/use-message'
 import { querySysDeptPostById, saveSysDeptPost, updateSysDeptPost } from '@/service/api/system/dept.post.api'
-import type { ModeIdType } from '@/service/model/base.model'
 import { SystemFlagEnums } from '@/service/model/base.model'
 
 defineOptions({ name: 'SysDeptAddOrUpdate' })

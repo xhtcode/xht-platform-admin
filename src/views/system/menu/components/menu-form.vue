@@ -5,7 +5,6 @@ import { useMessage } from '@/hooks/use-message'
 import { MenuCommonStatus, SysMenuOperationRequest } from '@/service/model/system/menu.model'
 import { MenuStatusEnums, MenuTypeEnums } from '@/service/model/system/menu.model'
 import { sysMenuOperationForm, sysMenuOperationRules } from '@/views/system/menu/menu.data'
-import type { ModeIdType } from '@/service/model/base.model'
 
 defineOptions({
   name: 'MenuForm',
@@ -78,7 +77,7 @@ const submitForm = () => {
  */
 const close = () => {
   if (state.loadingStatus) return
-  addUpdateForm.value = { ...SysMenuOperationForm }
+  addUpdateForm.value = { ...sysMenuOperationForm }
   state.visibleStatus = false
   state.operationStatus = 'create'
   state.loadingStatus = false

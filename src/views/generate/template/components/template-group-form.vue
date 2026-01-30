@@ -3,7 +3,6 @@ import type { FormInstance, FormRules } from 'element-plus'
 import { queryGenTemplateGroupById, saveGenTemplateGroup, updateGenTemplateGroup } from '@/service/api/generate/template.group.api'
 import { genTemplateGroupOperationForm, genTemplateGroupOperationRules } from '@/views/generate/template/template.data'
 import { useMessage } from '@/hooks/use-message'
-import type { ModeIdType } from '@/service/model/base.model'
 import type { GenTemplateGroupOperationRequest } from '@/service/model/generate/template.group.model'
 
 defineOptions({ name: 'TemplateGroupForm' })

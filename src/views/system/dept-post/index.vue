@@ -19,19 +19,17 @@ const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 const deptTreeRef = useTemplateRef('deptTreeRef')
 
 const state = reactive<TableQueryPageState<SysDeptPostQueryRequest, SysDeptPostResponse>>({
-  queryParams: {
-    current: 1,
-    size: 10,
-  },
-  loadingStatus: false,
-  total: 0,
-  pages: 0,
-  tableList: [],
-  selectedRows: [],
-  singleStatus: true, // 单个禁用
-  multipleStatus: true, // 多个禁用
+  queryParams: {}, // 查询参数
+  total: 0, // 总条目数
+  pages: 0, // 总页数
+  searchStatus: false, // 是否显示搜索区域
+  tableList: [], // 表格数据列表
+  selectedRows: [], // 选中行数据
+  loadingStatus: false, // 加载状态
+  singleStatus: true, // 单个操作禁用状态
+  multipleStatus: true, // 多个操作禁用状态
 })
-const { handleQuery, handleSelectionChange } = useTableQueryPageHooks<SysDeptPostQueryRequest, SysDeptPostResponse>(state, querySysDeptPostPage)
+const { handlePageQuery, handleSelectionChange } = useTableQueryPageHooks<SysDeptPostQueryRequest, SysDeptPostResponse>(state, querySysDeptPostPage)
 const { queryParams } = toRefs(state)
 
 const columnOption = ref<ColumnConfig<SysDeptPostResponse>>({
@@ -39,19 +37,15 @@ const columnOption = ref<ColumnConfig<SysDeptPostResponse>>({
 })
 
 /**
- * 查询部门岗位数据
- */
-const queryPostData = async () => {
-  await handleQuery()
-}
-/**
  * 重置表单
  */
 const resetQuery = async () => {
   queryFormRef.value?.resetFields()
   deptTreeRef.value?.resetHighlightCurrent()
-  queryParams.value.deptId = undefined
-  await queryPostData()
+  queryParams.value = {
+    deptId: undefined,
+  }
+  await handlePageQuery()
 }
 /**
  * 处理新增
@@ -77,7 +71,7 @@ const handleDelete = (row: SysDeptPostResponse) => {
     .then(async () => {
       await removeSysDeptPostById(row.id)
       useMessage().success('删除部门岗位成功!')
-      await queryPostData()
+      await handlePageQuery()
     })
     .finally(() => {
       state.loadingStatus = false
@@ -97,7 +91,7 @@ const handleBatchDelete = () => {
     .confirm('此操作将批量删除部门岗位, 是否继续?')
     .then(async () => {
       await removeSysDeptPostByIds(ids)
-      await queryPostData()
+      await handlePageQuery()
       useMessage().success('批量删除部门岗位成功!')
     })
     .finally(() => {
@@ -111,7 +105,7 @@ const handleBatchDelete = () => {
  */
 const handleDeptClick = (data: SysDeptResponse) => {
   queryParams.value.deptId = data.id
-  queryPostData()
+  handlePageQuery()
 }
 </script>
 
@@ -129,7 +123,7 @@ const handleDeptClick = (data: SysDeptResponse) => {
             </el-form-item>
           </el-col>
           <el-col :lg="8" :md="8" :sm="12" :xl="4" :xs="24" class="text-center">
-            <el-button :icon="Search" type="primary" @click="queryPostData">查询</el-button>
+            <el-button :icon="Search" type="primary" @click="handlePageQuery">查询</el-button>
             <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
           </el-col>
         </el-row>
@@ -161,7 +155,7 @@ const handleDeptClick = (data: SysDeptResponse) => {
             </el-form-item>
           </el-col>
           <el-col :lg="8" :md="8" :offset="8" :sm="12" :xl="4" :xs="24" class="text-center">
-            <el-button :icon="Search" type="primary" @click="queryPostData">查询</el-button>
+            <el-button :icon="Search" type="primary" @click="handlePageQuery">查询</el-button>
             <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
           </el-col>
         </el-row>
@@ -172,7 +166,7 @@ const handleDeptClick = (data: SysDeptResponse) => {
         column-status
         refresh-status
         search-status
-        @refresh="queryPostData"
+        @refresh="resetQuery"
       >
         <el-button :icon="Plus" size="small" type="primary" @click="handleAdd" v-authorization="['sys:dict:create']">新增</el-button>
         <el-button
@@ -235,10 +229,12 @@ const handleDeptClick = (data: SysDeptResponse) => {
         <el-table-column v-if="columnOption.createTime?.visible" label="创建时间" prop="createTime" width="180" />
         <el-table-column v-if="columnOption.updateBy?.visible" label="更新人" prop="updateBy" width="160" />
         <el-table-column v-if="columnOption.updateTime?.visible" label="更新时间" prop="updateTime" width="180" />
-        <el-table-column fixed="right" label="操作" width="260px">
+        <el-table-column label="操作" fixed="right" width="220">
           <template #default="{ row }">
-            <el-button :icon="Edit" link type="success" @click="handleEdit(row)" v-authorization="['sys:post:update']">修改</el-button>
-            <el-button :icon="Delete" link type="danger" @click="handleDelete(row)" v-authorization="['sys:post:remove']">删除</el-button>
+            <el-space wrap class="flex-center">
+              <el-button :icon="Edit" link type="success" @click="handleEdit(row)" v-authorization="['sys:post:update']">修改</el-button>
+              <el-button :icon="Delete" link type="danger" @click="handleDelete(row)" v-authorization="['sys:post:remove']">删除</el-button>
+            </el-space>
           </template>
         </el-table-column>
       </el-table>
@@ -247,15 +243,11 @@ const handleDeptClick = (data: SysDeptResponse) => {
         v-model:page-size="state.queryParams.size"
         :page-count="state.pages"
         :total="state.total"
-        @pagination="queryPostData"
+        @pagination="handlePageQuery"
       />
     </div>
-    <dept-post-form ref="deptPostFormRef" @success="queryPostData" />
+    <dept-post-form ref="deptPostFormRef" @success="handlePageQuery" />
   </div>
 </template>
 
-<style lang="scss" scoped>
-:deep(.splitpanes--vertical .splitpanes__splitter) {
-  cursor: auto !important;
-}
-</style>
+<style lang="scss" scoped></style>

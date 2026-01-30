@@ -1,4 +1,3 @@
-import type { BasicFormRequest, BasicResponse, ModeIdType, PageQueryRequest } from '@/service/model/base.model'
 import type { SysDeptPostResponse } from '@/service/model/system/dept.post.model'
 
 /**
@@ -137,7 +136,7 @@ export interface SysUserProfileResponse extends BasicResponse {
 /**
  * 响应类型
  */
-export interface SysUserResponse extends BasicResponse {
+export interface SysUserResponse extends MetaResponse {
   id: ModeIdType // 用户ID
   userType: UserTypeEnums // 用户类型
   userName: string // 用户名

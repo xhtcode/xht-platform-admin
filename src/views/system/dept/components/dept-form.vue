@@ -4,7 +4,6 @@ import { querySysDeptById, saveSysDept, updateSysDept } from '@/service/api/syst
 import type { SysDeptOperationRequest } from '@/service/model/system/dept.model'
 import { DeptStatusEnums } from '@/service/model/system/dept.model'
 import type { UserSimpleVo } from '@/service/model/system/user.model'
-import type { ModeIdType } from '@/service/model/base.model'
 import { sysDeptOperationForm, sysDeptOperationRules } from '@/views/system/dept/dept.data'
 import { useMessage } from '@/hooks/use-message'
 import { Search } from '@element-plus/icons-vue'

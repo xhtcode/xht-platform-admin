@@ -1,4 +1,3 @@
-import type { BasicFormRequest, BasicResponse, ModeIdType, PageQueryRequest } from '@/service/model/base.model'
 import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
 
 /**
@@ -18,7 +17,7 @@ export interface GenDataSourceQueryRequest extends PageQueryRequest {
 /**
  * 响应类型
  */
-export interface GenDataSourceResponse extends BasicResponse {
+export interface GenDataSourceResponse extends MetaResponse {
   /**
    * 数据源ID
    */

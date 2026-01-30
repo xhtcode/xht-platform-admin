@@ -22,19 +22,18 @@ const deptTreeRef = useTemplateRef('deptTreeRef')
 const state = reactive<TableQueryPageState<SysUserQueryRequest, SysUserResponse>>({
   queryParams: {
     deptId: undefined,
-    current: 1,
-    size: 10,
     ascName: 'createTime',
-  },
-  loadingStatus: false,
-  total: 0,
-  pages: 0,
-  tableList: [],
-  selectedRows: [],
-  singleStatus: true, // 单个禁用
-  multipleStatus: true, // 多个禁用
+  }, // 查询参数
+  total: 0, // 总条目数
+  pages: 0, // 总页数
+  searchStatus: false, // 是否显示搜索区域
+  tableList: [], // 表格数据列表
+  selectedRows: [], // 选中行数据
+  loadingStatus: false, // 加载状态
+  singleStatus: true, // 单个操作禁用状态
+  multipleStatus: true, // 多个操作禁用状态
 })
-const { handleQuery, handleSelectionChange } = useTableQueryPageHooks<SysUserQueryRequest, SysUserResponse>(state, querySysUserPage)
+const { handlePageQuery, handleSelectionChange } = useTableQueryPageHooks<SysUserQueryRequest, SysUserResponse>(state, querySysUserPage)
 const { queryParams } = toRefs(state)
 
 const columnOption = ref<ColumnConfig<SysUserResponse>>({
@@ -47,11 +46,8 @@ const columnOption = ref<ColumnConfig<SysUserResponse>>({
 const resetQuery = async () => {
   queryFormRef.value?.resetFields()
   deptTreeRef.value?.resetHighlightCurrent()
-  state.queryParams = {
-    current: 1,
-    size: 10,
-  }
-  await handleQuery()
+  queryParams.value = {}
+  await handlePageQuery()
 }
 
 /**
@@ -77,7 +73,7 @@ const handleDelete = (row: SysUserResponse) => {
     .confirm('此操作将永久删除用户, 是否继续?')
     .then(async () => {
       await removeSysUserById(row.id)
-      await handleQuery()
+      await handlePageQuery()
       useMessage().success('删除用户成功!')
     })
     .finally(() => {
@@ -99,7 +95,7 @@ const handleBatchDelete = () => {
     .then(async () => {
       await removeSysUserByIds(ids)
       useMessage().success('批量删除用户成功!')
-      await handleQuery()
+      await handlePageQuery()
     })
     .finally(() => {
       state.loadingStatus = false
@@ -134,11 +130,11 @@ const handleUserRole = (row: SysUserResponse) => {
  */
 const handleDeptClick = async (data: SysDeptResponse) => {
   queryParams.value.deptId = data.id
-  await handleQuery()
+  await handlePageQuery()
 }
 
 onMounted(async () => {
-  await handleQuery()
+  await handlePageQuery()
 })
 </script>
 
@@ -156,7 +152,7 @@ onMounted(async () => {
             </el-form-item>
           </el-col>
           <el-col :lg="8" :md="8" :sm="12" :xl="4" :xs="24" class="text-center">
-            <el-button :icon="Search" type="primary" @click="handleQuery">查询</el-button>
+            <el-button :icon="Search" type="primary" @click="handlePageQuery">查询</el-button>
             <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
           </el-col>
         </el-row>
@@ -197,7 +193,7 @@ onMounted(async () => {
             </el-form-item>
           </el-col>
           <el-col :lg="8" :md="8" :sm="12" :xl="4" :xs="24" class="text-center">
-            <el-button :icon="Search" type="primary" @click="handleQuery">查询</el-button>
+            <el-button :icon="Search" type="primary" @click="handlePageQuery">查询</el-button>
             <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
           </el-col>
         </el-row>
@@ -208,7 +204,7 @@ onMounted(async () => {
         column-status
         refresh-status
         search-status
-        @refresh="handleQuery"
+        @refresh="resetQuery"
       >
         <el-button :icon="Plus" size="small" type="primary" @click="handleAdd" v-authorization="['sys:user:create']">新增</el-button>
         <el-button
@@ -237,7 +233,7 @@ onMounted(async () => {
         :data="state.tableList"
         border
         row-key="id"
-        :empty-text="queryParams.deptId ? '该部门下未添加用户信息' : '系统内暂无相关数据'"
+        :empty-text="queryParams.deptId ? '该部门下未添加用户信息 🔍 试试调整筛选条件吧！' : '暂无匹配数据 🔍 试试调整筛选条件吧！'"
         @selection-change="handleSelectionChange"
       >
         <el-table-column align="center" type="selection" width="55" />
@@ -264,9 +260,9 @@ onMounted(async () => {
         <el-table-column v-if="columnOption.createTime?.visible" label="创建时间" prop="createTime" width="180" />
         <el-table-column v-if="columnOption.updateBy?.visible" label="更新人" prop="updateBy" width="160" />
         <el-table-column v-if="columnOption.updateTime?.visible" label="更新时间" prop="updateTime" width="180" />
-        <el-table-column fixed="right" label="操作" width="220">
+        <el-table-column label="操作" fixed="right" width="220">
           <template #default="{ row }">
-            <el-space wrap>
+            <el-space wrap class="flex-center">
               <el-button :icon="Edit" link type="success" @click="handleEdit(row)" v-authorization="['sys:user:update']">修改用户</el-button>
               <el-button :icon="Delete" link type="danger" @click="handleDelete(row)" v-authorization="['sys:user:remove']">删除用户</el-button>
               <el-button :icon="Key" link type="warning" @click="handleResetPwd(row)" v-authorization="['sys:user:pwd']">重置密码</el-button>
@@ -280,10 +276,10 @@ onMounted(async () => {
         v-model:page-size="state.queryParams.size"
         :page-count="state.pages"
         :total="state.total"
-        @pagination="handleQuery"
+        @pagination="handlePageQuery"
       />
     </div>
-    <user-form ref="userFormRef" @success="handleQuery" />
+    <user-form ref="userFormRef" @success="handlePageQuery" />
     <user-role-form ref="userRoleFormRef" />
   </div>
 </template>

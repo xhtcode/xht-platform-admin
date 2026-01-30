@@ -1,5 +1,4 @@
-import type { BasicFormRequest, BasicResponse, ModeIdType, PageQueryRequest } from '@/service/model/base.model'
-import { GenColumnInfoResponse, GenTableColumnQueryResponse } from '@/service/model/generate/column.model'
+import type { GenColumnInfoResponse, GenTableColumnQueryResponse } from '@/service/model/generate/column.model'
 import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
 
 /**
@@ -42,7 +41,7 @@ export interface CodeViewState {
 /**
  * 表信息操作响应参数
  */
-export interface GenTableInfoOperationResponse extends BasicResponse {
+export interface GenTableInfoOperationResponse extends MetaResponse {
   /**
    * 表信息
    */
@@ -116,7 +115,7 @@ export interface GenTableInfoQueryRequest extends PageQueryRequest {
 /**
  * 响应类型
  */
-export interface GenTableInfoResponse extends BasicResponse {
+export interface GenTableInfoResponse extends MetaResponse {
   /**
    * 表ID
    */

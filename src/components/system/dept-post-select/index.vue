@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { ModeIdType } from '@/service/model/base.model'
 import { findListByDeptId } from '@/service/api/system/dept.post.api'
 import type { SysDeptPostResponse } from '@/service/model/system/dept.post.model'
 

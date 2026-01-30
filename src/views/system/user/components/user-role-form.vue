@@ -3,7 +3,6 @@ import { queryToolsRoleList } from '@/service/api/system/role.api'
 import type { CheckboxValueType } from 'element-plus'
 import { useMessage } from '@/hooks/use-message'
 import { selectRoleIdByUserId, UserRoleBind } from '@/service/api/system/user.api'
-import type { ModeIdType } from '@/service/model/base.model'
 import { UserRoleBindOperationRequest } from '@/service/model/system/user.model'
 
 defineOptions({ name: 'UserRoleForm' })
@@ -137,6 +136,6 @@ defineExpose({
 }
 
 .user-role-dialog-body {
-  height: 65vh;
+  height: 45vh;
 }
 </style>

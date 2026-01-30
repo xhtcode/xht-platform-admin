@@ -1,8 +1,7 @@
 <script lang="ts" setup>
 import { querySysDeptTree } from '@/service/api/system/dept.api'
-import type { SysDeptResponse, SysDeptTreeResponse } from '@/service/model/system/dept.model'
+import type { SysDeptResponse } from '@/service/model/system/dept.model'
 import { DeptStatusEnums } from '@/service/model/system/dept.model'
-import type { ModeIdType } from '@/service/model/base.model'
 
 defineOptions({ name: 'DeptTreeSelect' })
 
@@ -25,7 +24,7 @@ interface Props {
 
 const menuSelectTreeRef = useTemplateRef<any>('menuSelectTreeRef')
 const modelValue = useVModel(props, 'modelValue', emits)
-const menuTree = ref<SysDeptTreeResponse>([])
+const menuTree = ref<INodeResponse<SysDeptResponse>[]>([])
 
 /**
  * 获取部门树数据
@@ -35,7 +34,7 @@ const getMenuTree = async () => {
     const response = await querySysDeptTree({
       deptStatus: DeptStatusEnums.NORMAL,
     })
-    let treeData = response.data
+    let treeData: INodeResponse<SysDeptResponse>[] = response.data
     // 如果需要显示顶级部门选项
     if (props.showTopDept) {
       const topMenu = {

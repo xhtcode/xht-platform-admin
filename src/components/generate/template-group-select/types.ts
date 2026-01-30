@@ -1,5 +1,4 @@
 import type { SelectProps } from 'element-plus'
-import type { ModeIdType } from '@/service/model/base.model'
 import type { GenTemplateGroupResponse } from '@/service/model/generate/template.group.model'
 
 /**

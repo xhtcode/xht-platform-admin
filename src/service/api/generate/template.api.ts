@@ -1,6 +1,5 @@
 import request from '@/utils/request'
 import type { AxiosPromise } from 'axios'
-import type { ModeIdType } from '@/service/model/base.model'
 import type { GenTemplateOperationRequest, GenTemplateResponse } from '@/service/model/generate/template.model'
 
 /**

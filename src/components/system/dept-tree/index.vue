@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { useVModel } from '@vueuse/core'
 import { querySysDeptTree } from '@/service/api/system/dept.api'
-import type { SysDeptQueryRequest, SysDeptResponse, SysDeptTreeResponse } from '@/service/model/system/dept.model'
+import type { SysDeptQueryRequest, SysDeptResponse } from '@/service/model/system/dept.model'
 import { DeptStatusEnums } from '@/service/model/system/dept.model'
 import type { AxiosResponse } from 'axios'
 import { CaretBottom, CaretTop } from '@element-plus/icons-vue'
@@ -31,7 +31,7 @@ const modelValue = useVModel(props, 'modelValue', emits)
 const loading = ref<boolean>(false)
 const filterText = ref<string>('')
 const treeRef = useTemplateRef('treeRef')
-const treeData = ref<SysDeptTreeResponse>([])
+const treeData = ref<INodeResponse<SysDeptResponse>[]>([])
 const queryParams = ref<SysDeptQueryRequest>({
   deptStatus: DeptStatusEnums.NORMAL,
 })
@@ -80,7 +80,7 @@ watch(filterText, (val) => {
  */
 const handleQuery = async () => {
   loading.value = true
-  await querySysDeptTree(queryParams.value).then((res: AxiosResponse<SysDeptTreeResponse>) => {
+  await querySysDeptTree(queryParams.value).then((res: AxiosResponse<INodeResponse<SysDeptResponse>[]>) => {
     treeData.value = res.data
     loading.value = false
   })

@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import type { ModeIdType } from '@/service/model/base.model'
 import { DeptUserProps, UserSimpleVo } from '@/service/model/system/user.model'
 import { useMessage } from '@/hooks/use-message'
 

@@ -7,7 +7,6 @@ import type {
   SysRoleQueryRequest,
   SysRoleResponse,
 } from '@/service/model/system/role.model'
-import type { ModeIdType, PageResponse } from '@/service/model/base.model'
 
 /**
  * 后台管理服务前缀

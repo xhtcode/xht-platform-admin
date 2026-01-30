@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { MenuCommonStatus, MenuTypeEnums, type SysMenuTreeResponse } from '@/service/model/system/menu.model'
+import { MenuCommonStatus, MenuTypeEnums, type SysMenuResponse } from '@/service/model/system/menu.model'
 import { queryToolsMenuTree } from '@/service/api/system/menu.api'
 import type { TreeNodeData, TreeOptionProps } from 'element-plus/es/components/tree/src/tree.type'
 import type { MenuTreeSelectProps } from '@/components/system/menu-tree-select/types'
@@ -20,7 +20,7 @@ const emits = defineEmits(['change'])
 
 const menuSelectTreeRef = useTemplateRef<TreeInstance>('menuSelectTreeRef')
 const modelValue = defineModel<string>('modelValue')
-const menuTree = ref<SysMenuTreeResponse>([])
+const menuTree = ref<INodeResponse<SysMenuResponse>[]>([])
 const loadingStatus = ref<boolean>(false)
 const menuTreeProps: TreeOptionProps = {
   label: 'menuName',

@@ -110,7 +110,7 @@ onMounted(() => {
         <slot />
       </el-space>
     </div>
-    <div :style="style" class="top-right-btn">
+    <div class="top-right-btn">
       <slot name="after" />
       <el-tooltip v-if="importStatus" class="item" content="导入" placement="top">
         <el-button circle :icon="Upload" size="small" type="success" @click="emitFunction('import')" />

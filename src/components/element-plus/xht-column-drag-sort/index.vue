@@ -3,7 +3,6 @@ import type { SortableEvent } from 'sortablejs'
 import Sortable from 'sortablejs'
 import { Rank } from '@element-plus/icons-vue'
 import type { XhtColumnDragSortEmits, XhtColumnDragSortProps } from '@/components/element-plus/xht-column-drag-sort/types'
-import type { BasicResponse } from '@/service/model/base.model'
 
 defineOptions({
   name: 'XhtColumnDragSort',

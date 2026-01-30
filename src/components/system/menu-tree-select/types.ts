@@ -1,5 +1,3 @@
-import type { ModeIdType } from '@/service/model/base.model'
-
 /**
  * 菜单树选择组件 props 属性
  */

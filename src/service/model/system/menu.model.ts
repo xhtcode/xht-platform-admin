@@ -1,5 +1,3 @@
-import type { BasicFormRequest, BasicResponse, INodeResponse, ModeIdType, PageQueryRequest } from '@/service/model/base.model'
-
 /**
  * 定义菜单状态枚举类型
  */
@@ -37,7 +35,7 @@ export interface SysMenuQueryRequest extends PageQueryRequest {
 /**
  * 菜单响应类型
  */
-export interface SysMenuResponse extends BasicResponse {
+export interface SysMenuResponse extends MetaResponse {
   id: ModeIdType // 菜单ID
   parentId: ModeIdType // 父菜单ID
   menuType?: MenuTypeEnums // 类型
@@ -54,11 +52,6 @@ export interface SysMenuResponse extends BasicResponse {
   frameFlag?: MenuCommonStatus // 是否为外链
   affixStatus?: MenuCommonStatus // 菜单固定状态
 }
-
-/**
- * 菜单树响应类型
- */
-export type SysMenuTreeResponse = INodeResponse<SysMenuResponse>[]
 
 /**
  * 菜单操作类型

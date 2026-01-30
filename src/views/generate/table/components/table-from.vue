@@ -2,9 +2,8 @@
 import type { FormInstance, FormRules } from 'element-plus'
 import { queryGenTableInfoById, updateGenTableInfo } from '@/service/api/generate/table.api'
 import type { GenTableInfoOperationRequest } from '@/service/model/generate/table.model'
-import { genTableInfoOperationForm, genTableInfoOperationRules } from '@/views/generate/table/table.data'
 import { useMessage } from '@/hooks/use-message'
-import type { ModeIdType } from '@/service/model/base.model'
+import { genTableInfoOperationForm, genTableInfoOperationRules } from '@/views/generate/table/table.data'
 
 defineOptions({ name: 'GenTableInfoAddOrUpdate' })
 

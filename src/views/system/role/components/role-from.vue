@@ -5,7 +5,6 @@ import type { SysRoleOperationRequest } from '@/service/model/system/role.model'
 import { RoleStatusEnums } from '@/service/model/system/role.model'
 import { sysRoleOperationForm, sysRoleOperationRules } from '@/views/system/role/role.data'
 import { useMessage } from '@/hooks/use-message'
-import type { ModeIdType } from '@/service/model/base.model'
 
 defineOptions({ name: 'SysRoleAddOrUpdate' })
 

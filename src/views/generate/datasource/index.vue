@@ -3,12 +3,12 @@ import type { FormInstance } from 'element-plus'
 import type { GenDataSourceQueryRequest, GenDataSourceResponse } from '@/service/model/generate/datasource.model'
 import { connectionTest, queryGenDataSourceList, removeGenDataSourceByIds } from '@/service/api/generate/datasource.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import type { ModeIdArrayType } from '@/service/model/base.model'
 import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
 import type { AxiosResponse } from 'axios'
 import { genDataSourceColumnOption } from '@/views/generate/datasource/datasource.data'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { Delete, Edit, Plus, Refresh, Search } from '@element-plus/icons-vue'
+import { useTableQueryListHooks } from '@/hooks/use-crud-hooks'
 
 defineOptions({ name: 'GenDataSourceViewIndex' })
 
@@ -16,54 +16,34 @@ const datasourceForm = defineAsyncComponent(() => import('@/views/generate/datas
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 const datasourceFormRef = useTemplateRef('datasourceFormRef')
 
-interface TableQueryState {
-  queryParams: GenDataSourceQueryRequest // 查询参数
-  searchStatus?: boolean // 是否显示搜索
-  tableList: GenDataSourceResponse[] // 表格数据
-  selectedRows: GenDataSourceResponse[] // 选中行数据
-  loadingStatus: boolean // 加载状态
-  singleStatus: boolean // 单个禁用
-  multipleStatus: boolean // 多个禁用
-}
-
-const state = reactive<TableQueryState>({
-  queryParams: {},
-  loadingStatus: false,
-  tableList: [],
+const state = reactive<TableQueryListState<GenDataSourceQueryRequest, GenDataSourceResponse>>({
+  loadingStatus: false, // 加载状态
+  refreshTable: true, // 刷新表格状态
+  expandAllStatus: false, // 展开所有状态
+  searchStatus: false, // 是否显示搜索区域
+  queryParams: {}, // 查询参数
+  tableList: [], // 表格数据列表
   selectedRows: [],
   singleStatus: true, // 单个禁用
   multipleStatus: true, // 多个禁用
 })
+
+const { handleListQuery, handleSelectionChange } = useTableQueryListHooks<GenDataSourceQueryRequest, GenDataSourceResponse>(
+  state,
+  queryGenDataSourceList
+)
 const { queryParams } = toRefs(state)
 const columnOption = ref<ColumnConfig<GenDataSourceResponse>>({
   ...genDataSourceColumnOption,
 })
 
 /**
- * 查询表单提交
- */
-const handleQuery = async () => {
-  queryGenDataSourceList({ ...queryParams.value }).then((res) => {
-    state.tableList = res.data
-  })
-}
-
-/**
- * 多选框选中数据
- * @param selection 选中信息
- */
-const handleSelectionChange = (selection: any[]) => {
-  state.selectedRows = selection
-  state.singleStatus = selection.length !== 1
-  state.multipleStatus = !selection.length
-}
-
-/**
  * 重置表单
  */
 const resetQuery = async () => {
   queryFormRef.value?.resetFields()
-  await handleQuery()
+  queryParams.value = {}
+  await handleListQuery()
 }
 
 /**
@@ -89,7 +69,7 @@ const handleDelete = (row?: GenDataSourceResponse) => {
   if (row) {
     ids = [row.id]
   } else {
-    ids = state.selectedRows.map((item) => item.id)
+    ids = state.selectedRows?.map((item) => item.id) || []
   }
   if (!ids || ids.length <= 0) {
     useMessage().error('请选择数据源配置数据')
@@ -99,7 +79,7 @@ const handleDelete = (row?: GenDataSourceResponse) => {
     .confirm('此操作将永久删除数据源配置, 是否继续?')
     .then(async () => {
       await removeGenDataSourceByIds(ids)
-      await handleQuery()
+      await handleListQuery()
       useMessage().success('删除数据源配置成功!')
     })
     .finally(() => {
@@ -117,12 +97,12 @@ const handleTest = (row: GenDataSourceResponse) => {
     } else {
       useMessage().error('数据库链接异常！')
     }
-    await handleQuery()
+    await handleListQuery()
   })
 }
 
 onMounted(async () => {
-  await handleQuery()
+  await handleListQuery()
 })
 </script>
 
@@ -144,14 +124,14 @@ onMounted(async () => {
           </el-form-item>
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
-          <el-button :icon="Search" type="primary" @click="handleQuery()">查询</el-button>
+          <el-button :icon="Search" type="primary" @click="handleListQuery()">查询</el-button>
           <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
         </el-col>
       </el-row>
     </el-form>
-    <table-tool-bar v-model:column-data="columnOption" v-model:show-search="state.searchStatus" column-status refresh-status @refresh="handleQuery">
+    <table-tool-bar v-model:column-data="columnOption" v-model:show-search="state.searchStatus" column-status refresh-status @refresh="resetQuery">
       <el-button :icon="Plus" size="small" type="primary" @click="handleAdd">新增</el-button>
-      <el-button :icon="Edit" size="small" type="success" :disabled="state.singleStatus" @click="handleEdit(state.selectedRows[0])">修改</el-button>
+      <el-button :icon="Edit" size="small" type="success" :disabled="state.singleStatus" @click="handleEdit(state.selectedRows![0])">修改</el-button>
       <el-button :icon="Delete" size="small" type="danger" :disabled="state.multipleStatus" @click="handleDelete(undefined)">批量删除</el-button>
     </table-tool-bar>
     <el-table
@@ -159,7 +139,7 @@ onMounted(async () => {
       :data="state.tableList"
       border
       row-key="id"
-      empty-text="请添加数据源配置！"
+      empty-text="暂无匹配数据 🔍 试试调整筛选条件吧！"
       @selection-change="handleSelectionChange"
     >
       <el-table-column align="center" type="selection" width="55" />
@@ -176,15 +156,17 @@ onMounted(async () => {
           <el-tag v-else type="danger">{{ row.lastTestTime }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column align="center" fixed="right" label="操作" width="260px">
+      <el-table-column label="操作" fixed="right" width="220">
         <template #default="{ row }">
-          <el-button :icon="Edit" link type="success" @click="handleEdit(row)">修改</el-button>
-          <el-button :icon="Delete" link type="danger" @click="handleDelete(row)">删除</el-button>
-          <el-button :icon="Delete" link type="primary" @click="handleTest(row)">测试</el-button>
+          <el-space wrap class="flex-center">
+            <el-button :icon="Edit" link type="success" @click="handleEdit(row)">修改</el-button>
+            <el-button :icon="Delete" link type="danger" @click="handleDelete(row)">删除</el-button>
+            <el-button :icon="Delete" link type="primary" @click="handleTest(row)">测试</el-button>
+          </el-space>
         </template>
       </el-table-column>
     </el-table>
-    <datasource-form ref="datasourceFormRef" @success="handleQuery()" />
+    <datasource-form ref="datasourceFormRef" @success="handleListQuery()" />
   </div>
 </template>
 

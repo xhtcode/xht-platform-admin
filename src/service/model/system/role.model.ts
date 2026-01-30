@@ -1,5 +1,4 @@
-import type { BasicFormRequest, BasicResponse, ModeIdType, PageQueryRequest } from '@/service/model/base.model'
-import type { SysMenuTreeResponse } from '@/service/model/system/menu.model'
+import { SysMenuResponse } from '@/service/model/system/menu.model'
 
 /**
  * 角色状态枚举
@@ -17,7 +16,7 @@ export interface SysRoleQueryRequest extends PageQueryRequest {}
 /**
  * 响应类型
  */
-export interface SysRoleResponse extends BasicResponse {
+export interface SysRoleResponse extends MetaResponse {
   id: ModeIdType // 角色ID
   roleCode: string //角色编码
   roleName: string //角色名称
@@ -43,7 +42,7 @@ export interface RoleSelectedMenuResponse {
   /**
    * 菜单列表
    */
-  menuList: SysMenuTreeResponse
+  menuList: INodeResponse<SysMenuResponse>[]
 }
 
 /**

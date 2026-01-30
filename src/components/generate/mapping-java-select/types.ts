@@ -1,5 +1,4 @@
 import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
-import { ModeIdType } from '@/service/model/base.model'
 import type { GenTypeMappingResponse } from '@/service/model/generate/type.mapping.model'
 
 /**

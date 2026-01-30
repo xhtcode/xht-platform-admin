@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import type { ModeIdType } from '@/service/model/base.model'
 import { downloadFileApi, viewCodeFileApi } from '@/service/api/generate/table.api'
 import { ArrowRight, Delete, DocumentCopy, Download, Refresh } from '@element-plus/icons-vue'
 import type { CodeViewState } from '@/service/model/generate/table.model'

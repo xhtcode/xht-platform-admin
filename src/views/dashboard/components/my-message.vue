@@ -117,13 +117,15 @@ function markAllAsRead() {
         </template>
       </el-table-column>
       <!-- 操作列 -->
-      <el-table-column prop="id" label="操作" width="200px" fixed="right">
+      <el-table-column label="操作" fixed="right" width="220">
         <template #header>
           <el-button type="primary" size="small" @click="markAllAsRead" :disabled="unreadCount === 0">标记全部已读</el-button>
         </template>
         <template #default="{ row }">
-          <el-button type="primary" size="small" icon="view" text @click="viewMessage(row)">查看</el-button>
-          <el-button type="danger" size="small" text icon="delete" @click="deleteMessage(row.id)">删除</el-button>
+          <el-space wrap class="flex-center">
+            <el-button type="primary" size="small" icon="view" text @click="viewMessage(row)">查看</el-button>
+            <el-button type="danger" size="small" text icon="delete" @click="deleteMessage(row.id)">删除</el-button>
+          </el-space>
         </template>
       </el-table-column>
     </el-table>

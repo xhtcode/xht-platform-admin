@@ -18,20 +18,19 @@ const templateGroupViewRef = useTemplateRef('templateGroupViewRef')
 
 const state = reactive<TableQueryPageState<GenTemplateGroupQueryRequest, GenTemplateGroupResponse>>({
   queryParams: {
-    current: 1,
-    size: 10,
     desc: 'groupSort',
-  },
-  loadingStatus: false,
-  total: 0,
-  pages: 0,
-  tableList: [],
-  selectedRows: [],
-  singleStatus: true, // 单个禁用
-  multipleStatus: true, // 多个禁用
+  }, // 查询参数
+  total: 0, // 总条目数
+  pages: 0, // 总页数
+  searchStatus: false, // 是否显示搜索区域
+  tableList: [], // 表格数据列表
+  selectedRows: [], // 选中行数据
+  loadingStatus: false, // 加载状态
+  singleStatus: true, // 单个操作禁用状态
+  multipleStatus: true, // 多个操作禁用状态
 })
 
-const { handleQuery, handleCurrentChange } = useTableQueryPageHooks<GenTemplateGroupQueryRequest, GenTemplateGroupResponse>(
+const { handlePageQuery, handleCurrentChange } = useTableQueryPageHooks<GenTemplateGroupQueryRequest, GenTemplateGroupResponse>(
   state,
   queryGenTemplateGroupPage
 )
@@ -47,7 +46,8 @@ const columnOption = ref<ColumnConfig<GenTemplateGroupResponse>>({
  */
 const resetQuery = async () => {
   queryFormRef.value?.resetFields()
-  await handleQuery()
+  queryParams.value = {}
+  await handlePageQuery()
 }
 
 /**
@@ -80,7 +80,7 @@ const handleDelete = (row?: GenTemplateGroupResponse) => {
     .confirm('此操作将永久删除模板信息, 是否继续?')
     .then(async () => {
       await removeGenTemplateGroupByIds(row!.id)
-      await handleQuery()
+      await handlePageQuery()
       useMessage().success('删除模板信息成功!')
     })
     .finally(() => {
@@ -89,7 +89,7 @@ const handleDelete = (row?: GenTemplateGroupResponse) => {
 }
 
 onMounted(async () => {
-  await handleQuery()
+  await handlePageQuery()
 })
 </script>
 
@@ -103,12 +103,12 @@ onMounted(async () => {
           </el-form-item>
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
-          <el-button :icon="Search" type="primary" @click="handleQuery()">查询</el-button>
+          <el-button :icon="Search" type="primary" @click="handlePageQuery()">查询</el-button>
           <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
         </el-col>
       </el-row>
     </el-form>
-    <table-tool-bar v-model:column-data="columnOption" v-model:show-search="state.searchStatus" column-status refresh-status @refresh="handleQuery">
+    <table-tool-bar v-model:column-data="columnOption" v-model:show-search="state.searchStatus" column-status refresh-status @refresh="resetQuery">
       <el-button :icon="Plus" size="small" type="primary" @click="handleAdd">新增</el-button>
       <el-button :icon="Edit" size="small" type="success" :disabled="state.singleStatus" @click="handleEdit(state.selectedRows[0])">修改</el-button>
     </table-tool-bar>
@@ -116,8 +116,9 @@ onMounted(async () => {
       v-loading="state.loadingStatus"
       :data="state.tableList"
       row-key="id"
-      empty-text="系统暂无相关模板信息！"
+      empty-text="暂无匹配数据 🔍 试试调整筛选条件吧！"
       highlight-current-row
+      border
       @current-change="handleCurrentChange"
     >
       <xht-column-index :current="queryParams.current" :size="queryParams.size" />
@@ -129,11 +130,13 @@ onMounted(async () => {
       <el-table-column v-if="columnOption.createTime?.visible" label="创建时间" prop="createTime" width="180" />
       <el-table-column v-if="columnOption.updateBy?.visible" label="更新人" prop="updateBy" width="160" />
       <el-table-column v-if="columnOption.updateTime?.visible" label="更新时间" prop="updateTime" width="180" />
-      <el-table-column align="center" fixed="right" label="操作" width="260px">
+      <el-table-column label="操作" fixed="right" width="220">
         <template #default="{ row }">
-          <el-button :icon="Edit" link type="success" @click="handleEdit(row)">修改</el-button>
-          <el-button :icon="View" link type="primary" @click="handleView(row)">模板编辑</el-button>
-          <el-button :icon="Delete" link type="danger" @click="handleDelete(row)">删除</el-button>
+          <el-space wrap class="flex-center">
+            <el-button :icon="Edit" link type="success" @click="handleEdit(row)">修改</el-button>
+            <el-button :icon="View" link type="primary" @click="handleView(row)">模板编辑</el-button>
+            <el-button :icon="Delete" link type="danger" @click="handleDelete(row)">删除</el-button>
+          </el-space>
         </template>
       </el-table-column>
     </el-table>
@@ -142,10 +145,10 @@ onMounted(async () => {
       v-model:page-size="state.queryParams.size"
       :page-count="state.pages"
       :total="state.total"
-      @pagination="handleQuery"
+      @pagination="handlePageQuery"
     />
-    <template-group-form ref="templateGroupFormRef" @success="handleQuery()" />
-    <template-view-form ref="templateGroupViewRef" @success="handleQuery()" />
+    <template-group-form ref="templateGroupFormRef" @success="handlePageQuery()" />
+    <template-view-form ref="templateGroupViewRef" @success="handlePageQuery()" />
   </div>
 </template>
 

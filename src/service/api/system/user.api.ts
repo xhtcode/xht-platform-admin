@@ -7,7 +7,6 @@ import {
   SysUserVo,
   UserRoleBindOperationRequest,
 } from '@/service/model/system/user.model'
-import type { ModeIdArrayType, ModeIdType, PageResponse } from '@/service/model/base.model'
 
 /**
  * 后台管理服务前缀

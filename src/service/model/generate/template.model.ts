@@ -1,5 +1,3 @@
-import type { BasicFormRequest, BasicResponse, ModeIdType, PageQueryRequest } from '@/service/model/base.model'
-
 /**
  * 查询请求类型
  */
@@ -13,7 +11,7 @@ export interface GenTemplateQueryRequest extends PageQueryRequest {
 /**
  * 响应类型
  */
-export interface GenTemplateResponse extends BasicResponse {
+export interface GenTemplateResponse extends MetaResponse {
   /**
    * 模板ID
    */

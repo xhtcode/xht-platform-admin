@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
 import type { GenTableInfoQueryRequest, GenTableInfoResponse } from '@/service/model/generate/table.model'
-import type { ModeIdArrayType } from '@/service/model/base.model'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { genTableInfoColumnOption } from '@/views/generate/table/table.data'
 import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
@@ -22,19 +21,17 @@ const downloadCodeFileRef = useTemplateRef('downloadCodeFileRef')
 const codeViewRef = useTemplateRef('codeViewRef')
 
 const state = reactive<TableQueryPageState<GenTableInfoQueryRequest, GenTableInfoResponse>>({
-  queryParams: {
-    current: 1,
-    size: 10,
-  },
-  loadingStatus: false,
-  total: 0,
-  pages: 0,
-  tableList: [],
-  selectedRows: [],
-  singleStatus: true, // 单个禁用
-  multipleStatus: true, // 多个禁用
+  queryParams: {}, // 查询参数
+  total: 0, // 总条目数
+  pages: 0, // 总页数
+  searchStatus: false, // 是否显示搜索区域
+  tableList: [], // 表格数据列表
+  selectedRows: [], // 选中行数据
+  loadingStatus: false, // 加载状态
+  singleStatus: true, // 单个操作禁用状态
+  multipleStatus: true, // 多个操作禁用状态
 })
-const { handleQuery, handleSelectionChange } = useTableQueryPageHooks<GenTableInfoQueryRequest, GenTableInfoResponse>(state, queryExistsPage)
+const { handlePageQuery, handleSelectionChange } = useTableQueryPageHooks<GenTableInfoQueryRequest, GenTableInfoResponse>(state, queryExistsPage)
 const { queryParams } = toRefs(state)
 
 const columnOption = ref<ColumnConfig<GenTableInfoResponse>>({
@@ -46,7 +43,8 @@ const columnOption = ref<ColumnConfig<GenTableInfoResponse>>({
  */
 const resetQuery = async () => {
   queryFormRef.value?.resetFields()
-  await handleQuery()
+  queryParams.value = {}
+  await handlePageQuery()
 }
 
 /**
@@ -73,7 +71,7 @@ const handleSync = async (row: GenTableInfoResponse) => {
     .then(() => {
       syncTableApi(row!.id).then(async () => {
         useMessage().success(`${row.tableName}表信息成功!`)
-        await handleQuery()
+        await handlePageQuery()
       })
     })
     .finally(() => {
@@ -109,7 +107,7 @@ const handleDelete = (row: GenTableInfoResponse) => {
     .confirm('此操作将永久删除表信息, 是否继续?')
     .then(async () => {
       await removeGenTableInfoByIds(row!.id)
-      await handleQuery()
+      await handlePageQuery()
       useMessage().success('删除表信息成功!')
     })
     .finally(() => {
@@ -131,7 +129,7 @@ const handleCodeView = (row?: GenTableInfoResponse) => {
 }
 
 onMounted(async () => {
-  await handleQuery()
+  await handlePageQuery()
 })
 </script>
 
@@ -155,12 +153,12 @@ onMounted(async () => {
           </el-form-item>
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
-          <el-button :icon="Search" type="primary" @click="handleQuery()">查询</el-button>
+          <el-button :icon="Search" type="primary" @click="handlePageQuery()">查询</el-button>
           <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
         </el-col>
       </el-row>
     </el-form>
-    <table-tool-bar v-model:column-data="columnOption" v-model:show-search="state.searchStatus" column-status refresh-status @refresh="handleQuery">
+    <table-tool-bar v-model:column-data="columnOption" v-model:show-search="state.searchStatus" column-status refresh-status @refresh="resetQuery">
       <el-button :icon="Download" size="small" type="primary" @click="handleImport">导入</el-button>
       <el-button :icon="Edit" size="small" type="success" :disabled="state.singleStatus" @click="handleEdit(state.selectedRows[0])">修改</el-button>
       <el-button :disabled="state.multipleStatus" :icon="Download" size="small" type="warning" @click="handleDownload()">批量下载</el-button>
@@ -171,7 +169,7 @@ onMounted(async () => {
       :data="state.tableList"
       border
       row-key="id"
-      empty-text="系统相关表信息！"
+      empty-text="暂无匹配数据 🔍 试试调整筛选条件吧！"
       @selection-change="handleSelectionChange"
     >
       <el-table-column align="center" type="selection" width="55" />
@@ -183,13 +181,15 @@ onMounted(async () => {
       <el-table-column v-if="columnOption.codeComment?.visible" label="代码注释" min-width="260" prop="codeComment" show-overflow-tooltip />
       <el-table-column v-if="columnOption.tableCreateTime?.visible" label="表创建时间" prop="tableCreateTime" sortable width="180" />
       <el-table-column v-if="columnOption.tableUpdateTime?.visible" label="表更新时间" prop="tableUpdateTime" sortable width="180" />
-      <el-table-column align="center" fixed="right" label="操作" width="280px">
+      <el-table-column label="操作" fixed="right" width="220">
         <template #default="{ row }">
-          <el-button :icon="Refresh" link type="info" @click="handleSync(row)">同步</el-button>
-          <el-button :icon="Edit" link type="success" @click="handleEdit(row)">修改</el-button>
-          <el-button :icon="Delete" link type="danger" @click="handleDelete(row)">删除</el-button>
-          <el-button :icon="View" link type="primary" @click="handleCodeView(row)">预览</el-button>
-          <el-button :icon="Download" link type="warning" @click="handleDownload(row)">下载</el-button>
+          <el-space wrap class="flex-center">
+            <el-button :icon="Refresh" link type="info" @click="handleSync(row)">同步</el-button>
+            <el-button :icon="Edit" link type="success" @click="handleEdit(row)">修改</el-button>
+            <el-button :icon="Delete" link type="danger" @click="handleDelete(row)">删除</el-button>
+            <el-button :icon="View" link type="primary" @click="handleCodeView(row)">预览</el-button>
+            <el-button :icon="Download" link type="warning" @click="handleDownload(row)">下载</el-button>
+          </el-space>
         </template>
       </el-table-column>
     </el-table>
@@ -198,10 +198,10 @@ onMounted(async () => {
       v-model:page-size="state.queryParams.size"
       :page-count="state.pages"
       :total="state.total"
-      @pagination="handleQuery"
+      @pagination="handlePageQuery"
     />
-    <table-from ref="tableFormRef" @success="handleQuery()" />
-    <import-table ref="importTableRef" @success="handleQuery()" />
+    <table-from ref="tableFormRef" @success="handlePageQuery()" />
+    <import-table ref="importTableRef" @success="handlePageQuery()" />
     <download-code-file ref="downloadCodeFileRef" />
     <code-view ref="codeViewRef" />
   </div>

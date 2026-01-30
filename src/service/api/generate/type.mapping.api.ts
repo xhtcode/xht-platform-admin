@@ -1,6 +1,5 @@
 import request from '@/utils/request'
 import type { AxiosPromise } from 'axios'
-import type { ModeIdType, PageResponse } from '@/service/model/base.model'
 import type { GenTypeMappingOperationRequest, GenTypeMappingQueryRequest, GenTypeMappingResponse } from '@/service/model/generate/type.mapping.model'
 
 /**

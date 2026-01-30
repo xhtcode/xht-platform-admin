@@ -1,7 +1,6 @@
 import request from '@/utils/request'
 import type { AxiosPromise } from 'axios'
 import type { SysDictOperationRequest, SysDictQueryRequest, SysDictResponse } from '@/service/model/system/dict.model'
-import type { ModeIdType, PageResponse } from '@/service/model/base.model'
 
 /**
  * 后台管理服务前缀

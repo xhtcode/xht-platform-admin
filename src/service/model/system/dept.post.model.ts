@@ -1,4 +1,4 @@
-import type { BasicFormRequest, BasicResponse, ModeIdType, PageQueryRequest, SystemFlagEnums } from '@/service/model/base.model'
+import { SystemFlagEnums } from '@/service/model/base.model'
 
 /**
  * 部门状态
@@ -28,7 +28,7 @@ export interface SysDeptPostQueryRequest extends PageQueryRequest {
 /**
  * 响应类型
  */
-export interface SysDeptPostResponse extends BasicResponse {
+export interface SysDeptPostResponse extends MetaResponse {
   id: ModeIdType // 岗位id
   deptId: ModeIdType //  部门id
   postCode: string //  岗位编码

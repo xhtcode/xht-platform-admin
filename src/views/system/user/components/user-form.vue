@@ -4,7 +4,6 @@ import { querySysUserById, saveSysUser, updateSysUser } from '@/service/api/syst
 import { useMessage } from '@/hooks/use-message'
 import { sysUserOperationForm, sysUserOperationRules } from '@/views/system/user/user.data'
 import { SysUserOperationRequest, UserStatusEnums, UserTypeEnums } from '@/service/model/system/user.model'
-import type { ModeIdType } from '@/service/model/base.model'
 import type { SysDeptResponse } from '@/service/model/system/dept.model'
 
 defineOptions({

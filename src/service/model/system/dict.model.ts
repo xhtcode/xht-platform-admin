@@ -1,5 +1,3 @@
-import type { BasicFormRequest, BasicResponse, ModeIdType, PageQueryRequest } from '@/service/model/base.model'
-
 /**
  * 字典状态枚举
  */
@@ -20,7 +18,7 @@ export interface SysDictQueryRequest extends PageQueryRequest {
 /**
  * 响应类型
  */
-export interface SysDictResponse extends BasicResponse {
+export interface SysDictResponse extends MetaResponse {
   id: ModeIdType //字典ID
   dictCode: string //字典编码
   dictName: string //字典名称
