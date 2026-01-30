@@ -185,8 +185,11 @@ const handleChangeTag = (item: TabPaneName) => {
 /**
  * 组件挂载后初始化标签和位置
  */
-onMounted(() => {
+onMounted(async () => {
+  activeName.value = null
   initTags()
+  await nextTick()
+  activeName.value = route.fullPath
 })
 
 /**
@@ -207,7 +210,15 @@ watch(
 
 <template>
   <div class="xht-tags-container">
-    <el-tabs @tab-change="handleChangeTag" @tab-remove="removeItem" v-model="activeName" class="xht-tags-item" type="card">
+    <el-tabs
+      @tab-change="handleChangeTag"
+      @tab-remove="removeItem"
+      closable
+      :default-value="activeName"
+      v-model="activeName"
+      class="xht-tags-item"
+      type="card"
+    >
       <el-tab-pane
         v-for="item in visitedViews"
         :key="item.path"
