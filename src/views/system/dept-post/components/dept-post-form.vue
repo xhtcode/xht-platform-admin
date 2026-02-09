@@ -123,12 +123,12 @@ defineExpose({
         </el-col>
         <el-col :span="24">
           <el-form-item label="岗位排序" prop="postSort">
-            <el-input-number v-model="addUpdateForm.postSort" :max="999" :min="0" class="w100" placeholder="请输入岗位排序" />
+            <el-input-number v-model="addUpdateForm.postSort" :max="999" :min="0" class="w-full!" placeholder="请输入岗位排序" />
           </el-form-item>
         </el-col>
         <el-col :span="24">
           <el-form-item label="岗位限制" prop="postLimit">
-            <el-input-number v-model="addUpdateForm.postLimit" :max="999" :min="1" class="w100" placeholder="请输入岗位限制人数">
+            <el-input-number v-model="addUpdateForm.postLimit" :max="999" :min="1" class="w-full!" placeholder="请输入岗位限制人数">
               <template #suffix>
                 <span>{{ addUpdateForm.postHave ? addUpdateForm.postHave : 0 }}/{{ addUpdateForm.postLimit }}</span>
               </template>

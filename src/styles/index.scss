@@ -31,3 +31,11 @@ body,
 .user-select-none {
   user-select: none;
 }
+
+.xht-instruction{
+&:before {
+  content: '*';
+  color: var(--el-color-danger);
+  margin-right: 4px;
+}
+}

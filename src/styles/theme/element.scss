@@ -8,6 +8,12 @@
   user-select: none;
 }
 
+.custom-drawer-body {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 .el-drawer__footer {
   padding: 10px 20px;
   border-top: 1px solid var(--el-border-color);
@@ -17,16 +23,17 @@
 //=================== 弹窗 el-dialog 样式修改 ===================
 .el-dialog__header {
   padding-bottom: calc(var(--el-dialog-padding-primary) / 2) !important;
+  border-bottom: 1px solid var(--el-border-color);
   user-select: none;
 }
 
 .el-dialog__body {
-  min-height: 20vh;
-  padding: var(--el-dialog-padding-primary) calc(var(--el-dialog-padding-primary) / 2);
+  padding: calc(var(--el-dialog-padding-primary) / 2) var(--el-dialog-padding-primary) !important;
 }
 
 .el-dialog__footer {
-  padding: 10px 20px;
+  padding: calc(var(--el-dialog-padding-primary) / 2) var(--el-dialog-padding-primary) !important;
+  border-top: 1px solid var(--el-border-color);
   user-select: none;
 }
 
@@ -97,7 +104,7 @@
 }
 
 .el-form-item {
-  //margin-bottom: 8px !important;
+  margin-bottom: 8px !important;
 }
 
 //=================== 表格控件样式修改 ===================
@@ -131,5 +138,9 @@
 }
 
 .el-tree-node {
+  user-select: none;
+}
+
+.el-descriptions__label {
   user-select: none;
 }

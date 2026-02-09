@@ -1,178 +1,252 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
+import type { MessageInfoVo } from '@/service/model/notice/message.info.model'
+import type { SysMenuQueryRequest } from '@/service/model/system/menu.model'
+import {
+  queryMyMessagePage,
+  updateMessageRead,
+  updateMessageReadAll,
+  updateMessageRemove,
+  updateMessageStart,
+  updateMessageTop,
+} from '@/service/api/notice/message.api'
+import { ArrowUpBold, DArrowRight, Delete, Edit, Refresh, Search, StarFilled, View } from '@element-plus/icons-vue'
+import type { FormInstance } from 'element-plus'
+import { MessageStarEnums, MessageTopEnums, type SysMessageResponse } from '@/service/model/notice/message.model'
+import { useMessage, useMessageBox } from '@/hooks/use-message'
+import type { ColumnConfig } from '@/components/table-tool-bar/types'
+import { sysMessageColumnOption } from '@/views/dashboard/message/data'
 
 defineOptions({
   name: 'MyMessage',
 })
-
-interface MessageType {
-  id: number
-  title: string
-  content: string
-  time: string
-  read: boolean
-  type: 'system' | 'info' | 'warning' | 'error'
-}
-
-// 模拟更多消息数据
-const messages: MessageType[] = Array.from({ length: 20 }, (_, index) => {
-  const id = index + 1
-  return {
-    id,
-    title: `系统通知标题 ${id}`,
-    content: `这是系统通知的内容，通知的内容通知的内容通知的内容通知的内容通知的内容通知的内容通知的内容通知的内容通知的内容通知的内容通知的内容通知的内容通知的内容通知的内容通知的内容通知的内容通知的内容通知的内容通知的内容通知的内容通知的内容通知的内容通知的内容通知的内容通知的内容通知的内容通知的内容通知的内容通知的内容通知的内容通知的内容通知的内容通知的内容通知的内容通知的内容包含详细信息。系统通知ID：${id}，这是一条测试消息，用于展示分页功能。`,
-    time: `2024-01-${String(20 - index).padStart(2, '0')} 14:30:22`,
-    read: id > 5,
-    type: id % 4 === 0 ? 'warning' : id % 3 === 0 ? 'error' : id % 2 === 0 ? 'info' : 'system',
-    color: id % 4 === 0 ? '#E6A23C' : id % 3 === 0 ? '#F56C6C' : '#409EFF',
-  }
+const state = reactive<TableQueryPageState<SysMenuQueryRequest, MessageInfoVo>>({
+  queryParams: {}, // 查询参数
+  total: 0, // 总条目数
+  pages: 0, // 总页数
+  searchStatus: false, // 是否显示搜索区域
+  tableList: [], // 表格数据列表
+  selectedRows: [], // 选中行数据
+  loadingStatus: false, // 加载状态
+  singleStatus: true, // 单个操作禁用状态
+  multipleStatus: true, // 多个操作禁用状态
 })
-
-// 分页相关
-const currentPage = ref(1)
-const pageSize = ref(5)
-
-const total = computed(() => messages.length)
-
-const unreadCount = computed(() => {
-  return messages.filter((msg) => !msg.read).length
+const messageInfo = defineAsyncComponent(() => import('@/views/dashboard/message/components/message-info.vue'))
+const messageInfoRef = useTemplateRef('messageInfoRef')
+const { handlePageQuery, handleSelectionChange } = useTableQueryPageHooks<SysMenuQueryRequest, MessageInfoVo>(state, queryMyMessagePage)
+const { queryParams } = toRefs(state)
+const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
+const columnOption = ref<ColumnConfig<SysMessageResponse>>({
+  ...sysMessageColumnOption,
 })
+/**
+ * 批量已读
+ */
+const handleReadAll = () => {
+  state.loadingStatus = true
+  updateMessageReadAll()
+    .then(() => {
+      useMessage().success('已读所有站内信成功!')
+      handlePageQuery()
+    })
+    .finally(() => {
+      state.loadingStatus = false
+    })
+}
 
-const paginatedMessages = computed(() => {
-  const start = (currentPage.value - 1) * pageSize.value
-  const end = start + pageSize.value
-  return messages.slice(start, end)
+/**
+ * 已读单个
+ * @param messageId 消息ID
+ */
+const handleRead = async (messageId: ModeIdType) => {
+  state.loadingStatus = true
+  updateMessageRead(messageId)
+    .then(() => {
+      useMessage().success('已读站内信成功!')
+      handlePageQuery()
+    })
+    .finally(() => {
+      state.loadingStatus = false
+    })
+}
+
+/**
+ * 查看单个
+ * @param messageId 消息ID
+ */
+const handleView = async (messageId: ModeIdType) => {
+  messageInfoRef.value?.show(messageId)
+}
+
+/**
+ * 收藏信息
+ * @param messageId 消息ID
+ * @param start 收藏状态
+ */
+const handleStart = (messageId: ModeIdType, start: MessageStarEnums) => {
+  state.loadingStatus = true
+  const requestStart = start === MessageStarEnums.YES ? MessageStarEnums.NO : MessageStarEnums.YES
+  const requestStartSuccessMsg = start === MessageStarEnums.YES ? '取消收藏站内信成功！' : '收藏站内信成功！'
+  updateMessageStart(messageId, requestStart)
+    .then(() => {
+      useMessage().success(requestStartSuccessMsg)
+      handlePageQuery()
+    })
+    .finally(() => {
+      state.loadingStatus = false
+    })
+}
+
+/**
+ * 置顶信息
+ * @param messageId 消息ID
+ * @param top 置顶状态
+ */
+const handleTop = (messageId: ModeIdType, top: MessageTopEnums) => {
+  state.loadingStatus = true
+  const requestTop = top === MessageTopEnums.YES ? MessageTopEnums.NO : MessageTopEnums.YES
+  const requestTopSuccessMsg = top === MessageTopEnums.YES ? '取消收藏站内信成功！' : '收藏站内信成功！'
+  updateMessageTop(messageId, requestTop)
+    .then(() => {
+      useMessage().success(requestTopSuccessMsg)
+      handlePageQuery()
+    })
+    .finally(() => {
+      state.loadingStatus = false
+    })
+}
+
+/**
+ * 删除信息
+ * * @param messageId 消息ID
+ *  */
+const handleDelete = (messageId: ModeIdType) => {
+  state.loadingStatus = true
+  useMessageBox()
+    .confirm('此操作将删除站内信, 是否继续?')
+    .then(async () => {
+      await updateMessageRemove(messageId)
+      await handlePageQuery()
+      useMessage().success('删除站内信成功!')
+    })
+    .catch(() => {
+      useMessage().success('删除站内信失败!')
+    })
+    .finally(() => {
+      state.loadingStatus = false
+    })
+}
+
+/**
+ * 重置查询表单
+ */
+const resetQuery = async () => {
+  queryFormRef.value?.resetFields()
+  queryParams.value = {}
+  await handlePageQuery()
+}
+onMounted(() => {
+  handlePageQuery()
 })
-
-// 查看消息对话框
-const viewDialogVisible = ref(false)
-const currentMessage = ref<MessageType | null>(null)
-
-/**
- * 查看消息详情
- * @param message 消息对象
- */
-function viewMessage(message: MessageType) {
-  currentMessage.value = message
-  viewDialogVisible.value = true
-  // 查看后自动标记为已读
-  if (!message.read) {
-    markAsRead(message.id)
-  }
-}
-
-/**
- * 标记消息为已读
- * @param id 消息ID
- */
-function markAsRead(id: number) {
-  const msg = messages.find((m) => m.id === id)
-  if (msg) {
-    msg.read = true
-  }
-}
-
-/**
- * 删除消息
- * @param id 消息ID
- */
-function deleteMessage(id: number) {
-  const index = messages.findIndex((m) => m.id === id)
-  if (index > -1) {
-    messages.splice(index, 1)
-    // 如果删除的是当前页的最后一条，且不是第一页，则跳转到上一页
-    if (paginatedMessages.value.length === 1 && currentPage.value > 1) {
-      currentPage.value--
-    }
-  }
-}
-
-/**
- * 标记全部已读
- */
-function markAllAsRead() {
-  messages.forEach((msg) => {
-    msg.read = true
-  })
-}
 </script>
 
 <template>
   <div class="xht-view-container">
+    <el-form ref="queryFormRef" :disabled="state.loadingStatus" :model="queryParams" class="user-select-none" label-width="100px">
+      <el-row>
+        <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
+          <el-form-item label="信息状态" prop="messageStatus">
+            <el-select v-model="queryParams.messageStatus" placeholder="请选择信息状态" clearable>
+              <el-option label="全部" value=""></el-option>
+              <el-option label="未读" :value="1"></el-option>
+              <el-option label="已读" :value="2"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
+          <el-form-item label="收藏状态" prop="messageStar">
+            <el-select v-model="queryParams.messageStar" placeholder="请选择收藏状态" clearable>
+              <el-option label="全部" value=""></el-option>
+              <el-option label="否" :value="MessageStarEnums.NO"></el-option>
+              <el-option label="是" :value="MessageStarEnums.YES"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
+          <el-button :icon="Search" type="primary" @click="handlePageQuery">查询</el-button>
+          <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
+        </el-col>
+      </el-row>
+    </el-form>
+    <table-tool-bar column-status refresh-status @refresh="resetQuery" :column-data="columnOption"></table-tool-bar>
     <el-table
-      :data="paginatedMessages"
-      row-key="id"
-      empty-text="系统暂无相关模板信息！"
-      highlight-current-row
+      v-loading="state.loadingStatus"
+      :data="state.tableList"
       border
-      :row-class-name="({ row }) => (!row.read ? 'message-unread-row' : '')"
+      row-key="id"
+      empty-text="暂无匹配数据 🔍 试试调整筛选条件吧"
+      @selection-change="handleSelectionChange"
     >
-      <xht-column-index :current="currentPage" :size="pageSize" />
-      <!-- 标题列 -->
-      <el-table-column prop="title" label="标题" width="120" show-overflow-tooltip />
-      <!-- 时间列 -->
-      <el-table-column prop="time" label="时间" width="120" />
-      <!-- 内容列 -->
-      <el-table-column prop="content" label="内容">
+      <el-table-column fixed="left" align="center" type="selection" width="55" />
+      <xht-column-index fixed="left" :current="queryParams.current" :size="queryParams.size" />
+      <el-table-column fixed="left" label="发送人" prop="senderName" width="160">
         <template #default="{ row }">
-          <div class="content-line-clamp">
-            {{ row.content }}
-          </div>
+          <el-icon v-if="row.response.messageStar === 1" color="#FFDC00" :size="18"><StarFilled /></el-icon>
+          <el-icon v-if="row.response.messageTop === 1" :size="18"><ArrowUpBold /></el-icon>
+          {{ row.senderName }}
         </template>
       </el-table-column>
-      <!-- 操作列 -->
+      <el-table-column label="消息标题" prop="messageTitle" show-overflow-tooltip min-width="360" />
+      <el-table-column label="消息类型" prop="messageType" width="120">
+        <template #default="{ row }">
+          <el-tag v-if="row.messageType === 1" type="success">系统通知</el-tag>
+          <el-tag v-else type="primary">业务提醒</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="消息状态" prop="response.messageStatus" width="120">
+        <template #default="{ row }">
+          <message-status :status="row.response.messageStatus" />
+        </template>
+      </el-table-column>
+      <el-table-column label="已读时间" v-if="columnOption.readTime?.visible" prop="response.readTime" width="180" />
+      <el-table-column label="发送时间" v-if="columnOption.createTime?.visible" prop="response.createTime" width="180" />
       <el-table-column label="操作" fixed="right" width="220">
         <template #header>
-          <el-button type="primary" size="small" @click="markAllAsRead" :disabled="unreadCount === 0">标记全部已读</el-button>
+          <el-button type="primary" @click="handleReadAll">标记全部已读</el-button>
         </template>
         <template #default="{ row }">
           <el-space wrap class="flex-center">
-            <el-button type="primary" size="small" icon="view" text @click="viewMessage(row)">查看</el-button>
-            <el-button type="danger" size="small" text icon="delete" @click="deleteMessage(row.id)">删除</el-button>
+            <el-button type="success" :icon="View" text @click="handleView(row.response.messageId)">查看</el-button>
+            <el-button type="primary" :icon="Edit" text @click="handleRead(row.response.messageId)" v-if="!row.response.readTime">标记已读</el-button>
+            <el-dropdown trigger="click" effect="dark" size="large">
+              <el-button text>
+                更多操作
+                <el-icon><DArrowRight /></el-icon>
+              </el-button>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item :icon="StarFilled" @click="handleStart(row.response.messageId, row.response.messageStar)">
+                    {{ row.response.messageStar === 1 ? '取消' : null }}收藏
+                  </el-dropdown-item>
+                  <el-dropdown-item :icon="ArrowUpBold" @click="handleTop(row.response.messageId, row.response.messageTop)">
+                    {{ row.response.messageTop === 1 ? '取消' : null }}置顶
+                  </el-dropdown-item>
+                  <el-dropdown-item :icon="Delete" @click="handleDelete(row.response.messageId)">删除</el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
           </el-space>
         </template>
       </el-table-column>
     </el-table>
-
-    <!-- 分页组件 -->
-    <div class="mt-4 flex justify-center">
-      <el-pagination
-        v-model:current-page="currentPage"
-        v-model:page-size="pageSize"
-        :page-sizes="[5, 10, 20, 50]"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-      />
-    </div>
-
-    <!-- 查看消息对话框 -->
-    <el-dialog v-model="viewDialogVisible" title="查看通知" destroy-on-close>
-      <div class="max-h-[60vh] overflow-y-auto">
-        <el-descriptions border :column="1" label-width="80px">
-          <el-descriptions-item label="标题" label-align="right">
-            <div class="flex justify-between">
-              <div>{{ currentMessage?.title }}</div>
-              <el-tag size="small" :type="currentMessage?.read ? 'success' : 'danger'">
-                {{ currentMessage?.read ? '已读' : '未读' }}
-              </el-tag>
-            </div>
-          </el-descriptions-item>
-          <el-descriptions-item label="时间" label-align="right">
-            {{ currentMessage?.time }}
-          </el-descriptions-item>
-          <el-descriptions-item label="内容" label-align="right">
-            <div class="message-content-detail overflow-y-auto whitespace-pre-wrap p-2">
-              {{ currentMessage?.content }}
-            </div>
-          </el-descriptions-item>
-        </el-descriptions>
-      </div>
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="viewDialogVisible = false">关闭</el-button>
-        </span>
-      </template>
-    </el-dialog>
+    <xht-pagination
+      v-model:current-page="state.queryParams.current"
+      v-model:page-size="state.queryParams.size"
+      :page-count="state.pages"
+      :total="state.total"
+      @pagination="handlePageQuery"
+    />
+    <message-info ref="messageInfoRef" @success="handlePageQuery" />
   </div>
 </template>
 

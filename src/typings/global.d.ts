@@ -1,17 +1,21 @@
 declare global {
   /**
-   * 常用的key和value
+   * 字典枚举项类型
    */
-  interface CommonKeyValue<KEY, VALUE> {
-    label: KEY
-    value: VALUE
+  export interface DictEnumItem<T> {
+    label: string
+    value: T
+    color?: string
+    type?: 'primary' | 'success' | 'warning' | 'info' | 'danger' | unknown
+    disabled?: boolean
+    [key: string]: any
   }
 
   /**
-   * 常用value
+   * 字典枚举类型
    */
-  interface CommonObjValue<VALUE> {
-    [index: string]: VALUE
+  export type DictEnum<T, K extends string = string> = {
+    [key in K]: DictEnumItem<T>
   }
 }
 export {}

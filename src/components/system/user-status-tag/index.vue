@@ -17,13 +17,13 @@ const getStatusLabel = (status: UserStatusEnums) => {
 </script>
 
 <template>
-  <el-tag class="user-status-tag" :color="getTagColor(props.status)">
+  <el-tag class="message-status-tag" :color="getTagColor(props.status)">
     {{ getStatusLabel(props.status) }}
   </el-tag>
 </template>
 
 <style lang="scss" scoped>
-.user-status-tag {
+.message-status-tag {
   border-width: 0 !important;
   color: #ffffff;
   user-select: none;

@@ -174,7 +174,7 @@ defineExpose({
         </el-col>
         <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="菜单排序" prop="menuSort">
-            <el-input-number v-model="addUpdateForm.menuSort" :max="999" :min="1" class="w100!" placeholder="请输入菜单排序" />
+            <el-input-number v-model="addUpdateForm.menuSort" :max="999" :min="1" class="w-full!" placeholder="请输入菜单排序" />
           </el-form-item>
         </el-col>
       </el-row>

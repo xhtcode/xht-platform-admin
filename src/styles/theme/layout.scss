@@ -99,4 +99,11 @@ $header-item-width: 40px !default;
       @extend .xht-view-container-none;
     }
   }
+
+  .xht-dropdown-link {
+    cursor: pointer;
+    color: var(--el-color-info);
+    display: flex;
+    align-items: center;
+  }
 }

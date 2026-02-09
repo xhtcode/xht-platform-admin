@@ -91,7 +91,7 @@ defineExpose({
     :show-checkbox="true"
     check-strictly
     node-key="id"
-    class="user-select-display menu-tree"
+    class="user-select-none menu-tree"
     @check="handleCheck"
   />
 </template>

@@ -11,3 +11,11 @@ export enum SystemFlagEnums {
    */
   NO = 1,
 }
+
+/**
+ * 标签值对象
+ */
+export interface LabelValue<K, V> {
+  label: K
+  value: V
+}

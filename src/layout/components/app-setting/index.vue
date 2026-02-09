@@ -77,7 +77,7 @@ const resetSetting = () => {
   <div class="header-tool-item" @click="state.visibleStatus = true">
     <div class="i-common-theme size-20px" />
     <el-drawer v-model="state.visibleStatus" append-to-body size="360px" title="主题设置">
-      <el-form ref="queryFormRef" :disabled="state.loadingStatus" class="user-select-display app-setting-form" label-width="80px" size="default">
+      <el-form ref="queryFormRef" :disabled="state.loadingStatus" class="user-select-none app-setting-form" label-width="80px" size="default">
         <el-divider>布局样式</el-divider>
         <div class="xht-layout-box">
           <div class="xht-layout-item xht-layout-default" :class="{ 'is-active': layoutType === 'default' }" @click="changeLayoutType('default')">

@@ -125,7 +125,7 @@ defineExpose({
         </el-col>
         <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="角色排序" prop="roleSort">
-            <el-input-number v-model="addUpdateForm.roleSort" :max="999" :min="0" class="w100!" value-on-clear="min" placeholder="请输入角色排序" />
+            <el-input-number v-model="addUpdateForm.roleSort" :max="999" :min="0" class="w-full!" value-on-clear="min" placeholder="请输入角色排序" />
           </el-form-item>
         </el-col>
       </el-row>

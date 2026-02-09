@@ -96,7 +96,7 @@ onMounted(() => {
     :show-checkbox="multiple"
     check-strictly
     highlight-current
-    class="user-select-display"
+    class="user-select-none"
     node-key="id"
     @change="handleChange"
   />

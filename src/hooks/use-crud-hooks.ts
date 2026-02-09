@@ -6,10 +6,12 @@ import { toRef } from 'vue'
  * 表格查询分页Hooks
  * @param options 响应式状态对象
  * @param queryPageApi 分页查询接口
+ * @param parseResponse 解析响应数据
  */
 export const useTableQueryPageHooks = <Req extends PageQueryRequest, Res extends BasicResponse>(
   options: Reactive<TableQueryPageState<Req, Res>>,
-  queryPageApi: (req: Req) => AxiosPromise<PageResponse<Res> | Res[]>
+  queryPageApi: (req?: Req) => AxiosPromise<PageResponse<Res>>,
+  parseResponse?: (res: PageResponse<Res>) => void
 ) => {
   // 默认配置
   const defaultOptions: TableQueryPageState<Req, Res> = {
@@ -38,10 +40,15 @@ export const useTableQueryPageHooks = <Req extends PageQueryRequest, Res extends
       // 快速搜索 状态设置
       queryParams.value.quick = !state.searchStatus
       const response: AxiosResponse = await queryPageApi(queryParams.value)
-      const { records = [], total = 0, pages = 0 } = response.data
+      const { records = [], total = 0, pages = 0, current, size } = response.data
       state.tableList = records
       state.total = total
       state.pages = pages
+      queryParams.value.current = current
+      queryParams.value.size = size
+      if (parseResponse) {
+        parseResponse(response.data)
+      }
     } catch (err) {
       console.error('数据查询失败:', err)
       throw err // 抛出错误供外部处理

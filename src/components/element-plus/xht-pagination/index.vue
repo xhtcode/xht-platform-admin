@@ -46,7 +46,7 @@ const handleCurrentChange = (val: number) => {
 </script>
 
 <template>
-  <div class="pagination-container">
+  <div class="pagination-container" :class="props.class">
     <el-pagination
       :background="props.background"
       :current-page="currentPage"

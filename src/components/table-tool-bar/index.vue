@@ -104,7 +104,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex p-8px">
+  <div class="flex p-8px pt-0">
     <div class="flex-1">
       <el-space>
         <slot />
@@ -124,7 +124,7 @@ onMounted(() => {
       <el-tooltip v-if="searchStatus" class="item" content="搜索切换" placement="top">
         <el-button circle :icon="Switch" size="small" @click="toggleSearch" />
       </el-tooltip>
-      <el-tooltip class="item" content="列设置" placement="top">
+      <el-tooltip v-if="columnStatus" class="item" content="列设置" placement="top">
         <el-button @click="show" circle color="#626aef" :icon="Menu" size="small" />
       </el-tooltip>
       <slot name="before" />

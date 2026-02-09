@@ -94,7 +94,7 @@ defineExpose({
   <el-drawer
     v-model="state.visibleStatus"
     :title="state.title"
-    size="45%"
+    size="55%"
     append-to-body
     :close-on-click-modal="false"
     :show-close="!state.loadingStatus"

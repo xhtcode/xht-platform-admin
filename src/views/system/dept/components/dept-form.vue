@@ -163,7 +163,7 @@ defineExpose({
         </el-col>
         <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="显示顺序" prop="deptSort">
-            <el-input-number v-model="addUpdateForm.deptSort" :max="999" :min="0" class="w100" placeholder="请输入显示顺序" />
+            <el-input-number v-model="addUpdateForm.deptSort" :max="999" :min="0" class="w-full!" placeholder="请输入显示顺序" />
           </el-form-item>
         </el-col>
       </el-row>

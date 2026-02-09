@@ -24,7 +24,7 @@ const userType = computed<string>(() => {
 </template>
 
 <style lang="scss" scoped>
-.user-status-tag {
+.message-status-tag {
   border-width: 0 !important;
   color: #ffffff;
   user-select: none;

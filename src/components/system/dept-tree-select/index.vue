@@ -86,7 +86,7 @@ onMounted(() => {
     :props="{ label: 'deptName' }"
     check-strictly
     highlight-current
-    class="user-select-display"
+    class="user-select-none"
     filterable
     node-key="id"
     v-bind="$attrs"

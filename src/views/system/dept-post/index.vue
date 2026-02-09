@@ -115,7 +115,7 @@ const handleDeptClick = (data: SysDeptResponse) => {
       <dept-tree ref="deptTreeRef" @click-node="handleDeptClick" />
     </div>
     <div class="xht-view-container flex-[4]">
-      <el-form ref="queryFormRef" :disabled="state.loadingStatus" :model="queryParams" class="user-select-display" label-width="80px">
+      <el-form ref="queryFormRef" :disabled="state.loadingStatus" :model="queryParams" class="user-select-none" label-width="80px">
         <el-row v-if="!state.searchStatus">
           <el-col :lg="8" :md="8" :sm="12" :xl="4" :xs="24">
             <el-form-item label="关键字" prop="keyWord">

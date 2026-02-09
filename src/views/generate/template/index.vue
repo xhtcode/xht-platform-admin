@@ -95,7 +95,7 @@ onMounted(async () => {
 
 <template>
   <div class="xht-view-container">
-    <el-form ref="queryFormRef" :disabled="state.loadingStatus" :model="queryParams" class="user-select-display" label-width="120px">
+    <el-form ref="queryFormRef" :disabled="state.loadingStatus" :model="queryParams" class="user-select-none" label-width="120px">
       <el-row>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
           <el-form-item label="分组名称" prop="groupName">

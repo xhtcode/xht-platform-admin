@@ -31,7 +31,7 @@ const state = reactive<TableQueryPageState<SysDictItemQueryRequest, SysDictItemR
   multipleStatus: true, // 多个操作禁用状态
 })
 
-const handleGetSysDictItemPage = (data: SysDictItemQueryRequest) => {
+const handleGetSysDictItemPage = (data?: SysDictItemQueryRequest) => {
   state.queryParams.dictId = route.params?.id
   return querySysDictItemPage(data)
 }
@@ -105,7 +105,7 @@ onMounted(async () => {
 
 <template>
   <div class="xht-view-container">
-    <el-form ref="queryFormRef" :disabled="state.loadingStatus" :model="queryParams" class="user-select-display" label-width="80px">
+    <el-form ref="queryFormRef" :disabled="state.loadingStatus" :model="queryParams" class="user-select-none" label-width="80px">
       <el-row v-if="!state.searchStatus">
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
           <el-form-item label="关键字" prop="keyWord">
