@@ -106,7 +106,11 @@ defineExpose({
       <el-row>
         <el-col :span="24">
           <el-form-item label="所属部门" prop="deptId">
-            <dept-tree-select v-model="addUpdateForm.deptId" placeholder="请选择岗位所属部门" />
+            <dept-tree-select
+              v-model="addUpdateForm.deptId"
+              :disabled="addUpdateForm.systemFlag === SystemFlagEnums.YES"
+              placeholder="请选择岗位所属部门"
+            />
           </el-form-item>
         </el-col>
       </el-row>
@@ -137,7 +141,13 @@ defineExpose({
         </el-col>
         <el-col :span="24">
           <el-form-item label="岗位状态" prop="postStatus">
-            <xht-enum-select v-model="addUpdateForm.postStatus" :data="sysDeptPostStatusEnums" clearable placeholder="请选择岗位状态" />
+            <xht-enum-select
+              v-model="addUpdateForm.postStatus"
+              :disabled="addUpdateForm.systemFlag === SystemFlagEnums.YES"
+              :data="sysDeptPostStatusEnums"
+              clearable
+              placeholder="请选择岗位状态"
+            />
           </el-form-item>
         </el-col>
         <el-col :span="24">

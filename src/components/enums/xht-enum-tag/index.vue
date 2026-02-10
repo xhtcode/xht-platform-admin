@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { XhtEnumTagEmits, XhtEnumTagProps } from '@/components/enums/xht-enum-tag/types'
-import type { DictVo } from '@/store/modules/dict.store'
 import _ from 'lodash'
 
 defineOptions({
@@ -36,7 +35,7 @@ const filterDictData = computed(() => {
   })
 })
 
-const handlerClick = (item: DictVo) => {
+const handlerClick = (item: DictEnumItem<any>) => {
   emits('tag-click', item)
 }
 </script>

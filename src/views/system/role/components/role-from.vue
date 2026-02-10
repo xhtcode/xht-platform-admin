@@ -2,6 +2,7 @@
 import type { FormInstance, FormRules } from 'element-plus'
 import { querySysRoleById, saveSysRole, updateSysRole } from '@/service/api/system/role.api'
 import type { SysRoleOperationRequest } from '@/service/model/system/role.model'
+import { roleStatusEnums } from '@/service/enums/system/role.enum'
 import { sysRoleOperationForm, sysRoleOperationRules } from '@/views/system/role/role.data'
 import { useMessage } from '@/hooks/use-message'
 
@@ -116,7 +117,7 @@ defineExpose({
       <el-row>
         <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="角色状态" prop="roleStatus">
-            <xht-enum-select v-model="addUpdateForm.roleStatus" :data="sysRoleOperationForm" clearable placeholder="请选择角色状态" />
+            <xht-enum-select v-model="addUpdateForm.roleStatus" :data="roleStatusEnums" clearable placeholder="请选择角色状态" />
           </el-form-item>
         </el-col>
         <el-col :lg="12" :sm="24" :xs="24">

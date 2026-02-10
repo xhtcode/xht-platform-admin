@@ -1,4 +1,4 @@
-import { SysMenuResponse } from '@/service/model/system/menu.model'
+import type { SysMenuResponse } from '@/service/model/system/menu.model'
 
 /**
  * 角色状态

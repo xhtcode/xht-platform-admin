@@ -7,14 +7,17 @@ export const userTypeEnums: DictEnum<UserType, 'ADMIN' | 'BUSINESS' | 'USER'> = 
   ADMIN: {
     label: '管理员',
     value: 1,
+    type: 'primary',
   },
   BUSINESS: {
     label: '商户',
     value: 2,
+    type: 'success',
   },
   USER: {
     label: '用户',
     value: 3,
+    type: 'info',
   },
 }
 /**

@@ -7,7 +7,7 @@ export const messageTypeEnums: DictEnum<MessageType, 'SYSTEM' | 'BUSINESS'> = {
   SYSTEM: {
     label: '系统通知',
     value: 1,
-    type: 'info',
+    type: 'success',
   },
   BUSINESS: {
     label: '业务提醒',

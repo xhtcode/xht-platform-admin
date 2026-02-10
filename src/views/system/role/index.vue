@@ -5,7 +5,8 @@ import type { SysRoleQueryRequest, SysRoleResponse } from '@/service/model/syste
 import { querySysRolePage, removeSysRoleById, removeSysRoleByIds } from '@/service/api/system/role.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
-import { sysRoleColumnOption, sysRoleOperationForm } from '@/views/system/role/role.data'
+import { roleStatusEnums } from '@/service/enums/system/role.enum'
+import { sysRoleColumnOption } from '@/views/system/role/role.data'
 import { Delete, Edit, Plus, Refresh, Search } from '@element-plus/icons-vue'
 
 defineOptions({ name: 'SysRoleViewIndex' })
@@ -134,7 +135,7 @@ onMounted(async () => {
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
           <el-form-item label="角色状态" prop="roleStatus">
-            <xht-enum-select v-model="queryParams.roleStatus" :data="sysRoleOperationForm" clearable placeholder="请选择角色状态" />
+            <xht-enum-select v-model="queryParams.roleStatus" :data="roleStatusEnums" clearable placeholder="请选择角色状态" />
           </el-form-item>
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
