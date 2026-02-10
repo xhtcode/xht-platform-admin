@@ -25,7 +25,7 @@ const emits = defineEmits<XhtEnumTagEmits>()
  */
 const filterDictData = computed(() => {
   if (_.isNull(props.filterLabel)) {
-    return props.data
+    return []
   }
   return Object.values(props.data).filter((item) => {
     if (_.isArray(props.filterLabel)) {

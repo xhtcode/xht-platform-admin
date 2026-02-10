@@ -2,11 +2,11 @@
 import type { FormInstance, FormRules } from 'element-plus'
 import { querySysDeptById, saveSysDept, updateSysDept } from '@/service/api/system/dept.api'
 import type { SysDeptOperationRequest } from '@/service/model/system/dept.model'
-import { DeptStatusEnums } from '@/service/model/system/dept.model'
 import type { UserSimpleVo } from '@/service/model/system/user.model'
 import { sysDeptOperationForm, sysDeptOperationRules } from '@/views/system/dept/dept.data'
 import { useMessage } from '@/hooks/use-message'
 import { Search } from '@element-plus/icons-vue'
+import { deptStatusEnums } from '@/service/enums/system/dept.enum'
 
 defineOptions({ name: 'SysDeptAddOrUpdate' })
 
@@ -155,10 +155,7 @@ defineExpose({
       <el-row>
         <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="部门状态" prop="deptStatus">
-            <el-select v-model="addUpdateForm.deptStatus" placeholder="请选择部门状态">
-              <el-option :value="DeptStatusEnums.NORMAL" label="正常" />
-              <el-option :value="DeptStatusEnums.DISABLE" label="停用" />
-            </el-select>
+            <xht-enum-select v-model="addUpdateForm.deptStatus" :data="deptStatusEnums" clearable placeholder="请选择部门状态" />
           </el-form-item>
         </el-col>
         <el-col :lg="12" :sm="24" :xs="24">

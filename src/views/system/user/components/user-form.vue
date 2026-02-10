@@ -3,8 +3,9 @@ import type { FormInstance, FormRules } from 'element-plus'
 import { querySysUserById, saveSysUser, updateSysUser } from '@/service/api/system/user.api'
 import { useMessage } from '@/hooks/use-message'
 import { sysUserOperationForm, sysUserOperationRules } from '@/views/system/user/user.data'
-import { SysUserOperationRequest, UserStatusEnums, UserTypeEnums } from '@/service/model/system/user.model'
+import { SysUserOperationRequest } from '@/service/model/system/user.model'
 import type { SysDeptResponse } from '@/service/model/system/dept.model'
+import { userStatusEnums, userTypeEnums } from '@/service/enums/system/user.enum'
 
 defineOptions({
   name: 'UserForm',
@@ -128,24 +129,14 @@ defineExpose({
             <el-input v-model="addUpdateForm.nickName" :maxlength="15" placeholder="请输入用户昵称" show-word-limit />
           </el-form-item>
           <el-form-item label="用户类型" prop="userType">
-            <el-select v-model="addUpdateForm.userType" clearable placeholder="请选择用户类型">
-              <el-option :label="'管理员'" :value="UserTypeEnums.ADMIN" />
-              <el-option :label="'商家用户'" :value="UserTypeEnums.BUSINESS" />
-              <el-option :label="'普通用户'" :value="UserTypeEnums.USER" />
-            </el-select>
+            <xht-enum-select v-model="addUpdateForm.userType" :data="userTypeEnums" clearable placeholder="请选择用户类型" />
           </el-form-item>
         </div>
       </div>
       <el-row>
         <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="用户状态" prop="userStatus">
-            <el-select v-model="addUpdateForm.userStatus" placeholder="请选择用户状态">
-              <el-option :value="UserStatusEnums.NORMAL" label="账号正常" />
-              <el-option :value="UserStatusEnums.UNACTIVATED" label="账号未激活" />
-              <el-option :value="UserStatusEnums.DISABLED" label="账号禁用" />
-              <el-option :value="UserStatusEnums.LOCKED" label="账号锁定" />
-              <el-option :value="UserStatusEnums.EXPIRED" label="账号过期" />
-            </el-select>
+            <xht-enum-select v-model="addUpdateForm.userStatus" :data="userStatusEnums" clearable placeholder="请选择用户类型" />
           </el-form-item>
         </el-col>
         <el-col :lg="12" :sm="24" :xs="24">

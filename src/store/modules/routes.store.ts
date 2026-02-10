@@ -2,9 +2,9 @@ import { defineStore } from 'pinia'
 import type { RouteRecordRaw } from 'vue-router'
 import { getRouters } from '@/service/api/permission'
 import { cloneDeep } from 'lodash'
-import { MenuTypeEnums } from '@/service/model/system/menu.model'
 import pInIaPersistConfig from '@/store/pinia-persist'
 import DynamicRouter from '@/router/modules/dynamic'
+import { menuTypeEnums } from '@/service/enums/system/menu.enum'
 
 const viewsModules: any = import.meta.glob('../../views/**/*.{vue,tsx}')
 const dynamicViewsModules: Record<string, Function> = Object.assign({}, { ...viewsModules })
@@ -61,7 +61,7 @@ export const useRouteStore = defineStore(
         if (route.children && route.children?.length >= 0) {
           formatFlatteningRoutes(result, route.children)
           delete route.children
-          if (route.meta?.menuType === MenuTypeEnums.C) {
+          if (route.meta?.menuType === menuTypeEnums.C.value) {
             result.push(route)
           }
         } else {

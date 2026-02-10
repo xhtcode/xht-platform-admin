@@ -6,7 +6,7 @@ declare global {
     label: string
     value: T
     color?: string
-    type?: 'primary' | 'success' | 'warning' | 'info' | 'danger' | unknown
+    type?: 'primary' | 'success' | 'warning' | 'info' | 'danger'
     disabled?: boolean
     [key: string]: any
   }

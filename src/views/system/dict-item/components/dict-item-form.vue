@@ -2,10 +2,10 @@
 import type { FormInstance, FormRules } from 'element-plus'
 import { querySysDictItemById, saveSysDictItem, updateSysDictItem } from '@/service/api/system/dict.item.api'
 import type { SysDictItemOperationRequest } from '@/service/model/system/dict.item.model'
-import { DictItemStatusEnums } from '@/service/model/system/dict.item.model'
 import { sysDictItemOperationForm, sysDictItemOperationRules } from '@/views/system/dict-item/dict.item.data'
 import { useMessage } from '@/hooks/use-message'
 import { useRoute } from 'vue-router'
+import { sysDictStatusEnums } from '@/service/enums/system/dict.enum'
 
 defineOptions({ name: 'SysDictItemAddOrUpdate' })
 
@@ -133,11 +133,8 @@ defineExpose({
           </el-form-item>
         </el-col>
         <el-col :lg="12" :sm="24" :xs="24">
-          <el-form-item label="状态" prop="status">
-            <el-select v-model="addUpdateForm.status" placeholder="请选择字典状态">
-              <el-option :value="DictItemStatusEnums.ENABLED" label="启用" />
-              <el-option :value="DictItemStatusEnums.DISABLED" label="禁用" />
-            </el-select>
+          <el-form-item label="字典项状态" prop="status">
+            <xht-enum-select v-model="addUpdateForm.status" :data="sysDictStatusEnums" clearable placeholder="请选择字典项状态" />
           </el-form-item>
         </el-col>
         <el-col :lg="12" :sm="24" :xs="24">

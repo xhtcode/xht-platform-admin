@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
 import { querySysNoticeTypeById, saveSysNoticeType, updateSysNoticeType } from '@/service/api/notice/type.api'
-import { NoticeTypeStatusEnums, SysNoticeTypeOperationRequest } from '@/service/model/notice/type.model'
+import type { SysNoticeTypeOperationRequest } from '@/service/model/notice/type.model'
 import { sysNoticeTypeOperationForm, sysNoticeTypeOperationRules } from '@/views/notice/type/type.data'
 import { useMessage } from '@/hooks/use-message'
+import { noticeTypeStatusEnums } from '@/service/enums/system/notice.enum'
 
 defineOptions({ name: 'SysNoticeTypeAddOrUpdate' })
 
@@ -110,10 +111,7 @@ defineExpose({
         </el-col>
         <el-col :span="24">
           <el-form-item label="类型状态" prop="noticeTypeStatus">
-            <el-select v-model="addUpdateForm.noticeTypeStatus" clearable placeholder="请选择类型状态">
-              <el-option label="未启用" :value="NoticeTypeStatusEnums.NOT_ENABLE" />
-              <el-option label="启用" :value="NoticeTypeStatusEnums.ENABLE" />
-            </el-select>
+            <xht-enum-select v-model="addUpdateForm.noticeTypeStatus" :data="noticeTypeStatusEnums" clearable placeholder="请选择类型状态" />
           </el-form-item>
         </el-col>
         <el-col :span="24">

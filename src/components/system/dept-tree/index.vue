@@ -2,9 +2,9 @@
 import { useVModel } from '@vueuse/core'
 import { querySysDeptTree } from '@/service/api/system/dept.api'
 import type { SysDeptQueryRequest, SysDeptResponse } from '@/service/model/system/dept.model'
-import { DeptStatusEnums } from '@/service/model/system/dept.model'
 import type { AxiosResponse } from 'axios'
 import { CaretBottom, CaretTop } from '@element-plus/icons-vue'
+import { deptStatusEnums } from '@/service/enums/system/dept.enum'
 
 defineOptions({ name: 'DeptTree' })
 const props = withDefaults(defineProps<DeptSelectTreeProps>(), {
@@ -33,7 +33,7 @@ const filterText = ref<string>('')
 const treeRef = useTemplateRef('treeRef')
 const treeData = ref<INodeResponse<SysDeptResponse>[]>([])
 const queryParams = ref<SysDeptQueryRequest>({
-  deptStatus: DeptStatusEnums.NORMAL,
+  deptStatus: deptStatusEnums.NORMAL.value,
 })
 
 const resetHighlightCurrent = () => {

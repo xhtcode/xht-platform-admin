@@ -1,13 +1,14 @@
-import { DeptStatusEnums, SysDeptOperationRequest, SysDeptResponse } from '@/service/model/system/dept.model'
+import type { SysDeptOperationRequest, SysDeptResponse } from '@/service/model/system/dept.model'
 import type { FormRules } from 'element-plus'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
+import { deptStatusEnums } from '@/service/enums/system/dept.enum'
 
 /**
  * 增改页面 表单类型 默认值
  */
 export const sysDeptOperationForm: Partial<SysDeptOperationRequest> = {
   parentId: '0', // 父部门ID
-  deptStatus: DeptStatusEnums.NORMAL, // 部门状态,可用值:0,1
+  deptStatus: deptStatusEnums.NORMAL.value, // 部门状态,可用值:0,1
   deptSort: 0, // 显示顺序
 }
 

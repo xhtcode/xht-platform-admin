@@ -4,7 +4,7 @@ import { querySysDictById, saveSysDict, updateSysDict } from '@/service/api/syst
 import { sysDictOperationForm, sysDictOperationRules } from '@/views/system/dict/dict.data'
 import { useMessage } from '@/hooks/use-message'
 import type { SysDictOperationRequest } from '@/service/model/system/dict.model'
-import { DictStatusEnums } from '@/service/model/system/dict.model'
+import { sysDictStatusEnums } from '@/service/enums/system/dict.enum'
 
 defineOptions({ name: 'SysDictAddOrUpdate' })
 
@@ -121,10 +121,7 @@ defineExpose({
         </el-col>
         <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="字典状态" prop="status">
-            <el-select v-model="addUpdateForm.status" placeholder="请选择字典状态">
-              <el-option :value="DictStatusEnums.ENABLED" label="启用" />
-              <el-option :value="DictStatusEnums.DISABLED" label="禁用" />
-            </el-select>
+            <xht-enum-select v-model="addUpdateForm.status" :data="sysDictStatusEnums" clearable placeholder="请选择字典状态" />
           </el-form-item>
         </el-col>
       </el-row>

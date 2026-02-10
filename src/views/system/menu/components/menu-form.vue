@@ -2,9 +2,9 @@
 import type { FormInstance, FormRules } from 'element-plus'
 import { querySysMenuById, saveSysMenu, updateSysMenu } from '@/service/api/system/menu.api'
 import { useMessage } from '@/hooks/use-message'
-import { MenuCommonStatus, SysMenuOperationRequest } from '@/service/model/system/menu.model'
-import { MenuStatusEnums, MenuTypeEnums } from '@/service/model/system/menu.model'
+import type { SysMenuOperationRequest } from '@/service/model/system/menu.model'
 import { sysMenuOperationForm, sysMenuOperationRules } from '@/views/system/menu/menu.data'
+import { menuCommonStatus, menuStatusEnums, menuTypeEnums } from '@/service/enums/system/menu.enum'
 
 defineOptions({
   name: 'MenuForm',
@@ -21,10 +21,10 @@ const state = reactive<AddUpdateOption<SysMenuOperationRequest>>({
   addUpdateForm: { ...sysMenuOperationForm },
 })
 const { addUpdateForm } = toRefs(state)
-const isM = computed(() => addUpdateForm.value.menuType === MenuTypeEnums.M)
-const isC = computed(() => addUpdateForm.value.menuType === MenuTypeEnums.C)
-const isB = computed(() => addUpdateForm.value.menuType === MenuTypeEnums.B)
-const isCAndFrameFlag = computed(() => isC.value && addUpdateForm.value.frameFlag === MenuCommonStatus.NO)
+const isM = computed(() => addUpdateForm.value.menuType === menuTypeEnums.M.value)
+const isC = computed(() => addUpdateForm.value.menuType === menuTypeEnums.C.value)
+const isB = computed(() => addUpdateForm.value.menuType === menuTypeEnums.B.value)
+const isCAndFrameFlag = computed(() => isC.value && addUpdateForm.value.frameFlag === menuCommonStatus.NO.value)
 
 /**
  * 打开显示
@@ -88,12 +88,12 @@ const close = () => {
  * 组件发生变化
  */
 const handlerChange = () => {
-  if (addUpdateForm.value.frameFlag === MenuCommonStatus.YES) {
-    addUpdateForm.value.menuHidden = MenuCommonStatus.YES
+  if (addUpdateForm.value.frameFlag === menuCommonStatus.YES.value) {
+    addUpdateForm.value.menuHidden = menuCommonStatus.YES.value
   }
-  if (addUpdateForm.value.menuHidden === MenuCommonStatus.NO) {
-    addUpdateForm.value.menuCache = MenuCommonStatus.NO
-    addUpdateForm.value.affixStatus = MenuCommonStatus.NO
+  if (addUpdateForm.value.menuHidden === menuCommonStatus.NO.value) {
+    addUpdateForm.value.menuCache = menuCommonStatus.NO.value
+    addUpdateForm.value.affixStatus = menuCommonStatus.NO.value
   }
 }
 
@@ -130,11 +130,7 @@ defineExpose({
         </el-col>
         <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="菜单类型" prop="menuType">
-            <el-select v-model="addUpdateForm.menuType" clearable placeholder="请选择菜单类型">
-              <el-option :value="MenuTypeEnums.M" label="目录" />
-              <el-option :value="MenuTypeEnums.C" label="菜单" />
-              <el-option :value="MenuTypeEnums.B" label="按钮" />
-            </el-select>
+            <xht-enum-select v-model="addUpdateForm.menuType" :data="menuTypeEnums" clearable placeholder="请选择菜单类型" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -146,10 +142,7 @@ defineExpose({
         </el-col>
         <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="菜单状态" prop="menuStatus">
-            <el-select v-model="addUpdateForm.menuStatus" clearable placeholder="请选择菜单状态">
-              <el-option :value="MenuStatusEnums.NORMAL" label="正常" />
-              <el-option :value="MenuStatusEnums.DISABLE" label="停用" />
-            </el-select>
+            <xht-enum-select v-model="addUpdateForm.menuStatus" :data="menuStatusEnums" clearable placeholder="请选择菜单状态" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -196,21 +189,21 @@ defineExpose({
             <el-switch
               @change="handlerChange"
               v-model="addUpdateForm.menuHidden"
-              :active-value="MenuCommonStatus.YES"
-              :inactive-value="MenuCommonStatus.NO"
+              :active-value="menuCommonStatus.YES.value"
+              :inactive-value="menuCommonStatus.NO.value"
               active-text="显示"
               inactive-text="隐藏"
               inline-prompt
             />
           </el-form-item>
         </el-col>
-        <el-col v-if="isC && addUpdateForm.menuHidden === MenuCommonStatus.NO" :lg="12" :sm="24" :xs="24">
+        <el-col v-if="isC && addUpdateForm.menuHidden === menuCommonStatus.NO.value" :lg="12" :sm="24" :xs="24">
           <el-form-item label="高亮菜单" prop="activeMenuPath">
             <el-input v-model="addUpdateForm.activeMenuPath" placeholder="请输入高亮菜单" />
           </el-form-item>
         </el-col>
         <el-col
-          v-if="isC && addUpdateForm.menuHidden === MenuCommonStatus.YES && addUpdateForm.frameFlag === MenuCommonStatus.NO"
+          v-if="isC && addUpdateForm.menuHidden === menuCommonStatus.YES.value && addUpdateForm.frameFlag === menuCommonStatus.NO.value"
           :lg="12"
           :sm="24"
           :xs="24"
@@ -218,8 +211,8 @@ defineExpose({
           <el-form-item label="缓存状态" prop="menuCache">
             <el-switch
               v-model="addUpdateForm.menuCache"
-              :active-value="MenuCommonStatus.YES"
-              :inactive-value="MenuCommonStatus.NO"
+              :active-value="menuCommonStatus.YES.value"
+              :inactive-value="menuCommonStatus.NO.value"
               active-text="是"
               inactive-text="否"
               inline-prompt
@@ -227,7 +220,7 @@ defineExpose({
           </el-form-item>
         </el-col>
         <el-col
-          v-if="isC && addUpdateForm.menuHidden === MenuCommonStatus.YES && addUpdateForm.frameFlag === MenuCommonStatus.NO"
+          v-if="isC && addUpdateForm.menuHidden === menuCommonStatus.YES.value && addUpdateForm.frameFlag === menuCommonStatus.NO.value"
           :lg="12"
           :sm="24"
           :xs="24"
@@ -236,8 +229,8 @@ defineExpose({
             <el-switch
               class="w-100!"
               v-model="addUpdateForm.affixStatus"
-              :active-value="MenuCommonStatus.YES"
-              :inactive-value="MenuCommonStatus.NO"
+              :active-value="menuCommonStatus.YES.value"
+              :inactive-value="menuCommonStatus.NO.value"
               active-text="是"
               inactive-text="否"
               inline-prompt
@@ -249,8 +242,8 @@ defineExpose({
             <el-switch
               @change="handlerChange"
               v-model="addUpdateForm.frameFlag"
-              :active-value="MenuCommonStatus.YES"
-              :inactive-value="MenuCommonStatus.NO"
+              :active-value="menuCommonStatus.YES.value"
+              :inactive-value="menuCommonStatus.NO.value"
               active-text="是"
               inactive-text="否"
               inline-prompt

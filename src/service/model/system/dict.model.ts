@@ -1,10 +1,7 @@
 /**
- * 字典状态枚举
+ * 字典状态
  */
-export enum DictStatusEnums {
-  DISABLED = 0,
-  ENABLED = 1,
-}
+export type DictStatusType = 1 | 2
 
 /**
  * 查询请求类型
@@ -12,7 +9,7 @@ export enum DictStatusEnums {
 export interface SysDictQueryRequest extends PageQueryRequest {
   dictCode?: string //字典编码
   dictName?: string //字典名称
-  status?: DictStatusEnums //状态(1:启用 0:禁用)
+  status?: DictStatusType //状态(1:启用 0:禁用)
 }
 
 /**
@@ -24,7 +21,7 @@ export interface SysDictResponse extends MetaResponse {
   dictName: string //字典名称
   sortOrder: number //排序序号
   remark: string //字典描述
-  status: DictStatusEnums //状态(1:启用 0:禁用)
+  status: DictStatusType //状态(1:启用 0:禁用)
 }
 
 /**

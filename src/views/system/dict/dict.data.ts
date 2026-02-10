@@ -1,14 +1,14 @@
 import type { SysDictOperationRequest, SysDictResponse } from '@/service/model/system/dict.model'
-import { DictStatusEnums } from '@/service/model/system/dict.model'
 import type { FormRules } from 'element-plus'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
+import { sysDictStatusEnums } from '@/service/enums/system/dict.enum'
 
 /**
  * 增改页面 表单类型 默认值
  */
 export const sysDictOperationForm: Partial<SysDictOperationRequest> = {
   sortOrder: 0, //排序序号
-  status: DictStatusEnums.ENABLED, //状态(1:启用 0:禁用)
+  status: sysDictStatusEnums.ENABLED.value, //状态(1:启用 0:禁用)
 }
 
 /**
@@ -29,19 +29,7 @@ export const sysDictOperationRules: FormRules<Required<SysDictOperationRequest>>
     { type: 'number', message: '排序序号必须为数字', trigger: 'blur' },
   ],
   remark: [{ max: 200, message: '字典描述长度不能超过200个字符', trigger: 'blur' }],
-  status: [
-    { required: true, message: '状态不能为空', trigger: 'change' },
-    {
-      validator: (_, value, callback) => {
-        if (Object.values(DictStatusEnums).includes(value)) {
-          callback()
-        } else {
-          callback(new Error('状态值无效'))
-        }
-      },
-      trigger: 'change',
-    },
-  ],
+  status: [{ required: true, message: '状态不能为空', trigger: 'change' }],
 }
 
 /**

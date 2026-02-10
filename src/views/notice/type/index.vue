@@ -1,10 +1,11 @@
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
 import { useTableQueryListHooks } from '@/hooks/use-crud-hooks'
-import { NoticeTypeStatusEnums, SysNoticeTypeQueryRequest, SysNoticeTypeResponse } from '@/service/model/notice/type.model'
+import type { SysNoticeTypeQueryRequest, SysNoticeTypeResponse } from '@/service/model/notice/type.model'
 import { querySysNoticeTypeList, removeSysNoticeTypeById, removeSysNoticeTypeByIdBatch } from '@/service/api/notice/type.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { Delete, Edit, Plus, Refresh, Search } from '@element-plus/icons-vue'
+import { noticeTypeStatusEnums } from '@/service/enums/system/notice.enum'
 
 defineOptions({ name: 'SysNoticeTypeView' })
 
@@ -105,10 +106,7 @@ onMounted(async () => {
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
           <el-form-item label="类型状态" prop="noticeTypeStatus">
-            <el-select v-model="queryParams.noticeTypeStatus" clearable placeholder="请选择类型状态">
-              <el-option label="未启用" :value="NoticeTypeStatusEnums.NOT_ENABLE" />
-              <el-option label="启用" :value="NoticeTypeStatusEnums.ENABLE" />
-            </el-select>
+            <xht-enum-select v-model="queryParams.noticeTypeStatus" :data="noticeTypeStatusEnums" clearable placeholder="请选择类型状态" />
           </el-form-item>
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
@@ -153,8 +151,7 @@ onMounted(async () => {
       <el-table-column label="类型名称" prop="noticeTypeName" min-width="120" />
       <el-table-column label="类型状态" prop="noticeTypeStatus" width="80">
         <template #default="{ row }">
-          <el-tag v-if="row.noticeTypeStatus === NoticeTypeStatusEnums.ENABLE" type="success">启用</el-tag>
-          <el-tag v-else type="danger">未启用</el-tag>
+          <xht-enum-tag :filter-label="row.noticeTypeStatus" :data="noticeTypeStatusEnums" />
         </template>
       </el-table-column>
       <el-table-column label="类型排序" prop="noticeTypeSort" width="80" />

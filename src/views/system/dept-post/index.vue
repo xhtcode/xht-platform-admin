@@ -2,7 +2,6 @@
 import type { FormInstance } from 'element-plus'
 import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
 import type { SysDeptPostQueryRequest, SysDeptPostResponse } from '@/service/model/system/dept.post.model'
-import { SysDeptPostStatusEnums } from '@/service/model/system/dept.post.model'
 import { querySysDeptPostPage, removeSysDeptPostById, removeSysDeptPostByIds } from '@/service/api/system/dept.post.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { SysDeptResponse } from '@/service/model/system/dept.model'
@@ -10,6 +9,7 @@ import { SystemFlagEnums } from '@/service/model/base.model'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { sysDeptPostColumnOption } from '@/views/system/dept-post/dept.post.data'
 import { Delete, Edit, Plus, Refresh, Search } from '@element-plus/icons-vue'
+import { sysDeptPostStatusEnums } from '@/service/enums/system/dept.post.enum'
 
 defineOptions({ name: 'SysDeptPostViewIndex' })
 
@@ -140,10 +140,7 @@ const handleDeptClick = (data: SysDeptResponse) => {
           </el-col>
           <el-col :lg="8" :md="8" :sm="12" :xl="4" :xs="24">
             <el-form-item label="岗位状态" prop="postStatus">
-              <el-select v-model="queryParams.postStatus" class="w100" placeholder="请选择岗位状态">
-                <el-option :value="SysDeptPostStatusEnums.NORMAL" label="正常" />
-                <el-option :value="SysDeptPostStatusEnums.DISABLE" label="停用" />
-              </el-select>
+              <xht-enum-select v-model="queryParams.postStatus" :data="sysDeptPostStatusEnums" clearable placeholder="请选择岗位状态" />
             </el-form-item>
           </el-col>
           <el-col :lg="8" :md="8" :sm="12" :xl="4" :xs="24">

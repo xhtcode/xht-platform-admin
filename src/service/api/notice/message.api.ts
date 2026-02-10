@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 import type { AxiosPromise } from 'axios'
-import { MessageStarEnums, MessageTopEnums, SysMessageQueryRequest, SysMessageResponse } from '@/service/model/notice/message.model'
-import { MessageInfoVo, SysMessageInfoResponse } from '@/service/model/notice/message.info.model'
+import type { MessageStar, MessageTop, SysMessageQueryRequest, SysMessageResponse } from '@/service/model/notice/message.model'
+import type { MessageInfoVo, SysMessageInfoResponse } from '@/service/model/notice/message.info.model'
 
 /**
  * 后台管理服务前缀
@@ -48,7 +48,7 @@ export const updateMessageRead = (messageId: ModeIdType): AxiosPromise<void> => 
 /**
  * 收集站内信（收件人侧）
  */
-export const updateMessageStart = (messageId: ModeIdType, start: MessageStarEnums) => {
+export const updateMessageStart = (messageId: ModeIdType, start: MessageStar) => {
   return request({
     url: Api.UPDATE_START + `${messageId}/${start}`,
     baseURL,
@@ -59,7 +59,7 @@ export const updateMessageStart = (messageId: ModeIdType, start: MessageStarEnum
 /**
  * 置顶站内信（收件人侧）
  */
-export const updateMessageTop = (messageId: ModeIdType, top: MessageTopEnums) => {
+export const updateMessageTop = (messageId: ModeIdType, top: MessageTop) => {
   return request({
     url: Api.UPDATE_TOP + `${messageId}/${top}`,
     baseURL,

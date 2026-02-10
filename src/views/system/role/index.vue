@@ -2,11 +2,10 @@
 import type { FormInstance } from 'element-plus'
 import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
 import type { SysRoleQueryRequest, SysRoleResponse } from '@/service/model/system/role.model'
-import { RoleStatusEnums } from '@/service/model/system/role.model'
 import { querySysRolePage, removeSysRoleById, removeSysRoleByIds } from '@/service/api/system/role.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
-import { sysRoleColumnOption } from '@/views/system/role/role.data'
+import { sysRoleColumnOption, sysRoleOperationForm } from '@/views/system/role/role.data'
 import { Delete, Edit, Plus, Refresh, Search } from '@element-plus/icons-vue'
 
 defineOptions({ name: 'SysRoleViewIndex' })
@@ -135,10 +134,7 @@ onMounted(async () => {
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
           <el-form-item label="角色状态" prop="roleStatus">
-            <el-select v-model="queryParams.roleStatus" clearable placeholder="请选择角色状态">
-              <el-option :value="RoleStatusEnums.NORMAL" label="正常" />
-              <el-option :value="RoleStatusEnums.DISABLE" label="停用" />
-            </el-select>
+            <xht-enum-select v-model="queryParams.roleStatus" :data="sysRoleOperationForm" clearable placeholder="请选择角色状态" />
           </el-form-item>
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">

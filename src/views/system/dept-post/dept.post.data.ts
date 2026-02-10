@@ -1,14 +1,14 @@
 import type { SysDeptPostOperationRequest, SysDeptPostResponse } from '@/service/model/system/dept.post.model'
-import { SysDeptPostStatusEnums } from '@/service/model/system/dept.post.model'
 import type { FormRules } from 'element-plus'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
+import { sysDeptPostStatusEnums } from '@/service/enums/system/dept.post.enum'
 
 /**
  * 增改页面 表单类型 默认值
  */
 export const sysDeptPostOperationForm: Partial<SysDeptPostOperationRequest> = {
   postSort: 0, // 岗位排序
-  postStatus: SysDeptPostStatusEnums.NORMAL, //  岗位状态
+  postStatus: sysDeptPostStatusEnums.NORMAL.value, //  岗位状态
   postLimit: 999, // 岗位人员限制
   remark: '暂无', // 岗位描述
 }

@@ -1,20 +1,20 @@
-import { MenuCommonStatus, SysMenuOperationRequest, SysMenuResponse } from '@/service/model/system/menu.model'
-import { MenuStatusEnums, MenuTypeEnums } from '@/service/model/system/menu.model'
+import type { SysMenuOperationRequest, SysMenuResponse } from '@/service/model/system/menu.model'
 import type { FormRules } from 'element-plus'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
+import { menuCommonStatus, menuStatusEnums, menuTypeEnums } from '@/service/enums/system/menu.enum'
 
 /**
  * 增改页面 表单类型 默认值
  */
 export const sysMenuOperationForm: Partial<SysMenuOperationRequest> = {
   parentId: '0', // 父菜单ID
-  menuType: MenuTypeEnums.M, // 类型，默认为目录
-  menuHidden: MenuCommonStatus.YES, // 显示状态，默认为显示
-  menuCache: MenuCommonStatus.YES, // 是否缓存，默认为否
-  menuStatus: MenuStatusEnums.NORMAL, // 菜单状态，默认为正常
+  menuType: menuTypeEnums.M.value, // 类型，默认为目录
+  menuHidden: menuCommonStatus.YES.value, // 显示状态，默认为显示
+  menuCache: menuCommonStatus.YES.value, // 是否缓存，默认为否
+  menuStatus: menuStatusEnums.NORMAL.value, // 菜单状态，默认为正常
   menuSort: 1, // 菜单排序，默认为1
-  frameFlag: MenuCommonStatus.NO, // 是否为外链，默认为否
-  affixStatus: MenuCommonStatus.NO, // 菜单固定状态，默认为否
+  frameFlag: menuCommonStatus.NO.value, // 是否为外链，默认为否
+  affixStatus: menuCommonStatus.NO.value, // 菜单固定状态，默认为否
 }
 
 /**

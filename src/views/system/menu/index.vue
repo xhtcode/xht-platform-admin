@@ -1,13 +1,13 @@
 <script lang="ts" setup>
 import { querySysMenuTree, removeSysMenuById } from '@/service/api/system/menu.api'
 import type { SysMenuQueryRequest, SysMenuResponse } from '@/service/model/system/menu.model'
-import { MenuStatusEnums, MenuTypeEnums } from '@/service/model/system/menu.model'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { FormInstance } from 'element-plus'
 import { sysMenuColumnOption } from '@/views/system/menu/menu.data'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { Delete, Edit, Plus, Refresh, Search, Sort } from '@element-plus/icons-vue'
 import { useTableQueryListHooks } from '@/hooks/use-crud-hooks'
+import { menuStatusEnums, menuTypeEnums } from '@/service/enums/system/menu.enum'
 
 defineOptions({ name: 'SysMenuViewIndex' })
 
@@ -99,19 +99,12 @@ onMounted(async () => {
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
           <el-form-item label="菜单类型" prop="menuType">
-            <el-select v-model="queryParams.menuType" clearable placeholder="请选择菜单类型">
-              <el-option :value="MenuTypeEnums.M" label="目录" />
-              <el-option :value="MenuTypeEnums.C" label="菜单" />
-              <el-option :value="MenuTypeEnums.B" label="按钮" />
-            </el-select>
+            <xht-enum-select v-model="queryParams.menuType" :data="menuTypeEnums" clearable placeholder="请选择菜单类型" />
           </el-form-item>
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
           <el-form-item label="菜单状态" prop="menuStatus">
-            <el-select v-model="queryParams.menuStatus" clearable placeholder="请选择菜单状态">
-              <el-option :value="MenuStatusEnums.NORMAL" label="正常" />
-              <el-option :value="MenuStatusEnums.DISABLE" label="停用" />
-            </el-select>
+            <xht-enum-select v-model="queryParams.menuStatus" :data="menuStatusEnums" clearable placeholder="请选择菜单状态" />
           </el-form-item>
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
@@ -143,9 +136,7 @@ onMounted(async () => {
     >
       <el-table-column v-if="columnOption.menuType?.visible" align="left" fixed="left" label="菜单类型" width="160" prop="menuType">
         <template #default="{ row }">
-          <el-tag :type="row.menuType === MenuTypeEnums.M ? 'success' : row.menuType === MenuTypeEnums.C ? 'warning' : 'info'">
-            {{ row.menuType === MenuTypeEnums.M ? '目录' : row.menuType === MenuTypeEnums.C ? '菜单' : '按钮' }}
-          </el-tag>
+          <xht-enum-tag :filter-label="row.menuType" :data="menuTypeEnums" />
         </template>
       </el-table-column>
       <el-table-column
@@ -163,14 +154,7 @@ onMounted(async () => {
       </el-table-column>
       <el-table-column v-if="columnOption.menuStatus?.visible" align="center" label="菜单状态" min-width="120" prop="menuStatus">
         <template #default="{ row }">
-          <el-switch
-            :active-value="MenuStatusEnums.NORMAL"
-            :inactive-value="MenuStatusEnums.DISABLE"
-            :model-value="row.menuStatus"
-            active-text="正常"
-            inactive-text="停用"
-            inline-prompt
-          />
+          <xht-enum-tag :filter-label="row.menuStatus" :data="menuStatusEnums" />
         </template>
       </el-table-column>
       <el-table-column v-if="columnOption.menuAuthority?.visible" align="center" label="权限标识" prop="menuAuthority" width="150" />

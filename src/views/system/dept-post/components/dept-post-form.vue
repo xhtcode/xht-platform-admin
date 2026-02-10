@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
 import type { SysDeptPostOperationRequest } from '@/service/model/system/dept.post.model'
-import { SysDeptPostStatusEnums } from '@/service/model/system/dept.post.model'
 import { sysDeptPostOperationForm, sysDeptPostOperationRules } from '@/views/system/dept-post/dept.post.data'
 import { useMessage } from '@/hooks/use-message'
 import { querySysDeptPostById, saveSysDeptPost, updateSysDeptPost } from '@/service/api/system/dept.post.api'
 import { SystemFlagEnums } from '@/service/model/base.model'
+import { sysDeptPostStatusEnums } from '@/service/enums/system/dept.post.enum'
 
 defineOptions({ name: 'SysDeptAddOrUpdate' })
 
@@ -137,10 +137,7 @@ defineExpose({
         </el-col>
         <el-col :span="24">
           <el-form-item label="岗位状态" prop="postStatus">
-            <el-select v-model="addUpdateForm.postStatus" placeholder="请选择岗位状态">
-              <el-option :value="SysDeptPostStatusEnums.NORMAL" label="正常" />
-              <el-option :value="SysDeptPostStatusEnums.DISABLE" label="停用" />
-            </el-select>
+            <xht-enum-select v-model="addUpdateForm.postStatus" :data="sysDeptPostStatusEnums" clearable placeholder="请选择岗位状态" />
           </el-form-item>
         </el-col>
         <el-col :span="24">

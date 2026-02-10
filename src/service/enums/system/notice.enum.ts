@@ -1,7 +1,26 @@
+import type { NoticeTypeStatus } from '@/service/model/notice/type.model'
+import type { NoticeJumpType, NoticeStatus, NoticeTimedPublish, NoticeTop } from '@/service/model/notice/base.model'
+
+/**
+ * 通知类型状态枚举
+ */
+export const noticeTypeStatusEnums: DictEnum<NoticeTypeStatus, 'NOT_ENABLE' | 'ENABLE'> = {
+  NOT_ENABLE: {
+    label: '未启用',
+    value: 0,
+    type: 'danger',
+  },
+  ENABLE: {
+    label: '启用',
+    value: 1,
+    type: 'success',
+  },
+}
+
 /**
  * 跳转类型
  */
-export const noticeJumpTypeEnums: DictEnum<number, 'NO_JUMP' | 'INNER_PAGE' | 'OUTER_LINK'> = {
+export const noticeJumpTypeEnums: DictEnum<NoticeJumpType, 'NO_JUMP' | 'INNER_PAGE' | 'OUTER_LINK'> = {
   NO_JUMP: {
     label: '无跳转',
     value: 0,
@@ -22,7 +41,7 @@ export const noticeJumpTypeEnums: DictEnum<number, 'NO_JUMP' | 'INNER_PAGE' | 'O
 /**
  * 是否定时发布
  */
-export const noticeTimedPublishEnums: DictEnum<number, 'NOT_PUBLISH' | 'PUBLISH'> = {
+export const noticeTimedPublishEnums: DictEnum<NoticeTimedPublish, 'NOT_PUBLISH' | 'PUBLISH'> = {
   NOT_PUBLISH: {
     label: '否(立即发布)',
     value: 0,
@@ -38,7 +57,7 @@ export const noticeTimedPublishEnums: DictEnum<number, 'NOT_PUBLISH' | 'PUBLISH'
 /**
  * 是否置顶
  */
-export const noticeTopEnums: DictEnum<number, 'NO' | 'YES'> = {
+export const noticeTopEnums: DictEnum<NoticeTop, 'NO' | 'YES'> = {
   NO: {
     label: '否',
     value: 0,
@@ -54,7 +73,7 @@ export const noticeTopEnums: DictEnum<number, 'NO' | 'YES'> = {
 /**
  * 通知状态
  */
-export const noticeStatusEnums: DictEnum<number, 'NOT_PUBLISH' | 'PUBLISH' | 'UNDER_SHELVE' | 'EXPIRED'> = {
+export const noticeStatusEnums: DictEnum<NoticeStatus, 'NOT_PUBLISH' | 'PUBLISH' | 'UNDER_SHELVE' | 'EXPIRED'> = {
   NOT_PUBLISH: {
     label: '未发布',
     value: 0,

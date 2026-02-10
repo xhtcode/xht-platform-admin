@@ -2,13 +2,13 @@
 import type { FormInstance } from 'element-plus'
 import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
 import type { SysDictItemQueryRequest, SysDictItemResponse } from '@/service/model/system/dict.item.model'
-import { DictItemStatusEnums } from '@/service/model/system/dict.item.model'
 import { querySysDictItemPage, removeSysDictItemById } from '@/service/api/system/dict.item.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { useRoute } from 'vue-router'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { sysDictItemColumnOption } from '@/views/system/dict-item/dict.item.data'
 import { Delete, Edit, Plus, Refresh, Search } from '@element-plus/icons-vue'
+import { sysDictStatusEnums } from '@/service/enums/system/dict.enum'
 
 defineOptions({ name: 'SysDictItemViewIndex' })
 
@@ -130,10 +130,7 @@ onMounted(async () => {
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
           <el-form-item label="字典项状态" prop="status">
-            <el-select v-model="queryParams.status" placeholder="请选择字典项状态">
-              <el-option :value="DictItemStatusEnums.ENABLED" label="启用" />
-              <el-option :value="DictItemStatusEnums.DISABLED" label="禁用" />
-            </el-select>
+            <xht-enum-select v-model="queryParams.status" :data="sysDictStatusEnums" clearable placeholder="请选择字典项状态" />
           </el-form-item>
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">

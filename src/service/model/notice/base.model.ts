@@ -1,4 +1,21 @@
 /**
+ * 跳转类型
+ */
+export type NoticeJumpType = 0 | 1 | 2
+/**
+ * 是否定时发布
+ */
+export type NoticeTimedPublish = 0 | 1
+/**
+ * 是否置顶
+ */
+export type NoticeTop = 0 | 1
+/**
+ * 通知状态
+ */
+export type NoticeStatus = 0 | 1 | 2 | 3
+
+/**
  * 系统管理-通知详情查询请求参数类型
  */
 export interface SysNoticeQueryRequest extends PageQueryRequest {
@@ -21,14 +38,14 @@ export interface SysNoticeResponse extends MetaResponse {
   noticeTitle: string // 通知标题
   noticeSummary: string // 通知摘要
   noticeContent: string // 通知内容
-  noticeStatus: number // 通知状态
+  noticeStatus: NoticeStatus // 通知状态
   noticeOrder: number // 通知排序
-  noticeTop: number // 是否置顶
-  noticeTimedPublish: number // 是否定时发布
+  noticeTop: NoticeTop // 是否置顶
+  noticeTimedPublish: NoticeTimedPublish // 是否定时发布
   noticePublishTime: string // 发布时间
   noticeExpireTime: string // 过期时间
   noticeOfflineTime: string // 下架时间
-  noticeJumpType: number // 跳转类型
+  noticeJumpType: NoticeJumpType // 跳转类型
   noticeJumpUrl: string // 跳转地址
   noticeReadCount: number // 已读人数
   noticeClickCount: number // 点击次数

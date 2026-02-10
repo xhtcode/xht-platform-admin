@@ -7,6 +7,7 @@ import { queryAdminSendPage, updateCancelSingle } from '@/service/api/notice/mes
 import { Operation, Plus, Refresh, RefreshLeft, Search, View } from '@element-plus/icons-vue'
 import type { FormInstance } from 'element-plus'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
+import { messageStatusEnums, messageTypeEnums } from '@/service/enums/system/message.enum'
 
 defineOptions({ name: 'SysMessageView' })
 
@@ -129,8 +130,7 @@ defineExpose({
         </el-descriptions-item>
         <el-descriptions-item label="发送人" :span="2">{{ messageInfo?.senderName }}</el-descriptions-item>
         <el-descriptions-item label="信息类型" :span="2">
-          <el-tag v-if="messageInfo?.messageType === 1" type="success">系统通知</el-tag>
-          <el-tag v-else type="primary">业务提醒</el-tag>
+          <xht-enum-tag :filter-label="messageInfo?.messageType" :data="messageTypeEnums" />
         </el-descriptions-item>
         <el-descriptions-item label="消息内容" :span="4">{{ messageInfo?.messageContent }}</el-descriptions-item>
         <el-descriptions-item label="扩展信息" :span="4">{{ messageInfo?.messageExtend }}</el-descriptions-item>
@@ -150,7 +150,7 @@ defineExpose({
       <el-table-column label="接收人" prop="recipientName" width="160" />
       <el-table-column label="消息状态" prop="messageStatus" width="160">
         <template #default="{ row }">
-          <message-status :status="row.messageStatus" />
+          <xht-enum-tag :filter-label="row.messageStatus" :data="messageStatusEnums" />
         </template>
       </el-table-column>
       <el-table-column label="已读时间" prop="readTime" width="180" />

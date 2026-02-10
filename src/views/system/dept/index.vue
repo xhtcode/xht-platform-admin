@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import { querySysDeptTree, removeSysDeptById } from '@/service/api/system/dept.api'
 import type { SysDeptQueryRequest, SysDeptResponse } from '@/service/model/system/dept.model'
-import { DeptStatusEnums } from '@/service/model/system/dept.model'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { sysDeptColumnOption } from '@/views/system/dept/dept.data'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { Delete, Edit, Plus, Refresh, Search, Sort } from '@element-plus/icons-vue'
 import { useTableQueryListHooks } from '@/hooks/use-crud-hooks'
+import { deptStatusEnums } from '@/service/enums/system/dept.enum'
 
 defineOptions({ name: 'SysDeptViewIndex' })
 
@@ -99,10 +99,7 @@ onMounted(async () => {
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
           <el-form-item label="部门状态" prop="deptStatus">
-            <el-select v-model="queryParams.deptStatus" placeholder="请选择部门状态">
-              <el-option :value="DeptStatusEnums.NORMAL" label="正常" />
-              <el-option :value="DeptStatusEnums.DISABLE" label="停用" />
-            </el-select>
+            <xht-enum-select v-model="queryParams.deptStatus" :data="deptStatusEnums" clearable placeholder="请选择部门状态" />
           </el-form-item>
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
@@ -150,14 +147,7 @@ onMounted(async () => {
       </el-table-column>
       <el-table-column v-if="columnOption.deptStatus?.visible" align="center" label="部门状态" prop="deptStatus" width="120">
         <template #default="{ row }">
-          <el-switch
-            :active-value="DeptStatusEnums.NORMAL"
-            :inactive-value="DeptStatusEnums.DISABLE"
-            :model-value="row.deptStatus"
-            active-text="正常"
-            inactive-text="停用"
-            inline-prompt
-          />
+          <xht-enum-tag :filter-label="row.deptStatus" :data="deptStatusEnums" />
         </template>
       </el-table-column>
       <el-table-column v-if="columnOption.deptSort?.visible" align="center" label="显示顺序" prop="deptSort" width="120" />

@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
 import type { SysUserQueryRequest, SysUserResponse } from '@/service/model/system/user.model'
-import { UserStatusEnums, UserTypeEnums } from '@/service/model/system/user.model'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import type { SysDeptResponse } from '@/service/model/system/dept.model'
 import { sysUserColumnOption } from '@/views/system/user/user.data'
@@ -9,6 +8,7 @@ import { querySysUserPage, removeSysUserById, removeSysUserByIds, resetPassword 
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
 import { Delete, Edit, Key, Plus, Refresh, Search, User } from '@element-plus/icons-vue'
+import { userStatusEnums, userTypeEnums } from '@/service/enums/system/user.enum'
 
 defineOptions({ name: 'SysUserViewIndex' })
 
@@ -159,11 +159,7 @@ onMounted(async () => {
         <el-row v-else>
           <el-col :lg="8" :md="8" :sm="12" :xl="4" :xs="24">
             <el-form-item label="用户类型" prop="userType">
-              <el-select v-model="queryParams.userType" placeholder="请选择用户类型">
-                <el-option :value="UserTypeEnums.ADMIN" label="管理员" />
-                <el-option :value="UserTypeEnums.BUSINESS" label="商家" />
-                <el-option :value="UserTypeEnums.USER" label="用户" />
-              </el-select>
+              <xht-enum-select v-model="queryParams.userType" :data="userTypeEnums" clearable placeholder="请选择用户类型" />
             </el-form-item>
           </el-col>
           <el-col :lg="8" :md="8" :sm="12" :xl="4" :xs="24">
@@ -178,13 +174,7 @@ onMounted(async () => {
           </el-col>
           <el-col :lg="8" :md="8" :sm="12" :xl="4" :xs="24">
             <el-form-item label="用户状态" prop="userStatus">
-              <el-select v-model="queryParams.userStatus" placeholder="请选择用户状态">
-                <el-option :value="UserStatusEnums.NORMAL" label="账号正常" />
-                <el-option :value="UserStatusEnums.UNACTIVATED" label="账号未激活" />
-                <el-option :value="UserStatusEnums.DISABLED" label="账号禁用" />
-                <el-option :value="UserStatusEnums.LOCKED" label="账号锁定" />
-                <el-option :value="UserStatusEnums.EXPIRED" label="账号过期" />
-              </el-select>
+              <xht-enum-select v-model="queryParams.userStatus" :data="userStatusEnums" clearable placeholder="请选择用户状态" />
             </el-form-item>
           </el-col>
           <el-col :lg="8" :md="8" :sm="12" :xl="4" :xs="24">
@@ -247,12 +237,12 @@ onMounted(async () => {
         <el-table-column v-if="columnOption.nickName?.visible" label="用户昵称" min-width="160" prop="nickName" />
         <el-table-column v-if="columnOption.userType?.visible" label="用户类型" min-width="100" prop="userType">
           <template #default="{ row }">
-            <user-type-tag :type="row.userType" />
+            <xht-enum-tag :filter-label="row.userType" :data="userTypeEnums" />
           </template>
         </el-table-column>
         <el-table-column v-if="columnOption.userStatus?.visible" label="用户状态" min-width="100" prop="userStatus">
           <template #default="{ row }">
-            <user-status-tag :status="row.userStatus" />
+            <xht-enum-tag :filter-label="row.userStatus" :data="userStatusEnums" />
           </template>
         </el-table-column>
         <el-table-column v-if="columnOption.userPhone?.visible" label="手机号码" min-width="130" prop="userPhone" />

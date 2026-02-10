@@ -1,10 +1,7 @@
 /**
- * 定义部门状态枚举类型
+ * 部门状态
  */
-export enum DeptStatusEnums {
-  NORMAL = 0, // 激活
-  DISABLE = 1, // 停用
-}
+export type DeptStatusType = 0 | 1
 
 /**
  * 查询请求类型
@@ -12,7 +9,7 @@ export enum DeptStatusEnums {
 export interface SysDeptQueryRequest extends PageQueryRequest {
   deptCode?: string // 部门编码
   deptName?: string // 部门名称
-  deptStatus?: DeptStatusEnums // 部门状态
+  deptStatus?: DeptStatusType // 部门状态
 }
 
 /**
@@ -23,7 +20,7 @@ export interface SysDeptResponse extends MetaResponse {
   parentId: ModeIdType // 父部门ID
   deptCode: string // 部门编码
   deptName: string // 部门名称
-  deptStatus: DeptStatusEnums // 部门状态,可用值:0,1
+  deptStatus: DeptStatusType // 部门状态,可用值:0,1
   deptSort: number // 显示顺序
   ancestors: string //祖先列表
   leader: string //负责人

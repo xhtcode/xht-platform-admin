@@ -1,5 +1,5 @@
 import { AppLanguageEnums, ComponentSizeEnums } from '@/service/enums'
-import { UserStatusEnums } from '@/service/model/system/user.model'
+import type { UserStatusType } from '@/service/model/system/user.model'
 
 /**
  * pinia自定义ts类型
@@ -172,7 +172,7 @@ declare global {
     /**
      * 账号状态(0-正常,1-未激活,2-禁用,3-锁定,4-过期)
      */
-    userStatus?: UserStatusEnums
+    userStatus?: UserStatusType
     /**
      * 手机号
      */

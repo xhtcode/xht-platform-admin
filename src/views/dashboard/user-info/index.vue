@@ -1,9 +1,10 @@
 <script setup lang="ts">
+import { userStatusEnums } from '@/service/enums/system/user.enum'
+
 defineOptions({
   name: 'UserInfo',
 })
 import { ref, reactive } from 'vue'
-import { UserStatusEnums } from '@/service/model/system/user.model'
 import { ElMessage } from 'element-plus'
 // 模拟用户数据
 const userData = reactive({
@@ -12,7 +13,7 @@ const userData = reactive({
   nickName: '管理员',
   userPhone: '13800138000',
   userAvatar: '',
-  userStatus: UserStatusEnums.NORMAL,
+  userStatus: userStatusEnums.NORMAL.value,
   registerDate: '2024-01-01',
   dataScope: 1,
   userType: '1',
@@ -80,15 +81,6 @@ const editForm = reactive({
   userAvatar: userData.userAvatar,
 })
 
-// 用户状态映射
-const userStatusMap = {
-  [UserStatusEnums.NORMAL]: { text: '正常', color: 'success' as const },
-  [UserStatusEnums.UNACTIVATED]: { text: '未激活', color: 'warning' as const },
-  [UserStatusEnums.DISABLED]: { text: '禁用', color: 'danger' as const },
-  [UserStatusEnums.LOCKED]: { text: '锁定', color: 'danger' as const },
-  [UserStatusEnums.EXPIRED]: { text: '过期', color: 'warning' as const },
-}
-
 // 数据范围映射
 const dataScopeMap: Record<number, string> = {
   1: '全部数据权限',
@@ -155,9 +147,7 @@ const cancelEdit = () => {
           </div>
           <p class="m-0 mb-3 text-sm text-gray-600">账号：{{ userData.userName }}</p>
           <div class="flex flex-wrap items-center gap-4">
-            <el-tag :type="userStatusMap[userData.userStatus as UserStatusEnums]?.color || 'info'">
-              {{ userStatusMap[userData.userStatus as UserStatusEnums]?.text || '未知状态' }}
-            </el-tag>
+            <xht-enum-tag :filter-label="userData.userStatus" :data="userStatusEnums" />
             <span class="text-xs text-gray-500">注册日期：{{ userData.registerDate || '未知' }}</span>
           </div>
         </div>

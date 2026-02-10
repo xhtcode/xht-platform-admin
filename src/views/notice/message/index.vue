@@ -7,6 +7,7 @@ import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { sysMessageColumnOption } from '@/views/notice/message/message.data'
 import { RefreshLeft, Refresh, Search, View } from '@element-plus/icons-vue'
+import { messageTypeEnums } from '@/service/enums/system/message.enum'
 
 defineOptions({ name: 'SysMessageView' })
 
@@ -114,8 +115,7 @@ onMounted(async () => {
       <el-table-column v-if="columnOption.senderName?.visible" label="发件人名称" prop="senderName" width="120" />
       <el-table-column v-if="columnOption.messageType?.visible" label="消息类型" prop="messageType" width="160">
         <template #default="{ row }">
-          <el-tag v-if="row.messageType === 1" type="success">系统通知</el-tag>
-          <el-tag v-else type="primary">业务提醒</el-tag>
+          <xht-enum-tag :filter-label="row?.messageType" :data="messageTypeEnums" />
         </template>
       </el-table-column>
       <el-table-column v-if="columnOption.cancelTime?.visible" label="撤回时间" prop="cancelTime" min-width="180" />
