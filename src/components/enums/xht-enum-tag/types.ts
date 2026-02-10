@@ -3,7 +3,7 @@
  */
 export interface XhtEnumTagProps {
   data: DictEnum<any, any> // 枚举数据
-  filterLabel?: string | string[] // 枚举项值
+  filterLabel?: any | any[] // 枚举项值
   hit?: boolean // 是否有边框描边
   size?: '' | 'large' | 'default' | 'small' // Tag 的尺寸
   effect?: 'dark' | 'light' | 'plain' // Tag 的主题

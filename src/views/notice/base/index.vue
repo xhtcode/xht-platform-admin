@@ -6,8 +6,8 @@ import { querySysNoticePage, removeSysNoticeById } from '@/service/api/notice/ba
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { sysNoticeColumnOption } from '@/views/notice/base/base.data'
-import { Delete, Edit, Plus, Refresh, Search } from '@element-plus/icons-vue'
-import { useRoute, useRouter } from 'vue-router'
+import { BottomLeft, Delete, Edit, Plus, Refresh, Search, TopRight } from '@element-plus/icons-vue'
+import { noticeJumpTypeEnums, noticeStatusEnums, noticeTimedPublishEnums, noticeTopEnums } from '@/service/enums/system/notice.enum'
 
 defineOptions({ name: 'SysNoticeView' })
 
@@ -30,7 +30,6 @@ const state = reactive<TableQueryPageState<SysNoticeQueryRequest, SysNoticeRespo
 })
 const { handlePageQuery, handleSelectionChange } = useTableQueryPageHooks<SysNoticeQueryRequest, SysNoticeResponse>(state, querySysNoticePage)
 const { queryParams } = toRefs(state)
-const router = useRouter()
 
 const columnOption = ref<ColumnConfig<SysNoticeResponse>>({
   ...sysNoticeColumnOption,
@@ -206,14 +205,30 @@ onMounted(async () => {
       <el-table-column v-if="columnOption.noticeTypeName?.visible" label="通知类型" prop="noticeTypeName" width="120" />
       <el-table-column v-if="columnOption.noticeTitle?.visible" label="通知标题" prop="noticeTitle" width="260" show-overflow-tooltip />
       <el-table-column v-if="columnOption.noticeSummary?.visible" label="通知摘要" prop="noticeSummary" width="360" show-overflow-tooltip />
-      <el-table-column v-if="columnOption.noticeStatus?.visible" label="通知状态" prop="noticeStatus" width="120" />
+      <el-table-column v-if="columnOption.noticeStatus?.visible" label="通知状态" prop="noticeStatus" width="120">
+        <template #default="{ row }">
+          <xht-enum-tag :filter-label="row.noticeStatus" :data="noticeStatusEnums" placeholder="请选择通知状态" disabled />
+        </template>
+      </el-table-column>
       <el-table-column v-if="columnOption.noticeOrder?.visible" label="通知排序" prop="noticeOrder" width="120" />
-      <el-table-column v-if="columnOption.noticeTop?.visible" label="置顶状态" prop="noticeTop" width="120" />
-      <el-table-column v-if="columnOption.noticeTimedPublish?.visible" label="定时发布" prop="noticeTimedPublish" width="180" />
+      <el-table-column v-if="columnOption.noticeTop?.visible" label="置顶状态" prop="noticeTop" width="120">
+        <template #default="{ row }">
+          <xht-enum-tag :filter-label="row.noticeTop" :data="noticeTopEnums" placeholder="请选择通知状态" />
+        </template>
+      </el-table-column>
+      <el-table-column v-if="columnOption.noticeTimedPublish?.visible" label="定时发布" prop="noticeTimedPublish" width="180">
+        <template #default="{ row }">
+          <xht-enum-tag :filter-label="row.noticeTimedPublish" :data="noticeTimedPublishEnums" placeholder="请选择通知状态" />
+        </template>
+      </el-table-column>
       <el-table-column v-if="columnOption.noticePublishTime?.visible" label="发布时间" prop="noticePublishTime" width="180" />
       <el-table-column v-if="columnOption.noticeExpireTime?.visible" label="过期时间" prop="noticeExpireTime" width="180" />
       <el-table-column v-if="columnOption.noticeOfflineTime?.visible" label="下架时间" prop="noticeOfflineTime" width="180" />
-      <el-table-column v-if="columnOption.noticeJumpType?.visible" label="跳转类型" prop="noticeJumpType" width="120" />
+      <el-table-column v-if="columnOption.noticeJumpType?.visible" label="跳转类型" prop="noticeJumpType" width="120">
+        <template #default="{ row }">
+          <xht-enum-tag :filter-label="row.noticeJumpType" :data="noticeJumpTypeEnums" placeholder="请选择通知状态" />
+        </template>
+      </el-table-column>
       <el-table-column v-if="columnOption.noticeJumpUrl?.visible" label="跳转地址" prop="noticeJumpUrl" width="160" show-overflow-tooltip />
       <el-table-column v-if="columnOption.noticeReadCount?.visible" label="已读人数" prop="noticeReadCount" width="120" />
       <el-table-column v-if="columnOption.noticeClickCount?.visible" label="点击次数" prop="noticeClickCount" width="120" />
@@ -225,6 +240,8 @@ onMounted(async () => {
       <el-table-column label="操作" fixed="right" width="220">
         <template #default="{ row }">
           <el-space wrap class="flex-center">
+            <el-button :icon="TopRight" link type="primary" v-if="row.noticeStatus === noticeStatusEnums.NOT_PUBLISH.value">发布</el-button>
+            <el-button :icon="BottomLeft" link type="primary" v-if="row.noticeStatus === noticeStatusEnums.PUBLISH.value">下架</el-button>
             <el-button :icon="Edit" link type="success" @click="handleEdit(row)" v-authorization="['sys:notice:update']">修改</el-button>
             <el-button :icon="Delete" link type="danger" @click="handleDelete(row)" v-authorization="['sys:notice:remove']">删除</el-button>
           </el-space>

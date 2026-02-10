@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { XhtEnumTagEmits, XhtEnumTagProps } from '@/components/enums/xht-enum-tag/types'
 import type { DictVo } from '@/store/modules/dict.store'
+import _ from 'lodash'
 
 defineOptions({
   name: 'XhtEnumTag',
@@ -23,11 +24,11 @@ const emits = defineEmits<XhtEnumTagEmits>()
  * 计算过滤后的枚举数据
  */
 const filterDictData = computed(() => {
-  if (!props.filterLabel) {
+  if (_.isNull(props.filterLabel)) {
     return props.data
   }
   return Object.values(props.data).filter((item) => {
-    if (Array.isArray(props.filterLabel)) {
+    if (_.isArray(props.filterLabel)) {
       return props.filterLabel.includes(item.value)
     } else {
       return item.value === props.filterLabel
@@ -59,6 +60,7 @@ const handlerClick = (item: DictVo) => {
       :size="size"
       :effect="effect"
       :round="round"
+      :type="item.type"
       :color="item.color"
       @click="handlerClick(item)"
     >

@@ -21,7 +21,6 @@ const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
 const { addUpdateForm, attachments } = toRefs(state)
 const rules: FormRules<Required<SysNoticeOperationRequest>> = sysNoticeOperationRules
 const activeNames = ref<string[]>(['1', '2', '3', '4', '5'])
-const permStatus = ref(false)
 
 /**
  * 打开显示
@@ -73,18 +72,6 @@ const submitForm = () => {
 }
 
 /**
- * 打开权限
- */
-const openDialog = () => {
-  permStatus.value = true
-}
-
-/**
- * 删除
- */
-const handleDelete = (row: any) => {}
-
-/**
  * 关闭
  */
 const close = () => {
@@ -109,6 +96,21 @@ defineExpose({
     :show-close="false"
     :before-close="close"
   >
+    <template #header>
+      <div>{{ state.title }}</div>
+      <div>
+        <el-button
+          type="success"
+          v-if="state.operationStatus === 'update' && addUpdateForm.noticeStatus === noticeStatusEnums.NOT_PUBLISH.value"
+          @click="submitForm"
+        >
+          发布
+        </el-button>
+        <el-button type="danger" v-if="state.operationStatus === 'update' && addUpdateForm.noticeStatus === noticeStatusEnums.PUBLISH.value">
+          下架
+        </el-button>
+      </div>
+    </template>
     <el-form
       ref="addUpdateFormRef"
       v-loading="state.loadingStatus"
@@ -137,7 +139,7 @@ defineExpose({
             </el-col>
             <el-col :span="12">
               <el-form-item label="通知状态" prop="noticeStatus">
-                <xht-enum-select v-model="addUpdateForm.noticeStatus" :data="noticeStatusEnums" placeholder="请选择通知状态" />
+                <xht-enum-select v-model="addUpdateForm.noticeStatus" :data="noticeStatusEnums" placeholder="请选择通知状态" disabled />
               </el-form-item>
             </el-col>
             <el-col :span="12">
