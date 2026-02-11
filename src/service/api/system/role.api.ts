@@ -114,7 +114,7 @@ export const selectMenuIdByRoleId = (roleId: ModeIdType): AxiosPromise<RoleSelec
  * 角色绑定菜单
  * @param data 角色绑定菜单数据
  */
-export const roleMenuBind = (data: SysRoleMenuBindForm): AxiosPromise<any[]> => {
+export const roleMenuBind = (data: SysRoleMenuBindForm): AxiosPromise<void> => {
   return request({
     url: Api.BIND_MENU_ROLE,
     baseURL,
