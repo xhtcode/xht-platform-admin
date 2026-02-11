@@ -20,7 +20,7 @@ enum Api {
 /**
  * 保存字典项
  */
-export const saveSysDictItem = (data: SysDictItemOperationRequest): AxiosPromise<boolean> => {
+export const saveSysDictItem = (data: SysDictItemOperationRequest): AxiosPromise<void> => {
   return request({
     url: Api.CREATE,
     baseURL,
@@ -31,7 +31,7 @@ export const saveSysDictItem = (data: SysDictItemOperationRequest): AxiosPromise
 /**
  * 删除字典项
  */
-export const removeSysDictItemById = (id: ModeIdArrayType): AxiosPromise<boolean> => {
+export const removeSysDictItemById = (id: ModeIdArrayType): AxiosPromise<void> => {
   return request({
     url: Api.REMOVE,
     baseURL,
@@ -39,10 +39,11 @@ export const removeSysDictItemById = (id: ModeIdArrayType): AxiosPromise<boolean
     data: id,
   })
 }
+
 /**
  * 修改字典项数据
  */
-export const updateSysDictItem = (data: SysDictItemOperationRequest): AxiosPromise<boolean> => {
+export const updateSysDictItem = (data: SysDictItemOperationRequest): AxiosPromise<void> => {
   return request({
     url: Api.UPDATE,
     baseURL,

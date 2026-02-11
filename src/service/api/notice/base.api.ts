@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 import type { AxiosPromise } from 'axios'
-import { NoticeVo, SysNoticeOperationRequest, SysNoticeQueryRequest, SysNoticeResponse } from '@/service/model/notice/base.model'
+import { NoticeTop, NoticeVo, SysNoticeOperationRequest, SysNoticeQueryRequest, SysNoticeResponse } from '@/service/model/notice/base.model'
 
 /**
  * 后台管理服务前缀
@@ -13,6 +13,9 @@ const baseURL: string = import.meta.env.VITE_ADMIN_API_PREFIX
 enum Api {
   CREATE = '/sys/notice/create',
   UPDATE = '/sys/notice/update',
+  UPDATE_PUBLISH = '/sys/notice/publish/',
+  UPDATE_UNDER_SHELVE = '/sys/notice/underShelve/',
+  UPDATE_TOP = '/sys/notice/top/',
   REMOVE = '/sys/notice/remove/',
   QUERY_BY_ID = '/sys/notice/get/',
   QUERY_PAGE = '/sys/notice/page',
@@ -23,7 +26,7 @@ enum Api {
  *
  * @param form 系统管理-通知详情表单请求参数
  */
-export const saveSysNotice = (form: SysNoticeOperationRequest): AxiosPromise<boolean> => {
+export const saveSysNotice = (form: SysNoticeOperationRequest): AxiosPromise<void> => {
   return request({
     url: Api.CREATE,
     baseURL,
@@ -37,7 +40,7 @@ export const saveSysNotice = (form: SysNoticeOperationRequest): AxiosPromise<boo
  *
  * @param form 系统管理-通知详情表单请求参数
  */
-export const updateSysNotice = (form: SysNoticeOperationRequest): AxiosPromise<boolean> => {
+export const updateSysNotice = (form: SysNoticeOperationRequest): AxiosPromise<void> => {
   return request({
     url: Api.UPDATE,
     baseURL,
@@ -47,11 +50,51 @@ export const updateSysNotice = (form: SysNoticeOperationRequest): AxiosPromise<b
 }
 
 /**
+ * 根据通知id 发布
+ *
+ * @param noticeId 通知id
+ */
+export const updateSysNoticePublish = (noticeId: ModeIdType): AxiosPromise<void> => {
+  return request({
+    url: Api.UPDATE_PUBLISH + noticeId,
+    baseURL,
+    method: 'post',
+  })
+}
+
+/**
+ * 根据通知id 下架
+ *
+ * @param noticeId 通知id
+ */
+export const updateSysNoticeUnderShelve = (noticeId: ModeIdType): AxiosPromise<void> => {
+  return request({
+    url: Api.UPDATE_UNDER_SHELVE + noticeId,
+    baseURL,
+    method: 'post',
+  })
+}
+
+/**
+ * 根据通知id 置顶
+ *
+ * @param noticeId 通知id
+ * @param isTop    是否置顶
+ */
+export const updateSysNoticeTop = (noticeId: ModeIdType, isTop: NoticeTop): AxiosPromise<void> => {
+  return request({
+    url: Api.UPDATE_TOP + `${noticeId}/${isTop}`,
+    baseURL,
+    method: 'post',
+  })
+}
+
+/**
  * 根据主键`id`删除系统管理-通知详情
  *
  * @param id 系统管理-通知详情主键
  */
-export const removeSysNoticeById = (id: ModeIdType): AxiosPromise<boolean> => {
+export const removeSysNoticeById = (id: ModeIdType): AxiosPromise<void> => {
   return request({
     url: Api.REMOVE + `${id}`,
     baseURL,

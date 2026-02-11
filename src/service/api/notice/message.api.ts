@@ -48,7 +48,7 @@ export const updateMessageRead = (messageId: ModeIdType): AxiosPromise<void> => 
 /**
  * 收集站内信（收件人侧）
  */
-export const updateMessageStart = (messageId: ModeIdType, start: MessageStar) => {
+export const updateMessageStart = (messageId: ModeIdType, start: MessageStar): AxiosPromise<void> => {
   return request({
     url: Api.UPDATE_START + `${messageId}/${start}`,
     baseURL,
@@ -59,7 +59,7 @@ export const updateMessageStart = (messageId: ModeIdType, start: MessageStar) =>
 /**
  * 置顶站内信（收件人侧）
  */
-export const updateMessageTop = (messageId: ModeIdType, top: MessageTop) => {
+export const updateMessageTop = (messageId: ModeIdType, top: MessageTop): AxiosPromise<void> => {
   return request({
     url: Api.UPDATE_TOP + `${messageId}/${top}`,
     baseURL,

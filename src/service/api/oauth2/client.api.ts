@@ -13,6 +13,7 @@ const baseURL: string = import.meta.env.VITE_ADMIN_API_PREFIX
 enum Api {
   CREATE = '/sys/oauth2/client/create',
   UPDATE = '/sys/oauth2/client/update',
+  UPDATE_SECRET = '/sys/oauth2/client/secret',
   REMOVE = '/sys/oauth2/client/remove/',
   REMOVE_BATCH = '/sys/oauth2/client/remove',
   QUERY_BY_ID = '/sys/oauth2/client/get/',
@@ -24,7 +25,7 @@ enum Api {
  *
  * @param form 系统管理-客户端管理表单请求参数
  */
-export const saveSysOauth2Client = (form: SysOauth2ClientOperationRequest): AxiosPromise<boolean> => {
+export const saveSysOauth2Client = (form: SysOauth2ClientOperationRequest): AxiosPromise<void> => {
   return request({
     url: Api.CREATE,
     baseURL,
@@ -38,7 +39,7 @@ export const saveSysOauth2Client = (form: SysOauth2ClientOperationRequest): Axio
  *
  * @param form 系统管理-客户端管理表单请求参数
  */
-export const updateSysOauth2Client = (form: SysOauth2ClientOperationRequest): AxiosPromise<boolean> => {
+export const updateSysOauth2Client = (form: SysOauth2ClientOperationRequest): AxiosPromise<void> => {
   return request({
     url: Api.UPDATE,
     baseURL,
@@ -48,11 +49,29 @@ export const updateSysOauth2Client = (form: SysOauth2ClientOperationRequest): Ax
 }
 
 /**
+ * 根据主键`id`更新系统管理-客户端管理
+ *
+ * @param id 系统管理-客户端管理id
+ * @param clientSecret 系统管理-客户端密钥
+ */
+export const updateSysOauth2ClientSecret = (id: ModeIdType, clientSecret: string): AxiosPromise<void> => {
+  return request({
+    url: Api.UPDATE_SECRET,
+    baseURL,
+    method: 'post',
+    data: {
+      id: id,
+      clientSecret: clientSecret,
+    },
+  })
+}
+
+/**
  * 根据主键`id`删除系统管理-客户端管理
  *
  * @param id 系统管理-客户端管理主键
  */
-export const removeSysOauth2ClientById = (id: ModeIdType): AxiosPromise<boolean> => {
+export const removeSysOauth2ClientById = (id: ModeIdType): AxiosPromise<void> => {
   return request({
     url: Api.REMOVE + `${id}`,
     baseURL,
@@ -65,7 +84,7 @@ export const removeSysOauth2ClientById = (id: ModeIdType): AxiosPromise<boolean>
  *
  * @param ids 系统管理-客户端管理主键
  */
-export const removeSysOauth2ClientByIdBatch = (ids: string[]): AxiosPromise<boolean> => {
+export const removeSysOauth2ClientByIdBatch = (ids: string[]): AxiosPromise<void> => {
   return request({
     url: Api.REMOVE_BATCH,
     baseURL,

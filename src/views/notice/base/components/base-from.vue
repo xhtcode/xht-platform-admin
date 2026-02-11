@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
-import { querySysNoticeById, saveSysNotice, updateSysNotice } from '@/service/api/notice/base.api'
+import { querySysNoticeById, saveSysNotice, updateSysNotice, updateSysNoticePublish, updateSysNoticeUnderShelve } from '@/service/api/notice/base.api'
 import type { SysNoticeOperationRequest } from '@/service/model/notice/base.model'
 import { sysNoticeOperationForm, sysNoticeOperationRules } from '@/views/notice/base/base.data'
-import { useMessage } from '@/hooks/use-message'
+import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { noticeJumpTypeEnums, noticeStatusEnums, noticeTimedPublishEnums, noticeTopEnums } from '@/service/enums/system/notice.enum'
 
 defineOptions({ name: 'SysNoticeAddOrUpdate' })
@@ -72,6 +72,42 @@ const submitForm = () => {
 }
 
 /**
+ * 发布通知
+ */
+const handleSysNoticePublish = () => {
+  if (state.operationStatus === 'update' && addUpdateForm.value.noticeStatus === noticeStatusEnums.NOT_PUBLISH.value) {
+    state.loadingStatus = true
+    useMessageBox()
+      .confirm('此操作将发布通知, 是否继续?')
+      .then(async () => {
+        await updateSysNoticePublish(addUpdateForm.value.id)
+        useMessage().success('通知发布成功!')
+      })
+      .finally(() => {
+        state.loadingStatus = false
+      })
+  }
+}
+
+/**
+ * 下架通知
+ */
+const handleSysNoticeUnderShelve = () => {
+  if (state.operationStatus === 'update' && addUpdateForm.value.noticeStatus === noticeStatusEnums.PUBLISH.value) {
+    state.loadingStatus = true
+    useMessageBox()
+      .confirm('此操作将下架通知, 是否继续?')
+      .then(async () => {
+        await updateSysNoticeUnderShelve(addUpdateForm.value.id)
+        useMessage().success('通知下架成功!')
+      })
+      .finally(() => {
+        state.loadingStatus = false
+      })
+  }
+}
+
+/**
  * 关闭
  */
 const close = () => {
@@ -102,11 +138,15 @@ defineExpose({
         <el-button
           type="success"
           v-if="state.operationStatus === 'update' && addUpdateForm.noticeStatus === noticeStatusEnums.NOT_PUBLISH.value"
-          @click="submitForm"
+          @click="handleSysNoticePublish"
         >
           发布
         </el-button>
-        <el-button type="danger" v-if="state.operationStatus === 'update' && addUpdateForm.noticeStatus === noticeStatusEnums.PUBLISH.value">
+        <el-button
+          type="danger"
+          v-if="state.operationStatus === 'update' && addUpdateForm.noticeStatus === noticeStatusEnums.PUBLISH.value"
+          @click="handleSysNoticeUnderShelve"
+        >
           下架
         </el-button>
       </div>

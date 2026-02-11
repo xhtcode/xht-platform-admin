@@ -2,7 +2,13 @@
 import type { FormInstance } from 'element-plus'
 import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
 import type { SysNoticeQueryRequest, SysNoticeResponse } from '@/service/model/notice/base.model'
-import { querySysNoticePage, removeSysNoticeById } from '@/service/api/notice/base.api'
+import {
+  querySysNoticePage,
+  removeSysNoticeById,
+  updateSysNoticePublish,
+  updateSysNoticeTop,
+  updateSysNoticeUnderShelve,
+} from '@/service/api/notice/base.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { sysNoticeColumnOption } from '@/views/notice/base/base.data'
@@ -73,6 +79,61 @@ const handleDelete = (row: SysNoticeResponse) => {
     .finally(() => {
       state.loadingStatus = false
     })
+}
+
+/**
+ * 发布通知
+ */
+const handleSysNoticePublish = (row: SysNoticeResponse) => {
+  if (row && row.noticeStatus === noticeStatusEnums.NOT_PUBLISH.value) {
+    state.loadingStatus = true
+    useMessageBox()
+      .confirm('此操作将发布通知, 是否继续?')
+      .then(async () => {
+        await updateSysNoticePublish(row.id)
+        useMessage().success('通知发布成功!')
+      })
+      .finally(() => {
+        state.loadingStatus = false
+      })
+  }
+}
+
+/**
+ * 下架通知
+ */
+const handleSysNoticeUnderShelve = (row: SysNoticeResponse) => {
+  if (row && row.noticeStatus === noticeStatusEnums.PUBLISH.value) {
+    state.loadingStatus = true
+    useMessageBox()
+      .confirm('此操作将下架通知, 是否继续?')
+      .then(async () => {
+        await updateSysNoticeUnderShelve(row.id)
+        useMessage().success('通知下架成功!')
+      })
+      .finally(() => {
+        state.loadingStatus = false
+      })
+  }
+}
+
+/**
+ * 置顶通知
+ */
+const handleSysNoticeTop = (row: SysNoticeResponse) => {
+  if (row) {
+    state.loadingStatus = true
+    const noticeTop = row.noticeTop === noticeTopEnums.NO.value ? noticeTopEnums.NO.operate : noticeTopEnums.YES.operate
+    useMessageBox()
+      .confirm(`此操作通知将${noticeTop}, 是否继续?`)
+      .then(async () => {
+        await updateSysNoticeTop(row.id, row.noticeTop)
+        useMessage().success(`通知${noticeTop}成功!`)
+      })
+      .finally(() => {
+        state.loadingStatus = false
+      })
+  }
 }
 
 onMounted(async () => {
@@ -240,8 +301,27 @@ onMounted(async () => {
       <el-table-column label="操作" fixed="right" width="220">
         <template #default="{ row }">
           <el-space wrap class="flex-center">
-            <el-button :icon="TopRight" link type="primary" v-if="row.noticeStatus === noticeStatusEnums.NOT_PUBLISH.value">发布</el-button>
-            <el-button :icon="BottomLeft" link type="primary" v-if="row.noticeStatus === noticeStatusEnums.PUBLISH.value">下架</el-button>
+            <el-button :icon="TopRight" link type="warning" v-authorization="['sys:notice:update']" @click="handleSysNoticeTop(row)">置顶</el-button>
+            <el-button
+              :icon="TopRight"
+              link
+              type="primary"
+              v-if="row.noticeStatus === noticeStatusEnums.NOT_PUBLISH.value"
+              v-authorization="['sys:notice:update']"
+              @click="handleSysNoticePublish(row)"
+            >
+              发布
+            </el-button>
+            <el-button
+              :icon="BottomLeft"
+              link
+              type="primary"
+              v-if="row.noticeStatus === noticeStatusEnums.PUBLISH.value"
+              v-authorization="['sys:notice:update']"
+              @click="handleSysNoticeUnderShelve(row)"
+            >
+              下架
+            </el-button>
             <el-button :icon="Edit" link type="success" @click="handleEdit(row)" v-authorization="['sys:notice:update']">修改</el-button>
             <el-button :icon="Delete" link type="danger" @click="handleDelete(row)" v-authorization="['sys:notice:remove']">删除</el-button>
           </el-space>

@@ -30,7 +30,7 @@ export const saveGenTemplate = (data: GenTemplateOperationRequest): AxiosPromise
 /**
  * 修改模板信息数据
  */
-export const updateGenTemplate = (data: GenTemplateOperationRequest): AxiosPromise<boolean> => {
+export const updateGenTemplate = (data: GenTemplateOperationRequest): AxiosPromise<void> => {
   return request({
     url: Api.UPDATE,
     baseURL,
@@ -42,7 +42,7 @@ export const updateGenTemplate = (data: GenTemplateOperationRequest): AxiosPromi
 /**
  * 删除模板信息
  */
-export const removeGenTemplateById = (id: ModeIdType): AxiosPromise<boolean> => {
+export const removeGenTemplateById = (id: ModeIdType): AxiosPromise<void> => {
   return request({
     url: Api.REMOVE + `${id}`,
     baseURL,

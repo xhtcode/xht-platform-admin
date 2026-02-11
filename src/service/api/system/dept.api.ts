@@ -18,7 +18,7 @@ enum Api {
 /**
  * 保存
  */
-export const saveSysDept = (data: SysDeptOperationRequest): AxiosPromise<boolean> => {
+export const saveSysDept = (data: SysDeptOperationRequest): AxiosPromise<void> => {
   return request({
     url: Api.CREATE,
     baseURL,
@@ -30,7 +30,7 @@ export const saveSysDept = (data: SysDeptOperationRequest): AxiosPromise<boolean
 /**
  * 修改数据
  */
-export const updateSysDept = (data: SysDeptOperationRequest): AxiosPromise<boolean> => {
+export const updateSysDept = (data: SysDeptOperationRequest): AxiosPromise<void> => {
   return request({
     url: Api.UPDATE,
     baseURL,
@@ -42,7 +42,7 @@ export const updateSysDept = (data: SysDeptOperationRequest): AxiosPromise<boole
 /**
  * 删除
  */
-export const removeSysDeptById = (id: ModeIdType): AxiosPromise<boolean> => {
+export const removeSysDeptById = (id: ModeIdType): AxiosPromise<void> => {
   return request({
     url: Api.REMOVE + `${id}`,
     baseURL,

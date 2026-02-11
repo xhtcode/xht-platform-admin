@@ -62,11 +62,13 @@ export const noticeTopEnums: DictEnum<NoticeTop, 'NO' | 'YES'> = {
     label: '否',
     value: 0,
     type: 'info',
+    operate: '置顶',
   },
   YES: {
     label: '是',
     value: 1,
     type: 'primary',
+    operate: '取消置顶',
   },
 }
 

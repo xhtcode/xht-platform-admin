@@ -23,7 +23,7 @@ enum Api {
 /**
  * 保存模板信息
  */
-export const saveGenTemplateGroup = (data: GenTemplateGroupOperationRequest): AxiosPromise<boolean> => {
+export const saveGenTemplateGroup = (data: GenTemplateGroupOperationRequest): AxiosPromise<void> => {
   return request({
     url: Api.CREATE,
     baseURL,
@@ -35,7 +35,7 @@ export const saveGenTemplateGroup = (data: GenTemplateGroupOperationRequest): Ax
 /**
  * 修改模板信息数据
  */
-export const updateGenTemplateGroup = (data: GenTemplateGroupOperationRequest): AxiosPromise<boolean> => {
+export const updateGenTemplateGroup = (data: GenTemplateGroupOperationRequest): AxiosPromise<void> => {
   return request({
     url: Api.UPDATE,
     baseURL,
@@ -47,7 +47,7 @@ export const updateGenTemplateGroup = (data: GenTemplateGroupOperationRequest): 
 /**
  * 删除模板信息
  */
-export const removeGenTemplateGroupByIds = (id: ModeIdType): AxiosPromise<boolean> => {
+export const removeGenTemplateGroupByIds = (id: ModeIdType): AxiosPromise<void> => {
   return request({
     url: Api.REMOVE + `${id}`,
     baseURL,

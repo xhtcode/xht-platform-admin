@@ -19,7 +19,7 @@ enum Api {
 /**
  * 保存菜单
  */
-export const saveSysMenu = (data: SysMenuOperationRequest): AxiosPromise<boolean> => {
+export const saveSysMenu = (data: SysMenuOperationRequest): AxiosPromise<void> => {
   return request({
     url: Api.CREATE,
     baseURL,
@@ -31,7 +31,7 @@ export const saveSysMenu = (data: SysMenuOperationRequest): AxiosPromise<boolean
 /**
  * 修改菜单
  */
-export const updateSysMenu = (data: SysMenuOperationRequest): AxiosPromise<boolean> => {
+export const updateSysMenu = (data: SysMenuOperationRequest): AxiosPromise<void> => {
   return request({
     url: Api.UPDATE,
     baseURL,
@@ -43,7 +43,7 @@ export const updateSysMenu = (data: SysMenuOperationRequest): AxiosPromise<boole
 /**
  * 删除菜单
  */
-export const removeSysMenuById = (id: ModeIdType): AxiosPromise<boolean> => {
+export const removeSysMenuById = (id: ModeIdType): AxiosPromise<void> => {
   return request({
     url: Api.REMOVE + `${id}`,
     baseURL,

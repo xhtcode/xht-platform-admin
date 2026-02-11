@@ -26,7 +26,7 @@ enum Api {
  *
  * @param form 系统管理-通知类型表单请求参数
  */
-export const saveSysNoticeType = (form: SysNoticeTypeOperationRequest): AxiosPromise<boolean> => {
+export const saveSysNoticeType = (form: SysNoticeTypeOperationRequest): AxiosPromise<void> => {
   return request({
     url: Api.CREATE,
     baseURL,
@@ -40,7 +40,7 @@ export const saveSysNoticeType = (form: SysNoticeTypeOperationRequest): AxiosPro
  *
  * @param form 系统管理-通知类型表单请求参数
  */
-export const updateSysNoticeType = (form: SysNoticeTypeOperationRequest): AxiosPromise<boolean> => {
+export const updateSysNoticeType = (form: SysNoticeTypeOperationRequest): AxiosPromise<void> => {
   return request({
     url: Api.UPDATE,
     baseURL,
@@ -54,7 +54,7 @@ export const updateSysNoticeType = (form: SysNoticeTypeOperationRequest): AxiosP
  *
  * @param id 系统管理-通知类型主键
  */
-export const removeSysNoticeTypeById = (id: ModeIdType): AxiosPromise<boolean> => {
+export const removeSysNoticeTypeById = (id: ModeIdType): AxiosPromise<void> => {
   return request({
     url: Api.REMOVE + `${id}`,
     baseURL,

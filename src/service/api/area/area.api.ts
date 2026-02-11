@@ -24,7 +24,7 @@ enum Api {
  *
  * @param form 系统管理-行政区划表单请求参数
  */
-export const saveSysArea = (form: SysAreaOperationRequest): AxiosPromise<boolean> => {
+export const saveSysArea = (form: SysAreaOperationRequest): AxiosPromise<void> => {
   return request({
     url: Api.CREATE,
     baseURL,
@@ -38,7 +38,7 @@ export const saveSysArea = (form: SysAreaOperationRequest): AxiosPromise<boolean
  *
  * @param form 系统管理-行政区划表单请求参数
  */
-export const updateSysArea = (form: SysAreaOperationRequest): AxiosPromise<boolean> => {
+export const updateSysArea = (form: SysAreaOperationRequest): AxiosPromise<void> => {
   return request({
     url: Api.UPDATE,
     baseURL,
@@ -52,7 +52,7 @@ export const updateSysArea = (form: SysAreaOperationRequest): AxiosPromise<boole
  *
  * @param id 系统管理-行政区划主键
  */
-export const removeSysAreaById = (id: ModeIdType): AxiosPromise<boolean> => {
+export const removeSysAreaById = (id: ModeIdType): AxiosPromise<void> => {
   return request({
     url: Api.REMOVE + `${id}`,
     baseURL,
@@ -65,7 +65,7 @@ export const removeSysAreaById = (id: ModeIdType): AxiosPromise<boolean> => {
  *
  * @param ids 系统管理-行政区划主键
  */
-export const removeSysAreaByIdBatch = (ids: string[]): AxiosPromise<boolean> => {
+export const removeSysAreaByIdBatch = (ids: string[]): AxiosPromise<void> => {
   return request({
     url: Api.REMOVE_BATCH,
     baseURL,

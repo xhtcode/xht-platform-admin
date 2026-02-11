@@ -27,7 +27,7 @@ enum Api {
 /**
  * 保存角色
  */
-export const saveSysRole = (data: SysRoleOperationRequest): AxiosPromise<boolean> => {
+export const saveSysRole = (data: SysRoleOperationRequest): AxiosPromise<void> => {
   return request({
     url: Api.CREATE,
     baseURL,
@@ -41,7 +41,7 @@ export const saveSysRole = (data: SysRoleOperationRequest): AxiosPromise<boolean
  *
  * @param data 角色
  */
-export const updateSysRole = (data: SysRoleOperationRequest): AxiosPromise<boolean> => {
+export const updateSysRole = (data: SysRoleOperationRequest): AxiosPromise<void> => {
   return request({
     url: Api.UPDATE,
     baseURL,
@@ -53,7 +53,7 @@ export const updateSysRole = (data: SysRoleOperationRequest): AxiosPromise<boole
 /**
  * 删除角色
  */
-export const removeSysRoleById = (id: ModeIdType): AxiosPromise<boolean> => {
+export const removeSysRoleById = (id: ModeIdType): AxiosPromise<void> => {
   return request({
     url: Api.REMOVE + `${id}`,
     baseURL,
@@ -65,7 +65,7 @@ export const removeSysRoleById = (id: ModeIdType): AxiosPromise<boolean> => {
  * 批量删除角色
  * @param ids
  */
-export const removeSysRoleByIds = (ids: string[]): AxiosPromise<boolean> => {
+export const removeSysRoleByIds = (ids: string[]): AxiosPromise<void> => {
   return request({
     url: Api.REMOVE,
     baseURL,

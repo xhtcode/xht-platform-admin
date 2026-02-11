@@ -19,7 +19,7 @@ enum Api {
 /**
  * 保存部门岗位信息
  */
-export const saveSysDeptPost = (data: SysDeptPostOperationRequest): AxiosPromise<boolean> => {
+export const saveSysDeptPost = (data: SysDeptPostOperationRequest): AxiosPromise<void> => {
   return request({
     url: Api.CREATE,
     baseURL,
@@ -31,7 +31,7 @@ export const saveSysDeptPost = (data: SysDeptPostOperationRequest): AxiosPromise
 /**
  * 修改部门岗位信息
  */
-export const updateSysDeptPost = (data: SysDeptPostOperationRequest): AxiosPromise<boolean> => {
+export const updateSysDeptPost = (data: SysDeptPostOperationRequest): AxiosPromise<void> => {
   return request({
     url: Api.UPDATE,
     baseURL,
@@ -43,7 +43,7 @@ export const updateSysDeptPost = (data: SysDeptPostOperationRequest): AxiosPromi
 /**
  * 删除部门岗位信息
  */
-export const removeSysDeptPostById = (id: ModeIdType): AxiosPromise<boolean> => {
+export const removeSysDeptPostById = (id: ModeIdType): AxiosPromise<void> => {
   return request({
     url: Api.REMOVE + `${id}`,
     baseURL,
@@ -54,7 +54,7 @@ export const removeSysDeptPostById = (id: ModeIdType): AxiosPromise<boolean> => 
 /**
  * 删除部门岗位信息
  */
-export const removeSysDeptPostByIds = (ids: ModeIdArrayType): AxiosPromise<boolean> => {
+export const removeSysDeptPostByIds = (ids: ModeIdArrayType): AxiosPromise<void> => {
   return request({
     url: Api.REMOVE,
     baseURL,
@@ -62,6 +62,7 @@ export const removeSysDeptPostByIds = (ids: ModeIdArrayType): AxiosPromise<boole
     data: ids,
   })
 }
+
 /**
  * 查询单个部门岗位信息
  */

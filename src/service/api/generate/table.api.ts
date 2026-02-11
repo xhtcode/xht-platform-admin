@@ -29,7 +29,7 @@ enum Api {
 /**
  * 保存表信息
  */
-export const importTableInfo = (data: ImportTableFormRequest): AxiosPromise<boolean> => {
+export const importTableInfo = (data: ImportTableFormRequest): AxiosPromise<void> => {
   return request({
     url: Api.IMPORT_TABLE,
     baseURL,
@@ -41,7 +41,7 @@ export const importTableInfo = (data: ImportTableFormRequest): AxiosPromise<bool
 /**
  * 修改表信息数据
  */
-export const updateGenTableInfo = (data: GenTableInfoOperationRequest): AxiosPromise<boolean> => {
+export const updateGenTableInfo = (data: GenTableInfoOperationRequest): AxiosPromise<void> => {
   return request({
     url: Api.UPDATE,
     baseURL,
@@ -53,7 +53,7 @@ export const updateGenTableInfo = (data: GenTableInfoOperationRequest): AxiosPro
 /**
  * 删除表信息
  */
-export const removeGenTableInfoByIds = (id: ModeIdType): AxiosPromise<boolean> => {
+export const removeGenTableInfoByIds = (id: ModeIdType): AxiosPromise<void> => {
   return request({
     url: Api.REMOVE + `${id}`,
     baseURL,
@@ -103,7 +103,7 @@ export const queryNoExistsPage = (data?: GenTableInfoQueryRequest): AxiosPromise
  * @param tableId 表ID数组
  * @returns 同步结果的Promise
  */
-export const syncTableApi = (tableId: ModeIdType[]) => {
+export const syncTableApi = (tableId: ModeIdType[]): AxiosPromise<void> => {
   return request({
     url: Api.SYNC_TABLE + `${tableId}`,
     baseURL,

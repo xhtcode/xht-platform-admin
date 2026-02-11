@@ -4,6 +4,7 @@ import { querySysOauth2ClientById, saveSysOauth2Client, updateSysOauth2Client } 
 import type { SysOauth2ClientOperationRequest } from '@/service/model/oauth2/client.model'
 import { sysOauth2ClientOperationForm, sysOauth2ClientOperationRules } from '@/views/oauth2/client/client.data'
 import { useMessage } from '@/hooks/use-message'
+import { authorizationGrantTypesEnums, autoApproveEnums, clientAuthenticationMethodsEnums } from '@/service/enums/system/oauth2.enum'
 
 defineOptions({ name: 'SysOauth2ClientAddOrUpdate' })
 
@@ -18,6 +19,9 @@ const state = reactive<AddUpdateOption<SysOauth2ClientOperationRequest>>({
 const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
 const { addUpdateForm } = toRefs(state)
 const rules: FormRules<Required<SysOauth2ClientOperationRequest>> = sysOauth2ClientOperationRules
+const authorizationGrantTypesStatus = computed<boolean>(() => {
+  return addUpdateForm.value.authorizationGrantTypes ? addUpdateForm.value.authorizationGrantTypes.includes('authorization_code') : false
+})
 
 /**
  * 打开显示
@@ -30,7 +34,7 @@ const show = async (type: 'create' | 'update', id: ModeIdType) => {
     if (type === 'update') {
       state.title = '修改系统管理-客户端管理'
       const { data } = await querySysOauth2ClientById(id)
-      addUpdateForm.value = data
+      addUpdateForm.value = { ...data }
     }
     state.loadingStatus = false
   } catch {
@@ -46,6 +50,7 @@ const submitForm = () => {
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
       try {
+        addUpdateForm.value = { ...addUpdateForm.value }
         if (state.operationStatus === 'create') {
           await saveSysOauth2Client(addUpdateForm.value)
           useMessage().success(`新增系统管理-客户端管理成功`)
@@ -85,7 +90,7 @@ defineExpose({
   <el-drawer
     v-model="state.visibleStatus"
     :title="state.title"
-    size="45%"
+    size="65%"
     append-to-body
     :close-on-click-modal="false"
     :show-close="!state.loadingStatus"
@@ -103,35 +108,8 @@ defineExpose({
     >
       <el-row>
         <el-col :span="12">
-          <el-form-item label="客户端ID" prop="clientId">
-            <el-input v-model="addUpdateForm.clientId" clearable :maxlength="100" show-word-limit placeholder="请输入客户端ID" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="客户端发布时间" prop="clientIdIssuedAt">
-            <el-date-picker
-              v-model="addUpdateForm.clientIdIssuedAt"
-              format="YYYY-MM-DD"
-              placeholder="选择客户端发布时间"
-              type="date"
-              value-format="YYYY-MM-DD"
-            />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="客户端密钥" prop="clientSecret">
-            <el-input v-model="addUpdateForm.clientSecret" clearable :maxlength="100" show-word-limit placeholder="请输入客户端密钥" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="客户端过期时间" prop="clientSecretExpiresAt">
-            <el-date-picker
-              v-model="addUpdateForm.clientSecretExpiresAt"
-              format="YYYY-MM-DD"
-              placeholder="选择客户端过期时间"
-              type="date"
-              value-format="YYYY-MM-DD"
-            />
+          <el-form-item label="客户端标识" prop="clientId">
+            <el-input v-model="addUpdateForm.clientId" clearable :maxlength="100" show-word-limit placeholder="请输入客户端标识" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -139,72 +117,132 @@ defineExpose({
             <el-input v-model="addUpdateForm.clientName" clearable :maxlength="100" show-word-limit placeholder="请输入客户端名称" />
           </el-form-item>
         </el-col>
+        <el-col :span="24" v-if="state.operationStatus === 'create'">
+          <el-form-item label="客户端密钥" prop="clientSecret">
+            <el-input v-model="addUpdateForm.clientSecret" type="password" show-password placeholder="请输入客户端密钥" />
+          </el-form-item>
+        </el-col>
         <el-col :span="12">
-          <el-form-item label="客户认证方式" prop="clientAuthenticationMethods">
-            <el-input
+          <el-form-item label="认证方式" prop="clientAuthenticationMethods">
+            <xht-enum-select
               v-model="addUpdateForm.clientAuthenticationMethods"
+              :data="clientAuthenticationMethodsEnums"
+              multiple
+              :max-collapse-tags="1"
               clearable
-              :maxlength="100"
-              show-word-limit
-              placeholder="请输入客户认证方式"
+              placeholder="请输入客户端认证方式"
             />
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="客户端授权类型" prop="authorizationGrantTypes">
-            <el-input v-model="addUpdateForm.authorizationGrantTypes" clearable :maxlength="100" show-word-limit placeholder="请输入客户端授权类型" />
+          <el-form-item label="授权类型" prop="authorizationGrantTypes">
+            <xht-enum-select
+              v-model="addUpdateForm.authorizationGrantTypes"
+              :data="authorizationGrantTypesEnums"
+              multiple
+              :max-collapse-tags="1"
+              clearable
+              placeholder="请选择客户端授权类型"
+            />
           </el-form-item>
         </el-col>
+
         <el-col :span="12">
-          <el-form-item label="授权后重定向URI" prop="redirectUris">
-            <el-input v-model="addUpdateForm.redirectUris" clearable :maxlength="100" show-word-limit placeholder="请输入授权后重定向URI" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="登出后重定向URI" prop="postLogoutRedirectUris">
-            <el-input v-model="addUpdateForm.postLogoutRedirectUris" clearable :maxlength="100" show-word-limit placeholder="请输入登出后重定向URI" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="客户端作用域" prop="scopes">
-            <el-input v-model="addUpdateForm.scopes" clearable :maxlength="100" show-word-limit placeholder="请输入客户端作用域" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="请求令牌有效时间" prop="accessTokenValidity">
-            <el-date-picker
+          <el-form-item label="令牌时效" prop="accessTokenValidity">
+            <el-input-number
               v-model="addUpdateForm.accessTokenValidity"
-              format="YYYY-MM-DD"
-              placeholder="选择请求令牌有效时间"
-              type="date"
-              value-format="YYYY-MM-DD"
-            />
+              class="w-full!"
+              :min="10 * 60"
+              value-on-clear="min"
+              placeholder="请输入请求令牌时效"
+            >
+              <template #suffix>秒</template>
+            </el-input-number>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="刷新令牌有效时间" prop="refreshTokenValidity">
-            <el-date-picker
+          <el-form-item label="刷新时效" prop="refreshTokenValidity">
+            <el-input-number
               v-model="addUpdateForm.refreshTokenValidity"
-              format="YYYY-MM-DD"
-              placeholder="选择刷新令牌有效时间"
+              class="w-full!"
+              :min="10 * 60"
+              value-on-clear="min"
+              placeholder="请输入刷新令牌时效"
+            >
+              <template #suffix>秒</template>
+            </el-input-number>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="发布时间" prop="clientIdIssuedAt">
+            <el-date-picker
+              disabled
+              v-model="addUpdateForm.clientIdIssuedAt"
+              class="w-full!"
+              format="YYYY-MM-DD hh:mm:ss"
+              placeholder="选择客户端发布时间"
               type="date"
-              value-format="YYYY-MM-DD"
+              value-format="YYYY-MM-DD hh:mm:ss"
             />
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="扩展信息" prop="additionalInformation">
-            <el-input v-model="addUpdateForm.additionalInformation" clearable :maxlength="100" show-word-limit placeholder="请输入扩展信息" />
+          <el-form-item label="过期时间" prop="clientSecretExpiresAt">
+            <el-date-picker
+              v-model="addUpdateForm.clientSecretExpiresAt"
+              class="w-full!"
+              format="YYYY-MM-DD hh:mm:ss"
+              placeholder="选择客户端过期时间"
+              type="date"
+              value-format="YYYY-MM-DD hh:mm:ss"
+            />
           </el-form-item>
         </el-col>
-        <el-col :span="12">
-          <el-form-item label="是否自动放行" prop="autoApprove">
-            <el-input v-model="addUpdateForm.autoApprove" clearable :maxlength="100" show-word-limit placeholder="请输入是否自动放行" />
+        <el-col :span="24">
+          <el-form-item label="作用域" prop="scopes">
+            <el-input-tag
+              v-model="addUpdateForm.scopes"
+              draggable
+              tag-effect="light"
+              tag-type="danger"
+              collapse-tags
+              :max-collapse-tags="3"
+              collapse-tags-tooltip
+              placeholder="请输入客户端作用域"
+            />
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="24" v-if="authorizationGrantTypesStatus">
+          <el-form-item label="重定向地址" prop="redirectUris">
+            <el-input-tag
+              v-model="addUpdateForm.redirectUris"
+              draggable
+              tag-effect="light"
+              tag-type="success"
+              collapse-tags
+              :max-collapse-tags="3"
+              collapse-tags-tooltip
+              placeholder="请输入重定向地址"
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :span="24" v-if="authorizationGrantTypesStatus">
+          <el-form-item label="自动放行" prop="autoApprove">
+            <xht-enum-select v-model="addUpdateForm.autoApprove" :data="autoApproveEnums" clearable placeholder="请选择自动放行状态" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
           <el-form-item label="备注" prop="remark">
-            <el-input v-model="addUpdateForm.remark" clearable :maxlength="100" show-word-limit placeholder="请输入备注" />
+            <el-input
+              v-model="addUpdateForm.remark"
+              type="textarea"
+              :rows="5"
+              resize="none"
+              clearable
+              :maxlength="200"
+              show-word-limit
+              placeholder="请输入备注"
+            />
           </el-form-item>
         </el-col>
       </el-row>

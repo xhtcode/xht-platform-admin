@@ -19,7 +19,7 @@ enum Api {
 /**
  * 保存数据源配置
  */
-export const saveGenDataSource = (data: GenDataSourceOperationRequest): AxiosPromise<boolean> => {
+export const saveGenDataSource = (data: GenDataSourceOperationRequest): AxiosPromise<void> => {
   return request({
     url: Api.CREATE,
     baseURL,
@@ -31,7 +31,7 @@ export const saveGenDataSource = (data: GenDataSourceOperationRequest): AxiosPro
 /**
  * 修改数据源配置数据
  */
-export const updateGenDataSource = (data: GenDataSourceOperationRequest): AxiosPromise<boolean> => {
+export const updateGenDataSource = (data: GenDataSourceOperationRequest): AxiosPromise<void> => {
   return request({
     url: Api.UPDATE,
     baseURL,
@@ -43,7 +43,7 @@ export const updateGenDataSource = (data: GenDataSourceOperationRequest): AxiosP
 /**
  * 删除数据源配置
  */
-export const removeGenDataSourceByIds = (ids: ModeIdType[]): AxiosPromise<boolean> => {
+export const removeGenDataSourceByIds = (ids: ModeIdType[]): AxiosPromise<void> => {
   return request({
     url: Api.REMOVE,
     baseURL,

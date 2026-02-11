@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 import type { AxiosPromise } from 'axios'
-import {
+import type {
   SysUserOperationRequest,
   SysUserQueryRequest,
   SysUserResponse,
@@ -27,7 +27,7 @@ enum Api {
 /**
  * 保存
  */
-export const saveSysUser = (data: SysUserOperationRequest): AxiosPromise<boolean> => {
+export const saveSysUser = (data: SysUserOperationRequest): AxiosPromise<void> => {
   return request({
     url: Api.CREATE,
     baseURL,
@@ -39,7 +39,7 @@ export const saveSysUser = (data: SysUserOperationRequest): AxiosPromise<boolean
 /**
  * 修改数据
  */
-export const updateSysUser = (data: SysUserOperationRequest): AxiosPromise<boolean> => {
+export const updateSysUser = (data: SysUserOperationRequest): AxiosPromise<void> => {
   return request({
     url: Api.UPDATE,
     baseURL,
@@ -51,7 +51,7 @@ export const updateSysUser = (data: SysUserOperationRequest): AxiosPromise<boole
 /**
  * 删除
  */
-export const removeSysUserById = (id: ModeIdType): AxiosPromise<boolean> => {
+export const removeSysUserById = (id: ModeIdType): AxiosPromise<void> => {
   return request({
     url: Api.REMOVE + `${id}`,
     baseURL,
@@ -63,7 +63,7 @@ export const removeSysUserById = (id: ModeIdType): AxiosPromise<boolean> => {
  * 批量删除
  * @param ids
  */
-export const removeSysUserByIds = (ids: ModeIdArrayType): AxiosPromise<boolean> => {
+export const removeSysUserByIds = (ids: ModeIdArrayType): AxiosPromise<void> => {
   return request({
     url: Api.REMOVE,
     baseURL,
@@ -100,7 +100,7 @@ export const querySysUserPage = (data?: SysUserQueryRequest): AxiosPromise<PageR
  * 重置密码
  * @param userId 用户id
  */
-export const resetPassword = (userId: any): AxiosPromise<boolean> => {
+export const resetPassword = (userId: ModeIdType): AxiosPromise<void> => {
   return request({
     url: Api.RESET_PASSWORD + `${userId}/pwd`,
     baseURL,
@@ -112,7 +112,7 @@ export const resetPassword = (userId: any): AxiosPromise<boolean> => {
  * 查询用户拥有的角色
  * @param userId 用户id
  */
-export const selectRoleIdByUserId = (userId: any): AxiosPromise<any[]> => {
+export const selectRoleIdByUserId = (userId: ModeIdType): AxiosPromise<ModeIdType[]> => {
   return request({
     url: Api.QUERY_ROLE_ID + userId,
     baseURL,

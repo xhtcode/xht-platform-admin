@@ -19,7 +19,7 @@ enum Api {
 /**
  * 保存字段映射
  */
-export const saveGenTypeMapping = (data: GenTypeMappingOperationRequest): AxiosPromise<boolean> => {
+export const saveGenTypeMapping = (data: GenTypeMappingOperationRequest): AxiosPromise<void> => {
   return request({
     url: Api.CREATE,
     baseURL,
@@ -31,7 +31,7 @@ export const saveGenTypeMapping = (data: GenTypeMappingOperationRequest): AxiosP
 /**
  * 修改字段映射数据
  */
-export const updateGenTypeMapping = (data: GenTypeMappingOperationRequest): AxiosPromise<boolean> => {
+export const updateGenTypeMapping = (data: GenTypeMappingOperationRequest): AxiosPromise<void> => {
   return request({
     url: Api.UPDATE,
     baseURL,
@@ -43,7 +43,7 @@ export const updateGenTypeMapping = (data: GenTypeMappingOperationRequest): Axio
 /**
  * 删除字段映射
  */
-export const removeGenTypeMappingByIds = (ids: ModeIdType[]): AxiosPromise<boolean> => {
+export const removeGenTypeMappingByIds = (ids: ModeIdType[]): AxiosPromise<void> => {
   return request({
     url: Api.REMOVE,
     baseURL,
