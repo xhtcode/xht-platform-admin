@@ -16,7 +16,7 @@ export const PAGE_PATH_LOGIN = '/login'
 /**
  * 首页页面名字
  */
-export const HOME_PAGE_PATH = '/home'
+export const HOME_PAGE_PATH = '/'
 
 /**
  * 定义HTTP请求头中的Authorization字段常量

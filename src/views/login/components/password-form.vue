@@ -58,14 +58,20 @@ const handleLogin = async () => {
           captcha_key: loginForm.captcha_key,
         })
         .then(() => {
-          useMessage().success('登录成功，已为您加载专属工作台，开始工作吧～ !')
-          router.push({ path: '/' })
+          router
+            .push({ path: HOME_PAGE_PATH })
+            .then(() => {
+              useMessage().success('登录成功，已为您加载专属工作台，开始工作吧～ !')
+            })
+            .catch(() => {
+              useMessage().error('登录失败，请稍后再试！')
+            })
+            .finally(() => {
+              loading.value = false
+            })
         })
         .catch(() => {
           refreshCaptcha()
-        })
-        .finally(() => {
-          loading.value = false
         })
     } else {
       loading.value = false

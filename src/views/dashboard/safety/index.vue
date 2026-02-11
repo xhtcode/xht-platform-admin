@@ -150,7 +150,7 @@ const handleReset = () => {
         </el-divider>
         <div class="p-6">
           <el-alert title="修改密码成功" type="success" show-icon>
-            <template #description>请重新登录</template>
+            <template #default>请重新登录</template>
           </el-alert>
         </div>
       </el-splitter-panel>
