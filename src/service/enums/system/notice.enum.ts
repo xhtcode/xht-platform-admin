@@ -1,5 +1,5 @@
-import type { NoticeTypeStatus } from '@/service/model/notice/type.model'
-import type { NoticeJumpType, NoticeStatus, NoticeTimedPublish, NoticeTop } from '@/service/model/notice/base.model'
+import type { NoticeTypeStatus } from '@/service/model/system/notice.type.model'
+import type { NoticeJumpType, NoticeStatus, NoticeTimedPublish, NoticeTop } from '@/service/model/system/notice.model'
 
 /**
  * 通知类型状态枚举

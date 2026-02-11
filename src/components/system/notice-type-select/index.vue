@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { querySysNoticeEnableTypeList } from '@/service/api/notice/type.api'
+import { querySysNoticeEnableTypeList } from '@/service/api/system/notice.type.api'
 import type { NoticeTypeSelectProps } from '@/components/system/notice-type-select/types'
 import type { LabelValue } from '@/service/model/base.model'
 import { onMounted } from 'vue'

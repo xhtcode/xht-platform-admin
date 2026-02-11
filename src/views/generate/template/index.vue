@@ -8,7 +8,7 @@ import { genTemplateGroupOperationOption } from '@/views/generate/template/templ
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { Delete, Edit, Plus, Refresh, Search, View } from '@element-plus/icons-vue'
 
-defineOptions({ name: 'GenTemplateGroupViewIndex' })
+defineOptions({ name: 'GenTemplateViewIndex' })
 
 const templateGroupForm = defineAsyncComponent(() => import('@/views/generate/template/components/template-group-form.vue'))
 const templateViewForm = defineAsyncComponent(() => import('@/views/generate/template/components/template-view-form.vue'))

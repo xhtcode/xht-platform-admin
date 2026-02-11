@@ -1,4 +1,4 @@
-import type { MessageStar, MessageStatus, MessageTop, MessageType } from '@/service/model/notice/message.model'
+import type { MessageStar, MessageStatus, MessageTop, MessageType } from '@/service/model/system/message.model'
 
 /**
  * 信息类型

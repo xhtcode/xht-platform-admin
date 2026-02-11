@@ -1,4 +1,4 @@
-import type { AuthorizationGrantTypes, AutoApprove, ClientAuthenticationMethods } from '@/service/model/oauth2/client.model'
+import type { AuthorizationGrantTypes, AutoApprove, ClientAuthenticationMethods } from '@/service/model/system/oauth2.client.model'
 
 /**
  * 客户端授权类型

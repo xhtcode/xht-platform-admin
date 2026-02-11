@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { MessageInfoVo } from '@/service/model/notice/message.info.model'
-import { querySysMessageById } from '@/service/api/notice/message.api'
+import type { MessageInfoVo } from '@/service/model/system/message.info.model'
+import { querySysMessageById } from '@/service/api/system/message.api'
 import { messageStarEnums, messageStatusEnums, messageTopEnums } from '@/service/enums/system/message.enum'
 
 defineOptions({

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
-import type { MessageInfoVo } from '@/service/model/notice/message.info.model'
+import type { MessageInfoVo } from '@/service/model/system/message.info.model'
 import type { SysMenuQueryRequest } from '@/service/model/system/menu.model'
 import {
   queryMyMessagePage,
@@ -9,10 +9,10 @@ import {
   updateMessageRemove,
   updateMessageStart,
   updateMessageTop,
-} from '@/service/api/notice/message.api'
+} from '@/service/api/system/message.api'
 import { ArrowUpBold, DArrowRight, Delete, Edit, Refresh, Search, StarFilled, View } from '@element-plus/icons-vue'
 import type { FormInstance } from 'element-plus'
-import type { MessageStar, MessageTop, SysMessageResponse } from '@/service/model/notice/message.model'
+import type { MessageStar, MessageTop, SysMessageResponse } from '@/service/model/system/message.model'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { sysMessageColumnOption } from '@/views/dashboard/message/data'
