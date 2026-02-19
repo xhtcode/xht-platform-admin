@@ -18,7 +18,6 @@ export const genTableInfoOperationRules: FormRules<Required<GenTableInfoOperatio
   'tableInfo.groupId': [{ required: true, message: '请选择分组id', trigger: 'change' }],
   'tableInfo.dataBaseType': [{ required: true, message: '请选择数据库类型', trigger: 'change' }],
   'tableInfo.tableName': [{ required: true, message: '请输入数据库表名', trigger: 'blur' }],
-  'tableInfo.tableComment': [{ required: true, message: '请输入表注释', trigger: 'blur' }],
   'tableInfo.moduleName': [{ required: true, message: '请输入模块名称', trigger: 'blur' }],
   'tableInfo.serviceName': [{ required: true, message: '请输入业务名称', trigger: 'blur' }],
   'tableInfo.codeName': [{ required: true, message: '请输入代码名称', trigger: 'blur' }],
