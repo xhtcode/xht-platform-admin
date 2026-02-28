@@ -101,10 +101,31 @@
 //=================== 表单控件样式修改 ===================
 .el-form {
   user-select: none;
-}
 
-.el-form-item {
-  margin-bottom: 8px !important;
+  .el-form-item--large {
+    margin-bottom: 12px !important;
+  }
+
+  .el-form-item--default {
+    margin-bottom: 8px !important;
+  }
+
+  .el-form-item--small {
+    margin-bottom: 8px !important;
+  }
+
+  .el-form-item--large.is-error {
+    margin-bottom: 22px !important;
+  }
+
+  .el-form-item--default.is-error {
+    margin-bottom: 18px !important;
+  }
+
+  .el-form-item--small.is-error {
+    margin-bottom: 18px !important;
+  }
+
 }
 
 //=================== 表格控件样式修改 ===================

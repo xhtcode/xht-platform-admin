@@ -1,9 +1,11 @@
 @use '@/styles/variables/var.dark.scss';
 @use 'sass:map';
+@use 'element-plus/theme-chalk/src/mixins/function.scss' as *;
+
 @forward 'element-plus/theme-chalk/src/common/var.scss' with (
   $table: (
-    'header-bg-color': 'var(--el-table-row-hover-bg-color)',
-    'header-text-color': 'var(--el-text-color-primary)',
+    'header-bg-color':  getCssVar('table-row-hover-bg-color'),
+    'header-text-color':  getCssVar('text-color-primary'),
   ),
   $table-padding: (
     'large': 8px 0,
@@ -13,8 +15,15 @@
   $table-cell-padding: (
     'large': 0 8px,
     'default': 0 6px,
-    'small': 0 4px,
-  )
+    'small': 0 2px,
+  ),
+  $main: (
+    'padding': 20px,
+  ),
+  $footer:(
+    'padding': 0 10px,
+    'height': 60px,
+ ),
 );
 
 :root {

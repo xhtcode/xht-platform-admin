@@ -34,6 +34,8 @@ const messageConfig: MessageConfigContext = {
     :dialog="dialogConfig"
     :message="messageConfig"
     :experimental-features="{}"
+    :value-on-clear="null"
+    :empty-values="[undefined, null]"
   >
     <router-view />
   </el-config-provider>
