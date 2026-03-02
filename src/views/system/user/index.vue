@@ -7,8 +7,9 @@ import { sysUserColumnOption } from '@/views/system/user/user.data'
 import { querySysUserPage, removeSysUserById, removeSysUserByIds, resetPassword } from '@/service/api/system/user.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
-import { Delete, Edit, Key, Plus, Refresh, Search, User } from '@element-plus/icons-vue'
+import { DArrowLeft, DArrowRight, Delete, Edit, Key, Plus, Refresh, Search, User } from '@element-plus/icons-vue'
 import { userStatusEnums, userTypeEnums } from '@/service/enums/system/user.enum'
+import { ref } from 'vue'
 
 defineOptions({ name: 'SysUserViewIndex' })
 
@@ -35,6 +36,7 @@ const state = reactive<TableQueryPageState<SysUserQueryRequest, SysUserResponse>
 })
 const { handlePageQuery, handleSelectionChange } = useTableQueryPageHooks<SysUserQueryRequest, SysUserResponse>(state, querySysUserPage)
 const { queryParams } = toRefs(state)
+const deptTreeStatus = ref<boolean>(false)
 
 const columnOption = ref<ColumnConfig<SysUserResponse>>({
   ...sysUserColumnOption,
@@ -117,6 +119,14 @@ const handleResetPwd = (row: SysUserResponse) => {
       state.loadingStatus = false
     })
 }
+
+/**
+ * 处理部门树状态
+ */
+const handleDeptTreeStatus = () => {
+  deptTreeStatus.value = !deptTreeStatus.value
+}
+
 /**
  * 处理用户授权
  */
@@ -140,7 +150,7 @@ onMounted(async () => {
 
 <template>
   <div class="h-full flex gap-1">
-    <div class="xht-view-container-none flex-1">
+    <div class="xht-view-container-none flex-1" v-show="deptTreeStatus">
       <dept-tree ref="deptTreeRef" @click-node="handleDeptClick" />
     </div>
     <div class="xht-view-container flex-[4]">
@@ -217,6 +227,11 @@ onMounted(async () => {
         >
           批量删除
         </el-button>
+        <template #after>
+          <el-tooltip :content="deptTreeStatus ? '折叠部门' : '展开部门'" placement="top">
+            <el-button circle size="small" :icon="deptTreeStatus ? DArrowLeft : DArrowRight" @click="handleDeptTreeStatus" />
+          </el-tooltip>
+        </template>
       </table-tool-bar>
       <el-table
         v-loading="state.loadingStatus"
@@ -226,14 +241,22 @@ onMounted(async () => {
         :empty-text="queryParams.deptId ? '该部门下未添加用户信息 🔍 试试调整筛选条件吧！' : '暂无匹配数据 🔍 试试调整筛选条件吧！'"
         @selection-change="handleSelectionChange"
       >
-        <el-table-column align="center" type="selection" width="55" />
-        <xht-column-index :current="queryParams.current" :size="queryParams.size" />
-        <el-table-column v-if="columnOption.userAvatar?.visible" label="用户头像" prop="userAvatar" width="100">
+        <el-table-column align="center" type="selection" width="55" fixed="left" />
+        <xht-column-index :current="queryParams.current" :size="queryParams.size" fixed="left" />
+        <el-table-column v-if="columnOption.userAvatar?.visible" label="用户头像" prop="userAvatar" width="100" fixed="left">
           <template #default="{ row }">
             <el-avatar :src="row.userAvatar" alt="用户头像" shape="circle" />
           </template>
         </el-table-column>
-        <el-table-column v-if="columnOption.userName?.visible" label="用户账号" min-width="160" prop="userName" show-overflow-tooltip sortable />
+        <el-table-column
+          v-if="columnOption.userName?.visible"
+          label="用户账号"
+          min-width="160"
+          prop="userName"
+          show-overflow-tooltip
+          sortable
+          fixed="left"
+        />
         <el-table-column v-if="columnOption.nickName?.visible" label="用户昵称" min-width="160" prop="nickName" />
         <el-table-column v-if="columnOption.userType?.visible" label="用户类型" min-width="100" prop="userType">
           <template #default="{ row }">

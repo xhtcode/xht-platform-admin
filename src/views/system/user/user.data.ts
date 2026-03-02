@@ -77,14 +77,14 @@ export const sysUserOperationRules: FormRules<Required<SysUserOperationRequest>>
 export const sysUserColumnOption: ColumnConfig<SysUserResponse> = {
   userAvatar: {
     desc: '用户头像',
-    visible: true,
-    disabled: true,
+    visible: false,
+    disabled: false,
   },
   userName: { desc: '用户账号', visible: true, disabled: true },
   nickName: { desc: '用户昵称', visible: true, disabled: true },
   userType: { desc: '用户类型', visible: true, disabled: false },
   userStatus: { desc: '用户状态', visible: true, disabled: false },
-  userPhone: { desc: '手机号码', visible: false, disabled: false },
+  userPhone: { desc: '手机号码', visible: true, disabled: false },
   createBy: { desc: '创建人', visible: false, disabled: false },
   createTime: { desc: '创建时间', visible: false, disabled: false },
   updateBy: { desc: '更新人', visible: false, disabled: false },
