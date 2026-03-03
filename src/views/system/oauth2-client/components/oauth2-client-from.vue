@@ -53,10 +53,10 @@ const submitForm = () => {
         addUpdateForm.value = { ...addUpdateForm.value }
         if (state.operationStatus === 'create') {
           await saveSysOauth2Client(addUpdateForm.value)
-          useMessage().success(`新增系统管理-客户端管理成功`)
+          useMessage().success(`新增客户端成功`)
         } else {
           await updateSysOauth2Client(addUpdateForm.value)
-          useMessage().success(`修改系统管理-客户端管理成功`)
+          useMessage().success(`修改客户端成功`)
         }
         emits('success')
         state.loadingStatus = false
@@ -76,6 +76,7 @@ const submitForm = () => {
  */
 const close = () => {
   if (state.loadingStatus) return
+  addUpdateForm.value = { ...sysOauth2ClientOperationForm }
   state.visibleStatus = false
   state.operationStatus = 'create'
   addUpdateFormRef.value?.resetFields()
@@ -153,6 +154,7 @@ defineExpose({
               v-model="addUpdateForm.accessTokenValidity"
               class="w-full!"
               :min="10 * 60"
+              :max="7 * 24 * 60 * 60"
               value-on-clear="min"
               placeholder="请输入请求令牌时效"
             >
@@ -166,6 +168,7 @@ defineExpose({
               v-model="addUpdateForm.refreshTokenValidity"
               class="w-full!"
               :min="10 * 60"
+              :max="7 * 24 * 60 * 60"
               value-on-clear="min"
               placeholder="请输入刷新令牌时效"
             >

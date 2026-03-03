@@ -118,6 +118,7 @@ const handleSysNoticeUnderShelve = () => {
  */
 const close = () => {
   if (state.loadingStatus) return
+  addUpdateForm.value = { ...sysNoticeOperationForm }
   state.visibleStatus = false
   state.operationStatus = 'create'
   addUpdateFormRef.value?.resetFields()

@@ -15,19 +15,30 @@ const { userInfo } = storeToRefs(permissions)
  * 打开操作
  * @param type
  */
-const openDialog = (type: 'infoRef' | 'passwordRef' | 'logout') => {
+const openDialog = (type: 'userInfo' | 'userSafety' | 'userMessage' | 'loginLog' | 'logout') => {
   switch (type) {
-    case 'infoRef':
-      router.push('/user/info').catch((_) => {
-        useMessage().error('路由错误，请联系管理员!')
-      })
+    case 'userInfo':
+      routerPath('/user/info')
       break
-    case 'passwordRef':
+    case 'userSafety':
+      routerPath('/user/safety')
+      break
+    case 'userMessage':
+      routerPath('/user/message')
+      break
+    case 'loginLog':
+      routerPath('/user/login/log')
       break
     case 'logout':
+      useMessage().error('暂未实现')
       break
   }
 }
+
+/**
+ * 路由跳转
+ * @param path 路由地址
+ */
 const routerPath = (path: string) => {
   router.push(path).catch((_) => {
     useMessage().error('路由错误，请联系管理员!')
@@ -37,7 +48,7 @@ const routerPath = (path: string) => {
 
 <template>
   <div class="user-info-container layout-header-top-item">
-    <el-dropdown trigger="click" size="default">
+    <el-dropdown trigger="click" size="default" @command="openDialog">
       <div class="avatar-container flex-center">
         <div class="flex-center">
           <el-avatar alt="avatar" class="avatar-image user-select-none" :src="userInfo.userAvatar" />
@@ -51,31 +62,31 @@ const routerPath = (path: string) => {
       </div>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item @click="routerPath('/user/info')">
+          <el-dropdown-item command="userInfo">
             <el-icon>
               <UserFilled />
             </el-icon>
             <span class="user-select-none">个人信息</span>
           </el-dropdown-item>
-          <el-dropdown-item @click="routerPath('/user/safety')">
+          <el-dropdown-item command="userSafety">
             <el-icon>
               <Lock />
             </el-icon>
             <span class="user-select-none">安全设置</span>
           </el-dropdown-item>
-          <el-dropdown-item divided @click="routerPath('/user/message')">
+          <el-dropdown-item divided command="userMessage">
             <el-icon>
               <Message />
             </el-icon>
             <span class="user-select-none">我的信息</span>
           </el-dropdown-item>
-          <el-dropdown-item>
+          <el-dropdown-item command="loginLog">
             <el-icon>
               <List />
             </el-icon>
-            <span class="user-select-none" @click="routerPath('/user/login/log')">登录日志</span>
+            <span class="user-select-none">登录日志</span>
           </el-dropdown-item>
-          <el-dropdown-item divided @click="openDialog('logout')">
+          <el-dropdown-item divided command="logout">
             <el-icon>
               <switch-button />
             </el-icon>

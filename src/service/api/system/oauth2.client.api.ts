@@ -18,16 +18,15 @@ enum Api {
   CREATE = '/sys/oauth2/client/create',
   UPDATE = '/sys/oauth2/client/update',
   UPDATE_SECRET = '/sys/oauth2/client/secret',
-  REMOVE = '/sys/oauth2/client/remove/',
   REMOVE_BATCH = '/sys/oauth2/client/remove',
   QUERY_BY_ID = '/sys/oauth2/client/get/',
   QUERY_PAGE = '/sys/oauth2/client/page',
 }
 
 /**
- * 创建系统管理-客户端管理
+ * 创建客户端
  *
- * @param form 系统管理-客户端管理表单请求参数
+ * @param form 客户端表单请求参数
  */
 export const saveSysOauth2Client = (form: SysOauth2ClientOperationRequest): AxiosPromise<void> => {
   return request({
@@ -39,9 +38,9 @@ export const saveSysOauth2Client = (form: SysOauth2ClientOperationRequest): Axio
 }
 
 /**
- * 根据主键`id`更新系统管理-客户端管理
+ * 根据主键`id`更新客户端
  *
- * @param form 系统管理-客户端管理表单请求参数
+ * @param form 客户端表单请求参数
  */
 export const updateSysOauth2Client = (form: SysOauth2ClientOperationRequest): AxiosPromise<void> => {
   return request({
@@ -53,9 +52,9 @@ export const updateSysOauth2Client = (form: SysOauth2ClientOperationRequest): Ax
 }
 
 /**
- * 根据主键`id`更新系统管理-客户端管理
+ * 根据主键`id`更新客户端
  *
- * @param id 系统管理-客户端管理id
+ * @param id 客户端id
  * @param clientSecret 系统管理-客户端密钥
  */
 export const updateSysOauth2ClientSecret = (id: ModeIdType, clientSecret: string): AxiosPromise<void> => {
@@ -71,22 +70,9 @@ export const updateSysOauth2ClientSecret = (id: ModeIdType, clientSecret: string
 }
 
 /**
- * 根据主键`id`删除系统管理-客户端管理
+ * 根据主键`id`删除客户端
  *
- * @param id 系统管理-客户端管理主键
- */
-export const removeSysOauth2ClientById = (id: ModeIdType): AxiosPromise<void> => {
-  return request({
-    url: Api.REMOVE + `${id}`,
-    baseURL,
-    method: 'post',
-  })
-}
-
-/**
- * 根据主键`id`删除系统管理-客户端管理
- *
- * @param ids 系统管理-客户端管理主键
+ * @param ids 客户端主键
  */
 export const removeSysOauth2ClientByIdBatch = (ids: string[]): AxiosPromise<void> => {
   return request({
@@ -98,9 +84,9 @@ export const removeSysOauth2ClientByIdBatch = (ids: string[]): AxiosPromise<void
 }
 
 /**
- * 根据主键`id`查询系统管理-客户端管理
+ * 根据主键`id`查询客户端
  *
- * @param id 系统管理-客户端管理主键
+ * @param id 客户端主键
  */
 export const querySysOauth2ClientById = (id: ModeIdType): AxiosPromise<SysOauth2ClientResponse> => {
   return request({
@@ -111,9 +97,9 @@ export const querySysOauth2ClientById = (id: ModeIdType): AxiosPromise<SysOauth2
 }
 
 /**
- * 分页查询系统管理-客户端管理
+ * 分页查询客户端
  *
- * @param query 系统管理-客户端管理查询请求参数
+ * @param query 客户端查询请求参数
  */
 export const querySysOauth2ClientPage = (query?: SysOauth2ClientQueryRequest): AxiosPromise<PageResponse<SysOauth2ClientResponse>> => {
   return request({

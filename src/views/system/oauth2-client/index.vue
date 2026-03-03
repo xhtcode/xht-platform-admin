@@ -6,12 +6,7 @@ import type {
   SysOauth2ClientQueryRequest,
   SysOauth2ClientResponse,
 } from '@/service/model/system/oauth2.client.model'
-import {
-  querySysOauth2ClientPage,
-  removeSysOauth2ClientById,
-  removeSysOauth2ClientByIdBatch,
-  updateSysOauth2ClientSecret,
-} from '@/service/api/system/oauth2.client.api'
+import { querySysOauth2ClientPage, removeSysOauth2ClientByIdBatch, updateSysOauth2ClientSecret } from '@/service/api/system/oauth2.client.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { sysOauth2ClientColumnOption, sysOauth2ClientOperationRules } from '@/views/system/oauth2-client/oauth2.client.data'
@@ -60,51 +55,34 @@ const resetQuery = async () => {
 }
 
 /**
- * 处理新增系统管理-客户端管理
+ * 处理新增客户端
  */
 const handleAdd = () => {
   sysOauth2ClientFormRef.value?.show('create', null)
 }
 
 /**
- * 处理编辑系统管理-客户端管理
+ * 处理编辑客户端
  */
 const handleEdit = (row: SysOauth2ClientResponse) => {
   sysOauth2ClientFormRef.value?.show('update', row.id)
 }
 
 /**
- * 处理删除系统管理-客户端管理
+ * 删除客户端
  */
-const handleDelete = (row: SysOauth2ClientResponse) => {
-  state.loadingStatus = true
-  useMessageBox()
-    .confirm('此操作将永久删除系统管理-客户端管理, 是否继续?')
-    .then(async () => {
-      await removeSysOauth2ClientById(row.id)
-      await handlePageQuery()
-      useMessage().success('删除系统管理-客户端管理成功!')
-    })
-    .finally(() => {
-      state.loadingStatus = false
-    })
-}
-
-/**
- * 处理批量删除系统管理-客户端管理
- */
-const handleBatchDelete = () => {
-  const ids = state.selectedRows.map((item) => item.id)
+const handleDelete = (row?: SysOauth2ClientResponse) => {
+  const ids = row ? [row.id] : state.selectedRows.map((item) => item.id)
   if (!ids || ids.length <= 0) {
-    useMessage().error('请选择系统管理-客户端管理数据')
+    useMessage().error('请选择客户端数据')
   }
   state.loadingStatus = true
   useMessageBox()
-    .confirm(`此操作将批量删除${ids.length}个系统管理-客户端管理, 是否继续?`)
+    .confirm('此操作将删除客户端, 是否继续?')
     .then(async () => {
       await removeSysOauth2ClientByIdBatch(ids)
       await handlePageQuery()
-      useMessage().success('批量删除系统管理-客户端管理成功!')
+      useMessage().success('删除客户端管理成功!')
     })
     .finally(() => {
       state.loadingStatus = false
@@ -210,7 +188,7 @@ onMounted(async () => {
         size="small"
         type="danger"
         :disabled="state.multipleStatus"
-        @click="handleBatchDelete"
+        @click="handleDelete"
         v-authorization="['sys:oauth2:client:remove']"
       >
         批量删除

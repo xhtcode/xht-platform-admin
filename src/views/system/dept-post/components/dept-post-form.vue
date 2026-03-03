@@ -72,6 +72,7 @@ const submitForm = () => {
  */
 const close = () => {
   if (state.loadingStatus) return
+  addUpdateForm.value = { ...sysDeptPostOperationForm }
   state.visibleStatus = false
   state.operationStatus = 'create'
   addUpdateFormRef.value?.resetFields()
@@ -95,7 +96,6 @@ defineExpose({
     <el-form
       ref="addUpdateFormRef"
       v-loading="state.loadingStatus"
-      :disabled="addUpdateForm.systemFlag === SystemFlagEnums.YES"
       :model="addUpdateForm"
       :rules="rules"
       element-loading-text="拼命加载中"

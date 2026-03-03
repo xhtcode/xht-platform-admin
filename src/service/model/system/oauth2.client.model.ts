@@ -21,7 +21,7 @@ export type ClientAuthenticationMethods =
 export type AutoApprove = 0 | 1
 
 /**
- * 系统管理-客户端管理查询请求参数类型
+ * 客户端查询请求参数类型
  */
 export interface SysOauth2ClientQueryRequest extends PageQueryRequest {
   clientId?: string // 客户端标识
@@ -30,7 +30,7 @@ export interface SysOauth2ClientQueryRequest extends PageQueryRequest {
 }
 
 /**
- * 系统管理-客户端管理响应类型
+ * 客户端响应类型
  */
 export interface SysOauth2ClientResponse extends MetaResponse {
   id: ModeIdType // ID
@@ -51,6 +51,6 @@ export interface SysOauth2ClientResponse extends MetaResponse {
 }
 
 /**
- * 系统管理-客户端管理表单请求参数类型
+ * 客户端表单请求参数类型
  */
 export interface SysOauth2ClientOperationRequest extends Partial<SysOauth2ClientResponse>, BasicFormRequest {}

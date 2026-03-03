@@ -31,7 +31,10 @@ const { addUpdateForm } = toRefs(state)
 const show = async (userId: ModeIdType) => {
   try {
     state.visibleStatus = true
-    addUpdateForm.value.userId = userId
+    addUpdateForm.value = {
+      userId: null,
+      roleIds: [],
+    }
     state.loadingStatus = true
     const roleIds = await selectRoleIdByUserId(userId)
     state.checkedKeys = roleIds.data
@@ -48,6 +51,7 @@ const show = async (userId: ModeIdType) => {
  */
 const close = () => {
   if (state.loadingStatus) return
+  addUpdateForm.value.roleIds = []
   state.visibleStatus = false
   state.operationStatus = 'create'
   state.loadingStatus = false

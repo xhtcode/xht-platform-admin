@@ -1,24 +1,13 @@
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
-import { useTableQueryListHooks, useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
 import type { SysAreaOperationRequest, SysAreaQueryRequest, SysAreaResponse } from '@/service/model/system/area.model'
-import {
-  querySysAreaById,
-  querySysAreaList,
-  removeSysAreaById,
-  removeSysAreaByIdBatch,
-  saveSysArea,
-  updateSysArea,
-} from '@/service/api/system/area.api'
+import { querySysAreaById, querySysAreaList, removeSysAreaById, saveSysArea, updateSysArea } from '@/service/api/system/area.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import type { ColumnConfig } from '@/components/table-tool-bar/types'
-import { sysAreaColumnOption, sysAreaOperationForm, sysAreaOperationRules } from '@/views/system/area/area.data'
-import { Delete, Edit, Plus, Refresh, Search } from '@element-plus/icons-vue'
-import type { SysMenuQueryRequest, SysMenuResponse } from '@/service/model/system/menu.model'
-import { querySysMenuTree } from '@/service/api/system/menu.api'
-import { onMounted, useTemplateRef } from 'vue'
+import { Delete, Edit, Plus, Refresh } from '@element-plus/icons-vue'
+import { useTemplateRef } from 'vue'
 import type Node from 'element-plus/es/components/tree/src/model/node'
 import { TreeData } from 'element-plus/es/components/tree/src/tree.type'
+import { sysAreaOperationForm, sysAreaOperationRules } from '@/views/system/area/area.data'
 
 defineOptions({ name: 'SysAreaViewIndex' })
 
@@ -75,6 +64,7 @@ const getAreaInfo = async (node: SysAreaResponse) => {
     state.create = false
     state.update = false
     state.parentName = `${node.areaName}(${node.areaCode})`
+    state.parentId = node.id
     const { data } = await querySysAreaById(node.id)
     addUpdateForm.value = data
     state.loadingStatus = false
@@ -83,6 +73,7 @@ const getAreaInfo = async (node: SysAreaResponse) => {
   }
 }
 const create = () => {
+  addUpdateForm.value = { ...sysAreaOperationForm, parentId: addUpdateForm.value.id }
   addUpdateFormRef.value?.resetFields()
   state.refreshTable = false
   state.create = true
@@ -112,6 +103,7 @@ const refreshLoad = async () => {
 }
 const close = () => {
   state.refreshTable = true
+  addUpdateForm.value = { ...sysAreaOperationForm }
   state.create = false
   state.update = false
   treeRef.value?.setCurrentKey(undefined)
@@ -149,7 +141,7 @@ const submitForm = (operationStatus: 'create' | 'update') => {
 const handleDelete = () => {
   state.loadingStatus = true
   useMessageBox()
-    .confirm('此操作将永久删除系统管理-行政区划, 是否继续?')
+    .confirm(`此操作将永久删除${addUpdateForm.value.areaName}, 是否继续?`)
     .then(async () => {
       await removeSysAreaById(addUpdateForm.value.id)
       await refreshLoad()
@@ -172,6 +164,7 @@ const handleDelete = () => {
         :data="state.tableList"
         :load="loadTreeData"
         :props="areaTreeProps"
+        :expand-on-click-node="false"
         highlight-current
         @node-click="getAreaInfo"
         empty-text="暂无匹配数据 🔍 试试调整筛选条件吧！"
@@ -186,6 +179,7 @@ const handleDelete = () => {
       </el-tree>
     </div>
     <div class="xht-view-container flex-[2]">
+      {{ addUpdateForm.parentId }}
       <div class="pb-10px text-right">
         <el-button type="danger" :icon="Delete" :disabled="!addUpdateForm.id" @click="handleDelete">删除</el-button>
         <el-button type="primary" :icon="Plus" :disabled="!addUpdateForm.id" @click="create">增加</el-button>

@@ -9,7 +9,7 @@ import { deptStatusEnums } from '@/service/enums/system/dept.enum'
 export const sysDeptOperationForm: Partial<SysDeptOperationRequest> = {
   parentId: '0', // 父部门ID
   deptStatus: deptStatusEnums.NORMAL.value, // 部门状态,可用值:0,1
-  deptSort: 0, // 显示顺序
+  deptSort: 0, // 部门顺序
 }
 
 /**
@@ -20,7 +20,7 @@ export const sysDeptOperationRules: FormRules<Required<SysDeptOperationRequest>>
   deptCode: [{ required: true, message: '请输入部门编码', trigger: ['blur', 'change'] }], // 部门编码
   deptName: [{ required: true, message: '请输入部门名称', trigger: ['blur', 'change'] }], // 部门名称
   deptStatus: [{ required: true, message: '请输入部门状态', trigger: ['blur', 'change'] }], // 部门状态,可用值:0,1
-  deptSort: [{ required: true, message: '请输入部门显示顺序', trigger: ['blur', 'change'] }], // 显示顺序
+  deptSort: [{ required: true, message: '请输入部门顺序', trigger: ['blur', 'change'] }], // 显示顺序
   phone: [{ required: true, message: '请输入部门联系电话', trigger: ['blur', 'change'] }], //联系电话
   email: [{ required: true, message: '请输入部门联系邮箱', trigger: ['blur', 'change'] }], //邮箱
 }
@@ -37,7 +37,7 @@ export const sysDeptColumnOption: ColumnConfig<SysDeptResponse> = {
   phone: { desc: '联系电话', visible: true, disabled: true },
   email: { desc: '联系邮箱', visible: false, disabled: false },
   deptStatus: { desc: '部门状态', visible: true, disabled: false },
-  deptSort: { desc: '显示顺序', visible: true, disabled: false },
+  deptSort: { desc: '部门顺序', visible: true, disabled: false },
   createBy: { desc: '创建人', visible: false, disabled: false },
   createTime: { desc: '创建时间', visible: false, disabled: false },
   updateBy: { desc: '更新人', visible: false, disabled: false },

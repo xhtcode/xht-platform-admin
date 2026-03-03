@@ -94,6 +94,7 @@ const submitForm = () => {
  */
 const close = () => {
   if (state.loadingStatus) return
+  addUpdateForm.value = { ...sysDeptOperationForm }
   state.visibleStatus = false
   state.operationStatus = 'create'
   addUpdateFormRef.value?.resetFields()
@@ -143,12 +144,12 @@ defineExpose({
       <el-row>
         <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="部门名称" prop="deptName">
-            <el-input v-model="addUpdateForm.deptName" placeholder="请输入部门名称" />
+            <el-input v-model="addUpdateForm.deptName" :maxlength="100" show-word-limit placeholder="请输入部门名称" />
           </el-form-item>
         </el-col>
         <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="部门编码" prop="deptCode">
-            <el-input v-model="addUpdateForm.deptCode" placeholder="请输入部门编码" />
+            <el-input v-model="addUpdateForm.deptCode" :maxlength="9" show-word-limit placeholder="请输入部门编码" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -159,20 +160,20 @@ defineExpose({
           </el-form-item>
         </el-col>
         <el-col :lg="12" :sm="24" :xs="24">
-          <el-form-item label="显示顺序" prop="deptSort">
-            <el-input-number v-model="addUpdateForm.deptSort" :max="999" :min="0" class="w-full!" placeholder="请输入显示顺序" />
+          <el-form-item label="部门顺序" prop="deptSort">
+            <el-input-number v-model="addUpdateForm.deptSort" :max="999" :min="0" class="w-full!" placeholder="请输入部门顺序" />
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="联系电话" prop="phone">
-            <el-input v-model="addUpdateForm.phone" maxlength="11" placeholder="请输入联系电话" show-word-limit />
+            <el-input v-model="addUpdateForm.phone" maxlength="11" show-word-limit placeholder="请输入联系电话" />
           </el-form-item>
         </el-col>
         <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="联系邮箱" prop="email">
-            <el-input v-model="addUpdateForm.email" maxlength="50" placeholder="请输入联系邮箱" show-word-limit />
+            <el-input v-model="addUpdateForm.email" maxlength="50" show-word-limit placeholder="请输入联系邮箱" />
           </el-form-item>
         </el-col>
       </el-row>

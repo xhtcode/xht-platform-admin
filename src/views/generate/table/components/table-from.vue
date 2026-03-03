@@ -74,6 +74,7 @@ const submitForm = () => {
  */
 const close = () => {
   if (state.loadingStatus) return
+  addUpdateForm.value = { ...genTableInfoOperationForm }
   state.visibleStatus = false
   state.operationStatus = 'create'
   activeName.value = 1

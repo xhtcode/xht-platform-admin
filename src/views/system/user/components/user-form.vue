@@ -73,6 +73,7 @@ const submitForm = () => {
  */
 const close = () => {
   if (state.loadingStatus) return
+  addUpdateForm.value = { ...sysUserOperationForm }
   state.visibleStatus = false
   state.operationStatus = 'create'
   addUpdateFormRef.value?.resetFields()
@@ -116,9 +117,11 @@ defineExpose({
         <!-- 头像上传 -->
         <div class="flex-1">
           <el-form-item label="用户头像" prop="userAvatar">
-            <el-upload :show-file-list="false" accept="image/*" action="/api/upload/avatar">
-              <el-image :src="addUpdateForm.userAvatar" style="width: 100px; height: 100px; border-radius: 50%" />
-            </el-upload>
+            <div class="w-full flex flex-center">
+              <el-upload :show-file-list="false" accept="image/*" action="/api/upload/avatar">
+                <el-image :src="addUpdateForm.userAvatar" style="width: 100px; height: 100px; border-radius: 50%" />
+              </el-upload>
+            </div>
           </el-form-item>
         </div>
         <div class="flex-1">
@@ -136,7 +139,13 @@ defineExpose({
       <el-row>
         <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="用户状态" prop="userStatus">
-            <xht-enum-select v-model="addUpdateForm.userStatus" :data="userStatusEnums" clearable placeholder="请选择用户类型" />
+            <xht-enum-select
+              v-model="addUpdateForm.userStatus"
+              :data="userStatusEnums"
+              clearable
+              placeholder="请选择用户类型"
+              :disabled="state.operationStatus === 'create'"
+            />
           </el-form-item>
         </el-col>
         <el-col :lg="12" :sm="24" :xs="24">
@@ -169,6 +178,7 @@ defineExpose({
               placeholder="选择出生日期"
               type="date"
               value-format="YYYY-MM-DD"
+              class="w-full!"
             />
           </el-form-item>
         </el-col>

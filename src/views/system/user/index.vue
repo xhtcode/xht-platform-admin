@@ -36,7 +36,7 @@ const state = reactive<TableQueryPageState<SysUserQueryRequest, SysUserResponse>
 })
 const { handlePageQuery, handleSelectionChange } = useTableQueryPageHooks<SysUserQueryRequest, SysUserResponse>(state, querySysUserPage)
 const { queryParams } = toRefs(state)
-const deptTreeStatus = ref<boolean>(false)
+const deptTreeStatus = ref<boolean>(true)
 
 const columnOption = ref<ColumnConfig<SysUserResponse>>({
   ...sysUserColumnOption,
@@ -150,10 +150,10 @@ onMounted(async () => {
 
 <template>
   <div class="h-full flex gap-1">
-    <div class="xht-view-container-none flex-1" v-show="deptTreeStatus">
+    <div class="xht-view-container-none w-[260px]" v-show="deptTreeStatus">
       <dept-tree ref="deptTreeRef" @click-node="handleDeptClick" />
     </div>
-    <div class="xht-view-container flex-[4]">
+    <div class="xht-view-container flex-1">
       <el-form ref="queryFormRef" :disabled="state.loadingStatus" :model="queryParams" class="user-select-none" label-width="80px">
         <el-row v-if="!state.searchStatus">
           <el-col :lg="8" :md="8" :sm="12" :xl="4" :xs="24">
@@ -229,7 +229,7 @@ onMounted(async () => {
         </el-button>
         <template #after>
           <el-tooltip :content="deptTreeStatus ? '折叠部门' : '展开部门'" placement="top">
-            <el-button circle size="small" :icon="deptTreeStatus ? DArrowLeft : DArrowRight" @click="handleDeptTreeStatus" />
+            <el-button circle type="warning" size="small" :icon="deptTreeStatus ? DArrowLeft : DArrowRight" @click="handleDeptTreeStatus" />
           </el-tooltip>
         </template>
       </table-tool-bar>

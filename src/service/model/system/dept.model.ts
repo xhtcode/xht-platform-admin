@@ -21,7 +21,7 @@ export interface SysDeptResponse extends MetaResponse {
   deptCode: string // 部门编码
   deptName: string // 部门名称
   deptStatus: DeptStatusType // 部门状态,可用值:0,1
-  deptSort: number // 显示顺序
+  deptSort: number // 部门顺序
   ancestors: string //祖先列表
   leader: string //负责人
   phone: string //联系电话

@@ -150,7 +150,7 @@ onMounted(async () => {
           <xht-enum-tag :filter-label="row.deptStatus" :data="deptStatusEnums" />
         </template>
       </el-table-column>
-      <el-table-column v-if="columnOption.deptSort?.visible" align="center" label="显示顺序" prop="deptSort" width="120" />
+      <el-table-column v-if="columnOption.deptSort?.visible" align="center" label="部门顺序" prop="deptSort" width="120" />
       <el-table-column v-if="columnOption.remark?.visible" align="center" label="部门描述" prop="remark" show-overflow-tooltip width="220" />
       <el-table-column v-if="columnOption.createBy?.visible" label="创建人" prop="createBy" width="160" />
       <el-table-column v-if="columnOption.createTime?.visible" label="创建时间" prop="createTime" width="180" />

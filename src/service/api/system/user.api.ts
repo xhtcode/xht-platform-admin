@@ -5,6 +5,7 @@ import type {
   SysUserQueryRequest,
   SysUserResponse,
   SysUserVo,
+  UpdatePwdFrom,
   UserRoleBindOperationRequest,
 } from '@/service/model/system/user.model'
 
@@ -20,6 +21,7 @@ enum Api {
   QUERY_BY_ID = '/sys/user/get/',
   QUERY_PAGE = '/sys/user/page',
   RESET_PASSWORD = `/sys/user/reset/`,
+  UPDATE_PASSWORD = `/sys/user/update/pwd`,
   QUERY_ROLE_ID = '/sys/user/role/',
   BIND_USER_ROLE = '/sys/user/role/bind',
 }
@@ -105,6 +107,19 @@ export const resetPassword = (userId: ModeIdType): AxiosPromise<void> => {
     url: Api.RESET_PASSWORD + `${userId}/pwd`,
     baseURL,
     method: 'post',
+  })
+}
+
+/**
+ * 修改密码
+ * @param passWordInfo 密码信息
+ */
+export const updatePassword = (passWordInfo: UpdatePwdFrom): AxiosPromise<void> => {
+  return request({
+    url: Api.UPDATE_PASSWORD,
+    baseURL,
+    method: 'post',
+    data: passWordInfo,
   })
 }
 

@@ -95,6 +95,10 @@ const submitForm = async () => {
  */
 const close = () => {
   if (state.loadingStatus) return
+  addUpdateForm.value = {
+    roleId: null,
+    menuIds: [],
+  }
   state.visibleStatus = false
   state.operationStatus = 'create'
   checkAll.value = false

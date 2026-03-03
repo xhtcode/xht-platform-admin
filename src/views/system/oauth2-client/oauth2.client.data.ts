@@ -3,12 +3,12 @@ import type { FormRules } from 'element-plus'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 
 /**
- * 系统管理-客户端管理 增改页面 表单类型 默认值
+ * 客户端 增改页面 表单类型 默认值
  */
 export const sysOauth2ClientOperationForm: SysOauth2ClientOperationRequest = {}
 
 /**
- * 系统管理-客户端管理 增改页面 表单类型 表单校验
+ * 客户端 增改页面 表单类型 表单校验
  */
 export const sysOauth2ClientOperationRules: FormRules<Required<SysOauth2ClientOperationRequest>> = {
   clientId: [{ required: true, message: '请输入客户端标识', trigger: ['blur', 'change'] }],
@@ -24,7 +24,7 @@ export const sysOauth2ClientOperationRules: FormRules<Required<SysOauth2ClientOp
 }
 
 /**
- * 系统管理-客户端管理 列表显示配置
+ * 客户端 列表显示配置
  */
 export const sysOauth2ClientColumnOption: ColumnConfig<SysOauth2ClientResponse> = {
   clientId: { desc: '客户端标识', visible: true, disabled: true },

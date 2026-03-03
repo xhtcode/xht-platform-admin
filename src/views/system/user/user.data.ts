@@ -8,7 +8,7 @@ import { userStatusEnums, userTypeEnums } from '@/service/enums/system/user.enum
  */
 export const sysUserOperationForm: SysUserOperationRequest = {
   userType: userTypeEnums.USER.value,
-  userStatus: userStatusEnums.NORMAL.value,
+  userStatus: userStatusEnums.UNACTIVATED.value,
   profile: {},
   postInfos: [],
 }
@@ -47,8 +47,6 @@ export const sysUserOperationRules: FormRules<Required<SysUserOperationRequest>>
     },
   ],
   'profile.gender': [{ required: true, message: '请选择用户性别', trigger: ['blur', 'change'] }],
-  'profile.birthDate': [{ required: true, message: '请选择出生日期', trigger: ['blur', 'change'] }],
-  'profile.age': [{ required: true, message: '请输入年龄', trigger: ['blur', 'change'] }],
   'profile.emergencyContact': [
     { required: true, message: '请输入紧急联系人', trigger: ['blur', 'change'] },
     { min: 2, max: 20, message: '紧急联系人长度必须在 2-20 个字符之间', trigger: 'blur' },
