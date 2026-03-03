@@ -51,7 +51,7 @@ const show = async (userId: ModeIdType) => {
  */
 const close = () => {
   if (state.loadingStatus) return
-  addUpdateForm.value.roleIds = []
+  addUpdateForm.value = null
   state.visibleStatus = false
   state.operationStatus = 'create'
   state.loadingStatus = false

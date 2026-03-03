@@ -13,7 +13,7 @@ const state = reactive<AddUpdateOption<GenTypeMappingOperationRequest>>({
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,
-  addUpdateForm: { ...genTypeMappingOperationForm },
+  addUpdateForm: null,
 })
 const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
 const { addUpdateForm } = toRefs(state)
@@ -31,6 +31,8 @@ const show = async (type: 'create' | 'update', id: ModeIdType) => {
       state.title = '修改字段类型映射'
       const { data } = await queryGenTypeMappingById(id)
       addUpdateForm.value = data
+    } else {
+      addUpdateForm.value = { ...genTypeMappingOperationForm }
     }
   } finally {
     state.loadingStatus = false
@@ -70,7 +72,7 @@ const submitForm = () => {
  */
 const close = () => {
   if (state.loadingStatus) return
-  addUpdateForm.value = { ...genTypeMappingOperationForm }
+  addUpdateForm.value = null
   state.visibleStatus = false
   state.operationStatus = 'create'
   addUpdateFormRef.value?.resetFields()

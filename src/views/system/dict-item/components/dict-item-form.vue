@@ -15,7 +15,7 @@ const state = reactive<AddUpdateOption<SysDictItemOperationRequest>>({
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,
-  addUpdateForm: { ...sysDictItemOperationForm },
+  addUpdateForm: null,
 })
 const route = useRoute()
 const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
@@ -35,6 +35,8 @@ const show = async (type: 'create' | 'update', id: ModeIdType) => {
       state.title = '修改字典项'
       const { data } = await querySysDictItemById(id)
       addUpdateForm.value = data
+    } else {
+      addUpdateForm.value = { ...sysDictItemOperationForm }
     }
   } finally {
     state.loadingStatus = false
@@ -75,7 +77,7 @@ const submitForm = () => {
  */
 const close = () => {
   if (state.loadingStatus) return
-  addUpdateForm.value = { ...sysDictItemOperationForm }
+  addUpdateForm.value = null
   state.visibleStatus = false
   state.operationStatus = 'create'
   addUpdateFormRef.value?.resetFields()

@@ -14,7 +14,7 @@ const state = reactive<AddUpdateOption<GenDataSourceOperationRequest>>({
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,
-  addUpdateForm: { ...genDataSourceOperationForm },
+  addUpdateForm: null,
 })
 const addUpdateFormRef = ref<FormInstance>()
 const { addUpdateForm } = toRefs(state)
@@ -32,6 +32,8 @@ const show = async (type: 'create' | 'update', id: ModeIdType) => {
       state.title = '修改数据源配置'
       const { data } = await queryGenDataSourceById(id)
       addUpdateForm.value = { ...data }
+    } else {
+      addUpdateForm.value = { ...genDataSourceOperationForm }
     }
   } finally {
     state.loadingStatus = false
@@ -71,7 +73,7 @@ const submitForm = () => {
  */
 const close = () => {
   if (state.loadingStatus) return
-  addUpdateForm.value = { ...genDataSourceOperationForm }
+  addUpdateForm.value = null
   state.visibleStatus = false
   state.operationStatus = 'create'
   addUpdateFormRef.value?.resetFields()

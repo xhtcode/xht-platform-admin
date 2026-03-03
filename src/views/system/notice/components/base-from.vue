@@ -20,7 +20,7 @@ const state = reactive<AddUpdateOption<SysNoticeOperationRequest>>({
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,
-  addUpdateForm: { ...sysNoticeOperationForm },
+  addUpdateForm: null,
   attachments: [],
 })
 const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
@@ -41,6 +41,8 @@ const show = async (type: 'create' | 'update', id: ModeIdType) => {
       const { data } = await querySysNoticeById(id)
       addUpdateForm.value = data.notice
       attachments.value = data.attachments || []
+    } else {
+      addUpdateForm.value = { ...sysNoticeOperationForm }
     }
     state.loadingStatus = false
   } catch {
@@ -118,7 +120,7 @@ const handleSysNoticeUnderShelve = () => {
  */
 const close = () => {
   if (state.loadingStatus) return
-  addUpdateForm.value = { ...sysNoticeOperationForm }
+  addUpdateForm.value = null
   state.visibleStatus = false
   state.operationStatus = 'create'
   addUpdateFormRef.value?.resetFields()

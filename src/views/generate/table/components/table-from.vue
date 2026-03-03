@@ -21,7 +21,7 @@ const state = reactive<AddUpdateOption<GenTableInfoOperationRequest>>({
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,
-  addUpdateForm: { ...genTableInfoOperationForm },
+  addUpdateForm: null,
 })
 const activeName = ref<number>(1)
 const addUpdateFormRef = ref<FormInstance>()
@@ -74,7 +74,7 @@ const submitForm = () => {
  */
 const close = () => {
   if (state.loadingStatus) return
-  addUpdateForm.value = { ...genTableInfoOperationForm }
+  addUpdateForm.value = null
   state.visibleStatus = false
   state.operationStatus = 'create'
   activeName.value = 1

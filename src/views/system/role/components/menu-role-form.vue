@@ -32,7 +32,10 @@ const { checkAll, treeData, checkedKeys, addUpdateForm } = toRefs(state)
 const show = async (roleId: ModeIdType) => {
   try {
     state.visibleStatus = true
-    addUpdateForm.value.roleId = roleId
+    addUpdateForm.value = {
+      roleId,
+      menuIds: [],
+    }
     state.loadingStatus = true
     await selectMenuIdByRoleId(roleId).then((res) => {
       checkAll.value = res.data.checkAll
@@ -95,10 +98,7 @@ const submitForm = async () => {
  */
 const close = () => {
   if (state.loadingStatus) return
-  addUpdateForm.value = {
-    roleId: null,
-    menuIds: [],
-  }
+  addUpdateForm.value = null
   state.visibleStatus = false
   state.operationStatus = 'create'
   checkAll.value = false

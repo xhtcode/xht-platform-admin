@@ -18,7 +18,7 @@ const state = reactive<AddUpdateOption<SysUserOperationRequest>>({
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,
-  addUpdateForm: { ...sysUserOperationForm },
+  addUpdateForm: null,
 })
 const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
 const { addUpdateForm } = toRefs(state)
@@ -34,6 +34,8 @@ const show = async (type: 'create' | 'update', id: ModeIdType) => {
       state.title = '修改用户信息'
       const { data } = await querySysUserById(id)
       addUpdateForm.value = { ...data }
+    } else {
+      addUpdateForm.value = { ...sysUserOperationForm }
     }
   } finally {
     state.loadingStatus = false
@@ -73,7 +75,7 @@ const submitForm = () => {
  */
 const close = () => {
   if (state.loadingStatus) return
-  addUpdateForm.value = { ...sysUserOperationForm }
+  addUpdateForm.value = null
   state.visibleStatus = false
   state.operationStatus = 'create'
   addUpdateFormRef.value?.resetFields()

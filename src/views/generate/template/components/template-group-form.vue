@@ -13,7 +13,7 @@ const state = reactive<AddUpdateOption<GenTemplateGroupOperationRequest>>({
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,
-  addUpdateForm: { ...genTemplateGroupOperationForm },
+  addUpdateForm: null,
 })
 const addUpdateFormRef = ref<FormInstance>()
 const { addUpdateForm } = toRefs(state)
@@ -31,6 +31,8 @@ const show = async (type: 'create' | 'update', id: ModeIdType) => {
       state.title = '修改模板分组'
       const { data } = await queryGenTemplateGroupById(id)
       addUpdateForm.value = data
+    } else {
+      addUpdateForm.value = { ...genTemplateGroupOperationForm }
     }
   } finally {
     state.loadingStatus = false
@@ -70,7 +72,7 @@ const submitForm = () => {
  */
 const close = () => {
   if (state.loadingStatus) return
-  addUpdateForm.value = { ...genTemplateGroupOperationForm }
+  addUpdateForm.value = null
   state.visibleStatus = false
   state.operationStatus = 'create'
   addUpdateFormRef.value?.resetFields()

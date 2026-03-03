@@ -19,7 +19,7 @@ const state = reactive<AddUpdateOption<SysDeptOperationRequest>>({
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,
-  addUpdateForm: { ...sysDeptOperationForm },
+  addUpdateForm: null,
 })
 const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
 const { addUpdateForm } = toRefs(state)
@@ -55,6 +55,8 @@ const show = async (type: 'create' | 'update', id: ModeIdType) => {
       state.title = '修改系统部门'
       const { data } = await querySysDeptById(id)
       addUpdateForm.value = data
+    } else {
+      addUpdateForm.value = { ...sysDeptOperationForm }
     }
   } finally {
     state.loadingStatus = false
@@ -94,7 +96,7 @@ const submitForm = () => {
  */
 const close = () => {
   if (state.loadingStatus) return
-  addUpdateForm.value = { ...sysDeptOperationForm }
+  addUpdateForm.value = null
   state.visibleStatus = false
   state.operationStatus = 'create'
   addUpdateFormRef.value?.resetFields()
