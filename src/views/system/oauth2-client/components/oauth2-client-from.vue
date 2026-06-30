@@ -14,7 +14,7 @@ const state = reactive<AddUpdateOption<SysOauth2ClientOperationRequest>>({
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,
-  addUpdateForm: null,
+  addUpdateForm: { ...sysOauth2ClientOperationForm },
 })
 const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
 const { addUpdateForm } = toRefs(state)
@@ -35,8 +35,6 @@ const show = async (type: 'create' | 'update', id: ModeIdType) => {
       state.title = '修改客户端'
       const { data } = await querySysOauth2ClientById(id)
       addUpdateForm.value = { ...data }
-    } else {
-      addUpdateForm.value = { ...sysOauth2ClientOperationForm }
     }
     state.loadingStatus = false
   } catch {
@@ -78,7 +76,7 @@ const submitForm = () => {
  */
 const close = () => {
   if (state.loadingStatus) return
-  addUpdateForm.value = null
+  addUpdateForm.value = { ...sysOauth2ClientOperationForm }
   state.visibleStatus = false
   state.operationStatus = 'create'
   addUpdateFormRef.value?.resetFields()

@@ -124,7 +124,7 @@ const submitPwdDialog = () => {
  * 关闭修改密码
  */
 const closePwdDialog = () => {
-  updateData.value = undefined
+  updateData.value = {}
   updateStatus.value = false
 }
 
@@ -278,7 +278,7 @@ onMounted(async () => {
       :total="state.total"
       @pagination="handlePageQuery"
     />
-    <el-dialog title="密钥修改" width="45%" :before-close="closePwdDialog" draggable align-center>
+    <el-dialog v-model="updateStatus" title="密钥修改" width="45%" :before-close="closePwdDialog" draggable>
       <el-form
         ref="addUpdateFormRef"
         v-loading="state.loadingStatus"
@@ -290,6 +290,16 @@ onMounted(async () => {
         scroll-to-error
       >
         <el-row>
+          <el-col :span="24">
+            <el-form-item label="客户端标识" prop="clientId">
+              <el-input v-model="updateData.clientId" clearable :maxlength="100" show-word-limit placeholder="请输入客户端标识" disabled />
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="客户端名称" prop="clientName">
+              <el-input v-model="updateData.clientName" clearable :maxlength="100" show-word-limit placeholder="请输入客户端名称" disabled />
+            </el-form-item>
+          </el-col>
           <el-col :span="24">
             <el-form-item label="客户端密钥" prop="clientSecret">
               <el-input v-model="updateData.clientSecret" type="password" show-password placeholder="请输入客户端密钥" />

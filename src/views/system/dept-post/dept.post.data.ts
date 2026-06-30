@@ -7,7 +7,7 @@ import { sysDeptPostStatusEnums } from '@/service/enums/system/dept.post.enum'
  * 增改页面 表单类型 默认值
  */
 export const sysDeptPostOperationForm: Partial<SysDeptPostOperationRequest> = {
-  postSort: 0, // 岗位排序
+  postSort: 999, // 岗位排序
   postStatus: sysDeptPostStatusEnums.NORMAL.value, //  岗位状态
   postLimit: 999, // 岗位人员限制
   remark: '暂无', // 岗位描述
@@ -22,7 +22,7 @@ export const sysDeptPostOperationRules: FormRules<Required<SysDeptPostOperationR
   postName: [{ required: true, message: '请输入岗位名称', trigger: ['blur', 'change'] }],
   postSort: [{ required: true, message: '请输入岗位排序', trigger: ['blur', 'change'] }],
   postStatus: [{ required: true, message: '请选择岗位状态', trigger: ['blur', 'change'] }],
-  remark: [{ required: true, message: '请输入岗位描述', trigger: ['blur', 'change'] }],
+  quotaNum: [{ required: true, message: '请输入岗位编制人数', trigger: ['blur', 'change'] }],
 }
 
 /**
@@ -31,10 +31,10 @@ export const sysDeptPostOperationRules: FormRules<Required<SysDeptPostOperationR
 export const sysDeptPostColumnOption: ColumnConfig<SysDeptPostResponse> = {
   postCode: { desc: '岗位编码', visible: true, disabled: true },
   postName: { desc: '岗位名称', visible: true, disabled: true },
-  postLimit: { desc: '员工统计', visible: false, disabled: false },
   postStatus: { desc: '岗位状态', visible: true, disabled: false },
-  systemFlag: { desc: '系统内置', visible: false, disabled: false },
   postSort: { desc: '岗位排序', visible: true, disabled: false },
+  quotaNum: { desc: '岗位编制人数', visible: false, disabled: false },
+  currentNum: { desc: '岗位在岗人数', visible: false, disabled: false },
   remark: { desc: '岗位描述', visible: false, disabled: false },
   createBy: { desc: '创建人', visible: false, disabled: false },
   createTime: {

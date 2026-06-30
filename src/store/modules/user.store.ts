@@ -2,8 +2,6 @@ import { defineStore } from 'pinia'
 import type { LoginRequestType } from '@/service/model/login/login.model'
 import { loginInPassWord } from '@/service/api/login/login.api'
 import type { AxiosResponse } from 'axios'
-import { resetRouter } from '@/router'
-import { useMessageBox } from '@/hooks/use-message'
 import pInIaPersistConfig from '@/store/pinia-persist'
 import { getUserInfo } from '@/service/api/permission'
 import _ from 'lodash'
@@ -81,7 +79,19 @@ export const useUserInfoStore = defineStore(
      * @returns Promise<void>
      */
     function logout() {
-      return resetToken()
+      return new Promise<void>(async (resolve) => {
+        userInfo.value = {
+          roleCodes: [],
+          menuButtonCodes: [],
+        }
+        token.value = {
+          scope: [],
+          additional_parameters: {},
+        }
+        window.sessionStorage.clear()
+        window.localStorage.clear()
+        resolve()
+      })
     }
 
     /**
@@ -97,37 +107,16 @@ export const useUserInfoStore = defineStore(
             resolve()
           })
           .catch((_) => {
-            useMessageBox()
-              .confirm('用户信息获取失败,请重新登录!')
-              .then(async () => {
-                await resetToken()
-              })
             reject()
           })
       })
     }
 
     /**
-     * 重置用户认证信息方法
-     * 清除用户信息、认证令牌及本地存储，并重置路由
-     * @returns Promise<void>
+     * 设置access_token
      */
-    async function resetToken(): Promise<void> {
-      return new Promise<void>(async (resolve) => {
-        userInfo.value = {
-          roleCodes: [],
-          menuButtonCodes: [],
-        }
-        token.value = {
-          scope: [],
-          additional_parameters: {},
-        }
-        window.sessionStorage.clear()
-        window.localStorage.clear()
-        resetRouter().then(() => {
-          resolve()
-        })
-      })
+    function setAccessToken(access_token: string) {
+      token.value.access_token = access_token
     }
 
     return {
@@ -141,6 +130,7 @@ export const useUserInfoStore = defineStore(
       login,
       logout,
       getUserInfos,
+      setAccessToken,
     }
   },
   {

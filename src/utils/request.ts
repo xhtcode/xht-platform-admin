@@ -1,7 +1,6 @@
-import { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, CreateAxiosDefaults, InternalAxiosRequestConfig } from 'axios'
+import { AxiosError, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 import axios from 'axios'
-import _ from 'lodash'
-import { useMessage } from '@/hooks/use-message'
+import { useMessage, useMessageBox } from '@/hooks/use-message'
 import qs from 'qs'
 import { useUserInfoStore } from '@/store/modules/user.store'
 import { HEADER_AUTHORIZATION, HEADER_TRACE_ID, HEADER_USER_ACCOUNT, HEADER_USER_ID } from '@/service/constant'
@@ -102,11 +101,12 @@ service.interceptors.response.use(
  * 退出登录
  */
 const logout = () => {
-  // 未授权：跳转登录页（根据实际路由调整）
-  useUserInfoStore()
-    .logout()
-    .then(() => {})
-  window.location.href = '/login'
+  useMessageBox()
+    .confirm('用户信息获取失败,请重新登录!')
+    .then(async () => {
+      window.location.href = '/login'
+    })
+    .catch((_) => {})
 }
 
 export default service

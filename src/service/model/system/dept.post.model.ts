@@ -1,5 +1,3 @@
-import { SystemFlagEnums } from '@/service/model/base.model'
-
 /**
  * 部门状态
  */
@@ -13,7 +11,6 @@ export interface SysDeptPostQueryRequest extends PageQueryRequest {
   postCode?: string //  岗位编码
   postName?: string // 岗位名称
   postStatus?: SysDeptPostStatusType // 岗位状态
-  systemFlag?: SystemFlagEnums // 系统内置
 }
 
 /**
@@ -24,12 +21,12 @@ export interface SysDeptPostResponse extends MetaResponse {
   deptId: ModeIdType //  部门id
   postCode: string //  岗位编码
   postName: string // 岗位名称
-  postSort: number // 岗位排序
-  postHave: number // 岗位人员已有人数
-  postLimit: number // 岗位人员限制
-  remark: string // 岗位描述
   postStatus: SysDeptPostStatusType // 岗位状态
-  systemFlag: SystemFlagEnums // 系统内置
+  postSort: number // 岗位排序
+  deptLeader: boolean // 部门领导岗位
+  quotaNum: number // 岗位编制人数
+  currentNum: number // 岗位在岗人数
+  remark: string // 岗位描述
 }
 
 /**

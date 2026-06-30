@@ -150,6 +150,11 @@ declare global {
      * 从服务端获取当前登录用户的信息
      */
     getUserInfos: () => Promise<void>
+    /**
+     * 设置访问令牌方法
+     * 设置当前访问令牌
+     */
+    setAccessToken: (access_token: string) => void
   }
 
   interface UserInfoType {

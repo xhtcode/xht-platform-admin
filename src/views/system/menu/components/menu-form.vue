@@ -18,7 +18,7 @@ const state = reactive<AddUpdateOption<SysMenuOperationRequest>>({
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,
-  addUpdateForm: null,
+  addUpdateForm: { ...sysMenuOperationForm },
 })
 const { addUpdateForm } = toRefs(state)
 const isM = computed(() => addUpdateForm.value.menuType === menuTypeEnums.M.value)
@@ -38,8 +38,6 @@ const show = async (type: 'create' | 'update', id: ModeIdType) => {
       state.title = '修改菜单'
       const { data } = await querySysMenuById(id)
       addUpdateForm.value = data
-    } else {
-      addUpdateForm.value = sysMenuOperationForm
     }
   } finally {
     state.loadingStatus = false
@@ -79,7 +77,7 @@ const submitForm = () => {
  */
 const close = () => {
   if (state.loadingStatus) return
-  addUpdateForm.value = null
+  addUpdateForm.value = { ...sysMenuOperationForm }
   state.visibleStatus = false
   state.operationStatus = 'create'
   state.loadingStatus = false

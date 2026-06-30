@@ -6,6 +6,7 @@ import { useRouteStore } from '@/store/modules/routes.store'
 import type { RouteLocationNormalized, RouteRecordRaw } from 'vue-router'
 import { useTitle } from '@/hooks/use-title'
 import { HOME_PAGE_PATH, PAGE_PATH_LOGIN } from '@/service/constant'
+import { useMessageBox } from '@/hooks/use-message'
 
 const { setTitle } = useTitle()
 /**
@@ -15,7 +16,7 @@ NProgress.configure({ showSpinner: false })
 /**
  * 白名单路由
  */
-const whiteList = ['/login']
+const whiteList = ['/login', '/oauth2']
 
 export function setupPermission() {
   router.beforeEach(async (to, _, next) => {

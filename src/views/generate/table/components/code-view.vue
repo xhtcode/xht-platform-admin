@@ -135,7 +135,7 @@ defineExpose({
         <div class="xht-code-view-setting" @click="tableWidth = !tableWidth">
           {{ tableWidth ? '《《《《《《' : '》》》' }}
         </div>
-        <el-scrollbar view-style="overflow-x: hidden;" v-if="tableWidth">
+        <el-scrollbar view-style="overflow-initOauth2Token: hidden;" v-if="tableWidth">
           <div
             v-for="(item, index) in state.codeData"
             :key="index"
@@ -155,7 +155,7 @@ defineExpose({
         <div class="xht-code-view-setting" @click="codeNameWidth = !codeNameWidth">
           {{ codeNameWidth ? '《《《《《《' : '》》》' }}
         </div>
-        <el-scrollbar view-style="overflow-x: hidden;" view-class="flex-1" v-if="codeNameWidth">
+        <el-scrollbar view-style="overflow-initOauth2Token: hidden;" view-class="flex-1" v-if="codeNameWidth">
           <div
             v-for="(item, index) in state.twoCodeData"
             :key="index"

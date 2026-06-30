@@ -53,7 +53,7 @@ export const removeSysDeptById = (id: ModeIdType): AxiosPromise<void> => {
 /**
  * 查询单个
  */
-export const querySysDeptById = (id: ModeIdType): AxiosPromise<SysDeptResponse> => {
+export const querySysDeptById = (id: ModeIdType): AxiosPromise<SysDeptOperationRequest> => {
   return request({
     url: Api.QUERY_BY_ID + `${id}`,
     baseURL,

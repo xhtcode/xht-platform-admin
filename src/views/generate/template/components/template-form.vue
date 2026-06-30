@@ -27,6 +27,10 @@ const addUpdateForm = defineModel<GenTemplateOperationRequest>('addUpdateForm', 
 const validateStatus = ref<boolean>(false)
 const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
 const rules: FormRules<Required<GenTemplateOperationRequest>> = genTemplateOperationRules
+
+/**
+ * 提交
+ */
 const submitForm = () => {
   loadingStatus.value = true
   addUpdateFormRef.value?.validate(async (valid, invalidFields) => {
@@ -52,6 +56,7 @@ const submitForm = () => {
     }
   })
 }
+
 /**
  * 模板内容改变
  * @param value 改变后的内容

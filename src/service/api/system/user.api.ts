@@ -22,7 +22,6 @@ enum Api {
   QUERY_PAGE = '/sys/user/page',
   RESET_PASSWORD = `/sys/user/reset/`,
   UPDATE_PASSWORD = `/sys/user/update/pwd`,
-  QUERY_ROLE_ID = '/sys/user/role/',
   BIND_USER_ROLE = '/sys/user/role/bind',
 }
 
@@ -120,18 +119,6 @@ export const updatePassword = (passWordInfo: UpdatePwdFrom): AxiosPromise<void> 
     baseURL,
     method: 'post',
     data: passWordInfo,
-  })
-}
-
-/**
- * 查询用户拥有的角色
- * @param userId 用户id
- */
-export const selectRoleIdByUserId = (userId: ModeIdType): AxiosPromise<ModeIdType[]> => {
-  return request({
-    url: Api.QUERY_ROLE_ID + userId,
-    baseURL,
-    method: 'get',
   })
 }
 

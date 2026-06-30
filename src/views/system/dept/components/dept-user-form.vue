@@ -5,12 +5,12 @@ import { userStatusEnums } from '@/service/enums/system/user.enum'
 
 defineOptions({ name: 'DeptUserForm' })
 
-const props = withDefaults(defineProps<DeptUserProps>(), {
-  modelValue: undefined,
-})
 const emits = defineEmits<{
   (e: 'change', user: UserSimpleVo): void
 }>()
+
+const modelValue = defineModel<ModeIdType>('modelValue')
+
 const tableRef = useTemplateRef<any>('tableRef')
 const state = reactive<{
   visibleStatus: boolean

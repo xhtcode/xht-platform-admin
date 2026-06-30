@@ -6,10 +6,12 @@ import { deptStatusEnums } from '@/service/enums/system/dept.enum'
 /**
  * 增改页面 表单类型 默认值
  */
-export const sysDeptOperationForm: Partial<SysDeptOperationRequest> = {
+export const sysDeptOperationForm: SysDeptOperationRequest = {
   parentId: '0', // 父部门ID
   deptStatus: deptStatusEnums.NORMAL.value, // 部门状态,可用值:0,1
   deptSort: 0, // 部门顺序
+  leaderPost: {}, // 负责人职位信息
+  leaderUser: {}, // 负责人用户信息
 }
 
 /**

@@ -5,7 +5,6 @@ import type { SysDeptPostQueryRequest, SysDeptPostResponse } from '@/service/mod
 import { querySysDeptPostPage, removeSysDeptPostById, removeSysDeptPostByIds } from '@/service/api/system/dept.post.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { SysDeptResponse } from '@/service/model/system/dept.model'
-import { SystemFlagEnums } from '@/service/model/base.model'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { sysDeptPostColumnOption } from '@/views/system/dept-post/dept.post.data'
 import { Delete, Edit, Plus, Refresh, Search } from '@element-plus/icons-vue'
@@ -19,7 +18,9 @@ const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 const deptTreeRef = useTemplateRef('deptTreeRef')
 
 const state = reactive<TableQueryPageState<SysDeptPostQueryRequest, SysDeptPostResponse>>({
-  queryParams: {}, // 查询参数
+  queryParams: {
+    ascName: 'postSort',
+  }, // 查询参数
   total: 0, // 总条目数
   pages: 0, // 总页数
   searchStatus: false, // 是否显示搜索区域
@@ -44,6 +45,7 @@ const resetQuery = async () => {
   deptTreeRef.value?.resetHighlightCurrent()
   queryParams.value = {
     deptId: undefined,
+    ascName: 'postSort',
   }
   await handlePageQuery()
 }
@@ -62,27 +64,10 @@ const handleEdit = (row: SysDeptPostResponse) => {
 }
 
 /**
- * 处理删除
- */
-const handleDelete = (row: SysDeptPostResponse) => {
-  state.loadingStatus = true
-  useMessageBox()
-    .confirm('此操作将永久删除部门岗位, 是否继续?')
-    .then(async () => {
-      await removeSysDeptPostById(row.id)
-      useMessage().success('删除部门岗位成功!')
-      await handlePageQuery()
-    })
-    .finally(() => {
-      state.loadingStatus = false
-    })
-}
-
-/**
  * 处理批量删除
  */
-const handleBatchDelete = () => {
-  const ids = state.selectedRows.map((item) => item.id)
+const handleDelete = (row: SysDeptPostResponse | null) => {
+  const ids = row ? [row.id] : state.selectedRows.map((item) => item.id)
   if (!ids || ids.length <= 0) {
     useMessage().error('请选择部门岗位数据')
   }
@@ -143,14 +128,6 @@ const handleDeptClick = (data: SysDeptResponse) => {
               <xht-enum-select v-model="queryParams.postStatus" :data="sysDeptPostStatusEnums" clearable placeholder="请选择岗位状态" />
             </el-form-item>
           </el-col>
-          <el-col :lg="8" :md="8" :sm="12" :xl="4" :xs="24">
-            <el-form-item label="系统内置" prop="systemFlag">
-              <el-select v-model="queryParams.systemFlag" class="w100" placeholder="请选择系统内置">
-                <el-option :value="SystemFlagEnums.YES" label="正常" />
-                <el-option :value="SystemFlagEnums.NO" label="停用" />
-              </el-select>
-            </el-form-item>
-          </el-col>
           <el-col :lg="8" :md="8" :offset="8" :sm="12" :xl="4" :xs="24" class="text-center">
             <el-button :icon="Search" type="primary" @click="handlePageQuery">查询</el-button>
             <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
@@ -181,7 +158,7 @@ const handleDeptClick = (data: SysDeptResponse) => {
           size="small"
           type="danger"
           :disabled="state.multipleStatus"
-          @click="handleBatchDelete"
+          @click="handleDelete(null)"
           v-authorization="['sys:post:remove']"
         >
           批量删除
@@ -198,7 +175,7 @@ const handleDeptClick = (data: SysDeptResponse) => {
       >
         <el-table-column align="center" type="selection" width="55" />
         <xht-column-index :current="queryParams.current" :size="queryParams.size" />
-        <el-table-column v-if="columnOption.postCode?.visible" label="岗位编码" prop="postCode" width="120" />
+        <el-table-column v-if="columnOption.postCode?.visible" label="岗位编码" prop="postCode" width="150" />
         <el-table-column v-if="columnOption.postName?.visible" label="岗位名称" min-width="180" prop="postName" />
         <el-table-column v-if="columnOption.postLimit?.visible" label="员工统计" prop="postLimit" width="120">
           <template #default="{ row }">

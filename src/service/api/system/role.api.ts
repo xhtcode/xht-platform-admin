@@ -1,8 +1,9 @@
 import request from '@/utils/request'
 import type { AxiosPromise } from 'axios'
-import type {
+import {
   RoleSelectedMenuResponse,
   SysRoleMenuBindForm,
+  SysRoleMenuBindVO,
   SysRoleOperationRequest,
   SysRoleQueryRequest,
   SysRoleResponse,
@@ -21,7 +22,7 @@ enum Api {
   QUERY_PAGE = '/sys/role/page',
   QUERY_MENU_BY_ROLE_ID = '/sys/role/select/menu/',
   BIND_MENU_ROLE = '/sys/role/menu/bind',
-  QUERY_ROLE_LIST = '/sys/role/list',
+  QUERY_ROLE_LIST = '/sys/user/role/',
 }
 
 /**
@@ -124,11 +125,12 @@ export const roleMenuBind = (data: SysRoleMenuBindForm): AxiosPromise<void> => {
 }
 
 /**
- * 查询树形结构菜单
+ * 获取当前用户拥有的角色ID列表
+ * @param userId 用户ID
  */
-export const queryToolsRoleList = (): AxiosPromise<SysRoleResponse[]> => {
+export const roleRoleByUserId = (userId: ModeIdType): AxiosPromise<SysRoleMenuBindVO> => {
   return request({
-    url: Api.QUERY_ROLE_LIST,
+    url: Api.QUERY_ROLE_LIST + userId,
     baseURL,
     method: 'get',
   })

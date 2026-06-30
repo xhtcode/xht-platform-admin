@@ -114,6 +114,7 @@ const handleResetPwd = (row: SysUserResponse) => {
     .then(async () => {
       await resetPassword(row.id)
       useMessage().success(`${row.userName}用户密码重置成功!`)
+      await handlePageQuery()
     })
     .finally(() => {
       state.loadingStatus = false
@@ -280,6 +281,7 @@ onMounted(async () => {
               <el-button :icon="Delete" link type="danger" @click="handleDelete(row)" v-authorization="['sys:user:remove']">删除用户</el-button>
               <el-button :icon="Key" link type="warning" @click="handleResetPwd(row)" v-authorization="['sys:user:pwd']">重置密码</el-button>
               <el-button :icon="User" link type="primary" @click="handleUserRole(row)" v-authorization="['sys:user:role:bind']">用户授权</el-button>
+              <el-button>岗位调整</el-button>
             </el-space>
           </template>
         </el-table-column>

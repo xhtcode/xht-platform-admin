@@ -14,7 +14,7 @@ const state = reactive<AddUpdateOption<SysRoleOperationRequest>>({
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,
-  addUpdateForm: null,
+  addUpdateForm: { ...sysRoleOperationForm },
 })
 const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
 const { addUpdateForm } = toRefs(state)
@@ -32,8 +32,6 @@ const show = async (type: 'create' | 'update', id: ModeIdType) => {
       state.title = '修改角色'
       const { data } = await querySysRoleById(id)
       addUpdateForm.value = data
-    } else {
-      addUpdateForm.value = { ...sysRoleOperationForm }
     }
     state.loadingStatus = false
   } catch {
@@ -74,7 +72,7 @@ const submitForm = () => {
  */
 const close = () => {
   if (state.loadingStatus) return
-  addUpdateForm.value = null
+  addUpdateForm.value = { ...sysRoleOperationForm }
   state.visibleStatus = false
   state.operationStatus = 'create'
   addUpdateFormRef.value?.resetFields()

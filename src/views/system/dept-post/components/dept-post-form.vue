@@ -15,11 +15,12 @@ const state = reactive<AddUpdateOption<SysDeptPostOperationRequest>>({
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,
-  addUpdateForm: null,
+  addUpdateForm: { ...sysDeptPostOperationForm },
 })
 const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
 const { addUpdateForm } = toRefs(state)
 const rules: FormRules = sysDeptPostOperationRules
+const deptLeaderStatus = computed<boolean>(() => addUpdateForm.value.deptLeader || false)
 
 /**
  * 打开显示
@@ -33,8 +34,6 @@ const show = async (type: 'create' | 'update', id: ModeIdType) => {
       state.title = '修改部门岗位'
       const { data } = await querySysDeptPostById(id)
       addUpdateForm.value = data
-    } else {
-      addUpdateForm.value = { ...sysDeptPostOperationForm }
     }
   } finally {
     state.loadingStatus = false
@@ -74,7 +73,7 @@ const submitForm = () => {
  */
 const close = () => {
   if (state.loadingStatus) return
-  addUpdateForm.value = null
+  addUpdateForm.value = { ...sysDeptPostOperationForm }
   state.visibleStatus = false
   state.operationStatus = 'create'
   addUpdateFormRef.value?.resetFields()
@@ -108,11 +107,7 @@ defineExpose({
       <el-row>
         <el-col :span="24">
           <el-form-item label="所属部门" prop="deptId">
-            <dept-tree-select
-              v-model="addUpdateForm.deptId"
-              :disabled="addUpdateForm.systemFlag === SystemFlagEnums.YES"
-              placeholder="请选择岗位所属部门"
-            />
+            <dept-tree-select v-model="addUpdateForm.deptId" :disabled="deptLeaderStatus" placeholder="请选择岗位所属部门" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -128,15 +123,17 @@ defineExpose({
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label="岗位排序" prop="postSort">
-            <el-input-number v-model="addUpdateForm.postSort" :max="999" :min="0" class="w-full!" placeholder="请输入岗位排序" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="24">
-          <el-form-item label="岗位限制" prop="postLimit">
-            <el-input-number v-model="addUpdateForm.postLimit" :max="999" :min="1" class="w-full!" placeholder="请输入岗位限制人数">
+          <el-form-item label="岗位编制" prop="quotaNum">
+            <el-input-number
+              v-model="addUpdateForm.quotaNum"
+              :max="999"
+              :min="1"
+              :disabled="deptLeaderStatus"
+              class="w-full!"
+              placeholder="请输入岗位编制人数"
+            >
               <template #suffix>
-                <span>{{ addUpdateForm.postHave ? addUpdateForm.postHave : 0 }}/{{ addUpdateForm.postLimit }}</span>
+                <span>{{ addUpdateForm.currentNum ? addUpdateForm.currentNum : 0 }}/{{ addUpdateForm.quotaNum }}</span>
               </template>
             </el-input-number>
           </el-form-item>
@@ -145,13 +142,26 @@ defineExpose({
           <el-form-item label="岗位状态" prop="postStatus">
             <xht-enum-select
               v-model="addUpdateForm.postStatus"
-              :disabled="addUpdateForm.systemFlag === SystemFlagEnums.YES"
+              :disabled="deptLeaderStatus"
               :data="sysDeptPostStatusEnums"
               clearable
               placeholder="请选择岗位状态"
             />
           </el-form-item>
         </el-col>
+        <el-col :span="24">
+          <el-form-item label="岗位排序" prop="postSort">
+            <el-input-number
+              v-model="addUpdateForm.postSort"
+              :max="999"
+              :min="1"
+              :disabled="deptLeaderStatus"
+              class="w-full!"
+              placeholder="请输入岗位排序"
+            />
+          </el-form-item>
+        </el-col>
+
         <el-col :span="24">
           <el-form-item label="岗位描述" prop="remark">
             <el-input

@@ -41,7 +41,7 @@ export const sysUserOperationRules: FormRules<Required<SysUserOperationRequest>>
   'profile.idCard': [
     { required: true, message: '请输入身份证号', trigger: ['blur', 'change'] },
     {
-      pattern: /(^\d{18}$)|(^\d{17}(\d|X|x)$)/,
+      pattern: /(^\d{18}$)|(^\d{17}(\d|X|initOauth2Token)$)/,
       message: '请输入正确的18位身份证号',
       trigger: 'blur',
     },

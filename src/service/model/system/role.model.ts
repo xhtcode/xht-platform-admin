@@ -48,6 +48,17 @@ export interface RoleSelectedMenuResponse {
 export interface SysRoleOperationRequest extends Partial<SysRoleResponse>, BasicFormRequest {}
 
 /**
+ * 角色菜单绑定VO
+ */
+export interface SysRoleMenuBindVO extends BasicResponse {
+  userId: ModeIdType // 用户ID
+  bindRoleIds: ModeIdType[] // 已绑定的roleIds
+  roles: SysRoleResponse[] // 全部的角色信息
+  allChecked: boolean // 是否全选
+  indeterminate: boolean // 是否半选
+}
+
+/**
  * 角色菜单绑定请求参数
  */
 export interface SysRoleMenuBindForm extends BasicFormRequest {

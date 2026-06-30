@@ -5,27 +5,26 @@ import type { SysDeptOperationRequest } from '@/service/model/system/dept.model'
 import type { UserSimpleVo } from '@/service/model/system/user.model'
 import { sysDeptOperationForm, sysDeptOperationRules } from '@/views/system/dept/dept.data'
 import { useMessage } from '@/hooks/use-message'
-import { Search } from '@element-plus/icons-vue'
 import { deptStatusEnums } from '@/service/enums/system/dept.enum'
+import DeptUserForm from '@/views/system/dept/components/dept-user-form.vue'
 
 defineOptions({ name: 'SysDeptAddOrUpdate' })
 
 const emits = defineEmits(['success'])
-
-const DeptUserForm = defineAsyncComponent(() => import('@/views/system/dept/components/dept-user-form.vue'))
 
 const state = reactive<AddUpdateOption<SysDeptOperationRequest>>({
   title: '增加部门',
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,
-  addUpdateForm: null,
+  addUpdateForm: { ...sysDeptOperationForm },
 })
 const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
 const { addUpdateForm } = toRefs(state)
 const rules: FormRules<Required<SysDeptOperationRequest>> = sysDeptOperationRules
 const useDeptUserDialog = useTemplateRef('deptUserDialog')
 const currentUser = ref<UserSimpleVo>()
+
 /**
  * 打开部门主管选择
  */
@@ -55,8 +54,6 @@ const show = async (type: 'create' | 'update', id: ModeIdType) => {
       state.title = '修改系统部门'
       const { data } = await querySysDeptById(id)
       addUpdateForm.value = data
-    } else {
-      addUpdateForm.value = { ...sysDeptOperationForm }
     }
   } finally {
     state.loadingStatus = false
@@ -96,7 +93,7 @@ const submitForm = () => {
  */
 const close = () => {
   if (state.loadingStatus) return
-  addUpdateForm.value = null
+  addUpdateForm.value = { ...sysDeptOperationForm }
   state.visibleStatus = false
   state.operationStatus = 'create'
   addUpdateFormRef.value?.resetFields()
@@ -128,58 +125,41 @@ defineExpose({
       scroll-to-error
     >
       <el-row>
-        <el-col :lg="12" :sm="24" :xs="24">
+        <el-col :span="24">
           <el-form-item label="上级部门" prop="parentId">
             <dept-tree-select v-model="addUpdateForm.parentId" placeholder="请选择上级部门" show-top-dept />
           </el-form-item>
         </el-col>
-        <el-col :lg="12" :sm="24" :xs="24">
-          <el-form-item label="部门主管" prop="leaderName">
-            <el-input v-model="addUpdateForm.leaderName" placeholder="请选择部门主管" readonly>
-              <template #append>
-                <el-button :icon="Search" type="primary" @click="showDeptUser" />
-              </template>
-            </el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :lg="12" :sm="24" :xs="24">
+        <el-col :span="12">
           <el-form-item label="部门名称" prop="deptName">
             <el-input v-model="addUpdateForm.deptName" :maxlength="100" show-word-limit placeholder="请输入部门名称" />
           </el-form-item>
         </el-col>
-        <el-col :lg="12" :sm="24" :xs="24">
+        <el-col :span="12">
           <el-form-item label="部门编码" prop="deptCode">
             <el-input v-model="addUpdateForm.deptCode" :maxlength="9" show-word-limit placeholder="请输入部门编码" />
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row>
-        <el-col :lg="12" :sm="24" :xs="24">
+        <el-col :span="12">
           <el-form-item label="部门状态" prop="deptStatus">
             <xht-enum-select v-model="addUpdateForm.deptStatus" :data="deptStatusEnums" clearable placeholder="请选择部门状态" />
           </el-form-item>
         </el-col>
-        <el-col :lg="12" :sm="24" :xs="24">
+        <el-col :span="12">
           <el-form-item label="部门顺序" prop="deptSort">
             <el-input-number v-model="addUpdateForm.deptSort" :max="999" :min="0" class="w-full!" placeholder="请输入部门顺序" />
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row>
-        <el-col :lg="12" :sm="24" :xs="24">
+        <el-col :span="12">
           <el-form-item label="联系电话" prop="phone">
             <el-input v-model="addUpdateForm.phone" maxlength="11" show-word-limit placeholder="请输入联系电话" />
           </el-form-item>
         </el-col>
-        <el-col :lg="12" :sm="24" :xs="24">
+        <el-col :span="12">
           <el-form-item label="联系邮箱" prop="email">
             <el-input v-model="addUpdateForm.email" maxlength="50" show-word-limit placeholder="请输入联系邮箱" />
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row>
         <el-col :span="24">
           <el-form-item label="部门备注" prop="remark">
             <el-input
@@ -194,6 +174,26 @@ defineExpose({
           </el-form-item>
         </el-col>
       </el-row>
+      <div class="w-full" v-if="state.operationStatus === 'update'">
+        <el-divider content-position="left">
+          部门管理信息
+          <el-button type="primary" size="small">编辑</el-button>
+        </el-divider>
+        <el-descriptions border :column="2" label-width="120px">
+          <el-descriptions-item label="岗位编码" align="right">
+            {{ addUpdateForm.leaderPost.postCode }}
+          </el-descriptions-item>
+          <el-descriptions-item label="岗位编码" align="right">{{ addUpdateForm.leaderPost?.postCode }}</el-descriptions-item>
+          <el-descriptions-item label="岗位名称" align="right">{{ addUpdateForm.leaderPost?.postName }}</el-descriptions-item>
+          <el-descriptions-item label="岗位类型" align="right">{{ addUpdateForm.leaderPost?.postType }}</el-descriptions-item>
+          <el-descriptions-item label="岗位状态" align="right">{{ addUpdateForm.leaderPost?.postStatus }}</el-descriptions-item>
+          <el-descriptions-item label="岗位描述" align="right" :span="2">{{ addUpdateForm.leaderPost?.remark }}</el-descriptions-item>
+          <el-descriptions-item label="账号" align="right">{{ addUpdateForm.leaderUser?.userName }}</el-descriptions-item>
+          <el-descriptions-item label="昵称" align="right">{{ addUpdateForm.leaderUser?.nickName }}</el-descriptions-item>
+          <el-descriptions-item label="状态" align="right">{{ addUpdateForm.leaderUser?.userStatus }}</el-descriptions-item>
+          <el-descriptions-item label="联系电话" align="right">{{ addUpdateForm.leaderUser?.userPhone }}</el-descriptions-item>
+        </el-descriptions>
+      </div>
     </el-form>
     <template #footer>
       <el-button :disabled="state.loadingStatus" @click="close">取 消</el-button>
