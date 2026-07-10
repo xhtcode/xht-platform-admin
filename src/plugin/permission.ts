@@ -16,7 +16,7 @@ NProgress.configure({ showSpinner: false })
 /**
  * 白名单路由
  */
-const whiteList = ['/login', '/oauth2']
+const whiteList = ['/login', '/oauth2', '/process']
 
 export function setupPermission() {
   router.beforeEach(async (to, _, next) => {

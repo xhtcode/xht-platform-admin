@@ -1,6 +1,4 @@
 // src/types/env.d.ts
-import type { Directive } from 'vue'
-import { ElementLoading, LoadingBinding } from 'element-plus/es/components/loading/src/directive'
 
 interface ImportMetaEnv {
   /**

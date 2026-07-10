@@ -1,0 +1,26 @@
+/*新增：去除bpmn画布点击后的焦点边框*/
+.djs-container:focus,
+.djs-container svg:focus,
+.bjs-container:focus {
+  outline: none !important;
+}
+
+.djs-minimap {
+  top: 10px !important;
+  right: 10px !important;
+}
+
+/* 修改小地图尺寸 size */
+.djs-minimap .map {
+
+}
+
+/*  隐藏展开/收起按钮 toggle */
+.djs-minimap .toggle {
+  display: none !important;
+}
+.el-collapse-item.is-disabled{
+  .el-collapse-item__header{
+    cursor: pointer !important;
+  }
+}

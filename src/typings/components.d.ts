@@ -12,6 +12,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    BpmnEditor: typeof import('./../components/bpmn-editor/index.vue')['default']
     CodeMonacoEditor: typeof import('./../components/code-monaco-editor/index.vue')['default']
     ColumnDictSelect: typeof import('./../components/generate/column-dict-select/index.vue')['default']
     ColumnFormSelect: typeof import('./../components/generate/column-form-select/index.vue')['default']
@@ -33,6 +34,7 @@ declare module 'vue' {
     ElBreadcrumb: typeof import('element-plus/es')['ElBreadcrumb']
     ElBreadcrumbItem: typeof import('element-plus/es')['ElBreadcrumbItem']
     ElButton: typeof import('element-plus/es')['ElButton']
+    ElButtonGroup: typeof import('element-plus/es')['ElButtonGroup']
     ElCard: typeof import('element-plus/es')['ElCard']
     ElCheckbox: typeof import('element-plus/es')['ElCheckbox']
     ElCheckboxButton: typeof import('element-plus/es')['ElCheckboxButton']
@@ -68,6 +70,7 @@ declare module 'vue' {
     ElMenuItem: typeof import('element-plus/es')['ElMenuItem']
     ElOption: typeof import('element-plus/es')['ElOption']
     ElPagination: typeof import('element-plus/es')['ElPagination']
+    ElPopover: typeof import('element-plus/es')['ElPopover']
     ElRadio: typeof import('element-plus/es')['ElRadio']
     ElRadioButton: typeof import('element-plus/es')['ElRadioButton']
     ElRadioGroup: typeof import('element-plus/es')['ElRadioGroup']
@@ -131,6 +134,7 @@ declare module 'vue' {
 
 // For TSX support
 declare global {
+  const BpmnEditor: typeof import('./../components/bpmn-editor/index.vue')['default']
   const CodeMonacoEditor: typeof import('./../components/code-monaco-editor/index.vue')['default']
   const ColumnDictSelect: typeof import('./../components/generate/column-dict-select/index.vue')['default']
   const ColumnFormSelect: typeof import('./../components/generate/column-form-select/index.vue')['default']
@@ -152,6 +156,7 @@ declare global {
   const ElBreadcrumb: typeof import('element-plus/es')['ElBreadcrumb']
   const ElBreadcrumbItem: typeof import('element-plus/es')['ElBreadcrumbItem']
   const ElButton: typeof import('element-plus/es')['ElButton']
+  const ElButtonGroup: typeof import('element-plus/es')['ElButtonGroup']
   const ElCard: typeof import('element-plus/es')['ElCard']
   const ElCheckbox: typeof import('element-plus/es')['ElCheckbox']
   const ElCheckboxButton: typeof import('element-plus/es')['ElCheckboxButton']
@@ -187,6 +192,7 @@ declare global {
   const ElMenuItem: typeof import('element-plus/es')['ElMenuItem']
   const ElOption: typeof import('element-plus/es')['ElOption']
   const ElPagination: typeof import('element-plus/es')['ElPagination']
+  const ElPopover: typeof import('element-plus/es')['ElPopover']
   const ElRadio: typeof import('element-plus/es')['ElRadio']
   const ElRadioButton: typeof import('element-plus/es')['ElRadioButton']
   const ElRadioGroup: typeof import('element-plus/es')['ElRadioGroup']

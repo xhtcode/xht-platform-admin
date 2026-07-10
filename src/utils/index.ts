@@ -1,4 +1,3 @@
-import { useMessage } from '@/hooks/use-message'
 import _ from 'lodash'
 import { AxiosResponse } from 'axios'
 /**
@@ -32,6 +31,7 @@ const handleDownloadFile = (response: AxiosResponse, fileName?: string) => {
   const contentType = _.isUndefined(response.headers['content-type']) ? response.headers['Content-Type'] : response.headers['content-type']
   console.log(response.headers)
   // 构建下载数据
+  // @ts-ignore
   const url = window.URL.createObjectURL(new Blob([response.data], { type: contentType }))
   const link = document.createElement('a')
   link.style.display = 'none'
@@ -60,4 +60,18 @@ function getIntersectionLength(dataArray: string[], checkArray: string[]): numbe
   return _.intersection(dataArray, checkArray)?.length || 0
 }
 
-export { generateUUID, handleDownloadFile, getIntersectionLength }
+/**
+ * 文件下载方法
+ * @param href
+ * @param filename
+ */
+function downloadFile(href: string, filename: string) {
+  if (href && filename) {
+    const a: HTMLAnchorElement = document.createElement('a')
+    a.download = filename //指定下载的文件名
+    a.href = href //  URL对象
+    a.click() // 模拟点击
+    URL.revokeObjectURL(a.href) // 释放URL 对象
+  }
+}
+export { generateUUID, handleDownloadFile, getIntersectionLength, downloadFile }

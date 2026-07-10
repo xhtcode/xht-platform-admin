@@ -10,7 +10,7 @@ const StaticRouter: RouteRecordRaw[] = [
     component: () => import('@/views/login/index.vue'),
     meta: { hiddenStatus: true, authStatus: true },
   },
-    {
+  {
     path: '/process',
     name: 'ProcessIndex',
     component: () => import('@/views/process/index.vue'),
