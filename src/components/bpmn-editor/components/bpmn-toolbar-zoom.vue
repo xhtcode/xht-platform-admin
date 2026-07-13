@@ -12,6 +12,9 @@ const currentScale = computed<any>(() => {
 })
 const bpmnStore = useBpmnStore()
 const { canvas, modeler } = storeToRefs(bpmnStore)
+/**
+ * 缩小
+ */
 const zoomOut = () => {
   zoomNumber.value = zoomNumber.value - zoomStep
   if (currentScale.value <= 0.5) {
@@ -19,10 +22,16 @@ const zoomOut = () => {
   }
   changeZoom()
 }
+/**
+ * 重置缩放
+ */
 const zoomReset = () => {
   zoomNumber.value = 1
   changeZoom()
 }
+/**
+ * 放大
+ */
 const zoomIn = () => {
   zoomNumber.value = zoomNumber.value + zoomStep
   if (zoomNumber.value >= 5) {
@@ -30,6 +39,9 @@ const zoomIn = () => {
   }
   changeZoom()
 }
+/**
+ * 改变缩放
+ */
 const changeZoom = () => {
   canvas.value && canvas.value.zoom(zoomNumber.value, zoomNumber.value === 'fit-viewport' ? undefined : { x: 0, y: 0 })
 }

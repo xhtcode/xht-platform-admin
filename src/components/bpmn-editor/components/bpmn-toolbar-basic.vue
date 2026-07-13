@@ -26,6 +26,36 @@ const saveBpmnXml = () => {
   useMessage().success(`流程名称：\`${processName}\`保存成功`)
 }
 /**
+ * 导入流程xml
+ */
+const importXmlFile = () => {
+  importRef.value?.click()
+}
+/**
+ * 文件改变
+ */
+const changeImportFile = () => {
+  if (importRef.value && importRef.value.files) {
+    const file = importRef.value.files[0]
+    const reader = new FileReader()
+    reader.readAsText(file)
+    reader.onload = function () {
+      const xmlStr = this.result
+      importXML(xmlStr as string)
+        .then(() => {
+          const processName = getProcessName()
+          useMessage().success(`流程: \`${processName}\` 导入成功`)
+        })
+        .catch((e) => {
+          useMessage().error(e.message)
+        })
+    }
+    importRef.value.value = ''
+    importRef.value.files = null
+  }
+}
+
+/**
  * 获取流程名称
  */
 const getProcessName = () => {
@@ -93,34 +123,6 @@ function setEncoded(type: string, filename: string, data: string) {
     filename: `${filename}.${type.toLowerCase()}`,
     href: `data:application/${type === 'svg' ? 'text/xml' : 'bpmn20-xml'};charset=UTF-8,${encodedData}`,
     data: data,
-  }
-}
-/**
- * 导入流程xml
- */
-const importXmlFile = () => {
-  importRef.value?.click()
-}
-/**
- * 文件改变
- */
-const changeImportFile = () => {
-  if (importRef.value && importRef.value.files) {
-    const file = importRef.value.files[0]
-    const reader = new FileReader()
-    reader.readAsText(file)
-    reader.onload = function () {
-      const xmlStr = this.result
-      importXML(xmlStr as string)
-        .then(() => {
-          useMessage().success('导入流程文件成功')
-        })
-        .catch((e) => {
-          useMessage().error(e.message)
-        })
-    }
-    importRef.value.value = ''
-    importRef.value.files = null
   }
 }
 </script>

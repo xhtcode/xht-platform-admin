@@ -16,14 +16,22 @@ const { importXML } = useBpmnHooks()
 const { modeler } = storeToRefs(bpmnStore)
 const command = computed(() => modeler.value?.get<CommandStack>('commandStack'))
 const loadingStatus = ref<boolean>(false)
+
+/**
+ * 上一步
+ */
 const undo = () => {
   command.value && command.value?.canUndo() && command.value?.undo()
 }
-
+/**
+ * 下一步
+ */
 const redo = () => {
   command.value && command.value?.canRedo() && command.value?.redo()
 }
-
+/**
+ * 重置
+ */
 const restart = async () => {
   loadingStatus.value = true
   command.value && command.value?.clear()

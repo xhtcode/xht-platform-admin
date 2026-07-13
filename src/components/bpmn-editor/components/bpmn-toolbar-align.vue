@@ -2,7 +2,7 @@
 import { useBpmnStore } from '@/store/modules/bpmn.store'
 import { storeToRefs } from 'pinia'
 import { useMessage } from '@/hooks/use-message'
-import { Refresh } from '@element-plus/icons-vue'
+import { Operation } from '@element-plus/icons-vue'
 
 defineOptions({
   name: 'BpmnToolbarAlign',
@@ -40,27 +40,27 @@ const fitAuto = () => {
     <el-tooltip content="自适应" placement="bottom">
       <el-button @click="fitAuto">
         <el-icon :size="16">
-          <refresh />
+          <Operation />
         </el-icon>
       </el-button>
     </el-tooltip>
     <el-tooltip content="左对齐" placement="bottom">
-      <el-button @click="alignElements('left')"><div class="i-common-align-start-vertical"></div></el-button>
+      <el-button @click="alignElements('left')"><div class="i-common-align-end-vertical"></div></el-button>
     </el-tooltip>
     <el-tooltip content="水平居中" placement="bottom">
-      <el-button @click="alignElements('center')"><div class="i-common-align-center-vertical"></div></el-button>
+      <el-button @click="alignElements('center')"><div class="i-common-align-center-horizontal"></div></el-button>
     </el-tooltip>
     <el-tooltip content="右对齐" placement="bottom">
-      <el-button @click="alignElements('right')"><div class="i-common-align-end-vertical"></div></el-button>
+      <el-button @click="alignElements('right')"><div class="i-common-align-start-vertical"></div></el-button>
     </el-tooltip>
     <el-tooltip content="上对齐" placement="bottom">
-      <el-button @click="alignElements('top')"><div class="i-common-align-start-horizontal"></div></el-button>
+      <el-button @click="alignElements('top')"><div class="i-common-align-end-horizontal"></div></el-button>
     </el-tooltip>
     <el-tooltip content="垂直居中" placement="bottom">
-      <el-button @click="alignElements('middle')"><div class="i-common-align-center-horizontal"></div></el-button>
+      <el-button @click="alignElements('middle')"><div class="i-common-align-center-vertical"></div></el-button>
     </el-tooltip>
     <el-tooltip content="下对齐" placement="bottom">
-      <el-button @click="alignElements('bottom')"><div class="i-common-align-end-horizontal"></div></el-button>
+      <el-button @click="alignElements('bottom')"><div class="i-common-align-start-horizontal"></div></el-button>
     </el-tooltip>
   </el-button-group>
 </template>
