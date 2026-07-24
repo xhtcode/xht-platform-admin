@@ -15,7 +15,6 @@ const columnInfo = defineModel<GenColumnInfoResponse[]>('columnInfo', {
 })
 const tableInfo = defineModel<GenTableInfoResponse>('tableInfo', {
   required: true,
-  default: () => {},
 })
 
 const columnInfoSelect = computed(() =>
@@ -126,6 +125,7 @@ defineExpose({
           </el-select>
         </template>
       </el-table-column>
+      <!-- @vue-generic {GenTableColumnQueryResponse} -->
       <el-table-column label="查询列">
         <template #default="{ row }">
           <el-select

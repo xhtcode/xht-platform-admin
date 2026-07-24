@@ -12,15 +12,14 @@
 
 /* 修改小地图尺寸 size */
 .djs-minimap .map {
-
 }
 
 /*  隐藏展开/收起按钮 toggle */
 .djs-minimap .toggle {
   display: none !important;
 }
-.el-collapse-item.is-disabled{
-  .el-collapse-item__header{
+.el-collapse-item.is-disabled {
+  .el-collapse-item__header {
     cursor: pointer !important;
   }
 }

@@ -7,6 +7,6 @@ const { toggle: toggleFullScreen, isFullscreen } = useFullscreen()
 
 <template>
   <div class="header-tool-item" @click="toggleFullScreen">
-    <div :class="isFullscreen ? 'i-common-fullscreen-exit' : 'i-common-fullscreen'" class="size-20px" />
+    <div :class="isFullscreen ? 'i-common-fullscreen-exit' : 'i-common-fullscreen'" class="w-18px h-18px" />
   </div>
 </template>

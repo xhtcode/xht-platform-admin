@@ -1,3 +1,5 @@
+import type { CheckboxValueType } from 'element-plus'
+
 /**
  * 字典多选属性
  */

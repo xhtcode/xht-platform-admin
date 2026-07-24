@@ -119,7 +119,7 @@ onMounted(async () => {
       empty-text="暂无匹配数据 🔍 试试调整筛选条件吧！"
       highlight-current-row
       border
-      @current-change="handleCurrentChange"
+      @current-change="(currentRow, _) => handleCurrentChange(currentRow!)"
     >
       <xht-column-index :current="queryParams.current" :size="queryParams.size" />
       <el-table-column v-if="columnOption.groupName?.visible" label="分组名称" min-width="200" prop="groupName" />
@@ -130,6 +130,7 @@ onMounted(async () => {
       <el-table-column v-if="columnOption.createTime?.visible" label="创建时间" prop="createTime" width="180" />
       <el-table-column v-if="columnOption.updateBy?.visible" label="更新人" prop="updateBy" width="160" />
       <el-table-column v-if="columnOption.updateTime?.visible" label="更新时间" prop="updateTime" width="180" />
+      <!-- @vue-generic {GenTemplateGroupResponse} -->
       <el-table-column label="操作" fixed="right" width="220">
         <template #default="{ row }">
           <el-space wrap class="flex-center">

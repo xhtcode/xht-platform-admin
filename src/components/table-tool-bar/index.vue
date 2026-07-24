@@ -18,7 +18,9 @@ const showSearch = defineModel<boolean>('showSearch', {
 })
 const columnData = defineModel<ColumnConfig<any>>('columnData', {
   required: false,
-  default: {},
+  default: () => {
+    return {}
+  },
 })
 const checkAllStatus = ref<boolean>(false)
 const indeterminateStatus = ref<boolean>(false)

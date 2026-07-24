@@ -2,16 +2,16 @@ import request from '@/utils/request'
 import { CaptchaResponseType, LoginRequestType } from '@/service/model/login/login.model'
 import type { AxiosPromise } from 'axios'
 
-const baseURL = import.meta.env.VITE_AUTH_API_PREFIX
-const basicAuth = 'Basic ' + window.btoa('oidc-client:secret')
+const baseAdminURL = import.meta.env.VITE_ADMIN_API_PREFIX
+const baseAuthURL = import.meta.env.VITE_AUTH_API_PREFIX
 
 /**
  * 获取验证码信息
  */
 export const generateCaptcha = (captchaKey: any): AxiosPromise<CaptchaResponseType> => {
   return request({
-    url: '/login/captcha',
-    baseURL,
+    url: '/oauth2/login/captcha',
+    baseURL: baseAuthURL,
     method: 'post',
     headers: {
       skipToken: true,
@@ -26,22 +26,16 @@ export const generateCaptcha = (captchaKey: any): AxiosPromise<CaptchaResponseTy
  * 登录
  */
 export const loginInPassWord = (data: LoginRequestType): AxiosPromise<TokenInfoType> => {
-  const encPassword = data.password
   // 密码加密
   return request({
-    url: '/oauth2/token',
-    baseURL,
+    url: '/login/form',
+    baseURL: baseAdminURL,
     method: 'post',
     headers: {
       skipToken: true,
-      Authorization: basicAuth,
-      'Content-Type': 'multipart/form-data;',
     },
     data: {
       ...data,
-      password: encPassword,
-      grant_type: 'password',
-      scope: 'openid',
     },
   })
 }

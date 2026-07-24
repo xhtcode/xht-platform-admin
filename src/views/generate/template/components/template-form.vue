@@ -18,9 +18,11 @@ const loadingStatus = defineModel<boolean>('loadingStatus', {
 })
 
 const addUpdateForm = defineModel<GenTemplateOperationRequest>('addUpdateForm', {
-  required: true,
-  default: {
-    ...genTemplateOperationForm,
+  required: false,
+  default: () => {
+    return {
+      ...genTemplateOperationForm,
+    }
   },
 })
 

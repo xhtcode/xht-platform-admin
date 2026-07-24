@@ -27,8 +27,8 @@ const { loadingStatus, dictData } = useDictHooks(props.dictCode)
 /**
  * 字典单选组件发生改变的时候
  */
-const handlerChange = (value?: string) => {
-  emits('change', value)
+const handlerChange = (value?: string | number | boolean) => {
+  emits('change', String(value))
 }
 </script>
 

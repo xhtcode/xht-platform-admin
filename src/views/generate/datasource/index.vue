@@ -156,6 +156,7 @@ onMounted(async () => {
           <el-tag v-else type="danger">{{ row.lastTestTime }}</el-tag>
         </template>
       </el-table-column>
+      <!-- @vue-generic {GenDataSourceResponse} -->
       <el-table-column label="操作" fixed="right" width="220">
         <template #default="{ row }">
           <el-space wrap class="flex-center">

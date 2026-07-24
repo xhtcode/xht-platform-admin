@@ -181,6 +181,7 @@ onMounted(async () => {
       <el-table-column v-if="columnOption.codeComment?.visible" label="代码注释" min-width="260" prop="codeComment" show-overflow-tooltip />
       <el-table-column v-if="columnOption.tableCreateTime?.visible" label="表创建时间" prop="tableCreateTime" sortable width="180" />
       <el-table-column v-if="columnOption.tableUpdateTime?.visible" label="表更新时间" prop="tableUpdateTime" sortable width="180" />
+      <!-- @vue-generic {GenTableInfoResponse} -->
       <el-table-column label="操作" fixed="right" width="220">
         <template #default="{ row }">
           <el-space wrap class="flex-center">

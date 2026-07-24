@@ -234,7 +234,7 @@ watch(
       </el-tab-pane>
     </el-tabs>
     <div class="xht-tags-tool" @click="handleContextmenu($event)">
-      <el-icon :size="22">
+      <el-icon :size="16">
         <ArrowDownBold />
       </el-icon>
     </div>
@@ -246,7 +246,7 @@ watch(
 @use '@/styles/variables' as va;
 
 .xht-tags-container {
-  $tags-tool-width: 50px;
+  $tags-tool-width: 28px;
   display: flex;
   align-items: center;
   width: 100%;
@@ -257,7 +257,7 @@ watch(
   }
 
   .el-tabs__header {
-    padding: 0 0 0 0;
+    padding: 0;
     height: va.$tags-height;
     box-sizing: border-box;
     margin: 0;
@@ -280,7 +280,7 @@ watch(
       justify-content: center;
       height: 100%;
       font-weight: bold;
-      font-size: 24px;
+      font-size: 14px;
 
       &:hover {
         color: var(--el-color-primary);
@@ -289,6 +289,7 @@ watch(
 
     .el-tabs__nav-prev {
       @extend .base-nav_btn;
+      font-size: 16px;
       border-right: 1px solid var(--xht-border-color);
     }
 
@@ -305,6 +306,8 @@ watch(
     color: #afafaf;
     border: none !important;
     user-select: none;
+    height: va.$tags-height !important;
+    font-size: 12px;
 
     .el-icon {
       width: 14px !important;
@@ -316,7 +319,7 @@ watch(
       &::before {
         position: absolute;
         bottom: 0;
-        width: 100%;
+        width: 90%;
         height: 0;
         content: '';
         border-bottom: 2px solid var(--el-color-primary) !important;
@@ -330,7 +333,7 @@ watch(
     &::before {
       position: absolute;
       bottom: 0;
-      width: 100%;
+      width: 90%;
       height: 0;
       content: '';
       border-bottom: 2px solid var(--el-color-primary) !important;
@@ -338,16 +341,14 @@ watch(
   }
 
   .xht-tabs-icon {
-    width: 14px;
-    height: 14px;
-    font-size: 12px;
-    position: relative;
-    left: -7px;
+    width: 12px;
+    height: 12px;
+    margin-right: 5px;
   }
 
   .is-closable {
-    padding-left: 20px !important;
-    padding-right: 20px !important;
+    padding-left: 10px !important;
+    padding-right: 15px !important;
   }
 
   .xht-tags-tool {

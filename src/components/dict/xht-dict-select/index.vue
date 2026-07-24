@@ -50,9 +50,8 @@ const handlerChange = (value?: string | string[]) => {
 /**
  * 字典单选组件发生改变的时候
  */
-const handlerRemoveTag = (value: string) => {
-  console.log(value)
-  emits('remove-tag', value)
+const handlerRemoveTag = (value: unknown) => {
+  emits('remove-tag', String(value))
 }
 </script>
 

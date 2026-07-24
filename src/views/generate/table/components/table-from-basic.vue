@@ -3,7 +3,6 @@ import type { GenTableInfoResponse } from '@/service/model/generate/table.model'
 
 const tableInfo = defineModel<GenTableInfoResponse>('tableInfo', {
   required: true,
-  default: () => {},
 })
 const restaurants = ref<any[]>([{ value: 'system' }, { value: 'generate' }])
 /**

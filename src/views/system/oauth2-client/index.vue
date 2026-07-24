@@ -188,7 +188,7 @@ onMounted(async () => {
         size="small"
         type="danger"
         :disabled="state.multipleStatus"
-        @click="handleDelete"
+        @click="handleDelete()"
         v-authorization="['sys:oauth2:client:remove']"
       >
         批量删除
@@ -204,10 +204,10 @@ onMounted(async () => {
     >
       <el-table-column align="center" type="selection" fixed="left" width="55" />
       <xht-column-index :current="queryParams.current" fixed="left" :size="queryParams.size" />
-      <el-table-column v-if="columnOption.clientId?.visible" fixed="left" label="客户端标识" prop="clientId" width="160" />
-      <el-table-column v-if="columnOption.clientName?.visible" label="名称" prop="clientName" width="160" />
-      <el-table-column v-if="columnOption.accessTokenValidity?.visible" label="请求令牌有效时间" prop="accessTokenValidity" width="180" />
-      <el-table-column v-if="columnOption.refreshTokenValidity?.visible" label="刷新令牌有效时间" prop="refreshTokenValidity" width="180" />
+      <el-table-column v-if="columnOption.clientId?.visible" fixed="left" label="客户端标识" prop="clientId" min-width="160" />
+      <el-table-column v-if="columnOption.clientName?.visible" label="客户端名称" prop="clientName" min-width="160" />
+      <el-table-column v-if="columnOption.accessTokenValidity?.visible" label="令牌有效时间" prop="accessTokenValidity" width="120" />
+      <el-table-column v-if="columnOption.refreshTokenValidity?.visible" label="刷新有效时间" prop="refreshTokenValidity" width="120" />
       <el-table-column v-if="columnOption.clientIdIssuedAt?.visible" label="发布时间" prop="clientIdIssuedAt" width="180" />
       <el-table-column v-if="columnOption.clientSecretExpiresAt?.visible" label="过期时间" prop="clientSecretExpiresAt" width="180" />
       <el-table-column v-if="columnOption.clientAuthenticationMethods?.visible" label="认证方式" prop="clientAuthenticationMethods" width="160">
@@ -259,6 +259,7 @@ onMounted(async () => {
       <el-table-column v-if="columnOption.createTime?.visible" label="创建时间" prop="createTime" width="180" />
       <el-table-column v-if="columnOption.updateBy?.visible" label="更新人" prop="updateBy" width="160" />
       <el-table-column v-if="columnOption.updateTime?.visible" label="更新时间" prop="updateTime" width="180" />
+      <!-- @vue-generic {SysOauth2ClientResponse} -->
       <el-table-column label="操作" fixed="right" width="220">
         <template #default="{ row }">
           <el-space wrap class="flex-center">

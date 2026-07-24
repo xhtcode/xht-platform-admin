@@ -4,6 +4,16 @@ import { useRoute, useRouter } from 'vue-router'
 import { useThemeStore } from '@/store/modules/theme.store'
 
 defineOptions({ name: 'BreadCrumb' })
+/**
+ * 工作台路由
+ */
+const HomeDynamicRouter: any = {
+  path: '/',
+  meta: {
+    title: '首页',
+    icon: 'i-menu-dashboard',
+  },
+}
 const themeStore = useThemeStore()
 const route = useRoute()
 const breadcrumbList = ref<any[]>([])
@@ -11,11 +21,13 @@ const router = useRouter()
 const { currentRoute } = useRouter()
 const initBreadCrumb = (to: any) => {
   const currentRoute = to ? to : route
-  const breadcrumbListEmp = currentRoute.matched.filter((item: RouteLocationNormalizedLoaded) => !item.meta?.breadcrumb)
+  const breadcrumbListEmp = currentRoute.matched.filter(
+    (item: RouteLocationNormalizedLoaded) => !item.meta?.breadcrumb && (item.meta?.title || '').indexOf('首页') === -1
+  )
   if (breadcrumbListEmp.length > 0) {
-    breadcrumbList.value = [...breadcrumbListEmp]
+    breadcrumbList.value = [HomeDynamicRouter, ...breadcrumbListEmp]
   } else {
-    breadcrumbList.value = []
+    breadcrumbList.value = [HomeDynamicRouter]
   }
 }
 const handleRedirect = (item: any) => {
@@ -44,14 +56,14 @@ watch(
     <transition-group name="breadcrumb">
       <el-breadcrumb-item v-for="(item, index) in breadcrumbList" :key="item.path">
         <div v-if="index !== breadcrumbList.length - 1" class="h-full flex cursor-pointer items-center gap-2" @click="handleRedirect(item)">
-          <div :class="`${item.meta.icon}`" class="text-12px" />
-          <div class="h-full flex items-center text-14px" style="line-height: 50px">
+          <div :class="`${item.meta.icon}`" class="w-14px h-14px" />
+          <div class="h-full flex items-center text-12px">
             {{ item.meta.title }}
           </div>
         </div>
         <div v-else class="h-full flex items-center gap-2">
-          <div :class="`${item.meta.icon}`" class="text-12px" />
-          <div class="h-full flex items-center text-14px" style="line-height: 50px">
+          <div :class="`${item.meta.icon}`" class="w-14px h-14px" />
+          <div class="h-full flex items-center text-12px">
             {{ item.meta.title }}
           </div>
         </div>

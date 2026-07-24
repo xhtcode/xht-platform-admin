@@ -1,4 +1,4 @@
-import { AxiosError, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios'
+import { ApiResponse, AxiosError, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 import axios from 'axios'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import qs from 'qs'
@@ -61,28 +61,25 @@ service.interceptors.request.use(
  * 响应拦截器：处理响应数据、错误状态码等
  */
 service.interceptors.response.use(
-  (response: AxiosResponse): any => {
-    const contentType = response.headers['content-type'] ? response.headers['content-type'] : response.headers['Content-Type']
-    if (contentType?.indexOf('application/json') === -1) {
+  (response: AxiosResponse<ApiResponse>): AxiosResponse | any => {
+    const { responseType } = response.config
+    if (responseType === 'blob' || responseType === 'arraybuffer') {
       return response
     }
+    const { code, msg, dataType } = response.data
     // 如果是加密数据
-    if (response.data.dataType === 10) {
-      response.data.encryptData = response.data.data
-      const decryptStr = JSON.stringify(response.data.data)
-      if (decryptStr) {
-        response.data.data = JSON.parse(decryptStr)
-      }
+    if (dataType === 1) {
+      useMessage().error('加密暂未实现')
     }
-    if (response.data.code && response.data.code !== 200) {
-      if (response.data.code === 424) {
-        logout()
-        return Promise.reject(response.data)
-      }
-      useMessage().error(response.data.msg)
-      return Promise.reject(response.data)
+    if (code === 200) {
+      return response.data
     }
-    return Promise.resolve(response.data)
+    if (code === 424) {
+      logout()
+      return Promise.reject(new Error('登录已过期，请重新登录'))
+    }
+    useMessage().error(msg)
+    return Promise.resolve(new Error(msg || '系统出错'))
   },
   (error: any): Promise<any> => {
     // 对响应错误做点什么

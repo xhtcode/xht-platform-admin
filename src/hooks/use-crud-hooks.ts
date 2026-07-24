@@ -143,6 +143,7 @@ export const useTableQueryListHooks = <Req extends PageQueryRequest, Res extends
    * @param selection 选中的行数据
    */
   const handleCurrentChange = (selection: Res): void => {
+    if (!selection) return
     state.selectedRows.push(selection)
     state.singleStatus = !selection
     state.multipleStatus = !selection

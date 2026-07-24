@@ -6,7 +6,6 @@ import { useRouteStore } from '@/store/modules/routes.store'
 import type { RouteLocationNormalized, RouteRecordRaw } from 'vue-router'
 import { useTitle } from '@/hooks/use-title'
 import { HOME_PAGE_PATH, PAGE_PATH_LOGIN } from '@/service/constant'
-import { useMessageBox } from '@/hooks/use-message'
 
 const { setTitle } = useTitle()
 /**
@@ -19,21 +18,18 @@ NProgress.configure({ showSpinner: false })
 const whiteList = ['/login', '/oauth2', '/process']
 
 export function setupPermission() {
-  router.beforeEach(async (to, _, next) => {
+  router.beforeEach(async (to, _from) => {
     NProgress.start()
     const userInfoStore = useUserInfoStore()
     const routeStore = useRouteStore()
     if (userInfoStore.hasToken) {
       if (routeStore.isGenerate) {
         if (to.path === PAGE_PATH_LOGIN) {
-          // 如果已登录状态下，进入登录页会强制跳转到主页
-          next({
+          return {
             path: HOME_PAGE_PATH + (userInfoStore.isAdmin ? '/admin' : null),
             replace: true,
-          })
-          return
+          }
         }
-        next()
       } else {
         try {
           // 获取用户权限
@@ -46,28 +42,28 @@ export function setupPermission() {
             }
           })
           // 动态路由生成并注册后，重新进入当前路由
-          next({
+          return {
             path: to.path,
             query: to.query,
             replace: true,
-          })
+          }
         } catch (e) {
           console.error('路由错误', e)
           await userInfoStore.logout()
-          next({ path: PAGE_PATH_LOGIN })
+          return { path: PAGE_PATH_LOGIN }
         }
       }
     } else {
       if (whiteList.includes(to.path)) {
-        next()
+        return
       } else {
         // 重定向登录页
-        next({
+        return {
           path: PAGE_PATH_LOGIN,
           query: {
             redirect: to.fullPath,
           },
-        })
+        }
       }
     }
   })

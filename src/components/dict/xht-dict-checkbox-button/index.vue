@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { XhtDictCheckboxButtonEmits, XhtDictCheckboxButtonProps } from '@/components/dict/xht-dict-checkbox-button/types'
 import { useDictHooks } from '@/hooks/use-dict'
+import type { CheckboxValueType } from 'element-plus'
 
 defineOptions({
   name: 'XhtDictCheckboxButton',
@@ -28,8 +29,8 @@ const { loadingStatus, dictData } = useDictHooks(props.dictCode)
 /**
  * 字典多选组件发生改变的时候
  */
-const handlerChange = (value: string[]) => {
-  emits('change', value)
+const handlerChange = (value: CheckboxValueType[]) => {
+  emits('change', value as string[])
 }
 </script>
 

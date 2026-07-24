@@ -66,7 +66,7 @@ const handleChangeLoginType = (type: LoginType) => {
           <span>其它登录方式</span>
         </div>
       </div>
-      <!-- 其它登录方式  -->
+      <!-- 其它登录方式 -->
       <div class="other-party-login">
         <div class="other-party-icons">
           <div

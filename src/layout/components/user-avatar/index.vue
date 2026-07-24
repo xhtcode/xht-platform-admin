@@ -53,11 +53,8 @@ const routerPath = (path: string) => {
         <div class="flex-center">
           <el-avatar alt="avatar" class="avatar-image user-select-none" :src="userInfo.userAvatar" />
         </div>
-        <div class="user-select-none">
+        <div class="user-select-none pr-3">
           {{ userInfo.nickName }}
-          <el-icon>
-            <CaretBottom />
-          </el-icon>
         </div>
       </div>
       <template #dropdown>
@@ -107,8 +104,8 @@ const routerPath = (path: string) => {
     cursor: pointer;
 
     .avatar-image {
-      width: 28px;
-      height: 28px;
+      width: 22px;
+      height: 22px;
       margin-right: 5px !important;
       border-radius: 50%;
     }

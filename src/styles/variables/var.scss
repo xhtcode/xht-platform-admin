@@ -4,8 +4,8 @@
 
 @forward 'element-plus/theme-chalk/src/common/var.scss' with (
   $table: (
-    'header-bg-color':  getCssVar('table-row-hover-bg-color'),
-    'header-text-color':  getCssVar('text-color-primary'),
+    'header-bg-color': getCssVar('table-row-hover-bg-color'),
+    'header-text-color': getCssVar('text-color-primary'),
   ),
   $table-padding: (
     'large': 8px 0,
@@ -20,10 +20,10 @@
   $main: (
     'padding': 20px,
   ),
-  $footer:(
+  $footer: (
     'padding': 0 10px,
     'height': 60px,
- ),
+  )
 );
 
 :root {

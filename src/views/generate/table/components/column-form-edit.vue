@@ -15,7 +15,6 @@ const columnInfo = defineModel<GenColumnInfoResponse[]>('columnInfo', {
  */
 const tableInfo = defineModel<GenTableInfoResponse>('tableInfo', {
   required: true,
-  default: () => {},
 })
 </script>
 

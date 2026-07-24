@@ -23,19 +23,23 @@ body,
 #app {
   margin: 0;
   padding: 0;
+  width: 100%;
   height: 100%;
   background-color: var(--xht-bg-color);
   color: var(--xht-text-color);
 }
 
+html {
+  overflow: hidden;
+}
 .user-select-none {
   user-select: none;
 }
 
-.xht-instruction{
-&:before {
-  content: '*';
-  color: var(--el-color-danger);
-  margin-right: 4px;
-}
+.xht-instruction {
+  &:before {
+    content: '*';
+    color: var(--el-color-danger);
+    margin-right: 4px;
+  }
 }

@@ -53,6 +53,6 @@ export interface GenTemplateResponse extends MetaResponse {
 /**
  * 操作类型
  */
-export interface GenTemplateOperationRequest extends Partial<GenTemplateResponse>, BasicFormRequest {
+export interface GenTemplateOperationRequest extends Partial<GenTemplateResponse> {
   isNew?: boolean
 }

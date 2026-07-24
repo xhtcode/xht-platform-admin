@@ -274,6 +274,7 @@ onMounted(async () => {
         <el-table-column v-if="columnOption.createTime?.visible" label="创建时间" prop="createTime" width="180" />
         <el-table-column v-if="columnOption.updateBy?.visible" label="更新人" prop="updateBy" width="160" />
         <el-table-column v-if="columnOption.updateTime?.visible" label="更新时间" prop="updateTime" width="180" />
+        <!-- @vue-generic {SysUserResponse} -->
         <el-table-column label="操作" fixed="right" width="220">
           <template #default="{ row }">
             <el-space wrap class="flex-center">
@@ -281,7 +282,6 @@ onMounted(async () => {
               <el-button :icon="Delete" link type="danger" @click="handleDelete(row)" v-authorization="['sys:user:remove']">删除用户</el-button>
               <el-button :icon="Key" link type="warning" @click="handleResetPwd(row)" v-authorization="['sys:user:pwd']">重置密码</el-button>
               <el-button :icon="User" link type="primary" @click="handleUserRole(row)" v-authorization="['sys:user:role:bind']">用户授权</el-button>
-              <el-button>岗位调整</el-button>
             </el-space>
           </template>
         </el-table-column>
