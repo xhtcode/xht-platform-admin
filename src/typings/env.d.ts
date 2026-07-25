@@ -6,6 +6,10 @@ interface ImportMetaEnv {
    */
   VITE_APP_TITLE: string
   /**
+   * 项目作者
+   */
+  VITE_APP_AUTHOR: string
+  /**
    * 应用端口
    */
   VITE_APP_PORT: number

@@ -8,6 +8,7 @@ import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import { dependencies, devDependencies, engines, name, version } from './package.json'
+import xhtStartLogPlugin from './plugins/vite-plugin-log'
 // 平台的名称、版本、运行所需的 node 版本、依赖、构建时间的类型提示
 const __APP_INFO__ = {
   pkg: { name, version, engines, dependencies, devDependencies },
@@ -70,7 +71,6 @@ const elementPlusPreloadStyles = [
   'text',
   'drawer',
   'color-picker',
-  'backtop',
   'message-box',
   'skeleton',
   'skeleton-item',
@@ -129,6 +129,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
         globs: ['src/components/**/index.vue'], // 指定自定义组件位置(默认:src/components)
         dts: path.resolve(pathSrc, 'typings', 'components.d.ts'), // 导入组件类型声明文件路径 (false:关闭自动生成)
       }),
+      xhtStartLogPlugin(env),
     ],
     // 路径解析配置
     resolve: {
