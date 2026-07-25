@@ -33,6 +33,10 @@ interface ImportMetaEnv {
    * 代码生成器服务前缀
    */
   VITE_GENERATE_API_PREFIX: string
+  /**
+   * 工作流服务前缀
+   */
+  VITE_WORKFLOW_API_PREFIX: string
 }
 
 export interface ImportMeta {

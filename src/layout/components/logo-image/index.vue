@@ -19,7 +19,7 @@ const { menuCollapse } = useThemeHooks()
 <style lang="scss" scoped>
 .layout-container-logo {
   display: flex;
-  height: $header-height;
+  height: $menu-item-height;
   flex-shrink: 0;
   user-select: none;
   justify-content: center;

@@ -66,6 +66,8 @@
   }
 
   .el-sub-menu__title {
+    height: $menu-item-height !important;
+    line-height: $menu-item-height !important;
     padding: 0 !important;
     justify-content: center;
 
@@ -80,8 +82,8 @@
   user-select: none;
 
   .el-menu-item {
-    height: 56px !important;
-    line-height: 56px !important;
+    height: $menu-item-height !important;
+    line-height: $menu-item-height !important;
 
     &.is-active {
       background: var(--el-color-primary) !important;

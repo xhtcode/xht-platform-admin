@@ -47,14 +47,14 @@ const routerPath = (path: string) => {
 </script>
 
 <template>
-  <div class="user-info-container layout-header-top-item">
-    <el-dropdown trigger="click" size="default" @command="openDialog">
+  <div class="user-info-container layout-header-top-item pr-5">
+    <el-dropdown trigger="click" size="default" @command="openDialog" placement="bottom-end">
       <div class="avatar-container flex-center">
         <div class="flex-center">
           <el-avatar alt="avatar" class="avatar-image user-select-none" :src="userInfo.userAvatar" />
         </div>
-        <div class="user-select-none pr-3">
-          {{ userInfo.nickName }}
+        <div class="user-select-none">
+          <span class="text-[14px]!">{{ userInfo?.nickName }}</span>
         </div>
       </div>
       <template #dropdown>

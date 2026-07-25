@@ -31,7 +31,7 @@ const menuList = defineModel<ContextMenuSchemaType[]>('menuList', {
   required: true,
   default: () => [],
 })
-
+const menuCloseStatus = ref<boolean>(false)
 // 当前操作项的数据
 const itemData = shallowRef<any>()
 
@@ -42,6 +42,13 @@ const commandTrigger = (menuItem: ContextMenuSchemaType) => {
 
 // 打开右键菜单函数
 const openContextmenu = (event: MouseEvent, tagItem?: any) => {
+  if (menuCloseStatus.value) {
+    itemData.value = []
+    dropdownRef.value?.handleClose()
+    menuCloseStatus.value = !menuCloseStatus.value
+    return
+  }
+
   // 保存当前操作项数据
   itemData.value = tagItem
 
@@ -51,7 +58,7 @@ const openContextmenu = (event: MouseEvent, tagItem?: any) => {
 
   // 设置菜单位置为元素底部中心
   position.value = DOMRect.fromRect({
-    x: x + width / 2,
+    x: x,
     y: y + height,
   })
 
@@ -60,6 +67,8 @@ const openContextmenu = (event: MouseEvent, tagItem?: any) => {
 
   // 手动打开下拉菜单
   dropdownRef.value?.handleOpen()
+  console.log('-----------', menuCloseStatus.value)
+  menuCloseStatus.value = !menuCloseStatus.value
 }
 
 // 暴露方法给父组件调用

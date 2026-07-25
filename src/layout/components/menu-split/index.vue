@@ -89,7 +89,7 @@ watch(
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: $header-height;
+    height: $menu-item-height;
     cursor: pointer;
     transition: all 0.3s ease;
 

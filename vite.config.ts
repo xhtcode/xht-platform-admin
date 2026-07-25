@@ -116,8 +116,8 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
           globalsPropValue: true,
         },
         vueTemplate: true,
-        dts: false, // 导入函数类型声明文件路径 (false:关闭自动生成)
-        // dts: path.resolve(pathSrc, 'typings', 'auto-imports.d.ts'),
+        //  dts: false, // 导入函数类型声明文件路径 (false:关闭自动生成)
+        dts: path.resolve(pathSrc, 'typings', 'auto-imports.d.ts'),
       }),
       // 自动按需引入组件配置 https://github.com/sxzz/element-plus-best-practices/blob/main/vite.config.ts
       Components({
@@ -128,8 +128,8 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
           }),
         ],
         globs: ['src/components/**/index.vue'], // 指定自定义组件位置(默认:src/components)
-        dts: false, // 导入组件类型声明文件路径 (false:关闭自动生成)
-        // dts: path.resolve(pathSrc, 'typings', 'components.d.ts'),
+        // dts: false, // 导入组件类型声明文件路径 (false:关闭自动生成)
+        dts: path.resolve(pathSrc, 'typings', 'components.d.ts'),
       }),
       xhtStartLogPlugin(env),
     ],
