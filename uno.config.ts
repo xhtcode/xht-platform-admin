@@ -28,6 +28,12 @@ const generateSafeList = () => {
     )
     result.push(
       ...fs
+        .readdirSync(`${iconsDir}/login`)
+        .filter((file) => file.endsWith('.svg'))
+        .map((file) => `i-login-${file.replace('.svg', '')}`)
+    )
+    result.push(
+      ...fs
         .readdirSync(`${iconsDir}/menu`)
         .filter((file) => file.endsWith('.svg'))
         .map((file) => `i-menu-${file.replace('.svg', '')}`)
@@ -74,7 +80,7 @@ export default defineConfig({
       },
     }),
   ],
-  safelist: [...generateSafeList()],
+  safelist: generateSafeList(),
   transformers: [transformerDirectives(), transformerVariantGroup()],
   shortcuts: {
     'm-0-auto': 'm-0 ma', // margin: 0 auto
