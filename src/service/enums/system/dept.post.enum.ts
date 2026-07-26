@@ -3,7 +3,7 @@ import type { SysDeptPostStatusType } from '@/service/model/system/dept.post.mod
 /**
  * 部门状态
  */
-export const sysDeptPostStatusEnums: DictEnum<SysDeptPostStatusType, 'NORMAL' | 'DISABLE'> = {
+export const sysDeptPostStatusEnum: DictEnum<SysDeptPostStatusType, 'NORMAL' | 'DISABLE'> = {
   NORMAL: {
     label: '正常',
     value: 0,

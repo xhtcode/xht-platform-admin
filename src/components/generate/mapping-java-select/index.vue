@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { MappingJavaSelectProps, MappingJavaSelectState } from '@/components/generate/mapping-java-select/types'
 import { GenTypeMappingResponse } from '@/service/model/generate/type.mapping.model'
-import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
+import { DataBaseTypeEnum } from '@/service/enums/generate/generate.enums'
 import { queryGenTypeMappingList } from '@/service/api/generate/type.mapping.api'
 
 defineOptions({
@@ -11,7 +11,7 @@ defineOptions({
  * 定义组件属性
  */
 const props = withDefaults(defineProps<MappingJavaSelectProps>(), {
-  dataBaseType: DataBaseTypeEnums.MYSQL,
+  dataBaseType: DataBaseTypeEnum.MYSQL,
   dbDataType: '',
   placeholder: '请输入选择类型的数据库映射',
   clearable: true,

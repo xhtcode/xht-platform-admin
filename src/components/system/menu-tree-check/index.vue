@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { SysMenuResponse } from '@/service/model/system/menu.model'
 import { queryToolsMenuTree } from '@/service/api/system/menu.api'
-import { menuTypeEnums } from '@/service/enums/system/menu.enum'
+import { menuTypeEnum } from '@/service/enums/system/menu.enum'
 
 defineOptions({ name: 'MenuTree' })
 
@@ -37,7 +37,7 @@ const getMenuTree = async () => {
       const topMenu = {
         id: '0',
         menuName: '顶级菜单',
-        menuType: menuTypeEnums.M.value,
+        menuType: menuTypeEnum.M.value,
         children: treeData,
       } as any
       treeData = [topMenu]

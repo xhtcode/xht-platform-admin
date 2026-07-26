@@ -44,7 +44,7 @@ const xhtStartLogPlugin = (env: Record<string, any>): PluginOption => {
         console.log(`${COLOR.cyan}⌚启动时间:${COLOR.yellow}👉${startStr}👈${COLOR.reset}`)
         console.log(`${COLOR.cyan}🌎当前环境:${COLOR.magenta}👉${nodeEnv}👈${COLOR.reset}`)
         console.log(`${COLOR.cyan}🌐后端访问地址:${COLOR.blue}${gatewayApi}${COLOR.reset}`)
-        console.log(`${COLOR.cyan}🌐前端访问地址:${COLOR.blue}http://www.xht.sso.com:${prot}${COLOR.reset}`)
+        console.log(`${COLOR.cyan}🌐前端访问地址:${COLOR.blue}http://www.xht.com:${prot}${COLOR.reset}`)
         console.log(`${COLOR.cyan}🛠️VueDevTools:${COLOR.blue}http://www.xht.com:${prot}/__devtools__/${COLOR.reset}`)
         console.log(`${COLOR.cyan}🎨UnoCSS调试面板:${COLOR.blue}http://www.xht.com:${prot}/__unocss/${COLOR.reset}`)
         console.log(`${COLOR.cyan}📚接口文档地址:${COLOR.reset}`)

@@ -4,6 +4,8 @@ import { queryFlowSequenceById, saveFlowSequence, updateFlowSequence } from '@/s
 import type { FlowSequenceOperationRequest } from '@/service/model/workflow/sequence.model'
 import { flowSequenceOperationForm, flowSequenceOperationRules } from '@/views/workflow/sequence/sequence.data'
 import { useMessage } from '@/hooks/use-message'
+import { IsCycleStatusEnum, IsResetFlagEnum } from '@/service/enums/workflow/sequence.enum'
+import { Bell } from '@element-plus/icons-vue'
 
 defineOptions({ name: 'FlowSequenceAddOrUpdate' })
 
@@ -77,6 +79,9 @@ const close = () => {
   addUpdateFormRef.value?.resetFields()
 }
 
+const handleChangeMinValue = () => {
+  addUpdateForm.value.currentValue = Math.max(addUpdateForm.value.minValue ?? 0, addUpdateForm.value.currentValue ?? 0)
+}
 defineExpose({
   show,
 })
@@ -99,63 +104,78 @@ defineExpose({
       :rules="rules"
       element-loading-text="拼命加载中"
       inline-message
-      label-width="120px"
+      label-width="100px"
       scroll-to-error
     >
-      <el-row>
-        <el-col :span="12">
-          <el-form-item label="序列编码" prop="sequenceCode">
-            <el-input v-model="addUpdateForm.sequenceCode" clearable :maxlength="60" show-word-limit placeholder="请输入序列编码" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="序列名称" prop="sequenceName">
-            <el-input v-model="addUpdateForm.sequenceName" clearable :maxlength="100" show-word-limit placeholder="请输入序列名称" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="序列格式" prop="sequenceFormat">
-            <el-date-picker
-              v-model="addUpdateForm.sequenceFormat"
-              format="YYYY-MM-DD"
-              placeholder="选择序列格式"
-              type="date"
-              value-format="YYYY-MM-DD"
-            />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="最小值" prop="minValue">
-            <el-input v-model="addUpdateForm.minValue" clearable :maxlength="0" show-word-limit placeholder="请输入最小值" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="最大值" prop="maxValue">
-            <el-input v-model="addUpdateForm.maxValue" clearable :maxlength="0" show-word-limit placeholder="请输入最大值" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="当前值" prop="currentValue">
-            <el-input v-model="addUpdateForm.currentValue" clearable :maxlength="0" show-word-limit placeholder="请输入当前值" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="步进值" prop="steppingValue">
-            <el-input v-model="addUpdateForm.steppingValue" clearable :maxlength="0" show-word-limit placeholder="请输入步进值" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="是否循环" prop="isCycle">
-            <el-input v-model="addUpdateForm.isCycle" clearable :maxlength="1" show-word-limit placeholder="请输入是否循环" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="重置周期" prop="resetFlag">
-            <el-input v-model="addUpdateForm.resetFlag" clearable :maxlength="1" show-word-limit placeholder="请输入重置周期" />
-          </el-form-item>
-        </el-col>
-      </el-row>
+      <el-form-item label="序列名称" prop="sequenceName">
+        <el-input v-model="addUpdateForm.sequenceName" clearable :maxlength="100" show-word-limit placeholder="请输入序列名称" />
+      </el-form-item>
+      <el-form-item label="序列编码" prop="sequenceCode">
+        <el-input v-model="addUpdateForm.sequenceCode" clearable :maxlength="60" show-word-limit placeholder="请输入序列编码" />
+      </el-form-item>
+      <el-form-item label="最小值" prop="minValue">
+        <el-input-number
+          v-model="addUpdateForm.minValue"
+          :min="1"
+          :max="addUpdateForm.maxValue"
+          class="w-full!"
+          value-on-clear="min"
+          @change="handleChangeMinValue"
+          placeholder="请输入最小值"
+        />
+      </el-form-item>
+      <el-form-item label="最大值" prop="maxValue">
+        <el-input-number
+          v-model="addUpdateForm.maxValue"
+          :min="addUpdateForm.minValue"
+          :max="999999"
+          class="w-full!"
+          value-on-clear="max"
+          placeholder="请输入最大值"
+        />
+      </el-form-item>
+      <el-form-item label="当前值" prop="currentValue">
+        <el-input-number
+          v-model="addUpdateForm.currentValue"
+          :min="addUpdateForm.minValue"
+          :max="addUpdateForm.maxValue"
+          class="w-full!"
+          value-on-clear="min"
+          placeholder="请输入当前值"
+        />
+      </el-form-item>
+      <el-form-item label="步进值" prop="steppingValue">
+        <el-input-number v-model="addUpdateForm.steppingValue" :min="0" :max="100" class="w-full!" value-on-clear="min" placeholder="请输入步进值" />
+      </el-form-item>
+      <el-form-item label="是否循环" prop="isCycle">
+        <xht-enum-select v-model="addUpdateForm.isCycle" :data="IsCycleStatusEnum" clearable placeholder="请选择是否循环" />
+      </el-form-item>
+      <el-form-item label="重置周期" prop="resetFlag">
+        <xht-enum-select v-model="addUpdateForm.resetFlag" :data="IsResetFlagEnum" clearable placeholder="请选择重置周期" />
+      </el-form-item>
+      <el-form-item label="序列格式" prop="sequenceFormat">
+        <el-input
+          v-model="addUpdateForm.sequenceFormat"
+          type="textarea"
+          :rows="5"
+          resize="none"
+          clearable
+          :maxlength="500"
+          show-word-limit
+          placeholder="请输入序列格式"
+        />
+      </el-form-item>
     </el-form>
+    <el-alert :closable="false" show-icon type="primary">
+      <template #title><el-text type="danger" tag="b" class="user-select-none">示例：032000{YYYYMMDD}-{N}</el-text></template>
+      <ul class="pl-5 color-[var(--xht-text-color)] user-select-none">
+        <li>YYYYMMDD,当前日期的格式定义，支持YYYY,YY,MM,DD几种格式组合</li>
+        <li>{N}原值显示当前值 {N6}当前值显示的最小长度为6位，不足时前面补零</li>
+      </ul>
+      <template #icon>
+        <Bell />
+      </template>
+    </el-alert>
     <template #footer>
       <el-button :disabled="state.loadingStatus" @click="close">取 消</el-button>
       <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>

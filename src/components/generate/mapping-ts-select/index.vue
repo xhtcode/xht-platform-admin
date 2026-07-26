@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { GenTypeMappingResponse } from '@/service/model/generate/type.mapping.model'
 import { MappingTsSelectProps, MappingTsSelectState } from '@/components/generate/mapping-ts-select/types'
-import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
+import { DataBaseTypeEnum } from '@/service/enums/generate/generate.enums'
 import { queryGenTypeMappingList } from '@/service/api/generate/type.mapping.api'
 
 defineOptions({
@@ -11,7 +11,7 @@ defineOptions({
  * 定义组件属性
  */
 const props = withDefaults(defineProps<MappingTsSelectProps>(), {
-  dataBaseType: DataBaseTypeEnums.MYSQL,
+  dataBaseType: DataBaseTypeEnum.MYSQL,
   dbDataType: '',
   placeholder: '请选择Ts类型的数据库映射',
   clearable: true,

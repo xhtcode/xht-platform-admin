@@ -1,13 +1,13 @@
 <script lang="ts" setup>
 import type { GenColumnInfoResponse } from '@/service/model/generate/column.model'
-import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
+import { DataBaseTypeEnum } from '@/service/enums/generate/generate.enums'
 
 withDefaults(
   defineProps<{
-    dbType: DataBaseTypeEnums
+    dbType: DataBaseTypeEnum
   }>(),
   {
-    dbType: DataBaseTypeEnums.MYSQL,
+    dbType: DataBaseTypeEnum.MYSQL,
   }
 )
 

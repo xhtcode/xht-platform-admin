@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { DeptUserProps, UserSimpleVo } from '@/service/model/system/user.model'
 import { useMessage } from '@/hooks/use-message'
-import { userStatusEnums } from '@/service/enums/system/user.enum'
+import { userStatusEnum } from '@/service/enums/system/user.enum'
 
 defineOptions({ name: 'DeptUserForm' })
 
@@ -125,7 +125,7 @@ defineExpose({
       <el-table-column label="用户昵称" prop="nickName" />
       <el-table-column label="账号状态" prop="userStatus">
         <template #default="{ row }">
-          <xht-enum-tag :filter-label="row.userStatus" :data="userStatusEnums" />
+          <xht-enum-tag :filter-label="row.userStatus" :data="userStatusEnum" />
         </template>
       </el-table-column>
     </el-table>

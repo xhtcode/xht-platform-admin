@@ -1,13 +1,13 @@
 import type { SysNoticeTypeOperationRequest, SysNoticeTypeResponse } from '@/service/model/system/notice.type.model'
 import type { FormRules } from 'element-plus'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
-import { noticeTypeStatusEnums } from '@/service/enums/system/notice.enum'
+import { noticeTypeStatusEnum } from '@/service/enums/system/notice.enum'
 
 /**
  * 系统管理-通知类型 增改页面 表单类型 默认值
  */
 export const sysNoticeTypeOperationForm: SysNoticeTypeOperationRequest = {
-  noticeTypeStatus: noticeTypeStatusEnums.ENABLE.value, // 0:未启用 1:启用
+  noticeTypeStatus: noticeTypeStatusEnum.ENABLE.value, // 0:未启用 1:启用
   noticeTypeSort: 0, // 通知排序
 }
 

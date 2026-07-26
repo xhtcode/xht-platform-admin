@@ -1,7 +1,7 @@
 import { useThemeStore } from '@/store'
 import { storeToRefs } from 'pinia'
 import { changeCssProperty } from '@/utils/theme'
-import { DeviceEnums } from '@/service/enums'
+import { DeviceEnum } from '@/service/enums'
 import type { CSSProperties } from 'vue'
 import variables from '@/styles/variables.module.scss'
 
@@ -10,13 +10,13 @@ export const useThemeHooks = () => {
   const { device, sidebarStatus, menuStatus } = storeToRefs(themeStore)
   const menuCollapse = computed<boolean>(() => menuStatus.value)
   /**
-   *  DeviceEnums.DESKTOP 侧边栏状态 true 显示，false 隐藏
+   *  DeviceEnum.DESKTOP 侧边栏状态 true 显示，false 隐藏
    */
-  const desktopShowStatus = computed(() => !sidebarStatus.value && device.value === DeviceEnums.DESKTOP)
+  const desktopShowStatus = computed(() => !sidebarStatus.value && device.value === DeviceEnum.DESKTOP)
   /**
-   *  DeviceEnums.MOBILE 侧边栏状态 true 显示，false 隐藏
+   *  DeviceEnum.MOBILE 侧边栏状态 true 显示，false 隐藏
    */
-  const mobileShowStatus = computed(() => sidebarStatus.value && device.value === DeviceEnums.MOBILE)
+  const mobileShowStatus = computed(() => sidebarStatus.value && device.value === DeviceEnum.MOBILE)
 
   /**
    * aside 样式
@@ -98,7 +98,7 @@ export const useThemeDeviceHooks = () => {
     width,
     (val) => {
       const isDesktop = val >= WIDTH_DESKTOP
-      device.value = isDesktop ? DeviceEnums.DESKTOP : DeviceEnums.MOBILE
+      device.value = isDesktop ? DeviceEnum.DESKTOP : DeviceEnum.MOBILE
       if (menuStatus.value) {
         menuStatus.value = isDesktop
       }

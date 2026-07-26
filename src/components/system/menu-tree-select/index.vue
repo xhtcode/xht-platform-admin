@@ -4,7 +4,7 @@ import { queryToolsMenuTree } from '@/service/api/system/menu.api'
 import type { TreeNodeData, TreeOptionProps } from 'element-plus/es/components/tree/src/tree.type'
 import type { MenuTreeSelectProps } from '@/components/system/menu-tree-select/types'
 import type { TreeInstance } from 'element-plus'
-import { menuCommonStatus, menuTypeEnums } from '@/service/enums/system/menu.enum'
+import { menuCommonStatus, menuTypeEnum } from '@/service/enums/system/menu.enum'
 
 defineOptions({ name: 'MenuTreeSelect' })
 
@@ -52,7 +52,7 @@ const getMenuTree = async () => {
       const topMenu = {
         id: '0',
         menuName: '顶级菜单',
-        menuType: menuTypeEnums.M.value,
+        menuType: menuTypeEnum.M.value,
         children: treeData,
       } as any
       treeData = [topMenu]

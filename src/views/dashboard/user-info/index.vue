@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { userStatusEnums } from '@/service/enums/system/user.enum'
+import { userStatusEnum } from '@/service/enums/system/user.enum'
 
 defineOptions({
   name: 'UserInfo',
@@ -13,7 +13,7 @@ const userData = reactive({
   nickName: '管理员',
   userPhone: '13800138000',
   userAvatar: '',
-  userStatus: userStatusEnums.NORMAL.value,
+  userStatus: userStatusEnum.NORMAL.value,
   registerDate: '2024-01-01',
   dataScope: 1,
   userType: '1',
@@ -147,7 +147,7 @@ const cancelEdit = () => {
           </div>
           <p class="m-0 mb-3 text-sm text-gray-600">账号：{{ userData.userName }}</p>
           <div class="flex flex-wrap items-center gap-4">
-            <xht-enum-tag :filter-label="userData.userStatus" :data="userStatusEnums" />
+            <xht-enum-tag :filter-label="userData.userStatus" :data="userStatusEnum" />
             <span class="text-xs text-gray-500">注册日期：{{ userData.registerDate || '未知' }}</span>
           </div>
         </div>

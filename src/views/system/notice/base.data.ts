@@ -1,17 +1,17 @@
 import type { SysNoticeOperationRequest, SysNoticeResponse } from '@/service/model/system/notice.model'
 import type { FormRules } from 'element-plus'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
-import { noticeJumpTypeEnums, noticeStatusEnums, noticeTimedPublishEnums, noticeTopEnums } from '@/service/enums/system/notice.enum'
+import { noticeJumpTypeEnum, noticeStatusEnum, noticeTimedPublishEnum, noticeTopEnum } from '@/service/enums/system/notice.enum'
 
 /**
  * 通知 增改页面 表单类型 默认值
  */
 export const sysNoticeOperationForm: SysNoticeOperationRequest = {
   noticeOrder: 1, // 通知排序
-  noticeStatus: noticeStatusEnums.NOT_PUBLISH.value, // 通知状态
-  noticeTop: noticeTopEnums.NO.value, // 是否置顶
-  noticeJumpType: noticeJumpTypeEnums.NO_JUMP.value, // 跳转类型
-  noticeTimedPublish: noticeTimedPublishEnums.NOT_PUBLISH.value, // 是否定时发布
+  noticeStatus: noticeStatusEnum.NOT_PUBLISH.value, // 通知状态
+  noticeTop: noticeTopEnum.NO.value, // 是否置顶
+  noticeJumpType: noticeJumpTypeEnum.NO_JUMP.value, // 跳转类型
+  noticeTimedPublish: noticeTimedPublishEnum.NOT_PUBLISH.value, // 是否定时发布
   noticeRemark: '暂无', // 备注
 }
 

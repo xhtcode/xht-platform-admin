@@ -1,4 +1,4 @@
-import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
+import { DataBaseTypeEnum } from '@/service/enums/generate/generate.enums'
 
 /**
  * 查询请求类型
@@ -25,7 +25,7 @@ export interface GenTypeMappingResponse extends MetaResponse {
   /**
    * 数据库类型（MySQL/Oracle）
    */
-  dbType: DataBaseTypeEnums
+  dbType: DataBaseTypeEnum
   /**
    * 数据库数据类型（如：INT/VARCHAR2）
    */

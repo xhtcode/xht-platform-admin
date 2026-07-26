@@ -1,11 +1,19 @@
 import type { FlowSequenceOperationRequest, FlowSequenceResponse } from '@/service/model/workflow/sequence.model'
 import type { FormRules } from 'element-plus'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
+import { IsCycleStatusEnum, IsResetFlagEnum } from '@/service/enums/workflow/sequence.enum'
 
 /**
  * 流程扩展-流程序列号 增改页面 表单类型 默认值
  */
-export const flowSequenceOperationForm: FlowSequenceOperationRequest = {}
+export const flowSequenceOperationForm: FlowSequenceOperationRequest = {
+  minValue: 0,
+  maxValue: 999999,
+  currentValue: 1,
+  steppingValue: 1,
+  isCycle: IsCycleStatusEnum.YES.value,
+  resetFlag: IsResetFlagEnum.RESET_NONE.value,
+}
 
 /**
  * 流程扩展-流程序列号 增改页面 表单类型 表单校验

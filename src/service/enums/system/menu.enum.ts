@@ -3,7 +3,7 @@ import type { MenuCommon, MenuStatus, MenuType } from '@/service/model/system/me
 /**
  * 定义菜单状态枚举类型
  */
-export const menuStatusEnums: DictEnum<MenuStatus, 'NORMAL' | 'DISABLE'> = {
+export const menuStatusEnum: DictEnum<MenuStatus, 'NORMAL' | 'DISABLE'> = {
   NORMAL: {
     label: '正常',
     value: 0,
@@ -17,7 +17,7 @@ export const menuStatusEnums: DictEnum<MenuStatus, 'NORMAL' | 'DISABLE'> = {
 /**
  * 菜单类型枚举
  */
-export const menuTypeEnums: DictEnum<MenuType> = {
+export const menuTypeEnum: DictEnum<MenuType> = {
   M: {
     label: '目录',
     value: 'M',

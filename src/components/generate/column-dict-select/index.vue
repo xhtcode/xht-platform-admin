@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { querySysDictPage } from '@/service/api/system/dict.api'
 import type { SysDictResponse } from '@/service/model/system/dict.model'
-import { sysDictStatusEnums } from '@/service/enums/system/dict.enum'
+import { sysDictStatusEnum } from '@/service/enums/system/dict.enum'
 
 defineOptions({
   name: 'ColumnDictSelect',
@@ -49,7 +49,7 @@ const remoteMethod = (queryString: string | undefined) => {
       pageSize: 10,
       keyWord: queryString,
       descName: 'sortOrder',
-      status: sysDictStatusEnums.ENABLED.value,
+      status: sysDictStatusEnum.ENABLED.value,
     })
       .then((res) => {
         dictData.value = res.data?.records || []
@@ -88,7 +88,7 @@ onMounted(() => {
       :key="item.id"
       :value="item.dictCode"
       :label="item.dictName"
-      :disabled="item.status === sysDictStatusEnums.DISABLED.value"
+      :disabled="item.status === sysDictStatusEnum.DISABLED.value"
     >
       <div class="flex items-center justify-between">
         <div>{{ item.dictCode }}</div>

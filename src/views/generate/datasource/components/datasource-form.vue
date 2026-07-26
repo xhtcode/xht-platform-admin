@@ -3,7 +3,7 @@ import type { FormInstance, FormRules } from 'element-plus'
 import { queryGenDataSourceById, saveGenDataSource, updateGenDataSource } from '@/service/api/generate/datasource.api'
 import { genDataSourceOperationForm, genDataSourceOperationRules } from '@/views/generate/datasource/datasource.data'
 import { useMessage } from '@/hooks/use-message'
-import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
+import { DataBaseTypeEnum } from '@/service/enums/generate/generate.enums'
 import type { GenDataSourceOperationRequest } from '@/service/model/generate/datasource.model'
 
 defineOptions({ name: 'GenDataSourceAddOrUpdate' })
@@ -107,8 +107,8 @@ defineExpose({
       </el-form-item>
       <el-form-item label="类型" prop="dbType">
         <el-select v-model="addUpdateForm.dbType" placeholder="请选择数据库类型" clearable>
-          <el-option :value="DataBaseTypeEnums.MYSQL" label="MySql" />
-          <el-option :value="DataBaseTypeEnums.ORACLE" label="Oracle" />
+          <el-option :value="DataBaseTypeEnum.MYSQL" label="MySql" />
+          <el-option :value="DataBaseTypeEnum.ORACLE" label="Oracle" />
         </el-select>
       </el-form-item>
       <el-form-item label="用户名" prop="username">

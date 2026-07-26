@@ -14,11 +14,15 @@ import SwitchDark from '@/layout/components/switch-dark/index.vue'
 import LayoutFooter from '@/layout/components/layout-footer/index.vue'
 import LayoutMain from '@/layout/components/layout-main/index.vue'
 import LayoutAside from '@/layout/components/layout-aside/index.vue'
+import { useThemeStore } from '@/store'
+import { storeToRefs } from 'pinia'
 
 defineOptions({
   name: 'LayoutColumns',
 })
 const router = useRouter()
+const themeStore = useThemeStore()
+const { tagsViewStatus } = storeToRefs(themeStore)
 const menuList = ref<RouteRecordRaw[]>([])
 /**
  * 菜单点击事件
@@ -60,7 +64,7 @@ const handleMenuClick = async (menuItems: RouteRecordRaw[], linkStatus: boolean)
           <user-avatar />
         </div>
       </el-header>
-      <div class="tabs-box-container">
+      <div class="tabs-box-container" v-if="tagsViewStatus">
         <tags-view />
       </div>
       <layout-main />

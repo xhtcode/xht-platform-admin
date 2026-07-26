@@ -1,7 +1,7 @@
 /**
  * 系统内置
  */
-export enum SystemFlagEnums {
+export enum SystemFlagEnum {
   /**
    * 系统内置
    */

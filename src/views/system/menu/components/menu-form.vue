@@ -4,7 +4,7 @@ import { querySysMenuById, saveSysMenu, updateSysMenu } from '@/service/api/syst
 import { useMessage } from '@/hooks/use-message'
 import type { SysMenuOperationRequest } from '@/service/model/system/menu.model'
 import { sysMenuOperationForm, sysMenuOperationRules } from '@/views/system/menu/menu.data'
-import { menuCommonStatus, menuStatusEnums, menuTypeEnums } from '@/service/enums/system/menu.enum'
+import { menuCommonStatus, menuStatusEnum, menuTypeEnum } from '@/service/enums/system/menu.enum'
 
 defineOptions({
   name: 'MenuForm',
@@ -21,9 +21,9 @@ const state = reactive<AddUpdateOption<SysMenuOperationRequest>>({
   addUpdateForm: { ...sysMenuOperationForm },
 })
 const { addUpdateForm } = toRefs(state)
-const isM = computed(() => addUpdateForm.value.menuType === menuTypeEnums.M.value)
-const isC = computed(() => addUpdateForm.value.menuType === menuTypeEnums.C.value)
-const isB = computed(() => addUpdateForm.value.menuType === menuTypeEnums.B.value)
+const isM = computed(() => addUpdateForm.value.menuType === menuTypeEnum.M.value)
+const isC = computed(() => addUpdateForm.value.menuType === menuTypeEnum.C.value)
+const isB = computed(() => addUpdateForm.value.menuType === menuTypeEnum.B.value)
 const isCAndFrameFlag = computed(() => isC.value && addUpdateForm.value.frameFlag === menuCommonStatus.NO.value)
 
 /**
@@ -130,7 +130,7 @@ defineExpose({
         </el-col>
         <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="菜单类型" prop="menuType">
-            <xht-enum-select v-model="addUpdateForm.menuType" :data="menuTypeEnums" clearable placeholder="请选择菜单类型" />
+            <xht-enum-select v-model="addUpdateForm.menuType" :data="menuTypeEnum" clearable placeholder="请选择菜单类型" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -142,7 +142,7 @@ defineExpose({
         </el-col>
         <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="菜单状态" prop="menuStatus">
-            <xht-enum-select v-model="addUpdateForm.menuStatus" :data="menuStatusEnums" clearable placeholder="请选择菜单状态" />
+            <xht-enum-select v-model="addUpdateForm.menuStatus" :data="menuStatusEnum" clearable placeholder="请选择菜单状态" />
           </el-form-item>
         </el-col>
       </el-row>

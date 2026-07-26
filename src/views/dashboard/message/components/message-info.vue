@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { MessageInfoVo } from '@/service/model/system/message.info.model'
 import { querySysMessageById } from '@/service/api/system/message.api'
-import { messageStarEnums, messageStatusEnums, messageTopEnums } from '@/service/enums/system/message.enum'
+import { messageStarEnum, messageStatusEnum, messageTopEnum } from '@/service/enums/system/message.enum'
 
 defineOptions({
   name: 'MessageInfo',
@@ -58,13 +58,13 @@ defineExpose({
       </el-descriptions-item>
       <el-descriptions-item label="收件人名称">{{ messageInfo.response?.recipientName }}</el-descriptions-item>
       <el-descriptions-item label="消息状态">
-        <xht-enum-tag :filter-label="messageInfo.response?.messageStatus" :data="messageStatusEnums" />
+        <xht-enum-tag :filter-label="messageInfo.response?.messageStatus" :data="messageStatusEnum" />
       </el-descriptions-item>
       <el-descriptions-item label="信息置顶">
-        <xht-enum-tag :filter-label="messageInfo.response?.messageTop" :data="messageTopEnums" />
+        <xht-enum-tag :filter-label="messageInfo.response?.messageTop" :data="messageTopEnum" />
       </el-descriptions-item>
       <el-descriptions-item label="信息收藏">
-        <xht-enum-tag :filter-label="messageInfo.response?.messageStar" :data="messageStarEnums" />
+        <xht-enum-tag :filter-label="messageInfo.response?.messageStar" :data="messageStarEnum" />
       </el-descriptions-item>
       <el-descriptions-item label="阅读时间" :span="2">{{ messageInfo.response?.readTime }}</el-descriptions-item>
       <el-descriptions-item label="消息内容" :span="2">

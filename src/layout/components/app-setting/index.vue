@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useThemeStore } from '@/store'
-import { AppLanguageEnums, ComponentSizeEnums } from '@/service/enums'
+import { AppLanguageEnum, ComponentSizeEnum } from '@/service/enums'
 import { storeToRefs } from 'pinia'
 import useThemeColorHooks from '@/hooks/use-theme-hooks'
 import { DefaultThemeColor } from '@/service/constant'
@@ -35,7 +35,6 @@ const {
   colorWeaknessModeStatus,
 } = storeToRefs(themeStore)
 const { changeThemeColor } = useThemeColorHooks()
-const queryFormRef = useTemplateRef('queryFormRef')
 const predefineColors = ref(['#409EFF', '#ff4500', '#ff8c00', '#ffd700', '#90ee90', '#00ced1', '#c71585'])
 /**
  * 禁用 颜色选择器
@@ -65,8 +64,8 @@ const resetSetting = () => {
   breadcrumb.value = true
   tagsViewStatus.value = true
   footerStatus.value = true
-  languageType.value = AppLanguageEnums.EN
-  sizeType.value = ComponentSizeEnums.DEFAULT
+  languageType.value = AppLanguageEnum.EN
+  sizeType.value = ComponentSizeEnum.DEFAULT
   colorType.value = DefaultThemeColor
   mournModeStatus.value = false
   colorWeaknessModeStatus.value = false
@@ -138,9 +137,9 @@ const resetSetting = () => {
         <el-divider>界面设置</el-divider>
         <el-form-item label="组件大小">
           <el-radio-group v-model="sizeType">
-            <el-radio-button :value="ComponentSizeEnums.LARGE" label="大型" />
-            <el-radio-button :value="ComponentSizeEnums.DEFAULT" label="默认" />
-            <el-radio-button :value="ComponentSizeEnums.SMALL" label="小型" />
+            <el-radio-button :value="ComponentSizeEnum.LARGE" label="大型" />
+            <el-radio-button :value="ComponentSizeEnum.DEFAULT" label="默认" />
+            <el-radio-button :value="ComponentSizeEnum.SMALL" label="小型" />
           </el-radio-group>
         </el-form-item>
         <el-form-item label="面包屑">

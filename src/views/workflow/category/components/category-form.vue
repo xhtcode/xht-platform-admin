@@ -4,6 +4,7 @@ import { queryFlowCategoryById, saveFlowCategory, updateFlowCategory } from '@/s
 import type { FlowCategoryOperationRequest } from '@/service/model/workflow/category.model'
 import { flowCategoryOperationForm, flowCategoryOperationRules } from '@/views/workflow/category/category.data'
 import { useMessage } from '@/hooks/use-message'
+import { categoryStatusEnum } from '@/service/enums/workflow/category.enum'
 
 defineOptions({ name: 'FlowCategoryAddOrUpdate' })
 
@@ -83,10 +84,9 @@ defineExpose({
 </script>
 
 <template>
-  <el-drawer
+  <el-dialog
     v-model="state.visibleStatus"
     :title="state.title"
-    size="45%"
     append-to-body
     :close-on-click-modal="false"
     :show-close="!state.loadingStatus"
@@ -99,40 +99,27 @@ defineExpose({
       :rules="rules"
       element-loading-text="拼命加载中"
       inline-message
-      label-width="120px"
+      label-width="100px"
       scroll-to-error
     >
       <el-row>
-        <el-col :span="12">
+        <el-col :span="24">
           <el-form-item label="类别编码" prop="categoryCode">
-            <el-input v-model="addUpdateForm.categoryCode" clearable :maxlength="255" show-word-limit placeholder="请输入类别编码" />
+            <el-input v-model="addUpdateForm.categoryCode" clearable :maxlength="100" show-word-limit placeholder="请输入类别编码" />
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="24">
           <el-form-item label="类别名称" prop="categoryName">
-            <el-input v-model="addUpdateForm.categoryName" clearable :maxlength="255" show-word-limit placeholder="请输入类别名称" />
+            <el-input v-model="addUpdateForm.categoryName" clearable :maxlength="200" show-word-limit placeholder="请输入类别名称" />
           </el-form-item>
         </el-col>
-        <el-col :span="12">
-          <el-form-item label="类别描述" prop="categoryDesc">
-            <el-input
-              v-model="addUpdateForm.categoryDesc"
-              type="textarea"
-              :rows="5"
-              resize="none"
-              clearable
-              :maxlength="255"
-              show-word-limit
-              placeholder="请输入类别描述"
-            />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
+
+        <el-col :span="24">
           <el-form-item label="类别状态" prop="categoryStatus">
-            <el-input v-model="addUpdateForm.categoryStatus" clearable :maxlength="0" show-word-limit placeholder="请输入类别状态" />
+            <xht-enum-select v-model="addUpdateForm.categoryStatus" :data="categoryStatusEnum" clearable placeholder="请选择类别状态" />
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="24">
           <el-form-item label="类别排序" prop="categorySort">
             <el-input-number
               v-model="addUpdateForm.categorySort"
@@ -144,13 +131,27 @@ defineExpose({
             />
           </el-form-item>
         </el-col>
+        <el-col :span="24">
+          <el-form-item label="类别描述" prop="categoryDesc">
+            <el-input
+              v-model="addUpdateForm.categoryDesc"
+              type="textarea"
+              :rows="5"
+              resize="none"
+              clearable
+              :maxlength="500"
+              show-word-limit
+              placeholder="请输入类别描述"
+            />
+          </el-form-item>
+        </el-col>
       </el-row>
     </el-form>
     <template #footer>
       <el-button :disabled="state.loadingStatus" @click="close">取 消</el-button>
       <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>
     </template>
-  </el-drawer>
+  </el-dialog>
 </template>
 
 <style lang="scss" scoped></style>

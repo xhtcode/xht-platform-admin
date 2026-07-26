@@ -1,11 +1,16 @@
 <script setup lang="ts">
+import { useThemeStore } from '@/store'
+import { storeToRefs } from 'pinia'
+
 defineOptions({
   name: 'LayoutFooter',
 })
+const themeStore = useThemeStore()
+const { footerStatus } = storeToRefs(themeStore)
 </script>
 
 <template>
-  <el-footer class="xht-footer-container">
+  <el-footer class="xht-footer-container" v-if="footerStatus">
     <div class="xht-footer-main">
       <div class="xht-footer-main-item">小糊涂后台管理系统</div>
     </div>

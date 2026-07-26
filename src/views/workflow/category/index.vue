@@ -7,6 +7,7 @@ import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { flowCategoryColumnOption } from '@/views/workflow/category/category.data'
 import { Delete, Edit, Plus, Refresh, Search } from '@element-plus/icons-vue'
+import { categoryStatusEnum } from '@/service/enums/workflow/category.enum'
 
 defineOptions({ name: 'FlowCategoryView' })
 
@@ -116,6 +117,21 @@ onMounted(async () => {
         </el-col>
       </el-row>
       <el-row v-else>
+        <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
+          <el-form-item label="类别编码" prop="categoryCode">
+            <el-input v-model="queryParams.categoryCode" clearable :maxlength="100" show-word-limit placeholder="请输入类别编码" />
+          </el-form-item>
+        </el-col>
+        <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
+          <el-form-item label="类别名称" prop="categoryName">
+            <el-input v-model="queryParams.categoryName" clearable :maxlength="200" show-word-limit placeholder="请输入类别名称" />
+          </el-form-item>
+        </el-col>
+        <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
+          <el-form-item label="类别状态" prop="categoryStatus">
+            <xht-enum-select v-model="queryParams.categoryStatus" :data="categoryStatusEnum" clearable placeholder="请选择类别状态" />
+          </el-form-item>
+        </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
           <el-button :icon="Search" type="primary" @click="handlePageQuery">查询</el-button>
           <el-button :icon="Refresh" @click="resetQuery">重置</el-button>

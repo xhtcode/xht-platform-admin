@@ -4,7 +4,7 @@ import { querySysOauth2ClientById, saveSysOauth2Client, updateSysOauth2Client } 
 import type { SysOauth2ClientOperationRequest } from '@/service/model/system/oauth2.client.model'
 import { sysOauth2ClientOperationForm, sysOauth2ClientOperationRules } from '@/views/system/oauth2-client/oauth2.client.data'
 import { useMessage } from '@/hooks/use-message'
-import { authorizationGrantTypesEnums, autoApproveEnums, clientAuthenticationMethodsEnums } from '@/service/enums/system/oauth2.enum'
+import { authorizationGrantTypesEnum, autoApproveEnum, clientAuthenticationMethodsEnum } from '@/service/enums/system/oauth2.enum'
 
 defineOptions({ name: 'SysOauth2ClientAddOrUpdate' })
 
@@ -127,7 +127,7 @@ defineExpose({
           <el-form-item label="认证方式" prop="clientAuthenticationMethods">
             <xht-enum-select
               v-model="addUpdateForm.clientAuthenticationMethods"
-              :data="clientAuthenticationMethodsEnums"
+              :data="clientAuthenticationMethodsEnum"
               multiple
               :max-collapse-tags="1"
               clearable
@@ -139,7 +139,7 @@ defineExpose({
           <el-form-item label="授权类型" prop="authorizationGrantTypes">
             <xht-enum-select
               v-model="addUpdateForm.authorizationGrantTypes"
-              :data="authorizationGrantTypesEnums"
+              :data="authorizationGrantTypesEnum"
               multiple
               :max-collapse-tags="1"
               clearable
@@ -231,7 +231,7 @@ defineExpose({
         </el-col>
         <el-col :span="24" v-if="authorizationGrantTypesStatus">
           <el-form-item label="自动放行" prop="autoApprove">
-            <xht-enum-select v-model="addUpdateForm.autoApprove" :data="autoApproveEnums" clearable placeholder="请选择自动放行状态" />
+            <xht-enum-select v-model="addUpdateForm.autoApprove" :data="autoApproveEnum" clearable placeholder="请选择自动放行状态" />
           </el-form-item>
         </el-col>
         <el-col :span="24">

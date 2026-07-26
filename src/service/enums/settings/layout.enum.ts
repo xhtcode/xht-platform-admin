@@ -1,7 +1,7 @@
 /**
  * 组件尺寸枚举
  */
-export const enum ComponentSizeEnums {
+export const enum ComponentSizeEnum {
   /**
    * 默认
    */

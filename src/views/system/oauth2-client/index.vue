@@ -11,7 +11,7 @@ import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { sysOauth2ClientColumnOption, sysOauth2ClientOperationRules } from '@/views/system/oauth2-client/oauth2.client.data'
 import { Delete, Edit, Plus, Refresh, Search, Lock } from '@element-plus/icons-vue'
-import { authorizationGrantTypesEnums, clientAuthenticationMethodsEnums } from '@/service/enums/system/oauth2.enum'
+import { authorizationGrantTypesEnum, clientAuthenticationMethodsEnum } from '@/service/enums/system/oauth2.enum'
 
 defineOptions({ name: 'SysOauth2ClientViewIndex' })
 
@@ -214,7 +214,7 @@ onMounted(async () => {
         <template #default="{ row }">
           <xht-enum-tag
             :filter-label="row.clientAuthenticationMethods"
-            :data="clientAuthenticationMethodsEnums"
+            :data="clientAuthenticationMethodsEnum"
             space-size="small"
             wrap
             alignment="center"
@@ -227,7 +227,7 @@ onMounted(async () => {
         <template #default="{ row }">
           <xht-enum-tag
             :filter-label="row.authorizationGrantTypes"
-            :data="authorizationGrantTypesEnums"
+            :data="authorizationGrantTypesEnum"
             space-size="small"
             wrap
             alignment="center"

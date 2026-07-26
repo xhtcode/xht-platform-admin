@@ -6,7 +6,7 @@ import { sysDeptColumnOption } from '@/views/system/dept/dept.data'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { Delete, Edit, Plus, Refresh, Search, Sort } from '@element-plus/icons-vue'
 import { useTableQueryListHooks } from '@/hooks/use-crud-hooks'
-import { deptStatusEnums } from '@/service/enums/system/dept.enum'
+import { deptStatusEnum } from '@/service/enums/system/dept.enum'
 
 defineOptions({ name: 'SysDeptViewIndex' })
 
@@ -99,7 +99,7 @@ onMounted(async () => {
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
           <el-form-item label="部门状态" prop="deptStatus">
-            <xht-enum-select v-model="queryParams.deptStatus" :data="deptStatusEnums" clearable placeholder="请选择部门状态" />
+            <xht-enum-select v-model="queryParams.deptStatus" :data="deptStatusEnum" clearable placeholder="请选择部门状态" />
           </el-form-item>
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
@@ -147,7 +147,7 @@ onMounted(async () => {
       </el-table-column>
       <el-table-column v-if="columnOption.deptStatus?.visible" align="center" label="部门状态" prop="deptStatus" width="120">
         <template #default="{ row }">
-          <xht-enum-tag :filter-label="row.deptStatus" :data="deptStatusEnums" />
+          <xht-enum-tag :filter-label="row.deptStatus" :data="deptStatusEnum" />
         </template>
       </el-table-column>
       <el-table-column v-if="columnOption.deptSort?.visible" align="center" label="部门顺序" prop="deptSort" width="120" />

@@ -2,7 +2,7 @@
 import { Expand, Fold } from '@element-plus/icons-vue'
 import { useThemeStore } from '@/store'
 import { storeToRefs } from 'pinia'
-import { DeviceEnums } from '@/service/enums'
+import { DeviceEnum } from '@/service/enums'
 
 defineOptions({ name: 'MenuLock' })
 const themeStore = useThemeStore()
@@ -11,7 +11,7 @@ const { menuStatus, device, sidebarStatus } = storeToRefs(themeStore)
  * 切换菜单状态
  */
 const changeMenuStatus = () => {
-  if (device.value === DeviceEnums.MOBILE) {
+  if (device.value === DeviceEnum.MOBILE) {
     sidebarStatus.value = !sidebarStatus.value
   } else {
     menuStatus.value = !menuStatus.value

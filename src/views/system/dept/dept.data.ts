@@ -1,14 +1,14 @@
 import type { SysDeptOperationRequest, SysDeptResponse } from '@/service/model/system/dept.model'
 import type { FormRules } from 'element-plus'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
-import { deptStatusEnums } from '@/service/enums/system/dept.enum'
+import { deptStatusEnum } from '@/service/enums/system/dept.enum'
 
 /**
  * 增改页面 表单类型 默认值
  */
 export const sysDeptOperationForm: SysDeptOperationRequest = {
   parentId: '0', // 父部门ID
-  deptStatus: deptStatusEnums.NORMAL.value, // 部门状态,可用值:0,1
+  deptStatus: deptStatusEnum.NORMAL.value, // 部门状态,可用值:0,1
   deptSort: 0, // 部门顺序
   leaderPost: {}, // 负责人职位信息
   leaderUser: {}, // 负责人用户信息

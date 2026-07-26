@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { GenColumnInfoOperationRequest, GenColumnInfoResponse, GenStatusEnums } from '@/service/model/generate/column.model'
+import { GenColumnInfoOperationRequest, GenColumnInfoResponse, GenStatusEnum } from '@/service/model/generate/column.model'
 
 /**
  * 列信息模型，用于双向绑定列数据
@@ -70,8 +70,8 @@ const changeList = (row: GenColumnInfoOperationRequest) => {
       <template #default="{ row }">
         <el-switch
           v-model="row.listShow"
-          :active-value="GenStatusEnums.ENABLED"
-          :inactive-value="GenStatusEnums.DISABLED"
+          :active-value="GenStatusEnum.ENABLED"
+          :inactive-value="GenStatusEnum.DISABLED"
           :disabled="['id', 'version', 'tenant_id', 'del_flag'].includes(row.dbName)"
           @change="changeList(row)"
         />
@@ -81,8 +81,8 @@ const changeList = (row: GenColumnInfoOperationRequest) => {
       <template #default="{ row }">
         <el-switch
           v-model="row.listSortable"
-          :active-value="GenStatusEnums.ENABLED"
-          :inactive-value="GenStatusEnums.DISABLED"
+          :active-value="GenStatusEnum.ENABLED"
+          :inactive-value="GenStatusEnum.DISABLED"
           :disabled="row.listShow !== 1"
         />
       </template>
@@ -91,8 +91,8 @@ const changeList = (row: GenColumnInfoOperationRequest) => {
       <template #default="{ row }">
         <el-switch
           v-model="row.listDisabled"
-          :active-value="GenStatusEnums.ENABLED"
-          :inactive-value="GenStatusEnums.DISABLED"
+          :active-value="GenStatusEnum.ENABLED"
+          :inactive-value="GenStatusEnum.DISABLED"
           :disabled="row.listShow !== 1"
         />
       </template>
@@ -101,8 +101,8 @@ const changeList = (row: GenColumnInfoOperationRequest) => {
       <template #default="{ row }">
         <el-switch
           v-model="row.listHidden"
-          :active-value="GenStatusEnums.ENABLED"
-          :inactive-value="GenStatusEnums.DISABLED"
+          :active-value="GenStatusEnum.ENABLED"
+          :inactive-value="GenStatusEnum.DISABLED"
           :disabled="row.listShow !== 1"
         />
       </template>

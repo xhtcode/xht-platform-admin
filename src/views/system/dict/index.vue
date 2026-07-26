@@ -7,7 +7,7 @@ import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { sysDictColumnOption } from '@/views/system/dict/dict.data'
 import { Delete, Edit, Plus, Refresh, Search } from '@element-plus/icons-vue'
-import { sysDictStatusEnums } from '@/service/enums/system/dict.enum'
+import { sysDictStatusEnum } from '@/service/enums/system/dict.enum'
 
 defineOptions({ name: 'SysDictViewIndex' })
 
@@ -117,7 +117,7 @@ onMounted(async () => {
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
           <el-form-item label="字典状态" prop="status">
-            <xht-enum-select v-model="queryParams.status" :data="sysDictStatusEnums" clearable placeholder="请选择字典状态" />
+            <xht-enum-select v-model="queryParams.status" :data="sysDictStatusEnum" clearable placeholder="请选择字典状态" />
           </el-form-item>
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">

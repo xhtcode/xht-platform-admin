@@ -4,7 +4,7 @@ import { queryGenTypeMappingById, saveGenTypeMapping, updateGenTypeMapping } fro
 import { genTypeMappingOperationForm, genTypeMappingOperationRules } from '@/views/generate/type-mapping/type.mapping.data'
 import { useMessage } from '@/hooks/use-message'
 import type { GenTypeMappingOperationRequest } from '@/service/model/generate/type.mapping.model'
-import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
+import { DataBaseTypeEnum } from '@/service/enums/generate/generate.enums'
 
 defineOptions({ name: 'GenTypeMappingAddOrUpdate' })
 const emits = defineEmits(['success'])
@@ -105,8 +105,8 @@ defineExpose({
       </el-form-item>
       <el-form-item label="数据库类型" prop="dbType">
         <el-select v-model="addUpdateForm.dbType" placeholder="请选择数据库类型">
-          <el-option :value="DataBaseTypeEnums.MYSQL" label="MySql" />
-          <el-option :value="DataBaseTypeEnums.ORACLE" label="Oracle" />
+          <el-option :value="DataBaseTypeEnum.MYSQL" label="MySql" />
+          <el-option :value="DataBaseTypeEnum.ORACLE" label="Oracle" />
         </el-select>
       </el-form-item>
       <el-form-item label="Java类型" prop="javaType">

@@ -10,7 +10,7 @@ import {
 import type { SysNoticeOperationRequest } from '@/service/model/system/notice.model'
 import { sysNoticeOperationForm, sysNoticeOperationRules } from '@/views/system/notice/base.data'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import { noticeJumpTypeEnums, noticeStatusEnums, noticeTimedPublishEnums, noticeTopEnums } from '@/service/enums/system/notice.enum'
+import { noticeJumpTypeEnum, noticeStatusEnum, noticeTimedPublishEnum, noticeTopEnum } from '@/service/enums/system/notice.enum'
 
 defineOptions({ name: 'SysNoticeAddOrUpdate' })
 
@@ -81,7 +81,7 @@ const submitForm = () => {
  * 发布通知
  */
 const handleSysNoticePublish = () => {
-  if (state.operationStatus === 'update' && addUpdateForm.value.noticeStatus === noticeStatusEnums.NOT_PUBLISH.value) {
+  if (state.operationStatus === 'update' && addUpdateForm.value.noticeStatus === noticeStatusEnum.NOT_PUBLISH.value) {
     state.loadingStatus = true
     useMessageBox()
       .confirm('此操作将发布通知, 是否继续?')
@@ -99,7 +99,7 @@ const handleSysNoticePublish = () => {
  * 下架通知
  */
 const handleSysNoticeUnderShelve = () => {
-  if (state.operationStatus === 'update' && addUpdateForm.value.noticeStatus === noticeStatusEnums.PUBLISH.value) {
+  if (state.operationStatus === 'update' && addUpdateForm.value.noticeStatus === noticeStatusEnum.PUBLISH.value) {
     state.loadingStatus = true
     useMessageBox()
       .confirm('此操作将下架通知, 是否继续?')
@@ -144,14 +144,14 @@ defineExpose({
       <div>
         <el-button
           type="success"
-          v-if="state.operationStatus === 'update' && addUpdateForm.noticeStatus === noticeStatusEnums.NOT_PUBLISH.value"
+          v-if="state.operationStatus === 'update' && addUpdateForm.noticeStatus === noticeStatusEnum.NOT_PUBLISH.value"
           @click="handleSysNoticePublish"
         >
           发布
         </el-button>
         <el-button
           type="danger"
-          v-if="state.operationStatus === 'update' && addUpdateForm.noticeStatus === noticeStatusEnums.PUBLISH.value"
+          v-if="state.operationStatus === 'update' && addUpdateForm.noticeStatus === noticeStatusEnum.PUBLISH.value"
           @click="handleSysNoticeUnderShelve"
         >
           下架
@@ -186,12 +186,12 @@ defineExpose({
             </el-col>
             <el-col :span="12">
               <el-form-item label="通知状态" prop="noticeStatus">
-                <xht-enum-select v-model="addUpdateForm.noticeStatus" :data="noticeStatusEnums" placeholder="请选择通知状态" disabled />
+                <xht-enum-select v-model="addUpdateForm.noticeStatus" :data="noticeStatusEnum" placeholder="请选择通知状态" disabled />
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="置顶状态" prop="noticeTop">
-                <xht-enum-select v-model="addUpdateForm.noticeTop" :data="noticeTopEnums" placeholder="请选择置顶状态" />
+                <xht-enum-select v-model="addUpdateForm.noticeTop" :data="noticeTopEnum" placeholder="请选择置顶状态" />
               </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -290,10 +290,10 @@ defineExpose({
           <el-row>
             <el-col :span="12">
               <el-form-item label="定时发布" prop="noticeTimedPublish">
-                <xht-enum-select v-model="addUpdateForm.noticeTimedPublish" :data="noticeTimedPublishEnums" placeholder="请选择定时发布状态" />
+                <xht-enum-select v-model="addUpdateForm.noticeTimedPublish" :data="noticeTimedPublishEnum" placeholder="请选择定时发布状态" />
               </el-form-item>
             </el-col>
-            <el-col :span="12" v-if="addUpdateForm.noticeTimedPublish === noticeTimedPublishEnums.PUBLISH.value">
+            <el-col :span="12" v-if="addUpdateForm.noticeTimedPublish === noticeTimedPublishEnum.PUBLISH.value">
               <el-form-item label="发布时间" prop="noticePublishTime">
                 <el-date-picker
                   class="w-full!"
@@ -314,10 +314,10 @@ defineExpose({
           <el-row>
             <el-col :span="12">
               <el-form-item label="跳转类型" prop="noticeJumpType">
-                <xht-enum-select v-model="addUpdateForm.noticeJumpType" :data="noticeJumpTypeEnums" placeholder="请选择跳转类型" />
+                <xht-enum-select v-model="addUpdateForm.noticeJumpType" :data="noticeJumpTypeEnum" placeholder="请选择跳转类型" />
               </el-form-item>
             </el-col>
-            <el-col :span="12" v-if="addUpdateForm.noticeJumpType !== noticeJumpTypeEnums.NO_JUMP.value">
+            <el-col :span="12" v-if="addUpdateForm.noticeJumpType !== noticeJumpTypeEnum.NO_JUMP.value">
               <el-form-item label="跳转地址" prop="noticeJumpUrl">
                 <el-input v-model="addUpdateForm.noticeJumpUrl" clearable :maxlength="100" show-word-limit placeholder="请输入跳转地址" />
               </el-form-item>

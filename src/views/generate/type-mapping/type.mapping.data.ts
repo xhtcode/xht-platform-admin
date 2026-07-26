@@ -1,13 +1,13 @@
 import type { FormRules } from 'element-plus'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import type { GenTypeMappingOperationRequest, GenTypeMappingResponse } from '@/service/model/generate/type.mapping.model'
-import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
+import { DataBaseTypeEnum } from '@/service/enums/generate/generate.enums'
 
 /**
  * 增改页面 表单类型 默认值
  */
 export const genTypeMappingOperationForm: Partial<GenTypeMappingOperationRequest> = {
-  dbType: DataBaseTypeEnums.MYSQL,
+  dbType: DataBaseTypeEnum.MYSQL,
 }
 
 /**

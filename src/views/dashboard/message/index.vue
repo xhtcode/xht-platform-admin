@@ -16,7 +16,7 @@ import type { MessageStar, MessageTop, SysMessageResponse } from '@/service/mode
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { sysMessageColumnOption } from '@/views/dashboard/message/data'
-import { messageStarEnums, messageStatusEnums, messageTopEnums } from '@/service/enums/system/message.enum'
+import { messageStarEnum, messageStatusEnum, messageTopEnum } from '@/service/enums/system/message.enum'
 
 defineOptions({
   name: 'MyMessage',
@@ -86,8 +86,8 @@ const handleView = async (messageId: ModeIdType) => {
  */
 const handleStart = (messageId: ModeIdType, start: MessageStar) => {
   state.loadingStatus = true
-  const requestStart = start === messageStarEnums.YES.value ? messageStarEnums.NO.value : messageStarEnums.YES.value
-  const requestStartSuccessMsg = start === messageStarEnums.YES.value ? '取消收藏站内信成功！' : '收藏站内信成功！'
+  const requestStart = start === messageStarEnum.YES.value ? messageStarEnum.NO.value : messageStarEnum.YES.value
+  const requestStartSuccessMsg = start === messageStarEnum.YES.value ? '取消收藏站内信成功！' : '收藏站内信成功！'
   updateMessageStart(messageId, requestStart)
     .then(() => {
       useMessage().success(requestStartSuccessMsg)
@@ -105,8 +105,8 @@ const handleStart = (messageId: ModeIdType, start: MessageStar) => {
  */
 const handleTop = (messageId: ModeIdType, top: MessageTop) => {
   state.loadingStatus = true
-  const requestTop = top === messageTopEnums.YES.value ? messageTopEnums.NO.value : messageTopEnums.YES.value
-  const requestTopSuccessMsg = top === messageTopEnums.YES.value ? '取消收藏站内信成功！' : '收藏站内信成功！'
+  const requestTop = top === messageTopEnum.YES.value ? messageTopEnum.NO.value : messageTopEnum.YES.value
+  const requestTopSuccessMsg = top === messageTopEnum.YES.value ? '取消收藏站内信成功！' : '收藏站内信成功！'
   updateMessageTop(messageId, requestTop)
     .then(() => {
       useMessage().success(requestTopSuccessMsg)
@@ -166,7 +166,7 @@ onMounted(() => {
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
           <el-form-item label="收藏状态" prop="messageStar">
-            <xht-enum-select v-model="queryParams.messageStar" :data="messageStarEnums" clearable placeholder="请选择收藏状态" />
+            <xht-enum-select v-model="queryParams.messageStar" :data="messageStarEnum" clearable placeholder="请选择收藏状态" />
           </el-form-item>
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
@@ -188,8 +188,8 @@ onMounted(() => {
       <xht-column-index fixed="left" :current="queryParams.current" :size="queryParams.size" />
       <el-table-column fixed="left" label="发送人" prop="senderName" width="160">
         <template #default="{ row }">
-          <el-icon v-if="row.response.messageStar === messageStarEnums.YES.value" color="#FFDC00" :size="18"><StarFilled /></el-icon>
-          <el-icon v-if="row.response.messageTop === messageTopEnums.YES.value" :size="18"><ArrowUpBold /></el-icon>
+          <el-icon v-if="row.response.messageStar === messageStarEnum.YES.value" color="#FFDC00" :size="18"><StarFilled /></el-icon>
+          <el-icon v-if="row.response.messageTop === messageTopEnum.YES.value" :size="18"><ArrowUpBold /></el-icon>
           {{ row.senderName }}
         </template>
       </el-table-column>
@@ -202,7 +202,7 @@ onMounted(() => {
       </el-table-column>
       <el-table-column label="消息状态" prop="response.messageStatus" width="120">
         <template #default="{ row }">
-          <xht-enum-tag :status="row.response.messageStatus" :data="messageStatusEnums" />
+          <xht-enum-tag :status="row.response.messageStatus" :data="messageStatusEnum" />
         </template>
       </el-table-column>
       <el-table-column label="已读时间" v-if="columnOption.readTime?.visible" prop="response.readTime" width="180" />

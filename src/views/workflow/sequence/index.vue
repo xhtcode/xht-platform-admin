@@ -103,7 +103,7 @@ onMounted(async () => {
 
 <template>
   <div class="xht-view-container">
-    <el-form ref="queryFormRef" :disabled="state.loadingStatus" :model="queryParams" class="user-select-none" label-width="100px">
+    <el-form ref="queryFormRef" :disabled="state.loadingStatus" :model="queryParams" class="user-select-none mb-1" label-width="100px">
       <el-row v-if="!state.searchStatus">
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
           <el-form-item label="关键字" prop="keyWord">
@@ -117,24 +117,13 @@ onMounted(async () => {
       </el-row>
       <el-row v-else>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
-          <el-form-item label="序列编码" prop="sequenceCode">
-            <el-input v-model="queryParams.sequenceCode" clearable :maxlength="60" show-word-limit placeholder="请输入序列编码" />
-          </el-form-item>
-        </el-col>
-        <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
           <el-form-item label="序列名称" prop="sequenceName">
             <el-input v-model="queryParams.sequenceName" clearable :maxlength="100" show-word-limit placeholder="请输入序列名称" />
           </el-form-item>
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
-          <el-form-item label="序列格式" prop="sequenceFormat">
-            <el-date-picker
-              v-model="queryParams.sequenceFormat"
-              format="YYYY-MM-DD"
-              placeholder="选择序列格式"
-              type="date"
-              value-format="YYYY-MM-DD"
-            />
+          <el-form-item label="序列编码" prop="sequenceCode">
+            <el-input v-model="queryParams.sequenceCode" clearable :maxlength="60" show-word-limit placeholder="请输入序列编码" />
           </el-form-item>
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
@@ -147,7 +136,7 @@ onMounted(async () => {
             <el-input v-model="queryParams.resetFlag" clearable :maxlength="1" show-word-limit placeholder="请输入重置周期" />
           </el-form-item>
         </el-col>
-        <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
+        <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center" :offset="18">
           <el-button :icon="Search" type="primary" @click="handlePageQuery">查询</el-button>
           <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
         </el-col>

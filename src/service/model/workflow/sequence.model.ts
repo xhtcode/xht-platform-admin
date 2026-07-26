@@ -1,12 +1,22 @@
 /**
+ * 是否循环 1:否 0:是
+ */
+export type IsCycleStatus = 0 | 1
+
+/**
+ * 重置周期 0:不重置1:每天 2:每月3:每年
+ */
+export type IsResetFlag = 0 | 1 | 2 | 3
+
+/**
  * 流程扩展-流程序列号查询请求参数类型
  */
 export interface FlowSequenceQueryRequest extends PageQueryRequest {
   sequenceCode?: string // 序列编码
   sequenceName?: string // 序列名称
   sequenceFormat?: string // 序列格式
-  isCycle?: string // 是否循环
-  resetFlag?: string // 重置周期
+  isCycle?: IsCycleStatus // 是否循环
+  resetFlag?: IsResetFlag // 重置周期
 }
 
 /**
@@ -21,8 +31,8 @@ export interface FlowSequenceResponse extends MetaResponse {
   maxValue: number // 最大值
   currentValue: number // 当前值
   steppingValue: number // 步进值
-  isCycle: string // 是否循环
-  resetFlag: string // 重置周期
+  isCycle: IsCycleStatus // 是否循环
+  resetFlag: IsResetFlag // 重置周期
 }
 
 /**

@@ -7,7 +7,7 @@ import { sysMenuColumnOption } from '@/views/system/menu/menu.data'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { Delete, Edit, Plus, Refresh, Search, Sort } from '@element-plus/icons-vue'
 import { useTableQueryListHooks } from '@/hooks/use-crud-hooks'
-import { menuStatusEnums, menuTypeEnums } from '@/service/enums/system/menu.enum'
+import { menuStatusEnum, menuTypeEnum } from '@/service/enums/system/menu.enum'
 
 defineOptions({ name: 'SysMenuViewIndex' })
 
@@ -99,12 +99,12 @@ onMounted(async () => {
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
           <el-form-item label="菜单类型" prop="menuType">
-            <xht-enum-select v-model="queryParams.menuType" :data="menuTypeEnums" clearable placeholder="请选择菜单类型" />
+            <xht-enum-select v-model="queryParams.menuType" :data="menuTypeEnum" clearable placeholder="请选择菜单类型" />
           </el-form-item>
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
           <el-form-item label="菜单状态" prop="menuStatus">
-            <xht-enum-select v-model="queryParams.menuStatus" :data="menuStatusEnums" clearable placeholder="请选择菜单状态" />
+            <xht-enum-select v-model="queryParams.menuStatus" :data="menuStatusEnum" clearable placeholder="请选择菜单状态" />
           </el-form-item>
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
@@ -136,7 +136,7 @@ onMounted(async () => {
     >
       <el-table-column v-if="columnOption.menuType?.visible" align="left" fixed="left" label="菜单类型" width="160" prop="menuType">
         <template #default="{ row }">
-          <xht-enum-tag :filter-label="row.menuType" :data="menuTypeEnums" />
+          <xht-enum-tag :filter-label="row.menuType" :data="menuTypeEnum" />
         </template>
       </el-table-column>
       <el-table-column
@@ -154,7 +154,7 @@ onMounted(async () => {
       </el-table-column>
       <el-table-column v-if="columnOption.menuStatus?.visible" align="center" label="菜单状态" min-width="120" prop="menuStatus">
         <template #default="{ row }">
-          <xht-enum-tag :filter-label="row.menuStatus" :data="menuStatusEnums" />
+          <xht-enum-tag :filter-label="row.menuStatus" :data="menuStatusEnum" />
         </template>
       </el-table-column>
       <el-table-column v-if="columnOption.menuAuthority?.visible" align="center" label="权限标识" prop="menuAuthority" width="150" />

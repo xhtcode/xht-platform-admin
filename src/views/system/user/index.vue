@@ -8,7 +8,7 @@ import { querySysUserPage, removeSysUserById, removeSysUserByIds, resetPassword 
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
 import { DArrowLeft, DArrowRight, Delete, Edit, Key, Plus, Refresh, Search, User } from '@element-plus/icons-vue'
-import { userStatusEnums, userTypeEnums } from '@/service/enums/system/user.enum'
+import { userStatusEnum, userTypeEnum } from '@/service/enums/system/user.enum'
 import { ref } from 'vue'
 
 defineOptions({ name: 'SysUserViewIndex' })
@@ -170,7 +170,7 @@ onMounted(async () => {
         <el-row v-else>
           <el-col :lg="8" :md="8" :sm="12" :xl="4" :xs="24">
             <el-form-item label="用户类型" prop="userType">
-              <xht-enum-select v-model="queryParams.userType" :data="userTypeEnums" clearable placeholder="请选择用户类型" />
+              <xht-enum-select v-model="queryParams.userType" :data="userTypeEnum" clearable placeholder="请选择用户类型" />
             </el-form-item>
           </el-col>
           <el-col :lg="8" :md="8" :sm="12" :xl="4" :xs="24">
@@ -185,7 +185,7 @@ onMounted(async () => {
           </el-col>
           <el-col :lg="8" :md="8" :sm="12" :xl="4" :xs="24">
             <el-form-item label="用户状态" prop="userStatus">
-              <xht-enum-select v-model="queryParams.userStatus" :data="userStatusEnums" clearable placeholder="请选择用户状态" />
+              <xht-enum-select v-model="queryParams.userStatus" :data="userStatusEnum" clearable placeholder="请选择用户状态" />
             </el-form-item>
           </el-col>
           <el-col :lg="8" :md="8" :sm="12" :xl="4" :xs="24">
@@ -261,12 +261,12 @@ onMounted(async () => {
         <el-table-column v-if="columnOption.nickName?.visible" label="用户昵称" min-width="160" prop="nickName" />
         <el-table-column v-if="columnOption.userType?.visible" label="用户类型" min-width="100" prop="userType">
           <template #default="{ row }">
-            <xht-enum-tag :filter-label="row.userType" :data="userTypeEnums" />
+            <xht-enum-tag :filter-label="row.userType" :data="userTypeEnum" />
           </template>
         </el-table-column>
         <el-table-column v-if="columnOption.userStatus?.visible" label="用户状态" min-width="100" prop="userStatus">
           <template #default="{ row }">
-            <xht-enum-tag :filter-label="row.userStatus" :data="userStatusEnums" />
+            <xht-enum-tag :filter-label="row.userStatus" :data="userStatusEnum" />
           </template>
         </el-table-column>
         <el-table-column v-if="columnOption.userPhone?.visible" label="手机号码" min-width="130" prop="userPhone" />

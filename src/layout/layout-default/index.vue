@@ -16,7 +16,7 @@ import LayoutMain from '@/layout/components/layout-main/index.vue'
 
 defineOptions({ name: 'LayoutDefaultComponent' })
 const themeStore = useThemeStore()
-const { sidebarStatus } = storeToRefs(themeStore)
+const { sidebarStatus, tagsViewStatus } = storeToRefs(themeStore)
 const { desktopShowStatus, mobileShowStatus, asideStyle } = useThemeHooks()
 
 /**
@@ -48,7 +48,7 @@ function handleCloseSidebar() {
           <user-avatar />
         </div>
       </el-header>
-      <div class="tabs-box-container">
+      <div class="tabs-box-container" v-if="tagsViewStatus">
         <tags-view />
       </div>
       <layout-main />

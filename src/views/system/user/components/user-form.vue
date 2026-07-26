@@ -5,7 +5,7 @@ import { useMessage } from '@/hooks/use-message'
 import { sysUserOperationForm, sysUserOperationRules } from '@/views/system/user/user.data'
 import { SysUserOperationRequest } from '@/service/model/system/user.model'
 import type { SysDeptResponse } from '@/service/model/system/dept.model'
-import { userStatusEnums, userTypeEnums } from '@/service/enums/system/user.enum'
+import { userStatusEnum, userTypeEnum } from '@/service/enums/system/user.enum'
 
 defineOptions({
   name: 'UserForm',
@@ -132,7 +132,7 @@ defineExpose({
             <el-input v-model="addUpdateForm.nickName" :maxlength="15" placeholder="请输入用户昵称" show-word-limit />
           </el-form-item>
           <el-form-item label="用户类型" prop="userType">
-            <xht-enum-select v-model="addUpdateForm.userType" :data="userTypeEnums" clearable placeholder="请选择用户类型" />
+            <xht-enum-select v-model="addUpdateForm.userType" :data="userTypeEnum" clearable placeholder="请选择用户类型" />
           </el-form-item>
         </div>
       </div>
@@ -141,7 +141,7 @@ defineExpose({
           <el-form-item label="用户状态" prop="userStatus">
             <xht-enum-select
               v-model="addUpdateForm.userStatus"
-              :data="userStatusEnums"
+              :data="userStatusEnum"
               clearable
               placeholder="请选择用户类型"
               :disabled="state.operationStatus === 'create'"

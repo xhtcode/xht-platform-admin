@@ -13,7 +13,7 @@ import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { sysNoticeColumnOption } from '@/views/system/notice/base.data'
 import { BottomLeft, Delete, Edit, Plus, Refresh, Search, TopRight } from '@element-plus/icons-vue'
-import { noticeJumpTypeEnums, noticeStatusEnums, noticeTimedPublishEnums, noticeTopEnums } from '@/service/enums/system/notice.enum'
+import { noticeJumpTypeEnum, noticeStatusEnum, noticeTimedPublishEnum, noticeTopEnum } from '@/service/enums/system/notice.enum'
 
 defineOptions({ name: 'SysNoticeViewIndex' })
 
@@ -85,7 +85,7 @@ const handleDelete = (row: SysNoticeResponse) => {
  * 发布通知
  */
 const handleSysNoticePublish = (row: SysNoticeResponse) => {
-  if (row && row.noticeStatus === noticeStatusEnums.NOT_PUBLISH.value) {
+  if (row && row.noticeStatus === noticeStatusEnum.NOT_PUBLISH.value) {
     state.loadingStatus = true
     useMessageBox()
       .confirm('此操作将发布通知, 是否继续?')
@@ -103,7 +103,7 @@ const handleSysNoticePublish = (row: SysNoticeResponse) => {
  * 下架通知
  */
 const handleSysNoticeUnderShelve = (row: SysNoticeResponse) => {
-  if (row && row.noticeStatus === noticeStatusEnums.PUBLISH.value) {
+  if (row && row.noticeStatus === noticeStatusEnum.PUBLISH.value) {
     state.loadingStatus = true
     useMessageBox()
       .confirm('此操作将下架通知, 是否继续?')
@@ -123,7 +123,7 @@ const handleSysNoticeUnderShelve = (row: SysNoticeResponse) => {
 const handleSysNoticeTop = (row: SysNoticeResponse) => {
   if (row) {
     state.loadingStatus = true
-    const noticeTop = row.noticeTop === noticeTopEnums.NO.value ? noticeTopEnums.NO.operate : noticeTopEnums.YES.operate
+    const noticeTop = row.noticeTop === noticeTopEnum.NO.value ? noticeTopEnum.NO.operate : noticeTopEnum.YES.operate
     useMessageBox()
       .confirm(`此操作通知将${noticeTop}, 是否继续?`)
       .then(async () => {
@@ -268,18 +268,18 @@ onMounted(async () => {
       <el-table-column v-if="columnOption.noticeSummary?.visible" label="通知摘要" prop="noticeSummary" width="360" show-overflow-tooltip />
       <el-table-column v-if="columnOption.noticeStatus?.visible" label="通知状态" prop="noticeStatus" width="120">
         <template #default="{ row }">
-          <xht-enum-tag :filter-label="row.noticeStatus" :data="noticeStatusEnums" placeholder="请选择通知状态" disabled />
+          <xht-enum-tag :filter-label="row.noticeStatus" :data="noticeStatusEnum" placeholder="请选择通知状态" disabled />
         </template>
       </el-table-column>
       <el-table-column v-if="columnOption.noticeOrder?.visible" label="通知排序" prop="noticeOrder" width="120" />
       <el-table-column v-if="columnOption.noticeTop?.visible" label="置顶状态" prop="noticeTop" width="120">
         <template #default="{ row }">
-          <xht-enum-tag :filter-label="row.noticeTop" :data="noticeTopEnums" placeholder="请选择通知状态" />
+          <xht-enum-tag :filter-label="row.noticeTop" :data="noticeTopEnum" placeholder="请选择通知状态" />
         </template>
       </el-table-column>
       <el-table-column v-if="columnOption.noticeTimedPublish?.visible" label="定时发布" prop="noticeTimedPublish" width="180">
         <template #default="{ row }">
-          <xht-enum-tag :filter-label="row.noticeTimedPublish" :data="noticeTimedPublishEnums" placeholder="请选择通知状态" />
+          <xht-enum-tag :filter-label="row.noticeTimedPublish" :data="noticeTimedPublishEnum" placeholder="请选择通知状态" />
         </template>
       </el-table-column>
       <el-table-column v-if="columnOption.noticePublishTime?.visible" label="发布时间" prop="noticePublishTime" width="180" />
@@ -287,7 +287,7 @@ onMounted(async () => {
       <el-table-column v-if="columnOption.noticeOfflineTime?.visible" label="下架时间" prop="noticeOfflineTime" width="180" />
       <el-table-column v-if="columnOption.noticeJumpType?.visible" label="跳转类型" prop="noticeJumpType" width="120">
         <template #default="{ row }">
-          <xht-enum-tag :filter-label="row.noticeJumpType" :data="noticeJumpTypeEnums" placeholder="请选择通知状态" />
+          <xht-enum-tag :filter-label="row.noticeJumpType" :data="noticeJumpTypeEnum" placeholder="请选择通知状态" />
         </template>
       </el-table-column>
       <el-table-column v-if="columnOption.noticeJumpUrl?.visible" label="跳转地址" prop="noticeJumpUrl" width="160" show-overflow-tooltip />
@@ -307,7 +307,7 @@ onMounted(async () => {
               :icon="TopRight"
               link
               type="primary"
-              v-if="row.noticeStatus === noticeStatusEnums.NOT_PUBLISH.value"
+              v-if="row.noticeStatus === noticeStatusEnum.NOT_PUBLISH.value"
               v-authorization="['sys:notice:update']"
               @click="handleSysNoticePublish(row)"
             >
@@ -317,7 +317,7 @@ onMounted(async () => {
               :icon="BottomLeft"
               link
               type="primary"
-              v-if="row.noticeStatus === noticeStatusEnums.PUBLISH.value"
+              v-if="row.noticeStatus === noticeStatusEnum.PUBLISH.value"
               v-authorization="['sys:notice:update']"
               @click="handleSysNoticeUnderShelve(row)"
             >

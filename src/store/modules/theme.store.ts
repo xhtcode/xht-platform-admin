@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { AppLanguageEnums, ComponentSizeEnums, DeviceEnums } from '@/service/enums'
+import { AppLanguageEnum, ComponentSizeEnum, DeviceEnum } from '@/service/enums'
 import pInIaPersistConfig from '@/store/pinia-persist'
 import { DefaultThemeColor } from '@/service/constant'
 
@@ -16,7 +16,7 @@ export const useThemeStore = defineStore(
     /**
      * 设备类型
      */
-    const device = ref<DeviceEnums>(DeviceEnums.MOBILE)
+    const device = ref<DeviceEnum>(DeviceEnum.MOBILE)
     /**
      * 侧边栏状态
      */
@@ -30,7 +30,7 @@ export const useThemeStore = defineStore(
     /**
      * 菜单状态
      */
-    const menuStatus = ref<boolean>(true)
+    const menuStatus = ref<boolean>(false)
 
     /**
      * 面包屑显示状态
@@ -40,7 +40,7 @@ export const useThemeStore = defineStore(
     /**
      * tags显示状态
      */
-    const tagsViewStatus = ref<boolean>(true)
+    const tagsViewStatus = ref<boolean>(false)
 
     /**
      * footer 显示
@@ -55,12 +55,12 @@ export const useThemeStore = defineStore(
     /**
      * 语言类型
      */
-    const languageType = ref<AppLanguageEnums>(AppLanguageEnums.ZH_CN)
+    const languageType = ref<AppLanguageEnum>(AppLanguageEnum.ZH_CN)
 
     /**
      * UI组件大小类型
      */
-    const sizeType = ref<ComponentSizeEnums>(ComponentSizeEnums.DEFAULT)
+    const sizeType = ref<ComponentSizeEnum>(ComponentSizeEnum.DEFAULT)
 
     /**
      * 默认主题颜色

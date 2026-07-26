@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { querySysDeptTree } from '@/service/api/system/dept.api'
 import type { SysDeptResponse } from '@/service/model/system/dept.model'
-import { deptStatusEnums } from '@/service/enums/system/dept.enum'
+import { deptStatusEnum } from '@/service/enums/system/dept.enum'
 
 defineOptions({ name: 'DeptTreeSelect' })
 
@@ -32,7 +32,7 @@ const menuTree = ref<INodeResponse<SysDeptResponse>[]>([])
 const getMenuTree = async () => {
   try {
     const response = await querySysDeptTree({
-      deptStatus: deptStatusEnums.NORMAL.value,
+      deptStatus: deptStatusEnum.NORMAL.value,
     })
     let treeData: INodeResponse<SysDeptResponse>[] = response.data
     // 如果需要显示顶级部门选项

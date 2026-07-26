@@ -3,7 +3,7 @@ import type { FormInstance } from 'element-plus'
 import type { GenDataSourceQueryRequest, GenDataSourceResponse } from '@/service/model/generate/datasource.model'
 import { connectionTest, queryGenDataSourceList, removeGenDataSourceByIds } from '@/service/api/generate/datasource.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
+import { DataBaseTypeEnum } from '@/service/enums/generate/generate.enums'
 import type { AxiosResponse } from 'axios'
 import { genDataSourceColumnOption } from '@/views/generate/datasource/datasource.data'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
@@ -118,8 +118,8 @@ onMounted(async () => {
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
           <el-form-item label="数据库类型" prop="dbType">
             <el-select v-model="queryParams.dbType" placeholder="请选择数据库类型">
-              <el-option :value="DataBaseTypeEnums.MYSQL" label="MySql" />
-              <el-option :value="DataBaseTypeEnums.ORACLE" label="Oracle" />
+              <el-option :value="DataBaseTypeEnum.MYSQL" label="MySql" />
+              <el-option :value="DataBaseTypeEnum.ORACLE" label="Oracle" />
             </el-select>
           </el-form-item>
         </el-col>

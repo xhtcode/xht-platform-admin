@@ -4,7 +4,7 @@ import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
 import type { GenTypeMappingQueryRequest, GenTypeMappingResponse } from '@/service/model/generate/type.mapping.model'
 import { queryGenTypeMappingPage, removeGenTypeMappingByIds } from '@/service/api/generate/type.mapping.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
+import { DataBaseTypeEnum } from '@/service/enums/generate/generate.enums'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { dbDataTypeList, genTypeMappingColumnOption } from '@/views/generate/type-mapping/type.mapping.data'
 import { Delete, Edit, Plus, Refresh, Search } from '@element-plus/icons-vue'
@@ -112,8 +112,8 @@ onMounted(async () => {
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
           <el-form-item label="数据库" prop="dbType">
             <el-select v-model="queryParams.dbType" placeholder="请选择数据库类型">
-              <el-option :value="DataBaseTypeEnums.MYSQL" label="MySql" />
-              <el-option :value="DataBaseTypeEnums.ORACLE" label="Oracle" />
+              <el-option :value="DataBaseTypeEnum.MYSQL" label="MySql" />
+              <el-option :value="DataBaseTypeEnum.ORACLE" label="Oracle" />
             </el-select>
           </el-form-item>
         </el-col>

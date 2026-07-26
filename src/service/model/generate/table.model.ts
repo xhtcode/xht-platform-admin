@@ -1,5 +1,5 @@
 import type { GenColumnInfoResponse, GenTableColumnQueryResponse } from '@/service/model/generate/column.model'
-import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
+import { DataBaseTypeEnum } from '@/service/enums/generate/generate.enums'
 
 /**
  * 代码生成核心返回结果
@@ -134,7 +134,7 @@ export interface GenTableInfoResponse extends MetaResponse {
   /**
    * 数据库类型
    */
-  dataBaseType: DataBaseTypeEnums
+  dataBaseType: DataBaseTypeEnum
 
   /**
    * 引擎名称

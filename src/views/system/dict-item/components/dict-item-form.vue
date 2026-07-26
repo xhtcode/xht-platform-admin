@@ -5,7 +5,7 @@ import type { SysDictItemOperationRequest } from '@/service/model/system/dict.it
 import { sysDictItemOperationForm, sysDictItemOperationRules } from '@/views/system/dict-item/dict.item.data'
 import { useMessage } from '@/hooks/use-message'
 import { useRoute } from 'vue-router'
-import { sysDictStatusEnums } from '@/service/enums/system/dict.enum'
+import { sysDictStatusEnum } from '@/service/enums/system/dict.enum'
 
 defineOptions({ name: 'SysDictItemAddOrUpdate' })
 
@@ -135,7 +135,7 @@ defineExpose({
         </el-col>
         <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="字典项状态" prop="status">
-            <xht-enum-select v-model="addUpdateForm.status" :data="sysDictStatusEnums" clearable placeholder="请选择字典项状态" />
+            <xht-enum-select v-model="addUpdateForm.status" :data="sysDictStatusEnum" clearable placeholder="请选择字典项状态" />
           </el-form-item>
         </el-col>
         <el-col :lg="12" :sm="24" :xs="24">

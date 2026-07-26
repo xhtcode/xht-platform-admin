@@ -1,12 +1,15 @@
 import type { FlowCategoryOperationRequest, FlowCategoryResponse } from '@/service/model/workflow/category.model'
 import type { FormRules } from 'element-plus'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
-import { FALSE } from 'sass'
+import { categoryStatusEnum } from '@/service/enums/workflow/category.enum'
 
 /**
  * 流程扩展-流程分类 增改页面 表单类型 默认值
  */
-export const flowCategoryOperationForm: FlowCategoryOperationRequest = {}
+export const flowCategoryOperationForm: FlowCategoryOperationRequest = {
+  categoryStatus: categoryStatusEnum.NORMAL.value,
+  categorySort: 999,
+}
 
 /**
  * 流程扩展-流程分类 增改页面 表单类型 表单校验

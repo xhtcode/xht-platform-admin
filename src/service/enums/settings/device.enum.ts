@@ -1,7 +1,7 @@
 /**
  * 设备枚举
  */
-export const enum DeviceEnums {
+export const enum DeviceEnum {
   /**
    * 宽屏设备
    */

@@ -5,7 +5,7 @@ import type { SysDeptOperationRequest } from '@/service/model/system/dept.model'
 import type { UserSimpleVo } from '@/service/model/system/user.model'
 import { sysDeptOperationForm, sysDeptOperationRules } from '@/views/system/dept/dept.data'
 import { useMessage } from '@/hooks/use-message'
-import { deptStatusEnums } from '@/service/enums/system/dept.enum'
+import { deptStatusEnum } from '@/service/enums/system/dept.enum'
 import DeptUserForm from '@/views/system/dept/components/dept-user-form.vue'
 
 defineOptions({ name: 'SysDeptAddOrUpdate' })
@@ -142,7 +142,7 @@ defineExpose({
         </el-col>
         <el-col :span="12">
           <el-form-item label="部门状态" prop="deptStatus">
-            <xht-enum-select v-model="addUpdateForm.deptStatus" :data="deptStatusEnums" clearable placeholder="请选择部门状态" />
+            <xht-enum-select v-model="addUpdateForm.deptStatus" :data="deptStatusEnum" clearable placeholder="请选择部门状态" />
           </el-form-item>
         </el-col>
         <el-col :span="12">

@@ -8,7 +8,7 @@ import type { SysDeptResponse } from '@/service/model/system/dept.model'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { sysDeptPostColumnOption } from '@/views/system/dept-post/dept.post.data'
 import { Delete, Edit, Plus, Refresh, Search } from '@element-plus/icons-vue'
-import { sysDeptPostStatusEnums } from '@/service/enums/system/dept.post.enum'
+import { sysDeptPostStatusEnum } from '@/service/enums/system/dept.post.enum'
 
 defineOptions({ name: 'SysDeptPostViewIndex' })
 
@@ -125,7 +125,7 @@ const handleDeptClick = (data: SysDeptResponse) => {
           </el-col>
           <el-col :lg="8" :md="8" :sm="12" :xl="4" :xs="24">
             <el-form-item label="岗位状态" prop="postStatus">
-              <xht-enum-select v-model="queryParams.postStatus" :data="sysDeptPostStatusEnums" clearable placeholder="请选择岗位状态" />
+              <xht-enum-select v-model="queryParams.postStatus" :data="sysDeptPostStatusEnum" clearable placeholder="请选择岗位状态" />
             </el-form-item>
           </el-col>
           <el-col :lg="8" :md="8" :offset="8" :sm="12" :xl="4" :xs="24" class="text-center">

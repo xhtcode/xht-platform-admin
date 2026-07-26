@@ -5,7 +5,7 @@ import type { SysNoticeTypeQueryRequest, SysNoticeTypeResponse } from '@/service
 import { querySysNoticeTypeList, removeSysNoticeTypeById, removeSysNoticeTypeByIdBatch } from '@/service/api/system/notice.type.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { Delete, Edit, Plus, Refresh, Search } from '@element-plus/icons-vue'
-import { noticeTypeStatusEnums } from '@/service/enums/system/notice.enum'
+import { noticeTypeStatusEnum } from '@/service/enums/system/notice.enum'
 
 defineOptions({ name: 'SysNoticeTypeViewIndex' })
 
@@ -106,7 +106,7 @@ onMounted(async () => {
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
           <el-form-item label="类型状态" prop="noticeTypeStatus">
-            <xht-enum-select v-model="queryParams.noticeTypeStatus" :data="noticeTypeStatusEnums" clearable placeholder="请选择类型状态" />
+            <xht-enum-select v-model="queryParams.noticeTypeStatus" :data="noticeTypeStatusEnum" clearable placeholder="请选择类型状态" />
           </el-form-item>
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
@@ -151,7 +151,7 @@ onMounted(async () => {
       <el-table-column label="类型名称" prop="noticeTypeName" min-width="120" />
       <el-table-column label="类型状态" prop="noticeTypeStatus" width="80">
         <template #default="{ row }">
-          <xht-enum-tag :filter-label="row.noticeTypeStatus" :data="noticeTypeStatusEnums" />
+          <xht-enum-tag :filter-label="row.noticeTypeStatus" :data="noticeTypeStatusEnum" />
         </template>
       </el-table-column>
       <el-table-column label="类型排序" prop="noticeTypeSort" width="80" />

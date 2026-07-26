@@ -1,9 +1,9 @@
 import type { UserStatusType, UserType } from '@/service/model/system/user.model'
 
 /**
- * 用户类型枚举（对应 Java 的 UserTypeEnums）
+ * 用户类型枚举（对应 Java 的 UserTypeEnum）
  */
-export const userTypeEnums: DictEnum<UserType, 'ADMIN' | 'BUSINESS' | 'USER'> = {
+export const userTypeEnum: DictEnum<UserType, 'ADMIN' | 'BUSINESS' | 'USER'> = {
   ADMIN: {
     label: '管理员',
     value: 1,
@@ -23,7 +23,7 @@ export const userTypeEnums: DictEnum<UserType, 'ADMIN' | 'BUSINESS' | 'USER'> = 
 /**
  * 用户状态枚举
  */
-export const userStatusEnums: DictEnum<UserStatusType, 'NORMAL' | 'UNACTIVATED' | 'DISABLED' | 'LOCKED' | 'EXPIRED'> = {
+export const userStatusEnum: DictEnum<UserStatusType, 'NORMAL' | 'UNACTIVATED' | 'DISABLED' | 'LOCKED' | 'EXPIRED'> = {
   NORMAL: {
     label: '正常',
     value: 0,

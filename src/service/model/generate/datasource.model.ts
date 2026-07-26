@@ -1,4 +1,4 @@
-import { DataBaseTypeEnums } from '@/service/enums/generate/generate.enums'
+import { DataBaseTypeEnum } from '@/service/enums/generate/generate.enums'
 
 /**
  * 查询请求类型
@@ -11,7 +11,7 @@ export interface GenDataSourceQueryRequest extends PageQueryRequest {
   /**
    * 数据库类型
    */
-  dbType?: DataBaseTypeEnums
+  dbType?: DataBaseTypeEnum
 }
 
 /**
@@ -29,7 +29,7 @@ export interface GenDataSourceResponse extends MetaResponse {
   /**
    * 数据库类型
    */
-  dbType: DataBaseTypeEnums
+  dbType: DataBaseTypeEnum
   /**
    * 数据库地址
    */

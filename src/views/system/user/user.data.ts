@@ -1,14 +1,14 @@
 import type { SysUserOperationRequest, SysUserResponse } from '@/service/model/system/user.model'
 import type { FormRules } from 'element-plus'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
-import { userStatusEnums, userTypeEnums } from '@/service/enums/system/user.enum'
+import { userStatusEnum, userTypeEnum } from '@/service/enums/system/user.enum'
 
 /**
  * 增改页面 表单类型 默认值
  */
 export const sysUserOperationForm: SysUserOperationRequest = {
-  userType: userTypeEnums.USER.value,
-  userStatus: userStatusEnums.UNACTIVATED.value,
+  userType: userTypeEnum.USER.value,
+  userStatus: userStatusEnum.UNACTIVATED.value,
   profile: {},
   postInfos: [],
 }

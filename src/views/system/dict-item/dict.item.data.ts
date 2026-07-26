@@ -1,7 +1,7 @@
 import type { SysDictItemOperationRequest, SysDictItemResponse } from '@/service/model/system/dict.item.model'
 import type { FormRules } from 'element-plus'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
-import { sysDictStatusEnums } from '@/service/enums/system/dict.enum'
+import { sysDictStatusEnum } from '@/service/enums/system/dict.enum'
 
 /**
  * 增改页面 表单类型 默认值
@@ -9,7 +9,7 @@ import { sysDictStatusEnums } from '@/service/enums/system/dict.enum'
 export const sysDictItemOperationForm: Partial<SysDictItemOperationRequest> = {
   sortOrder: 0, // 排序序号
   remark: '暂无', // 字典项描述
-  status: sysDictStatusEnums.ENABLED.value, //状态(1:启用 0:禁用)
+  status: sysDictStatusEnum.ENABLED.value, //状态(1:启用 0:禁用)
 }
 
 /**

@@ -1,4 +1,4 @@
-export enum GenStatusEnums {
+export enum GenStatusEnum {
   DISABLED = 0, // 不显示/非必填/禁用/隐藏
   ENABLED = 1, // 显示/必填/启用/不隐藏
 }
@@ -35,12 +35,12 @@ export interface GenColumnInfoResponse extends MetaResponse {
   /**
    * 字段主键：0-非主键，1-主键
    */
-  dbPrimary: GenStatusEnums
+  dbPrimary: GenStatusEnum
 
   /**
    * 字段必填：0-非必填，1-必填
    */
-  dbRequired: GenStatusEnums
+  dbRequired: GenStatusEnum
 
   /**
    * 字段注释
@@ -65,12 +65,12 @@ export interface GenColumnInfoResponse extends MetaResponse {
   /**
    * 表单新增：0-不显示，1-显示
    */
-  fromInsert: GenStatusEnums
+  fromInsert: GenStatusEnum
 
   /**
    * 表单更新：0-不显示，1-显示
    */
-  fromUpdate: GenStatusEnums
+  fromUpdate: GenStatusEnum
 
   /**
    * 表单输入长度
@@ -80,7 +80,7 @@ export interface GenColumnInfoResponse extends MetaResponse {
   /**
    * 表单必填：0-非必填，1-必填
    */
-  fromFill: GenStatusEnums
+  fromFill: GenStatusEnum
 
   /**
    * 表单组件
@@ -90,17 +90,17 @@ export interface GenColumnInfoResponse extends MetaResponse {
   /**
    * 列表显示：0-不显示，1-显示
    */
-  listShow: GenStatusEnums
+  listShow: GenStatusEnum
 
   /**
    * 列表禁用：0-不禁用，1-禁用
    */
-  listDisabled: GenStatusEnums
+  listDisabled: GenStatusEnum
 
   /**
    * 默认隐藏：0-不隐藏，1-隐藏
    */
-  listHidden: GenStatusEnums
+  listHidden: GenStatusEnum
 
   /**
    * java类型
@@ -110,7 +110,7 @@ export interface GenColumnInfoResponse extends MetaResponse {
   /**
    * 列表排序
    */
-  listSortable: GenStatusEnums
+  listSortable: GenStatusEnum
 
   /**
    * java类型 包地址

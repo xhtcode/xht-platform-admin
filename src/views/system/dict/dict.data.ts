@@ -1,14 +1,14 @@
 import type { SysDictOperationRequest, SysDictResponse } from '@/service/model/system/dict.model'
 import type { FormRules } from 'element-plus'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
-import { sysDictStatusEnums } from '@/service/enums/system/dict.enum'
+import { sysDictStatusEnum } from '@/service/enums/system/dict.enum'
 
 /**
  * 增改页面 表单类型 默认值
  */
 export const sysDictOperationForm: Partial<SysDictOperationRequest> = {
   sortOrder: 0, //排序序号
-  status: sysDictStatusEnums.ENABLED.value, //状态(1:启用 0:禁用)
+  status: sysDictStatusEnum.ENABLED.value, //状态(1:启用 0:禁用)
 }
 
 /**

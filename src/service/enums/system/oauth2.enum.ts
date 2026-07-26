@@ -3,7 +3,7 @@ import type { AuthorizationGrantTypes, AutoApprove, ClientAuthenticationMethods 
 /**
  * 客户端授权类型
  */
-export const authorizationGrantTypesEnums: DictEnum<AuthorizationGrantTypes> = {
+export const authorizationGrantTypesEnum: DictEnum<AuthorizationGrantTypes> = {
   refresh_token: {
     label: '刷新Token',
     value: 'refresh_token',
@@ -34,7 +34,7 @@ export const authorizationGrantTypesEnums: DictEnum<AuthorizationGrantTypes> = {
 /**
  * 客户认证方式
  */
-export const clientAuthenticationMethodsEnums: DictEnum<ClientAuthenticationMethods> = {
+export const clientAuthenticationMethodsEnum: DictEnum<ClientAuthenticationMethods> = {
   client_secret_basic: { label: 'client_secret_basic', value: 'client_secret_basic' },
   client_secret_post: { label: 'client_secret_post', value: 'client_secret_post' },
   client_secret_jwt: { label: 'client_secret_jwt', value: 'client_secret_jwt' },
@@ -47,7 +47,7 @@ export const clientAuthenticationMethodsEnums: DictEnum<ClientAuthenticationMeth
 /**
  * 是否自动放行
  */
-export const autoApproveEnums: DictEnum<AutoApprove> = {
+export const autoApproveEnum: DictEnum<AutoApprove> = {
   NO: {
     label: '否',
     value: 0,

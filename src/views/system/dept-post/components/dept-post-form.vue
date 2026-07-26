@@ -4,8 +4,8 @@ import type { SysDeptPostOperationRequest } from '@/service/model/system/dept.po
 import { sysDeptPostOperationForm, sysDeptPostOperationRules } from '@/views/system/dept-post/dept.post.data'
 import { useMessage } from '@/hooks/use-message'
 import { querySysDeptPostById, saveSysDeptPost, updateSysDeptPost } from '@/service/api/system/dept.post.api'
-import { SystemFlagEnums } from '@/service/model/base.model'
-import { sysDeptPostStatusEnums } from '@/service/enums/system/dept.post.enum'
+import { SystemFlagEnum } from '@/service/model/base.model'
+import { sysDeptPostStatusEnum } from '@/service/enums/system/dept.post.enum'
 
 defineOptions({ name: 'SysDeptAddOrUpdate' })
 
@@ -143,7 +143,7 @@ defineExpose({
             <xht-enum-select
               v-model="addUpdateForm.postStatus"
               :disabled="deptLeaderStatus"
-              :data="sysDeptPostStatusEnums"
+              :data="sysDeptPostStatusEnum"
               clearable
               placeholder="请选择岗位状态"
             />

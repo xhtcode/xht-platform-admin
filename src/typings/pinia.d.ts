@@ -1,4 +1,4 @@
-import { AppLanguageEnums, ComponentSizeEnums } from '@/service/enums'
+import { AppLanguageEnum, ComponentSizeEnum } from '@/service/enums'
 import type { UserStatusType } from '@/service/model/system/user.model'
 
 /**
@@ -77,11 +77,11 @@ declare global {
     /**
      * 语言类型
      */
-    languageType: Ref<AppLanguageEnums>
+    languageType: Ref<AppLanguageEnum>
     /**
      * UI组件大小类型
      */
-    sizeType: Ref<ComponentSizeEnums>
+    sizeType: Ref<ComponentSizeEnum>
     /**
      * 默认主题颜色
      */
@@ -165,7 +165,7 @@ declare global {
     /**
      * 用户类型
      */
-    userType?: UserTypeEnums
+    userType?: UserTypeEnum
     /**
      * 用户名
      */
