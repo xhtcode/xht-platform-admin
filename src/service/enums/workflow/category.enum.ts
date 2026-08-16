@@ -6,10 +6,12 @@ import type { CategoryStatus } from '@/service/model/workflow/category.model'
 export const categoryStatusEnum: DictEnum<CategoryStatus, 'NORMAL' | 'DISABLE'> = {
   NORMAL: {
     label: '正常',
+    type: 'success',
     value: 0,
   },
   DISABLE: {
     label: '禁用',
+    type: 'danger',
     value: 1,
   },
 }

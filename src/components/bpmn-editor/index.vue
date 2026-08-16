@@ -78,11 +78,12 @@ onMounted(() => {
   }
   .process-panel {
     height: 100%;
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: hidden;
     position: relative;
-    padding: 0 var(--process-padding) 100px var(--process-padding);
-    width: 25vw;
+    padding: 0;
+    width: 30vw;
+    min-width: 460px;
+    max-width: 560px;
     border-left: 1px solid var(--xht-border-color);
   }
 }

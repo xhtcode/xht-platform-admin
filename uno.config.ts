@@ -38,6 +38,12 @@ const generateSafeList = () => {
         .filter((file) => file.endsWith('.svg'))
         .map((file) => `i-menu-${file.replace('.svg', '')}`)
     )
+    result.push(
+      ...fs
+        .readdirSync(`${iconsDir}/bpmn`)
+        .filter((file) => file.endsWith('.svg'))
+        .map((file) => `i-bpmn-${file.replace('.svg', '')}`)
+    )
   } catch (error) {
     console.error('无法读取图标目录:', error)
   }
@@ -77,6 +83,7 @@ export default defineConfig({
         common: FileSystemIconLoader(iconsDir, transform),
         login: FileSystemIconLoader(`${iconsDir}/login`, transform),
         menu: FileSystemIconLoader(`${iconsDir}/menu`, transform),
+        bpmn: FileSystemIconLoader(`${iconsDir}/bpmn`, transform),
       },
     }),
   ],

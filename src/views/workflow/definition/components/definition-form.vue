@@ -9,7 +9,7 @@ defineOptions({ name: 'FlowDefinitionAddOrUpdate' })
 
 const emits = defineEmits(['success'])
 const state = reactive<AddUpdateOption<FlowDefinitionOperationRequest>>({
-  title: '增加流程扩展-流程定义',
+  title: '增加流程定义',
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,
@@ -28,7 +28,7 @@ const show = async (type: 'create' | 'update', id: ModeIdType) => {
     state.operationStatus = type
     state.loadingStatus = true
     if (type === 'update') {
-      state.title = '修改流程扩展-流程定义'
+      state.title = '修改流程定义'
       const { data } = await queryFlowDefinitionById(id)
       addUpdateForm.value = data
     }
@@ -48,10 +48,10 @@ const submitForm = () => {
       try {
         if (state.operationStatus === 'create') {
           await saveFlowDefinition(addUpdateForm.value)
-          useMessage().success(`新增流程扩展-流程定义成功`)
+          useMessage().success(`新增流程定义成功`)
         } else {
           await updateFlowDefinition(addUpdateForm.value)
-          useMessage().success(`修改流程扩展-流程定义成功`)
+          useMessage().success(`修改流程定义成功`)
         }
         emits('success')
         state.loadingStatus = false
@@ -101,107 +101,7 @@ defineExpose({
       inline-message
       label-width="120px"
       scroll-to-error
-    >
-      <el-row>
-        <el-col :span="12">
-          <el-form-item label="类别id" prop="categoryId">
-            <el-input v-model="addUpdateForm.categoryId" clearable :maxlength="0" show-word-limit placeholder="请输入类别id" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="模型id" prop="modelId">
-            <el-input v-model="addUpdateForm.modelId" clearable :maxlength="64" show-word-limit placeholder="请输入模型id" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="模型名称" prop="modelName">
-            <el-input v-model="addUpdateForm.modelName" clearable :maxlength="255" show-word-limit placeholder="请输入模型名称" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="模型版本" prop="modelVersion">
-            <el-input v-model="addUpdateForm.modelVersion" clearable :maxlength="0" show-word-limit placeholder="请输入模型版本" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="流程定义状态" prop="definitionStatus">
-            <el-input v-model="addUpdateForm.definitionStatus" clearable :maxlength="0" show-word-limit placeholder="请输入流程定义状态" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="流程定义排序" prop="definitionSort">
-            <el-input-number
-              v-model="addUpdateForm.definitionSort"
-              :min="0"
-              :max="999"
-              class="w-full!"
-              value-on-clear="min"
-              placeholder="请输入流程定义排序"
-            />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="流程定义标识" prop="definitionKey">
-            <el-input v-model="addUpdateForm.definitionKey" clearable :maxlength="255" show-word-limit placeholder="请输入流程定义标识" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="流程定义名称" prop="definitionName">
-            <el-input v-model="addUpdateForm.definitionName" clearable :maxlength="255" show-word-limit placeholder="请输入流程定义名称" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="流程定义描述" prop="definitionDesc">
-            <el-input
-              v-model="addUpdateForm.definitionDesc"
-              type="textarea"
-              :rows="5"
-              resize="none"
-              clearable
-              :maxlength="255"
-              show-word-limit
-              placeholder="请输入流程定义描述"
-            />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="流程部署id" prop="deploymentId">
-            <el-input v-model="addUpdateForm.deploymentId" clearable :maxlength="255" show-word-limit placeholder="请输入流程部署id" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="流程部署状态" prop="deploymentStatus">
-            <el-input v-model="addUpdateForm.deploymentStatus" clearable :maxlength="255" show-word-limit placeholder="请输入流程部署状态" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="流程部署版本" prop="deploymentVersion">
-            <el-input v-model="addUpdateForm.deploymentVersion" clearable :maxlength="255" show-word-limit placeholder="请输入流程部署版本" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="流程部署时间" prop="deploymentTime">
-            <el-date-picker
-              v-model="addUpdateForm.deploymentTime"
-              format="YYYY-MM-DD"
-              placeholder="选择流程部署时间"
-              type="date"
-              value-format="YYYY-MM-DD"
-            />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="表单id" prop="formId">
-            <el-input v-model="addUpdateForm.formId" clearable :maxlength="255" show-word-limit placeholder="请输入表单id" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="表单名称" prop="formName">
-            <el-input v-model="addUpdateForm.formName" clearable :maxlength="255" show-word-limit placeholder="请输入表单名称" />
-          </el-form-item>
-        </el-col>
-      </el-row>
-    </el-form>
+    ></el-form>
     <template #footer>
       <el-button :disabled="state.loadingStatus" @click="close">取 消</el-button>
       <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>

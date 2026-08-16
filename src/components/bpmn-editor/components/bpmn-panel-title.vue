@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { Grid } from '@element-plus/icons-vue'
-
 defineOptions({
   name: 'BpmnPanelTitle',
   inheritAttrs: false,
@@ -8,14 +6,15 @@ defineOptions({
 withDefaults(
   defineProps<{
     name: string
+    className?: string
   }>(),
   {}
 )
 </script>
 
 <template>
-  <div class="bpmn-panel-title">
-    <el-icon :size="22">
+  <div class="bpmn-panel-title" :class="className">
+    <el-icon :size="16">
       <slot />
     </el-icon>
     <div class="font-[22px]">{{ name }}</div>

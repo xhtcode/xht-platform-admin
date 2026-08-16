@@ -45,22 +45,22 @@ const fitAuto = () => {
       </el-button>
     </el-tooltip>
     <el-tooltip content="左对齐" placement="bottom">
-      <el-button @click="alignElements('left')"><div class="i-common-align-end-vertical"></div></el-button>
+      <el-button @click="alignElements('left')"><div class="i-bpmn-align-end-vertical"></div></el-button>
     </el-tooltip>
     <el-tooltip content="水平居中" placement="bottom">
-      <el-button @click="alignElements('center')"><div class="i-common-align-center-horizontal"></div></el-button>
+      <el-button @click="alignElements('center')"><div class="i-bpmn-align-center-horizontal"></div></el-button>
     </el-tooltip>
     <el-tooltip content="右对齐" placement="bottom">
-      <el-button @click="alignElements('right')"><div class="i-common-align-start-vertical"></div></el-button>
+      <el-button @click="alignElements('right')"><div class="i-bpmn-align-start-vertical"></div></el-button>
     </el-tooltip>
     <el-tooltip content="上对齐" placement="bottom">
-      <el-button @click="alignElements('top')"><div class="i-common-align-end-horizontal"></div></el-button>
+      <el-button @click="alignElements('top')"><div class="i-bpmn-align-end-horizontal"></div></el-button>
     </el-tooltip>
     <el-tooltip content="垂直居中" placement="bottom">
-      <el-button @click="alignElements('middle')"><div class="i-common-align-center-vertical"></div></el-button>
+      <el-button @click="alignElements('middle')"><div class="i-bpmn-align-center-vertical"></div></el-button>
     </el-tooltip>
     <el-tooltip content="下对齐" placement="bottom">
-      <el-button @click="alignElements('bottom')"><div class="i-common-align-start-horizontal"></div></el-button>
+      <el-button @click="alignElements('bottom')"><div class="i-bpmn-align-start-horizontal"></div></el-button>
     </el-tooltip>
   </el-button-group>
 </template>

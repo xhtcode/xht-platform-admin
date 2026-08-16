@@ -26,13 +26,13 @@ const startEvent = computed(() => props.elementInfo?.elementType === 'StartEvent
         <Grid />
       </bpmn-panel-title>
     </template>
-    <el-form-item label="id">
+    <el-form-item label="id" class="mb-2!">
       <el-input v-model="id" placeholder="请输入id" />
     </el-form-item>
-    <el-form-item label="名称">
+    <el-form-item label="名称" class="mb-2!">
       <el-input v-model="name" placeholder="请输入名称" />
     </el-form-item>
-    <el-form-item label="发起人" v-if="startEvent">
+    <el-form-item label="发起人" class="mb-2!" v-if="startEvent">
       <el-input v-model="initiator" placeholder="请输入发起人" />
     </el-form-item>
   </el-collapse-item>

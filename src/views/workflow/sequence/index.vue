@@ -7,6 +7,8 @@ import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { flowSequenceColumnOption } from '@/views/workflow/sequence/sequence.data'
 import { Delete, Edit, Plus, Refresh, Search } from '@element-plus/icons-vue'
+import { categoryStatusEnum } from '@/service/enums/workflow/category.enum'
+import { IsCycleStatusEnum, IsResetFlagEnum } from '@/service/enums/workflow/sequence.enum'
 
 defineOptions({ name: 'FlowSequenceView' })
 
@@ -189,13 +191,21 @@ onMounted(async () => {
       <el-table-column v-if="columnOption.maxValue?.visible" label="最大值" prop="maxValue" min-width="100" />
       <el-table-column v-if="columnOption.currentValue?.visible" label="当前值" prop="currentValue" min-width="100" />
       <el-table-column v-if="columnOption.steppingValue?.visible" label="步进值" prop="steppingValue" min-width="100" />
-      <el-table-column v-if="columnOption.isCycle?.visible" label="是否循环" prop="isCycle" min-width="100" />
-      <el-table-column v-if="columnOption.resetFlag?.visible" label="重置周期" prop="resetFlag" min-width="100" />
+      <el-table-column v-if="columnOption.isCycle?.visible" label="是否循环" prop="isCycle" min-width="100">
+        <template #default="{ row }">
+          <xht-enum-tag :filter-label="row.isCycle" :data="IsCycleStatusEnum" fill />
+        </template>
+      </el-table-column>
+      <el-table-column v-if="columnOption.resetFlag?.visible" label="重置周期" prop="resetFlag" min-width="100">
+        <template #default="{ row }">
+          <xht-enum-tag :filter-label="row.resetFlag" :data="IsResetFlagEnum" fill />
+        </template>
+      </el-table-column>
       <el-table-column v-if="columnOption.createBy?.visible" label="创建人" prop="createBy" width="160" />
       <el-table-column v-if="columnOption.createTime?.visible" label="创建时间" prop="createTime" width="180" />
       <el-table-column v-if="columnOption.updateBy?.visible" label="更新人" prop="updateBy" width="160" />
       <el-table-column v-if="columnOption.updateTime?.visible" label="更新时间" prop="updateTime" width="180" />
-      <!--  @vue-generic {FlowSequenceResponse}   -->
+      <!-- @vue-generic {FlowSequenceResponse} -->
       <el-table-column label="操作" fixed="right" width="220">
         <template #default="{ row }">
           <el-space wrap class="flex-center">

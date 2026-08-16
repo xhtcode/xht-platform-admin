@@ -181,7 +181,11 @@ onMounted(async () => {
       <el-table-column v-if="columnOption.categoryName?.visible" label="类别名称" prop="categoryName" min-width="160" />
       <el-table-column v-if="columnOption.categoryCode?.visible" label="类别编码" prop="categoryCode" min-width="160" />
       <el-table-column v-if="columnOption.categoryDesc?.visible" label="类别描述" prop="categoryDesc" min-width="260" />
-      <el-table-column v-if="columnOption.categoryStatus?.visible" label="类别状态" prop="categoryStatus" min-width="100" sortable />
+      <el-table-column v-if="columnOption.categoryStatus?.visible" label="类别状态" prop="categoryStatus" min-width="100" sortable>
+        <template #default="{ row }">
+          <xht-enum-tag :filter-label="row.categoryStatus" :data="categoryStatusEnum" fill />
+        </template>
+      </el-table-column>
       <el-table-column v-if="columnOption.categorySort?.visible" label="类别排序" prop="categorySort" min-width="100" sortable />
       <el-table-column v-if="columnOption.createBy?.visible" label="创建人" prop="createBy" width="160" />
       <el-table-column v-if="columnOption.createTime?.visible" label="创建时间" prop="createTime" width="180" />

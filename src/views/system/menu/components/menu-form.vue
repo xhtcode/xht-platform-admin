@@ -108,6 +108,7 @@ defineExpose({
     :title="state.title"
     size="45%"
     append-to-body
+    destroy-on-close
     :close-on-click-modal="false"
     :show-close="!state.loadingStatus"
     :before-close="close"

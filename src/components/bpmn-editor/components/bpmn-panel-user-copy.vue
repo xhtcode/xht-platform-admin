@@ -19,6 +19,7 @@ const { activeElement, activeElementId } = storeToRefs(bpmnStore)
         <UserFilled />
       </bpmn-panel-title>
     </template>
+    <el-alert type="error" :closable="false">暂未实现</el-alert>
   </el-collapse-item>
 </template>
 

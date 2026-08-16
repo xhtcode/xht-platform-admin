@@ -15,6 +15,7 @@ export const useBpmnStore = defineStore('bpmn', () => {
   const activeElementId = ref<string>()
   const selection = shallowRef<Selection>()
   const selectionAlign = shallowRef<any>()
+  const activePanelName = ref<PanelElementType[]>([])
   const setModeler = (mod?: Modeler) => {
     modeler.value = mod
     if (mod) {
@@ -30,10 +31,19 @@ export const useBpmnStore = defineStore('bpmn', () => {
     }
     activeElement.value = element
     activeElementId.value = element?.id
+    activePanelName.value = ['bpmn-panel-basic']
+    console.log('activeElement.value', activeElement.value?.type)
   }
   const selectionModelerInit = (modeler: Modeler) => {
     selection.value = modeler.get<Selection>('selection')
     selectionAlign.value = modeler.get<any>('alignElements')
+  }
+  /**
+   * 设置当前活动的面板名称
+   * @param name
+   */
+  const setActivePanelName = (name: string[]) => {
+    activePanelName.value = name
   }
   return {
     modeler,
@@ -43,6 +53,7 @@ export const useBpmnStore = defineStore('bpmn', () => {
     activeElementId,
     selection,
     selectionAlign,
+    activePanelName,
     setModeler,
     setElement,
     selectionModelerInit,
