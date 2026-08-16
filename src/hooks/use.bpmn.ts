@@ -1,4 +1,4 @@
-import { getBusinessObject, is } from 'bpmn-js/lib/util/ModelUtil'
+import { Element, getBusinessObject, is, ModdleElement } from 'bpmn-js/lib/util/ModelUtil'
 import { useMessage } from '@/hooks/use-message'
 import { storeToRefs } from 'pinia'
 import { useBpmnStore } from '@/store/modules/bpmn.store'
@@ -9,6 +9,9 @@ import MiniMapModule from 'diagram-js-minimap' // 小地图
 import { debounce } from 'lodash'
 import flowableModdleDescriptor from '@/components/bpmn-editor/flowable.json'
 
+/**
+ * bpmn 钩子
+ */
 export const useBpmnHooks = () => {
   const bpmnStore = useBpmnStore()
   const { modeler, modeling, activeElement } = storeToRefs(bpmnStore)
@@ -87,4 +90,59 @@ export const useBpmnHooks = () => {
     })
   }
   return { initModeler, importXML, bpmnRef }
+}
+
+/**
+ * bpmn 扩展钩子
+ */
+export const useBpmnPlusHooks = () => {
+  const bpmnStore = useBpmnStore()
+  const { moddle, modeling, activeElement } = storeToRefs(bpmnStore)
+  /**
+   * 获取业务对象
+   * @param element 节点信息 或者 businessObject
+   */
+  function getElementBusinessObject(element: Element | ModdleElement): ModdleElement {
+    const businessObject = getBusinessObject(element)
+    if (is(element, 'bpmn:Participant')) {
+      return businessObject.get('processRef')
+    }
+    return businessObject
+  }
+
+  /**
+   * 获取节点扩展元素列表
+   * @param businessObject - bpmn 业务对象(businessObject)
+   * @param type - 【可选】扩展元素类型，例如 'flowable:Properties'；不传则返回全部扩展元素
+   * @returns 匹配的扩展元素数组，无数据时返回空数组
+   */
+  function getExtensionElementsList(businessObject: ModdleElement, type?: ExtensionElementsPropertiesType): ModdleElement[] {
+    const extensionElements = businessObject?.get('extensionElements')
+    if (!extensionElements) return []
+    const values: ModdleElement[] = extensionElements.get('values')
+    if (!values || !values.length) return []
+    if (type) {
+      return values.filter((value: ModdleElement) => is(value, type))
+    }
+    return values
+  }
+
+  /**
+   * 创建 moddle 元素
+   * @param elementType - 元素类型
+   * @param properties - 元素属性
+   * @param parent - 父元素
+   * @returns
+   */
+  function createModdleElement(
+    elementType: string | 'bpmn:ExtensionElements' | 'flowable:Properties' | 'flowable:Property',
+    properties: Record<string, any>,
+    parent?: Element | ModdleElement
+  ): ModdleElement {
+    const element = moddle.value?.create(elementType, properties)
+    parent && (element.$parent = parent)
+    return element
+  }
+
+  return { getElementBusinessObject, getExtensionElementsList, createModdleElement }
 }

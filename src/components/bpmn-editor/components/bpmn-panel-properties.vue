@@ -1,24 +1,28 @@
 <script setup lang="ts">
 import { useBpmnStore } from '@/store/modules/bpmn.store'
 import { storeToRefs } from 'pinia'
-import { BellFilled, Briefcase, Plus } from '@element-plus/icons-vue'
+import { Briefcase, Plus } from '@element-plus/icons-vue'
 import BpmnPanelTitle from '@/components/bpmn-editor/components/bpmn-panel-title.vue'
 import type { FormInstance, FormRules } from 'element-plus'
-import type { SysMenuOperationRequest } from '@/service/model/system/menu.model'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
+import { usePropertiesHooks } from '@/components/bpmn-editor/components/bpmn.properties.hooks'
 
 defineOptions({
   name: 'BpmnPanelProperties',
   inheritAttrs: false,
 })
 const bpmnStore = useBpmnStore()
-const { activeElement, activeElementId } = storeToRefs(bpmnStore)
-const tableData = ref<any[]>([])
+const { activeElementId } = storeToRefs(bpmnStore)
+const { getExtensionProperties, addExtensionProperty, removeExtensionProperty } = usePropertiesHooks()
+const tableData = ref<BpmnProperties[]>([])
 const visibleStatus = ref<boolean>(false)
 const loadingStatus = ref<boolean>(false)
-const addUpdateForm = ref<any>({})
+const addUpdateForm = ref<BpmnProperties>({
+  name: '',
+  value: '',
+})
 const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
-const rules: FormRules<Required<any>> = {
+const rules: FormRules<Required<BpmnProperties>> = {
   name: [{ required: true, message: '请输入属性名', trigger: 'change' }],
   value: [{ required: true, message: '请输入属性值', trigger: 'change' }],
 }
@@ -47,16 +51,25 @@ const closeDialog = () => {
 const addProperties = () => {
   loadingStatus.value = true
   addUpdateFormRef.value?.validate(async (valid) => {
-    if (valid) {
-      useMessage().success('新增扩展属性成功')
-      tableData.value.push({
-        ...addUpdateForm.value,
-      })
+    try {
+      if (valid) {
+        addExtensionProperty({
+          ...addUpdateForm.value,
+        })
+        tableData.value.push({
+          ...addUpdateForm.value,
+        })
+        loadingStatus.value = false
+        closeDialog()
+        useMessage().success('新增扩展属性成功')
+      } else {
+        loadingStatus.value = false
+        useMessage().error('新增扩展属性失败')
+      }
+    } catch (e) {
+      console.error(e)
       loadingStatus.value = false
-      closeDialog()
-    } else {
-      useMessage().error('新增扩展属性失败')
-      loadingStatus.value = false
+      useMessage().error('系统错误，新增扩展属性失败')
     }
   })
 }
@@ -69,10 +82,19 @@ const removeProperties = (index: any) => {
   useMessageBox()
     .confirm('是否要删除扩展属性')
     .then(() => {
-      tableData.value.splice(index, 1)
+      removeExtensionProperty({
+        ...tableData.value[index],
+      })
+      tableData.value = getExtensionProperties()
       useMessage().success('删除扩展属性成功')
     })
 }
+watch(
+  () => activeElementId.value,
+  () => {
+    tableData.value = getExtensionProperties()
+  }
+)
 </script>
 
 <template>

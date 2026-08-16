@@ -81,7 +81,8 @@ const viewBpmnXml = () => {
       viewState.value = true
       console.log(result.xml)
     })
-    .catch(() => {
+    .catch((e) => {
+      console.error(e)
       useMessage().error('bpmn 获取xml失败')
     })
 }

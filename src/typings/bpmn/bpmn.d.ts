@@ -1,8 +1,12 @@
 declare global {
   /**
+   * 业务对象类型
+   */
+  type ExtensionElementsPropertiesType = string | 'flowable:Properties'
+  /**
    * 面板类型
    */
-  export type PanelElementType =
+  type PanelElementType =
     | string
     | 'bpmn-panel-basic'
     | 'bpmn-panel-condition'
@@ -17,10 +21,18 @@ declare global {
   /**
    * bpmn 元素信息
    */
-  export interface BpmnElementInfo extends Record<string, any> {
+  interface BpmnElementInfo extends Record<string, any> {
     name: string
     elementType: string
     rawElementType: string
+  }
+
+  /**
+   * bpmn 属性信息
+   */
+  interface BpmnProperties {
+    name: string
+    value: string
   }
   /**
    * 监听器字段信息

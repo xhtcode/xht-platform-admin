@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import Modeler from 'bpmn-js/lib/Modeler'
 import Modeling from 'bpmn-js/lib/features/modeling/Modeling'
-import { Element } from 'bpmn-js/lib/model/Types'
+import { Element, Moddle } from 'bpmn-js/lib/model/Types'
 import ElementRegistry from 'diagram-js/lib/core/ElementRegistry'
 import { Selection } from 'bpmn-js/lib/features/label-link/LabelLink'
 import { Canvas } from 'bpmn-js/lib/features/context-pad/ContextPadProvider'
@@ -11,6 +11,7 @@ export const useBpmnStore = defineStore('bpmn', () => {
   const canvas = shallowRef<Canvas>()
   const elementRegistry = shallowRef<ElementRegistry>()
   const modeling = shallowRef<Modeling>()
+  const moddle = shallowRef<Moddle>()
   const activeElement = shallowRef<Element>()
   const activeElementId = ref<string>()
   const selection = shallowRef<Selection>()
@@ -20,6 +21,7 @@ export const useBpmnStore = defineStore('bpmn', () => {
     modeler.value = mod
     if (mod) {
       modeling.value = modeler.value?.get<Modeling>('modeling')
+      moddle.value = modeler.value?.get<Moddle>('moddle')
       canvas.value = modeler.value?.get<Canvas>('canvas')
       elementRegistry.value = modeler.value?.get<ElementRegistry>('elementRegistry')
     }
@@ -32,7 +34,6 @@ export const useBpmnStore = defineStore('bpmn', () => {
     activeElement.value = element
     activeElementId.value = element?.id
     activePanelName.value = ['bpmn-panel-basic']
-    console.log('activeElement.value', activeElement.value?.type)
   }
   const selectionModelerInit = (modeler: Modeler) => {
     selection.value = modeler.get<Selection>('selection')
@@ -47,6 +48,7 @@ export const useBpmnStore = defineStore('bpmn', () => {
   }
   return {
     modeler,
+    moddle,
     canvas,
     modeling,
     activeElement,
