@@ -7,6 +7,7 @@ defineOptions({
 })
 const zoomNumber = ref<number>(100)
 const zoomStep = 0.1
+const restFlag = ref<boolean>(false)
 const currentScale = computed<any>(() => {
   return Math.floor(zoomNumber.value * 10) * 10
 })
@@ -27,6 +28,7 @@ const zoomOut = () => {
  */
 const zoomReset = () => {
   zoomNumber.value = 1
+  restFlag.value = true
   canvas.value?.zoom('fit-viewport', { x: 0, y: 0 })
 }
 /**
@@ -51,7 +53,13 @@ onMounted(() => {
       zoomNumber.value = canvas.value?.zoom() || 1
     } finally {
       modeler.value?.on('canvas.viewbox.changed', ({ viewbox }: any) => {
-        zoomNumber.value = viewbox.scale
+        if (restFlag.value) {
+          zoomNumber.value = 1
+          restFlag.value = false
+          canvas.value?.zoom(zoomNumber.value)
+        } else {
+          zoomNumber.value = viewbox.scale
+        }
       })
     }
   })
