@@ -8,6 +8,7 @@ import GridLineModule from 'diagram-js-grid-bg' // 网格背景模块
 import MiniMapModule from 'diagram-js-minimap' // 小地图
 import { debounce } from 'lodash'
 import flowableModdleDescriptor from '@/components/bpmn-editor/flowable.json'
+import { find } from 'lodash'
 
 /**
  * bpmn 钩子
@@ -30,8 +31,8 @@ export const useBpmnHooks = () => {
           open: true, // 初始化时默认展开
         },
         gridLine: {
-          smallGridSpacing: 20, // 最小网格边长
-          gridSpacing: 80, // 大号网格边长
+          smallGridSpacing: 10, // 最小网格边长
+          gridSpacing: 40, // 大号网格边长
           gridLineStroke: 0.5, // 网格边框宽度
           gridLineOpacity: 0.4, // 网格边框透明度
           gridLineColor: 'var(--el-color-info-light-5)', // 网格边框颜色
@@ -52,8 +53,20 @@ export const useBpmnHooks = () => {
    * @param xml
    */
   const importXML = async (xml: string) => {
-    await modeler.value?.importXML(xml)
-    modeler.value?.get<any>('canvas').zoom('fit-viewport', 'auto')
+    return new Promise((resolve, reject) => {
+      modeler.value
+        ?.importXML(xml)
+        .then(() => {
+          modeler.value?.get<any>('canvas').zoom('fit-viewport', {
+            x: 0,
+            y: 0,
+          })
+          resolve(true)
+        })
+        .catch(() => {
+          reject()
+        })
+    })
   }
 
   /**
@@ -74,17 +87,17 @@ export const useBpmnHooks = () => {
    * @returns
    */
   function bpmnRef(key: string) {
-    return customRef((target, onCleanup) => {
+    return customRef((track, trigger) => {
       return {
         get() {
-          target()
+          track() // 收集依赖
           return activeElement.value?.businessObject?.get(key)
         },
         set(newValue: any) {
           updateProperties({
             [key]: newValue,
           })
-          onCleanup()
+          trigger() // 触发更新
         },
       }
     })
@@ -97,7 +110,7 @@ export const useBpmnHooks = () => {
  */
 export const useBpmnPlusHooks = () => {
   const bpmnStore = useBpmnStore()
-  const { moddle, modeling, activeElement } = storeToRefs(bpmnStore)
+  const { moddle } = storeToRefs(bpmnStore)
   /**
    * 获取业务对象
    * @param element 节点信息 或者 businessObject
@@ -135,7 +148,7 @@ export const useBpmnPlusHooks = () => {
    * @returns
    */
   function createModdleElement(
-    elementType: string | 'bpmn:ExtensionElements' | 'flowable:Properties' | 'flowable:Property',
+    elementType: string | 'bpmn:FormalExpression' | 'bpmn:ExtensionElements' | 'flowable:Properties' | 'flowable:Property',
     properties: Record<string, any>,
     parent?: Element | ModdleElement
   ): ModdleElement {
@@ -143,6 +156,12 @@ export const useBpmnPlusHooks = () => {
     parent && (element.$parent = parent)
     return element
   }
-
-  return { getElementBusinessObject, getExtensionElementsList, createModdleElement }
+  function getEventDefinition(element: Element | ModdleElement, eventType: string): ModdleElement | undefined {
+    const businessObject = getBusinessObject(element)
+    const eventDefinitions = businessObject.get('eventDefinitions') || []
+    return find(eventDefinitions, function (definition) {
+      return is(definition, eventType)
+    })
+  }
+  return { getElementBusinessObject, getExtensionElementsList, createModdleElement, getEventDefinition }
 }

@@ -85,5 +85,17 @@ declare global {
      */
     fields: ListenerField[]
   }
+
+  /**
+   * 流转条件表单信息
+   */
+  interface FlowConditionForm {
+    type: 'normal' | 'default' | 'condition'
+    conditionType?: 'script' | 'expression'
+    body?: string
+    language?: 'JavaScript' | 'Python' | string
+    resource?: string
+    scriptType?: 'externalScript' | 'inlineScript'
+  }
 }
 export {}

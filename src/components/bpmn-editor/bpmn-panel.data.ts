@@ -4,6 +4,7 @@
 const bpmnPanelData: Record<string, PanelElementType[]> = {
   'bpmn:Process': ['bpmn-panel-listener-execution', 'bpmn-panel-properties', 'bpmn-panel-document'],
   'bpmn:StartEvent': ['bpmn-panel-listener-execution', 'bpmn-panel-properties', 'bpmn-panel-document'],
+  'bpmn:SequenceFlowStartEvent': ['bpmn-panel-listener-execution', 'bpmn-panel-properties', 'bpmn-panel-document'],
   'bpmn:SequenceFlow': ['bpmn-panel-condition', 'bpmn-panel-listener-execution', 'bpmn-panel-properties', 'bpmn-panel-document'],
   'bpmn:Task': ['bpmn-panel-listener-task', 'bpmn-panel-properties', 'bpmn-panel-document'],
   'bpmn:UserTask': [

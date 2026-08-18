@@ -13,8 +13,9 @@ defineOptions({
 })
 const bpmnStore = useBpmnStore()
 const { activeElementId } = storeToRefs(bpmnStore)
-const { getExtensionProperties, addExtensionProperty, removeExtensionProperty } = usePropertiesHooks()
+const { getExtensionProperties, addExtensionProperty, removeExtensionProperty, updateExtensionProperty } = usePropertiesHooks()
 const tableData = ref<BpmnProperties[]>([])
+const dataIndex = ref<number>(-1)
 const visibleStatus = ref<boolean>(false)
 const loadingStatus = ref<boolean>(false)
 const addUpdateForm = ref<BpmnProperties>({
@@ -30,10 +31,18 @@ const rules: FormRules<Required<BpmnProperties>> = {
 /**
  * 打开扩展属性 Dialog
  */
-const openDialog = () => {
-  loadingStatus.value = true
+const openAddDialog = () => {
   visibleStatus.value = true
-  loadingStatus.value = false
+  dataIndex.value = -1
+}
+
+/**
+ * 打开修改扩展属性 Dialog
+ */
+const openUpdateDialog = (index: number, row: BpmnProperties) => {
+  visibleStatus.value = true
+  addUpdateForm.value = { ...row }
+  dataIndex.value = index
 }
 
 /**
@@ -53,18 +62,36 @@ const addProperties = () => {
   addUpdateFormRef.value?.validate(async (valid) => {
     try {
       if (valid) {
-        addExtensionProperty({
-          ...addUpdateForm.value,
-        })
-        tableData.value.push({
-          ...addUpdateForm.value,
-        })
+        if (dataIndex.value < 0) {
+          addExtensionProperty({
+            ...addUpdateForm.value,
+          })
+          tableData.value.push({
+            ...addUpdateForm.value,
+          })
+          useMessage().success('新增扩展属性成功')
+        } else {
+          updateExtensionProperty(
+            {
+              ...addUpdateForm.value,
+            },
+            dataIndex.value
+          )
+          tableData.value.splice(dataIndex.value, 1, {
+            ...addUpdateForm.value,
+          })
+          useMessage().success('修改扩展属性成功')
+        }
+
         loadingStatus.value = false
         closeDialog()
-        useMessage().success('新增扩展属性成功')
       } else {
+        if (dataIndex.value < 0) {
+          useMessage().error('新增扩展属性失败')
+        } else {
+          useMessage().error('修改扩展属性失败')
+        }
         loadingStatus.value = false
-        useMessage().error('新增扩展属性失败')
       }
     } catch (e) {
       console.error(e)
@@ -109,18 +136,20 @@ watch(
     </template>
     <el-table :data="tableData" size="small" border height="200" empty-text="暂无扩展属性,请添加扩展属性！">
       <xht-column-index type="step" />
-      <el-table-column label="属性名" prop="name" min-width="120" show-overflow-tooltip />
-      <el-table-column label="属性值" prop="value" min-width="120" show-overflow-tooltip />
-      <el-table-column label="操作" fixed="right" width="80">
-        <template #default="{ $index }">
+      <el-table-column label="属性名" prop="name" width="120" show-overflow-tooltip />
+      <el-table-column label="属性值" prop="value" width="200" show-overflow-tooltip />
+      <!-- @vue-generic {BpmnProperties} -->
+      <el-table-column label="操作" fixed="right" width="120">
+        <template #default="{ $index, row }">
+          <el-button type="success" size="small" text @click="openUpdateDialog($index, row)">修改</el-button>
           <el-button type="danger" size="small" text @click="removeProperties($index)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <el-button class="w-full mt-15px" type="primary" :icon="Plus" @click="openDialog()">添加扩展属性</el-button>
+    <el-button class="w-full mt-15px" type="primary" :icon="Plus" @click="openAddDialog()">添加扩展属性</el-button>
     <el-dialog
       v-model="visibleStatus"
-      title="新增扩展属性"
+      :title="dataIndex < 0 ? '新增扩展属性' : '修改扩展属性'"
       width="45%"
       destroy-on-close
       append-to-body

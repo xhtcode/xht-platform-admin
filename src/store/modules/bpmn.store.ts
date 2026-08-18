@@ -4,7 +4,7 @@ import Modeling from 'bpmn-js/lib/features/modeling/Modeling'
 import { Element, Moddle } from 'bpmn-js/lib/model/Types'
 import ElementRegistry from 'diagram-js/lib/core/ElementRegistry'
 import { Selection } from 'bpmn-js/lib/features/label-link/LabelLink'
-import { Canvas } from 'bpmn-js/lib/features/context-pad/ContextPadProvider'
+import Canvas from 'diagram-js/lib/core/Canvas'
 
 export const useBpmnStore = defineStore('bpmn', () => {
   const modeler = shallowRef<Modeler>()

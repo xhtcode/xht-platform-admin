@@ -27,6 +27,13 @@ const elementInfo = computed<BpmnElementInfo>(() => {
  * 获取当前元素的面板元素
  */
 const panelElement = computed<PanelElementType[]>(() => {
+  if (
+    activeElement.value?.type === 'bpmn:SequenceFlow' &&
+    activeElement.value?.source &&
+    activeElement.value?.source.type.indexOf('StartEvent') !== -1
+  ) {
+    return bpmnPanelData['bpmn:SequenceFlowStartEvent']
+  }
   return bpmnPanelData[activeElement.value?.type || 'bpmn:Process'] || []
 })
 </script>

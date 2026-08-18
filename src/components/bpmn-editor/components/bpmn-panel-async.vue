@@ -1,18 +1,17 @@
 <script setup lang="ts">
-import { useBpmnStore } from '@/store/modules/bpmn.store'
-import { storeToRefs } from 'pinia'
 import { BellFilled } from '@element-plus/icons-vue'
 import BpmnPanelTitle from '@/components/bpmn-editor/components/bpmn-panel-title.vue'
+import { useBpmnHooks } from '@/hooks/use.bpmn'
 
 defineOptions({
   name: 'BpmnPanelAsync',
   inheritAttrs: false,
 })
-const bpmnStore = useBpmnStore()
-const { activeElement, activeElementId } = storeToRefs(bpmnStore)
-const asyncBefore = ref<boolean>(false)
-const asyncAfter = ref<boolean>(false)
-const asyncExclusive = ref<boolean>(false)
+const { bpmnRef } = useBpmnHooks()
+const async = bpmnRef('flowable:async')
+const asyncBefore = bpmnRef('flowable:asyncBefore')
+const asyncAfter = bpmnRef('flowable:asyncAfter')
+const asyncExclusive = bpmnRef('flowable:exclusive')
 const showExclusive = computed(() => asyncBefore.value || asyncAfter.value)
 </script>
 
@@ -23,6 +22,9 @@ const showExclusive = computed(() => asyncBefore.value || asyncAfter.value)
         <BellFilled />
       </bpmn-panel-title>
     </template>
+    <el-form-item label="异步" class="mb-0!">
+      <el-switch v-model="async" />
+    </el-form-item>
     <el-form-item label="异步前" class="mb-0!">
       <el-switch v-model="asyncBefore" />
     </el-form-item>

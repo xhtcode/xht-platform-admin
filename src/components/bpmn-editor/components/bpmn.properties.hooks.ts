@@ -68,9 +68,29 @@ export const usePropertiesHooks = () => {
     }
   }
 
+  /**
+   * 修改扩展属性
+   * @param newProperty 新属性信息
+   * @param index 索引
+   */
+  function updateExtensionProperty(newProperty: BpmnProperties, index: number) {
+    const businessObject = getElementBusinessObject(activeElement.value)
+    const properties = getExtensionElementsList(businessObject)[0]
+    if (!properties) return
+    const oldValues: any[] = properties.get('values') || []
+    oldValues.forEach((item, i) => {
+      if (i === index) {
+        item.name = newProperty.name
+        item.value = newProperty.value
+      }
+    })
+    modeling.value!.updateModdleProperties(activeElement.value!, properties, { oldValues })
+  }
+
   return {
     getExtensionProperties,
     addExtensionProperty,
     removeExtensionProperty,
+    updateExtensionProperty,
   }
 }

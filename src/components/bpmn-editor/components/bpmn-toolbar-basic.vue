@@ -14,7 +14,7 @@ defineOptions({
 const importRef = useTemplateRef('importRef')
 const bpmnStore = useBpmnStore()
 const { importXML } = useBpmnHooks()
-const { modeler } = storeToRefs(bpmnStore)
+const { canvas, modeler } = storeToRefs(bpmnStore)
 const xml = ref<string>()
 const viewState = ref<boolean>()
 
@@ -79,7 +79,6 @@ const viewBpmnXml = () => {
     .then((result: SaveXMLResult) => {
       xml.value = result.xml
       viewState.value = true
-      console.log(result.xml)
     })
     .catch((e) => {
       console.error(e)
