@@ -8,6 +8,7 @@ import GridLineModule from 'diagram-js-grid-bg' // 网格背景模块
 import MiniMapModule from 'diagram-js-minimap' // 小地图
 import { debounce } from 'lodash'
 import flowableModdleDescriptor from '@/components/bpmn-editor/flowable.json'
+import { CustomPaletteModule } from '@/components/bpmn-editor/CustomPalette'
 import { find } from 'lodash'
 
 /**
@@ -23,7 +24,7 @@ export const useBpmnHooks = () => {
         container: canvas, // 挂载的元素
         width: '100%', // 宽度100%
         height: '100%', // 高度100%
-        additionalModules: [CustomTranslate, GridLineModule, MiniMapModule],
+        additionalModules: [CustomTranslate, GridLineModule, MiniMapModule, CustomPaletteModule],
         moddleExtensions: {
           flowable: flowableModdleDescriptor,
         },

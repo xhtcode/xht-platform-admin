@@ -73,6 +73,7 @@ export default {
   'Create expanded sub-process': '创建可折叠子流程',
   'Create gateway': '创建网关',
   'Create task': '创建任务',
+  'Create user task': '创建用户任务',
   'Create group': '创建组',
   'Create pool/participant': '创建池/参与者',
 
