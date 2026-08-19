@@ -51,6 +51,10 @@ const openUpdateDialog = (index: number, row: BpmnProperties) => {
 const closeDialog = () => {
   if (loadingStatus.value) return
   addUpdateFormRef.value?.resetFields()
+  addUpdateForm.value = {
+    name: '',
+    value: '',
+  }
   visibleStatus.value = false
 }
 

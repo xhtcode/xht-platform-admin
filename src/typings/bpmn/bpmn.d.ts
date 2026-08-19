@@ -2,7 +2,7 @@ declare global {
   /**
    * 业务对象类型
    */
-  type ExtensionElementsPropertiesType = string | 'flowable:Properties'
+  type ExtensionElementsPropertiesType = string | 'flowable:Properties' | 'flowable:assigneeType'
   /**
    * 面板类型
    */
@@ -97,5 +97,10 @@ declare global {
     resource?: string
     scriptType?: 'externalScript' | 'inlineScript'
   }
+
+  /**
+   * 用户赋值类型
+   */
+  export type UserAssigneeType = 'static' | 'idm'
 }
 export {}

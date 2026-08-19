@@ -4,27 +4,48 @@ import { storeToRefs } from 'pinia'
 import { UserFilled } from '@element-plus/icons-vue'
 import BpmnPanelTitle from '@/components/bpmn-editor/components/bpmn-panel-title.vue'
 import { useMessageBox } from '@/hooks/use-message'
+import { useBpmnHooks } from '@/hooks/use.bpmn'
+import { useBpmnUserHooks } from '@/components/bpmn-editor/components/bpmn-user.hooks'
+import { generateUUID } from '@/utils'
 
 defineOptions({
   name: 'BpmnPanelUser',
   inheritAttrs: false,
 })
 const bpmnStore = useBpmnStore()
+const { bpmnRef } = useBpmnHooks()
 const { activeElement, activeElementId } = storeToRefs(bpmnStore)
-const assigneeType = ref<boolean>(false)
-const assignee = ref<string>()
-const candidateUsers = ref<string>()
-const candidateGroups = ref<string>()
-const dueDate = ref<string>()
-const priority = ref<number>()
-const handlerChange = () => {
+const { getAssigneeType, updateAssigneeType } = useBpmnUserHooks()
+const assigneeType = ref<UserAssigneeType>('static')
+const assignee = bpmnRef<string>('flowable:assignee')
+const candidateUsers = bpmnRef<string>('flowable:candidateUsers')
+const candidateGroups = bpmnRef<string>('flowable:candidateGroups')
+const dueDate = bpmnRef<string>('flowable:dueDate')
+const priority = bpmnRef<number>('flowable:priority')
+
+/**
+ * 处理分配类型改变
+ */
+const handlerAssigneeTypeChange = () => {
   useMessageBox()
     .confirm('此操作将清除已选的数据, 是否继续?')
-    .then(() => {})
+    .then(() => {
+      updateAssigneeType(assigneeType.value)
+    })
     .catch(() => {
-      assigneeType.value = !assigneeType.value
+      assigneeType.value = 'static'
     })
 }
+onMounted(() => {
+  assigneeType.value = getAssigneeType()
+})
+watch(
+  () => activeElementId.value,
+  () => {
+    console.log(getAssigneeType())
+    assigneeType.value = getAssigneeType()
+  }
+)
 </script>
 
 <template>
@@ -34,10 +55,10 @@ const handlerChange = () => {
         <UserFilled />
       </bpmn-panel-title>
     </template>
-    <el-form-item label="分配类型">
-      <el-radio-group v-model="assigneeType" class="w-full!" @change="handlerChange">
-        <el-radio-button label="固定值" :value="false" />
-        <el-radio-button label="身份存储" :value="true" />
+    <el-form-item label="分配类型" class="mb-2!">
+      <el-radio-group v-model="assigneeType" class="w-full!" @change="handlerAssigneeTypeChange">
+        <el-radio-button label="固定值" value="static" />
+        <el-radio-button label="身份存储" value="idm" />
       </el-radio-group>
     </el-form-item>
     <el-form-item label="分配人" class="mb-2!">

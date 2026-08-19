@@ -17,7 +17,7 @@ export const usePropertiesHooks = () => {
    */
   function getExtensionProperties(): BpmnProperties[] {
     const businessObject = getElementBusinessObject(activeElement.value)
-    return getExtensionElementsList(businessObject).reduce((pre, current) => pre.concat(current.values), [])
+    return getExtensionElementsList(businessObject, 'flowable:Properties').reduce((pre, current) => pre.concat(current.values), [])
   }
 
   /**
@@ -33,7 +33,7 @@ export const usePropertiesHooks = () => {
       modeling.value?.updateModdleProperties(activeElement.value!, businessObject, { extensionElements })
     }
     // 判断 extensionElements 是否有 properties
-    let properties = getExtensionElementsList(businessObject)[0]
+    let properties = getExtensionElementsList(businessObject, 'flowable:Properties')[0]
     if (!properties) {
       properties = createModdleElement(`flowable:Properties`, { values: [] }, extensionElements)
       modeling.value?.updateModdleProperties(activeElement.value!, extensionElements, {
@@ -54,7 +54,7 @@ export const usePropertiesHooks = () => {
   function removeExtensionProperty(property: BpmnProperties) {
     const businessObject = getElementBusinessObject(activeElement.value)
     const extensionElements = businessObject.get('extensionElements')
-    const properties = getExtensionElementsList(businessObject)[0]
+    const properties = getExtensionElementsList(businessObject, 'flowable:Properties')[0]
     if (!properties) return
     const oldValues: any[] = properties.get('values') || []
     const values = oldValues.filter((item) => {
@@ -75,7 +75,7 @@ export const usePropertiesHooks = () => {
    */
   function updateExtensionProperty(newProperty: BpmnProperties, index: number) {
     const businessObject = getElementBusinessObject(activeElement.value)
-    const properties = getExtensionElementsList(businessObject)[0]
+    const properties = getExtensionElementsList(businessObject, 'flowable:Properties')[0]
     if (!properties) return
     const oldValues: any[] = properties.get('values') || []
     oldValues.forEach((item, i) => {
@@ -84,7 +84,7 @@ export const usePropertiesHooks = () => {
         item.value = newProperty.value
       }
     })
-    modeling.value!.updateModdleProperties(activeElement.value!, properties, { oldValues })
+    modeling.value!.updateModdleProperties(activeElement.value!, properties, { values: oldValues })
   }
 
   return {

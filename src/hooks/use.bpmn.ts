@@ -86,14 +86,14 @@ export const useBpmnHooks = () => {
    * @param key
    * @returns
    */
-  function bpmnRef(key: string) {
-    return customRef((track, trigger) => {
+  function bpmnRef<T = any>(key: string) {
+    return customRef<T | undefined, T | null | undefined>((track, trigger) => {
       return {
         get() {
           track() // 收集依赖
           return activeElement.value?.businessObject?.get(key)
         },
-        set(newValue: any) {
+        set(newValue) {
           updateProperties({
             [key]: newValue,
           })
