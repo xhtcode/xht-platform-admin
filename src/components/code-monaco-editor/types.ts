@@ -69,4 +69,5 @@ export interface EditorProps {
   fontSize?: number // 字体大小
   minimap?: boolean // 是否显示小地图
   validateStatus?: boolean // 校验状态
+  wordWrap?: 'on' | 'off' // 是否自动换行
 }

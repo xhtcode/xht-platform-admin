@@ -18,6 +18,7 @@ const props = withDefaults(defineProps<EditorProps>(), {
   fontSize: 16,
   minimap: false,
   validateStatus: false,
+  wordWrap: 'off',
 })
 const emits = defineEmits(['change'])
 const modelValue = defineModel<string>('modelValue')
@@ -61,7 +62,7 @@ const init = () => {
     formatOnPaste: false, //是否启用粘贴时自动格式化
     formatOnType: false, //是否启用输入时自动格式化
     contextmenu: false, //是否启用自定义右键菜单。
-    wordWrap: 'off', //是否换行
+    wordWrap: props.wordWrap || 'off', //是否换行
     wordWrapColumn: 120,
     stickyScroll: {
       enabled: false,
