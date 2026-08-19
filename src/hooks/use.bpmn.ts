@@ -8,7 +8,7 @@ import GridLineModule from 'diagram-js-grid-bg' // 网格背景模块
 import MiniMapModule from 'diagram-js-minimap' // 小地图
 import { debounce } from 'lodash'
 import flowableModdleDescriptor from '@/components/bpmn-editor/flowable.json'
-import { CustomPaletteModule } from '@/components/bpmn-editor/CustomPalette'
+import { CustomPaletteModule } from '@/components/bpmn-editor/palette/CustomPalette'
 import { find } from 'lodash'
 
 /**
