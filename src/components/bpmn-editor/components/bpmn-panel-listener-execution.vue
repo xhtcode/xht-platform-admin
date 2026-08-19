@@ -6,13 +6,15 @@ import BpmnPanelTitle from '@/components/bpmn-editor/components/bpmn-panel-title
 import type { FormInstance, FormRules } from 'element-plus'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import BpmnPanelListenerField from '@/components/bpmn-editor/components/bpmn-panel-listener-field.vue'
+import { useListenerExecutionHooks } from '@/components/bpmn-editor/components/bpmn.listener-execution.hooks'
 
 defineOptions({
   name: 'BpmnPanelListenerExecution',
   inheritAttrs: false,
 })
 const bpmnStore = useBpmnStore()
-const { activeElement, activeElementId } = storeToRefs(bpmnStore)
+const { activeElementId } = storeToRefs(bpmnStore)
+const { getExecutionListeners, addExecutionListener, updateExecutionListener, removeExecutionListener } = useListenerExecutionHooks()
 const tableData = ref<ExecutionListenerForm[]>([])
 const visibleStatus = ref<boolean>(false)
 const loadingStatus = ref<boolean>(false)
@@ -84,14 +86,19 @@ const addListenerExecution = () => {
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
       if (dataIndex.value < 0) {
-        tableData.value.push({
+        addExecutionListener({
           ...addUpdateForm.value,
         })
+        tableData.value = getExecutionListeners()
         useMessage().success('新增执行监听器成功')
       } else {
-        tableData.value.splice(dataIndex.value, 1, {
-          ...addUpdateForm.value,
-        })
+        updateExecutionListener(
+          {
+            ...addUpdateForm.value,
+          },
+          dataIndex.value
+        )
+        tableData.value = getExecutionListeners()
         useMessage().success('修改执行监听器成功')
       }
       loadingStatus.value = false
@@ -115,10 +122,18 @@ const removeListenerExecution = (index: any) => {
   useMessageBox()
     .confirm('是否要删除执行监听器')
     .then(() => {
-      tableData.value.splice(index, 1)
+      removeExecutionListener(index)
+      tableData.value = getExecutionListeners()
       useMessage().success('删除执行监听器成功')
     })
 }
+watch(
+  () => activeElementId.value,
+  () => {
+    tableData.value = getExecutionListeners()
+  },
+  { immediate: true }
+)
 </script>
 
 <template>

@@ -6,13 +6,15 @@ import BpmnPanelTitle from '@/components/bpmn-editor/components/bpmn-panel-title
 import type { FormInstance, FormRules } from 'element-plus'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import BpmnPanelListenerField from '@/components/bpmn-editor/components/bpmn-panel-listener-field.vue'
+import { useListenerTaskHooks } from '@/components/bpmn-editor/components/bpmn.listener-task.hooks'
 
 defineOptions({
   name: 'BpmnPanelListenerTask',
   inheritAttrs: false,
 })
 const bpmnStore = useBpmnStore()
-const { activeElement, activeElementId } = storeToRefs(bpmnStore)
+const { activeElementId } = storeToRefs(bpmnStore)
+const { getTaskListeners, addTaskListener, updateTaskListener, removeTaskListener } = useListenerTaskHooks()
 const tableData = ref<TaskListenerForm[]>([])
 const visibleStatus = ref<boolean>(false)
 const loadingStatus = ref<boolean>(false)
@@ -84,14 +86,19 @@ const addTaskListenerForm = () => {
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
       if (dataIndex.value < 0) {
-        tableData.value.push({
+        addTaskListener({
           ...addUpdateForm.value,
         })
+        tableData.value = getTaskListeners()
         useMessage().success('新增任务监听器成功')
       } else {
-        tableData.value.splice(dataIndex.value, 1, {
-          ...addUpdateForm.value,
-        })
+        updateTaskListener(
+          {
+            ...addUpdateForm.value,
+          },
+          dataIndex.value
+        )
+        tableData.value = getTaskListeners()
         useMessage().success('修改任务监听器成功')
       }
       loadingStatus.value = false
@@ -115,10 +122,18 @@ const removeTaskListenerForm = (index: any) => {
   useMessageBox()
     .confirm('是否要删除任务监听器')
     .then(() => {
-      tableData.value.splice(index, 1)
+      removeTaskListener(index)
+      tableData.value = getTaskListeners()
       useMessage().success('删除任务监听器成功')
     })
 }
+watch(
+  () => activeElementId.value,
+  () => {
+    tableData.value = getTaskListeners()
+  },
+  { immediate: true }
+)
 </script>
 
 <template>
