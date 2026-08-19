@@ -6,6 +6,7 @@ import CommandStack from 'diagram-js/lib/command/CommandStack'
 import { useBpmnHooks } from '@/hooks/use.bpmn'
 import bpmnXML from '@/components/bpmn-editor/bpmn-template'
 import { generateUUID } from '@/utils'
+import { useMessageBox } from '@/hooks/use-message'
 
 defineOptions({
   name: 'BpmnToolbarCommand',
@@ -33,11 +34,16 @@ const redo = () => {
  * 重置
  */
 const restart = async () => {
-  loadingStatus.value = true
-  command.value && command.value?.clear()
-  importXML(bpmnXML(generateUUID(), '测试流程')).finally(() => {
-    loadingStatus.value = false
-  })
+  useMessageBox()
+    .confirm('是否重置流程，这样将丢失当前数据？')
+    .then(() => {
+      loadingStatus.value = true
+      command.value && command.value?.clear()
+      importXML(bpmnXML(generateUUID(), '测试流程')).finally(() => {
+        loadingStatus.value = false
+      })
+    })
+    .catch(() => {})
 }
 </script>
 
