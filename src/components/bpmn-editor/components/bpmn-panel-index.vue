@@ -12,7 +12,6 @@ import BpmnPanelUserCopy from '@/components/bpmn-editor/components/bpmn-panel-us
 import BpmnPanelLoop from '@/components/bpmn-editor/components/bpmn-panel-loop.vue'
 import BpmnPanelCondition from '@/components/bpmn-editor/components/bpmn-panel-condition.vue'
 import { storeToRefs } from 'pinia'
-import bpmnPanelData from '@/components/bpmn-editor/bpmn-panel.data'
 
 defineOptions({
   name: 'BpmnPanelIndex',
@@ -23,19 +22,16 @@ const formInfo = shallowRef({})
 const elementInfo = computed<BpmnElementInfo>(() => {
   return getBpmnElementInfo(activeElement.value)
 })
-/**
- * 获取当前元素的面板元素
- */
-const panelElement = computed<PanelElementType[]>(() => {
-  if (
-    activeElement.value?.type === 'bpmn:SequenceFlow' &&
-    activeElement.value?.source &&
-    activeElement.value?.source.type.indexOf('StartEvent') !== -1
-  ) {
-    return bpmnPanelData['bpmn:SequenceFlowStartEvent']
-  }
-  return bpmnPanelData[activeElement.value?.type || 'bpmn:Process'] || []
+const isShowTask = computed<boolean>(() => {
+  return activeElement.value?.type.indexOf('Task') !== -1
 })
+const isShowUserTask = computed<boolean>(() => {
+  return elementInfo.value.elementType === 'UserTask'
+})
+const isConditionShow = computed<boolean>(
+  () =>
+    activeElement.value?.type === 'bpmn:SequenceFlow' && activeElement.value?.source && activeElement.value?.source.type.indexOf('StartEvent') === -1
+)
 </script>
 
 <template>
@@ -48,15 +44,15 @@ const panelElement = computed<PanelElementType[]>(() => {
       <el-scrollbar class="w-full" view-class="flex-1 pl-5 pr-5" always>
         <el-collapse v-model="activePanelName">
           <bpmn-panel-basic :element-info="elementInfo" />
-          <bpmn-panel-condition v-if="panelElement.includes('bpmn-panel-condition')" />
-          <bpmn-panel-user v-if="panelElement.includes('bpmn-panel-user')" />
-          <bpmn-panel-user-copy v-if="panelElement.includes('bpmn-panel-user-copy')" />
-          <bpmn-panel-listener-execution v-if="panelElement.includes('bpmn-panel-listener-execution')" />
-          <bpmn-panel-listener-task v-if="panelElement.includes('bpmn-panel-listener-task')" />
-          <bpmn-panel-loop v-if="panelElement.includes('bpmn-panel-loop')" />
-          <bpmn-panel-properties v-if="panelElement.includes('bpmn-panel-properties')" />
-          <bpmn-panel-async v-if="panelElement.includes('bpmn-panel-async')" />
-          <bpmn-panel-document v-if="panelElement.includes('bpmn-panel-document')" />
+          <bpmn-panel-condition v-if="isConditionShow" />
+          <bpmn-panel-user v-if="isShowUserTask" />
+          <bpmn-panel-user-copy v-if="isShowUserTask" />
+          <bpmn-panel-listener-execution />
+          <bpmn-panel-listener-task v-if="isShowUserTask" />
+          <bpmn-panel-loop v-if="isShowUserTask" />
+          <bpmn-panel-properties />
+          <bpmn-panel-async v-if="isShowTask" />
+          <bpmn-panel-document />
         </el-collapse>
       </el-scrollbar>
     </el-form>

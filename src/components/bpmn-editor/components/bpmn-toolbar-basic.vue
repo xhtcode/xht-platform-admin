@@ -162,7 +162,7 @@ function setEncoded(type: string, filename: string, data: string) {
     </el-button-group>
     <input type="file" ref="importRef" style="display: none" accept=".xml,.bpmn" @change="changeImportFile" />
     <el-drawer v-model="viewState" append-to-body destroy-on-close size="70%" title="流程xml预览">
-      <code-monaco-editor v-model="xml" ref="xmlEditor" readonly language="xml" />
+      <code-monaco-editor v-model="xml" ref="xmlEditor" readonly language="xml" :font-size="16" />
     </el-drawer>
   </div>
 </template>
