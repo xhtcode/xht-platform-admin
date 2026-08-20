@@ -37,7 +37,7 @@ const messageConfig: MessageConfigContext = {
     :value-on-clear="null"
     :empty-values="[undefined, null]"
   >
-    <bpmn-editor />
+    <router-view />
   </el-config-provider>
 </template>
 
