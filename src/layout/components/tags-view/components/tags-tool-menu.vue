@@ -54,7 +54,7 @@ const openContextmenu = (event: MouseEvent, tagItem?: any) => {
 
   // 获取触发元素的位置信息
   const target = event.currentTarget as HTMLElement
-  const { height, width, x, y } = target.getBoundingClientRect()
+  const { height, x, y } = target.getBoundingClientRect()
 
   // 设置菜单位置为元素底部中心
   position.value = DOMRect.fromRect({
@@ -67,7 +67,6 @@ const openContextmenu = (event: MouseEvent, tagItem?: any) => {
 
   // 手动打开下拉菜单
   dropdownRef.value?.handleOpen()
-  console.log('-----------', menuCloseStatus.value)
   menuCloseStatus.value = !menuCloseStatus.value
 }
 
