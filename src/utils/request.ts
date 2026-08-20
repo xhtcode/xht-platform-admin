@@ -79,7 +79,7 @@ service.interceptors.response.use(
       return Promise.reject(new Error('登录已过期，请重新登录'))
     }
     useMessage().error(msg)
-    return Promise.resolve(new Error(msg || '系统出错'))
+    return Promise.reject(new Error(msg || '系统出错'))
   },
   (error: any): Promise<any> => {
     // 对响应错误做点什么

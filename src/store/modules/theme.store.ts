@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { AppLanguageEnum, ComponentSizeEnum, DeviceEnum } from '@/service/enums'
 import pInIaPersistConfig from '@/store/pinia-persist'
-import { DefaultThemeColor } from '@/service/constant'
+import defaultSetting from '@/service/constant/default-setting'
 
 /**
  * 主题相关pinia
@@ -12,68 +12,68 @@ export const useThemeStore = defineStore(
     /**
      * 布局类型
      */
-    const layoutType = ref<'default' | 'columns'>('default')
+    const layoutType = ref<'default' | 'columns'>(defaultSetting.layoutType)
     /**
      * 设备类型
      */
-    const device = ref<DeviceEnum>(DeviceEnum.MOBILE)
+    const device = ref<DeviceEnum>(defaultSetting.device)
     /**
      * 侧边栏状态
      */
-    const sidebarStatus = ref<boolean>(false)
+    const sidebarStatus = ref<boolean>(defaultSetting.sidebarStatus)
 
     /**
      * 暗黑模式
      */
-    const darkStatus = ref<boolean>(false)
+    const darkStatus = ref<boolean>(defaultSetting.darkStatus)
 
     /**
      * 菜单状态
      */
-    const menuStatus = ref<boolean>(false)
+    const menuStatus = ref<boolean>(defaultSetting.menuStatus)
 
     /**
      * 面包屑显示状态
      */
-    const breadcrumb = ref<boolean>(true)
+    const breadcrumb = ref<boolean>(defaultSetting.breadcrumb)
 
     /**
      * tags显示状态
      */
-    const tagsViewStatus = ref<boolean>(false)
+    const tagsViewStatus = ref<boolean>(defaultSetting.tagsViewStatus)
 
     /**
      * footer 显示
      */
-    const footerStatus = ref<boolean>(true)
+    const footerStatus = ref<boolean>(defaultSetting.footerStatus)
 
     /**
      * 水印内容
      */
-    const watermarkContent = ref<string>('xht-platform-admin')
+    const watermarkContent = ref<string>(defaultSetting.watermarkContent)
 
     /**
      * 语言类型
      */
-    const languageType = ref<AppLanguageEnum>(AppLanguageEnum.ZH_CN)
+    const languageType = ref<AppLanguageEnum>(defaultSetting.languageType)
 
     /**
      * UI组件大小类型
      */
-    const sizeType = ref<ComponentSizeEnum>(ComponentSizeEnum.DEFAULT)
+    const sizeType = ref<ComponentSizeEnum>(defaultSetting.sizeType)
 
     /**
      * 默认主题颜色
      */
-    const colorType = ref<string>(DefaultThemeColor)
+    const colorType = ref<string>(defaultSetting.colorType)
     /**
      * 哀悼模式
      */
-    const mournModeStatus = ref<boolean>(false)
+    const mournModeStatus = ref<boolean>(defaultSetting.mournModeStatus)
     /**
      * 色弱模式
      */
-    const colorWeaknessModeStatus = ref<boolean>(false)
+    const colorWeaknessModeStatus = ref<boolean>(defaultSetting.colorWeaknessModeStatus)
 
     return {
       layoutType,

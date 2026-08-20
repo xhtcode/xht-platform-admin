@@ -1,5 +1,6 @@
 import { AppLanguageEnum, ComponentSizeEnum } from '@/service/enums'
 import type { UserStatusType } from '@/service/model/system/user.model'
+import type { UnwrapRef } from 'vue'
 
 /**
  * pinia自定义ts类型
@@ -41,6 +42,9 @@ declare global {
    * 存储应用的主题相关配置状态
    */
   interface ThemeStoreType {
+    /**
+     * 布局类型
+     */
     layoutType: Ref<'default' | 'columns'>
     /**
      * 设备类型
@@ -94,6 +98,14 @@ declare global {
      * 色弱模式
      */
     colorWeaknessModeStatus: Ref<boolean>
+  }
+
+  /**
+   * 主题默认配置类型
+   * 由ThemeStoreType提取去除响应式包装的类型，用于定义主题默认设置
+   */
+  type ThemeDefaultSettingType = {
+    [K in keyof ThemeStoreType]: UnwrapRef<ThemeStoreType[K]>
   }
 
   /**

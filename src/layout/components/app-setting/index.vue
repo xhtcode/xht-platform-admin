@@ -3,7 +3,7 @@ import { useThemeStore } from '@/store'
 import { AppLanguageEnum, ComponentSizeEnum } from '@/service/enums'
 import { storeToRefs } from 'pinia'
 import useThemeColorHooks from '@/hooks/use-theme-hooks'
-import { DefaultThemeColor } from '@/service/constant'
+import defaultSetting from '@/service/constant/default-setting'
 import { CircleCheckFilled, Setting } from '@element-plus/icons-vue'
 import { ElLoading } from 'element-plus'
 
@@ -24,6 +24,7 @@ const themeStore = useThemeStore()
 const {
   layoutType,
   darkStatus,
+  menuStatus,
   breadcrumb,
   tagsViewStatus,
   footerStatus,
@@ -59,16 +60,18 @@ const changeLayoutType = (args: 'default' | 'columns') => {
  * 恢复默认配置
  */
 const resetSetting = () => {
-  layoutType.value = 'default'
-  darkStatus.value = false
-  breadcrumb.value = true
-  tagsViewStatus.value = true
-  footerStatus.value = true
-  languageType.value = AppLanguageEnum.EN
-  sizeType.value = ComponentSizeEnum.DEFAULT
-  colorType.value = DefaultThemeColor
-  mournModeStatus.value = false
-  colorWeaknessModeStatus.value = false
+  layoutType.value = defaultSetting.layoutType
+  darkStatus.value = defaultSetting.darkStatus
+  breadcrumb.value = defaultSetting.breadcrumb
+  tagsViewStatus.value = defaultSetting.tagsViewStatus
+  footerStatus.value = defaultSetting.footerStatus
+  languageType.value = defaultSetting.languageType
+  sizeType.value = defaultSetting.sizeType
+  colorType.value = defaultSetting.colorType
+  mournModeStatus.value = defaultSetting.mournModeStatus
+  colorWeaknessModeStatus.value = defaultSetting.colorWeaknessModeStatus
+  menuStatus.value = defaultSetting.menuStatus
+  watermarkContent.value = defaultSetting.watermarkContent
 }
 </script>
 
