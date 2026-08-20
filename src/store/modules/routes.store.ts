@@ -24,10 +24,7 @@ export const useRouteStore = defineStore(
     /**
      * 路由状态
      */
-    const routerStatus = reactive<RouterStatus>({
-      loadingStatus: false,
-      refreshStatus: true,
-    })
+    const routerStatus = ref<boolean>(false)
     /**
      * 实际路由
      */

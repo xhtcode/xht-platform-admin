@@ -306,22 +306,6 @@ declare global {
      */
     query?: any
   }
-
-  /**
-   * 路由状态
-   * 管理路由加载和刷新状态
-
-   */
-  interface RouterStatus {
-    /**
-     * 加载状态
-     */
-    loadingStatus: boolean
-    /**
-     * 刷新状态
-     */
-    refreshStatus: boolean
-  }
 }
 
 export {}
