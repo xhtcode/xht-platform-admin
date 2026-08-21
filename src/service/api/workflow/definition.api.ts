@@ -17,7 +17,7 @@ const baseURL: string = import.meta.env.VITE_WORKFLOW_API_PREFIX
  */
 enum Api {
   CREATE = '/workflow/definition/create', // 新增流程扩展-流程定义
-  UPDATE = '/workflow/definition/update', // 根据主键`id`更新流程扩展-流程定义
+  UPDATE = '/workflow/definition/update/', // 根据主键`id`更新流程扩展-流程定义
   REMOVE = '/workflow/definition/remove/', // 根据主键`id`删除流程扩展-流程定义
   QUERY_BY_ID = '/workflow/definition/get/', // 根据主键`id`查询流程扩展-流程定义
   QUERY_LIST = '/workflow/definition/list', // 查询流程扩展-流程定义集合
@@ -44,7 +44,7 @@ export const saveFlowDefinition = (form: FlowDefinitionOperationRequest): AxiosP
  */
 export const updateFlowDefinition = (form: FlowDefinitionOperationRequest): AxiosPromise<void> => {
   return request({
-    url: Api.UPDATE,
+    url: Api.UPDATE + `${form.id}`,
     baseURL,
     method: 'post',
     data: form,

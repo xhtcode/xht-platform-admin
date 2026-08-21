@@ -10,7 +10,7 @@ export const definitionTypeEnum: DictEnum<DefinitionType, 'category' | 'order'> 
     value: 'category',
   },
   order: {
-    label: '申请单据',
+    label: '单据',
     type: 'success',
     value: 'order',
   },
@@ -23,11 +23,11 @@ export const definitionStatusEnum: DictEnum<DefinitionStatus, 'NORMAL' | 'DISABL
   NORMAL: {
     label: '正常',
     type: 'success',
-    value: 0,
+    value: 1,
   },
   DISABLE: {
     label: '禁用',
     type: 'danger',
-    value: 1,
+    value: 0,
   },
 }

@@ -7,7 +7,7 @@ import { queryFlowDefinitionList, removeFlowDefinitionById } from '@/service/api
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { flowDefinitionColumnOption } from '@/views/workflow/definition/definition.data'
-import { Delete, Edit, Plus, Refresh, Search, Sort } from '@element-plus/icons-vue'
+import { Delete, Edit, Plus, Refresh, Search } from '@element-plus/icons-vue'
 import { definitionStatusEnum, definitionTypeEnum } from '@/service/enums/workflow/definition.enum'
 
 defineOptions({ name: 'FlowDefinitionView' })
@@ -47,10 +47,7 @@ const queryFlowDefinitionTree = async (query: FlowDefinitionQueryRequest): Axios
   return response
 }
 
-const { handleListQuery, handleExpandAll } = useTableQueryListHooks<FlowDefinitionQueryRequest, FlowDefinitionTreeResponse>(
-  state,
-  queryFlowDefinitionTree
-)
+const { handleListQuery } = useTableQueryListHooks<FlowDefinitionQueryRequest, FlowDefinitionTreeResponse>(state, queryFlowDefinitionTree)
 const { queryParams } = toRefs(state)
 const columnOption = ref<ColumnConfig<FlowDefinitionResponse>>({
   ...flowDefinitionColumnOption,
@@ -100,10 +97,10 @@ const handleDelete = (row: FlowDefinitionResponse) => {
 /**
  * 树形懒加载子节点
  * @param row 当前展开的行数据
- * @param treeNode 树节点信息
+ * @param _ 树节点信息
  * @param resolve 解析子节点数据
  */
-const handleLoadChildren = async (row: FlowDefinitionTreeResponse, treeNode: unknown, resolve: (data: FlowDefinitionTreeResponse[]) => void) => {
+const handleLoadChildren = async (row: FlowDefinitionTreeResponse, _: unknown, resolve: (data: FlowDefinitionTreeResponse[]) => void) => {
   try {
     const { data } = await queryFlowDefinitionList({ parentId: row.id })
     resolve(handleTreeData(data))
@@ -164,7 +161,6 @@ onMounted(async () => {
       @refresh="resetQuery"
     >
       <el-button :icon="Plus" size="small" type="primary" @click="handleAdd()" v-authorization="['xht:flow:definition:create']">新增</el-button>
-      <el-button :icon="Sort" size="small" type="info" @click="handleExpandAll">折叠/展开</el-button>
     </table-tool-bar>
     <el-table
       v-if="state.refreshTable"
@@ -177,27 +173,26 @@ onMounted(async () => {
       :load="handleLoadChildren"
       empty-text="暂无匹配数据 🔍 试试调整筛选条件吧！"
     >
-      <el-table-column v-if="columnOption.definitionName?.visible" fixed="left" label="流程定义名称" prop="definitionName" min-width="200" />
-      <el-table-column v-if="columnOption.definitionCode?.visible" label="流程定义编码" prop="definitionCode" min-width="160" />
-      <el-table-column v-if="columnOption.definitionType?.visible" align="center" label="流程定义类型" prop="definitionType" min-width="120">
+      <el-table-column v-if="columnOption.definitionName?.visible" align="left" fixed="left" label="流程定义类型" prop="definitionType" :width="160">
         <template #default="{ row }">
           <xht-enum-tag :filter-label="row.definitionType" :data="definitionTypeEnum" />
         </template>
       </el-table-column>
-      <el-table-column v-if="columnOption.definitionStatus?.visible" align="center" label="流程定义状态" prop="definitionStatus" min-width="120">
+      <el-table-column v-if="columnOption.definitionName?.visible" fixed="left" label="流程定义名称" prop="definitionName" min-width="200" />
+      <el-table-column v-if="columnOption.definitionCode?.visible" label="流程定义编码" prop="definitionCode" min-width="160" show-overflow-tooltip />
+      <el-table-column v-if="columnOption.definitionStatus?.visible" label="流程定义状态" prop="definitionStatus" width="120">
         <template #default="{ row }">
           <xht-enum-tag :filter-label="row.definitionStatus" :data="definitionStatusEnum" />
         </template>
       </el-table-column>
-      <el-table-column v-if="columnOption.definitionLevel?.visible" align="center" label="流程定义层级" prop="definitionLevel" width="100" />
-      <el-table-column v-if="columnOption.definitionSort?.visible" align="center" label="流程定义排序" prop="definitionSort" width="100" />
+      <el-table-column v-if="columnOption.definitionSort?.visible" label="排序" prop="definitionSort" width="60" />
       <el-table-column v-if="columnOption.definitionDesc?.visible" label="流程定义描述" prop="definitionDesc" min-width="240" show-overflow-tooltip />
       <el-table-column v-if="columnOption.createBy?.visible" label="创建人" prop="createBy" width="160" />
       <el-table-column v-if="columnOption.createTime?.visible" label="创建时间" prop="createTime" width="180" />
       <el-table-column v-if="columnOption.updateBy?.visible" label="更新人" prop="updateBy" width="160" />
       <el-table-column v-if="columnOption.updateTime?.visible" label="更新时间" prop="updateTime" width="180" />
       <!--  @vue-generic {FlowDefinitionResponse}   -->
-      <el-table-column label="操作" fixed="right" width="220">
+      <el-table-column label="操作" fixed="right" width="260">
         <template #default="{ row }">
           <el-space wrap class="flex-center">
             <el-button :icon="Plus" link type="primary" @click="handleAdd(row)" v-authorization="['xht:flow:definition:create']">新增下级</el-button>

@@ -26,13 +26,12 @@ export const flowDefinitionOperationRules: FormRules<Required<FlowDefinitionOper
  * 流程扩展-流程定义 列表显示配置
  */
 export const flowDefinitionColumnOption: ColumnConfig<FlowDefinitionResponse> = {
+  definitionType: { desc: '流程定义类型', visible: true, disabled: false },
   definitionName: { desc: '流程定义名称', visible: true, disabled: true },
   definitionCode: { desc: '流程定义编码', visible: true, disabled: true },
-  definitionType: { desc: '流程定义类型', visible: true, disabled: false },
   definitionStatus: { desc: '流程定义状态', visible: true, disabled: false },
-  definitionLevel: { desc: '流程定义层级', visible: false, disabled: false },
-  definitionSort: { desc: '流程定义排序', visible: true, disabled: false },
-  definitionDesc: { desc: '流程定义描述', visible: false, disabled: false },
+  definitionSort: { desc: '排序', visible: true, disabled: false },
+  definitionDesc: { desc: '描述', visible: false, disabled: false },
   createBy: { desc: '创建人', visible: true, disabled: true },
   createTime: { desc: '创建时间', visible: true, disabled: true },
   updateBy: { desc: '更新人', visible: false, disabled: false },
