@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
-import type { SysAreaOperationRequest, SysAreaQueryRequest, SysAreaResponse } from '@/service/model/system/area.model'
+import type { SysAreaOperationRequest, SysAreaQueryRequest, SysAreaResponse, SysAreaTreeResponse } from '@/service/model/system/area.model'
 import { querySysAreaById, querySysAreaList, removeSysAreaById, saveSysArea, updateSysArea } from '@/service/api/system/area.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { Delete, Edit, Plus, Refresh } from '@element-plus/icons-vue'
@@ -11,7 +11,7 @@ import { sysAreaOperationForm, sysAreaOperationRules } from '@/views/system/area
 
 defineOptions({ name: 'SysAreaViewIndex' })
 
-const state = reactive<TableQueryListState<SysAreaQueryRequest, INodeResponse<SysAreaResponse>>>({
+const state = reactive<TableQueryListState<SysAreaQueryRequest, SysAreaTreeResponse>>({
   loadingStatus: false, // 加载状态
   refreshTable: true, // 刷新表格状态
   expandAllStatus: true, // 展开所有状态

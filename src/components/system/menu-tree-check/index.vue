@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { SysMenuResponse } from '@/service/model/system/menu.model'
+import type { SysMenuTreeResponse } from '@/service/model/system/menu.model'
 import { queryToolsMenuTree } from '@/service/api/system/menu.api'
 import { menuTypeEnum } from '@/service/enums/system/menu.enum'
 
@@ -23,7 +23,7 @@ interface Props {
 
 const menuTreeRef = ref<any>()
 const modelValue = useVModel(props, 'modelValue', emits)
-const menuTree = ref<INodeResponse<SysMenuResponse>[]>([])
+const menuTree = ref<SysMenuTreeResponse[]>([])
 
 /**
  * 获取菜单树数据

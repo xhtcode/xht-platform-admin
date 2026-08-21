@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { querySysDeptTree, removeSysDeptById } from '@/service/api/system/dept.api'
-import type { SysDeptQueryRequest, SysDeptResponse } from '@/service/model/system/dept.model'
+import type { SysDeptQueryRequest, SysDeptResponse, SysDeptTreeResponse } from '@/service/model/system/dept.model'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { sysDeptColumnOption } from '@/views/system/dept/dept.data'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
@@ -13,7 +13,7 @@ defineOptions({ name: 'SysDeptViewIndex' })
 const deptForm = defineAsyncComponent(() => import('@/views/system/dept/components/dept-form.vue'))
 const deptFormRef = useTemplateRef('deptFormRef')
 
-const state = reactive<TableQueryListState<SysDeptQueryRequest, INodeResponse<SysDeptResponse>>>({
+const state = reactive<TableQueryListState<SysDeptQueryRequest, SysDeptTreeResponse>>({
   loadingStatus: false, // 加载状态
   refreshTable: true, // 刷新表格状态
   expandAllStatus: false, // 展开所有状态
@@ -22,7 +22,7 @@ const state = reactive<TableQueryListState<SysDeptQueryRequest, INodeResponse<Sy
   tableList: [], // 表格数据列表
 })
 
-const { handleListQuery, handleExpandAll } = useTableQueryListHooks<SysDeptQueryRequest, INodeResponse<SysDeptResponse>>(state, querySysDeptTree)
+const { handleListQuery, handleExpandAll } = useTableQueryListHooks<SysDeptQueryRequest, SysDeptTreeResponse>(state, querySysDeptTree)
 const { queryParams } = toRefs(state)
 const columnOption = ref<ColumnConfig<SysDeptResponse>>({
   ...sysDeptColumnOption,

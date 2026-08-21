@@ -48,16 +48,7 @@ declare global {
     createBy?: string // 创建人
     updateBy?: string // 修改人
   }
-  /**
-   * 定义树节点类型
-   */
-  export interface INodeResponse<T> extends BasicResponse {
-    id: T
-    name: string
-    path: string
-    parentId: T | null
-    children?: INodeResponse<T>[]
-  }
+
   /**
    * 分页参数
    */

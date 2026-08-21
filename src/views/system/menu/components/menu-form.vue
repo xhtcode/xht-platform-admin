@@ -14,7 +14,7 @@ const emit = defineEmits(['success'])
 const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
 const rules: FormRules<Required<SysMenuOperationRequest>> = sysMenuOperationRules
 const state = reactive<AddUpdateOption<SysMenuOperationRequest>>({
-  title: '增加部门',
+  title: '增加菜单',
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,

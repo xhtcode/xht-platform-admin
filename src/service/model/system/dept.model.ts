@@ -35,6 +35,13 @@ export interface SysDeptResponse extends MetaResponse {
 }
 
 /**
+ * 树形结构响应类型
+ */
+export interface SysDeptTreeResponse extends SysDeptResponse {
+  children?: SysDeptTreeResponse[]
+}
+
+/**
  * 部门负责人职位信息
  */
 export interface LeaderPostResponse {

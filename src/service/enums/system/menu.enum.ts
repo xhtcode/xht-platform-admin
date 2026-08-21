@@ -17,7 +17,7 @@ export const menuStatusEnum: DictEnum<MenuStatus, 'NORMAL' | 'DISABLE'> = {
 /**
  * 菜单类型枚举
  */
-export const menuTypeEnum: DictEnum<MenuType> = {
+export const menuTypeEnum: DictEnum<MenuType, 'M' | 'C' | 'B'> = {
   M: {
     label: '目录',
     value: 'M',

@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 import type { AxiosPromise } from 'axios'
-import type { SysMenuOperationRequest, SysMenuQueryRequest, SysMenuResponse } from '@/service/model/system/menu.model'
+import type { SysMenuOperationRequest, SysMenuQueryRequest, SysMenuResponse, SysMenuTreeResponse } from '@/service/model/system/menu.model'
 
 /**
  * 后台管理服务前缀
@@ -65,7 +65,7 @@ export const querySysMenuById = (id: ModeIdType): AxiosPromise<SysMenuResponse> 
 /**
  * 查询树形结构菜单
  */
-export const querySysMenuTree = (data?: SysMenuQueryRequest): AxiosPromise<INodeResponse<SysMenuResponse>[]> => {
+export const querySysMenuTree = (data?: SysMenuQueryRequest): AxiosPromise<SysMenuTreeResponse[]> => {
   return request({
     url: Api.QUERY_TREE,
     baseURL,
@@ -77,7 +77,7 @@ export const querySysMenuTree = (data?: SysMenuQueryRequest): AxiosPromise<INode
 /**
  * 查询树形结构菜单
  */
-export const queryToolsMenuTree = (): AxiosPromise<INodeResponse<SysMenuResponse>[]> => {
+export const queryToolsMenuTree = (): AxiosPromise<SysMenuTreeResponse[]> => {
   return request({
     url: Api.QUERY_MENU_TREE,
     baseURL,

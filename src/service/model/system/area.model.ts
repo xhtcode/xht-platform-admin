@@ -21,6 +21,12 @@ export interface SysAreaResponse extends MetaResponse {
 }
 
 /**
+ * 系统管理-行政区划树响应类型
+ */
+export interface SysAreaTreeResponse extends SysAreaResponse {
+  children?: SysAreaTreeResponse[]
+}
+/**
  * 系统管理-行政区划表单请求参数类型
  */
 export interface SysAreaOperationRequest extends Partial<SysAreaResponse>, BasicFormRequest {}

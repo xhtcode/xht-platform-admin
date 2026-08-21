@@ -72,7 +72,7 @@ service.interceptors.response.use(
       useMessage().error('加密暂未实现')
     }
     if (code === 200) {
-      return response.data
+      return Promise.resolve(response.data)
     }
     if (code === 424) {
       logout()
@@ -90,6 +90,7 @@ service.interceptors.response.use(
     } else if (error.message.indexOf('Request') !== -1) {
       useMessage().error('网络连接异常，请求未成功发送，请检查网络后重试~')
     }
+    console.error('响应拦截器错误:', error)
     return Promise.reject(error.response)
   }
 )

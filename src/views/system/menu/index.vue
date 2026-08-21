@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { querySysMenuTree, removeSysMenuById } from '@/service/api/system/menu.api'
-import type { SysMenuQueryRequest, SysMenuResponse } from '@/service/model/system/menu.model'
+import type { SysMenuQueryRequest, SysMenuResponse, SysMenuTreeResponse } from '@/service/model/system/menu.model'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { FormInstance } from 'element-plus'
 import { sysMenuColumnOption } from '@/views/system/menu/menu.data'
@@ -15,7 +15,7 @@ const menuForm = defineAsyncComponent(() => import('@/views/system/menu/componen
 const menuFormRef = useTemplateRef('menuFormRef')
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 
-const state = reactive<TableQueryListState<SysMenuQueryRequest, INodeResponse<SysMenuResponse>>>({
+const state = reactive<TableQueryListState<SysMenuQueryRequest, SysMenuTreeResponse>>({
   loadingStatus: false, // 加载状态
   refreshTable: true, // 刷新表格状态
   expandAllStatus: false, // 展开所有状态
@@ -24,7 +24,7 @@ const state = reactive<TableQueryListState<SysMenuQueryRequest, INodeResponse<Sy
   tableList: [], // 表格数据列表
 })
 
-const { handleListQuery, handleExpandAll } = useTableQueryListHooks<SysMenuQueryRequest, INodeResponse<SysMenuResponse>>(state, querySysMenuTree)
+const { handleListQuery, handleExpandAll } = useTableQueryListHooks<SysMenuQueryRequest, SysMenuTreeResponse>(state, querySysMenuTree)
 const { queryParams } = toRefs(state)
 const columnOption = ref<ColumnConfig<SysMenuResponse>>({
   ...sysMenuColumnOption,

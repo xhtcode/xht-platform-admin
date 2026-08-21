@@ -42,6 +42,12 @@ export interface SysMenuResponse extends MetaResponse {
 }
 
 /**
+ * 菜单树响应类型
+ */
+export interface SysMenuTreeResponse extends SysMenuResponse {
+  children?: SysMenuTreeResponse[]
+}
+/**
  * 菜单操作类型
  */
 export interface SysMenuOperationRequest extends Partial<SysMenuResponse>, BasicFormRequest {

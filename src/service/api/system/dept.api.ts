@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 import type { AxiosPromise } from 'axios'
-import type { SysDeptOperationRequest, SysDeptQueryRequest, SysDeptResponse } from '@/service/model/system/dept.model'
+import type { SysDeptOperationRequest, SysDeptQueryRequest, SysDeptTreeResponse } from '@/service/model/system/dept.model'
 
 /**
  * 后台管理服务前缀
@@ -64,7 +64,7 @@ export const querySysDeptById = (id: ModeIdType): AxiosPromise<SysDeptOperationR
 /**
  * 查询全部
  */
-export const querySysDeptTree = (data?: SysDeptQueryRequest): AxiosPromise<INodeResponse<SysDeptResponse>[]> => {
+export const querySysDeptTree = (data?: SysDeptQueryRequest): AxiosPromise<SysDeptTreeResponse[]> => {
   return request({
     url: Api.QUERY_TREE,
     baseURL,

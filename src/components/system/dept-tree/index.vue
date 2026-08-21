@@ -1,37 +1,30 @@
 <script lang="ts" setup>
-import { useVModel } from '@vueuse/core'
 import { querySysDeptTree } from '@/service/api/system/dept.api'
-import type { SysDeptQueryRequest, SysDeptResponse } from '@/service/model/system/dept.model'
+import type { SysDeptQueryRequest, SysDeptResponse, SysDeptTreeResponse } from '@/service/model/system/dept.model'
 import type { AxiosResponse } from 'axios'
 import { CaretBottom, CaretTop } from '@element-plus/icons-vue'
 import { deptStatusEnum } from '@/service/enums/system/dept.enum'
 
 defineOptions({ name: 'DeptTree' })
-const props = withDefaults(defineProps<DeptSelectTreeProps>(), {
-  modelValue: undefined,
-})
 
 const emits = defineEmits<{
   (e: 'clickNode', data: SysDeptResponse): void
-  (e: 'update:modelValue', value: any): void
 }>()
 
 const expandAll = ref<boolean>(true)
-
-interface DeptSelectTreeProps {
-  modelValue?: any
-}
 
 const defaultProps: any = {
   children: 'children',
   label: 'deptName',
 }
 
-const modelValue = useVModel(props, 'modelValue', emits)
+const modelValue = defineModel<any>('modelValue', {
+  required: false,
+})
 const loading = ref<boolean>(false)
 const filterText = ref<string>('')
 const treeRef = useTemplateRef('treeRef')
-const treeData = ref<INodeResponse<SysDeptResponse>[]>([])
+const treeData = ref<SysDeptTreeResponse[]>([])
 const queryParams = ref<SysDeptQueryRequest>({
   deptStatus: deptStatusEnum.NORMAL.value,
 })
@@ -80,7 +73,7 @@ watch(filterText, (val) => {
  */
 const handleQuery = async () => {
   loading.value = true
-  await querySysDeptTree(queryParams.value).then((res: AxiosResponse<INodeResponse<SysDeptResponse>[]>) => {
+  await querySysDeptTree(queryParams.value).then((res: AxiosResponse<SysDeptTreeResponse[]>) => {
     treeData.value = res.data
     loading.value = false
   })

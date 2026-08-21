@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 import type { AxiosPromise } from 'axios'
-import type { SysAreaOperationRequest, SysAreaQueryRequest, SysAreaResponse } from '@/service/model/system/area.model'
+import type { SysAreaOperationRequest, SysAreaQueryRequest, SysAreaResponse, SysAreaTreeResponse } from '@/service/model/system/area.model'
 
 /**
  * 后台管理服务前缀
@@ -92,7 +92,7 @@ export const querySysAreaById = (id: ModeIdType): AxiosPromise<SysAreaResponse> 
  *
  * @param query 系统管理-行政区划查询请求参数
  */
-export const querySysAreaList = (query: SysAreaQueryRequest): AxiosPromise<INodeResponse<SysAreaResponse>[]> => {
+export const querySysAreaList = (query: SysAreaQueryRequest): AxiosPromise<SysAreaTreeResponse[]> => {
   return request({
     url: Api.QUERY_LIST + `${query.parentId}`,
     baseURL,

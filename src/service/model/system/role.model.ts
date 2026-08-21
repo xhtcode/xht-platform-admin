@@ -1,4 +1,4 @@
-import type { SysMenuResponse } from '@/service/model/system/menu.model'
+import type { SysMenuResponse, SysMenuTreeResponse } from '@/service/model/system/menu.model'
 
 /**
  * 角色状态
@@ -39,7 +39,7 @@ export interface RoleSelectedMenuResponse {
   /**
    * 菜单列表
    */
-  menuList: INodeResponse<SysMenuResponse>[]
+  menuList: SysMenuTreeResponse[]
 }
 
 /**
