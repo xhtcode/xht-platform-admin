@@ -59,6 +59,18 @@ const columnOption = ref<ColumnConfig<FlowDefinitionResponse>>({
 const resetQuery = async () => {
   queryFormRef.value?.resetFields()
   queryParams.value = {}
+  await refreshTreeTable()
+}
+
+/**
+ * 刷新树形表格
+ * 通过重建表格清除 el-table 懒加载子节点缓存，再重新查询根节点数据，
+ * 避免新增/修改/删除子节点后，展开父节点仍显示旧数据
+ */
+const refreshTreeTable = async () => {
+  state.refreshTable = false
+  await nextTick()
+  state.refreshTable = true
   await handleListQuery()
 }
 
@@ -87,7 +99,7 @@ const handleDelete = (row: FlowDefinitionResponse) => {
     .then(async () => {
       await removeFlowDefinitionById(row.id)
       useMessage().success('删除流程定义成功!')
-      await handleListQuery()
+      await refreshTreeTable()
     })
     .finally(() => {
       state.loadingStatus = false
@@ -125,7 +137,7 @@ onMounted(async () => {
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
           <el-space>
-            <el-button :icon="Search" type="primary" @click="handleListQuery()">查询</el-button>
+            <el-button :icon="Search" type="primary" @click="refreshTreeTable">查询</el-button>
             <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
           </el-space>
         </el-col>
@@ -147,7 +159,7 @@ onMounted(async () => {
           </el-form-item>
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
-          <el-button :icon="Search" type="primary" @click="handleListQuery()">查询</el-button>
+          <el-button :icon="Search" type="primary" @click="refreshTreeTable">查询</el-button>
           <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
         </el-col>
       </el-row>
@@ -202,7 +214,7 @@ onMounted(async () => {
         </template>
       </el-table-column>
     </el-table>
-    <flow-definition-form ref="flowDefinitionFormRef" @success="handleListQuery()" />
+    <flow-definition-form ref="flowDefinitionFormRef" @success="refreshTreeTable" />
   </div>
 </template>
 
