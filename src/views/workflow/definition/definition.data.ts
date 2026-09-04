@@ -31,9 +31,9 @@ export const flowDefinitionColumnOption: ColumnConfig<FlowDefinitionResponse> = 
   definitionCode: { desc: '流程定义编码', visible: true, disabled: true },
   definitionStatus: { desc: '流程定义状态', visible: true, disabled: false },
   definitionSort: { desc: '排序', visible: true, disabled: false },
-  definitionDesc: { desc: '描述', visible: false, disabled: false },
-  createBy: { desc: '创建人', visible: true, disabled: true },
-  createTime: { desc: '创建时间', visible: true, disabled: true },
+  definitionDesc: { desc: '描述', visible: true, disabled: false },
+  createBy: { desc: '创建人', visible: false, disabled: false },
+  createTime: { desc: '创建时间', visible: false, disabled: false },
   updateBy: { desc: '更新人', visible: false, disabled: false },
   updateTime: { desc: '更新时间', visible: false, disabled: false },
 }
