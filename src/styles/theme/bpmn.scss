@@ -18,11 +18,58 @@
 .djs-minimap .toggle {
   display: none !important;
 }
+
 .el-collapse-item.is-disabled {
   .el-collapse-item__header {
     cursor: pointer !important;
   }
 }
-.bjs-powered-by{
+
+.bjs-powered-by {
   display: none;
+}
+
+.djs-container {
+  overflow: visible !important;
+
+  .djs-overlay-container {
+    z-index: 9;
+  }
+}
+
+.bpmn-viewer-container {
+  overflow: visible;
+  height: 100%;
+  width: 100%;
+  background-color: #ffffff;
+
+  .bpmnCanvas {
+    .bjs-container {
+      overflow: visible;
+      padding: 0;
+
+      .djs-container {
+        overflow: visible !important;
+
+        .djs-overlay-container {
+          z-index: 9;
+        }
+      }
+    }
+  }
+
+  --bpmn-finished-color: rgb(149, 212, 117);
+  --bpmn-unfinished-color: rgb(238, 190, 119);
+  --bpmn-rejected-color: rgb(248, 152, 152);
+
+  .highlight-nodes {
+    .djs-visual {
+
+    }
+  }
+
+  .highlight-lines {
+    .djs-visual {
+    }
+  }
 }
