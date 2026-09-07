@@ -59,26 +59,122 @@
   }
 
   --bpmn-finished-color: rgb(149, 212, 117);
+  --bpmn-finished-bg-color: rgba(149, 212, 117, 0.25);
   --bpmn-unfinished-color: rgb(238, 190, 119);
+  --bpmn-unfinished-bg-color: rgba(238, 190, 119, 0.25);
   --bpmn-rejected-color: rgb(248, 152, 152);
+  --bpmn-rejected-bg-color: rgba(248, 152, 152, 0.25);
+
+  /* 已完成节点：绿色描边 + 半透明绿色背景 + 绿色文字 */
   .highlight-finished-nodes{
     .djs-visual {
-
+      > :nth-child(1) {
+        fill: var(--bpmn-finished-bg-color) !important;
+        stroke: var(--bpmn-finished-color) !important;
+      }
+      text {
+        fill: var(--bpmn-finished-color) !important;
+      }
     }
   }
+  /* 已完成连线：绿色描边 + 绿色箭头 + 绿色文字（箭头由 genBpmnSvgMarker 注入的 #greenMarker 提供） */
   .highlight-finished-lines{
     .djs-visual {
-
+      /* 连线的 marker defs 会占据 djs-visual 第一个子元素，必须用 > path 定位线条 */
+      > path {
+        stroke: var(--bpmn-finished-color) !important;
+        marker-end: url(#greenMarker) !important;
+      }
+      text {
+        fill: var(--bpmn-finished-color) !important;
+      }
     }
   }
+  /* 待办任务：橙色虚线描边（沿边框流动旋转）+ 半透明橙色背景 + 橙色文字 */
   .highlight-unfinished-tasks{
     .djs-visual {
-
+      > :nth-child(1) {
+        fill: var(--bpmn-unfinished-bg-color) !important;
+        stroke: var(--bpmn-unfinished-color) !important;
+        /* 虚线描边（周期 8+6=14）并通过 stroke-dashoffset 动画让虚线沿边框流动，形成旋转效果 */
+        stroke-dasharray: 8 6 !important;
+        animation: bpmn-unfinished-dash-flow 1.2s linear infinite;
+      }
+      text {
+        fill: var(--bpmn-unfinished-color) !important;
+      }
     }
   }
+  /* 已驳回任务：红色描边 + 半透明红色背景 + 红色文字 */
   .highlight-rejected-tasks{
     .djs-visual {
+      > :nth-child(1) {
+        fill: var(--bpmn-rejected-bg-color) !important;
+        stroke: var(--bpmn-rejected-color) !important;
+      }
+      text {
+        fill: var(--bpmn-rejected-color) !important;
+      }
+    }
+  }
 
+  /* 网关内部图案：跟随状态色（图案位于 djs-visual 的第二个子元素） */
+  .highlight-finished-nodes.highlight-gateway{
+    .djs-visual {
+      > :nth-child(2) {
+        fill: var(--bpmn-finished-color) !important;
+        stroke: var(--bpmn-finished-color) !important;
+      }
+    }
+  }
+  .highlight-unfinished-tasks.highlight-gateway{
+    .djs-visual {
+      > :nth-child(2) {
+        fill: var(--bpmn-unfinished-color) !important;
+        stroke: var(--bpmn-unfinished-color) !important;
+      }
+    }
+  }
+  .highlight-rejected-tasks.highlight-gateway{
+    .djs-visual {
+      > :nth-child(2) {
+        fill: var(--bpmn-rejected-color) !important;
+        stroke: var(--bpmn-rejected-color) !important;
+      }
+    }
+  }
+
+  /* 节点外部文字（开始事件、网关的 name 等独立 label 元素）跟随状态色 */
+  .highlight-finished-nodes-label{
+    .djs-visual {
+      text {
+        fill: var(--bpmn-finished-color) !important;
+      }
+    }
+  }
+  .highlight-unfinished-tasks-label{
+    .djs-visual {
+      text {
+        fill: var(--bpmn-unfinished-color) !important;
+      }
+    }
+  }
+  .highlight-rejected-tasks-label{
+    .djs-visual {
+      text {
+        fill: var(--bpmn-rejected-color) !important;
+      }
     }
   }
 }
+
+/* 待办节点虚线边框流动动画：偏移量须为虚线周期（8+6=14）的整数倍，否则循环时会跳变 */
+@keyframes bpmn-unfinished-dash-flow {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: -28;
+  }
+}
+

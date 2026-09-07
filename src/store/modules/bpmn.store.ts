@@ -18,6 +18,7 @@ export const useBpmnStore = defineStore('bpmn', () => {
   const selectionAlign = shallowRef<any>()
   const activePanelName = ref<PanelElementType[]>([])
   const setModeler = (mod?: Modeler) => {
+    modeler.value && modeler.value.destroy()
     modeler.value = mod
     if (mod) {
       modeling.value = modeler.value?.get<Modeling>('modeling')

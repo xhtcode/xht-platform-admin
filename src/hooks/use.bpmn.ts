@@ -18,6 +18,10 @@ export const useBpmnHooks = () => {
   const bpmnStore = useBpmnStore()
   const { modeler, modeling, activeElement } = storeToRefs(bpmnStore)
 
+  /**
+   * 初始化bpmnModeler
+   * @param canvas 容器元素
+   */
   const initModeler = (canvas: HTMLElement) => {
     bpmnStore.setModeler(
       new Modeler({
