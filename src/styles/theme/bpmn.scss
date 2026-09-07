@@ -61,15 +61,24 @@
   --bpmn-finished-color: rgb(149, 212, 117);
   --bpmn-unfinished-color: rgb(238, 190, 119);
   --bpmn-rejected-color: rgb(248, 152, 152);
-
-  .highlight-nodes {
+  .highlight-finished-nodes{
     .djs-visual {
 
     }
   }
-
-  .highlight-lines {
+  .highlight-finished-lines{
     .djs-visual {
+
+    }
+  }
+  .highlight-unfinished-tasks{
+    .djs-visual {
+
+    }
+  }
+  .highlight-rejected-tasks{
+    .djs-visual {
+
     }
   }
 }

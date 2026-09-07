@@ -47,6 +47,8 @@ function importXml() {
     fitViewScaleRate.value = canvas.zoom()
     const finishedNodes = defaultData.finishedNodes
     const finishedLines = defaultData.finishedLines
+    const unfinishedTasks = defaultData.unfinishedTasks
+    const rejectedTasks = defaultData.rejectedTasks
     const elementRegistry = bpmnViewer!.get<any>('elementRegistry')
     if (finishedNodes && finishedNodes.length > 0) {
       finishedNodes.forEach((item) => {
@@ -56,6 +58,16 @@ function importXml() {
     if (finishedLines && finishedLines.length > 0) {
       finishedLines.forEach((item) => {
         canvas.addMarker(item, 'highlight-finished-lines')
+      })
+    }
+    if (unfinishedTasks && unfinishedTasks.length > 0) {
+      unfinishedTasks.forEach((item) => {
+        canvas.addMarker(item, 'highlight-unfinished-tasks')
+      })
+    }
+    if (rejectedTasks && rejectedTasks.length > 0) {
+      rejectedTasks.forEach((item) => {
+        canvas.addMarker(item, 'highlight-rejected-tasks')
       })
     }
     genBpmnSvgMarker()
