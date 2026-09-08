@@ -1,24 +1,30 @@
 <script setup lang="ts">
-import '@/styles/theme/bpmn.scss'
+import '@/styles/theme/bpmn.scss' // 流程高亮样式（.highlight-* 系列）
 import 'bpmn-js/dist/assets/diagram-js.css' // 基础样式
-import MoveCanvasModule from 'diagram-js/lib/navigation/movecanvas'
+import MoveCanvasModule from 'diagram-js/lib/navigation/movecanvas' // 拖拽空白区域平移画布
 import GridLineModule from 'diagram-js-grid-bg' // 网格背景模块
-import defaultData from '@/components/bpmn-viewer/data'
-import BpmnViewer from 'bpmn-js/lib/Viewer'
-import { House, Minus, Plus } from '@element-plus/icons-vue'
+import defaultData from '@/components/bpmn-viewer/data' // 演示流程 XML 及节点/连线高亮数据
+import BpmnViewer from 'bpmn-js/lib/Viewer' // 只读流程查看器
+import { Minus, Plus } from '@element-plus/icons-vue' // 缩小 / 放大图标
+import { addNodeMarker, generateBpmnSvgMarker, removeBpmnPreviewModal } from '@/components/bpmn-viewer/bpmn-svg-marker' // 箭头 marker 的注入与清理
 defineOptions({
   name: 'BpmnViewer',
+  inheritAttrs: false,
 })
-const attrs = useAttrs()
-const canvas = useTemplateRef<HTMLElement>('canvas')
-onMounted(() => {
-  initModeler(canvas.value!)
-})
-const defaultZoom = ref(0)
-let bpmnViewer: BpmnViewer<null> | null = null
+const attrs = useAttrs() // 外部传入的属性透传到根节点容器
+const defaultZoom = ref<number>(0) // 当前画布缩放倍率（驱动按钮组缩放与百分比显示）
+const fitViewScaleRate = ref<number>(1) // 初始记录适配视口后的缩放倍率
+const bpmnViewerRef = useTemplateRef<HTMLElement>('bpmnViewerRef') // 画布挂载容器
+const bpmnViewer = shallowRef<BpmnViewer>() // 查看器实例（shallowRef 避免大对象深层响应式开销）
+const bpmnCanvas = shallowRef<any>() // diagram-js canvas 服务：控制缩放、addMarker 添加高亮类
+
+/**
+ * 初始化（或重建）只读流程查看器
+ * @param canvas 画布挂载的 DOM 元素
+ */
 const initModeler = (canvas: HTMLElement) => {
-  bpmnViewer && bpmnViewer.destroy()
-  bpmnViewer = new BpmnViewer({
+  bpmnViewer.value && bpmnViewer.value.destroy() // 已有实例时先销毁，避免重复挂载
+  bpmnViewer.value = new BpmnViewer({
     container: canvas,
     width: '100%',
     additionalModules: [
@@ -33,137 +39,106 @@ const initModeler = (canvas: HTMLElement) => {
       gridLineColor: 'var(--el-color-info-light-5)', // 网格边框颜色
     },
   })
-  importXml()
-  bpmnViewer.on('element.click', ({ element }) => {
-    console.log(element)
+  importXml() // 导入流程数据并执行状态高亮
+  bpmnViewer.value!.on('element.click', ({ element }) => {
+    console.log(element) // TODO: 演示用，后续可在此打开节点详情
   })
+  bpmnCanvas.value = bpmnViewer.value!.get<any>('canvas') // 缓存 canvas 服务，供缩放与高亮使用
+  // 注入绿色箭头 marker（#greenMarker），供已完成连线样式的 marker-end: url(#greenMarker) 引用
+  generateBpmnSvgMarker(bpmnViewerRef.value!)
 }
+
+/**
+ * 导入流程 XML（异步），完成后自动适配视口并按数据配置高亮节点与连线
+ */
 function importXml() {
-  bpmnViewer?.importXML(defaultData.xml).then(() => {
-    const canvas = bpmnViewer!.get<any>('canvas')
-    bpmnViewer!.get<any>('canvas').zoom('fit-viewport', 'auto')
-    defaultZoom.value = canvas?.zoom()
-    fitViewScaleRate.value = canvas.zoom()
-    const finishedNodes = defaultData.finishedNodes
-    const finishedLines = defaultData.finishedLines
-    const unfinishedTasks = defaultData.unfinishedTasks
-    const rejectedTasks = defaultData.rejectedTasks
-    const elementRegistry = bpmnViewer!.get<any>('elementRegistry')
-    // 高亮节点：网关内部图案（djs-visual 第二个子元素）需额外加类单独高亮
-    const addNodeMarker = (item: string, marker: string) => {
-      canvas.addMarker(item, marker)
-      const element = elementRegistry.get(item)
-      if (element && /Gateway$/.test(element.type)) {
-        canvas.addMarker(item, 'highlight-gateway')
-      }
-      // 外部文字（如开始事件、网关的 name）是独立的 label 元素（id 为 `${item}_label`），
-      // 需加独立类高亮，避免与节点主体的 > :nth-child(1) 规则冲突
-      const label = elementRegistry.get(`${item}_label`)
-      if (label) {
-        canvas.addMarker(label, `${marker}-label`)
-      }
-    }
-    if (finishedNodes && finishedNodes.length > 0) {
-      finishedNodes.forEach((item) => {
-        addNodeMarker(item, 'highlight-finished-nodes')
-      })
-    }
-    if (finishedLines && finishedLines.length > 0) {
-      finishedLines.forEach((item) => {
-        canvas.addMarker(item, 'highlight-finished-lines')
-        // 连线文字是独立的 label 元素（id 为 `${item}_label`），需单独添加高亮类
-        const label = elementRegistry.get(`${item}_label`)
-        if (label) {
-          canvas.addMarker(label, 'highlight-finished-lines')
-        }
-      })
-    }
-    if (unfinishedTasks && unfinishedTasks.length > 0) {
-      unfinishedTasks.forEach((item) => {
-        addNodeMarker(item, 'highlight-unfinished-tasks')
-      })
-    }
-    if (rejectedTasks && rejectedTasks.length > 0) {
-      rejectedTasks.forEach((item) => {
-        addNodeMarker(item, 'highlight-rejected-tasks')
-      })
-    }
-    genBpmnSvgMarker()
+  bpmnViewer.value?.importXML(defaultData.xml).then(() => {
+    bpmnCanvas.value.zoom('fit-viewport', { x: 0, y: 0 }) // 画布内容自适应视口并居中
+    defaultZoom.value = bpmnCanvas.value.zoom()
+    fitViewScaleRate.value = bpmnCanvas.value.zoom()
+    const elementRegistry = bpmnViewer.value!.get<any>('elementRegistry')
+    // 已完成节点：绿色边框 + 半透明绿色背景
+    addNodeMarker(bpmnCanvas.value, elementRegistry, 'highlight-finished-nodes', defaultData.finishedNodes)
+    // 已完成连线：绿色线条 + 绿色箭头
+    addNodeMarker(bpmnCanvas.value, elementRegistry, 'highlight-finished-lines', defaultData.finishedLines)
+    // 待办任务：橙色虚线流动边框
+    addNodeMarker(bpmnCanvas.value, elementRegistry, 'highlight-unfinished-tasks', defaultData.unfinishedTasks)
+    // 已驳回任务：红色边框
+    addNodeMarker(bpmnCanvas.value, elementRegistry, 'highlight-rejected-tasks', defaultData.rejectedTasks)
   })
 }
 
-const fitViewScaleRate = ref(1)
-const isFitView = ref(false)
-const processZoomOut = () => {}
-const processFitDialog = (isFitView: boolean) => {
-  console.log(isFitView)
+/**
+ * 缩小：每次按 zoomStep（默认 0.1）递减，最小不低于 0.2 倍
+ * @param zoomStep 步长
+ */
+const processZoomOut = (zoomStep = 0.05) => {
+  if (bpmnCanvas.value) {
+    // 先乘 100 取整再除回，避免浮点累加导致比例显示误差
+    let newZoom = Math.floor(defaultZoom.value * 100 - zoomStep * 100) / 100
+    if (newZoom < 0.2) {
+      newZoom = 0.2
+    }
+    defaultZoom.value = newZoom
+    bpmnCanvas.value.zoom(defaultZoom.value)
+  }
 }
-const processZoomIn = () => {}
 
-// 向画布中添加一个节点-箭头颜色的实现
-function genBpmnSvgMarker() {
-  // 向画布中添加一个节点-箭头颜色的实现
-  let bpmnCanvas = canvas.value!
-  let bpmnSvg = bpmnCanvas.querySelector('.djs-container')?.querySelector('svg')
-  // 取顶层 svg 的直接 defs，避免取到连线 djs-visual 内部的 defs 导致重绘后 marker 丢失
-  let bpmnSvgDefs = bpmnSvg?.querySelector(':scope > defs')
-  if (!bpmnSvgDefs) {
-    bpmnSvgDefs = document.createElementNS('http://www.w3.org/2000/svg', 'defs')
-    bpmnSvg?.appendChild(bpmnSvgDefs)
-  }
-  // 避免重复导入时生成重复 id 的 marker
-  bpmnSvgDefs.querySelector('#greenMarker')?.remove()
-  let marker = document.createElementNS('http://www.w3.org/2000/svg', 'marker')
-  if (marker) {
-    marker.setAttribute('id', 'greenMarker')
-    marker.setAttribute('viewBox', '0 0 20 20')
-    marker.setAttribute('refX', '11')
-    marker.setAttribute('refY', '10')
-    marker.setAttribute('markerWidth', '10')
-    marker.setAttribute('markerHeight', '10')
-    marker.setAttribute('orient', 'auto')
-    let path = document.createElementNS('http://www.w3.org/2000/svg', 'path')
-    path.setAttribute('d', 'M 1 5 L 11 10 L 1 15 Z')
-    path.setAttribute(
-      'style',
-      'fill: var(--bpmn-finished-color); stroke-width: 1px; stroke-linecap: round; stroke-dasharray: 10000, 1; stroke: var(--bpmn-finished-color);'
-    )
-    marker.appendChild(path)
-    bpmnSvgDefs?.appendChild(marker)
+/**
+ * 一键适配视口：将整张流程图缩放至全部可见
+ */
+const processFitDialog = () => {
+  if (bpmnCanvas.value) {
+    bpmnCanvas.value.zoom('fit-viewport', 'auto')
+    defaultZoom.value = bpmnCanvas.value.zoom()
   }
 }
-// 解决生成多个箭头标签的BUG
-function onCloseBpmnPreviewModal() {
-  let element = document.getElementById('greenMarker')
-  element?.parentNode?.removeChild(element)
+
+/**
+ * 放大：每次按 zoomStep（默认 0.1）递增，最大不超过 4 倍
+ * @param zoomStep 步长
+ */
+const processZoomIn = (zoomStep = 0.05) => {
+  if (bpmnCanvas.value) {
+    let newZoom = Math.floor(defaultZoom.value * 100 + zoomStep * 100) / 100
+    if (newZoom > 4) {
+      newZoom = 4
+    }
+    defaultZoom.value = newZoom
+    bpmnCanvas.value.zoom(defaultZoom.value)
+  }
 }
+
+onMounted(() => {
+  initModeler(bpmnViewerRef.value!) // 挂载完成后初始化查看器
+})
+
 onUnmounted(() => {
-  bpmnViewer?.destroy()
-  onCloseBpmnPreviewModal()
+  bpmnViewer.value?.destroy() // 销毁查看器，释放画布 DOM
+  removeBpmnPreviewModal() // 移除注入的箭头 marker，避免下次挂载出现重复 id
 })
 </script>
 
 <template>
   <div class="bpmn-viewer-container" v-bind="attrs">
-    <div class="svg-controller">
-      <div class="scale-rate">
-        {{ Math.floor(defaultZoom * 10 * 10) + '%' }}
-      </div>
-      <el-space>
-        <el-button title="缩小" shape="circle" size="small" @click="processZoomOut()" type="primary">
+    <!-- 缩放工具条：悬浮于画布右上角（定位见 bpmn.scss .bpmn-viewer-tool） -->
+    <div class="bpmn-viewer-tool">
+      <div class="scale-rate"></div>
+      <el-button-group>
+        <!-- 缩小（步长 0.1） -->
+        <el-button size="small" @click="processZoomOut()" type="primary">
           <el-icon><Minus /></el-icon>
         </el-button>
-        <el-button :title="isFitView ? '按窗口大小显示' : '实际大小'" shape="circle" size="small" @click="processFitDialog(isFitView)" type="primary">
-          <el-icon>
-            <House v-if="isFitView" />
-            <House v-else />
-          </el-icon>
+        <!-- 显示当前缩放比例，点击一键适配视口 -->
+        <el-button size="small" @click="processFitDialog()">
+          {{ Math.floor(defaultZoom * 10 * 10) + '%' }}
         </el-button>
-        <el-button title="放大" shape="circle" size="small" @click="processZoomIn()" type="primary">
+        <!-- 放大（步长 0.1） -->
+        <el-button size="small" @click="processZoomIn()" type="primary">
           <el-icon><Plus /></el-icon>
         </el-button>
-      </el-space>
+      </el-button-group>
     </div>
-    <div class="h-full w-full bpmnCanvas canvas" ref="canvas"></div>
+    <div class="h-full w-ful" ref="bpmnViewerRef"></div>
   </div>
 </template>
