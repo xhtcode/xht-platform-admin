@@ -3,6 +3,7 @@ export default {
   finishedLines: ['Line_1', 'Line_2', 'Line_3', 'Line_4'], //  高亮线
   unfinishedTasks: ['TASK_2', 'TASK_3'],
   rejectedTasks: [],
+  all: ['START_1', 'TASK_1', 'Gateway_1', 'Line_1', 'Line_2', 'Line_3', 'Line_4', 'TASK_2', 'TASK_3'],
   xml: `
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:flowable="http://flowable.org/bpmn" id="Definitions_10spe8o" targetNamespace="http://bpmn.io/schema/bpmn">

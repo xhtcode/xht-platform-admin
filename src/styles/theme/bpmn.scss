@@ -58,6 +58,7 @@
   --bpmn-unfinished-bg-color: rgba(238, 190, 119, 0.25);
   --bpmn-rejected-color: rgb(196, 86, 86);
   --bpmn-rejected-bg-color: rgba(248, 152, 152, 0.25);
+  --bpmn-selected-color: rgb(64, 158, 255);
 
   /* 已完成节点：绿色描边 + 半透明绿色背景 + 绿色文字 */
   .highlight-finished-nodes {
@@ -127,6 +128,20 @@
       > :nth-child(2) {
         fill: var(--bpmn-rejected-color) !important;
         stroke: var(--bpmn-rejected-color) !important;
+      }
+    }
+  }
+
+  /* 点击选中的节点：高亮边框（仅覆盖描边，保留各状态自身的背景填充）；
+     置于状态规则之后，同特异性下后定义者生效，可覆盖状态描边色 */
+  .highlight-node-selected {
+    .djs-visual {
+      > :nth-child(1) {
+        stroke: var(--bpmn-selected-color) !important;
+        stroke-width: 2.5px !important;
+        stroke-dasharray: none !important; /* 取消待办节点的流动虚线，选中态显示为实线 */
+        animation: none !important; /* 停掉虚线流动动画 */
+        filter: drop-shadow(0 0 4px var(--bpmn-selected-color)); /* 描边发光 */
       }
     }
   }

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Element } from 'bpmn-js/lib/util/ModelUtil'
 import '@/styles/theme/bpmn.scss' // 流程高亮样式（.highlight-* 系列）
 import 'bpmn-js/dist/assets/diagram-js.css' // 基础样式
 import MoveCanvasModule from 'diagram-js/lib/navigation/movecanvas' // 拖拽空白区域平移画布
@@ -17,6 +18,7 @@ const fitViewScaleRate = ref<number>(1) // 初始记录适配视口后的缩放�
 const bpmnViewerRef = useTemplateRef<HTMLElement>('bpmnViewerRef') // 画布挂载容器
 const bpmnViewer = shallowRef<BpmnViewer>() // 查看器实例（shallowRef 避免大对象深层响应式开销）
 const bpmnCanvas = shallowRef<any>() // diagram-js canvas 服务：控制缩放、addMarker 添加高亮类
+const lastClickElementId = shallowRef<string>('') // 点击选中的节点 id（切换或取消选中时需移除上一次的高亮）
 
 /**
  * 初始化（或重建）只读流程查看器
@@ -39,9 +41,27 @@ const initModeler = (canvas: HTMLElement) => {
       gridLineColor: 'var(--el-color-info-light-5)', // 网格边框颜色
     },
   })
-  importXml() // 导入流程数据并执行状态高亮
-  bpmnViewer.value!.on('element.click', ({ element }) => {
-    console.log(element) // TODO: 演示用，后续可在此打开节点详情
+  // 导入流程数据并执行状态高亮
+  importXml()
+  // 再次点击同一节点或点击连线/文字时取消选中，点击其他节点则切换选中对象
+  bpmnViewer.value!.on('element.click', (event: any) => {
+    const element = event.element as Element
+    // 移除上一次选中的高亮（旧元素可能已随流程重新导入失效，先确认存在再移除）
+    if (lastClickElementId.value) {
+      bpmnCanvas.value.removeMarker(lastClickElementId.value, 'highlight-node-selected')
+    }
+    lastClickElementId.value = ''
+    if (element.type === 'bpmn:Process') {
+      return
+    }
+    // 点击的仍是上次选中的节点：仅移除高亮完成取消，不再重复添加
+    if (element.id === lastClickElementId.value) {
+      return
+    }
+    if (defaultData.all && defaultData.all.includes(element.id)) {
+      bpmnCanvas.value.addMarker(element.id, 'highlight-node-selected')
+      lastClickElementId.value = element.id
+    }
   })
   bpmnCanvas.value = bpmnViewer.value!.get<any>('canvas') // 缓存 canvas 服务，供缩放与高亮使用
   // 注入绿色箭头 marker（#greenMarker），供已完成连线样式的 marker-end: url(#greenMarker) 引用
@@ -53,6 +73,7 @@ const initModeler = (canvas: HTMLElement) => {
  */
 function importXml() {
   bpmnViewer.value?.importXML(defaultData.xml).then(() => {
+    lastClickElementId.value = '' // 重新导入后画布整体重建，清除上一次点击选中记录
     bpmnCanvas.value.zoom('fit-viewport', { x: 0, y: 0 }) // 画布内容自适应视口并居中
     defaultZoom.value = bpmnCanvas.value.zoom()
     fitViewScaleRate.value = bpmnCanvas.value.zoom()
