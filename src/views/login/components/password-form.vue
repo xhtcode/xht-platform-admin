@@ -59,7 +59,7 @@ const handleLogin = async () => {
         })
         .then(() => {
           router
-            .push({ path: HOME_PAGE_PATH })
+            .push({ path: HOME_PAGE_PATH, replace: true })
             .then(() => {
               useMessage().success('登录成功，已为您加载专属工作台，开始工作吧～ !')
             })

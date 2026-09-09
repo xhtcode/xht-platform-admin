@@ -1,8 +1,8 @@
 export default {
-  finishedNodes: ['START_1', 'TASK_1', 'Gateway_1'], // 高亮节点
-  finishedLines: ['Line_1', 'Line_2', 'Line_3', 'Line_4'], //  高亮线
-  unfinishedTasks: ['TASK_2', 'TASK_3'],
-  rejectedTasks: [],
+  finishedNodes: ['START_1', 'TASK_1', 'Gateway_1'], // 已完成节点
+  finishedLines: ['Line_1', 'Line_2', 'Line_3', 'Line_4'], //  已完成连线
+  unfinishedTasks: ['TASK_2', 'TASK_3'], // 待办任务
+  rejectedTasks: [], // 已驳回任务
   all: ['START_1', 'TASK_1', 'Gateway_1', 'Line_1', 'Line_2', 'Line_3', 'Line_4', 'TASK_2', 'TASK_3'],
   xml: `
 <?xml version="1.0" encoding="UTF-8"?>
