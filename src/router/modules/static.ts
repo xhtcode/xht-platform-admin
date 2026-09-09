@@ -8,7 +8,7 @@ const StaticRouter: RouteRecordRaw[] = [
     path: '/login',
     name: 'LoginViewIndex',
     component: () => import('@/views/login/index.vue'),
-    meta: { hiddenStatus: true, authStatus: true },
+    meta: { title: '登录', hiddenStatus: true, authStatus: true },
   },
   {
     path: '/process',

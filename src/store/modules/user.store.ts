@@ -5,6 +5,7 @@ import type { AxiosResponse } from 'axios'
 import pInIaPersistConfig from '@/store/pinia-persist'
 import { getUserInfo } from '@/service/api/permission'
 import _ from 'lodash'
+import { userTypeEnum } from '@/service/enums/system/user.enum'
 
 /**
  * 用户信息store
@@ -31,7 +32,7 @@ export const useUserInfoStore = defineStore(
     /**
      * 是否为管理员
      */
-    const isAdmin = computed<boolean>(() => _.includes(userInfo.value.roleCodes, 'admin'))
+    const isAdmin = computed<boolean>(() => userInfo.value.userType === userTypeEnum.ADMIN.value)
 
     /**
      * 是否存在访问令牌

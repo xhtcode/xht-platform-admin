@@ -18,12 +18,13 @@ const state = reactive<AddUpdateOption<SysRoleMenuBindForm>>({
     roleId: null,
     menuIds: [],
   },
+  expandStatus: true,
   checkAll: false,
   treeData: [],
   checkedKeys: [],
 })
 
-const { checkAll, treeData, checkedKeys, addUpdateForm } = toRefs(state)
+const { expandStatus, checkAll, treeData, checkedKeys, addUpdateForm } = toRefs(state)
 
 /**
  * 显示角色权限分配弹窗
@@ -39,7 +40,7 @@ const show = async (roleId: ModeIdType) => {
     state.loadingStatus = true
     await selectMenuIdByRoleId(roleId).then((res) => {
       checkAll.value = res.data.checkAll
-      checkedKeys.value = res.data.checkedKeys
+      menuTree.value?.setCheckedKeys(res.data.checkedKeys || [])
       treeData.value = res.data.menuList
     })
   } finally {
@@ -53,6 +54,7 @@ const show = async (roleId: ModeIdType) => {
  */
 const handleExpand = (check: CheckboxValueType) => {
   state.loadingStatus = true
+  expandStatus.value = check as boolean
   const nodes = menuTree.value?.store._getAllNodes()
   if (nodes) {
     for (let i = 0; i < nodes.length; i++) {
@@ -83,21 +85,21 @@ const handleSelectAll = (check: CheckboxValueType) => {
  */
 const submitForm = async () => {
   state.loadingStatus = true
-  try {
-    addUpdateForm.value.menuIds = menuTree.value?.getCheckedKeys() || []
-    await roleMenuBind(addUpdateForm.value!)
-    useMessage().success('当前角色分配菜单权限成功')
-    close()
-  } finally {
-    state.loadingStatus = false
-  }
+  addUpdateForm.value.menuIds = menuTree.value?.getCheckedKeys() || []
+  roleMenuBind(addUpdateForm.value!)
+    .then(() => {
+      useMessage().success('当前角色分配菜单权限成功')
+      close()
+    })
+    .finally(() => {
+      state.loadingStatus = false
+    })
 }
 
 /**
  * 关闭角色权限分配弹窗
  */
 const close = () => {
-  if (state.loadingStatus) return
   addUpdateForm.value = {
     roleId: [],
     menuIds: [],
@@ -128,8 +130,8 @@ defineExpose({
       <div class="menu-role-dialog-title">
         <div>分配权限</div>
         <div class="mr-16 flex">
-          <el-checkbox checked label="展开/折叠" @change="handleExpand" />
-          <el-checkbox v-model="checkAll" label="全选/不全选" @change="handleSelectAll" />
+          <el-checkbox v-model="expandStatus" :label="expandStatus ? '收起所有节点' : '展开所有节点'" @change="handleExpand" />
+          <el-checkbox v-model="checkAll" :label="checkAll ? '全不选' : '全选'" @change="handleSelectAll" />
         </div>
       </div>
     </template>
@@ -137,9 +139,7 @@ defineExpose({
       <el-tree
         ref="menuTree"
         v-loading="state.loadingStatus"
-        :check-strictly="false"
         :data="treeData"
-        :default-checked-keys="checkedKeys"
         :default-expand-all="true"
         :props="{ children: 'children', label: 'menuName' }"
         highlight-current

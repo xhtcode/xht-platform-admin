@@ -177,7 +177,7 @@ declare global {
     /**
      * 用户类型
      */
-    userType?: UserTypeEnum
+    userType?: any
     /**
      * 用户名
      */
