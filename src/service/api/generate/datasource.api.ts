@@ -9,7 +9,7 @@ const baseURL: string = import.meta.env.VITE_GENERATE_API_PREFIX
 
 enum Api {
   CREATE = '/gen/datasource/create',
-  UPDATE = '/gen/datasource/update',
+  UPDATE = '/gen/datasource/update/',
   REMOVE = '/gen/datasource/remove/',
   QUERY_BY_ID = '/gen/datasource/get/',
   QUERY_LIST = '/gen/datasource/list',
@@ -33,7 +33,7 @@ export const saveGenDataSource = (data: GenDataSourceOperationRequest): AxiosPro
  */
 export const updateGenDataSource = (data: GenDataSourceOperationRequest): AxiosPromise<void> => {
   return request({
-    url: Api.UPDATE,
+    url: Api.UPDATE + `${data.id}`,
     baseURL,
     method: 'post',
     data: data,

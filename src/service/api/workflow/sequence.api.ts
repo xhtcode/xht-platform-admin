@@ -12,7 +12,7 @@ const baseURL: string = import.meta.env.VITE_WORKFLOW_API_PREFIX
  */
 enum Api {
   CREATE = '/flow/sequence/create', // 新增流程扩展-流程序列号
-  UPDATE = '/flow/sequence/update', // 根据主键`id`更新流程扩展-流程序列号
+  UPDATE = '/flow/sequence/update/', // 根据主键`id`更新流程扩展-流程序列号
   REMOVE = '/flow/sequence/remove/', // 根据主键`id`删除流程扩展-流程序列号
   REMOVE_BATCH = '/flow/sequence/remove/batch', // 根据主键`id`批量删除流程扩展-流程序列号
   QUERY_BY_ID = '/flow/sequence/get/', // 根据主键`id`查询流程扩展-流程序列号
@@ -40,7 +40,7 @@ export const saveFlowSequence = (form: FlowSequenceOperationRequest): AxiosPromi
  */
 export const updateFlowSequence = (form: FlowSequenceOperationRequest): AxiosPromise<void> => {
   return request({
-    url: Api.UPDATE,
+    url: Api.UPDATE + `${form.id}`,
     baseURL,
     method: 'post',
     data: form,

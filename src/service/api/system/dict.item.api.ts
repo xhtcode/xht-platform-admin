@@ -11,7 +11,7 @@ const baseURL: string = import.meta.env.VITE_ADMIN_API_PREFIX
 enum Api {
   CREATE = '/sys/dict/item/create',
   REMOVE = '/sys/dict/item/remove',
-  UPDATE = '/sys/dict/item/update',
+  UPDATE = '/sys/dict/item/update/',
   QUERY_BY_ID = '/sys/dict/item/get/',
   QUERY_PAGE = '/sys/dict/item/page',
   QUERY_BY_DICT_CODE = '/sys/dict/item/code/',
@@ -45,7 +45,7 @@ export const removeSysDictItemById = (id: ModeIdArrayType): AxiosPromise<void> =
  */
 export const updateSysDictItem = (data: SysDictItemOperationRequest): AxiosPromise<void> => {
   return request({
-    url: Api.UPDATE,
+    url: Api.UPDATE + `${data.id}`,
     baseURL,
     method: 'post',
     data: data,

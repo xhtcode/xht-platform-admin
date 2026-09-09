@@ -16,7 +16,7 @@ const baseURL: string = import.meta.env.VITE_ADMIN_API_PREFIX
  */
 enum Api {
   CREATE = '/sys/oauth2/client/create',
-  UPDATE = '/sys/oauth2/client/update',
+  UPDATE = '/sys/oauth2/client/update/',
   UPDATE_SECRET = '/sys/oauth2/client/secret',
   REMOVE_BATCH = '/sys/oauth2/client/remove',
   QUERY_BY_ID = '/sys/oauth2/client/get/',
@@ -44,7 +44,7 @@ export const saveSysOauth2Client = (form: SysOauth2ClientOperationRequest): Axio
  */
 export const updateSysOauth2Client = (form: SysOauth2ClientOperationRequest): AxiosPromise<void> => {
   return request({
-    url: Api.UPDATE,
+    url: Api.UPDATE + `${form.id}`,
     baseURL,
     method: 'post',
     data: form,

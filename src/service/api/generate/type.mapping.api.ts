@@ -9,7 +9,7 @@ const baseURL: string = import.meta.env.VITE_GENERATE_API_PREFIX
 
 enum Api {
   CREATE = '/gen/type/mapping/create',
-  UPDATE = '/gen/type/mapping/update',
+  UPDATE = '/gen/type/mapping/update/',
   REMOVE = '/gen/type/mapping/remove/',
   QUERY_BY_ID = '/gen/type/mapping/get/',
   QUERY_PAGE = '/gen/type/mapping/page',
@@ -33,7 +33,7 @@ export const saveGenTypeMapping = (data: GenTypeMappingOperationRequest): AxiosP
  */
 export const updateGenTypeMapping = (data: GenTypeMappingOperationRequest): AxiosPromise<void> => {
   return request({
-    url: Api.UPDATE,
+    url: Api.UPDATE + `${data.id}`,
     baseURL,
     method: 'post',
     data: data,

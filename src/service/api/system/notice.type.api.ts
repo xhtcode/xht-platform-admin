@@ -13,7 +13,7 @@ const baseURL: string = import.meta.env.VITE_ADMIN_API_PREFIX
  */
 enum Api {
   CREATE = '/sys/notice/type/create', // 创建系统管理-通知类型
-  UPDATE = '/sys/notice/type/update', // 根据主键`id`更新系统管理-通知类型
+  UPDATE = '/sys/notice/type/update/', // 根据主键`id`更新系统管理-通知类型
   REMOVE = '/sys/notice/type/remove/', // 根据主键`id`删除系统管理-通知类型
   REMOVE_BATCH = '/sys/notice/type/remove/batch', // 根据主键`id`批量删除系统管理-通知类型
   QUERY_BY_ID = '/sys/notice/type/get/', // 根据主键`id`查询系统管理-通知类型
@@ -42,7 +42,7 @@ export const saveSysNoticeType = (form: SysNoticeTypeOperationRequest): AxiosPro
  */
 export const updateSysNoticeType = (form: SysNoticeTypeOperationRequest): AxiosPromise<void> => {
   return request({
-    url: Api.UPDATE,
+    url: Api.UPDATE + `${form.id}`,
     baseURL,
     method: 'post',
     data: form,

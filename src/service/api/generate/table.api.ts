@@ -16,7 +16,7 @@ const baseURL: string = import.meta.env.VITE_GENERATE_API_PREFIX
 
 enum Api {
   IMPORT_TABLE = '/gen/table/info/import',
-  UPDATE = '/gen/table/info/update',
+  UPDATE = '/gen/table/info/update/',
   REMOVE = '/gen/table/info/remove/',
   QUERY_BY_ID = '/gen/table/info/get/',
   QUERY_EXISTS_PAGE = '/gen/table/info/exists/page',
@@ -43,7 +43,7 @@ export const importTableInfo = (data: ImportTableFormRequest): AxiosPromise<void
  */
 export const updateGenTableInfo = (data: GenTableInfoOperationRequest): AxiosPromise<void> => {
   return request({
-    url: Api.UPDATE,
+    url: Api.UPDATE + `${data.tableInfo.id}`,
     baseURL,
     method: 'post',
     data: data,

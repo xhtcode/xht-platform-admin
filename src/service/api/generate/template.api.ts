@@ -9,7 +9,7 @@ const baseURL: string = import.meta.env.VITE_GENERATE_API_PREFIX
 
 enum Api {
   CREATE = '/gen/template/create',
-  UPDATE = '/gen/template/update',
+  UPDATE = '/gen/template/update/',
   REMOVE = '/gen/template/remove/',
   QUERY_BY_ID = '/gen/template/get/',
   QUERY_LIST = '/gen/template/list/',
@@ -32,7 +32,7 @@ export const saveGenTemplate = (data: GenTemplateOperationRequest): AxiosPromise
  */
 export const updateGenTemplate = (data: GenTemplateOperationRequest): AxiosPromise<void> => {
   return request({
-    url: Api.UPDATE,
+    url: Api.UPDATE + `${data.id}`,
     baseURL,
     method: 'post',
     data: data,

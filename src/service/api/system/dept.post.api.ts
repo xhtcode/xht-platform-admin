@@ -9,7 +9,7 @@ const baseURL: string = import.meta.env.VITE_ADMIN_API_PREFIX
 
 enum Api {
   CREATE = '/sys/dept/post/create',
-  UPDATE = '/sys/dept/post/update',
+  UPDATE = '/sys/dept/post/update/',
   REMOVE = '/sys/dept/post/remove/',
   QUERY_BY_ID = '/sys/dept/post/get/',
   QUERY_PAGE = '/sys/dept/post/page',
@@ -33,7 +33,7 @@ export const saveSysDeptPost = (data: SysDeptPostOperationRequest): AxiosPromise
  */
 export const updateSysDeptPost = (data: SysDeptPostOperationRequest): AxiosPromise<void> => {
   return request({
-    url: Api.UPDATE,
+    url: Api.UPDATE + `${data.id}`,
     baseURL,
     method: 'post',
     data: data,

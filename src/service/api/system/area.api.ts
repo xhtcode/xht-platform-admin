@@ -12,7 +12,7 @@ const baseURL: string = import.meta.env.VITE_ADMIN_API_PREFIX
  */
 enum Api {
   CREATE = '/sys/area/create',
-  UPDATE = '/sys/area/update',
+  UPDATE = '/sys/area/update/',
   REMOVE = '/sys/area/remove/',
   REMOVE_BATCH = '/sys/area/remove',
   QUERY_BY_ID = '/sys/area/get/',
@@ -40,7 +40,7 @@ export const saveSysArea = (form: SysAreaOperationRequest): AxiosPromise<void> =
  */
 export const updateSysArea = (form: SysAreaOperationRequest): AxiosPromise<void> => {
   return request({
-    url: Api.UPDATE,
+    url: Api.UPDATE + `${form.id}`,
     baseURL,
     method: 'post',
     data: form,

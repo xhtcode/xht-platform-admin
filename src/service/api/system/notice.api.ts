@@ -12,7 +12,7 @@ const baseURL: string = import.meta.env.VITE_ADMIN_API_PREFIX
  */
 enum Api {
   CREATE = '/sys/notice/create',
-  UPDATE = '/sys/notice/update',
+  UPDATE = '/sys/notice/update/',
   UPDATE_PUBLISH = '/sys/notice/publish/',
   UPDATE_UNDER_SHELVE = '/sys/notice/underShelve/',
   UPDATE_TOP = '/sys/notice/top/',
@@ -42,7 +42,7 @@ export const saveSysNotice = (form: SysNoticeOperationRequest): AxiosPromise<voi
  */
 export const updateSysNotice = (form: SysNoticeOperationRequest): AxiosPromise<void> => {
   return request({
-    url: Api.UPDATE,
+    url: Api.UPDATE + `${form.id}`,
     baseURL,
     method: 'post',
     data: form,

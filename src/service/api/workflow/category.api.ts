@@ -12,7 +12,7 @@ const baseURL: string = import.meta.env.VITE_WORKFLOW_API_PREFIX
  */
 enum Api {
   CREATE = '/flow/category/create', // 新增流程扩展-流程分类
-  UPDATE = '/flow/category/update', // 根据主键`id`更新流程扩展-流程分类
+  UPDATE = '/flow/category/update/', // 根据主键`id`更新流程扩展-流程分类
   REMOVE = '/flow/category/remove/', // 根据主键`id`删除流程扩展-流程分类
   REMOVE_BATCH = '/flow/category/remove/batch', // 根据主键`id`批量删除流程扩展-流程分类
   QUERY_BY_ID = '/flow/category/get/', // 根据主键`id`查询流程扩展-流程分类
@@ -40,7 +40,7 @@ export const saveFlowCategory = (form: FlowCategoryOperationRequest): AxiosPromi
  */
 export const updateFlowCategory = (form: FlowCategoryOperationRequest): AxiosPromise<void> => {
   return request({
-    url: Api.UPDATE,
+    url: Api.UPDATE + `${form.id}`,
     baseURL,
     method: 'post',
     data: form,

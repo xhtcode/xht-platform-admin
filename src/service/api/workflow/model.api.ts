@@ -12,7 +12,7 @@ const baseURL: string = import.meta.env.VITE_ADMIN_API_PREFIX
  */
 enum Api {
   CREATE = '/act/re/model/create', // 新增流程模板信息表，存储流程模板相关描述信息，流程定义的bpmn文件放在act_ge_bytearray表中，以字节形式存储
-  UPDATE = '/act/re/model/update', // 根据主键`id`更新流程模板信息表，存储流程模板相关描述信息，流程定义的bpmn文件放在act_ge_bytearray表中，以字节形式存储
+  UPDATE = '/act/re/model/update/', // 根据主键`id`更新流程模板信息表，存储流程模板相关描述信息，流程定义的bpmn文件放在act_ge_bytearray表中，以字节形式存储
   REMOVE = '/act/re/model/remove/', // 根据主键`id`删除流程模板信息表，存储流程模板相关描述信息，流程定义的bpmn文件放在act_ge_bytearray表中，以字节形式存储
   REMOVE_BATCH = '/act/re/model/remove/batch', // 根据主键`id`批量删除流程模板信息表，存储流程模板相关描述信息，流程定义的bpmn文件放在act_ge_bytearray表中，以字节形式存储
   QUERY_BY_ID = '/act/re/model/get/', // 根据主键`id`查询流程模板信息表，存储流程模板相关描述信息，流程定义的bpmn文件放在act_ge_bytearray表中，以字节形式存储
@@ -40,7 +40,7 @@ export const saveFlowModel = (form: FlowModelOperationRequest): AxiosPromise<voi
  */
 export const updateFlowModel = (form: FlowModelOperationRequest): AxiosPromise<void> => {
   return request({
-    url: Api.UPDATE,
+    url: Api.UPDATE + `${form.id}`,
     baseURL,
     method: 'post',
     data: form,
