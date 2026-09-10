@@ -61,19 +61,6 @@ export const removeSysUserById = (id: ModeIdType): AxiosPromise<void> => {
 }
 
 /**
- * 批量删除
- * @param ids
- */
-export const removeSysUserByIds = (ids: ModeIdArrayType): AxiosPromise<void> => {
-  return request({
-    url: Api.REMOVE,
-    baseURL,
-    method: 'post',
-    data: ids,
-  })
-}
-
-/**
  * 查询单个
  * @param id  id
  */

@@ -256,7 +256,7 @@ defineExpose({
         </el-col>
         <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="所属部门" prop="deptName">
-            <el-input v-model="addUpdateForm.deptName" disabled @click-node="handleDeptClick" />
+            <el-input v-model="addUpdateForm.deptName" @click-node="handleDeptClick" />
           </el-form-item>
         </el-col>
       </el-row>

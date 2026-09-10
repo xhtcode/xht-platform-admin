@@ -4,7 +4,7 @@ import type { SysUserQueryRequest, SysUserResponse } from '@/service/model/syste
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import type { SysDeptResponse } from '@/service/model/system/dept.model'
 import { sysUserColumnOption } from '@/views/system/user/user.data'
-import { querySysUserPage, removeSysUserById, removeSysUserByIds, resetPassword } from '@/service/api/system/user.api'
+import { querySysUserPage, removeSysUserById, resetPassword } from '@/service/api/system/user.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
 import { DArrowLeft, DArrowRight, Delete, Edit, Key, Plus, Refresh, Search, User } from '@element-plus/icons-vue'
@@ -77,27 +77,6 @@ const handleDelete = (row: SysUserResponse) => {
       await removeSysUserById(row.id)
       await handlePageQuery()
       useMessage().success('删除用户成功!')
-    })
-    .finally(() => {
-      state.loadingStatus = false
-    })
-}
-
-/**
- * 处理批量删除
- */
-const handleBatchDelete = () => {
-  const ids = state.selectedRows.map((item) => item.id)
-  if (!ids || ids.length <= 0) {
-    useMessage().error('请选择角色数据')
-  }
-  state.loadingStatus = true
-  useMessageBox()
-    .confirm(`此操作将批量删除${ids.length}个用户, 是否继续?`)
-    .then(async () => {
-      await removeSysUserByIds(ids)
-      useMessage().success('批量删除用户成功!')
-      await handlePageQuery()
     })
     .finally(() => {
       state.loadingStatus = false
@@ -217,16 +196,6 @@ onMounted(async () => {
           v-authorization="['sys:user:update']"
         >
           修改
-        </el-button>
-        <el-button
-          :icon="Delete"
-          size="small"
-          type="danger"
-          :disabled="state.multipleStatus"
-          @click="handleBatchDelete"
-          v-authorization="['sys:user:remove']"
-        >
-          批量删除
         </el-button>
         <template #after>
           <el-tooltip :content="deptTreeStatus ? '折叠部门' : '展开部门'" placement="top">
