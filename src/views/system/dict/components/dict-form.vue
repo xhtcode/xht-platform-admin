@@ -45,19 +45,28 @@ const submitForm = () => {
   state.loadingStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      try {
-        if (state.operationStatus === 'create') {
-          await saveSysDict(addUpdateForm.value)
-          useMessage().success('新增字典成功')
-        } else {
-          await updateSysDict({ ...addUpdateForm.value })
-          useMessage().success('修改字典成功')
-        }
-        emits('success')
-        state.loadingStatus = false
-        close()
-      } catch {
-        state.loadingStatus = false
+      if (state.operationStatus === 'create') {
+        saveSysDict(addUpdateForm.value)
+          .then(() => {
+            emits('success')
+            useMessage().success('新增字典成功')
+            state.loadingStatus = false
+            close()
+          })
+          .finally(() => {
+            state.loadingStatus = false
+          })
+      } else {
+        updateSysDict({ ...addUpdateForm.value })
+          .then(() => {
+            emits('success')
+            useMessage().success('修改字典成功')
+            state.loadingStatus = false
+            close()
+          })
+          .finally(() => {
+            state.loadingStatus = false
+          })
       }
     } else {
       state.loadingStatus = false

@@ -45,19 +45,28 @@ const submitForm = () => {
   state.loadingStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      try {
-        if (state.operationStatus === 'create') {
-          await saveFlowModel(addUpdateForm.value)
-          useMessage().success(`新增流程模板信息表，存储流程模板相关描述信息，流程定义的bpmn文件放在act_ge_bytearray表中，以字节形式存储成功`)
-        } else {
-          await updateFlowModel(addUpdateForm.value)
-          useMessage().success(`修改流程模板信息表，存储流程模板相关描述信息，流程定义的bpmn文件放在act_ge_bytearray表中，以字节形式存储成功`)
-        }
-        emits('success')
-        state.loadingStatus = false
-        close()
-      } catch {
-        state.loadingStatus = false
+      if (state.operationStatus === 'create') {
+        saveFlowModel(addUpdateForm.value)
+          .then(() => {
+            emits('success')
+            useMessage().success(`新增流程模板信息表，存储流程模板相关描述信息，流程定义的bpmn文件放在act_ge_bytearray表中，以字节形式存储成功`)
+            state.loadingStatus = false
+            close()
+          })
+          .finally(() => {
+            state.loadingStatus = false
+          })
+      } else {
+        updateFlowModel(addUpdateForm.value)
+          .then(() => {
+            emits('success')
+            useMessage().success(`修改流程模板信息表，存储流程模板相关描述信息，流程定义的bpmn文件放在act_ge_bytearray表中，以字节形式存储成功`)
+            state.loadingStatus = false
+            close()
+          })
+          .finally(() => {
+            state.loadingStatus = false
+          })
       }
     } else {
       state.loadingStatus = false

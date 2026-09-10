@@ -43,19 +43,20 @@ const submitForm = () => {
   addUpdatePageInit.value.loadingStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      try {
-        await importTableInfo({
-          tableNames: tableNames.value,
-          dataSourceId: dataSourceId.value,
-          groupId: addUpdateForm.value.groupId,
+      importTableInfo({
+        tableNames: tableNames.value,
+        dataSourceId: dataSourceId.value,
+        groupId: addUpdateForm.value.groupId,
+      })
+        .then(() => {
+          emit('success')
+          useMessage().success('修改数据成功55555555555555555555555')
+          addUpdatePageInit.value.loadingStatus = false
+          close()
         })
-        useMessage().success('修改数据成功55555555555555555555555')
-        emit('success')
-        addUpdatePageInit.value.loadingStatus = false
-        close()
-      } catch {
-        addUpdatePageInit.value.loadingStatus = false
-      }
+        .finally(() => {
+          addUpdatePageInit.value.loadingStatus = false
+        })
     } else {
       addUpdatePageInit.value.loadingStatus = false
       useMessage().error('表单校验未通过，请重新检查提交内容')

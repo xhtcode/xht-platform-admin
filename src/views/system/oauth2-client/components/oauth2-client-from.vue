@@ -49,20 +49,29 @@ const submitForm = () => {
   state.loadingStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      try {
-        addUpdateForm.value = { ...addUpdateForm.value }
-        if (state.operationStatus === 'create') {
-          await saveSysOauth2Client(addUpdateForm.value)
-          useMessage().success(`新增客户端成功`)
-        } else {
-          await updateSysOauth2Client(addUpdateForm.value)
-          useMessage().success(`修改客户端成功`)
-        }
-        emits('success')
-        state.loadingStatus = false
-        close()
-      } catch {
-        state.loadingStatus = false
+      addUpdateForm.value = { ...addUpdateForm.value }
+      if (state.operationStatus === 'create') {
+        saveSysOauth2Client(addUpdateForm.value)
+          .then(() => {
+            emits('success')
+            useMessage().success(`新增客户端成功`)
+            state.loadingStatus = false
+            close()
+          })
+          .finally(() => {
+            state.loadingStatus = false
+          })
+      } else {
+        updateSysOauth2Client(addUpdateForm.value)
+          .then(() => {
+            emits('success')
+            useMessage().success(`修改客户端成功`)
+            state.loadingStatus = false
+            close()
+          })
+          .finally(() => {
+            state.loadingStatus = false
+          })
       }
     } else {
       state.loadingStatus = false

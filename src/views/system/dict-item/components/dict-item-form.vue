@@ -48,20 +48,29 @@ const submitForm = () => {
   state.loadingStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      try {
-        addUpdateForm.value.dictId = route.params?.id
-        if (state.operationStatus === 'create') {
-          await saveSysDictItem(addUpdateForm.value)
-          useMessage().success('新增字典项成功')
-        } else {
-          await updateSysDictItem(addUpdateForm.value)
-          useMessage().success('修改字典项成功')
-        }
-        emits('success')
-        state.loadingStatus = false
-        close()
-      } catch {
-        state.loadingStatus = false
+      addUpdateForm.value.dictId = route.params?.id
+      if (state.operationStatus === 'create') {
+        saveSysDictItem(addUpdateForm.value)
+          .then(() => {
+            emits('success')
+            useMessage().success('新增字典项成功')
+            state.loadingStatus = false
+            close()
+          })
+          .finally(() => {
+            state.loadingStatus = false
+          })
+      } else {
+        updateSysDictItem(addUpdateForm.value)
+          .then(() => {
+            emits('success')
+            useMessage().success('修改字典项成功')
+            state.loadingStatus = false
+            close()
+          })
+          .finally(() => {
+            state.loadingStatus = false
+          })
       }
     } else {
       state.loadingStatus = false

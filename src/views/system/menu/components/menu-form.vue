@@ -51,19 +51,28 @@ const submitForm = () => {
   state.loadingStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      try {
-        if (state.operationStatus === 'create') {
-          await saveSysMenu(addUpdateForm.value)
-          useMessage().success('新增数据成功')
-        } else {
-          await updateSysMenu(addUpdateForm.value)
-          useMessage().success('修改数据成功')
-        }
-        emit('success')
-        state.loadingStatus = false
-        close()
-      } catch {
-        state.loadingStatus = false
+      if (state.operationStatus === 'create') {
+        saveSysMenu(addUpdateForm.value)
+          .then(() => {
+            emit('success')
+            useMessage().success('新增数据成功')
+            state.loadingStatus = false
+            close()
+          })
+          .finally(() => {
+            state.loadingStatus = false
+          })
+      } else {
+        updateSysMenu(addUpdateForm.value)
+          .then(() => {
+            emit('success')
+            useMessage().success('修改数据成功')
+            state.loadingStatus = false
+            close()
+          })
+          .finally(() => {
+            state.loadingStatus = false
+          })
       }
     } else {
       state.loadingStatus = false

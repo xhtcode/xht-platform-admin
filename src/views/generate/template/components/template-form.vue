@@ -38,19 +38,25 @@ const submitForm = () => {
   addUpdateFormRef.value?.validate(async (valid, invalidFields) => {
     validateStatus.value = !!(invalidFields?.templateContent && invalidFields?.templateContent.length > 0)
     if (valid) {
-      try {
-        if (addUpdateForm.value.isNew) {
-          const { data } = await saveGenTemplate({ ...addUpdateForm.value, id: null })
-          addUpdateForm.value.isNew = false
-          addUpdateForm.value.id = data
-          emits('success', data)
-          useMessage().success('保存模板成功')
-        } else {
-          await updateGenTemplate(addUpdateForm.value)
-          useMessage().success('修改模板成功')
-        }
-      } finally {
-        loadingStatus.value = false
+      if (addUpdateForm.value.isNew) {
+        saveGenTemplate({ ...addUpdateForm.value, id: null })
+          .then(({ data }) => {
+            addUpdateForm.value.isNew = false
+            addUpdateForm.value.id = data
+            emits('success', data)
+            useMessage().success('保存模板成功')
+          })
+          .finally(() => {
+            loadingStatus.value = false
+          })
+      } else {
+        updateGenTemplate(addUpdateForm.value)
+          .then(() => {
+            useMessage().success('修改模板成功')
+          })
+          .finally(() => {
+            loadingStatus.value = false
+          })
       }
     } else {
       loadingStatus.value = false

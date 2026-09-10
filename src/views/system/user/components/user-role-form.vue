@@ -96,15 +96,16 @@ const handleCheckChange = (_: any, checkedInfo: CheckedInfo) => {
  * 提交表单
  */
 const submitForm = async () => {
-  try {
-    loadingStatus.value = true
-    addUpdateForm.value.roleIds = roleTreeRef.value?.getCheckedKeys() || []
-    await UserRoleBind({ userId: addUpdateForm.value.userId, roleIds: addUpdateForm.value.roleIds })
-    useMessage().success('当前用户分配角色成功')
-    close()
-  } finally {
-    loadingStatus.value = false
-  }
+  loadingStatus.value = true
+  addUpdateForm.value.roleIds = roleTreeRef.value?.getCheckedKeys() || []
+  UserRoleBind({ userId: addUpdateForm.value.userId, roleIds: addUpdateForm.value.roleIds })
+    .then(() => {
+      useMessage().success('当前用户分配角色成功')
+      close()
+    })
+    .finally(() => {
+      loadingStatus.value = false
+    })
 }
 
 watch(filterText, (val) => {

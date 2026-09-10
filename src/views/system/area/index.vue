@@ -116,18 +116,26 @@ const submitForm = (operationStatus: 'create' | 'update') => {
   state.loadingStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      try {
-        if (operationStatus === 'create') {
-          await saveSysArea(addUpdateForm.value)
-          useMessage().success(`新增系统管理-行政区划成功`)
-        } else {
-          await updateSysArea(addUpdateForm.value)
-          useMessage().success(`修改系统管理-行政区划成功`)
-        }
-        state.loadingStatus = false
-        await refreshLoad()
-      } catch {
-        state.loadingStatus = false
+      if (operationStatus === 'create') {
+        saveSysArea(addUpdateForm.value)
+          .then(() => {
+            useMessage().success(`新增系统管理-行政区划成功`)
+            state.loadingStatus = false
+            return refreshLoad()
+          })
+          .finally(() => {
+            state.loadingStatus = false
+          })
+      } else {
+        updateSysArea(addUpdateForm.value)
+          .then(() => {
+            useMessage().success(`修改系统管理-行政区划成功`)
+            state.loadingStatus = false
+            return refreshLoad()
+          })
+          .finally(() => {
+            state.loadingStatus = false
+          })
       }
     } else {
       state.loadingStatus = false

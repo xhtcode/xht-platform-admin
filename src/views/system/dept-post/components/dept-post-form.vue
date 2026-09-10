@@ -47,19 +47,28 @@ const submitForm = () => {
   state.loadingStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      try {
-        if (state.operationStatus === 'create') {
-          await saveSysDeptPost(addUpdateForm.value)
-          useMessage().success(`新增部门岗位：${addUpdateForm.value.postName}成功`)
-        } else {
-          await updateSysDeptPost(addUpdateForm.value)
-          useMessage().success(`修改部门岗位：${addUpdateForm.value.postName}成功`)
-        }
-        emits('success')
-        state.loadingStatus = false
-        close()
-      } catch {
-        state.loadingStatus = false
+      if (state.operationStatus === 'create') {
+        saveSysDeptPost(addUpdateForm.value)
+          .then(() => {
+            emits('success')
+            useMessage().success(`新增部门岗位：${addUpdateForm.value.postName}成功`)
+            state.loadingStatus = false
+            close()
+          })
+          .finally(() => {
+            state.loadingStatus = false
+          })
+      } else {
+        updateSysDeptPost(addUpdateForm.value)
+          .then(() => {
+            emits('success')
+            useMessage().success(`修改部门岗位：${addUpdateForm.value.postName}成功`)
+            state.loadingStatus = false
+            close()
+          })
+          .finally(() => {
+            state.loadingStatus = false
+          })
       }
     } else {
       state.loadingStatus = false

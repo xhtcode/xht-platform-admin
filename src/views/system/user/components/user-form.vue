@@ -47,19 +47,28 @@ const submitForm = () => {
   state.loadingStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      try {
-        if (state.operationStatus === 'create') {
-          await saveSysUser(addUpdateForm.value)
-          useMessage().success('新增用户成功')
-        } else {
-          await updateSysUser(addUpdateForm.value)
-          useMessage().success('修改用户成功')
-        }
-        emits('success')
-        state.loadingStatus = false
-        close()
-      } catch {
-        state.loadingStatus = false
+      if (state.operationStatus === 'create') {
+        saveSysUser(addUpdateForm.value)
+          .then(() => {
+            emits('success')
+            useMessage().success('新增用户成功')
+            state.loadingStatus = false
+            close()
+          })
+          .finally(() => {
+            state.loadingStatus = false
+          })
+      } else {
+        updateSysUser(addUpdateForm.value)
+          .then(() => {
+            emits('success')
+            useMessage().success('修改用户成功')
+            state.loadingStatus = false
+            close()
+          })
+          .finally(() => {
+            state.loadingStatus = false
+          })
       }
     } else {
       state.loadingStatus = false

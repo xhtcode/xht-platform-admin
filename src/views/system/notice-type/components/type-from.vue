@@ -46,19 +46,28 @@ const submitForm = () => {
   state.loadingStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      try {
-        if (state.operationStatus === 'create') {
-          await saveSysNoticeType(addUpdateForm.value)
-          useMessage().success(`新增系统管理-通知类型成功`)
-        } else {
-          await updateSysNoticeType(addUpdateForm.value)
-          useMessage().success(`修改系统管理-通知类型成功`)
-        }
-        emits('success')
-        state.loadingStatus = false
-        close()
-      } catch {
-        state.loadingStatus = false
+      if (state.operationStatus === 'create') {
+        saveSysNoticeType(addUpdateForm.value)
+          .then(() => {
+            emits('success')
+            useMessage().success(`新增系统管理-通知类型成功`)
+            state.loadingStatus = false
+            close()
+          })
+          .finally(() => {
+            state.loadingStatus = false
+          })
+      } else {
+        updateSysNoticeType(addUpdateForm.value)
+          .then(() => {
+            emits('success')
+            useMessage().success(`修改系统管理-通知类型成功`)
+            state.loadingStatus = false
+            close()
+          })
+          .finally(() => {
+            state.loadingStatus = false
+          })
       }
     } else {
       state.loadingStatus = false

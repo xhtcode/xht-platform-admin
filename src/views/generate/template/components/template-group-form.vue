@@ -44,19 +44,28 @@ const submitForm = () => {
   state.loadingStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      try {
-        if (state.operationStatus === 'create') {
-          await saveGenTemplateGroup(addUpdateForm.value)
-          useMessage().success('新增模板分组成功')
-        } else {
-          await updateGenTemplateGroup(addUpdateForm.value)
-          useMessage().success('修改模板分组成功')
-        }
-        emits('success')
-        state.loadingStatus = false
-        close()
-      } catch {
-        state.loadingStatus = false
+      if (state.operationStatus === 'create') {
+        saveGenTemplateGroup(addUpdateForm.value)
+          .then(() => {
+            emits('success')
+            useMessage().success('新增模板分组成功')
+            state.loadingStatus = false
+            close()
+          })
+          .finally(() => {
+            state.loadingStatus = false
+          })
+      } else {
+        updateGenTemplateGroup(addUpdateForm.value)
+          .then(() => {
+            emits('success')
+            useMessage().success('修改模板分组成功')
+            state.loadingStatus = false
+            close()
+          })
+          .finally(() => {
+            state.loadingStatus = false
+          })
       }
     } else {
       state.loadingStatus = false

@@ -105,14 +105,14 @@ const submitPwdDialog = () => {
   state.loadingStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      try {
-        await updateSysOauth2ClientSecret(updateData.value?.id, updateData.value?.clientSecret)
-        useMessage().success(`客户端密钥修改成功`)
-        closePwdDialog()
-        state.loadingStatus = false
-      } catch {
-        state.loadingStatus = false
-      }
+      updateSysOauth2ClientSecret(updateData.value?.id, updateData.value?.clientSecret)
+        .then(() => {
+          useMessage().success(`客户端密钥修改成功`)
+          closePwdDialog()
+        })
+        .finally(() => {
+          state.loadingStatus = false
+        })
     } else {
       state.loadingStatus = false
       useMessage().error('表单校验未通过，请重新检查提交内容')

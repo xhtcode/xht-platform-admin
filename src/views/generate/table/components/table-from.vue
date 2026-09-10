@@ -50,18 +50,19 @@ const submitForm = () => {
   state.loadingStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      try {
-        await updateGenTableInfo({
-          ...addUpdateForm.value,
-          queryColumns: columnFormQueryRef.value?.getData() || [],
+      updateGenTableInfo({
+        ...addUpdateForm.value,
+        queryColumns: columnFormQueryRef.value?.getData() || [],
+      })
+        .then(() => {
+          emits('success')
+          useMessage().success('修改数据成功')
+          state.loadingStatus = false
+          close()
         })
-        useMessage().success('修改数据成功')
-        emits('success')
-        state.loadingStatus = false
-        close()
-      } catch {
-        state.loadingStatus = false
-      }
+        .finally(() => {
+          state.loadingStatus = false
+        })
     } else {
       state.loadingStatus = false
       useMessage().error('表单校验未通过，请重新检查提交内容')

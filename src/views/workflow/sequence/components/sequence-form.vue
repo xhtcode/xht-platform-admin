@@ -47,19 +47,28 @@ const submitForm = () => {
   state.loadingStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      try {
-        if (state.operationStatus === 'create') {
-          await saveFlowSequence(addUpdateForm.value)
-          useMessage().success(`新增流程扩展-流程序列号成功`)
-        } else {
-          await updateFlowSequence(addUpdateForm.value)
-          useMessage().success(`修改流程扩展-流程序列号成功`)
-        }
-        emits('success')
-        state.loadingStatus = false
-        close()
-      } catch {
-        state.loadingStatus = false
+      if (state.operationStatus === 'create') {
+        saveFlowSequence(addUpdateForm.value)
+          .then(() => {
+            emits('success')
+            useMessage().success(`新增流程扩展-流程序列号成功`)
+            state.loadingStatus = false
+            close()
+          })
+          .finally(() => {
+            state.loadingStatus = false
+          })
+      } else {
+        updateFlowSequence(addUpdateForm.value)
+          .then(() => {
+            emits('success')
+            useMessage().success(`修改流程扩展-流程序列号成功`)
+            state.loadingStatus = false
+            close()
+          })
+          .finally(() => {
+            state.loadingStatus = false
+          })
       }
     } else {
       state.loadingStatus = false
