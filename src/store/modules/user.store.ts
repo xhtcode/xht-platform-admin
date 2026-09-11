@@ -4,7 +4,6 @@ import { loginInPassWord } from '@/service/api/login/login.api'
 import type { AxiosResponse } from 'axios'
 import pInIaPersistConfig from '@/store/pinia-persist'
 import { getUserInfo } from '@/service/api/permission'
-import _ from 'lodash'
 import { userTypeEnum } from '@/service/enums/system/user.enum'
 
 /**

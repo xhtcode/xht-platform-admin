@@ -17,58 +17,6 @@ const userData = reactive({
   registerDate: '2024-01-01',
   dataScope: 1,
   userType: '1',
-  // 部门岗位关联列表（支持多部门多岗位）
-  deptPostList: [
-    {
-      deptId: 1,
-      deptName: '技术部',
-      deptManager: '张三',
-      deptPhone: '010-88888888',
-      posts: [
-        {
-          postId: 1,
-          postName: '高级开发工程师',
-          postCode: 'DEV_SENIOR',
-        },
-        {
-          postId: 2,
-          postName: '架构师',
-          postCode: 'ARCHITECT',
-        },
-      ],
-    },
-    {
-      deptId: 2,
-      deptName: '产品部',
-      deptManager: '李四',
-      deptPhone: '010-88888889',
-      posts: [
-        {
-          postId: 3,
-          postName: '产品经理',
-          postCode: 'PRODUCT_MANAGER',
-        },
-      ],
-    },
-    {
-      deptId: 3,
-      deptName: '市场部',
-      deptManager: '王五',
-      deptPhone: '010-88888890',
-      posts: [
-        {
-          postId: 7,
-          postName: '市场专员',
-          postCode: 'MARKET_SPECIALIST',
-        },
-        {
-          postId: 10,
-          postName: '项目经理',
-          postCode: 'PROJECT_MANAGER',
-        },
-      ],
-    },
-  ],
 })
 
 // 是否处于编辑模式
@@ -187,33 +135,6 @@ const cancelEdit = () => {
         </div>
       </div>
     </div>
-
-    <!-- 部门岗位信息 -->
-    <el-divider content-position="left">
-      <h3 class="font-bold">部门岗位信息</h3>
-    </el-divider>
-    <template v-if="userData.deptPostList.length === 0">
-      <div class="rounded-lg bg-gray-50 py-4 text-center text-gray-500">暂无部门岗位信息</div>
-    </template>
-    <template v-else>
-      <div class="grid grid-cols-2 gap-4">
-        <div v-for="dept in userData.deptPostList" :key="dept.deptId" class="border border-gray-200 rounded-lg bg-gray-50 p-4 shadow-sm">
-          <div class="mb-2 text-gray-700 font-medium">{{ dept.deptName }}</div>
-          <div class="mb-3 flex justify-between text-sm text-gray-500">
-            <div>
-              部门主管：
-              <span class="text-gray-700 font-medium">{{ dept.deptManager }}</span>
-            </div>
-            <div>联系电话：{{ dept.deptPhone }}</div>
-          </div>
-          <div class="flex flex-wrap gap-2">
-            <el-tag v-for="post in dept.posts" :key="post.postId" type="primary" size="small">
-              {{ post.postName }}
-            </el-tag>
-          </div>
-        </div>
-      </div>
-    </template>
   </div>
 </template>
 

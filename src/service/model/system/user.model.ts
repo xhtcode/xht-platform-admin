@@ -1,5 +1,3 @@
-import type { SysDeptPostResponse } from '@/service/model/system/dept.post.model'
-
 /**
  * 用户类型
  */
@@ -60,7 +58,6 @@ export interface SysUserResponse extends MetaResponse {
  */
 export interface SysUserVo extends Partial<SysUserResponse> {
   profile: SysUserProfileResponse // 用户信息
-  postInfos: SysDeptPostResponse[] // 岗位信息
 }
 
 /**

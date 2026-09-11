@@ -199,7 +199,7 @@ onMounted(async () => {
           <el-tag v-if="row.dataScope === 2" effect="dark" type="success">自定数据权限</el-tag>
           <el-tag v-if="row.dataScope === 3" effect="dark" type="info">本部门数据权限</el-tag>
           <el-tag v-if="row.dataScope === 4" effect="dark" type="warning">本部门及以下数据权限</el-tag>
-          <el-tag v-if="row.dataScope === 5" effect="dark" type="danger">本岗位数据权限</el-tag>
+          <el-tag v-if="row.dataScope === 5" effect="dark" type="danger">本部门数据权限</el-tag>
           <el-tag v-if="row.dataScope === 6" color="#F2F6FC" effect="dark">仅本人数据权限</el-tag>
         </template>
       </el-table-column>

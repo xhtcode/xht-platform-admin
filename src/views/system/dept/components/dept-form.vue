@@ -183,26 +183,6 @@ defineExpose({
           </el-form-item>
         </el-col>
       </el-row>
-      <div class="w-full" v-if="state.operationStatus === 'update'">
-        <el-divider content-position="left">
-          部门管理信息
-          <el-button type="primary" size="small">编辑</el-button>
-        </el-divider>
-        <el-descriptions border :column="2" label-width="120px">
-          <el-descriptions-item label="岗位编码" align="right">
-            {{ addUpdateForm.leaderPost.postCode }}
-          </el-descriptions-item>
-          <el-descriptions-item label="岗位编码" align="right">{{ addUpdateForm.leaderPost?.postCode }}</el-descriptions-item>
-          <el-descriptions-item label="岗位名称" align="right">{{ addUpdateForm.leaderPost?.postName }}</el-descriptions-item>
-          <el-descriptions-item label="岗位类型" align="right">{{ addUpdateForm.leaderPost?.postType }}</el-descriptions-item>
-          <el-descriptions-item label="岗位状态" align="right">{{ addUpdateForm.leaderPost?.postStatus }}</el-descriptions-item>
-          <el-descriptions-item label="岗位描述" align="right" :span="2">{{ addUpdateForm.leaderPost?.remark }}</el-descriptions-item>
-          <el-descriptions-item label="账号" align="right">{{ addUpdateForm.leaderUser?.userName }}</el-descriptions-item>
-          <el-descriptions-item label="昵称" align="right">{{ addUpdateForm.leaderUser?.nickName }}</el-descriptions-item>
-          <el-descriptions-item label="状态" align="right">{{ addUpdateForm.leaderUser?.userStatus }}</el-descriptions-item>
-          <el-descriptions-item label="联系电话" align="right">{{ addUpdateForm.leaderUser?.userPhone }}</el-descriptions-item>
-        </el-descriptions>
-      </div>
     </el-form>
     <template #footer>
       <el-button :disabled="state.loadingStatus" @click="close">取 消</el-button>

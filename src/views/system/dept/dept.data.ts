@@ -10,8 +10,6 @@ export const sysDeptOperationForm: SysDeptOperationRequest = {
   parentId: '0', // 父部门ID
   deptStatus: deptStatusEnum.NORMAL.value, // 部门状态,可用值:0,1
   deptSort: 0, // 部门顺序
-  leaderPost: {}, // 负责人职位信息
-  leaderUser: {}, // 负责人用户信息
 }
 
 /**
