@@ -57,7 +57,7 @@ export declare const __APP_INFO__: {
 
 declare module '*.vue' {
   import type { DefineComponent } from 'vue'
-  const component: DefineComponent<object, object, any>
+  const component: DefineComponent<{}, {}, any>
   export default component
 }
 

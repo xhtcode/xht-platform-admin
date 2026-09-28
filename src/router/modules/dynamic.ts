@@ -1,4 +1,5 @@
 import type { RouteRecordRaw } from 'vue-router'
+export const LayoutIndex = defineAsyncComponent(() => import('@/layout/index.vue'))
 /**
  * 定义静态路由（默认路由）
  * 前端添加路由，请在此处加
@@ -7,7 +8,7 @@ const DynamicRouter: RouteRecordRaw[] = [
   {
     path: '/user',
     redirect: '/user/info',
-    component: () => import('@/layout/index.vue'),
+    component: LayoutIndex,
     meta: {
       hiddenStatus: false,
       title: '用户中心',

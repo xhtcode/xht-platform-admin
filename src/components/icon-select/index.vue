@@ -103,7 +103,7 @@ onMounted(() => {
         v-model="modelValue"
         autofocus
         clearable
-        :placeholder="modelValue ? modelValue : '请输入要搜索图标的提示'"
+        :placeholder="modelValue || '请输入要搜索图标的提示'"
         prefix-icon="Search"
         size="large"
       >

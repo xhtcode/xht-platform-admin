@@ -24,7 +24,6 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "noUncheckedIndexedAccess": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.tsbuildinfo"
   },
   "vueCompilerOptions": {

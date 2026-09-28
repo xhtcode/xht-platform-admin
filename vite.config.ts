@@ -8,7 +8,8 @@ import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import pkg from './package.json' with { type: 'json' }
-import xhtStartLogPlugin from './plugins/vite-plugin-log'
+// @ts-ignore
+import xhtStartLogPlugin from './plugins/vite-plugin-log.ts'
 const { dependencies, devDependencies, engines, name, version } = pkg
 // 平台的名称、版本、运行所需的 node 版本、依赖、构建时间的类型提示
 const __APP_INFO__ = {
@@ -89,6 +90,7 @@ const elementPlusPreloadStyles = [
 // https://vite.dev/config/
 export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
   const env = loadEnv(mode, process.cwd())
+  const viteBaseApi = env.VITE_BASE_API as string
   const isProduction = mode === 'production'
   return {
     define: {
@@ -159,7 +161,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
       cors: true, // 是否允许跨域
       // 跨域代理配置
       proxy: {
-        [env.VITE_BASE_API]: {
+        [viteBaseApi]: {
           target: env.VITE_GATEWAY_API, // easymock
           changeOrigin: true,
           rewrite: (path: string) => path.replace(new RegExp('^' + env.VITE_BASE_API), ''),
@@ -191,7 +193,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
       target: 'es2015',
       cssCodeSplit: true,
       sourcemap: !isProduction, // 开发环境生成sourcemap
-      rollupOptions: {
+      rolldownOptions: {
         output: {
           // 静态资源分类打包
           chunkFileNames: 'assets/js/[name]-[hash].js',

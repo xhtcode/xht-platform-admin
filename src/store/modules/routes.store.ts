@@ -3,7 +3,7 @@ import type { RouteRecordRaw } from 'vue-router'
 import { getRouters } from '@/service/api/permission'
 import { cloneDeep } from 'lodash'
 import pInIaPersistConfig from '@/store/pinia-persist'
-import DynamicRouter from '@/router/modules/dynamic'
+import DynamicRouter, { LayoutIndex } from '@/router/modules/dynamic'
 import { menuTypeEnum } from '@/service/enums/system/menu.enum'
 
 const viewsModules: any = import.meta.glob('../../views/**/*.{vue,tsx}')
@@ -97,7 +97,7 @@ export const useRouteStore = defineStore(
       if (!routes || !routes.length) return []
       return routes.map((route: any) => {
         if (route.meta.menuType === 'M') {
-          route.component = () => import('@/layout/index.vue')
+          route.component = LayoutIndex
         } else if (!route.meta.linkStatus) {
           if (route.component) {
             route.component = dynamicViewsModules[`../..${route.component}`]
