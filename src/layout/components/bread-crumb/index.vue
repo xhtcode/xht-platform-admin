@@ -56,13 +56,13 @@ watch(
     <transition-group name="breadcrumb">
       <el-breadcrumb-item v-for="(item, index) in breadcrumbList" :key="item.path">
         <div v-if="index !== breadcrumbList.length - 1" class="h-full flex cursor-pointer items-center gap-2" @click="handleRedirect(item)">
-          <div :class="`${item.meta.icon}`" class="w-14px h-14px" />
+          <div :class="`${item.meta.icon}`" class="h-14px w-14px" />
           <div class="h-full flex items-center text-12px">
             {{ item.meta.title }}
           </div>
         </div>
         <div v-else class="h-full flex items-center gap-2">
-          <div :class="`${item.meta.icon}`" class="w-14px h-14px" />
+          <div :class="`${item.meta.icon}`" class="h-14px w-14px" />
           <div class="h-full flex items-center text-12px">
             {{ item.meta.title }}
           </div>

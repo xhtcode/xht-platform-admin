@@ -7,13 +7,7 @@ export type AuthorizationGrantTypes = 'refresh_token' | 'password' | 'client_cre
  * 客户认证方式
  */
 export type ClientAuthenticationMethods =
-  | 'client_secret_basic'
-  | 'client_secret_post'
-  | 'client_secret_jwt'
-  | 'private_key_jwt'
-  | 'none'
-  | 'tls_client_auth'
-  | 'self_signed_tls_client_auth'
+  'client_secret_basic' | 'client_secret_post' | 'client_secret_jwt' | 'private_key_jwt' | 'none' | 'tls_client_auth' | 'self_signed_tls_client_auth'
 
 /**
  * 是否自动放行

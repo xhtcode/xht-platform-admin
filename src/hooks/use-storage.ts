@@ -38,9 +38,5 @@ const getItem = (key: string, storage: any) => {
   if (!value) {
     return null
   }
-  try {
-    return JSON.parse(value)
-  } catch (error) {
-    return value
-  }
+  return JSON.parse(value)
 }

@@ -36,7 +36,7 @@ npm install
 yarn install
 
 # 使用 pnpm
-pnpm install
+pnpm install --ignore-scripts=false
 ```
 
 ### 启动开发服务器

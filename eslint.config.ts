@@ -3,7 +3,9 @@ import { globalIgnores } from 'eslint/config'
 import eslintPluginVue from 'eslint-plugin-vue' // Vue.js的ESLint插件
 import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript' // Vue+TypeScript的ESLint配置
 import unoCss from '@unocss/eslint-config/flat'
-import skipFormatting from '@vue/eslint-config-prettier/skip-formatting' // 跳过Prettier格式化的配置
+import pluginOxlint from 'eslint-plugin-oxlint'
+import skipFormatting from 'eslint-config-prettier/flat'
+
 // 导出ESLint配置
 export default defineConfigWithVueTs(
   // 指定需要检查的文件
@@ -15,11 +17,12 @@ export default defineConfigWithVueTs(
   // 指定需要忽略的文件
   globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**', '**/node_modules/**', '**/auto-imports.d.ts', '**/components.d.ts']),
   // 应用Vue.js的基本规则集
-  eslintPluginVue.configs['flat/essential'],
+  ...eslintPluginVue.configs['flat/essential'],
 
   // 应用Vue+TypeScript的推荐规则集
   vueTsConfigs.recommended,
   unoCss,
+  ...pluginOxlint.buildFromOxlintConfigFile('.oxlintrc.json'),
   {
     languageOptions: {
       parserOptions: {
@@ -39,9 +42,12 @@ export default defineConfigWithVueTs(
       '@typescript-eslint/no-unused-expressions': 'off', // 降级为警告
       '@typescript-eslint/no-import-type-side-effects': 'error',
       '@typescript-eslint/no-unsafe-function-type': 'off',
-      'no-unused-vars': 'off', // 关闭未使用变量警告
+      // ========== 原生ESLint ==========
+      'no-unused-vars': 'off',
       'no-console': 'off',
       'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'warn',
+      'no-useless-catch': 'warn', // catch捕获后直接throw err的警告
+      'unicorn/no-empty-file': 'off',
       'vue/multi-word-component-names': 'off', // Vue 组件的名称应该是多词的，以提高可读性和维护性
       'vue/no-reserved-component-names': 'error', // 禁止在组件定义中使用保留名称。
       'vue/require-name-property': 'error', // 确保组件有name属性

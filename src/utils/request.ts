@@ -104,7 +104,7 @@ const logout = () => {
     .then(async () => {
       window.location.href = '/login'
     })
-    .catch((_) => {})
+    .catch(() => {})
 }
 
 export default service

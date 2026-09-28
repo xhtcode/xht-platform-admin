@@ -103,7 +103,7 @@ const initRestaurants = (data: RouteRecordRaw[]) => {
 
 <template>
   <div class="header-tool-item" @click="show">
-    <div class="i-common-search w-18px h-18px" />
+    <div class="i-common-search h-18px w-18px" />
     <el-dialog
       v-model="state.visibleStatus"
       :before-close="close"

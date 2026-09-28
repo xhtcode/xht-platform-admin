@@ -79,7 +79,7 @@ export const useUserInfoStore = defineStore(
      * @returns Promise<void>
      */
     function logout() {
-      return new Promise<void>(async (resolve) => {
+      return new Promise<void>((resolve) => {
         userInfo.value = {
           roleCodes: [],
           menuButtonCodes: [],
@@ -106,8 +106,8 @@ export const useUserInfoStore = defineStore(
             userInfo.value = res.data
             resolve()
           })
-          .catch((_) => {
-            reject()
+          .catch((err) => {
+            reject(err)
           })
       })
     }

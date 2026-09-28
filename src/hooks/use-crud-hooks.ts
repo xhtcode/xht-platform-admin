@@ -112,8 +112,6 @@ export const useTableQueryListHooks = <Req extends PageQueryRequest, Res extends
       queryParams.value.quick = !state.searchStatus
       const response: AxiosResponse = await queryPageApi(queryParams.value)
       state.tableList = response.data
-    } catch (err) {
-      throw err // 抛出错误供外部处理
     } finally {
       state.loadingStatus = false
     }

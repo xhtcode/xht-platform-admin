@@ -20,7 +20,7 @@ function toggleColorScheme() {
 
 <template>
   <div class="header-tool-item" @click="toggleColorScheme()">
-    <div v-if="darkStatus" class="i-common-moon w-18px h-18px" />
-    <div v-else class="i-common-sunny w-18px h-18px" />
+    <div v-if="darkStatus" class="i-common-moon h-18px w-18px" />
+    <div v-else class="i-common-sunny h-18px w-18px" />
   </div>
 </template>
