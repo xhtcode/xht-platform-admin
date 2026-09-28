@@ -11,12 +11,6 @@ const StaticRouter: RouteRecordRaw[] = [
     meta: { title: '登录', hiddenStatus: true, authStatus: true },
   },
   {
-    path: '/process',
-    name: 'ProcessIndex',
-    component: () => import('@/views/process/index.vue'),
-    meta: { hiddenStatus: true, authStatus: true },
-  },
-  {
     path: '/oauth2',
     name: 'Oauth2',
     component: () => import('@/views/oauth2/index.vue'),

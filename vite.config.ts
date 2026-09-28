@@ -1,21 +1,22 @@
 import { type ConfigEnv, defineConfig, loadEnv, type UserConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
-import path, { resolve } from 'path'
+import { resolve } from 'path'
 import UnoCSS from 'unocss/vite'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
-import { dependencies, devDependencies, engines, name, version } from './package.json'
+import pkg from './package.json' with { type: 'json' }
 import xhtStartLogPlugin from './plugins/vite-plugin-log'
+const { dependencies, devDependencies, engines, name, version } = pkg
 // 平台的名称、版本、运行所需的 node 版本、依赖、构建时间的类型提示
 const __APP_INFO__ = {
   pkg: { name, version, engines, dependencies, devDependencies },
   buildTimestamp: Date.now(),
 }
 // 路径常量定义
-const pathSrc = resolve(__dirname, 'src')
+const pathSrc = resolve(import.meta.dirname, 'src')
 
 // Element Plus 预加载组件样式（按需优化）
 const elementPlusPreloadStyles = [

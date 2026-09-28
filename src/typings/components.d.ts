@@ -12,7 +12,6 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    BpmnEditor: typeof import('./../components/bpmn-editor/index.vue')['default']
     CodeMonacoEditor: typeof import('./../components/code-monaco-editor/index.vue')['default']
     ColumnDictSelect: typeof import('./../components/generate/column-dict-select/index.vue')['default']
     ColumnFormSelect: typeof import('./../components/generate/column-form-select/index.vue')['default']
@@ -96,7 +95,6 @@ declare module 'vue' {
     ElTree: typeof import('element-plus/es')['ElTree']
     ElTreeSelect: typeof import('element-plus/es')['ElTreeSelect']
     ElUpload: typeof import('element-plus/es')['ElUpload']
-    FlowDefinitionTreeSelect: typeof import('./../components/workflow/flow-definition-tree-select/index.vue')['default']
     IconSelect: typeof import('./../components/icon-select/index.vue')['default']
     MappingJavaSelect: typeof import('./../components/generate/mapping-java-select/index.vue')['default']
     MappingTsSelect: typeof import('./../components/generate/mapping-ts-select/index.vue')['default']
@@ -135,7 +133,6 @@ declare module 'vue' {
 
 // For TSX support
 declare global {
-  const BpmnEditor: typeof import('./../components/bpmn-editor/index.vue')['default']
   const CodeMonacoEditor: typeof import('./../components/code-monaco-editor/index.vue')['default']
   const ColumnDictSelect: typeof import('./../components/generate/column-dict-select/index.vue')['default']
   const ColumnFormSelect: typeof import('./../components/generate/column-form-select/index.vue')['default']
@@ -219,7 +216,6 @@ declare global {
   const ElTree: typeof import('element-plus/es')['ElTree']
   const ElTreeSelect: typeof import('element-plus/es')['ElTreeSelect']
   const ElUpload: typeof import('element-plus/es')['ElUpload']
-  const FlowDefinitionTreeSelect: typeof import('./../components/workflow/flow-definition-tree-select/index.vue')['default']
   const IconSelect: typeof import('./../components/icon-select/index.vue')['default']
   const MappingJavaSelect: typeof import('./../components/generate/mapping-java-select/index.vue')['default']
   const MappingTsSelect: typeof import('./../components/generate/mapping-ts-select/index.vue')['default']
