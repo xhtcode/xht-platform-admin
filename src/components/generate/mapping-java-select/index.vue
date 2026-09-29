@@ -79,8 +79,12 @@ onMounted(() => {
     @change="handleChange"
   >
     <el-option v-for="item in state.tableList" :key="item.id" :value="item.id" :label="item.javaType">
-      <el-text size="large" tag="b" class="user-select-none">{{ item.dbDataType }}</el-text>
-      <el-text size="small" type="info" class="user-select-none float-right">{{ item.javaType }}</el-text>
+      <el-text size="large" tag="b" class="user-select-none">
+        {{ item.dbDataType }}
+      </el-text>
+      <el-text size="small" type="info" class="user-select-none float-right">
+        {{ item.javaType }}
+      </el-text>
     </el-option>
   </el-select>
 </template>

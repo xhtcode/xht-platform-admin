@@ -133,21 +133,21 @@ defineExpose({
       scroll-to-error
     >
       <el-row>
-        <el-col :lg="12" :sm="24" :xs="24">
+        <el-col :span="24">
           <el-form-item label="上级菜单" prop="parentId">
             <menu-tree-select v-model="addUpdateForm.parentId" :id="addUpdateForm.id" show-top-menu :type="isB ? 'M' : 'C'" />
           </el-form-item>
         </el-col>
-        <el-col :lg="12" :sm="24" :xs="24">
-          <el-form-item label="菜单类型" prop="menuType">
-            <xht-enum-select v-model="addUpdateForm.menuType" :data="menuTypeEnum" clearable placeholder="请选择菜单类型" />
+        <el-col :span="24">
+          <el-form-item label="菜单名称" prop="menuName">
+            <el-input v-model="addUpdateForm.menuName" :maxlength="50" show-word-limit placeholder="请输入菜单名称" />
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :lg="12" :sm="24" :xs="24">
-          <el-form-item label="菜单名称" prop="menuName">
-            <el-input v-model="addUpdateForm.menuName" :maxlength="50" show-word-limit placeholder="请输入菜单名称" />
+          <el-form-item label="菜单类型" prop="menuType">
+            <xht-enum-select v-model="addUpdateForm.menuType" :data="menuTypeEnum" clearable placeholder="请选择菜单类型" />
           </el-form-item>
         </el-col>
         <el-col :lg="12" :sm="24" :xs="24">

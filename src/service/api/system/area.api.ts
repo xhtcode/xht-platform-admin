@@ -94,7 +94,7 @@ export const querySysAreaById = (id: ModeIdType): AxiosPromise<SysAreaResponse> 
  */
 export const querySysAreaList = (query: SysAreaQueryRequest): AxiosPromise<SysAreaTreeResponse[]> => {
   return request({
-    url: Api.QUERY_LIST + `${query.parentId}`,
+    url: Api.QUERY_LIST + `${query.parentAreaCode}`,
     baseURL,
     method: 'get',
   })

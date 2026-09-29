@@ -128,12 +128,18 @@ defineExpose({
         <el-descriptions-item label="信息名称" :span="4">
           {{ messageInfo?.messageTitle }}
         </el-descriptions-item>
-        <el-descriptions-item label="发送人" :span="2">{{ messageInfo?.senderName }}</el-descriptions-item>
+        <el-descriptions-item label="发送人" :span="2">
+          {{ messageInfo?.senderName }}
+        </el-descriptions-item>
         <el-descriptions-item label="信息类型" :span="2">
           <xht-enum-tag :filter-label="messageInfo?.messageType" :data="messageTypeEnum" />
         </el-descriptions-item>
-        <el-descriptions-item label="消息内容" :span="4">{{ messageInfo?.messageContent }}</el-descriptions-item>
-        <el-descriptions-item label="扩展信息" :span="4">{{ messageInfo?.messageExtend }}</el-descriptions-item>
+        <el-descriptions-item label="消息内容" :span="4">
+          {{ messageInfo?.messageContent }}
+        </el-descriptions-item>
+        <el-descriptions-item label="扩展信息" :span="4">
+          {{ messageInfo?.messageExtend }}
+        </el-descriptions-item>
       </template>
     </el-descriptions>
 

@@ -28,14 +28,13 @@ export interface SysRoleResponse extends MetaResponse {
  */
 export interface RoleSelectedMenuResponse {
   /**
-   * 是否全选
-   */
-  checkAll: boolean
-  /**
    * 已选的菜单id
    */
-  checkedKeys: ModeIdType[]
-
+  checkedMenuIds: ModeIdType[]
+  /**
+   * 菜单总数
+   */
+  menuTotal: number
   /**
    * 菜单列表
    */

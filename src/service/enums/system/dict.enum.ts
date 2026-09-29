@@ -10,6 +10,6 @@ export const sysDictStatusEnum: DictEnum<DictStatusType, 'ENABLED' | 'DISABLED'>
   },
   DISABLED: {
     label: '禁用',
-    value: 2,
+    value: 0,
   },
 }

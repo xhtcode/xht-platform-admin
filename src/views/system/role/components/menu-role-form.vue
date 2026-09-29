@@ -19,12 +19,13 @@ const state = reactive<AddUpdateOption<SysRoleMenuBindForm>>({
     menuIds: [],
   },
   expandStatus: true,
-  checkAll: false,
+  checkAllStatus: false,
   treeData: [],
   checkedKeys: [],
 })
 
-const { expandStatus, checkAll, treeData, checkedKeys, addUpdateForm } = toRefs(state)
+const { expandStatus, checkAllStatus, treeData, checkedKeys, addUpdateForm } = toRefs(state)
+const indeterminateStatus = ref<boolean>(false)
 
 /**
  * 显示角色权限分配弹窗
@@ -39,9 +40,13 @@ const show = async (roleId: ModeIdType) => {
     }
     state.loadingStatus = true
     await selectMenuIdByRoleId(roleId).then((res) => {
-      checkAll.value = res.data.checkAll
-      menuTree.value?.setCheckedKeys(res.data.checkedKeys || [])
-      treeData.value = res.data.menuList
+      const { menuTotal, checkedMenuIds = [], menuList = [] } = res.data
+      const empStatus = checkedMenuIds.length === menuTotal
+      checkAllStatus.value = empStatus
+      menuTree.value?.setCheckedKeys(checkedMenuIds)
+      treeData.value = menuList
+      checkedKeys.value = checkedMenuIds
+      indeterminateStatus.value = checkedMenuIds.length > 0 && !empStatus
     })
   } finally {
     state.loadingStatus = false
@@ -85,7 +90,7 @@ const handleSelectAll = (check: CheckboxValueType) => {
  */
 const submitForm = async () => {
   state.loadingStatus = true
-  addUpdateForm.value.menuIds = menuTree.value?.getCheckedKeys() || []
+  addUpdateForm.value.menuIds = checkedKeys.value
   roleMenuBind(addUpdateForm.value!)
     .then(() => {
       useMessage().success('当前角色分配菜单权限成功')
@@ -94,6 +99,16 @@ const submitForm = async () => {
     .finally(() => {
       state.loadingStatus = false
     })
+}
+
+/**
+ * 处理当前节点选中状态变化
+ */
+const handleCurrentChange = () => {
+  checkedKeys.value = menuTree.value?.getCheckedKeys() || []
+  const halfCheckedKeys = menuTree.value?.getHalfCheckedKeys() || []
+  indeterminateStatus.value = halfCheckedKeys.length > 0 && checkedKeys.value.length > 0
+  checkAllStatus.value = checkedKeys.value.length > 0 && halfCheckedKeys.length === 0
 }
 
 /**
@@ -106,7 +121,7 @@ const close = () => {
   }
   state.visibleStatus = false
   state.operationStatus = 'create'
-  checkAll.value = false
+  checkAllStatus.value = false
   checkedKeys.value = []
   treeData.value = []
 }
@@ -131,7 +146,7 @@ defineExpose({
         <div>分配权限</div>
         <div class="mr-16 flex">
           <el-checkbox v-model="expandStatus" :label="expandStatus ? '收起所有节点' : '展开所有节点'" @change="handleExpand" />
-          <el-checkbox v-model="checkAll" :label="checkAll ? '全不选' : '全选'" @change="handleSelectAll" />
+          <el-checkbox v-model="checkAllStatus" label="全选" :indeterminate="indeterminateStatus" @change="handleSelectAll" />
         </div>
       </div>
     </template>
@@ -145,6 +160,7 @@ defineExpose({
         highlight-current
         node-key="id"
         show-checkbox
+        @check-change="handleCurrentChange"
       >
         <template #default="{ data }">
           <div>{{ data.menuName }}</div>

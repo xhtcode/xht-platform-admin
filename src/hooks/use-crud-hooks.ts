@@ -34,27 +34,32 @@ export const useTableQueryPageHooks = <Req extends PageQueryRequest, Res extends
    * 查询数据列表
    * @returns 数据查询Promise
    */
-  const handlePageQuery = async (): Promise<void> => {
+  const handlePageQuery = (): Promise<void> => {
     state.loadingStatus = true
-    try {
+    return new Promise<void>((resolve, reject) => {
       // 快速搜索 状态设置
       queryParams.value.quick = !state.searchStatus
-      const response: AxiosResponse = await queryPageApi(queryParams.value)
-      const { records = [], total = 0, pages = 0, current, size } = response.data
-      state.tableList = records
-      state.total = total
-      state.pages = pages
-      queryParams.value.current = current
-      queryParams.value.size = size
-      if (parseResponse) {
-        parseResponse(response.data)
-      }
-    } catch (err) {
-      console.error('数据查询失败:', err)
-      throw err // 抛出错误供外部处理
-    } finally {
-      state.loadingStatus = false
-    }
+      queryPageApi(queryParams.value)
+        .then((response: AxiosResponse) => {
+          const { records = [], total = 0, pages = 0, current, size } = response.data
+          state.tableList = records
+          state.total = total
+          state.pages = pages
+          queryParams.value.current = current
+          queryParams.value.size = size
+          if (parseResponse) {
+            parseResponse(response.data)
+          }
+          resolve()
+        })
+        .catch((err) => {
+          console.error('数据查询失败:', err)
+          reject(err)
+        })
+        .finally(() => {
+          state.loadingStatus = false
+        })
+    })
   }
 
   /**
@@ -105,16 +110,27 @@ export const useTableQueryListHooks = <Req extends PageQueryRequest, Res extends
   const state = mergeDefaultOptions(defaultOptions, options)
   const queryParams: Ref<Req> = toRef(state, 'queryParams')
 
+  /**
+   * 查询数据列表
+   * @returns 数据查询Promise
+   */
   const handleListQuery = async (): Promise<void> => {
-    state.loadingStatus = true
-    try {
-      // 快速搜索 状态设置
+    return new Promise<void>((resolve, reject) => {
+      state.loadingStatus = true
       queryParams.value.quick = !state.searchStatus
-      const response: AxiosResponse = await queryPageApi(queryParams.value)
-      state.tableList = response.data
-    } finally {
-      state.loadingStatus = false
-    }
+      queryPageApi(queryParams.value)
+        .then((response: AxiosResponse) => {
+          state.tableList = response.data
+          resolve()
+        })
+        .catch(() => {
+          state.tableList = []
+          reject()
+        })
+        .finally(() => {
+          state.loadingStatus = false
+        })
+    })
   }
   /**
    * 处理展开/折叠

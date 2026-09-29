@@ -106,6 +106,7 @@ onMounted(() => {
         :placeholder="modelValue || '请输入要搜索图标的提示'"
         prefix-icon="Search"
         size="large"
+        @keyup.enter="openDialog"
       >
         <template #append>
           <div :class="`${modelValue}`" />

@@ -50,7 +50,9 @@ defineExpose({
     :before-close="close"
   >
     <el-descriptions border :column="2" label-width="120px">
-      <el-descriptions-item label="消息标题" :span="2">{{ messageInfo.messageTitle }}</el-descriptions-item>
+      <el-descriptions-item label="消息标题" :span="2">
+        {{ messageInfo.messageTitle }}
+      </el-descriptions-item>
       <el-descriptions-item label="发件人名称">{{ messageInfo.senderName }}</el-descriptions-item>
       <el-descriptions-item label="消息类型">
         <el-tag v-if="messageInfo.messageType === 1" type="success">系统通知</el-tag>
@@ -66,7 +68,9 @@ defineExpose({
       <el-descriptions-item label="信息收藏">
         <xht-enum-tag :filter-label="messageInfo.response?.messageStar" :data="messageStarEnum" />
       </el-descriptions-item>
-      <el-descriptions-item label="阅读时间" :span="2">{{ messageInfo.response?.readTime }}</el-descriptions-item>
+      <el-descriptions-item label="阅读时间" :span="2">
+        {{ messageInfo.response?.readTime }}
+      </el-descriptions-item>
       <el-descriptions-item label="消息内容" :span="2">
         {{ messageInfo.messageContent }}
       </el-descriptions-item>

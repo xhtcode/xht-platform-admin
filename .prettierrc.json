@@ -16,6 +16,7 @@
   "tabWidth": 2,
   "trailingComma": "es5",
   "useTabs": false,
+  "singleAttributePerLine": false,
   "vueIndentScriptAndStyle": false,
   "endOfLine": "auto",
   "overrides": [

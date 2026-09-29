@@ -10,7 +10,7 @@ const baseURL: string = import.meta.env.VITE_ADMIN_API_PREFIX
 
 enum Api {
   CREATE = '/sys/dict/item/create',
-  REMOVE = '/sys/dict/item/remove',
+  REMOVE = '/sys/dict/item/remove/',
   UPDATE = '/sys/dict/item/update/',
   QUERY_BY_ID = '/sys/dict/item/get/',
   QUERY_PAGE = '/sys/dict/item/page',
@@ -30,18 +30,19 @@ export const saveSysDictItem = (data: SysDictItemOperationRequest): AxiosPromise
 }
 /**
  * 删除字典项
+ * @param id 字典项ID
  */
-export const removeSysDictItemById = (id: ModeIdArrayType): AxiosPromise<void> => {
+export const removeSysDictItemById = (id: ModeIdType): AxiosPromise<void> => {
   return request({
-    url: Api.REMOVE,
+    url: Api.REMOVE + id,
     baseURL,
     method: 'post',
-    data: id,
   })
 }
 
 /**
  * 修改字典项数据
+ * @param data 字典项数据
  */
 export const updateSysDictItem = (data: SysDictItemOperationRequest): AxiosPromise<void> => {
   return request({

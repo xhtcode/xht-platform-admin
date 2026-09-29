@@ -188,8 +188,12 @@ onMounted(() => {
       <xht-column-index fixed="left" :current="queryParams.current" :size="queryParams.size" />
       <el-table-column fixed="left" label="发送人" prop="senderName" width="160">
         <template #default="{ row }">
-          <el-icon v-if="row.response.messageStar === messageStarEnum.YES.value" color="#FFDC00" :size="18"><StarFilled /></el-icon>
-          <el-icon v-if="row.response.messageTop === messageTopEnum.YES.value" :size="18"><ArrowUpBold /></el-icon>
+          <el-icon v-if="row.response.messageStar === messageStarEnum.YES.value" color="#FFDC00" :size="18">
+            <StarFilled />
+          </el-icon>
+          <el-icon v-if="row.response.messageTop === messageTopEnum.YES.value" :size="18">
+            <ArrowUpBold />
+          </el-icon>
           {{ row.senderName }}
         </template>
       </el-table-column>

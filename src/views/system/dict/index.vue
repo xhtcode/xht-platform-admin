@@ -61,22 +61,12 @@ const handleEdit = (row: SysDictResponse) => {
 /**
  * 处理删除
  */
-const handleDelete = (row?: SysDictResponse) => {
+const handleDelete = (row: SysDictResponse) => {
   state.loadingStatus = true
-  let ids: ModeIdArrayType = []
-  if (row) {
-    ids = [row.id]
-  } else {
-    ids = state.selectedRows.map((item) => item.id)
-  }
-  if (!ids || ids.length <= 0) {
-    useMessage().error('请选择字典数据')
-    return
-  }
   useMessageBox()
     .confirm('此操作将永久删除字典, 是否继续?')
     .then(async () => {
-      await removeSysDictByIds(ids)
+      await removeSysDictByIds(row.id)
       useMessage().success('删除字典成功!')
       await handlePageQuery()
     })
@@ -144,16 +134,6 @@ onMounted(async () => {
         v-authorization="['sys:dict:update']"
       >
         修改
-      </el-button>
-      <el-button
-        :icon="Delete"
-        size="small"
-        type="danger"
-        :disabled="state.multipleStatus"
-        @click="handleDelete(undefined)"
-        v-authorization="['sys:dict:remove']"
-      >
-        批量删除
       </el-button>
     </table-tool-bar>
     <el-table

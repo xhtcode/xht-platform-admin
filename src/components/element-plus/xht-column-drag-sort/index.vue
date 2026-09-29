@@ -41,7 +41,9 @@ onMounted(() => {
   <el-table-column :label="label" :width="width" type="default" class-name="xht-table-column-drag-sort">
     <template #default>
       <span class="xht-table-column-drag-icon">
-        <el-icon class="drag-sort-icon" :size="18"><Rank /></el-icon>
+        <el-icon class="drag-sort-icon" :size="18">
+          <Rank />
+        </el-icon>
       </span>
     </template>
   </el-table-column>

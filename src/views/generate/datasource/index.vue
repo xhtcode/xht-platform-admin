@@ -153,7 +153,9 @@ onMounted(async () => {
           <el-tag v-if="row.testResult === 'success'" type="success">
             {{ row.lastTestTime }}
           </el-tag>
-          <el-tag v-else type="danger">{{ row.lastTestTime }}</el-tag>
+          <el-tag v-else type="danger">
+            {{ row.lastTestTime }}
+          </el-tag>
         </template>
       </el-table-column>
       <!-- @vue-generic {GenDataSourceResponse} -->

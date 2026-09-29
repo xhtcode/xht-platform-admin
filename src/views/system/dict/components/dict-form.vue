@@ -137,6 +137,13 @@ defineExpose({
       </el-row>
       <el-row>
         <el-col :span="24">
+          <el-form-item label="是否显示下级" prop="showDisabled">
+            <el-input v-model="addUpdateForm.showDisabled" :maxlength="100" placeholder="请选择是否显示下级" show-word-limit />
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="24">
           <el-form-item label="字典描述" prop="remark">
             <el-input
               v-model="addUpdateForm.remark"
