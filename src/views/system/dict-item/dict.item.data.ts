@@ -7,8 +7,9 @@ import { sysDictStatusEnum } from '@/service/enums/system/dict.enum'
  * 增改页面 表单类型 默认值
  */
 export const sysDictItemOperationForm: Partial<SysDictItemOperationRequest> = {
-  sortOrder: 0, // 排序序号
+  sortOrder: 1, // 排序序号
   remark: '暂无', // 字典项描述
+  itemColor: '#409EFF',
   status: sysDictStatusEnum.ENABLED.value, //状态(1:启用 0:禁用)
 }
 
@@ -18,12 +19,12 @@ export const sysDictItemOperationForm: Partial<SysDictItemOperationRequest> = {
 export const sysDictItemOperationRules: FormRules<Required<SysDictItemOperationRequest>> = {
   dictId: [{ required: true, message: '所属字典ID不能为空', trigger: 'blur' }],
   itemLabel: [
-    { required: true, message: '字典项标签不能为空', trigger: 'blur' },
-    { max: 50, message: '字典项标签长度不能超过50个字符', trigger: 'blur' },
+    { required: true, message: '字典项名称不能为空', trigger: 'blur' },
+    { max: 50, message: '字典项名称长度不能超过50个字符', trigger: 'blur' },
   ],
   itemValue: [
-    { required: true, message: '字典项值不能为空', trigger: 'blur' },
-    { max: 50, message: '字典项值长度不能超过50个字符', trigger: 'blur' },
+    { required: true, message: '字典项编码不能为空', trigger: 'blur' },
+    { max: 50, message: '字典项编码长度不能超过50个字符', trigger: 'blur' },
   ],
   itemColor: [
     {
@@ -44,32 +45,15 @@ export const sysDictItemOperationRules: FormRules<Required<SysDictItemOperationR
  * 列表显示配置
  */
 export const sysDictItemColumnOption: ColumnConfig<SysDictItemResponse> = {
-  dictCode: { desc: '字典项编码', visible: true, disabled: false },
-  itemLabel: { desc: '字典项标签', visible: true, disabled: false },
-  itemValue: { desc: '字典项值', visible: true, disabled: false },
+  dictCode: { desc: '字典编码', visible: true, disabled: true },
+  itemLabel: { desc: '字典项名称', visible: true, disabled: true },
+  itemValue: { desc: '字典项编码', visible: true, disabled: true },
   itemColor: { desc: '显示颜色', visible: true, disabled: false },
   sortOrder: { desc: '排序', visible: true, disabled: false },
-  remark: { desc: '描述', visible: true, disabled: false },
+  remark: { desc: '描述', visible: false, disabled: false },
   status: { desc: '状态', visible: true, disabled: false },
-
-  createBy: {
-    desc: '创建人',
-    visible: true,
-    disabled: false,
-  },
-  createTime: {
-    desc: '创建时间',
-    visible: true,
-    disabled: false,
-  },
-  updateBy: {
-    desc: '更新人',
-    visible: false,
-    disabled: false,
-  },
-  updateTime: {
-    desc: '更新时间',
-    visible: false,
-    disabled: false,
-  },
+  createBy: { desc: '创建人', visible: false, disabled: false },
+  createTime: { desc: '创建时间', visible: false, disabled: false },
+  updateBy: { desc: '更新人', visible: false, disabled: false },
+  updateTime: { desc: '更新时间', visible: false, disabled: false },
 }

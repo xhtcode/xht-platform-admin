@@ -1,14 +1,15 @@
 import type { SysDictOperationRequest, SysDictResponse } from '@/service/model/system/dict.model'
 import type { FormRules } from 'element-plus'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
-import { sysDictStatusEnum } from '@/service/enums/system/dict.enum'
+import { sysDictStatusEnum, sysShowDisabledEnum } from '@/service/enums/system/dict.enum'
 
 /**
  * 增改页面 表单类型 默认值
  */
 export const sysDictOperationForm: Partial<SysDictOperationRequest> = {
   sortOrder: 0, //排序序号
-  status: sysDictStatusEnum.ENABLED.value, //状态(1:启用 0:禁用)
+  status: sysDictStatusEnum.ENABLED.value, // 字典状态(1:启用 0:禁用)
+  showDisabled: sysShowDisabledEnum.ENABLED.value, // 下级字典显示禁用
 }
 
 /**
@@ -29,7 +30,8 @@ export const sysDictOperationRules: FormRules<Required<SysDictOperationRequest>>
     { type: 'number', message: '排序序号必须为数字', trigger: 'blur' },
   ],
   remark: [{ max: 200, message: '字典描述长度不能超过200个字符', trigger: 'blur' }],
-  status: [{ required: true, message: '状态不能为空', trigger: 'change' }],
+  status: [{ required: true, message: '字典状态不能为空', trigger: 'change' }],
+  showDisabled: [{ required: true, message: '下级字典显示禁用不能为空', trigger: 'change' }],
 }
 
 /**

@@ -110,12 +110,12 @@ onMounted(async () => {
       <el-row v-else>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
           <el-form-item label="字典项Label" prop="itemLabel">
-            <el-input v-model="queryParams.itemLabel" :maxlength="50" placeholder="请输入字典项标签" show-word-limit />
+            <el-input v-model="queryParams.itemLabel" :maxlength="50" placeholder="请输入字典项名称" show-word-limit />
           </el-form-item>
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
           <el-form-item label="字典项Value" prop="itemValue">
-            <el-input v-model="queryParams.itemValue" :maxlength="50" placeholder="请输入字典项值" show-word-limit />
+            <el-input v-model="queryParams.itemValue" :maxlength="50" placeholder="请输入字典项编码" show-word-limit />
           </el-form-item>
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
@@ -159,10 +159,10 @@ onMounted(async () => {
     >
       <el-table-column align="center" type="selection" width="55" />
       <xht-column-index :current="queryParams.current" :size="queryParams.size" />
-      <el-table-column label="字典项编码" prop="dictCode" width="160" />
-      <el-table-column label="字典项标签" prop="itemLabel" width="160" />
-      <el-table-column label="字典项值" prop="itemValue" width="160" />
-      <el-table-column label="显示颜色" prop="itemColor" width="120">
+      <el-table-column v-if="columnOption.dictCode?.visible" label="字典编码" prop="dictCode" min-width="160" />
+      <el-table-column v-if="columnOption.itemLabel?.visible" label="字典项名称" prop="itemLabel" min-width="160" />
+      <el-table-column v-if="columnOption.itemValue?.visible" label="字典项编码" prop="itemValue" min-width="160" />
+      <el-table-column v-if="columnOption.itemColor?.visible" label="显示颜色" prop="itemColor" width="100">
         <template #default="{ row }">
           <div
             :style="{ background: row.itemColor }"
@@ -170,18 +170,17 @@ onMounted(async () => {
           />
         </template>
       </el-table-column>
-      <el-table-column label="排序" prop="sortOrder" width="55" />
-      <el-table-column label="描述" prop="remark" show-overflow-tooltip width="220" />
-      <el-table-column label="状态" prop="status" width="160">
+      <el-table-column v-if="columnOption.sortOrder?.visible" label="排序" prop="sortOrder" width="100" />
+      <el-table-column v-if="columnOption.remark?.visible" label="描述" prop="remark" show-overflow-tooltip width="220" />
+      <el-table-column v-if="columnOption.status?.visible" label="状态" prop="status" width="100">
         <template #default="{ row }">
-          <el-tag v-if="row.status === 1" type="success">启用</el-tag>
-          <el-tag v-else type="danger">禁用</el-tag>
+          <xht-enum-tag :filter-label="row.status" :data="sysDictStatusEnum" />
         </template>
       </el-table-column>
-      <el-table-column label="创建人" prop="createBy" width="160" />
-      <el-table-column label="创建时间" prop="createTime" width="180" />
-      <el-table-column label="更新人" prop="updateBy" width="160" />
-      <el-table-column label="更新时间" prop="updateTime" width="180" />
+      <el-table-column v-if="columnOption.createBy?.visible" label="创建人" prop="createBy" width="160" />
+      <el-table-column v-if="columnOption.createTime?.visible" label="创建时间" prop="createTime" width="180" />
+      <el-table-column v-if="columnOption.updateBy?.visible" label="更新人" prop="updateBy" width="160" />
+      <el-table-column v-if="columnOption.updateTime?.visible" label="更新时间" prop="updateTime" width="180" />
       <!-- @vue-generic {SysDictItemResponse} -->
       <el-table-column label="操作" fixed="right" width="220">
         <template #default="{ row }">

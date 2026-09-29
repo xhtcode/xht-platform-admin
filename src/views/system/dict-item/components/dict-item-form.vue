@@ -21,14 +21,15 @@ const route = useRoute()
 const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
 const { addUpdateForm } = toRefs(state)
 const rules: FormRules<Required<SysDictItemOperationRequest>> = sysDictItemOperationRules
-const predefineColors = ref(['#409EFF', '#67C23A', '#E6A23C', '#F56C6C', '#909399', '#303133', '#CDD0D6', '#E6E8EB', '#000000', '#F2F6FC'])
-
+const predefineColors = ref<string[]>(['#409EFF', '#67C23A', '#E6A23C', '#F56C6C', '#909399', '#90ee90', '#00ced1'])
+const dictInfo = ref<string | null>()
 /**
  * 打开显示
  */
 const show = async (type: 'create' | 'update', id: ModeIdType) => {
   try {
     state.visibleStatus = true
+    dictInfo.value = route.query?.tagName as string
     state.operationStatus = type
     state.loadingStatus = true
     if (type === 'update') {
@@ -116,17 +117,12 @@ defineExpose({
       scroll-to-error
     >
       <el-row>
-        <el-col :lg="12" :sm="24" :xs="24">
-          <el-form-item label="字典项标签" prop="itemLabel">
-            <el-input v-model="addUpdateForm.itemLabel" :maxlength="50" placeholder="请输入字典项标签" show-word-limit />
+        <el-col :span="12">
+          <el-form-item label="字典信息" prop="dictCode">
+            <el-input v-model="dictInfo" :maxlength="50" disabled placeholder="请输入字典编码" show-word-limit />
           </el-form-item>
         </el-col>
-        <el-col :lg="12" :sm="24" :xs="24">
-          <el-form-item label="字典项值" prop="itemValue">
-            <el-input v-model="addUpdateForm.itemValue" :maxlength="50" placeholder="请输入字典项值" show-word-limit />
-          </el-form-item>
-        </el-col>
-        <el-col :lg="12" :sm="24" :xs="24">
+        <el-col :span="12">
           <el-form-item label="显示颜色" prop="itemColor">
             <el-color-picker
               v-model="addUpdateForm.itemColor"
@@ -137,17 +133,29 @@ defineExpose({
             />
           </el-form-item>
         </el-col>
-        <el-col :lg="12" :sm="24" :xs="24">
-          <el-form-item label="排序序号" prop="sortOrder">
-            <el-input-number v-model="addUpdateForm.sortOrder" :max="999" :min="0" class="w-full!" placeholder="请输入排序序号" />
+      </el-row>
+      <el-row>
+        <el-col :span="24">
+          <el-form-item label="字典项名称" prop="itemLabel">
+            <el-input v-model="addUpdateForm.itemLabel" :maxlength="50" placeholder="请输入字典项名称" show-word-limit />
           </el-form-item>
         </el-col>
-        <el-col :lg="12" :sm="24" :xs="24">
+        <el-col :span="24">
+          <el-form-item label="字典项编码" prop="itemValue">
+            <el-input v-model="addUpdateForm.itemValue" :maxlength="50" placeholder="请输入字典项编码" show-word-limit />
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="排序序号" prop="sortOrder">
+            <el-input-number v-model="addUpdateForm.sortOrder" :max="999" :min="1" class="w-full!" placeholder="请输入排序序号" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
           <el-form-item label="字典项状态" prop="status">
             <xht-enum-select v-model="addUpdateForm.status" :data="sysDictStatusEnum" clearable placeholder="请选择字典项状态" />
           </el-form-item>
         </el-col>
-        <el-col :lg="12" :sm="24" :xs="24">
+        <el-col :span="24">
           <el-form-item label="字典项描述" prop="remark">
             <el-input v-model="addUpdateForm.remark" :maxlength="200" :rows="5" placeholder="请输入" resize="none" show-word-limit type="textarea" />
           </el-form-item>

@@ -2,8 +2,8 @@ import { defineStore } from 'pinia'
 import { queryByDictCode } from '@/service/api/system/dict.item.api'
 
 export interface DictVo {
-  label: string // 字典项标签
-  value: string // 字典项值
+  label: string // 字典项名称
+  value: string // 字典项编码
   disabled: boolean // 禁用选项
   color?: string // 显示颜色
 }

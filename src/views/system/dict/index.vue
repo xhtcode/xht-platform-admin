@@ -150,18 +150,17 @@ onMounted(async () => {
       <el-table-column v-if="columnOption.dictCode?.visible" label="字典编码" min-width="160" prop="dictCode">
         <template #default="{ row }">
           <router-link :to="`/system/dict/${row.id}?tagName=字典项(${row.dictName})`">
-            <el-link>{{ row.dictCode }}</el-link>
+            <el-link type="primary">{{ row.dictCode }}</el-link>
           </router-link>
         </template>
       </el-table-column>
       <el-table-column v-if="columnOption.sortOrder?.visible" label="排序" min-width="80" prop="sortOrder" />
       <el-table-column v-if="columnOption.status?.visible" label="字典状态" min-width="160" prop="status" show-overflow-tooltip>
         <template #default="{ row }">
-          <el-tag v-if="row.status === 1" type="success">启用</el-tag>
-          <el-tag v-else type="danger">禁用</el-tag>
+          <xht-enum-tag :filter-label="row.status" :data="sysDictStatusEnum" />
         </template>
       </el-table-column>
-      <el-table-column v-if="columnOption.remark?.visible" label="字典描述" min-width="220" prop="remark" />
+      <el-table-column v-if="columnOption.remark?.visible" label="字典描述" min-width="220" prop="remark" show-overflow-tooltip/>
       <el-table-column v-if="columnOption.createBy?.visible" label="创建人" prop="createBy" width="160" />
       <el-table-column v-if="columnOption.createTime?.visible" label="创建时间" prop="createTime" width="180" />
       <el-table-column v-if="columnOption.updateBy?.visible" label="更新人" prop="updateBy" width="160" />

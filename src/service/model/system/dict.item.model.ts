@@ -5,9 +5,9 @@ import type { DictStatusType } from '@/service/model/system/dict.model'
  */
 export interface SysDictItemQueryRequest extends PageQueryRequest {
   dictId: ModeIdType // 所属字典ID
-  dictCode?: string // 字典项编码
-  itemLabel?: string // 字典项标签
-  itemValue?: string // 字典项值
+  dictCode?: string // 字典编码
+  itemLabel?: string // 字典项名称
+  itemValue?: string // 字典项编码
   status?: DictStatusType //状态(1:启用 0:禁用)
 }
 
@@ -17,9 +17,9 @@ export interface SysDictItemQueryRequest extends PageQueryRequest {
 export interface SysDictItemResponse extends MetaResponse {
   id: ModeIdType // 字典项ID
   dictId: ModeIdType // 所属字典ID
-  dictCode: string // 字典项编码
-  itemLabel: string // 字典项标签
-  itemValue: string // 字典项值
+  dictCode: string // 字典编码
+  itemLabel: string // 字典项名称
+  itemValue: string // 字典项编码
   itemColor: string // 显示颜色
   sortOrder: number // 排序序号
   remark: string // 字典项描述

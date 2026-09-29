@@ -36,7 +36,8 @@ const {
   colorWeaknessModeStatus,
 } = storeToRefs(themeStore)
 const { changeThemeColor } = useThemeColorHooks()
-const predefineColors = ref(['#409EFF', '#ff4500', '#ff8c00', '#ffd700', '#90ee90', '#00ced1', '#c71585'])
+const predefineColors = ref(['#409EFF', '#67C23A', '#E6A23C', '#F56C6C', '#909399', '#90ee90', '#00ced1'])
+
 /**
  * 禁用 颜色选择器
  */

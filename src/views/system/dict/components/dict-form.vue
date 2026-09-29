@@ -4,7 +4,7 @@ import { querySysDictById, saveSysDict, updateSysDict } from '@/service/api/syst
 import { sysDictOperationForm, sysDictOperationRules } from '@/views/system/dict/dict.data'
 import { useMessage } from '@/hooks/use-message'
 import type { SysDictOperationRequest } from '@/service/model/system/dict.model'
-import { sysDictStatusEnum } from '@/service/enums/system/dict.enum'
+import { sysDictStatusEnum, sysShowDisabledEnum } from '@/service/enums/system/dict.enum'
 
 defineOptions({ name: 'SysDictAddOrUpdate' })
 
@@ -112,24 +112,22 @@ defineExpose({
       scroll-to-error
     >
       <el-row>
-        <el-col :lg="12" :sm="24" :xs="24">
+        <el-col :span="24">
           <el-form-item label="字典编码" prop="dictCode">
             <el-input v-model="addUpdateForm.dictCode" :maxlength="50" placeholder="请输入字典编码" show-word-limit />
           </el-form-item>
         </el-col>
-        <el-col :lg="12" :sm="24" :xs="24">
+        <el-col :span="24">
           <el-form-item label="字典名称" prop="dictName">
-            <el-input v-model="addUpdateForm.dictName" :maxlength="50" placeholder="请输入字典名称" show-word-limit />
+            <el-input v-model="addUpdateForm.dictName" :maxlength="100" placeholder="请输入字典名称" show-word-limit />
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row>
-        <el-col :lg="12" :sm="24" :xs="24">
+        <el-col :span="24">
           <el-form-item label="排序序号" prop="sortOrder">
-            <el-input-number v-model="addUpdateForm.sortOrder" :max="999" :min="0" class="w-full!" placeholder="请输入排序序号" />
+            <el-input-number v-model="addUpdateForm.sortOrder" :max="9999" :min="1" class="w-full!" placeholder="请输入排序序号" />
           </el-form-item>
         </el-col>
-        <el-col :lg="12" :sm="24" :xs="24">
+        <el-col :span="24">
           <el-form-item label="字典状态" prop="status">
             <xht-enum-select v-model="addUpdateForm.status" :data="sysDictStatusEnum" clearable placeholder="请选择字典状态" />
           </el-form-item>
@@ -137,8 +135,8 @@ defineExpose({
       </el-row>
       <el-row>
         <el-col :span="24">
-          <el-form-item label="是否显示下级" prop="showDisabled">
-            <el-input v-model="addUpdateForm.showDisabled" :maxlength="100" placeholder="请选择是否显示下级" show-word-limit />
+          <el-form-item label="显示禁用" prop="showDisabled">
+            <xht-enum-select v-model="addUpdateForm.showDisabled" :data="sysShowDisabledEnum" clearable placeholder="请选择下级字典显示禁用" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -147,7 +145,7 @@ defineExpose({
           <el-form-item label="字典描述" prop="remark">
             <el-input
               v-model="addUpdateForm.remark"
-              :maxlength="200"
+              :maxlength="500"
               :rows="5"
               placeholder="请输入字典描述"
               resize="none"

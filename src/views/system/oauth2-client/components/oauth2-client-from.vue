@@ -216,7 +216,7 @@ defineExpose({
               v-model="addUpdateForm.scopes"
               draggable
               tag-effect="light"
-              tag-type="danger"
+              :tag-type="'primary'"
               collapse-tags
               :max-collapse-tags="3"
               collapse-tags-tooltip
@@ -230,7 +230,7 @@ defineExpose({
               v-model="addUpdateForm.redirectUris"
               draggable
               tag-effect="light"
-              tag-type="success"
+              :tag-type="'primary'"
               collapse-tags
               :max-collapse-tags="3"
               collapse-tags-tooltip

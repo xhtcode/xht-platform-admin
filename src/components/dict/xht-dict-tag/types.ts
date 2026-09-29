@@ -5,7 +5,7 @@ import type { DictVo } from '@/store/modules/dict.store'
  */
 export interface XhtDictTagProps {
   dictCode: string // 字典类别编码
-  filterLabel?: string | string[] // 字典项值
+  filterLabel?: string | string[] // 字典项编码
   hit?: boolean // 是否有边框描边
   size?: '' | 'large' | 'default' | 'small' // Tag 的尺寸
   effect?: 'dark' | 'light' | 'plain' // Tag 的主题

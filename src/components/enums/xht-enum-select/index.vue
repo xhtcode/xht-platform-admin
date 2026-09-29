@@ -64,6 +64,7 @@ const handlerRemoveTag = (value: any) => {
     :max-collapse-tags="maxCollapseTags"
     @change="handlerChange"
     @remove-tag="handlerRemoveTag"
+    class="w-full"
   >
     <el-option v-for="item in props.data" :label="item.label" :value="item.value" :key="item.label" :disabled="item.disabled" />
     <template #empty>暂无枚举项数据，请联系系统管理员</template>
