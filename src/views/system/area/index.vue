@@ -197,7 +197,6 @@ const handleDelete = () => {
 </script>
 
 <template>
-  <!-- 左右分栏布局：左侧行政区划树 + 右侧详情表单 -->
   <div class="h-full flex gap-1">
     <!-- 左侧：懒加载行政区划树 -->
     <div class="xht-view-container flex-1">

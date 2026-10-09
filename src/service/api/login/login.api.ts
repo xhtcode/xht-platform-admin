@@ -8,7 +8,7 @@ const baseAuthURL = import.meta.env.VITE_AUTH_API_PREFIX
 /**
  * 获取验证码信息
  */
-export const generateCaptcha = (captchaKey: any): AxiosPromise<CaptchaResponseType> => {
+export const generateCaptcha = (captchaKey: string): AxiosPromise<CaptchaResponseType> => {
   return request({
     url: '/oauth2/login/captcha',
     baseURL: baseAuthURL,
@@ -17,7 +17,7 @@ export const generateCaptcha = (captchaKey: any): AxiosPromise<CaptchaResponseTy
       skipToken: true,
     },
     params: {
-      captchaKey,
+      captcha_key: captchaKey,
     },
   })
 }

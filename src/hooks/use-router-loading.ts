@@ -21,7 +21,7 @@ const useRouterLoadingHooks = () => {
     await nextTick(() => {
       window.setTimeout(() => {
         routerStatus.value = false
-      }, 200)
+      }, 500)
     })
   }
 
