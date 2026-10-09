@@ -8,8 +8,10 @@ import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import pkg from './package.json' with { type: 'json' }
-// @ts-ignore
 import xhtStartLogPlugin from './plugins/vite-plugin-log.ts'
+import viteConfigServer from './plugins/vite-config-server.ts'
+import viteConfigBuild from './plugins/vite-config-build.ts'
+import viteConfigOptimizeDeps from './plugins/vite-config-optimizeDeps.ts'
 const { dependencies, devDependencies, engines, name, version } = pkg
 // 平台的名称、版本、运行所需的 node 版本、依赖、构建时间的类型提示
 const __APP_INFO__ = {
@@ -19,83 +21,17 @@ const __APP_INFO__ = {
 // 路径常量定义
 const pathSrc = resolve(import.meta.dirname, 'src')
 
-// Element Plus 预加载组件样式（按需优化）
-const elementPlusPreloadStyles = [
-  'form',
-  'form-item',
-  'button',
-  'input',
-  'input-number',
-  'switch',
-  'upload',
-  'menu2',
-  'col',
-  'icon',
-  'row',
-  'tag',
-  'dialog',
-  'loading',
-  'radio',
-  'radio-group',
-  'popover',
-  'scrollbar',
-  'tooltip',
-  'dropdown',
-  'dropdown-menu2',
-  'dropdown-item',
-  'sub-menu2',
-  'menu2-item',
-  'divider',
-  'card',
-  'link',
-  'breadcrumb',
-  'breadcrumb-item',
-  'table',
-  'tree-select',
-  'table-column',
-  'select',
-  'option',
-  'pagination',
-  'tree',
-  'alert',
-  'radio-button',
-  'checkbox-group',
-  'checkbox',
-  'tabs',
-  'tab-pane',
-  'rate',
-  'date-picker',
-  'notification',
-  'image',
-  'statistic',
-  'watermark',
-  'config-provider',
-  'text',
-  'drawer',
-  'color-picker',
-  'message-box',
-  'skeleton',
-  'skeleton-item',
-  'badge',
-  'steps',
-  'step',
-  'avatar',
-  'descriptions',
-  'descriptions-item',
-  'progress',
-  'image-viewer',
-  'empty',
-].map((component) => `element-plus/es/components/${component}/style/css`)
-
 // https://vite.dev/config/
 export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
   const env = loadEnv(mode, process.cwd())
-  const viteBaseApi = env.VITE_BASE_API as string
   const isProduction = mode === 'production'
   return {
     define: {
       __APP_INFO__: JSON.stringify(__APP_INFO__),
     },
+    /**
+     * 插件配置
+     */
     plugins: [
       // 基础Vue插件
       vue(),
@@ -136,13 +72,17 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
       }),
       xhtStartLogPlugin(env),
     ],
-    // 路径解析配置
+    /**
+     * 路径解析配置
+     */
     resolve: {
       alias: {
         '@': pathSrc,
       },
     },
-    // CSS配置
+    /**
+     * CSS配置
+     */
     css: {
       preprocessorOptions: {
         scss: {
@@ -153,54 +93,14 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
     /**
      * 本地反向代理解决浏览器跨域限制
      */
-    server: {
-      host: '0.0.0.0', // 服务器主机名，如果允许外部访问，可设置为 "0.0.0.0"
-      port: +Number(env.VITE_APP_PORT) || 3000, // 设置服务启动端口号
-      allowedHosts: ['www.xht.com'],
-      open: false, // 是否自动在浏览器中打开应用程序
-      cors: true, // 是否允许跨域
-      // 跨域代理配置
-      proxy: {
-        [viteBaseApi]: {
-          target: env.VITE_GATEWAY_API, // easymock
-          changeOrigin: true,
-          rewrite: (path: string) => path.replace(new RegExp('^' + env.VITE_BASE_API), ''),
-        },
-      },
-    },
-    // 预加载项目必需的组件
-    optimizeDeps: {
-      include: [
-        'vue',
-        'vue-router',
-        'element-plus',
-        'pinia',
-        'axios',
-        '@vueuse/core',
-        'path-to-regexp',
-        'echarts',
-        'path-browserify',
-        `monaco-editor/esm/vs/language/json/json.worker`,
-        `monaco-editor/esm/vs/language/css/css.worker`,
-        `monaco-editor/esm/vs/language/html/html.worker`,
-        `monaco-editor/esm/vs/language/typescript/ts.worker`,
-        `monaco-editor/esm/vs/editor/editor.worker`,
-        ...elementPlusPreloadStyles,
-      ],
-    },
-    // 生产环境构建配置
-    build: {
-      target: 'es2015',
-      cssCodeSplit: true,
-      sourcemap: !isProduction, // 开发环境生成sourcemap
-      rolldownOptions: {
-        output: {
-          // 静态资源分类打包
-          chunkFileNames: 'assets/js/[name]-[hash].js',
-          entryFileNames: 'assets/js/[name]-[hash].js',
-          assetFileNames: 'assets/[ext]/[name]-[hash].[ext]',
-        },
-      },
-    },
+    server: viteConfigServer(env),
+    /**
+     * 预加载项目必需的组件
+     */
+    optimizeDeps: viteConfigOptimizeDeps(),
+    /**
+     * 生产环境构建配置
+     */
+    build: viteConfigBuild(env, isProduction),
   }
 })
