@@ -160,7 +160,7 @@ onMounted(async () => {
           <xht-enum-tag :filter-label="row.status" :data="sysDictStatusEnum" />
         </template>
       </el-table-column>
-      <el-table-column v-if="columnOption.remark?.visible" label="字典描述" min-width="220" prop="remark" show-overflow-tooltip/>
+      <el-table-column v-if="columnOption.remark?.visible" label="字典描述" min-width="220" prop="remark" show-overflow-tooltip />
       <el-table-column v-if="columnOption.createBy?.visible" label="创建人" prop="createBy" width="160" />
       <el-table-column v-if="columnOption.createTime?.visible" label="创建时间" prop="createTime" width="180" />
       <el-table-column v-if="columnOption.updateBy?.visible" label="更新人" prop="updateBy" width="160" />
