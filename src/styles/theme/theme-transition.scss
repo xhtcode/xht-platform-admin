@@ -1,0 +1,56 @@
+/**
+ * 暗黑模式切换过渡动画（圆形擦除，效果与 Element Plus 官网一致）
+ *
+ * 由 @/hooks/use-theme-transition 在切换前向 html 写入以下状态：
+ * - data-theme-transition="to-dark" | "to-light"：决定动画承载在旧快照还是新快照上
+ * - --theme-transition-x / -y：动画圆心（百分比）
+ * - --theme-transition-radius：覆盖整个视口所需的圆形半径（百分比）
+ *
+ * 浏览器不支持 View Transitions 时，这些规则不会命中，主题直接切换。
+ */
+
+/* 关闭默认的交叉淡入淡出，改用 clip-path 圆形擦除 */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 2147483646;
+}
+
+/* 明亮 -> 暗黑：旧快照置于顶层并收缩，逐步露出暗黑主题 */
+html[data-theme-transition='to-dark']::view-transition-old(root) {
+  z-index: 2147483646;
+  animation: theme-transition-clip 0.45s ease-in both;
+}
+
+html[data-theme-transition='to-dark']::view-transition-new(root) {
+  z-index: 1;
+}
+
+/* 暗黑 -> 明亮：新快照置于顶层并扩散，逐步覆盖暗黑主题 */
+html[data-theme-transition='to-light']::view-transition-old(root) {
+  z-index: 1;
+}
+
+html[data-theme-transition='to-light']::view-transition-new(root) {
+  z-index: 2147483646;
+  animation: theme-transition-clip 0.45s ease-in both;
+  animation-direction: reverse;
+}
+
+@keyframes theme-transition-clip {
+  from {
+    clip-path: circle(var(--theme-transition-radius) at var(--theme-transition-x) var(--theme-transition-y));
+  }
+
+  to {
+    clip-path: circle(0% at var(--theme-transition-x) var(--theme-transition-y));
+  }
+}
