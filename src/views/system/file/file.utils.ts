@@ -46,7 +46,7 @@ const TEXT_MIME: string[] = ['text/plain', 'text/csv', 'text/markdown', 'applica
  * @param response 文件请求响应
  * @returns 业务异常信息，非异常响应时返回空字符串
  */
-export const parseFileErrorResponse = async (response: AxiosResponse): Promise<string> => {
+export const parseFileErrorResponse = async (response: AxiosResponse<Blob>): Promise<string> => {
   const contentType = (response.headers['content-type'] as string) || ''
   if (!contentType.includes('application/json')) {
     return ''

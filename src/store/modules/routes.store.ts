@@ -4,6 +4,7 @@ import { getRouters } from '@/service/api/permission'
 import { cloneDeep } from 'lodash'
 import pInIaPersistConfig from '@/store/pinia-persist'
 import DynamicRouter from '@/router/modules/dynamic'
+import { removeDynamicRoutes } from '@/router/index'
 import { menuTypeEnum } from '@/service/enums/system/menu.enum'
 
 const viewsModules: any = import.meta.glob('../../views/**/*.{vue,tsx}')
@@ -112,6 +113,20 @@ export const useRouteStore = defineStore(
       })
     }
 
+    /**
+     * 重置路由状态
+     *
+     * 登出时调用：移除已注册的动态路由，并复位生成标记，
+     * 保证下一个账号登录时重新按权限生成路由，不会残留上一账号的菜单。
+     */
+    const resetRoutes = () => {
+      removeDynamicRoutes()
+      isGenerate.value = false
+      routesRaw.value = []
+      formatRoutes.value = []
+      routerStatus.value = false
+    }
+
     return {
       routerStatus,
       isGenerate,
@@ -119,6 +134,7 @@ export const useRouteStore = defineStore(
       allRoutes,
       formatRoutes,
       generateRoutesAtBack,
+      resetRoutes,
     }
   },
   {

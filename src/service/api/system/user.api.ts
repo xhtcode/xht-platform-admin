@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import type { AxiosPromise } from 'axios'
+import type { ApiResponse } from 'axios'
 import type {
   SysUserOperationRequest,
   SysUserQueryRequest,
@@ -28,8 +28,8 @@ enum Api {
 /**
  * 保存
  */
-export const saveSysUser = (data: SysUserOperationRequest): AxiosPromise<void> => {
-  return request({
+export const saveSysUser = (data: SysUserOperationRequest): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.CREATE,
     baseURL,
     method: 'post',
@@ -40,8 +40,8 @@ export const saveSysUser = (data: SysUserOperationRequest): AxiosPromise<void> =
 /**
  * 修改数据
  */
-export const updateSysUser = (data: SysUserOperationRequest): AxiosPromise<void> => {
-  return request({
+export const updateSysUser = (data: SysUserOperationRequest): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.UPDATE + `${data.id}`,
     baseURL,
     method: 'post',
@@ -52,8 +52,8 @@ export const updateSysUser = (data: SysUserOperationRequest): AxiosPromise<void>
 /**
  * 删除
  */
-export const removeSysUserById = (id: ModeIdType): AxiosPromise<void> => {
-  return request({
+export const removeSysUserById = (id: ModeIdType): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.REMOVE + `${id}`,
     baseURL,
     method: 'post',
@@ -64,8 +64,8 @@ export const removeSysUserById = (id: ModeIdType): AxiosPromise<void> => {
  * 查询单个
  * @param id  id
  */
-export const querySysUserById = (id: ModeIdType): AxiosPromise<SysUserVo> => {
-  return request({
+export const querySysUserById = (id: ModeIdType): Promise<ApiResponse<SysUserVo>> => {
+  return request<SysUserVo>({
     url: Api.QUERY_BY_ID + `${id}`,
     baseURL,
     method: 'get',
@@ -75,8 +75,8 @@ export const querySysUserById = (id: ModeIdType): AxiosPromise<SysUserVo> => {
 /**
  * 查询全部
  */
-export const querySysUserPage = (data?: SysUserQueryRequest): AxiosPromise<PageResponse<SysUserResponse>> => {
-  return request({
+export const querySysUserPage = (data?: SysUserQueryRequest): Promise<ApiResponse<PageResponse<SysUserResponse>>> => {
+  return request<PageResponse<SysUserResponse>>({
     url: Api.QUERY_PAGE,
     baseURL,
     method: 'get',
@@ -88,8 +88,8 @@ export const querySysUserPage = (data?: SysUserQueryRequest): AxiosPromise<PageR
  * 重置密码
  * @param userId 用户id
  */
-export const resetPassword = (userId: ModeIdType): AxiosPromise<void> => {
-  return request({
+export const resetPassword = (userId: ModeIdType): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.RESET_PASSWORD + `${userId}/pwd`,
     baseURL,
     method: 'post',
@@ -100,8 +100,8 @@ export const resetPassword = (userId: ModeIdType): AxiosPromise<void> => {
  * 修改密码
  * @param passWordInfo 密码信息
  */
-export const updatePassword = (passWordInfo: UpdatePwdFrom): AxiosPromise<void> => {
-  return request({
+export const updatePassword = (passWordInfo: UpdatePwdFrom): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.UPDATE_PASSWORD,
     baseURL,
     method: 'post',
@@ -113,8 +113,8 @@ export const updatePassword = (passWordInfo: UpdatePwdFrom): AxiosPromise<void> 
  * 用户绑定角色
  * @param data 用户角色绑定数据
  */
-export const UserRoleBind = (data: UserRoleBindOperationRequest): AxiosPromise<void> => {
-  return request({
+export const UserRoleBind = (data: UserRoleBindOperationRequest): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.BIND_USER_ROLE,
     baseURL,
     method: 'post',

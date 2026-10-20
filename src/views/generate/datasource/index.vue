@@ -4,7 +4,7 @@ import type { GenDataSourceQueryRequest, GenDataSourceResponse } from '@/service
 import { connectionTest, queryGenDataSourceList, removeGenDataSourceByIds } from '@/service/api/generate/datasource.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { DataBaseTypeEnum } from '@/service/enums/generate/generate.enums'
-import type { AxiosResponse } from 'axios'
+import type { ApiResponse } from 'axios'
 import { genDataSourceColumnOption } from '@/views/generate/datasource/datasource.data'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { Delete, Edit, Plus, Refresh, Search } from '@element-plus/icons-vue'
@@ -91,7 +91,7 @@ const handleDelete = (row?: GenDataSourceResponse) => {
  * 测试链接
  */
 const handleTest = (row: GenDataSourceResponse) => {
-  connectionTest(row.id).then(async (res: AxiosResponse<boolean>) => {
+  connectionTest(row.id).then(async (res: ApiResponse<boolean>) => {
     if (res.data) {
       useMessage().success('数据库链接正常！')
     } else {

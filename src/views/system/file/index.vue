@@ -148,21 +148,9 @@ onMounted(async () => {
     >
       <el-button :icon="Upload" size="small" type="primary" @click="handleUpload">上传文件</el-button>
     </table-tool-bar>
-    <el-table
-      v-loading="state.loadingStatus"
-      :data="state.tableList"
-      border
-      row-key="id"
-      empty-text="暂无匹配数据 🔍 试试调整筛选条件吧"
-    >
+    <el-table v-loading="state.loadingStatus" :data="state.tableList" border row-key="id" empty-text="暂无匹配数据 🔍 试试调整筛选条件吧">
       <xht-column-index fixed="left" :current="queryParams.current" :size="queryParams.size" />
-      <el-table-column
-        v-if="columnOption.fileOriginalName?.visible"
-        label="文件原始名称"
-        prop="fileOriginalName"
-        width="260"
-        show-overflow-tooltip
-      />
+      <el-table-column v-if="columnOption.fileOriginalName?.visible" label="文件原始名称" prop="fileOriginalName" width="260" show-overflow-tooltip />
       <el-table-column v-if="columnOption.fileType?.visible" label="文件类型" prop="fileType" width="160" show-overflow-tooltip />
       <el-table-column v-if="columnOption.fileSuffix?.visible" label="文件后缀" prop="fileSuffix" width="100" />
       <el-table-column v-if="columnOption.fileSizeInfo?.visible" label="文件大小" prop="fileSizeInfo" width="120" />
@@ -177,27 +165,9 @@ onMounted(async () => {
           <xht-enum-tag :filter-label="row.fileStorageType" :data="fileStorageTypeEnum" />
         </template>
       </el-table-column>
-      <el-table-column
-        v-if="columnOption.fileStorageName?.visible"
-        label="存储名称"
-        prop="fileStorageName"
-        width="200"
-        show-overflow-tooltip
-      />
-      <el-table-column
-        v-if="columnOption.fileStorageKey?.visible"
-        label="存储Key"
-        prop="fileStorageKey"
-        width="220"
-        show-overflow-tooltip
-      />
-      <el-table-column
-        v-if="columnOption.fileStoragePath?.visible"
-        label="存储路径"
-        prop="fileStoragePath"
-        width="240"
-        show-overflow-tooltip
-      />
+      <el-table-column v-if="columnOption.fileStorageName?.visible" label="存储名称" prop="fileStorageName" width="200" show-overflow-tooltip />
+      <el-table-column v-if="columnOption.fileStorageKey?.visible" label="存储Key" prop="fileStorageKey" width="220" show-overflow-tooltip />
+      <el-table-column v-if="columnOption.fileStoragePath?.visible" label="存储路径" prop="fileStoragePath" width="240" show-overflow-tooltip />
       <el-table-column v-if="columnOption.fileHash?.visible" label="文件hash" prop="fileHash" width="220" show-overflow-tooltip />
       <el-table-column v-if="columnOption.fileUploadTime?.visible" label="上传时间" prop="fileUploadTime" width="180" />
       <el-table-column v-if="columnOption.fileUploadUser?.visible" label="上传用户" prop="fileUploadUser" width="120" />

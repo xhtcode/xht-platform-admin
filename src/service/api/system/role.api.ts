@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import type { AxiosPromise } from 'axios'
+import type { ApiResponse } from 'axios'
 import {
   RoleSelectedMenuResponse,
   SysRoleMenuBindForm,
@@ -28,8 +28,8 @@ enum Api {
 /**
  * 保存角色
  */
-export const saveSysRole = (data: SysRoleOperationRequest): AxiosPromise<void> => {
-  return request({
+export const saveSysRole = (data: SysRoleOperationRequest): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.CREATE,
     baseURL,
     method: 'post',
@@ -42,8 +42,8 @@ export const saveSysRole = (data: SysRoleOperationRequest): AxiosPromise<void> =
  *
  * @param data 角色
  */
-export const updateSysRole = (data: SysRoleOperationRequest): AxiosPromise<void> => {
-  return request({
+export const updateSysRole = (data: SysRoleOperationRequest): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.UPDATE + `${data.id}`,
     baseURL,
     method: 'post',
@@ -54,8 +54,8 @@ export const updateSysRole = (data: SysRoleOperationRequest): AxiosPromise<void>
 /**
  * 删除角色
  */
-export const removeSysRoleById = (id: ModeIdType): AxiosPromise<void> => {
-  return request({
+export const removeSysRoleById = (id: ModeIdType): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.REMOVE + `${id}`,
     baseURL,
     method: 'post',
@@ -66,8 +66,8 @@ export const removeSysRoleById = (id: ModeIdType): AxiosPromise<void> => {
  * 批量删除角色
  * @param ids
  */
-export const removeSysRoleByIds = (ids: string[]): AxiosPromise<void> => {
-  return request({
+export const removeSysRoleByIds = (ids: string[]): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.REMOVE,
     baseURL,
     method: 'post',
@@ -78,8 +78,8 @@ export const removeSysRoleByIds = (ids: string[]): AxiosPromise<void> => {
 /**
  * 查询单个角色
  */
-export const querySysRoleById = (id: ModeIdType): AxiosPromise<SysRoleResponse> => {
-  return request({
+export const querySysRoleById = (id: ModeIdType): Promise<ApiResponse<SysRoleResponse>> => {
+  return request<SysRoleResponse>({
     url: Api.QUERY_BY_ID + `${id}`,
     baseURL,
     method: 'get',
@@ -89,8 +89,8 @@ export const querySysRoleById = (id: ModeIdType): AxiosPromise<SysRoleResponse> 
 /**
  * 查询全部角色
  */
-export const querySysRolePage = (data?: SysRoleQueryRequest): AxiosPromise<PageResponse<SysRoleResponse>> => {
-  return request({
+export const querySysRolePage = (data?: SysRoleQueryRequest): Promise<ApiResponse<PageResponse<SysRoleResponse>>> => {
+  return request<PageResponse<SysRoleResponse>>({
     url: Api.QUERY_PAGE,
     baseURL,
     method: 'get',
@@ -103,8 +103,8 @@ export const querySysRolePage = (data?: SysRoleQueryRequest): AxiosPromise<PageR
  *
  * @param roleId 角色id
  */
-export const selectMenuIdByRoleId = (roleId: ModeIdType): AxiosPromise<RoleSelectedMenuResponse> => {
-  return request({
+export const selectMenuIdByRoleId = (roleId: ModeIdType): Promise<ApiResponse<RoleSelectedMenuResponse>> => {
+  return request<RoleSelectedMenuResponse>({
     url: Api.QUERY_MENU_BY_ROLE_ID + roleId,
     baseURL,
     method: 'get',
@@ -115,8 +115,8 @@ export const selectMenuIdByRoleId = (roleId: ModeIdType): AxiosPromise<RoleSelec
  * 角色绑定菜单
  * @param data 角色绑定菜单数据
  */
-export const roleMenuBind = (data: SysRoleMenuBindForm): AxiosPromise<void> => {
-  return request({
+export const roleMenuBind = (data: SysRoleMenuBindForm): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.BIND_MENU_ROLE,
     baseURL,
     method: 'post',
@@ -128,8 +128,8 @@ export const roleMenuBind = (data: SysRoleMenuBindForm): AxiosPromise<void> => {
  * 获取当前用户拥有的角色ID列表
  * @param userId 用户ID
  */
-export const roleRoleByUserId = (userId: ModeIdType): AxiosPromise<SysRoleMenuBindVO> => {
-  return request({
+export const roleRoleByUserId = (userId: ModeIdType): Promise<ApiResponse<SysRoleMenuBindVO>> => {
+  return request<SysRoleMenuBindVO>({
     url: Api.QUERY_ROLE_LIST + userId,
     baseURL,
     method: 'get',

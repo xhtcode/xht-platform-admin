@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { querySysDeptTree } from '@/service/api/system/dept.api'
 import type { SysDeptQueryRequest, SysDeptResponse, SysDeptTreeResponse } from '@/service/model/system/dept.model'
-import type { AxiosResponse } from 'axios'
+import type { ApiResponse } from 'axios'
 import { CaretBottom, CaretTop } from '@element-plus/icons-vue'
 import { deptStatusEnum } from '@/service/enums/system/dept.enum'
 
@@ -73,7 +73,7 @@ watch(filterText, (val) => {
  */
 const handleQuery = async () => {
   loading.value = true
-  await querySysDeptTree(queryParams.value).then((res: AxiosResponse<SysDeptTreeResponse[]>) => {
+  await querySysDeptTree(queryParams.value).then((res: ApiResponse<SysDeptTreeResponse[]>) => {
     treeData.value = res.data
     loading.value = false
   })

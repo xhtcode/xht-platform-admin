@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import type { AxiosPromise } from 'axios'
+import type { ApiResponse } from 'axios'
 import type {
   SysOauth2ClientOperationRequest,
   SysOauth2ClientQueryRequest,
@@ -28,8 +28,8 @@ enum Api {
  *
  * @param form 客户端表单请求参数
  */
-export const saveSysOauth2Client = (form: SysOauth2ClientOperationRequest): AxiosPromise<void> => {
-  return request({
+export const saveSysOauth2Client = (form: SysOauth2ClientOperationRequest): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.CREATE,
     baseURL,
     method: 'post',
@@ -42,8 +42,8 @@ export const saveSysOauth2Client = (form: SysOauth2ClientOperationRequest): Axio
  *
  * @param form 客户端表单请求参数
  */
-export const updateSysOauth2Client = (form: SysOauth2ClientOperationRequest): AxiosPromise<void> => {
-  return request({
+export const updateSysOauth2Client = (form: SysOauth2ClientOperationRequest): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.UPDATE + `${form.id}`,
     baseURL,
     method: 'post',
@@ -57,8 +57,8 @@ export const updateSysOauth2Client = (form: SysOauth2ClientOperationRequest): Ax
  * @param id 客户端id
  * @param clientSecret 系统管理-客户端密钥
  */
-export const updateSysOauth2ClientSecret = (id: ModeIdType, clientSecret: string): AxiosPromise<void> => {
-  return request({
+export const updateSysOauth2ClientSecret = (id: ModeIdType, clientSecret: string): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.UPDATE_SECRET,
     baseURL,
     method: 'post',
@@ -74,8 +74,8 @@ export const updateSysOauth2ClientSecret = (id: ModeIdType, clientSecret: string
  *
  * @param ids 客户端主键
  */
-export const removeSysOauth2ClientByIdBatch = (ids: string[]): AxiosPromise<void> => {
-  return request({
+export const removeSysOauth2ClientByIdBatch = (ids: string[]): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.REMOVE_BATCH,
     baseURL,
     method: 'post',
@@ -88,8 +88,8 @@ export const removeSysOauth2ClientByIdBatch = (ids: string[]): AxiosPromise<void
  *
  * @param id 客户端主键
  */
-export const querySysOauth2ClientById = (id: ModeIdType): AxiosPromise<SysOauth2ClientResponse> => {
-  return request({
+export const querySysOauth2ClientById = (id: ModeIdType): Promise<ApiResponse<SysOauth2ClientResponse>> => {
+  return request<SysOauth2ClientResponse>({
     url: Api.QUERY_BY_ID + `${id}`,
     baseURL,
     method: 'get',
@@ -101,8 +101,8 @@ export const querySysOauth2ClientById = (id: ModeIdType): AxiosPromise<SysOauth2
  *
  * @param query 客户端查询请求参数
  */
-export const querySysOauth2ClientPage = (query?: SysOauth2ClientQueryRequest): AxiosPromise<PageResponse<SysOauth2ClientResponse>> => {
-  return request({
+export const querySysOauth2ClientPage = (query?: SysOauth2ClientQueryRequest): Promise<ApiResponse<PageResponse<SysOauth2ClientResponse>>> => {
+  return request<PageResponse<SysOauth2ClientResponse>>({
     url: Api.QUERY_PAGE,
     baseURL,
     method: 'get',

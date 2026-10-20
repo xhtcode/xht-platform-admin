@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import type { AxiosPromise } from 'axios'
+import type { ApiResponse } from 'axios'
 import type { SysDeptOperationRequest, SysDeptQueryRequest, SysDeptTreeResponse } from '@/service/model/system/dept.model'
 
 /**
@@ -18,8 +18,8 @@ enum Api {
 /**
  * 保存
  */
-export const saveSysDept = (data: SysDeptOperationRequest): AxiosPromise<void> => {
-  return request({
+export const saveSysDept = (data: SysDeptOperationRequest): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.CREATE,
     baseURL,
     method: 'post',
@@ -30,8 +30,8 @@ export const saveSysDept = (data: SysDeptOperationRequest): AxiosPromise<void> =
 /**
  * 修改数据
  */
-export const updateSysDept = (data: SysDeptOperationRequest): AxiosPromise<void> => {
-  return request({
+export const updateSysDept = (data: SysDeptOperationRequest): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.UPDATE + `${data.id}`,
     baseURL,
     method: 'post',
@@ -42,8 +42,8 @@ export const updateSysDept = (data: SysDeptOperationRequest): AxiosPromise<void>
 /**
  * 删除
  */
-export const removeSysDeptById = (id: ModeIdType): AxiosPromise<void> => {
-  return request({
+export const removeSysDeptById = (id: ModeIdType): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.REMOVE + `${id}`,
     baseURL,
     method: 'post',
@@ -53,8 +53,8 @@ export const removeSysDeptById = (id: ModeIdType): AxiosPromise<void> => {
 /**
  * 查询单个
  */
-export const querySysDeptById = (id: ModeIdType): AxiosPromise<SysDeptOperationRequest> => {
-  return request({
+export const querySysDeptById = (id: ModeIdType): Promise<ApiResponse<SysDeptOperationRequest>> => {
+  return request<SysDeptOperationRequest>({
     url: Api.QUERY_BY_ID + `${id}`,
     baseURL,
     method: 'get',
@@ -64,8 +64,8 @@ export const querySysDeptById = (id: ModeIdType): AxiosPromise<SysDeptOperationR
 /**
  * 查询全部
  */
-export const querySysDeptTree = (data?: SysDeptQueryRequest): AxiosPromise<SysDeptTreeResponse[]> => {
-  return request({
+export const querySysDeptTree = (data?: SysDeptQueryRequest): Promise<ApiResponse<SysDeptTreeResponse[]>> => {
+  return request<SysDeptTreeResponse[]>({
     url: Api.QUERY_TREE,
     baseURL,
     method: 'get',

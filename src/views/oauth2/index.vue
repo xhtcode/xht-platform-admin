@@ -13,7 +13,7 @@ const router = useRouter()
  * 初始化Oauth2令牌
  */
 const initOauth2Token = () => {
-  request({
+  request<{ token?: string }>({
     url: '/get/token',
   }).then((res) => {
     if (res.data?.token) {

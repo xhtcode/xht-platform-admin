@@ -3,7 +3,7 @@ import { CaretBottom, List, Lock, Message, SwitchButton, UserFilled } from '@ele
 import { useUserInfoStore } from '@/store/modules/user.store'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
-import { useMessage } from '@/hooks/use-message'
+import { useMessage, useMessageBox } from '@/hooks/use-message'
 
 defineOptions({ name: 'UserAvatar' })
 
@@ -30,7 +30,15 @@ const openDialog = (type: 'userInfo' | 'userSafety' | 'userMessage' | 'loginLog'
       routerPath('/user/login/log')
       break
     case 'logout':
-      useMessage().error('暂未实现')
+      useMessageBox()
+        .confirm('确定退出当前账号吗？')
+        .then(async () => {
+          // 清除认证信息并移除动态路由，避免切换账号后残留上一账号的菜单
+          await permissions.logout()
+          await router.replace('/login')
+          useMessage().success('已退出登录')
+        })
+        .catch(() => {})
       break
   }
 }

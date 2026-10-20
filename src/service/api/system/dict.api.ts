@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import type { AxiosPromise } from 'axios'
+import type { ApiResponse } from 'axios'
 import type { SysDictOperationRequest, SysDictQueryRequest, SysDictResponse } from '@/service/model/system/dict.model'
 
 /**
@@ -18,8 +18,8 @@ enum Api {
 /**
  * 保存字典
  */
-export const saveSysDict = (data: SysDictOperationRequest): AxiosPromise<void> => {
-  return request({
+export const saveSysDict = (data: SysDictOperationRequest): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.CREATE,
     baseURL,
     method: 'post',
@@ -30,8 +30,8 @@ export const saveSysDict = (data: SysDictOperationRequest): AxiosPromise<void> =
 /**
  * 修改字典数据
  */
-export const updateSysDict = (data: SysDictOperationRequest): AxiosPromise<void> => {
-  return request({
+export const updateSysDict = (data: SysDictOperationRequest): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.UPDATE + `${data.id}`,
     baseURL,
     method: 'post',
@@ -43,8 +43,8 @@ export const updateSysDict = (data: SysDictOperationRequest): AxiosPromise<void>
  * 删除字典
  * @param id 字典ID
  */
-export const removeSysDictByIds = (id: ModeIdType): AxiosPromise<void> => {
-  return request({
+export const removeSysDictByIds = (id: ModeIdType): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.REMOVE + id,
     baseURL,
     method: 'post',
@@ -55,8 +55,8 @@ export const removeSysDictByIds = (id: ModeIdType): AxiosPromise<void> => {
  * 查询单个字典
  * @param id 字典ID
  */
-export const querySysDictById = (id: ModeIdType): AxiosPromise<SysDictResponse> => {
-  return request({
+export const querySysDictById = (id: ModeIdType): Promise<ApiResponse<SysDictResponse>> => {
+  return request<SysDictResponse>({
     url: Api.QUERY_BY_ID + `${id}`,
     baseURL,
     method: 'get',
@@ -67,8 +67,8 @@ export const querySysDictById = (id: ModeIdType): AxiosPromise<SysDictResponse> 
  * 查询全部字典
  * @param data 查询参数
  */
-export const querySysDictPage = (data?: SysDictQueryRequest): AxiosPromise<PageResponse<SysDictResponse>> => {
-  return request({
+export const querySysDictPage = (data?: SysDictQueryRequest): Promise<ApiResponse<PageResponse<SysDictResponse>>> => {
+  return request<PageResponse<SysDictResponse>>({
     url: Api.QUERY_LIST,
     baseURL,
     method: 'get',

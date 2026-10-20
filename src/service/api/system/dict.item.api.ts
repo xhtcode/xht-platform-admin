@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import type { AxiosPromise } from 'axios'
+import type { ApiResponse } from 'axios'
 import type { SysDictItemOperationRequest, SysDictItemQueryRequest, SysDictItemResponse } from '@/service/model/system/dict.item.model'
 import { DictVo } from '@/store/modules/dict.store'
 
@@ -20,8 +20,8 @@ enum Api {
 /**
  * 保存字典项
  */
-export const saveSysDictItem = (data: SysDictItemOperationRequest): AxiosPromise<void> => {
-  return request({
+export const saveSysDictItem = (data: SysDictItemOperationRequest): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.CREATE,
     baseURL,
     method: 'post',
@@ -32,8 +32,8 @@ export const saveSysDictItem = (data: SysDictItemOperationRequest): AxiosPromise
  * 删除字典项
  * @param id 字典项ID
  */
-export const removeSysDictItemById = (id: ModeIdType): AxiosPromise<void> => {
-  return request({
+export const removeSysDictItemById = (id: ModeIdType): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.REMOVE + id,
     baseURL,
     method: 'post',
@@ -44,8 +44,8 @@ export const removeSysDictItemById = (id: ModeIdType): AxiosPromise<void> => {
  * 修改字典项数据
  * @param data 字典项数据
  */
-export const updateSysDictItem = (data: SysDictItemOperationRequest): AxiosPromise<void> => {
-  return request({
+export const updateSysDictItem = (data: SysDictItemOperationRequest): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.UPDATE + `${data.id}`,
     baseURL,
     method: 'post',
@@ -56,8 +56,8 @@ export const updateSysDictItem = (data: SysDictItemOperationRequest): AxiosPromi
 /**
  * 查询单个字典项
  */
-export const querySysDictItemById = (id: ModeIdType): AxiosPromise<SysDictItemResponse> => {
-  return request({
+export const querySysDictItemById = (id: ModeIdType): Promise<ApiResponse<SysDictItemResponse>> => {
+  return request<SysDictItemResponse>({
     url: Api.QUERY_BY_ID + `${id}`,
     baseURL,
     method: 'get',
@@ -67,8 +67,8 @@ export const querySysDictItemById = (id: ModeIdType): AxiosPromise<SysDictItemRe
 /**
  * 查询全部字典项
  */
-export const querySysDictItemPage = (data?: SysDictItemQueryRequest): AxiosPromise<PageResponse<SysDictItemResponse>> => {
-  return request({
+export const querySysDictItemPage = (data?: SysDictItemQueryRequest): Promise<ApiResponse<PageResponse<SysDictItemResponse>>> => {
+  return request<PageResponse<SysDictItemResponse>>({
     url: Api.QUERY_PAGE,
     baseURL,
     method: 'get',
@@ -80,8 +80,8 @@ export const querySysDictItemPage = (data?: SysDictItemQueryRequest): AxiosPromi
  * 根据字典编码查询字典项
  * @param dictCode 字典编码
  */
-export const queryByDictCode = (dictCode: string): AxiosPromise<DictVo[]> => {
-  return request({
+export const queryByDictCode = (dictCode: string): Promise<ApiResponse<DictVo[]>> => {
+  return request<DictVo[]>({
     url: Api.QUERY_BY_DICT_CODE + `${dictCode}`,
     baseURL,
     method: 'get',

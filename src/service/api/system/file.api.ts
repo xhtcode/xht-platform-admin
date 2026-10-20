@@ -1,5 +1,5 @@
-import request from '@/utils/request'
-import type { AxiosPromise } from 'axios'
+import request, { requestBlob } from '@/utils/request'
+import type { ApiResponse, AxiosResponse } from 'axios'
 import type { SysFileOperationRequest, SysFileQueryRequest, SysFileResponse } from '@/service/model/system/file.model'
 
 /**
@@ -24,8 +24,8 @@ enum Api {
  *
  * @param fileId 文件ID
  */
-export const removeSysFileById = (fileId: ModeIdType): AxiosPromise<void> => {
-  return request({
+export const removeSysFileById = (fileId: ModeIdType): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.REMOVE + `${fileId}`,
     baseURL,
     method: 'post',
@@ -37,8 +37,8 @@ export const removeSysFileById = (fileId: ModeIdType): AxiosPromise<void> => {
  *
  * @param fileId 文件ID
  */
-export const querySysFileById = (fileId: ModeIdType): AxiosPromise<SysFileResponse> => {
-  return request({
+export const querySysFileById = (fileId: ModeIdType): Promise<ApiResponse<SysFileResponse>> => {
+  return request<SysFileResponse>({
     url: Api.QUERY_BY_ID + `${fileId}`,
     baseURL,
     method: 'get',
@@ -50,8 +50,8 @@ export const querySysFileById = (fileId: ModeIdType): AxiosPromise<SysFileRespon
  *
  * @param query 系统文件查询请求参数
  */
-export const querySysFilePage = (query?: SysFileQueryRequest): AxiosPromise<PageResponse<SysFileResponse>> => {
-  return request({
+export const querySysFilePage = (query?: SysFileQueryRequest): Promise<ApiResponse<PageResponse<SysFileResponse>>> => {
+  return request<PageResponse<SysFileResponse>>({
     url: Api.QUERY_PAGE,
     baseURL,
     method: 'get',
@@ -65,10 +65,10 @@ export const querySysFilePage = (query?: SysFileQueryRequest): AxiosPromise<Page
  * @param file 上传文件
  * @param form 文件上传请求参数
  */
-export const uploadSysFile = (file: File, form?: SysFileOperationRequest): AxiosPromise<SysFileResponse> => {
+export const uploadSysFile = (file: File, form?: SysFileOperationRequest): Promise<ApiResponse<SysFileResponse>> => {
   const data = new FormData()
   data.append('file', file)
-  return request({
+  return request<SysFileResponse>({
     url: Api.UPLOAD,
     baseURL,
     method: 'post',
@@ -83,8 +83,8 @@ export const uploadSysFile = (file: File, form?: SysFileOperationRequest): Axios
  *
  * @param fileStorageKey 文件存储key
  */
-export const downloadSysFile = (fileStorageKey: string): AxiosPromise<Blob> => {
-  return request({
+export const downloadSysFile = (fileStorageKey: string): Promise<AxiosResponse<Blob>> => {
+  return requestBlob({
     url: Api.DOWNLOAD + `${fileStorageKey}`,
     baseURL,
     method: 'get',
@@ -97,8 +97,8 @@ export const downloadSysFile = (fileStorageKey: string): AxiosPromise<Blob> => {
  *
  * @param fileStorageKey 文件存储key
  */
-export const previewSysFile = (fileStorageKey: string): AxiosPromise<Blob> => {
-  return request({
+export const previewSysFile = (fileStorageKey: string): Promise<AxiosResponse<Blob>> => {
+  return requestBlob({
     url: Api.PREVIEW + `${fileStorageKey}`,
     baseURL,
     method: 'get',

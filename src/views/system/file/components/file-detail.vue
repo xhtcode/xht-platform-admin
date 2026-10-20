@@ -80,7 +80,8 @@ defineExpose({
         <el-descriptions-item label="文件类型">{{ state.fileInfo.fileType }}</el-descriptions-item>
         <el-descriptions-item label="文件后缀">{{ state.fileInfo.fileSuffix }}</el-descriptions-item>
         <el-descriptions-item label="文件大小">
-          {{ state.fileInfo.fileSizeInfo }}<span v-if="state.fileInfo.fileSize">（{{ state.fileInfo.fileSize }} 字节）</span>
+          {{ state.fileInfo.fileSizeInfo }}
+          <span v-if="state.fileInfo.fileSize">（{{ state.fileInfo.fileSize }} 字节）</span>
         </el-descriptions-item>
         <el-descriptions-item label="文件用途">{{ state.fileInfo.fileUsed }}</el-descriptions-item>
         <el-descriptions-item label="存储类型">

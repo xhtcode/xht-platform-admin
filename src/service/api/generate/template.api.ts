@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import type { AxiosPromise } from 'axios'
+import type { ApiResponse } from 'axios'
 import type { GenTemplateOperationRequest, GenTemplateResponse } from '@/service/model/generate/template.model'
 
 /**
@@ -18,8 +18,8 @@ enum Api {
 /**
  * 保存模板信息
  */
-export const saveGenTemplate = (data: GenTemplateOperationRequest): AxiosPromise<ModeIdType> => {
-  return request({
+export const saveGenTemplate = (data: GenTemplateOperationRequest): Promise<ApiResponse<ModeIdType>> => {
+  return request<ModeIdType>({
     url: Api.CREATE,
     baseURL,
     method: 'post',
@@ -30,8 +30,8 @@ export const saveGenTemplate = (data: GenTemplateOperationRequest): AxiosPromise
 /**
  * 修改模板信息数据
  */
-export const updateGenTemplate = (data: GenTemplateOperationRequest): AxiosPromise<void> => {
-  return request({
+export const updateGenTemplate = (data: GenTemplateOperationRequest): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.UPDATE + `${data.id}`,
     baseURL,
     method: 'post',
@@ -42,8 +42,8 @@ export const updateGenTemplate = (data: GenTemplateOperationRequest): AxiosPromi
 /**
  * 删除模板信息
  */
-export const removeGenTemplateById = (id: ModeIdType): AxiosPromise<void> => {
-  return request({
+export const removeGenTemplateById = (id: ModeIdType): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.REMOVE + `${id}`,
     baseURL,
     method: 'post',
@@ -53,8 +53,8 @@ export const removeGenTemplateById = (id: ModeIdType): AxiosPromise<void> => {
 /**
  * 查询全部模板信息
  */
-export const queryGenTemplateList = (groupId: ModeIdType): AxiosPromise<GenTemplateResponse[]> => {
-  return request({
+export const queryGenTemplateList = (groupId: ModeIdType): Promise<ApiResponse<GenTemplateResponse[]>> => {
+  return request<GenTemplateResponse[]>({
     url: Api.QUERY_LIST + `${groupId}`,
     baseURL,
     method: 'get',

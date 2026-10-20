@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import type { AxiosPromise } from 'axios'
+import type { ApiResponse } from 'axios'
 import type { SysMenuOperationRequest, SysMenuQueryRequest, SysMenuResponse, SysMenuTreeResponse } from '@/service/model/system/menu.model'
 
 /**
@@ -19,8 +19,8 @@ enum Api {
 /**
  * 保存菜单
  */
-export const saveSysMenu = (data: SysMenuOperationRequest): AxiosPromise<void> => {
-  return request({
+export const saveSysMenu = (data: SysMenuOperationRequest): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.CREATE,
     baseURL,
     method: 'post',
@@ -31,8 +31,8 @@ export const saveSysMenu = (data: SysMenuOperationRequest): AxiosPromise<void> =
 /**
  * 修改菜单
  */
-export const updateSysMenu = (data: SysMenuOperationRequest): AxiosPromise<void> => {
-  return request({
+export const updateSysMenu = (data: SysMenuOperationRequest): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.UPDATE + `${data.id}`,
     baseURL,
     method: 'post',
@@ -43,8 +43,8 @@ export const updateSysMenu = (data: SysMenuOperationRequest): AxiosPromise<void>
 /**
  * 删除菜单
  */
-export const removeSysMenuById = (id: ModeIdType): AxiosPromise<void> => {
-  return request({
+export const removeSysMenuById = (id: ModeIdType): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.REMOVE + `${id}`,
     baseURL,
     method: 'post',
@@ -54,8 +54,8 @@ export const removeSysMenuById = (id: ModeIdType): AxiosPromise<void> => {
 /**
  * 查询菜单
  */
-export const querySysMenuById = (id: ModeIdType): AxiosPromise<SysMenuResponse> => {
-  return request({
+export const querySysMenuById = (id: ModeIdType): Promise<ApiResponse<SysMenuResponse>> => {
+  return request<SysMenuResponse>({
     url: Api.QUERY_BY_ID + `${id}`,
     baseURL,
     method: 'get',
@@ -65,8 +65,8 @@ export const querySysMenuById = (id: ModeIdType): AxiosPromise<SysMenuResponse> 
 /**
  * 查询树形结构菜单
  */
-export const querySysMenuTree = (data?: SysMenuQueryRequest): AxiosPromise<SysMenuTreeResponse[]> => {
-  return request({
+export const querySysMenuTree = (data?: SysMenuQueryRequest): Promise<ApiResponse<SysMenuTreeResponse[]>> => {
+  return request<SysMenuTreeResponse[]>({
     url: Api.QUERY_TREE,
     baseURL,
     method: 'get',
@@ -77,8 +77,8 @@ export const querySysMenuTree = (data?: SysMenuQueryRequest): AxiosPromise<SysMe
 /**
  * 查询树形结构菜单
  */
-export const queryToolsMenuTree = (): AxiosPromise<SysMenuTreeResponse[]> => {
-  return request({
+export const queryToolsMenuTree = (): Promise<ApiResponse<SysMenuTreeResponse[]>> => {
+  return request<SysMenuTreeResponse[]>({
     url: Api.QUERY_MENU_TREE,
     baseURL,
     method: 'get',

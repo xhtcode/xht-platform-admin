@@ -1,4 +1,4 @@
-import type { AxiosPromise, AxiosResponse } from 'axios'
+import type { ApiResponse } from 'axios'
 import type { Reactive, Ref } from 'vue'
 import { toRef } from 'vue'
 
@@ -10,7 +10,7 @@ import { toRef } from 'vue'
  */
 export const useTableQueryPageHooks = <Req extends PageQueryRequest, Res extends BasicResponse>(
   options: Reactive<TableQueryPageState<Req, Res>>,
-  queryPageApi: (req?: Req) => AxiosPromise<PageResponse<Res>>,
+  queryPageApi: (req?: Req) => Promise<ApiResponse<PageResponse<Res>>>,
   parseResponse?: (res: PageResponse<Res>) => void
 ) => {
   // 默认配置
@@ -40,7 +40,7 @@ export const useTableQueryPageHooks = <Req extends PageQueryRequest, Res extends
       // 快速搜索 状态设置
       queryParams.value.quick = !state.searchStatus
       queryPageApi(queryParams.value)
-        .then((response: AxiosResponse) => {
+        .then((response: ApiResponse<PageResponse<Res>>) => {
           const { records = [], total = 0, pages = 0, current, size } = response.data
           state.tableList = records
           state.total = total
@@ -95,7 +95,7 @@ export const useTableQueryPageHooks = <Req extends PageQueryRequest, Res extends
  */
 export const useTableQueryListHooks = <Req extends PageQueryRequest, Res extends BasicResponse>(
   options: Reactive<TableQueryListState<Req, Res>>,
-  queryPageApi: (req: Req) => AxiosPromise<Res[]>
+  queryPageApi: (req: Req) => Promise<ApiResponse<Res[]>>
 ) => {
   // 默认配置
   const defaultOptions: TableQueryListState<Req, Res> = {
@@ -119,7 +119,7 @@ export const useTableQueryListHooks = <Req extends PageQueryRequest, Res extends
       state.loadingStatus = true
       queryParams.value.quick = !state.searchStatus
       queryPageApi(queryParams.value)
-        .then((response: AxiosResponse) => {
+        .then((response: ApiResponse<Res[]>) => {
           state.tableList = response.data
           resolve()
         })

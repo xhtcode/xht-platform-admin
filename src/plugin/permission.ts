@@ -1,9 +1,9 @@
-import router from '@/router/index'
+import router, { addDynamicRoutes } from '@/router/index'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import { useUserInfoStore } from '@/store/modules/user.store'
 import { useRouteStore } from '@/store/modules/routes.store'
-import type { RouteLocationNormalized, RouteRecordRaw } from 'vue-router'
+import type { RouteLocationNormalized } from 'vue-router'
 import { useTitle } from '@/hooks/use-title'
 import { HOME_PAGE_PATH, PAGE_PATH_LOGIN } from '@/service/constant'
 
@@ -34,13 +34,9 @@ export function setupPermission() {
         try {
           // 获取用户权限
           await userInfoStore.getUserInfos().then(async () => {})
-          // 生成动态路由
+          // 生成并注册动态路由（登出时可被精确移除）
           await routeStore.generateRoutesAtBack()
-          routeStore.formatRoutes.forEach((route) => {
-            if (!/^(?:https?:|mailto:|tel:)/.test(route.path)) {
-              router.addRoute(route as RouteRecordRaw)
-            }
-          })
+          addDynamicRoutes(routeStore.formatRoutes)
           // 动态路由生成并注册后，重新进入当前路由
           return {
             path: to.path,

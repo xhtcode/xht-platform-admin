@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import type { AxiosPromise } from 'axios'
+import type { ApiResponse } from 'axios'
 import type { SysAreaOperationRequest, SysAreaQueryRequest, SysAreaResponse, SysAreaTreeResponse } from '@/service/model/system/area.model'
 
 /**
@@ -24,8 +24,8 @@ enum Api {
  *
  * @param form 系统管理-行政区划表单请求参数
  */
-export const saveSysArea = (form: SysAreaOperationRequest): AxiosPromise<void> => {
-  return request({
+export const saveSysArea = (form: SysAreaOperationRequest): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.CREATE,
     baseURL,
     method: 'post',
@@ -38,8 +38,8 @@ export const saveSysArea = (form: SysAreaOperationRequest): AxiosPromise<void> =
  *
  * @param form 系统管理-行政区划表单请求参数
  */
-export const updateSysArea = (form: SysAreaOperationRequest): AxiosPromise<void> => {
-  return request({
+export const updateSysArea = (form: SysAreaOperationRequest): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.UPDATE + `${form.id}`,
     baseURL,
     method: 'post',
@@ -52,8 +52,8 @@ export const updateSysArea = (form: SysAreaOperationRequest): AxiosPromise<void>
  *
  * @param id 系统管理-行政区划主键
  */
-export const removeSysAreaById = (id: ModeIdType): AxiosPromise<void> => {
-  return request({
+export const removeSysAreaById = (id: ModeIdType): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.REMOVE + `${id}`,
     baseURL,
     method: 'post',
@@ -65,8 +65,8 @@ export const removeSysAreaById = (id: ModeIdType): AxiosPromise<void> => {
  *
  * @param ids 系统管理-行政区划主键
  */
-export const removeSysAreaByIdBatch = (ids: string[]): AxiosPromise<void> => {
-  return request({
+export const removeSysAreaByIdBatch = (ids: string[]): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.REMOVE_BATCH,
     baseURL,
     method: 'post',
@@ -79,8 +79,8 @@ export const removeSysAreaByIdBatch = (ids: string[]): AxiosPromise<void> => {
  *
  * @param id 系统管理-行政区划主键
  */
-export const querySysAreaById = (id: ModeIdType): AxiosPromise<SysAreaResponse> => {
-  return request({
+export const querySysAreaById = (id: ModeIdType): Promise<ApiResponse<SysAreaResponse>> => {
+  return request<SysAreaResponse>({
     url: Api.QUERY_BY_ID + `${id}`,
     baseURL,
     method: 'get',
@@ -92,8 +92,8 @@ export const querySysAreaById = (id: ModeIdType): AxiosPromise<SysAreaResponse> 
  *
  * @param query 系统管理-行政区划查询请求参数
  */
-export const querySysAreaList = (query: SysAreaQueryRequest): AxiosPromise<SysAreaTreeResponse[]> => {
-  return request({
+export const querySysAreaList = (query: SysAreaQueryRequest): Promise<ApiResponse<SysAreaTreeResponse[]>> => {
+  return request<SysAreaTreeResponse[]>({
     url: Api.QUERY_LIST + `${query.parentAreaCode}`,
     baseURL,
     method: 'get',

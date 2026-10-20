@@ -92,7 +92,10 @@ defineExpose({
       <el-form-item label="选择文件">
         <el-upload v-model:file-list="state.fileList" class="w-full" drag multiple :auto-upload="false">
           <el-icon class="el-icon--upload"><UploadFilled /></el-icon>
-          <div class="el-upload__text">将文件拖到此处，或<em>点击选择文件</em></div>
+          <div class="el-upload__text">
+            将文件拖到此处，或
+            <em>点击选择文件</em>
+          </div>
           <template #tip>
             <div class="el-upload__tip">支持选择多个文件，选择完成后点击下方提交按钮进行上传</div>
           </template>

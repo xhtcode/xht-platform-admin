@@ -1,5 +1,5 @@
-import request from '@/utils/request'
-import type { AxiosPromise, AxiosResponse } from 'axios'
+import request, { requestBlob } from '@/utils/request'
+import type { ApiResponse, AxiosResponse } from 'axios'
 import {
   GenCodeCoreVo,
   GenTableInfoOperationRequest,
@@ -29,8 +29,8 @@ enum Api {
 /**
  * 保存表信息
  */
-export const importTableInfo = (data: ImportTableFormRequest): AxiosPromise<void> => {
-  return request({
+export const importTableInfo = (data: ImportTableFormRequest): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.IMPORT_TABLE,
     baseURL,
     method: 'post',
@@ -41,8 +41,8 @@ export const importTableInfo = (data: ImportTableFormRequest): AxiosPromise<void
 /**
  * 修改表信息数据
  */
-export const updateGenTableInfo = (data: GenTableInfoOperationRequest): AxiosPromise<void> => {
-  return request({
+export const updateGenTableInfo = (data: GenTableInfoOperationRequest): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.UPDATE + `${data.tableInfo.id}`,
     baseURL,
     method: 'post',
@@ -53,8 +53,8 @@ export const updateGenTableInfo = (data: GenTableInfoOperationRequest): AxiosPro
 /**
  * 删除表信息
  */
-export const removeGenTableInfoByIds = (id: ModeIdType): AxiosPromise<void> => {
-  return request({
+export const removeGenTableInfoByIds = (id: ModeIdType): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.REMOVE + `${id}`,
     baseURL,
     method: 'post',
@@ -64,8 +64,8 @@ export const removeGenTableInfoByIds = (id: ModeIdType): AxiosPromise<void> => {
 /**
  * 查询单个表信息
  */
-export const queryGenTableInfoById = (id: ModeIdType): AxiosPromise<GenTableInfoOperationResponse> => {
-  return request({
+export const queryGenTableInfoById = (id: ModeIdType): Promise<ApiResponse<GenTableInfoOperationResponse>> => {
+  return request<GenTableInfoOperationResponse>({
     url: Api.QUERY_BY_ID + `${id}`,
     baseURL,
     method: 'get',
@@ -76,8 +76,8 @@ export const queryGenTableInfoById = (id: ModeIdType): AxiosPromise<GenTableInfo
  * 分页查询已导入的表信息
  * @param data 查询参数
  */
-export const queryExistsPage = (data?: GenTableInfoQueryRequest): AxiosPromise<PageResponse<GenTableInfoResponse>> => {
-  return request({
+export const queryExistsPage = (data?: GenTableInfoQueryRequest): Promise<ApiResponse<PageResponse<GenTableInfoResponse>>> => {
+  return request<PageResponse<GenTableInfoResponse>>({
     url: Api.QUERY_EXISTS_PAGE,
     baseURL,
     method: 'get',
@@ -89,8 +89,8 @@ export const queryExistsPage = (data?: GenTableInfoQueryRequest): AxiosPromise<P
  * 分页查询未导入的表信息
  * @param data 查询参数
  */
-export const queryNoExistsPage = (data?: GenTableInfoQueryRequest): AxiosPromise<GenTableInfoResponse[]> => {
-  return request({
+export const queryNoExistsPage = (data?: GenTableInfoQueryRequest): Promise<ApiResponse<GenTableInfoResponse[]>> => {
+  return request<GenTableInfoResponse[]>({
     url: Api.QUERY_NO_EXISTS_PAGE,
     baseURL,
     method: 'get',
@@ -103,8 +103,8 @@ export const queryNoExistsPage = (data?: GenTableInfoQueryRequest): AxiosPromise
  * @param tableId 表ID数组
  * @returns 同步结果的Promise
  */
-export const syncTableApi = (tableId: ModeIdType[]): AxiosPromise<void> => {
-  return request({
+export const syncTableApi = (tableId: ModeIdType[]): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.SYNC_TABLE + `${tableId}`,
     baseURL,
     method: 'post',
@@ -117,8 +117,8 @@ export const syncTableApi = (tableId: ModeIdType[]): AxiosPromise<void> => {
  * @param packageName 包名
  * @returns 下载结果的Promise
  */
-export const downloadFileApi = (tableIds: ModeIdType[], packageName: string): AxiosPromise<AxiosResponse> => {
-  return request({
+export const downloadFileApi = (tableIds: ModeIdType[], packageName: string): Promise<AxiosResponse<Blob>> => {
+  return requestBlob({
     url: Api.DOWNLOAD_FILE,
     baseURL,
     method: 'post',
@@ -132,8 +132,8 @@ export const downloadFileApi = (tableIds: ModeIdType[], packageName: string): Ax
  * @param packageName 包名
  * @returns 预览结果的Promise
  */
-export const viewCodeFileApi = (tableIds: ModeIdType[], packageName: string): AxiosPromise<GenCodeCoreVo[]> => {
-  return request({
+export const viewCodeFileApi = (tableIds: ModeIdType[], packageName: string): Promise<ApiResponse<GenCodeCoreVo[]>> => {
+  return request<GenCodeCoreVo[]>({
     url: Api.VIEW_CODE,
     baseURL,
     method: 'post',

@@ -1,18 +1,29 @@
 /**
- * 扩展 axios 数据返回类型，可自行扩展
+ * 扩展 axios 类型定义，可自行扩展
  */
 declare module 'axios' {
   /**
-   * 扩展返回值
+   * 统一响应结构
    */
-  export interface ApiResponse<T = any> {
-    success: boolean
+  export interface ApiResponse<T = unknown> {
+    /** 业务状态码，200 表示成功 */
     code: number
+    /** 提示信息 */
+    msg: string
+    /** 业务数据 */
     data: T
-    message: string
+    /** 是否为加密数据：0 非加密 1 加密 */
     dataType: 0 | 1
+    /** 是否成功，向后兼容保留 */
+    success?: boolean
+  }
 
-    [key: string]: any
+  /**
+   * 扩展请求配置
+   */
+  export interface AxiosRequestConfig<D = any> {
+    /** 跳过访问令牌注入，用于登录、验证码等公开接口 */
+    skipToken?: boolean
   }
 }
 

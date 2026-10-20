@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import type { AxiosPromise } from 'axios'
+import type { ApiResponse } from 'axios'
 import type { SysNoticeTypeOperationRequest, SysNoticeTypeQueryRequest, SysNoticeTypeResponse } from '@/service/model/system/notice.type.model'
 import { LabelValue } from '@/service/model/base.model'
 
@@ -26,8 +26,8 @@ enum Api {
  *
  * @param form 系统管理-通知类型表单请求参数
  */
-export const saveSysNoticeType = (form: SysNoticeTypeOperationRequest): AxiosPromise<void> => {
-  return request({
+export const saveSysNoticeType = (form: SysNoticeTypeOperationRequest): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.CREATE,
     baseURL,
     method: 'post',
@@ -40,8 +40,8 @@ export const saveSysNoticeType = (form: SysNoticeTypeOperationRequest): AxiosPro
  *
  * @param form 系统管理-通知类型表单请求参数
  */
-export const updateSysNoticeType = (form: SysNoticeTypeOperationRequest): AxiosPromise<void> => {
-  return request({
+export const updateSysNoticeType = (form: SysNoticeTypeOperationRequest): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.UPDATE + `${form.id}`,
     baseURL,
     method: 'post',
@@ -54,8 +54,8 @@ export const updateSysNoticeType = (form: SysNoticeTypeOperationRequest): AxiosP
  *
  * @param id 系统管理-通知类型主键
  */
-export const removeSysNoticeTypeById = (id: ModeIdType): AxiosPromise<void> => {
-  return request({
+export const removeSysNoticeTypeById = (id: ModeIdType): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.REMOVE + `${id}`,
     baseURL,
     method: 'post',
@@ -67,8 +67,8 @@ export const removeSysNoticeTypeById = (id: ModeIdType): AxiosPromise<void> => {
  *
  * @param ids 系统管理-通知类型主键
  */
-export const removeSysNoticeTypeByIdBatch = (ids: string[]): AxiosPromise<boolean> => {
-  return request({
+export const removeSysNoticeTypeByIdBatch = (ids: string[]): Promise<ApiResponse<boolean>> => {
+  return request<boolean>({
     url: Api.REMOVE_BATCH,
     baseURL,
     method: 'post',
@@ -81,8 +81,8 @@ export const removeSysNoticeTypeByIdBatch = (ids: string[]): AxiosPromise<boolea
  *
  * @param id 系统管理-通知类型主键
  */
-export const querySysNoticeTypeById = (id: ModeIdType): AxiosPromise<SysNoticeTypeResponse> => {
-  return request({
+export const querySysNoticeTypeById = (id: ModeIdType): Promise<ApiResponse<SysNoticeTypeResponse>> => {
+  return request<SysNoticeTypeResponse>({
     url: Api.QUERY_BY_ID + `${id}`,
     baseURL,
     method: 'get',
@@ -94,8 +94,8 @@ export const querySysNoticeTypeById = (id: ModeIdType): AxiosPromise<SysNoticeTy
  *
  * @param query 系统管理-通知类型查询请求参数
  */
-export const querySysNoticeTypeList = (query?: SysNoticeTypeQueryRequest): AxiosPromise<SysNoticeTypeResponse[]> => {
-  return request({
+export const querySysNoticeTypeList = (query?: SysNoticeTypeQueryRequest): Promise<ApiResponse<SysNoticeTypeResponse[]>> => {
+  return request<SysNoticeTypeResponse[]>({
     url: Api.QUERY_LIST,
     baseURL,
     method: 'get',
@@ -105,8 +105,8 @@ export const querySysNoticeTypeList = (query?: SysNoticeTypeQueryRequest): Axios
 /**
  * 分页查询系统管理-通知类型
  */
-export const querySysNoticeEnableTypeList = (): AxiosPromise<LabelValue<ModeIdType, string>[]> => {
-  return request({
+export const querySysNoticeEnableTypeList = (): Promise<ApiResponse<LabelValue<ModeIdType, string>[]>> => {
+  return request<LabelValue<ModeIdType, string>[]>({
     url: Api.QUERY_ALL_LIST,
     baseURL,
     method: 'get',

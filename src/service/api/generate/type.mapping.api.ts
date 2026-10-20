@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import type { AxiosPromise } from 'axios'
+import type { ApiResponse } from 'axios'
 import type { GenTypeMappingOperationRequest, GenTypeMappingQueryRequest, GenTypeMappingResponse } from '@/service/model/generate/type.mapping.model'
 
 /**
@@ -19,8 +19,8 @@ enum Api {
 /**
  * 保存字段映射
  */
-export const saveGenTypeMapping = (data: GenTypeMappingOperationRequest): AxiosPromise<void> => {
-  return request({
+export const saveGenTypeMapping = (data: GenTypeMappingOperationRequest): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.CREATE,
     baseURL,
     method: 'post',
@@ -31,8 +31,8 @@ export const saveGenTypeMapping = (data: GenTypeMappingOperationRequest): AxiosP
 /**
  * 修改字段映射数据
  */
-export const updateGenTypeMapping = (data: GenTypeMappingOperationRequest): AxiosPromise<void> => {
-  return request({
+export const updateGenTypeMapping = (data: GenTypeMappingOperationRequest): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.UPDATE + `${data.id}`,
     baseURL,
     method: 'post',
@@ -43,8 +43,8 @@ export const updateGenTypeMapping = (data: GenTypeMappingOperationRequest): Axio
 /**
  * 删除字段映射
  */
-export const removeGenTypeMappingByIds = (ids: ModeIdType[]): AxiosPromise<void> => {
-  return request({
+export const removeGenTypeMappingByIds = (ids: ModeIdType[]): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.REMOVE,
     baseURL,
     method: 'post',
@@ -55,8 +55,8 @@ export const removeGenTypeMappingByIds = (ids: ModeIdType[]): AxiosPromise<void>
 /**
  * 查询单个字段映射
  */
-export const queryGenTypeMappingById = (id: ModeIdType): AxiosPromise<GenTypeMappingResponse> => {
-  return request({
+export const queryGenTypeMappingById = (id: ModeIdType): Promise<ApiResponse<GenTypeMappingResponse>> => {
+  return request<GenTypeMappingResponse>({
     url: Api.QUERY_BY_ID + `${id}`,
     baseURL,
     method: 'get',
@@ -66,8 +66,8 @@ export const queryGenTypeMappingById = (id: ModeIdType): AxiosPromise<GenTypeMap
 /**
  * 分页查询字段映射
  */
-export const queryGenTypeMappingPage = (data?: GenTypeMappingQueryRequest): AxiosPromise<PageResponse<GenTypeMappingResponse>> => {
-  return request({
+export const queryGenTypeMappingPage = (data?: GenTypeMappingQueryRequest): Promise<ApiResponse<PageResponse<GenTypeMappingResponse>>> => {
+  return request<PageResponse<GenTypeMappingResponse>>({
     url: Api.QUERY_PAGE,
     baseURL,
     method: 'get',
@@ -78,8 +78,8 @@ export const queryGenTypeMappingPage = (data?: GenTypeMappingQueryRequest): Axio
 /**
  * 查询全部字段映射
  */
-export const queryGenTypeMappingList = (data?: GenTypeMappingQueryRequest): AxiosPromise<GenTypeMappingResponse[]> => {
-  return request({
+export const queryGenTypeMappingList = (data?: GenTypeMappingQueryRequest): Promise<ApiResponse<GenTypeMappingResponse[]>> => {
+  return request<GenTypeMappingResponse[]>({
     url: Api.QUERY_LIST,
     baseURL,
     method: 'get',

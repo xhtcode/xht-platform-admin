@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import type { AxiosPromise } from 'axios'
+import type { ApiResponse } from 'axios'
 import type { MessageStar, MessageTop, SysMessageQueryRequest, SysMessageResponse } from '@/service/model/system/message.model'
 import type { MessageInfoVo, SysMessageInfoResponse } from '@/service/model/system/message.info.model'
 
@@ -27,8 +27,8 @@ enum Api {
 /**
  * 全部已读站内信
  */
-export const updateMessageReadAll = (): AxiosPromise<void> => {
-  return request({
+export const updateMessageReadAll = (): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.UPDATE_READ_ALL,
     baseURL,
     method: 'post',
@@ -37,8 +37,8 @@ export const updateMessageReadAll = (): AxiosPromise<void> => {
 /**
  * 已读站内信（收件人侧）
  */
-export const updateMessageRead = (messageId: ModeIdType): AxiosPromise<void> => {
-  return request({
+export const updateMessageRead = (messageId: ModeIdType): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.UPDATE_READ + `${messageId}`,
     baseURL,
     method: 'post',
@@ -48,8 +48,8 @@ export const updateMessageRead = (messageId: ModeIdType): AxiosPromise<void> => 
 /**
  * 收集站内信（收件人侧）
  */
-export const updateMessageStart = (messageId: ModeIdType, start: MessageStar): AxiosPromise<void> => {
-  return request({
+export const updateMessageStart = (messageId: ModeIdType, start: MessageStar): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.UPDATE_START + `${messageId}/${start}`,
     baseURL,
     method: 'post',
@@ -59,8 +59,8 @@ export const updateMessageStart = (messageId: ModeIdType, start: MessageStar): A
 /**
  * 置顶站内信（收件人侧）
  */
-export const updateMessageTop = (messageId: ModeIdType, top: MessageTop): AxiosPromise<void> => {
-  return request({
+export const updateMessageTop = (messageId: ModeIdType, top: MessageTop): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.UPDATE_TOP + `${messageId}/${top}`,
     baseURL,
     method: 'post',
@@ -70,8 +70,8 @@ export const updateMessageTop = (messageId: ModeIdType, top: MessageTop): AxiosP
 /**
  * 删除站内信（收件人侧）
  */
-export const updateMessageRemove = (messageId: ModeIdType): AxiosPromise<void> => {
-  return request({
+export const updateMessageRemove = (messageId: ModeIdType): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.UPDATE_REMOVE + `${messageId}`,
     baseURL,
     method: 'post',
@@ -81,8 +81,8 @@ export const updateMessageRemove = (messageId: ModeIdType): AxiosPromise<void> =
 /**
  * 撤回站内信（全部）
  */
-export const updateCancelAll = (messageId: ModeIdType): AxiosPromise<void> => {
-  return request({
+export const updateCancelAll = (messageId: ModeIdType): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.UPDATE_CANCEL_ALL + `${messageId}`,
     baseURL,
     method: 'post',
@@ -92,8 +92,8 @@ export const updateCancelAll = (messageId: ModeIdType): AxiosPromise<void> => {
 /**
  * 撤回站内信（对用户单一撤回）
  */
-export const updateCancelSingle = (messageId: ModeIdType): AxiosPromise<void> => {
-  return request({
+export const updateCancelSingle = (messageId: ModeIdType): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.UPDATE_CANCEL_SINGLE + `${messageId}`,
     baseURL,
     method: 'post',
@@ -105,8 +105,8 @@ export const updateCancelSingle = (messageId: ModeIdType): AxiosPromise<void> =>
  *
  * @param id 站内信主键
  */
-export const querySysMessageById = (id: ModeIdType): AxiosPromise<MessageInfoVo> => {
-  return request({
+export const querySysMessageById = (id: ModeIdType): Promise<ApiResponse<MessageInfoVo>> => {
+  return request<MessageInfoVo>({
     url: Api.QUERY_BY_ID + `${id}`,
     baseURL,
     method: 'get',
@@ -118,8 +118,8 @@ export const querySysMessageById = (id: ModeIdType): AxiosPromise<MessageInfoVo>
  *
  * @param query 站内信查询请求参数
  */
-export const queryAdminPage = (query?: SysMessageQueryRequest): AxiosPromise<PageResponse<SysMessageResponse>> => {
-  return request({
+export const queryAdminPage = (query?: SysMessageQueryRequest): Promise<ApiResponse<PageResponse<SysMessageResponse>>> => {
+  return request<PageResponse<SysMessageResponse>>({
     url: Api.ADMIN_PAGE,
     baseURL,
     method: 'get',
@@ -132,8 +132,8 @@ export const queryAdminPage = (query?: SysMessageQueryRequest): AxiosPromise<Pag
  *
  * @param query 站内信查询请求参数
  */
-export const queryAdminSendPage = (query?: SysMessageQueryRequest): AxiosPromise<PageResponse<SysMessageInfoResponse>> => {
-  return request({
+export const queryAdminSendPage = (query?: SysMessageQueryRequest): Promise<ApiResponse<PageResponse<SysMessageInfoResponse>>> => {
+  return request<PageResponse<SysMessageInfoResponse>>({
     url: Api.ADMIN_SEND_PAGE,
     baseURL,
     method: 'get',
@@ -146,8 +146,8 @@ export const queryAdminSendPage = (query?: SysMessageQueryRequest): AxiosPromise
  *
  * @param query 站内信查询请求参数
  */
-export const queryMyMessagePage = (query?: SysMessageQueryRequest): AxiosPromise<PageResponse<MessageInfoVo>> => {
-  return request({
+export const queryMyMessagePage = (query?: SysMessageQueryRequest): Promise<ApiResponse<PageResponse<MessageInfoVo>>> => {
+  return request<PageResponse<MessageInfoVo>>({
     url: Api.MY_PAGE,
     baseURL,
     method: 'get',

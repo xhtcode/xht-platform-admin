@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import type { AxiosPromise } from 'axios'
+import type { ApiResponse } from 'axios'
 import type {
   GenTemplateGroupOperationRequest,
   GenTemplateGroupQueryRequest,
@@ -23,8 +23,8 @@ enum Api {
 /**
  * 保存模板信息
  */
-export const saveGenTemplateGroup = (data: GenTemplateGroupOperationRequest): AxiosPromise<void> => {
-  return request({
+export const saveGenTemplateGroup = (data: GenTemplateGroupOperationRequest): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.CREATE,
     baseURL,
     method: 'post',
@@ -35,8 +35,8 @@ export const saveGenTemplateGroup = (data: GenTemplateGroupOperationRequest): Ax
 /**
  * 修改模板信息数据
  */
-export const updateGenTemplateGroup = (data: GenTemplateGroupOperationRequest): AxiosPromise<void> => {
-  return request({
+export const updateGenTemplateGroup = (data: GenTemplateGroupOperationRequest): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.UPDATE + `${data.id}`,
     baseURL,
     method: 'post',
@@ -47,8 +47,8 @@ export const updateGenTemplateGroup = (data: GenTemplateGroupOperationRequest): 
 /**
  * 删除模板信息
  */
-export const removeGenTemplateGroupByIds = (id: ModeIdType): AxiosPromise<void> => {
-  return request({
+export const removeGenTemplateGroupByIds = (id: ModeIdType): Promise<ApiResponse<void>> => {
+  return request<void>({
     url: Api.REMOVE + `${id}`,
     baseURL,
     method: 'post',
@@ -58,8 +58,8 @@ export const removeGenTemplateGroupByIds = (id: ModeIdType): AxiosPromise<void> 
 /**
  * 查询单个模板信息
  */
-export const queryGenTemplateGroupById = (id: ModeIdType): AxiosPromise<GenTemplateGroupResponse> => {
-  return request({
+export const queryGenTemplateGroupById = (id: ModeIdType): Promise<ApiResponse<GenTemplateGroupResponse>> => {
+  return request<GenTemplateGroupResponse>({
     url: Api.QUERY_BY_ID + `${id}`,
     baseURL,
     method: 'get',
@@ -69,8 +69,8 @@ export const queryGenTemplateGroupById = (id: ModeIdType): AxiosPromise<GenTempl
 /**
  * 查询全部模板信息
  */
-export const queryGenTemplateGroupList = (): AxiosPromise<GenTemplateGroupResponse[]> => {
-  return request({
+export const queryGenTemplateGroupList = (): Promise<ApiResponse<GenTemplateGroupResponse[]>> => {
+  return request<GenTemplateGroupResponse[]>({
     url: Api.QUERY_LIST,
     baseURL,
     method: 'get',
@@ -81,8 +81,8 @@ export const queryGenTemplateGroupList = (): AxiosPromise<GenTemplateGroupRespon
  * 分页查询模板信息
  * @param data
  */
-export const queryGenTemplateGroupPage = (data?: GenTemplateGroupQueryRequest): AxiosPromise<PageResponse<GenTemplateGroupResponse>> => {
-  return request({
+export const queryGenTemplateGroupPage = (data?: GenTemplateGroupQueryRequest): Promise<ApiResponse<PageResponse<GenTemplateGroupResponse>>> => {
+  return request<PageResponse<GenTemplateGroupResponse>>({
     url: Api.QUERY_PAGE,
     baseURL,
     method: 'get',

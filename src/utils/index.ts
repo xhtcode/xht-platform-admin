@@ -26,7 +26,7 @@ const generateUUID = () => {
  * @param fileName 文件名
  * @returns
  */
-const handleDownloadFile = (response: AxiosResponse, fileName?: string) => {
+const handleDownloadFile = (response: AxiosResponse<Blob>, fileName?: string) => {
   // 获取返回类型
   const contentType = _.isUndefined(response.headers['content-type']) ? response.headers['Content-Type'] : response.headers['content-type']
   console.log(response.headers)

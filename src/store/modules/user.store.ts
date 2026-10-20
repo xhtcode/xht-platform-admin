@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import type { LoginRequestType } from '@/service/model/login/login.model'
 import { loginInPassWord } from '@/service/api/login/login.api'
-import type { AxiosResponse } from 'axios'
+import type { ApiResponse } from 'axios'
 import pInIaPersistConfig from '@/store/pinia-persist'
 import { getUserInfo } from '@/service/api/permission'
 import { userTypeEnum } from '@/service/enums/system/user.enum'
@@ -63,7 +63,7 @@ export const useUserInfoStore = defineStore(
     async function login(data: LoginRequestType): Promise<void> {
       return new Promise((resolve, reject) => {
         loginInPassWord(data)
-          .then((res: AxiosResponse<TokenInfoType>) => {
+          .then((res: ApiResponse<TokenInfoType>) => {
             token.value = res.data
             resolve()
           })
@@ -75,23 +75,31 @@ export const useUserInfoStore = defineStore(
 
     /**
      * 用户登出方法
-     * 清除用户认证信息并重置路由
+     * 清除认证信息、动态路由与页签数据
      * @returns Promise<void>
      */
-    function logout() {
-      return new Promise<void>((resolve) => {
-        userInfo.value = {
-          roleCodes: [],
-          menuButtonCodes: [],
-        }
-        token.value = {
-          scope: [],
-          additional_parameters: {},
-        }
-        window.sessionStorage.clear()
-        window.localStorage.clear()
-        resolve()
-      })
+    async function logout(): Promise<void> {
+      // 动态导入：避免 user.store -> routes.store -> api -> request -> user.store 的静态循环依赖
+      const [{ useRouteStore }, { default: useTagsStore }] = await Promise.all([
+        import('@/store/modules/routes.store'),
+        import('@/store/modules/tags.store'),
+      ])
+      // 先移除动态路由并复位生成标记，否则重新登录后不会重新生成菜单
+      useRouteStore().resetRoutes()
+      // 页签指向的路由已被移除，同步清空，避免残留失效链接
+      const tagsStore = useTagsStore()
+      tagsStore.activeName = null
+      tagsStore.visitedViews = []
+      userInfo.value = {
+        roleCodes: [],
+        menuButtonCodes: [],
+      }
+      token.value = {
+        scope: [],
+        additional_parameters: {},
+      }
+      window.sessionStorage.clear()
+      window.localStorage.clear()
     }
 
     /**
@@ -102,7 +110,7 @@ export const useUserInfoStore = defineStore(
     function getUserInfos(): Promise<void> {
       return new Promise((resolve, reject) => {
         getUserInfo()
-          .then((res: AxiosResponse<UserInfoType>) => {
+          .then((res: ApiResponse<UserInfoType>) => {
             userInfo.value = res.data
             resolve()
           })

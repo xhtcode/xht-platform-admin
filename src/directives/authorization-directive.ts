@@ -1,56 +1,37 @@
 import { useUserInfoStore } from '@/store/modules/user.store'
 import { storeToRefs } from 'pinia'
-import _ from 'lodash'
+import { isAuthorized, type AuthorizationScope } from '@/utils/authorization'
 
 /**
  * 角色权限指令
+ *
+ * 用法：v-authorization="['sys:user:add']"、v-authorization:any.button="['a', 'b']"
+ * 判定规则由 isAuthorized 统一实现，此处只负责解析修饰符并移除无权元素。
+ *
  * @param el DOM元素
  * @param binding 绑定对象
  */
 export const vPermission: VAuthorizationDirectives = (el, binding) => {
-  const checkPermission = binding.value || []
-  const args = binding.arg || 'all'
-  const permissions = useUserInfoStore()
-  const { userInfo, isAdmin } = storeToRefs(permissions)
-  if (isAdmin.value) {
-    return
-  }
-  let intersection: number = 0
-  if (binding.modifiers.role || binding.modifiers.button) {
-    if (binding.modifiers.role) {
-      intersection += getIntersectionLength(userInfo.value.roleCodes, checkPermission)
-    }
-    if (binding.modifiers.button) {
-      intersection += getIntersectionLength(userInfo.value.menuButtonCodes, checkPermission)
-    }
-  } else {
-    intersection += getIntersectionLength(userInfo.value.roleCodes, checkPermission)
-    intersection += getIntersectionLength(userInfo.value.menuButtonCodes, checkPermission)
-  }
-  switch (args) {
-    case 'all': // 包含所有
-      if (intersection !== checkPermission.length) {
-        el.parentNode?.removeChild(el)
-      }
-      break
-    case 'any': // 包含任意一个以上
-      if (intersection <= 0) {
-        el.parentNode?.removeChild(el)
-      }
-      break
-    case 'none': // 不包含任意一个
-      if (intersection > 0) {
-        el.parentNode?.removeChild(el)
-      }
-      break
-  }
-}
+  const { userInfo, isAdmin } = storeToRefs(useUserInfoStore())
 
-/**
- * 获取交集长度
- * @param dataArray
- * @param checkArray
- */
-function getIntersectionLength(dataArray: string[], checkArray: string[]): number {
-  return _.intersection(dataArray, checkArray)?.length || 0
+  // 仅声明单个修饰符时限定权限来源，同时声明或均未声明时取两个来源的并集
+  let scope: AuthorizationScope = 'both'
+  if (binding.modifiers.role && !binding.modifiers.button) {
+    scope = 'role'
+  } else if (binding.modifiers.button && !binding.modifiers.role) {
+    scope = 'button'
+  }
+
+  const authorized = isAuthorized({
+    required: binding.value,
+    roleCodes: userInfo.value.roleCodes,
+    buttonCodes: userInfo.value.menuButtonCodes,
+    scope,
+    mode: binding.arg ?? 'all',
+    isAdmin: isAdmin.value,
+  })
+
+  if (!authorized) {
+    el.parentNode?.removeChild(el)
+  }
 }
