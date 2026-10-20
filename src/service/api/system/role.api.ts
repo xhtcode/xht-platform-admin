@@ -93,8 +93,8 @@ export const querySysRolePage = (data?: SysRoleQueryRequest): Promise<ApiRespons
   return request<PageResponse<SysRoleResponse>>({
     url: Api.QUERY_PAGE,
     baseURL,
-    method: 'get',
-    params: data,
+    method: 'post',
+    data: data,
   })
 }
 

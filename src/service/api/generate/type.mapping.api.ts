@@ -70,8 +70,8 @@ export const queryGenTypeMappingPage = (data?: GenTypeMappingQueryRequest): Prom
   return request<PageResponse<GenTypeMappingResponse>>({
     url: Api.QUERY_PAGE,
     baseURL,
-    method: 'get',
-    params: data,
+    method: 'post',
+    data: data,
   })
 }
 

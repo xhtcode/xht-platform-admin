@@ -85,7 +85,7 @@ export const queryGenTemplateGroupPage = (data?: GenTemplateGroupQueryRequest): 
   return request<PageResponse<GenTemplateGroupResponse>>({
     url: Api.QUERY_PAGE,
     baseURL,
-    method: 'get',
-    params: data,
+    method: 'post',
+    data: data,
   })
 }

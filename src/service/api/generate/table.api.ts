@@ -80,8 +80,8 @@ export const queryExistsPage = (data?: GenTableInfoQueryRequest): Promise<ApiRes
   return request<PageResponse<GenTableInfoResponse>>({
     url: Api.QUERY_EXISTS_PAGE,
     baseURL,
-    method: 'get',
-    params: data,
+    method: 'post',
+    data: data,
   })
 }
 
@@ -93,8 +93,8 @@ export const queryNoExistsPage = (data?: GenTableInfoQueryRequest): Promise<ApiR
   return request<GenTableInfoResponse[]>({
     url: Api.QUERY_NO_EXISTS_PAGE,
     baseURL,
-    method: 'get',
-    params: data,
+    method: 'post',
+    data: data,
   })
 }
 

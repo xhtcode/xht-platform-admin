@@ -105,7 +105,7 @@ export const querySysOauth2ClientPage = (query?: SysOauth2ClientQueryRequest): P
   return request<PageResponse<SysOauth2ClientResponse>>({
     url: Api.QUERY_PAGE,
     baseURL,
-    method: 'get',
-    params: query,
+    method: 'post',
+    data: query,
   })
 }

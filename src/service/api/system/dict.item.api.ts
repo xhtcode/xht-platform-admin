@@ -71,8 +71,8 @@ export const querySysDictItemPage = (data?: SysDictItemQueryRequest): Promise<Ap
   return request<PageResponse<SysDictItemResponse>>({
     url: Api.QUERY_PAGE,
     baseURL,
-    method: 'get',
-    params: data,
+    method: 'post',
+    data: data,
   })
 }
 

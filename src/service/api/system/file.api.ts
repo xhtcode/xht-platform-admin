@@ -54,8 +54,8 @@ export const querySysFilePage = (query?: SysFileQueryRequest): Promise<ApiRespon
   return request<PageResponse<SysFileResponse>>({
     url: Api.QUERY_PAGE,
     baseURL,
-    method: 'get',
-    params: query,
+    method: 'post',
+    data: query,
   })
 }
 

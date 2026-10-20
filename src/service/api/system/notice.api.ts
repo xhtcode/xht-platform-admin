@@ -124,7 +124,7 @@ export const querySysNoticePage = (query?: SysNoticeQueryRequest): Promise<ApiRe
   return request<PageResponse<SysNoticeResponse>>({
     url: Api.QUERY_PAGE,
     baseURL,
-    method: 'get',
-    params: query,
+    method: 'post',
+    data: query,
   })
 }

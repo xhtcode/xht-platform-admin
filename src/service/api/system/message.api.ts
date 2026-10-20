@@ -122,8 +122,8 @@ export const queryAdminPage = (query?: SysMessageQueryRequest): Promise<ApiRespo
   return request<PageResponse<SysMessageResponse>>({
     url: Api.ADMIN_PAGE,
     baseURL,
-    method: 'get',
-    params: query,
+    method: 'post',
+    data: query,
   })
 }
 
@@ -136,8 +136,8 @@ export const queryAdminSendPage = (query?: SysMessageQueryRequest): Promise<ApiR
   return request<PageResponse<SysMessageInfoResponse>>({
     url: Api.ADMIN_SEND_PAGE,
     baseURL,
-    method: 'get',
-    params: query,
+    method: 'post',
+    data: query,
   })
 }
 
@@ -150,7 +150,7 @@ export const queryMyMessagePage = (query?: SysMessageQueryRequest): Promise<ApiR
   return request<PageResponse<MessageInfoVo>>({
     url: Api.MY_PAGE,
     baseURL,
-    method: 'get',
-    params: query,
+    method: 'post',
+    data: query,
   })
 }

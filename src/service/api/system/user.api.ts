@@ -79,8 +79,8 @@ export const querySysUserPage = (data?: SysUserQueryRequest): Promise<ApiRespons
   return request<PageResponse<SysUserResponse>>({
     url: Api.QUERY_PAGE,
     baseURL,
-    method: 'get',
-    params: data,
+    method: 'post',
+    data: data,
   })
 }
 
