@@ -25,13 +25,14 @@ const canUseViewTransition = () =>
   !window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
 /**
- * 清理过渡期间写入的 CSS 变量与标记属性
+ * 清理过渡期间写入的 CSS 变量、标记属性与交互锁
  */
 const clearTransitionState = (root: HTMLElement) => {
   delete root.dataset.themeTransition
   root.style.removeProperty('--theme-transition-x')
   root.style.removeProperty('--theme-transition-y')
   root.style.removeProperty('--theme-transition-radius')
+  root.style.removeProperty('pointer-events')
 }
 
 export const useThemeTransition = () => {
@@ -43,6 +44,8 @@ export const useThemeTransition = () => {
   const withThemeTransition = (event: MouseEvent | undefined, change: () => void) => {
     // 不支持 View Transitions 或用户偏好减少动效时，直接切换
     if (!canUseViewTransition()) {
+      // 兜底清掉可能残留的状态（尤其是 pointer-events 交互锁，残留会导致整页不可点击）
+      clearTransitionState(document.documentElement)
       change()
       return
     }
@@ -64,6 +67,8 @@ export const useThemeTransition = () => {
     root.style.setProperty('--theme-transition-radius', `${(100 * endRadius) / referRadius}%`)
     // 依据切换前的状态确定动画方向（此刻 isDark 尚未发生变化）
     root.dataset.themeTransition = isDark.value ? 'to-light' : 'to-dark'
+    // 快照播放期间页面已静止，锁住交互：既能避免冻结期连续点击打断过渡，也省掉无效的命中测试
+    root.style.pointerEvents = 'none'
 
     const transitionId = ++latestTransitionId
     const transition = document.startViewTransition(async () => {
@@ -71,6 +76,9 @@ export const useThemeTransition = () => {
       // 等待 DOM 与样式更新完成，确保新主题被完整快照
       await nextTick()
     })
+
+    // ready 被拒绝时（如过渡被浏览器跳过）不抛出未捕获异常，清理逻辑统一交给 finished
+    transition.ready.catch(() => {})
 
     transition.finished
       .catch(() => {

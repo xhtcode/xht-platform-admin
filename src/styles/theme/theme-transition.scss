@@ -7,6 +7,11 @@
  * - --theme-transition-radius：覆盖整个视口所需的圆形半径（百分比）
  *
  * 浏览器不支持 View Transitions 时，这些规则不会命中，主题直接切换。
+ *
+ * 时长与缓动只在下文两处 animation 简写中定义，调整时需保持两处一致：
+ * 0.32s + cubic-bezier(0.4, 0, 0.2, 1)（近似 ease-out）。
+ * 不采用 ease-in 的原因：其前 40% 位移极小，主观上会被感知为"点下去没反应、末尾突然加速"，
+ * 在整页快照本就有启动延迟的前提下会放大迟滞感。
  */
 
 /* 关闭默认的交叉淡入淡出，改用 clip-path 圆形擦除 */
@@ -27,7 +32,7 @@
 /* 明亮 -> 暗黑：旧快照置于顶层并收缩，逐步露出暗黑主题 */
 html[data-theme-transition='to-dark']::view-transition-old(root) {
   z-index: 2147483646;
-  animation: theme-transition-clip 0.45s ease-in both;
+  animation: theme-transition-clip 0.32s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
 html[data-theme-transition='to-dark']::view-transition-new(root) {
@@ -41,7 +46,7 @@ html[data-theme-transition='to-light']::view-transition-old(root) {
 
 html[data-theme-transition='to-light']::view-transition-new(root) {
   z-index: 2147483646;
-  animation: theme-transition-clip 0.45s ease-in both;
+  animation: theme-transition-clip 0.32s cubic-bezier(0.4, 0, 0.2, 1) both;
   animation-direction: reverse;
 }
 
