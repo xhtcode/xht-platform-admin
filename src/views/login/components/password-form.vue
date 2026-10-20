@@ -3,22 +3,44 @@ import type { FormInstance, FormRules } from 'element-plus'
 import { generateCaptcha } from '@/service/api/login/login.api'
 import { useMessage } from '@/hooks/use-message'
 import { useUserInfoStore } from '@/store/modules/user.store'
-import { HOME_PAGE_PATH } from '@/service/constant'
-import { useRouter } from 'vue-router'
+import { HOME_PAGE_PATH, PAGE_PATH_LOGIN } from '@/service/constant'
+import { useRoute, useRouter } from 'vue-router'
 import type { LoginRequestType } from '@/service/model/login/login.model'
 import { Lock, User } from '@element-plus/icons-vue'
 
 defineOptions({ name: 'PasswordForm' })
 
-// 账号密码登录表单
+// 账号密码登录表单（默认值仅在开发环境填充，避免演示账号进入生产构建）
 const loginForm = reactive<LoginRequestType>({
-  username: 'admin',
-  password: '123456',
+  username: import.meta.env.DEV ? 'admin' : '',
+  password: import.meta.env.DEV ? '123456' : '',
   captcha_code: '',
   captcha_key: '',
 })
 const loading = ref<boolean>(false)
 const router = useRouter()
+const route = useRoute()
+
+/**
+ * 解析登录后的跳转地址
+ *
+ * 会话失效时拦截器会写入 `/login?redirect=原地址`，登录成功后应回到该地址。
+ * 仅接受站内绝对路径，并拒绝协议相对地址（`//host`）与登录页自身，避免开放重定向与死循环。
+ *
+ * @returns 站内跳转路径，非法时回退到首页
+ */
+const resolveRedirectPath = (): string => {
+  const rawRedirect = route.query.redirect
+  const redirect = Array.isArray(rawRedirect) ? rawRedirect[0] : rawRedirect
+  if (typeof redirect !== 'string') {
+    return HOME_PAGE_PATH
+  }
+  if (!redirect.startsWith('/') || redirect.startsWith('//') || redirect === PAGE_PATH_LOGIN) {
+    return HOME_PAGE_PATH
+  }
+  return redirect
+}
+
 // 表单验证规则
 const loginRules: FormRules = {
   username: [{ required: true, message: '请输入用户名', trigger: ['blur', 'change'] }],
@@ -47,36 +69,34 @@ const refreshCaptcha = () => {
 
 // 登录处理
 const handleLogin = async () => {
+  if (!loginFormRef.value) {
+    return
+  }
+  try {
+    await loginFormRef.value.validate()
+  } catch {
+    // 表单校验未通过，交由表单自身展示错误信息
+    useMessage().error('请填写完整的登录信息')
+    return
+  }
+
   loading.value = true
-  loginFormRef.value?.validate(async (valid) => {
-    if (valid) {
-      userInfoStore
-        .login({
-          username: loginForm.username,
-          password: loginForm.password,
-          captcha_code: loginForm.captcha_code,
-          captcha_key: loginForm.captcha_key,
-        })
-        .then(() => {
-          router
-            .push({ path: HOME_PAGE_PATH, replace: true })
-            .then(() => {
-              useMessage().success('登录成功，已为您加载专属工作台，开始工作吧～ !')
-            })
-            .catch(() => {
-              useMessage().error('登录失败，请稍后再试！')
-            })
-            .finally(() => {
-              loading.value = false
-            })
-        })
-        .catch(() => {
-          refreshCaptcha()
-        })
-    } else {
-      loading.value = false
-    }
-  })
+  try {
+    await userInfoStore.login({
+      username: loginForm.username,
+      password: loginForm.password,
+      captcha_code: loginForm.captcha_code,
+      captcha_key: loginForm.captcha_key,
+    })
+    // 会话失效后重新登录时回到原地址，否则回首页
+    await router.replace({ path: resolveRedirectPath() })
+    useMessage().success('登录成功，已为您加载专属工作台，开始工作吧～ !')
+  } catch {
+    // 错误提示由请求拦截器统一给出，此处仅刷新验证码便于重试
+    refreshCaptcha()
+  } finally {
+    loading.value = false
+  }
 }
 onMounted(() => {
   refreshCaptcha()

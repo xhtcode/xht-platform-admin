@@ -26,7 +26,7 @@ const handleChangeLoginType = (type: LoginType) => {
   if (type === 'password' || type === 'phone' || type === 'qrcode') {
     activeLoginType.value = type
   } else {
-    useMessage().error('暂不支持第三方登录')
+    useMessage().warning('第三方登录暂未开放，请使用账号密码登录')
   }
 }
 </script>
@@ -93,23 +93,13 @@ const handleChangeLoginType = (type: LoginType) => {
           >
             <div class="icon i-login-sm" />
           </div>
-          <div
-            :class="{ active: activeLoginType === 'wechat' }"
-            class="other-party-icon-item"
-            title="微信登录"
-            @click="handleChangeLoginType('wechat')"
-          >
+          <div class="other-party-icon-item is-unavailable" title="微信登录（暂未开放）" @click="handleChangeLoginType('wechat')">
             <div class="icon i-login-wechat" />
           </div>
-          <div :class="{ active: activeLoginType === 'qq' }" class="other-party-icon-item" title="QQ登录" @click="handleChangeLoginType('qq')">
+          <div class="other-party-icon-item is-unavailable" title="QQ登录（暂未开放）" @click="handleChangeLoginType('qq')">
             <div class="icon i-login-qq" />
           </div>
-          <div
-            :class="{ active: activeLoginType === 'dinging' }"
-            class="other-party-icon-item"
-            title="钉钉登录"
-            @click="handleChangeLoginType('dinging')"
-          >
+          <div class="other-party-icon-item is-unavailable" title="钉钉登录（暂未开放）" @click="handleChangeLoginType('dinging')">
             <div class="icon i-login-ding-ding" />
           </div>
         </div>
@@ -218,6 +208,17 @@ const handleChangeLoginType = (type: LoginType) => {
             fill: currentColor;
             filter: drop-shadow(0 0 6px rgba(59, 130, 246, 0.6));
             transform: scale(1.1);
+          }
+        }
+
+        // 暂未开放的登录方式：弱化显示且不提供悬停反馈
+        &.is-unavailable {
+          opacity: 0.45;
+
+          &:hover {
+            background: transparent;
+            transform: none;
+            box-shadow: none;
           }
         }
 

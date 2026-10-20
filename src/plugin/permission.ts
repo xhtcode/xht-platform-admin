@@ -25,15 +25,16 @@ export function setupPermission() {
     if (userInfoStore.hasToken) {
       if (routeStore.isGenerate) {
         if (to.path === PAGE_PATH_LOGIN) {
+          // 已登录访问登录页：直接回首页，具体落地页由后端下发的菜单决定
           return {
-            path: HOME_PAGE_PATH + (userInfoStore.isAdmin ? '/admin' : null),
+            path: HOME_PAGE_PATH,
             replace: true,
           }
         }
       } else {
         try {
           // 获取用户权限
-          await userInfoStore.getUserInfos().then(async () => {})
+          await userInfoStore.getUserInfos()
           // 生成并注册动态路由（登出时可被精确移除）
           await routeStore.generateRoutesAtBack()
           addDynamicRoutes(routeStore.formatRoutes)
@@ -46,7 +47,11 @@ export function setupPermission() {
         } catch (e) {
           console.error('路由错误', e)
           await userInfoStore.logout()
-          return { path: PAGE_PATH_LOGIN }
+          // 保留原地址，重新登录后可回到该页面
+          return {
+            path: PAGE_PATH_LOGIN,
+            query: to.fullPath === PAGE_PATH_LOGIN ? undefined : { redirect: to.fullPath },
+          }
         }
       }
     } else {

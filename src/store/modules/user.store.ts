@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import type { LoginRequestType } from '@/service/model/login/login.model'
 import { loginInPassWord } from '@/service/api/login/login.api'
 import type { ApiResponse } from 'axios'
-import pInIaPersistConfig from '@/store/pinia-persist'
+import pInIaPersistConfig, { clearSessionPersist } from '@/store/pinia-persist'
 import { getUserInfo } from '@/service/api/permission'
 import { userTypeEnum } from '@/service/enums/system/user.enum'
 
@@ -98,8 +98,8 @@ export const useUserInfoStore = defineStore(
         scope: [],
         additional_parameters: {},
       }
-      window.sessionStorage.clear()
-      window.localStorage.clear()
+      // 仅清理登录态相关的持久化数据，保留主题、布局等偏好
+      clearSessionPersist()
     }
 
     /**

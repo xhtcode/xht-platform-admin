@@ -2,7 +2,6 @@ import { defineStore } from 'pinia'
 import type { RouteRecordRaw } from 'vue-router'
 import { getRouters } from '@/service/api/permission'
 import { cloneDeep } from 'lodash'
-import pInIaPersistConfig from '@/store/pinia-persist'
 import DynamicRouter from '@/router/modules/dynamic'
 import { removeDynamicRoutes } from '@/router/index'
 import { menuTypeEnum } from '@/service/enums/system/menu.enum'
@@ -136,8 +135,5 @@ export const useRouteStore = defineStore(
       generateRoutesAtBack,
       resetRoutes,
     }
-  },
-  {
-    persist: pInIaPersistConfig('router', ['activeRoute']),
   }
 )

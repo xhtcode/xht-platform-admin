@@ -41,10 +41,11 @@ const TEXT_MIME: string[] = ['text/plain', 'text/csv', 'text/markdown', 'applica
 /**
  * 解析文件响应中的业务异常信息
  * <p>
- * blob 文件流请求发生业务异常时（如文件不存在、已删除），后端统一以 JSON 结构返回错误信息
+ * blob 文件流请求发生业务异常时（如文件不存在、已删除），后端统一以 JSON 结构返回错误信息。
+ * 按约定错误文案完全透传后端 msg，不补充兜底文案。
  *
  * @param response 文件请求响应
- * @returns 业务异常信息，非异常响应时返回空字符串
+ * @returns 业务异常信息，非异常响应或后端未提供 msg 时返回空字符串
  */
 export const parseFileErrorResponse = async (response: AxiosResponse<Blob>): Promise<string> => {
   const contentType = (response.headers['content-type'] as string) || ''
@@ -54,9 +55,9 @@ export const parseFileErrorResponse = async (response: AxiosResponse<Blob>): Pro
   try {
     const text = await response.data.text()
     const { msg } = JSON.parse(text)
-    return msg || '文件处理失败'
+    return msg ?? ''
   } catch {
-    return '文件处理失败'
+    return ''
   }
 }
 

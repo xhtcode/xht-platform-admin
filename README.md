@@ -9,19 +9,19 @@ XHT Platform Admin 是一个现代化的企业级前端管理后台系统，采�
 ## 🚀 技术栈
 
 - **核心框架**: Vue 3.5+ (Composition API)
-- **开发语言**: TypeScript 5.8+
-- **构建工具**: Vite 7.0+
-- **UI 组件库**: Element Plus 2.11+
-- **状态管理**: Pinia 3.0+
-- **路由管理**: Vue Router 4.5+
-- **HTTP 客户端**: Axios 1.11+
+- **开发语言**: TypeScript 6.0+
+- **构建工具**: Vite 8.2+（Rolldown 内核）
+- **UI 组件库**: Element Plus 2.14+
+- **状态管理**: Pinia 4.0+
+- **路由管理**: Vue Router 5.3+
+- **HTTP 客户端**: Axios 1.18+
 - **样式方案**: UnoCSS + SCSS
 - **图标方案**: Element Plus Icons
 - **工具库**: VueUse、Lodash
 
 ## 📦 环境要求
 
-- **Node.js**: ^20.19.0 || >=22.12.0
+- **Node.js**: ^22.18.0 || >=24.12.0
 - **包管理器**: npm、yarn 或 pnpm
 
 ## 🛠️ 快速开始
@@ -63,6 +63,35 @@ npm run format
 # TypeScript 类型检查
 npm run type-check
 ```
+
+## 🌐 环境变量与部署
+
+### 环境变量
+
+| 变量 | 说明 |
+| --- | --- |
+| `VITE_APP_PORT` | 开发服务器端口，默认 `3000` |
+| `VITE_BASE_API` | 前端请求基础路径，默认 `/api` |
+| `VITE_GATEWAY_API` | 开发环境代理目标（网关地址），**仅开发服务器生效** |
+| `VITE_AUTH_API_PREFIX` | 鉴权服务前缀，默认 `/api/auth` |
+| `VITE_ADMIN_API_PREFIX` | 管理服务前缀，默认 `/api/admin` |
+| `VITE_GENERATE_API_PREFIX` | 代码生成服务前缀，默认 `/api/generate` |
+
+### 生产部署要求
+
+1. `VITE_GATEWAY_API` 仅用于开发服务器代理（见 `plugins/vite-config-server.ts`），**不会进入构建产物**。
+2. 构建产物中的接口地址是相对路径 `/api`，因此生产环境必须由 Nginx 将 `/api` 反向代理到网关，否则所有接口都会 404。
+3. 开发代理会去掉 `/api` 前缀（`/api/auth/login` → `/auth/login`），Nginx 需保持同样行为：
+
+```nginx
+location /api/ {
+    proxy_pass http://<gateway-host>:<port>/;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+}
+```
+
+4. 前端为单页应用，需配置 history 回退：`try_files $uri $uri/ /index.html;`
 
 ## 📁 项目结构
 

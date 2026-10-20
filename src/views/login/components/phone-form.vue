@@ -1,13 +1,22 @@
 <script lang="ts" setup>
-import type { FormInstance, FormRules } from 'element-plus'
+import type { FormRules } from 'element-plus'
 import { useMessage } from '@/hooks/use-message'
 import { Phone } from '@element-plus/icons-vue'
 
 defineOptions({ name: 'PhoneForm' })
-const loading = ref(false)
-const phoneFormRef = ref<FormInstance>()
-// 短信验证码倒计时
-const smsCountdown = ref(0)
+
+/**
+ * 手机号登录（界面占位）
+ *
+ * 说明：当前未接入后端短信服务与手机号登录接口，因此不提供真实的登录能力。
+ * 接入前提：
+ * 1. 后端提供「发送短信验证码」接口，sendSMS 中补齐请求与倒计时；
+ * 2. 后端提供「手机号登录」接口，handlePhoneLogin 中补齐 token 写入（userStore.login）
+ *    与登录后跳转（含 redirect 回跳）。
+ * 在接口就绪前，此处只保留界面与明确提示，避免出现"点击即登录成功"的误导。
+ */
+const UNAVAILABLE_TIP = '手机登录暂未开放，请使用账号密码登录'
+
 // 手机登录表单
 const phoneForm = reactive({
   phone: '',
@@ -23,51 +32,20 @@ const phoneRules: FormRules = {
     { len: 6, message: '验证码为6位数字', trigger: 'blur' },
   ],
 }
-// 发送短信验证码
-const sendSMS = async () => {
-  if (!phoneForm.phone || !/^1[3-9]\d{9}$/.test(phoneForm.phone)) {
-    useMessage().error('请输入正确的手机号')
-    return
-  }
 
-  smsCountdown.value = 60
-  const timer = setInterval(() => {
-    smsCountdown.value--
-    if (smsCountdown.value <= 0) {
-      clearInterval(timer)
-    }
-  }, 1000)
-
-  // 这里添加实际的发送短信逻辑
-  useMessage().success('验证码已发送')
+// 发送短信验证码（占位）
+const sendSMS = () => {
+  useMessage().warning('短信服务暂未接入，暂不可用')
 }
-// 手机登录处理
-const handlePhoneLogin = async () => {
-  if (!phoneFormRef.value) {
-    return
-  }
 
-  try {
-    await phoneFormRef.value.validate()
-    loading.value = true
-
-    // 这里添加实际的手机登录逻辑
-    console.log('手机登录:', phoneForm)
-
-    // 模拟登录请求
-    setTimeout(() => {
-      loading.value = false
-      useMessage().success('手机登录成功！')
-      // 登录成功后的处理
-    }, 1000)
-  } catch (error) {
-    console.error('表单验证失败:', error)
-  }
+// 手机登录（占位）
+const handlePhoneLogin = () => {
+  useMessage().warning(UNAVAILABLE_TIP)
 }
 </script>
 
 <template>
-  <el-form ref="phoneFormRef" :model="phoneForm" :rules="phoneRules" size="default">
+  <el-form :model="phoneForm" :rules="phoneRules" size="default">
     <el-form-item :inline-message="false" :show-message="false" prop="phone">
       <el-input v-model="phoneForm.phone" class="login-input" placeholder="请输入手机号" :prefix-icon="Phone" size="large" />
     </el-form-item>
@@ -79,12 +57,11 @@ const handlePhoneLogin = async () => {
             <div class="i-login-code h-1rem w-1rem color-[var(--color)]" />
           </template>
         </el-input>
-        <el-button :disabled="smsCountdown > 0" class="sms-button" size="large" type="primary" @click="sendSMS">
-          {{ smsCountdown > 0 ? `${smsCountdown}s` : '发送验证码' }}
-        </el-button>
+        <el-button class="sms-button" size="large" type="primary" plain @click="sendSMS">发送验证码</el-button>
       </div>
     </el-form-item>
-    <el-button :loading="loading" class="login-button" size="large" type="primary" @click="handlePhoneLogin">登录</el-button>
+    <el-button class="login-button" size="large" type="primary" @click="handlePhoneLogin">登录</el-button>
+    <div class="text-center text-12px color-#9ca3af">手机登录暂未开放，请使用账号密码登录</div>
   </el-form>
 </template>
 

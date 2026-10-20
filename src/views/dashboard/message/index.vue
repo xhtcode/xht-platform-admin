@@ -43,16 +43,18 @@ const columnOption = ref<ColumnConfig<SysMessageResponse>>({
 /**
  * 批量已读
  */
-const handleReadAll = () => {
+const handleReadAll = async () => {
   state.loadingStatus = true
-  updateMessageReadAll()
-    .then(() => {
-      useMessage().success('已读所有站内信成功!')
-      handlePageQuery()
-    })
-    .finally(() => {
-      state.loadingStatus = false
-    })
+  try {
+    await updateMessageReadAll()
+    useMessage().success('已读所有站内信成功!')
+    await handlePageQuery()
+  } catch (error) {
+    // 失败提示由请求拦截器统一给出
+    console.error('批量已读失败:', error)
+  } finally {
+    state.loadingStatus = false
+  }
 }
 
 /**
@@ -61,14 +63,15 @@ const handleReadAll = () => {
  */
 const handleRead = async (messageId: ModeIdType) => {
   state.loadingStatus = true
-  updateMessageRead(messageId)
-    .then(() => {
-      useMessage().success('已读站内信成功!')
-      handlePageQuery()
-    })
-    .finally(() => {
-      state.loadingStatus = false
-    })
+  try {
+    await updateMessageRead(messageId)
+    useMessage().success('已读站内信成功!')
+    await handlePageQuery()
+  } catch (error) {
+    console.error('已读站内信失败:', error)
+  } finally {
+    state.loadingStatus = false
+  }
 }
 
 /**
@@ -84,18 +87,19 @@ const handleView = async (messageId: ModeIdType) => {
  * @param messageId 消息ID
  * @param start 收藏状态
  */
-const handleStart = (messageId: ModeIdType, start: MessageStar) => {
+const handleStart = async (messageId: ModeIdType, start: MessageStar) => {
   state.loadingStatus = true
   const requestStart = start === messageStarEnum.YES.value ? messageStarEnum.NO.value : messageStarEnum.YES.value
   const requestStartSuccessMsg = start === messageStarEnum.YES.value ? '取消收藏站内信成功！' : '收藏站内信成功！'
-  updateMessageStart(messageId, requestStart)
-    .then(() => {
-      useMessage().success(requestStartSuccessMsg)
-      handlePageQuery()
-    })
-    .finally(() => {
-      state.loadingStatus = false
-    })
+  try {
+    await updateMessageStart(messageId, requestStart)
+    useMessage().success(requestStartSuccessMsg)
+    await handlePageQuery()
+  } catch (error) {
+    console.error('收藏站内信失败:', error)
+  } finally {
+    state.loadingStatus = false
+  }
 }
 
 /**
@@ -103,39 +107,44 @@ const handleStart = (messageId: ModeIdType, start: MessageStar) => {
  * @param messageId 消息ID
  * @param top 置顶状态
  */
-const handleTop = (messageId: ModeIdType, top: MessageTop) => {
+const handleTop = async (messageId: ModeIdType, top: MessageTop) => {
   state.loadingStatus = true
   const requestTop = top === messageTopEnum.YES.value ? messageTopEnum.NO.value : messageTopEnum.YES.value
   const requestTopSuccessMsg = top === messageTopEnum.YES.value ? '取消收藏站内信成功！' : '收藏站内信成功！'
-  updateMessageTop(messageId, requestTop)
-    .then(() => {
-      useMessage().success(requestTopSuccessMsg)
-      handlePageQuery()
-    })
-    .finally(() => {
-      state.loadingStatus = false
-    })
+  try {
+    await updateMessageTop(messageId, requestTop)
+    useMessage().success(requestTopSuccessMsg)
+    await handlePageQuery()
+  } catch (error) {
+    console.error('置顶站内信失败:', error)
+  } finally {
+    state.loadingStatus = false
+  }
 }
 
 /**
  * 删除信息
  * * @param messageId 消息ID
  *  */
-const handleDelete = (messageId: ModeIdType) => {
+const handleDelete = async (messageId: ModeIdType) => {
+  try {
+    await useMessageBox().confirm('此操作将删除站内信, 是否继续?')
+  } catch {
+    // 用户取消或关闭确认框，静默返回，不作为失败处理
+    return
+  }
+
   state.loadingStatus = true
-  useMessageBox()
-    .confirm('此操作将删除站内信, 是否继续?')
-    .then(async () => {
-      await updateMessageRemove(messageId)
-      await handlePageQuery()
-      useMessage().success('删除站内信成功!')
-    })
-    .catch(() => {
-      useMessage().success('删除站内信失败!')
-    })
-    .finally(() => {
-      state.loadingStatus = false
-    })
+  try {
+    await updateMessageRemove(messageId)
+    await handlePageQuery()
+    useMessage().success('删除站内信成功!')
+  } catch (error) {
+    // 失败提示由请求拦截器统一给出，此处仅记录，避免重复弹窗
+    console.error('删除站内信失败:', error)
+  } finally {
+    state.loadingStatus = false
+  }
 }
 
 /**

@@ -4,6 +4,7 @@ import { useMessage } from '@/hooks/use-message'
 import qs from 'qs'
 import { useUserInfoStore } from '@/store/modules/user.store'
 import { HEADER_AUTHORIZATION, HEADER_TRACE_ID, HEADER_USER_ACCOUNT, HEADER_USER_ID, PAGE_PATH_LOGIN } from '@/service/constant'
+import { BusinessError } from '@/utils/business-error'
 import { generateUUID } from '@/utils/index'
 import router from '@/router/index'
 import { storeToRefs } from 'pinia'
@@ -48,24 +49,32 @@ const handleSessionExpired = async (message?: string): Promise<void> => {
   }
   sessionExpiredHandling = true
   const { path, fullPath } = router.currentRoute.value
+  // 记录原地址，重新登录后可回到该页面
+  const redirectQuery = fullPath && fullPath !== path && path !== PAGE_PATH_LOGIN ? { redirect: fullPath } : undefined
   try {
-    await useUserInfoStore().logout()
+    try {
+      await useUserInfoStore().logout()
+    } catch (error) {
+      // 清理失败不阻断后续跳转，否则会滞留在失效会话中
+      console.error('会话清理失败:', error)
+    }
     if (path !== PAGE_PATH_LOGIN) {
-      await router.replace({
-        path: PAGE_PATH_LOGIN,
-        query: fullPath && fullPath !== path ? { redirect: fullPath } : undefined,
-      })
+      await router.replace({ path: PAGE_PATH_LOGIN, query: redirectQuery })
     }
   } catch (error) {
-    // 兜底：跳转失败时直接刷新到登录页，确保不会停留在失效会话中
-    console.error('会话失效处理失败:', error)
-    window.location.replace(PAGE_PATH_LOGIN)
+    // 兜底：SPA 路由不可用时整页跳转，并保留 redirect 信息
+    console.error('登录页跳转失败，改用整页跳转:', error)
+    const search = redirectQuery?.redirect ? `?redirect=${encodeURIComponent(redirectQuery.redirect)}` : ''
+    window.location.replace(`${PAGE_PATH_LOGIN}${search}`)
   } finally {
     sessionExpiredHandling = false
   }
   // 提示失败不影响会话清理结果，单独兜底避免返回的 Promise 变为拒绝态
+  // 文案完全透传后端 msg，后端未提供时不额外补充提示
   try {
-    useMessage().error(message || '登录状态已失效，请重新登录')
+    if (message) {
+      useMessage().error(message)
+    }
   } catch (error) {
     console.error('会话失效提示失败:', error)
   }
@@ -98,17 +107,32 @@ service.interceptors.request.use(
     return config
   },
   async (error: AxiosError): Promise<never> => {
-    useMessage().error('请求准备失败，请稍后重试')
+    // 请求未能发出（配置异常等），此处不补充文案，交由调用方与日志定位
     console.error('请求拦截器错误:', error)
     return Promise.reject(error)
   }
 )
 
 /**
+ * 提示错误信息
+ *
+ * 约定：后端仅 200 为成功，其余状态码一律视为失败，错误文案完全透传后端 msg，
+ * 不改写、不映射、不补充兜底文案；msg 为空时不展示提示。
+ *
+ * @param message 后端返回的错误信息
+ */
+const showErrorMessage = (message?: string) => {
+  if (message) {
+    useMessage().error(message)
+  }
+}
+
+/**
  * 响应拦截器：处理响应数据、错误状态码等
  *
  * 保持 axios 原生返回契约（始终返回 AxiosResponse），
  * 业务信封的解包由下方 request<T>() 统一完成，避免类型系统与运行时脱节。
+ * 业务失败统一抛出 BusinessError，携带 code 与 data，便于调用方分支处理。
  */
 service.interceptors.response.use(
   async (response: AxiosResponse<ApiResponse>) => {
@@ -116,7 +140,7 @@ service.interceptors.response.use(
     if (responseType === 'blob' || responseType === 'arraybuffer') {
       return response
     }
-    const { code, msg, dataType } = response.data
+    const { code, msg, dataType, data } = response.data
     // 如果是加密数据
     if (dataType === 1) {
       useMessage().error('加密暂未实现')
@@ -127,32 +151,25 @@ service.interceptors.response.use(
     if (code === 424 && !response.config.skipToken) {
       // 等待会话清理与跳转完成后再抛出，避免调用方在会话状态尚未复位时继续处理
       await handleSessionExpired(msg)
-      throw new Error(msg || '登录状态已失效，请重新登录')
+      throw new BusinessError(code, msg ?? '', data)
     }
-    useMessage().error(msg)
-    throw new Error(msg || '系统出错')
+    showErrorMessage(msg)
+    throw new BusinessError(code, msg ?? '', data)
   },
   async (error: AxiosError<ApiResponse>): Promise<never> => {
     // 已登录状态下返回 401，按登录态失效处理（公开接口不触发）
     const status = error.response?.status
     if (status === 401 && !error.config?.skipToken && useUserInfoStore().hasToken) {
-      // 同上：会话处理完成后再把原始错误交给调用方
-      await handleSessionExpired(error.response?.data?.msg)
-      return Promise.reject(error.response)
+      const message = error.response?.data?.msg
+      // 同上：会话处理完成后再把异常交给调用方
+      await handleSessionExpired(message)
+      throw new BusinessError(401, message ?? '', error.response?.data?.data)
     }
-    // 优先使用后端返回的提示，避免把 4xx/5xx 误报为网络异常
-    const responseMessage = error.response?.data?.msg
-    if (responseMessage) {
-      useMessage().error(responseMessage)
-    } else if (error.message?.includes('timeout')) {
-      useMessage().error('服务器正在伸懒腰，请稍后再来~')
-    } else if (error.message === 'Network Error') {
-      useMessage().error('请求传递过程中超时了，就像寄快递路上堵车了~')
-    } else if (error.message?.includes('Request')) {
-      useMessage().error('网络连接异常，请求未成功发送，请检查网络后重试~')
-    }
+    // 有响应时透传后端 msg；无响应（网络中断/超时）时透传 axios 原始错误信息
+    const message = error.response ? error.response.data?.msg : error.message
+    showErrorMessage(message)
     console.error('响应拦截器错误:', error)
-    return Promise.reject(error.response)
+    throw new BusinessError(status ?? 0, message ?? '', error.response?.data?.data)
   }
 )
 
@@ -177,10 +194,10 @@ export async function request<T = unknown>(config: AxiosRequestConfig): Promise<
  * 调用方可读取响应头与二进制 data。
  *
  * @param config 请求配置（需将 responseType 设置为 blob 或 arraybuffer）
- * @returns 原始响应 Promise
+ * @returns 原始响应 Promise；使用 arraybuffer 时请显式指定泛型 `requestBlob<ArrayBuffer>`
  */
-export async function requestBlob(config: AxiosRequestConfig): Promise<AxiosResponse<Blob>> {
-  return service.request<Blob>(config)
+export async function requestBlob<T = Blob>(config: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+  return service.request<T>(config)
 }
 
 export default request
