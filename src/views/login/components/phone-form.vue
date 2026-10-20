@@ -1,67 +1,193 @@
 <script lang="ts" setup>
-import type { FormRules } from 'element-plus'
+import type { FormInstance, FormRules } from 'element-plus'
 import { useMessage } from '@/hooks/use-message'
+import { useUserInfoStore } from '@/store/modules/user.store'
+import { generatePhoneSmsCode } from '@/service/api/login/login.api'
+import { SMS_RESEND_INTERVAL } from '@/service/constant'
+import type { PhoneLoginFormType } from '@/service/model/login/login.model'
+import { resolveLoginRedirect } from '@/views/login/login-redirect'
+import { useRoute, useRouter } from 'vue-router'
 import { Phone } from '@element-plus/icons-vue'
 
 defineOptions({ name: 'PhoneForm' })
 
 /**
- * 手机号登录（界面占位）
+ * 手机号验证码登录
  *
- * 说明：当前未接入后端短信服务与手机号登录接口，因此不提供真实的登录能力。
- * 接入前提：
- * 1. 后端提供「发送短信验证码」接口，sendSMS 中补齐请求与倒计时；
- * 2. 后端提供「手机号登录」接口，handlePhoneLogin 中补齐 token 写入（userStore.login）
- *    与登录后跳转（含 redirect 回跳）。
- * 在接口就绪前，此处只保留界面与明确提示，避免出现"点击即登录成功"的误导。
+ * 流程：发送短信验证码（重发间隔由 SMS_RESEND_INTERVAL 配置）→ 校验手机号与验证码 → 登录换取令牌
+ * → 跳转 redirect 指定页面或首页。登录成功后的用户信息与动态路由由路由守卫统一加载。
  */
-const UNAVAILABLE_TIP = '手机登录暂未开放，请使用账号密码登录'
 
-// 手机登录表单
-const phoneForm = reactive({
+const route = useRoute()
+const router = useRouter()
+const userInfoStore = useUserInfoStore()
+const phoneFormRef = useTemplateRef<FormInstance>('phoneFormRef')
+
+// 手机号登录表单
+const phoneForm = reactive<PhoneLoginFormType>({
   phone: '',
-  code: '',
+  phoneCode: '',
 })
+
 const phoneRules: FormRules = {
   phone: [
     { required: true, message: '请输入手机号', trigger: 'blur' },
     { pattern: /^1[3-9]\d{9}$/, message: '请输入正确的手机号', trigger: 'blur' },
   ],
-  code: [
+  phoneCode: [
     { required: true, message: '请输入验证码', trigger: 'blur' },
     { len: 6, message: '验证码为6位数字', trigger: 'blur' },
   ],
 }
 
-// 发送短信验证码（占位）
-const sendSMS = () => {
-  useMessage().warning('短信服务暂未接入，暂不可用')
+// 登录请求状态
+const loginLoading = ref<boolean>(false)
+// 验证码发送状态
+const smsLoading = ref<boolean>(false)
+// 重发倒计时剩余秒数
+const countdown = ref<number>(0)
+let countdownTimer: ReturnType<typeof setInterval> | undefined
+
+/**
+ * 提取纯数字
+ *
+ * 手机号与验证码只允许数字：粘贴或输入法带入的空格、`+`、`-` 等字符直接过滤，
+ * 避免填完提交时才被表单规则或后端拒绝。
+ *
+ * @param value 原始输入值
+ * @returns 仅保留数字的字符串
+ */
+const onlyDigits = (value: string): string => value.replace(/\D/g, '')
+
+/**
+ * 启动重发倒计时
+ */
+const startCountdown = () => {
+  countdown.value = SMS_RESEND_INTERVAL
+  countdownTimer = setInterval(() => {
+    countdown.value -= 1
+    if (countdown.value <= 0) {
+      clearCountdown()
+    }
+  }, 1000)
 }
 
-// 手机登录（占位）
-const handlePhoneLogin = () => {
-  useMessage().warning(UNAVAILABLE_TIP)
+/**
+ * 清除重发倒计时
+ */
+const clearCountdown = () => {
+  if (countdownTimer) {
+    clearInterval(countdownTimer)
+    countdownTimer = undefined
+  }
+  countdown.value = 0
+}
+
+onUnmounted(clearCountdown)
+
+/**
+ * 发送短信验证码
+ *
+ * 仅在手机号校验通过后请求，成功后进入倒计时，避免频繁请求造成短信轰炸。
+ */
+const sendSMS = async () => {
+  if (smsLoading.value || countdown.value > 0 || !phoneFormRef.value) {
+    return
+  }
+  try {
+    await phoneFormRef.value.validateField('phone')
+  } catch {
+    // 手机号校验未通过，交由表单展示错误信息
+    return
+  }
+  smsLoading.value = true
+  try {
+    await generatePhoneSmsCode(phoneForm.phone)
+    useMessage().success('验证码已发送，请注意查收')
+    startCountdown()
+  } catch {
+    // 错误提示由请求拦截器统一给出，失败后允许立即重试
+  } finally {
+    smsLoading.value = false
+  }
+}
+
+/**
+ * 手机号登录
+ */
+const handlePhoneLogin = async () => {
+  if (!phoneFormRef.value) {
+    return
+  }
+  try {
+    await phoneFormRef.value.validate()
+  } catch {
+    useMessage().error('请填写完整的登录信息')
+    return
+  }
+  loginLoading.value = true
+  try {
+    await userInfoStore.loginByPhone({
+      phone: phoneForm.phone,
+      phoneCode: phoneForm.phoneCode,
+    })
+    // 会话失效后重新登录时回到原地址，否则回首页
+    await router.replace({ path: resolveLoginRedirect(route.query) })
+    useMessage().success('登录成功，已为您加载专属工作台，开始工作吧～ !')
+  } catch {
+    // 错误提示由请求拦截器统一给出，此处不再重复提示
+  } finally {
+    loginLoading.value = false
+  }
 }
 </script>
 
 <template>
-  <el-form :model="phoneForm" :rules="phoneRules" size="default">
-    <el-form-item :inline-message="false" :show-message="false" prop="phone">
-      <el-input v-model="phoneForm.phone" class="login-input" placeholder="请输入手机号" :prefix-icon="Phone" size="large" />
+  <el-form
+    ref="phoneFormRef"
+    v-loading="loginLoading"
+    :model="phoneForm"
+    :rules="phoneRules"
+    inline-message
+    size="default"
+    @keyup.enter="handlePhoneLogin"
+  >
+    <el-form-item prop="phone">
+      <el-input
+        v-model="phoneForm.phone"
+        class="login-input"
+        :maxlength="11"
+        show-word-limit
+        placeholder="请输入手机号"
+        :prefix-icon="Phone"
+        inputmode="numeric"
+        size="large"
+        @input="(value: string) => (phoneForm.phone = onlyDigits(value))"
+      />
     </el-form-item>
 
-    <el-form-item prop="code">
+    <el-form-item prop="phoneCode">
       <div class="sms-container">
-        <el-input v-model="phoneForm.code" class="login-input" placeholder="请输入验证码" size="large">
+        <el-input
+          v-model="phoneForm.phoneCode"
+          class="login-input"
+          :maxlength="6"
+          placeholder="请输入验证码"
+          inputmode="numeric"
+          size="large"
+          @input="(value: string) => (phoneForm.phoneCode = onlyDigits(value))"
+        >
           <template #prefix>
             <div class="i-login-code h-1rem w-1rem color-[var(--color)]" />
           </template>
         </el-input>
-        <el-button class="sms-button" size="large" type="primary" plain @click="sendSMS">发送验证码</el-button>
+        <el-button :disabled="countdown > 0" :loading="smsLoading" class="sms-button" size="large" type="primary" plain @click="sendSMS">
+          {{ countdown > 0 ? `${countdown}s 后重发` : '获取验证码' }}
+        </el-button>
       </div>
     </el-form-item>
-    <el-button class="login-button" size="large" type="primary" @click="handlePhoneLogin">登录</el-button>
-    <div class="text-center text-12px color-#9ca3af">手机登录暂未开放，请使用账号密码登录</div>
+    <el-button :loading="loginLoading" class="login-button" size="large" type="primary" @click="handlePhoneLogin">登录</el-button>
+    <div class="text-center text-12px color-#9ca3af">未注册的手机号将自动创建账号</div>
   </el-form>
 </template>
 

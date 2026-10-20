@@ -15,3 +15,17 @@ export interface LoginRequestType {
   captcha_code: string
   captcha_key: string
 }
+
+/**
+ * 手机号验证码登录参数类型
+ */
+export interface PhoneLoginFormType {
+  /**
+   * 手机号
+   */
+  phone: string
+  /**
+   * 手机号验证码
+   */
+  phoneCode: string
+}

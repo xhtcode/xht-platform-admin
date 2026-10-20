@@ -33,6 +33,10 @@ interface ImportMetaEnv {
    * 代码生成器服务前缀
    */
   VITE_GENERATE_API_PREFIX: string
+  /**
+   * 短信验证码重发间隔(秒)，需与后端频控一致，默认 120
+   */
+  VITE_SMS_RESEND_INTERVAL: string
 }
 
 export interface ImportMeta {

@@ -14,126 +14,123 @@ const dynamicViewsModules: Record<string, Function> = Object.assign({}, { ...vie
  * @methods setColumnsMenuHover 设置分栏布局菜单鼠标移入 boolean
  * @methods setColumnsNavHover 设置分栏布局最左侧导航鼠标移入 boolean
  */
-export const useRouteStore = defineStore(
-  'router',
-  () => {
-    const isGenerate = ref(false) // 是否生成路由
-    const routesRaw = ref<any[]>([]) // 原始路由
-    const formatRoutes = ref<RouteRecordRaw[]>([]) //添加路由时使用
-    const allRoutes = computed(() => routesRaw.value)
-    /**
-     * 路由状态
-     */
-    const routerStatus = ref<boolean>(false)
-    /**
-     * 实际路由
-     */
-    const genFormatRoutes = () => {
-      const returnRoutes: RouteRecordRaw[] = []
-      if (routesRaw.value) {
-        routesRaw.value.forEach((item) => {
-          returnRoutes.push({ ...cloneDeep(item) })
-        })
-        returnRoutes.forEach((item) => {
-          if (item.children) {
-            item.redirect = item.children[0]?.path
-            const result: RouteRecordRaw[] = []
-            formatFlatteningRoutes(result, item.children)
-            item.children = result
-          }
-          return item
-        })
-      }
-      return returnRoutes
-    }
-
-    /**
-     * 路由多级嵌套数组处理成一维数组
-     * @param result 存储处理后路由的数组
-     * @param routes 传入路由菜单数据数组
-     * @returns 返回处理后的一维路由菜单数组
-     */
-    const formatFlatteningRoutes = (result: RouteRecordRaw[], routes: RouteRecordRaw[]) => {
-      routes.forEach((route) => {
-        if (route.children && route.children?.length >= 0) {
-          formatFlatteningRoutes(result, route.children)
-          delete route.children
-          if (route.meta?.menuType === menuTypeEnum.C.value) {
-            result.push(route)
-          }
-        } else {
-          result.push(route)
-          delete route.children
+export const useRouteStore = defineStore('router', () => {
+  const isGenerate = ref(false) // 是否生成路由
+  const routesRaw = ref<any[]>([]) // 原始路由
+  const formatRoutes = ref<RouteRecordRaw[]>([]) //添加路由时使用
+  const allRoutes = computed(() => routesRaw.value)
+  /**
+   * 路由状态
+   */
+  const routerStatus = ref<boolean>(false)
+  /**
+   * 实际路由
+   */
+  const genFormatRoutes = () => {
+    const returnRoutes: RouteRecordRaw[] = []
+    if (routesRaw.value) {
+      routesRaw.value.forEach((item) => {
+        returnRoutes.push({ ...cloneDeep(item) })
+      })
+      returnRoutes.forEach((item) => {
+        if (item.children) {
+          item.redirect = item.children[0]?.path
+          const result: RouteRecordRaw[] = []
+          formatFlatteningRoutes(result, item.children)
+          item.children = result
         }
+        return item
       })
     }
-
-    /**
-     *  生成路由（后端获取）
-     */
-    const generateRoutesAtBack = async () => {
-      // 获取路由菜单数据-
-      await getRouters()
-        .then((res) => {
-          // 设置 routes 数据
-          routesRaw.value = formatBackRoutes(res.data)
-          formatRoutes.value = genFormatRoutes()
-          formatRoutes.value.push(...DynamicRouter)
-          // 创建路由匹配器
-          isGenerate.value = true
-        })
-        .catch((err) => {
-          console.error(err)
-        })
-    }
-
-    /**
-     * 格式化后端路由数据
-     *
-     * @param routes 接口返回所有的动态路由
-     * @returns 返回用户有权限的动态路由
-     */
-    const formatBackRoutes = (routes: any[]) => {
-      if (!routes || !routes.length) return []
-      return routes.map((route: any) => {
-        if (route.meta.menuType === 'M') {
-          route.component = () => import('@/layout/index.vue')
-        } else if (!route.meta.linkStatus) {
-          if (route.component) {
-            route.component = dynamicViewsModules[`../..${route.component}`]
-          } else {
-            delete route.component
-          }
-        }
-        if (route.children) {
-          route.children = formatBackRoutes(route.children)
-        }
-        return route
-      })
-    }
-
-    /**
-     * 重置路由状态
-     *
-     * 登出时调用：移除已注册的动态路由，并复位生成标记，
-     * 保证下一个账号登录时重新按权限生成路由，不会残留上一账号的菜单。
-     */
-    const resetRoutes = () => {
-      removeDynamicRoutes()
-      isGenerate.value = false
-      routesRaw.value = []
-      formatRoutes.value = []
-      routerStatus.value = false
-    }
-
-    return {
-      routerStatus,
-      isGenerate,
-      routesRaw,
-      allRoutes,
-      formatRoutes,
-      generateRoutesAtBack,
-      resetRoutes,
-    }
+    return returnRoutes
   }
-)
+
+  /**
+   * 路由多级嵌套数组处理成一维数组
+   * @param result 存储处理后路由的数组
+   * @param routes 传入路由菜单数据数组
+   * @returns 返回处理后的一维路由菜单数组
+   */
+  const formatFlatteningRoutes = (result: RouteRecordRaw[], routes: RouteRecordRaw[]) => {
+    routes.forEach((route) => {
+      if (route.children && route.children?.length >= 0) {
+        formatFlatteningRoutes(result, route.children)
+        delete route.children
+        if (route.meta?.menuType === menuTypeEnum.C.value) {
+          result.push(route)
+        }
+      } else {
+        result.push(route)
+        delete route.children
+      }
+    })
+  }
+
+  /**
+   *  生成路由（后端获取）
+   */
+  const generateRoutesAtBack = async () => {
+    // 获取路由菜单数据-
+    await getRouters()
+      .then((res) => {
+        // 设置 routes 数据
+        routesRaw.value = formatBackRoutes(res.data)
+        formatRoutes.value = genFormatRoutes()
+        formatRoutes.value.push(...DynamicRouter)
+        // 创建路由匹配器
+        isGenerate.value = true
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
+  /**
+   * 格式化后端路由数据
+   *
+   * @param routes 接口返回所有的动态路由
+   * @returns 返回用户有权限的动态路由
+   */
+  const formatBackRoutes = (routes: any[]) => {
+    if (!routes || !routes.length) return []
+    return routes.map((route: any) => {
+      if (route.meta.menuType === 'M') {
+        route.component = () => import('@/layout/index.vue')
+      } else if (!route.meta.linkStatus) {
+        if (route.component) {
+          route.component = dynamicViewsModules[`../..${route.component}`]
+        } else {
+          delete route.component
+        }
+      }
+      if (route.children) {
+        route.children = formatBackRoutes(route.children)
+      }
+      return route
+    })
+  }
+
+  /**
+   * 重置路由状态
+   *
+   * 登出时调用：移除已注册的动态路由，并复位生成标记，
+   * 保证下一个账号登录时重新按权限生成路由，不会残留上一账号的菜单。
+   */
+  const resetRoutes = () => {
+    removeDynamicRoutes()
+    isGenerate.value = false
+    routesRaw.value = []
+    formatRoutes.value = []
+    routerStatus.value = false
+  }
+
+  return {
+    routerStatus,
+    isGenerate,
+    routesRaw,
+    allRoutes,
+    formatRoutes,
+    generateRoutesAtBack,
+    resetRoutes,
+  }
+})

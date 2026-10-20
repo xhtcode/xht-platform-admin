@@ -26,34 +26,21 @@ const defaultConfig: AxiosRequestConfig = {
 const service = axios.create(defaultConfig)
 
 /**
- * 会话失效处理中标记
- * 避免并发请求同时返回 424/401 时重复弹窗与重复跳转
- */
-let sessionExpiredHandling = false
-
-/**
- * 统一处理登录态失效
+ * 清理会话并跳转登录页
  *
- * 先清理认证信息与动态路由，再跳转登录页并携带原地址，
+ * 仅在用户明确选择「前往登录」后调用：先清理认证信息与动态路由，再跳转登录页并携带原地址，
  * 避免遗留 token、菜单或页签导致重新登录后状态异常。
  *
- * 该函数保证不抛错（内部已兜底），调用方应等待其完成后再向上抛出请求异常，
- * 以确保调用方捕获错误时会话状态已完成复位。
- *
- * @param message 提示文案
- * @returns 会话清理与跳转完成的 Promise
+ * 该函数保证不抛错（内部已兜底）。
  */
-const handleSessionExpired = async (message?: string): Promise<void> => {
-  if (sessionExpiredHandling) {
-    return
-  }
-  sessionExpiredHandling = true
+const redirectToLogin = async (): Promise<void> => {
   const { path, fullPath } = router.currentRoute.value
   // 记录原地址，重新登录后可回到该页面
   const redirectQuery = fullPath && fullPath !== path && path !== PAGE_PATH_LOGIN ? { redirect: fullPath } : undefined
   try {
     try {
-      await useUserInfoStore().logout()
+      // 令牌已失效，无需再请求注销接口，仅清理本地会话
+      await useUserInfoStore().logout(false)
     } catch (error) {
       // 清理失败不阻断后续跳转，否则会滞留在失效会话中
       console.error('会话清理失败:', error)
@@ -66,18 +53,39 @@ const handleSessionExpired = async (message?: string): Promise<void> => {
     console.error('登录页跳转失败，改用整页跳转:', error)
     const search = redirectQuery?.redirect ? `?redirect=${encodeURIComponent(redirectQuery.redirect)}` : ''
     window.location.replace(`${PAGE_PATH_LOGIN}${search}`)
-  } finally {
-    sessionExpiredHandling = false
   }
-  // 提示失败不影响会话清理结果，单独兜底避免返回的 Promise 变为拒绝态
-  // 文案完全透传后端 msg，后端未提供时不额外补充提示
-  try {
-    if (message) {
-      useMessage().error(message)
-    }
-  } catch (error) {
-    console.error('会话失效提示失败:', error)
+}
+
+/**
+ * 统一处理登录态失效
+ *
+ * 不自动跳转登录页，而是明确告知用户「登录状态已失效」，并提供两个选择：
+ * - 前往登录：清理本地会话并跳转登录页（携带 redirect，登录后可回到当前页面）；
+ * - 暂不跳转：保留当前会话与页面，由用户自行决定何时登录。
+ *
+ * 该函数保证不抛错，调用方应等待用户选择完成后再向上抛出请求异常。
+ *
+ * @returns 提示与后续处理完成的 Promise
+ */
+const handleSessionExpired = async (): Promise<void> => {
+  // 应用初始化阶段（刷新后动态路由尚未生成）页面没有可停留的内容，直接清理并跳转，不再询问
+  // 动态导入：避免 request → routes.store → api → request 的静态循环依赖
+  const { useRouteStore } = await import('@/store/modules/routes.store')
+  if (!useRouteStore().isGenerate) {
+    await redirectToLogin()
+    return
   }
+  await ElMessageBox.confirm('登录状态已失效，请重新登录后继续操作。', '登录状态已失效', {
+    confirmButtonText: '前往登录',
+    cancelButtonText: '暂不跳转',
+    type: 'warning',
+    // 避免误触遮罩关闭弹窗，必须显式选择
+    closeOnClickModal: false,
+  })
+    .then(() => redirectToLogin())
+    .catch(() => {
+      // 取消、关闭（X / ESC）均视为「暂不跳转」：保留当前会话与页面，不做任何处理
+    })
 }
 
 /**
@@ -149,20 +157,21 @@ service.interceptors.response.use(
       return response
     }
     if (code === 424 && !response.config.skipToken) {
-      // 等待会话清理与跳转完成后再抛出，避免调用方在会话状态尚未复位时继续处理
-      await handleSessionExpired(msg)
+      // 令牌失效：提示用户「登录状态已失效」，由用户决定是否前往登录
+      await handleSessionExpired()
       throw new BusinessError(code, msg ?? '', data)
     }
     showErrorMessage(msg)
     throw new BusinessError(code, msg ?? '', data)
   },
-  async (error: AxiosError<ApiResponse>): Promise<never> => {
-    // 已登录状态下返回 401，按登录态失效处理（公开接口不触发）
+  async (error: AxiosError<ApiResponse>): Promise<AxiosResponse> => {
     const status = error.response?.status
-    if (status === 401 && !error.config?.skipToken && useUserInfoStore().hasToken) {
+    const config = error.config
+    // 已登录状态下返回 401，按登录态失效处理（公开接口不触发）
+    if (status === 401 && config && !config.skipToken && useUserInfoStore().hasToken) {
       const message = error.response?.data?.msg
-      // 同上：会话处理完成后再把异常交给调用方
-      await handleSessionExpired(message)
+      // 提示用户自行决定是否前往登录，不自动跳转
+      await handleSessionExpired()
       throw new BusinessError(401, message ?? '', error.response?.data?.data)
     }
     // 有响应时透传后端 msg；无响应（网络中断/超时）时透传 axios 原始错误信息

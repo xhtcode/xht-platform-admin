@@ -4,6 +4,24 @@
 export const DefaultThemeColor = 'rgb(64, 158, 255)'
 
 /**
+ * 短信验证码默认重发间隔（秒）
+ * 与后端短信发送频控一致，环境变量未配置或配置非法时使用该值
+ */
+const DEFAULT_SMS_RESEND_INTERVAL = 120
+
+/**
+ * 短信验证码重发间隔（秒）
+ *
+ * 通过环境变量 `VITE_SMS_RESEND_INTERVAL` 调整，修改后需与后端频控阈值保持一致，
+ * 否则前端倒计时结束后仍会被后端拒绝。配置缺失、非数字或非正整数时回退为默认值，
+ * 避免出现 `NaN`、`0` 导致按钮立即可点。
+ */
+export const SMS_RESEND_INTERVAL = ((): number => {
+  const interval = Number(import.meta.env.VITE_SMS_RESEND_INTERVAL)
+  return Number.isInteger(interval) && interval > 0 ? interval : DEFAULT_SMS_RESEND_INTERVAL
+})()
+
+/**
  * 404页面名字
  */
 export const PAGE_PATH_404 = '/404'

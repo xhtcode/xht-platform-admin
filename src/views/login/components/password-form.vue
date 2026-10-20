@@ -3,9 +3,9 @@ import type { FormInstance, FormRules } from 'element-plus'
 import { generateCaptcha } from '@/service/api/login/login.api'
 import { useMessage } from '@/hooks/use-message'
 import { useUserInfoStore } from '@/store/modules/user.store'
-import { HOME_PAGE_PATH, PAGE_PATH_LOGIN } from '@/service/constant'
 import { useRoute, useRouter } from 'vue-router'
 import type { LoginRequestType } from '@/service/model/login/login.model'
+import { resolveLoginRedirect } from '@/views/login/login-redirect'
 import { Lock, User } from '@element-plus/icons-vue'
 
 defineOptions({ name: 'PasswordForm' })
@@ -20,26 +20,6 @@ const loginForm = reactive<LoginRequestType>({
 const loading = ref<boolean>(false)
 const router = useRouter()
 const route = useRoute()
-
-/**
- * 解析登录后的跳转地址
- *
- * 会话失效时拦截器会写入 `/login?redirect=原地址`，登录成功后应回到该地址。
- * 仅接受站内绝对路径，并拒绝协议相对地址（`//host`）与登录页自身，避免开放重定向与死循环。
- *
- * @returns 站内跳转路径，非法时回退到首页
- */
-const resolveRedirectPath = (): string => {
-  const rawRedirect = route.query.redirect
-  const redirect = Array.isArray(rawRedirect) ? rawRedirect[0] : rawRedirect
-  if (typeof redirect !== 'string') {
-    return HOME_PAGE_PATH
-  }
-  if (!redirect.startsWith('/') || redirect.startsWith('//') || redirect === PAGE_PATH_LOGIN) {
-    return HOME_PAGE_PATH
-  }
-  return redirect
-}
 
 // 表单验证规则
 const loginRules: FormRules = {
@@ -89,7 +69,7 @@ const handleLogin = async () => {
       captcha_key: loginForm.captcha_key,
     })
     // 会话失效后重新登录时回到原地址，否则回首页
-    await router.replace({ path: resolveRedirectPath() })
+    await router.replace({ path: resolveLoginRedirect(route.query) })
     useMessage().success('登录成功，已为您加载专属工作台，开始工作吧～ !')
   } catch {
     // 错误提示由请求拦截器统一给出，此处仅刷新验证码便于重试

@@ -1,5 +1,6 @@
 import { AppLanguageEnum, ComponentSizeEnum } from '@/service/enums'
 import type { UserStatusType } from '@/service/model/system/user.model'
+import type { LoginRequestType, PhoneLoginFormType } from '@/service/model/login/login.model'
 import type { UnwrapRef } from 'vue'
 
 /**
@@ -153,15 +154,26 @@ declare global {
      */
     login: (data: LoginRequestType) => Promise<void>
     /**
-     * 用户登出方法
-     * 清除用户认证信息并重置路由
+     * 手机号验证码登录方法
+     * 通过手机号与短信验证码登录，获取认证令牌
      */
-    logout: () => Promise<void>
+    loginByPhone: (data: PhoneLoginFormType) => Promise<void>
+    /**
+     * 用户登出方法
+     * 注销服务端令牌并清除用户认证信息、重置路由
+     * @param revokeRemote 是否请求服务端注销令牌，默认 true
+     */
+    logout: (revokeRemote?: boolean) => Promise<void>
     /**
      * 获取用户信息方法
      * 从服务端获取当前登录用户的信息
      */
     getUserInfos: () => Promise<void>
+    /**
+     * 合并写入认证令牌方法
+     * 用于登录与令牌刷新场景，未提供的字段沿用原值
+     */
+    applyToken: (data: Partial<TokenInfoType>) => void
     /**
      * 设置访问令牌方法
      * 设置当前访问令牌

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
-import type { LoginRequestType } from '@/service/model/login/login.model'
-import { loginInPassWord } from '@/service/api/login/login.api'
+import type { LoginRequestType, PhoneLoginFormType } from '@/service/model/login/login.model'
+import { loginInPassWord, loginInPhone, logoutToken } from '@/service/api/login/login.api'
 import type { ApiResponse } from 'axios'
 import pInIaPersistConfig, { clearSessionPersist } from '@/store/pinia-persist'
 import { getUserInfo } from '@/service/api/permission'
@@ -55,6 +55,24 @@ export const useUserInfoStore = defineStore(
     const getUserInfoPage = computed<string>(() => (isAdmin.value ? '/home/user/admin' : '/home/user'))
 
     /**
+     * 合并写入认证令牌
+     *
+     * 按字段合并写入：接口未返回的字段沿用原值，避免令牌信息被部分字段覆盖。
+     *
+     * @param data 令牌字段
+     */
+    function applyToken(data: Partial<TokenInfoType>) {
+      token.value = {
+        access_token: data.access_token ?? token.value.access_token,
+        refresh_token: data.refresh_token ?? token.value.refresh_token,
+        token_type: data.token_type ?? token.value.token_type,
+        expires_in: data.expires_in ?? token.value.expires_in,
+        scope: data.scope ?? token.value.scope ?? [],
+        additional_parameters: data.additional_parameters ?? token.value.additional_parameters ?? {},
+      }
+    }
+
+    /**
      * 用户登录方法
      * 通过用户名密码进行登录，获取认证令牌
      * @param data 登录请求数据
@@ -64,7 +82,7 @@ export const useUserInfoStore = defineStore(
       return new Promise((resolve, reject) => {
         loginInPassWord(data)
           .then((res: ApiResponse<TokenInfoType>) => {
-            token.value = res.data
+            applyToken(res.data)
             resolve()
           })
           .catch(() => {
@@ -74,11 +92,36 @@ export const useUserInfoStore = defineStore(
     }
 
     /**
-     * 用户登出方法
-     * 清除认证信息、动态路由与页签数据
+     * 手机号验证码登录
+     *
+     * 登录成功后将访问令牌写入 store，持久化由 pinia 插件完成。
+     *
+     * @param data 手机号与验证码
      * @returns Promise<void>
      */
-    async function logout(): Promise<void> {
+    async function loginByPhone(data: PhoneLoginFormType): Promise<void> {
+      const res = await loginInPhone(data)
+      applyToken(res.data)
+    }
+
+    /**
+     * 用户登出方法
+     *
+     * 先请求服务端注销令牌（失败不阻断），再清除本地认证信息、动态路由与页签数据。
+     *
+     * @param revokeRemote 是否请求服务端注销令牌；令牌已失效时传 false，避免无效请求
+     * @returns Promise<void>
+     */
+    async function logout(revokeRemote = true): Promise<void> {
+      // 注销接口依赖请求头中的访问令牌，必须在清理本地令牌之前调用
+      if (revokeRemote && token.value.access_token) {
+        try {
+          await logoutToken()
+        } catch (error) {
+          // 服务端注销失败（令牌已失效、网络异常等）不阻断本地退出
+          console.warn('注销令牌失败，继续清理本地会话:', error)
+        }
+      }
       // 动态导入：避免 user.store -> routes.store -> api -> request -> user.store 的静态循环依赖
       const [{ useRouteStore }, { default: useTagsStore }] = await Promise.all([
         import('@/store/modules/routes.store'),
@@ -136,8 +179,10 @@ export const useUserInfoStore = defineStore(
       getAccessToken,
       getUserInfoPage,
       login,
+      loginByPhone,
       logout,
       getUserInfos,
+      applyToken,
       setAccessToken,
     }
   },

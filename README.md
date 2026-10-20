@@ -76,6 +76,7 @@ npm run type-check
 | `VITE_AUTH_API_PREFIX` | 鉴权服务前缀，默认 `/api/auth` |
 | `VITE_ADMIN_API_PREFIX` | 管理服务前缀，默认 `/api/admin` |
 | `VITE_GENERATE_API_PREFIX` | 代码生成服务前缀，默认 `/api/generate` |
+| `VITE_SMS_RESEND_INTERVAL` | 短信验证码重发间隔（秒），默认 `120`，需与后端频控一致 |
 
 ### 生产部署要求
 
