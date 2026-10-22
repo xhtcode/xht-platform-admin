@@ -142,7 +142,7 @@ defineExpose({
 </template>
 
 <style scoped lang="scss">
-.el-upload-dragger{
-  padding: 0!important;
+.el-upload-dragger {
+  padding: 0 !important;
 }
 </style>
