@@ -54,7 +54,7 @@ export const HEADER_TRACE_ID = 'X-Trace-Id'
 /**
  * 定义HTTP请求头中的用户名字段常量
  */
-export const HEADER_USER_ACCOUNT = 'User-Account'
+export const HEADER_USER_ACCOUNT = 'X-User-Account'
 
 /**
  * 定义HTTP请求头中的用户ID字段常量

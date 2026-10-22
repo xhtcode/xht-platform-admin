@@ -1,9 +1,0 @@
-<script lang="ts" setup>
-defineOptions({ name: 'SysOperLogViewIndex' })
-</script>
-
-<template>
-  <div class="main-container-none"></div>
-</template>
-
-<style lang="scss" scoped></style>
