@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { GenColumnInfoResponse } from '@/service/model/generate/column.model'
-import { DataBaseTypeEnum } from '@/service/enums/generate/generate.enums'
+import { DataBaseTypeEnum } from '@/service/enums/generate/generate.enum'
 
 withDefaults(
   defineProps<{

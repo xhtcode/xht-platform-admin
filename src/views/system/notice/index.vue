@@ -11,7 +11,7 @@ import {
 } from '@/service/api/system/notice.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
-import { sysNoticeColumnOption } from '@/views/system/notice/base.data'
+import { sysNoticeColumnOption } from '@/views/system/notice/notice.data'
 import { BottomLeft, Delete, Edit, Plus, Refresh, Search, TopRight } from '@element-plus/icons-vue'
 import { noticeJumpTypeEnum, noticeStatusEnum, noticeTimedPublishEnum, noticeTopEnum } from '@/service/enums/system/notice.enum'
 

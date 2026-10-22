@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import type { ContextMenuSchemaType, PropsTypes } from '@/layout/components/tags-view/types'
-import { ref, shallowRef, useTemplateRef } from 'vue'
 
 defineOptions({ name: 'TagsContextMenu' })
 

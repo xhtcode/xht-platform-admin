@@ -187,7 +187,7 @@ const handlePhoneLogin = async () => {
       </div>
     </el-form-item>
     <el-button :loading="loginLoading" class="login-button" size="large" type="primary" @click="handlePhoneLogin">登录</el-button>
-    <div class="text-center text-12px color-#9ca3af">未注册的手机号将自动创建账号</div>
+    <div class="text-center text-12px color-[var(--el-text-color-placeholder)]">未注册的手机号将自动创建账号</div>
   </el-form>
 </template>
 
@@ -199,7 +199,7 @@ const handlePhoneLogin = async () => {
     box-shadow: none;
 
     &:hover {
-      border-color: #d1d5db;
+      border-color: var(--el-border-color);
     }
 
     &.is-focus {

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import type { RouteRecordRaw } from 'vue-router'
-import { getRouters } from '@/service/api/permission'
+import { getRouters } from '@/service/api/permission/router.api'
 import { cloneDeep } from 'lodash'
 import DynamicRouter from '@/router/modules/dynamic'
 import { removeDynamicRoutes } from '@/router/index'

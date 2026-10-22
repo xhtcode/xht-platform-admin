@@ -2,24 +2,18 @@
 import type { SysMenuTreeResponse } from '@/service/model/system/menu.model'
 import { queryToolsMenuTree } from '@/service/api/system/menu.api'
 import { menuTypeEnum } from '@/service/enums/system/menu.enum'
+import type { MenuTreeCheckEmits, MenuTreeCheckProps } from '@/components/system/menu-tree-check/types'
 
 defineOptions({ name: 'MenuTree' })
 
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<MenuTreeCheckProps>(), {
   modelValue: () => [],
   disabled: false,
   showTopMenu: false,
   type: 'ALL',
 })
 
-const emits = defineEmits(['update:modelValue', 'change'])
-
-interface Props {
-  modelValue?: string[]
-  disabled?: boolean
-  showTopMenu?: boolean
-  type?: 'ALL' | 'M' | 'C' | 'B'
-}
+const emits = defineEmits<MenuTreeCheckEmits>()
 
 const menuTreeRef = ref<any>()
 const modelValue = useVModel(props, 'modelValue', emits)

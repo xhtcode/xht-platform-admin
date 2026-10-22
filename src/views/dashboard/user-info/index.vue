@@ -4,8 +4,7 @@ import { userStatusEnum } from '@/service/enums/system/user.enum'
 defineOptions({
   name: 'UserInfo',
 })
-import { ref, reactive } from 'vue'
-import { ElMessage } from 'element-plus'
+import { useMessage } from '@/hooks/use-message.ts'
 // 模拟用户数据
 const userData = reactive({
   userId: 1,
@@ -55,7 +54,7 @@ const saveEdit = () => {
   userData.userAvatar = editForm.userAvatar
 
   // 显示保存成功消息
-  ElMessage.success('保存成功')
+  useMessage().success('保存成功')
 
   // 退出编辑模式
   isEditMode.value = false

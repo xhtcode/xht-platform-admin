@@ -2,7 +2,7 @@
 import type { FormInstance, FormRules } from 'element-plus'
 import { querySysNoticeTypeById, saveSysNoticeType, updateSysNoticeType } from '@/service/api/system/notice.type.api'
 import type { SysNoticeTypeOperationRequest } from '@/service/model/system/notice.type.model'
-import { sysNoticeTypeOperationForm, sysNoticeTypeOperationRules } from '@/views/system/notice-type/type.data'
+import { sysNoticeTypeOperationForm, sysNoticeTypeOperationRules } from '@/views/system/notice-type/notice.type.data'
 import { useMessage } from '@/hooks/use-message'
 import { noticeTypeStatusEnum } from '@/service/enums/system/notice.enum'
 

@@ -2,25 +2,18 @@
 import { querySysDeptTree } from '@/service/api/system/dept.api'
 import type { SysDeptResponse, SysDeptTreeResponse } from '@/service/model/system/dept.model'
 import { deptStatusEnum } from '@/service/enums/system/dept.enum'
+import type { DeptTreeSelectEmits, DeptTreeSelectProps } from '@/components/system/dept-tree-select/types'
 
 defineOptions({ name: 'DeptTreeSelect' })
 
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<DeptTreeSelectProps>(), {
   placeholder: '请选择父部门',
   clearable: true,
   disabled: false,
   showTopDept: false,
 })
 
-const emits = defineEmits(['update:modelValue', 'clickNode'])
-
-interface Props {
-  modelValue: ModeIdType
-  placeholder?: string
-  disabled?: boolean
-  clearable?: boolean
-  showTopDept?: boolean
-}
+const emits = defineEmits<DeptTreeSelectEmits>()
 
 const menuSelectTreeRef = useTemplateRef<any>('menuSelectTreeRef')
 const modelValue = useVModel(props, 'modelValue', emits)

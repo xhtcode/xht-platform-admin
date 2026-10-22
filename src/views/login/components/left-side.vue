@@ -39,7 +39,7 @@ defineOptions({
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  color: #fff;
+  color: var(--el-color-white);
 
   // 顶部Logo
   .brand-header {

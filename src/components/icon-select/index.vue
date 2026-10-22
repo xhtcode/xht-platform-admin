@@ -145,13 +145,13 @@ onMounted(() => {
     padding: 8px;
     margin: 4px;
     cursor: pointer;
-    border: 1px solid #dcdfe6;
+    border: 1px solid var(--el-border-color);
     border-radius: var(--xht-border-radius-base);
     transition: all 0.3s;
   }
 
   .icon-item:hover {
-    border-color: #409eff;
+    border-color: var(--el-color-primary);
     scale: 1.2;
   }
 }
@@ -178,7 +178,7 @@ onMounted(() => {
         justify-content: center;
         padding: 8px;
         margin: 4px;
-        border: 1px solid #dcdfe6;
+        border: 1px solid var(--el-border-color);
         border-radius: var(--xht-border-radius-base);
         cursor: pointer;
         transition: all 0.3s;

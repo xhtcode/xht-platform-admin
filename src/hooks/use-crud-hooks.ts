@@ -1,6 +1,5 @@
 import type { ApiResponse } from 'axios'
 import type { Reactive, Ref } from 'vue'
-import { toRef } from 'vue'
 
 /**
  * 表格查询分页Hooks

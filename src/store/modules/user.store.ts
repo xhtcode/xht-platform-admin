@@ -3,7 +3,7 @@ import type { LoginRequestType, PhoneLoginFormType } from '@/service/model/login
 import { loginInPassWord, loginInPhone, logoutToken } from '@/service/api/login/login.api'
 import type { ApiResponse } from 'axios'
 import pInIaPersistConfig, { clearSessionPersist } from '@/store/pinia-persist'
-import { getUserInfo } from '@/service/api/permission'
+import { getUserInfo } from '@/service/api/permission/user.profile.api'
 import { userTypeEnum } from '@/service/enums/system/user.enum'
 
 /**

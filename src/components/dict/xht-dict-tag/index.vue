@@ -77,7 +77,7 @@ const handlerClick = (item: DictVo) => {
 <style scoped lang="scss">
 .dict-status-tag {
   border-width: 0 !important;
-  color: #ffffff;
+  color: var(--el-color-white);
   user-select: none;
 }
 </style>

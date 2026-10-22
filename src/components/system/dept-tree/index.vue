@@ -4,12 +4,11 @@ import type { SysDeptQueryRequest, SysDeptResponse, SysDeptTreeResponse } from '
 import type { ApiResponse } from 'axios'
 import { CaretBottom, CaretTop } from '@element-plus/icons-vue'
 import { deptStatusEnum } from '@/service/enums/system/dept.enum'
+import type { DeptTreeEmits } from '@/components/system/dept-tree/types'
 
 defineOptions({ name: 'DeptTree' })
 
-const emits = defineEmits<{
-  (e: 'clickNode', data: SysDeptResponse): void
-}>()
+const emits = defineEmits<DeptTreeEmits>()
 
 const expandAll = ref<boolean>(true)
 

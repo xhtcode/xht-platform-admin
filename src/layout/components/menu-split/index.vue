@@ -75,11 +75,11 @@ watch(
   .xht-split-item-active {
     background: var(--el-color-primary);
     .xht-split-item-icon {
-      color: #ffffff !important;
+      color: var(--el-color-white) !important;
     }
 
     .xht-split-item-text {
-      color: #ffffff !important;
+      color: var(--el-color-white) !important;
     }
   }
 

@@ -2,19 +2,15 @@
 import { querySysDictPage } from '@/service/api/system/dict.api'
 import type { SysDictResponse } from '@/service/model/system/dict.model'
 import { sysDictStatusEnum } from '@/service/enums/system/dict.enum'
+import type { ColumnDictSelectProps } from '@/components/generate/column-dict-select/types'
 
 defineOptions({
   name: 'ColumnDictSelect',
   inheritAttrs: false,
 })
-withDefaults(
-  defineProps<{
-    disabled?: boolean
-  }>(),
-  {
-    disabled: false,
-  }
-)
+withDefaults(defineProps<ColumnDictSelectProps>(), {
+  disabled: false,
+})
 /**
  * 字典编码
  */

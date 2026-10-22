@@ -2,7 +2,6 @@
 import { querySysNoticeEnableTypeList } from '@/service/api/system/notice.type.api'
 import type { NoticeTypeSelectProps } from '@/components/system/notice-type-select/types'
 import type { LabelValue } from '@/service/model/base.model'
-import { onMounted } from 'vue'
 
 defineOptions({ name: 'NoticeTypeSelect' })
 

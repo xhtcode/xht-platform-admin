@@ -4,7 +4,7 @@ import { queryGenTypeMappingById, saveGenTypeMapping, updateGenTypeMapping } fro
 import { genTypeMappingOperationForm, genTypeMappingOperationRules } from '@/views/generate/type-mapping/type.mapping.data'
 import { useMessage } from '@/hooks/use-message'
 import type { GenTypeMappingOperationRequest } from '@/service/model/generate/type.mapping.model'
-import { DataBaseTypeEnum } from '@/service/enums/generate/generate.enums'
+import { DataBaseTypeEnum } from '@/service/enums/generate/generate.enum'
 
 defineOptions({ name: 'GenTypeMappingAddOrUpdate' })
 const emits = defineEmits(['success'])

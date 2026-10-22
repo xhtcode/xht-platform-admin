@@ -8,7 +8,7 @@ import {
   updateSysNoticeUnderShelve,
 } from '@/service/api/system/notice.api'
 import type { SysNoticeOperationRequest } from '@/service/model/system/notice.model'
-import { sysNoticeOperationForm, sysNoticeOperationRules } from '@/views/system/notice/base.data'
+import { sysNoticeOperationForm, sysNoticeOperationRules } from '@/views/system/notice/notice.data'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { noticeJumpTypeEnum, noticeStatusEnum, noticeTimedPublishEnum, noticeTopEnum } from '@/service/enums/system/notice.enum'
 

@@ -77,6 +77,7 @@ defineExpose({
           <xht-enum-tag :filter-label="state.fileInfo.fileStatus" :data="fileStatusEnum" />
         </el-descriptions-item>
         <el-descriptions-item label="文件原始名称" :span="2">{{ state.fileInfo.fileOriginalName }}</el-descriptions-item>
+        <el-descriptions-item label="文件描述" :span="2">{{ state.fileInfo.fileDesc || '暂无' }}</el-descriptions-item>
         <el-descriptions-item label="文件类型">{{ state.fileInfo.fileType }}</el-descriptions-item>
         <el-descriptions-item label="文件后缀">{{ state.fileInfo.fileSuffix }}</el-descriptions-item>
         <el-descriptions-item label="文件大小">

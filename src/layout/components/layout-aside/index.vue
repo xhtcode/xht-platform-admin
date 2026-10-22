@@ -46,7 +46,7 @@ const menuList = computed(() => {
   overflow: hidden;
   background-color: var(--xht-menu-bg-color);
   z-index: 1;
-  box-shadow: 2px 0 4px #00152959;
+  box-shadow: 2px 0 4px var(--xht-aside-shadow-color);
 }
 
 html.dark {

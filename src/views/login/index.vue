@@ -42,7 +42,7 @@ const handleChangeLoginType = (type: LoginType) => {
         <div class="mb-[1.25rem]">
           <div class="mb-8px text-24px color-#1f2329 font-600 dark-color-white">小糊涂・后台管理系统</div>
           <Transition mode="out-in" name="text-fade">
-            <div :key="activeLoginType" class="m-0 text-14px color-#6b7280">
+            <div :key="activeLoginType" class="m-0 text-14px color-[var(--el-text-color-secondary)]">
               {{
                 activeLoginType === 'password' ? '密码验证 · 安全登录' : activeLoginType === 'phone' ? '手机验证 · 便捷登录' : '扫码授权 · 快捷登录'
               }}
@@ -127,8 +127,8 @@ const handleChangeLoginType = (type: LoginType) => {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  ---divider-bg-color: #cdd0d6;
-  ---divider-text-color: #a8abb2;
+  ---divider-bg-color: var(--el-border-color-darker);
+  ---divider-text-color: var(--el-text-color-placeholder);
 }
 
 // 右侧登录表单区域
@@ -190,7 +190,7 @@ const handleChangeLoginType = (type: LoginType) => {
         position: relative;
 
         &:hover {
-          background: #e8e8e8;
+          background: var(--el-fill-color-dark);
           transform: scale(1.05);
           box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
         }

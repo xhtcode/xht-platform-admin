@@ -129,7 +129,7 @@ onMounted(() => {
     box-shadow: none;
 
     &:hover {
-      border-color: #d1d5db;
+      border-color: var(--el-border-color);
     }
 
     &.is-focus {
@@ -179,6 +179,6 @@ onMounted(() => {
   cursor: pointer;
   border-radius: 4px;
   overflow: hidden;
-  background-color: #f5f7fa;
+  background-color: var(--el-fill-color-light);
 }
 </style>

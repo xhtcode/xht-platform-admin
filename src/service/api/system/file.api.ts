@@ -72,7 +72,7 @@ export const uploadSysFile = (file: File, form?: SysFileOperationRequest): Promi
     url: Api.UPLOAD,
     baseURL,
     method: 'post',
-    params: { fileUsed: form?.fileUsed || undefined },
+    params: { fileUsed: form?.fileUsed || undefined, fileDesc: form?.fileDesc || undefined },
     headers: { 'Content-Type': 'multipart/form-data' },
     data,
   })

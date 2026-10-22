@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { GenTypeMappingResponse } from '@/service/model/generate/type.mapping.model'
 import { MappingTsSelectProps, MappingTsSelectState } from '@/components/generate/mapping-ts-select/types'
-import { DataBaseTypeEnum } from '@/service/enums/generate/generate.enums'
+import { DataBaseTypeEnum } from '@/service/enums/generate/generate.enum'
 import { queryGenTypeMappingList } from '@/service/api/generate/type.mapping.api'
 
 defineOptions({

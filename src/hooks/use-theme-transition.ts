@@ -1,4 +1,3 @@
-import { nextTick } from 'vue'
 import { isDark } from '@/utils/dark'
 
 /**

@@ -9,7 +9,6 @@ import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
 import { DArrowLeft, DArrowRight, Delete, Edit, Key, Plus, Refresh, Search, User } from '@element-plus/icons-vue'
 import { userStatusEnum, userTypeEnum } from '@/service/enums/system/user.enum'
-import { ref } from 'vue'
 
 defineOptions({ name: 'SysUserViewIndex' })
 

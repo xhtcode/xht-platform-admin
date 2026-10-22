@@ -5,7 +5,7 @@ import type { BLogQueryRequest, BLogResponse } from '@/service/model/monitor/blo
 import { queryBLogPage } from '@/service/api/monitor/blog.api'
 import { bLogExecuteStatusEnum } from '@/service/enums/monitor/blog.enum'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
-import { bLogColumnOption } from '@/views/monitor/blog/log.data'
+import { bLogColumnOption } from '@/views/monitor/blog/blog.data'
 import { View, Refresh, Search } from '@element-plus/icons-vue'
 
 defineOptions({ name: 'BLogViewIndex' })

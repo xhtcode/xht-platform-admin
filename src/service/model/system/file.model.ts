@@ -17,6 +17,7 @@ export interface SysFileQueryRequest extends PageQueryRequest {
 export interface SysFileResponse extends MetaResponse {
   id: ModeIdType // 文件ID
   fileOriginalName: string // 文件原始名称
+  fileDesc: string // 文件描述
   fileSize: number // 文件大小（单位：字节）
   fileSizeInfo: string // 文件大小信息
   fileHash: string // 文件hash
@@ -39,4 +40,5 @@ export interface SysFileResponse extends MetaResponse {
  */
 export interface SysFileOperationRequest {
   fileUsed?: string // 文件用途
+  fileDesc?: string // 文件描述
 }

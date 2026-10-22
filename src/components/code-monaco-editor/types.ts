@@ -71,3 +71,10 @@ export interface EditorProps {
   validateStatus?: boolean // 校验状态
   wordWrap?: 'on' | 'off' // 是否自动换行
 }
+
+/**
+ * 编辑器emit类型
+ */
+export interface EditorEmits {
+  (e: 'change', value?: string): void // 内容变化时触发
+}

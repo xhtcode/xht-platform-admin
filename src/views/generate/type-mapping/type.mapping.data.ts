@@ -1,7 +1,7 @@
 import type { FormRules } from 'element-plus'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import type { GenTypeMappingOperationRequest, GenTypeMappingResponse } from '@/service/model/generate/type.mapping.model'
-import { DataBaseTypeEnum } from '@/service/enums/generate/generate.enums'
+import { DataBaseTypeEnum } from '@/service/enums/generate/generate.enum'
 
 /**
  * 增改页面 表单类型 默认值

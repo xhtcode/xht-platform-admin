@@ -3,7 +3,7 @@ import type { FormInstance, FormRules } from 'element-plus'
 import { queryGenDataSourceById, saveGenDataSource, updateGenDataSource } from '@/service/api/generate/datasource.api'
 import { genDataSourceOperationForm, genDataSourceOperationRules } from '@/views/generate/datasource/datasource.data'
 import { useMessage } from '@/hooks/use-message'
-import { DataBaseTypeEnum } from '@/service/enums/generate/generate.enums'
+import { DataBaseTypeEnum } from '@/service/enums/generate/generate.enum'
 import type { GenDataSourceOperationRequest } from '@/service/model/generate/datasource.model'
 
 defineOptions({ name: 'GenDataSourceAddOrUpdate' })

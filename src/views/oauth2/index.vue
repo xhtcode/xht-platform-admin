@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import request from '@/utils/request'
-import { onMounted } from 'vue'
 import { useUserInfoStore } from '@/store/modules/user.store'
 import { useRouter } from 'vue-router'
 defineOptions({

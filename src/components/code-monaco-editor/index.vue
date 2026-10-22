@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { EditorProps, LanguageType } from '@/components/code-monaco-editor/types'
+import type { EditorEmits, EditorProps, LanguageType } from '@/components/code-monaco-editor/types'
 import { customSuggestOptions } from '@/components/code-monaco-editor/data'
 import '@/components/code-monaco-editor/web-work'
 import * as monaco from 'monaco-editor'
@@ -20,7 +20,7 @@ const props = withDefaults(defineProps<EditorProps>(), {
   validateStatus: false,
   wordWrap: 'off',
 })
-const emits = defineEmits(['change'])
+const emits = defineEmits<EditorEmits>()
 const modelValue = defineModel<string>('modelValue')
 const language = defineModel<LanguageType>('language', {
   default: null,

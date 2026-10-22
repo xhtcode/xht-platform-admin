@@ -16,9 +16,9 @@ defineOptions({ name: 'QrcodeForm' })
     <div class="qrcode-image">
       <el-image :src="qrcodeUrl" alt="扫码登录二维码" class="h-220px w-220px" fit="fill" />
     </div>
-    <div class="text-[0.85rem] color-#6b7280">
+    <div class="text-[0.85rem] color-[var(--el-text-color-secondary)]">
       <p class="mb-5px">在手机上打开 “小糊涂App” 扫码</p>
-      <p class="mb-0 text-12px color-#9ca3af">扫码登录暂未开放，请使用账号密码登录</p>
+      <p class="mb-0 text-12px color-[var(--el-text-color-placeholder)]">扫码登录暂未开放，请使用账号密码登录</p>
     </div>
   </div>
 </template>

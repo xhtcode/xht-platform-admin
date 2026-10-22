@@ -6,6 +6,7 @@ import type { ColumnConfig } from '@/components/table-tool-bar/types'
  */
 export const sysFileColumnOption: ColumnConfig<SysFileResponse> = {
   fileOriginalName: { desc: '文件原始名称', visible: true, disabled: true },
+  fileDesc: { desc: '文件描述', visible: true, disabled: false },
   fileType: { desc: '文件类型', visible: true, disabled: false },
   fileSuffix: { desc: '文件后缀', visible: true, disabled: false },
   fileSizeInfo: { desc: '文件大小', visible: true, disabled: false },

@@ -2,22 +2,16 @@
 import { useUserInfoStore } from '@/store/modules/user.store'
 import { storeToRefs } from 'pinia'
 import { isAuthorized, type AuthorizationScope } from '@/utils/authorization'
+import type { XhtAuthorizationProps } from '@/components/xht-authorization/types'
 
 defineOptions({
   name: 'XhtAuthorization',
   inheritAttrs: false,
 })
-const props = withDefaults(
-  defineProps<{
-    authorization: string | string[]
-    modifiers?: VAuthorizationModifiers
-    args?: VAuthorizationArgs
-  }>(),
-  {
-    modifiers: undefined,
-    args: 'all',
-  }
-)
+const props = withDefaults(defineProps<XhtAuthorizationProps>(), {
+  modifiers: undefined,
+  args: 'all',
+})
 const { userInfo, isAdmin } = storeToRefs(useUserInfoStore())
 
 /**

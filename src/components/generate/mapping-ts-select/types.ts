@@ -1,4 +1,4 @@
-import { DataBaseTypeEnum } from '@/service/enums/generate/generate.enums'
+import { DataBaseTypeEnum } from '@/service/enums/generate/generate.enum'
 import type { GenTypeMappingResponse } from '@/service/model/generate/type.mapping.model'
 
 /**

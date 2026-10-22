@@ -226,7 +226,7 @@ defineExpose({
       &:hover {
         font-weight: bold;
         color: var(--el-color-primary);
-        background: #ebeef5;
+        background: var(--el-border-color-lighter);
       }
     }
 

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { XhtPaginationProps } from '@/components/element-plus/xht-pagination/types'
+import type { XhtPaginationEmits, XhtPaginationProps } from '@/components/element-plus/xht-pagination/types'
 
 defineOptions({ name: 'XhtPagination', inheritAttrs: false })
 
@@ -21,7 +21,7 @@ const props = withDefaults(defineProps<XhtPaginationProps>(), {
   nextIcon: undefined,
   pageCount: undefined,
 })
-const emits = defineEmits(['pagination'])
+const emits = defineEmits<XhtPaginationEmits>()
 const pageSize = defineModel<number | undefined>('pageSize', {
   required: true,
 })

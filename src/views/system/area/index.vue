@@ -1,24 +1,16 @@
 <script lang="ts" setup>
-/**
- * 系统管理 - 行政区划管理页面
- * 采用左右分栏布局：左侧为懒加载行政区划树，右侧为对应节点的详情表单
- * 支持对行政区划的新增、修改、删除、刷新等操作
- */
 import type { FormInstance, FormRules } from 'element-plus'
 import type { SysAreaOperationRequest, SysAreaQueryRequest, SysAreaResponse, SysAreaTreeResponse } from '@/service/model/system/area.model'
 import { querySysAreaById, querySysAreaList, removeSysAreaById, saveSysArea, updateSysArea } from '@/service/api/system/area.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { Delete, Edit, Plus, Refresh } from '@element-plus/icons-vue'
-import { useTemplateRef } from 'vue'
 import type Node from 'element-plus/es/components/tree/src/model/node'
 import { TreeData } from 'element-plus/es/components/tree/src/tree.type'
 import { sysAreaOperationForm, sysAreaOperationRules } from '@/views/system/area/area.data'
 import { sysAreaHashChildEnum } from '@/service/enums/system/area.enum'
 
-/** 组件名称，用于 keep-alive 缓存识别 */
 defineOptions({ name: 'SysAreaViewIndex' })
 
-/** 页面响应式状态 */
 const state = reactive<TableQueryListState<SysAreaQueryRequest, SysAreaTreeResponse>>({
   loadingStatus: false, // 加载状态
   refreshTable: true, // 是否刷新表格（控制表单是否可编辑）

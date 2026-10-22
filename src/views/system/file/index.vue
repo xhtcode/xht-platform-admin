@@ -5,7 +5,7 @@ import type { SysFileQueryRequest, SysFileResponse } from '@/service/model/syste
 import { querySysFilePage, removeSysFileById } from '@/service/api/system/file.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
-import { sysFileColumnOption } from '@/views/system/file/base.data'
+import { sysFileColumnOption } from '@/views/system/file/file.data'
 import { handleDownloadSysFile } from '@/views/system/file/file.utils'
 import { fileStatusEnum, fileStorageTypeEnum } from '@/service/enums/system/file.enum'
 import { Delete, Document, Download, Refresh, Search, Upload, View } from '@element-plus/icons-vue'
@@ -151,6 +151,7 @@ onMounted(async () => {
     <el-table v-loading="state.loadingStatus" :data="state.tableList" border row-key="id" empty-text="暂无匹配数据 🔍 试试调整筛选条件吧">
       <xht-column-index fixed="left" :current="queryParams.current" :size="queryParams.size" />
       <el-table-column v-if="columnOption.fileOriginalName?.visible" label="文件原始名称" prop="fileOriginalName" width="260" show-overflow-tooltip />
+      <el-table-column v-if="columnOption.fileDesc?.visible" label="文件描述" prop="fileDesc" width="240" show-overflow-tooltip />
       <el-table-column v-if="columnOption.fileType?.visible" label="文件类型" prop="fileType" width="160" show-overflow-tooltip />
       <el-table-column v-if="columnOption.fileSuffix?.visible" label="文件后缀" prop="fileSuffix" width="100" />
       <el-table-column v-if="columnOption.fileSizeInfo?.visible" label="文件大小" prop="fileSizeInfo" width="120" />

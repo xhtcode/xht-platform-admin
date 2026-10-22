@@ -11,7 +11,6 @@ import { ArrowDownBold } from '@element-plus/icons-vue'
 import { storeToRefs } from 'pinia'
 
 defineOptions({ name: 'TagsView' })
-const emits = defineEmits(['refresh'])
 
 const tagsToolMenu = defineAsyncComponent(() => import('@/layout/components/tags-view/components/tags-tool-menu.vue'))
 
@@ -303,7 +302,7 @@ watch(
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #afafaf;
+    color: var(--el-text-color-placeholder);
     border: none !important;
     user-select: none;
     height: va.$tags-height !important;

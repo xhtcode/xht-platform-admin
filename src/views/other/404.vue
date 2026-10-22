@@ -23,7 +23,7 @@ const goHome = () => {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #f5f5f5; // 背景色
+  background-color: var(--el-fill-color-light); // 背景色
   text-align: center;
 
   .content {
@@ -32,29 +32,29 @@ const goHome = () => {
 
     .title {
       font-size: 100px;
-      color: #ff6b6b; // 醒目的红色
+      color: var(--el-color-danger); // 醒目的红色
       margin: 0;
       font-weight: bold;
     }
 
     .description {
       font-size: 20px;
-      color: #666;
+      color: var(--el-text-color-regular);
       margin: 20px 0;
     }
 
     .home-button {
       padding: 12px 24px;
       font-size: 16px;
-      color: white;
-      background-color: #007bff; // 蓝色按钮
+      color: var(--el-color-white);
+      background-color: var(--el-color-primary); // 蓝色按钮
       border: none;
       border-radius: 5px;
       cursor: pointer;
       transition: background-color 0.3s ease;
 
       &:hover {
-        background-color: #0056b3; // 悬停变深蓝
+        background-color: var(--el-color-primary-dark-2); // 悬停变深蓝
       }
     }
   }

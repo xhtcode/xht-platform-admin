@@ -2,7 +2,7 @@
 import type { SysMenuTreeResponse } from '@/service/model/system/menu.model'
 import { queryToolsMenuTree } from '@/service/api/system/menu.api'
 import type { TreeNodeData, TreeOptionProps } from 'element-plus/es/components/tree/src/tree.type'
-import type { MenuTreeSelectProps } from '@/components/system/menu-tree-select/types'
+import type { MenuTreeSelectEmits, MenuTreeSelectProps } from '@/components/system/menu-tree-select/types'
 import type { TreeInstance } from 'element-plus'
 import { menuCommonStatus, menuTypeEnum } from '@/service/enums/system/menu.enum'
 
@@ -17,7 +17,7 @@ const props = withDefaults(defineProps<MenuTreeSelectProps>(), {
   type: undefined,
 })
 
-const emits = defineEmits(['change'])
+const emits = defineEmits<MenuTreeSelectEmits>()
 
 const menuSelectTreeRef = useTemplateRef<TreeInstance>('menuSelectTreeRef')
 const modelValue = defineModel<string>('modelValue')
