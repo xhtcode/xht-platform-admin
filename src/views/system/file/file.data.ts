@@ -19,8 +19,4 @@ export const sysFileColumnOption: ColumnConfig<SysFileResponse> = {
   fileHash: { desc: '文件hash', visible: false, disabled: false },
   fileUploadTime: { desc: '上传时间', visible: true, disabled: false },
   fileUploadUser: { desc: '上传用户', visible: false, disabled: false },
-  createBy: { desc: '创建人', visible: false, disabled: false },
-  createTime: { desc: '创建时间', visible: false, disabled: false },
-  updateBy: { desc: '更新人', visible: false, disabled: false },
-  updateTime: { desc: '更新时间', visible: false, disabled: false },
 }

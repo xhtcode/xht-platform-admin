@@ -6,14 +6,13 @@ import { querySysFilePage, removeSysFileById } from '@/service/api/system/file.a
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { sysFileColumnOption } from '@/views/system/file/file.data'
-import { handleDownloadSysFile } from '@/views/system/file/file.utils'
+import { handleDownloadSysFile } from '@/utils/file'
 import { fileStatusEnum, fileStorageTypeEnum } from '@/service/enums/system/file.enum'
 import { Delete, Document, Download, Refresh, Search, Upload, View } from '@element-plus/icons-vue'
 
 defineOptions({ name: 'SysFileViewIndex' })
 
 const fileUpload = defineAsyncComponent(() => import('@/views/system/file/components/file-upload.vue'))
-const filePreview = defineAsyncComponent(() => import('@/views/system/file/components/file-preview.vue'))
 const fileDetail = defineAsyncComponent(() => import('@/views/system/file/components/file-detail.vue'))
 const sysFileUploadRef = useTemplateRef('sysFileUploadRef')
 const sysFileDetailRef = useTemplateRef('sysFileDetailRef')
@@ -22,7 +21,7 @@ const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 
 const state = reactive<TableQueryPageState<SysFileQueryRequest, SysFileResponse>>({
   queryParams: {
-    descName: 'createTime',
+    descName: 'fileUploadTime',
   }, // 查询参数
   total: 0, // 总条目数
   pages: 0, // 总页数
@@ -41,11 +40,33 @@ const columnOption = ref<ColumnConfig<SysFileResponse>>({
 })
 
 /**
+ * 上传时间范围（仅用于表单，查询时拆分为 startUploadTime / endUploadTime）
+ */
+const uploadTimeRange = ref<[string, string] | null>(null)
+
+/**
  * 重置查询表单
  */
 const resetQuery = async () => {
   queryFormRef.value?.resetFields()
-  queryParams.value = {}
+  uploadTimeRange.value = null
+  queryParams.value = {
+    descName: 'fileUploadTime',
+  }
+  await handlePageQuery()
+}
+
+/**
+ * 组装查询参数并查询（拆分上传时间范围）
+ */
+const handleSearch = async () => {
+  if (uploadTimeRange.value?.length === 2) {
+    queryParams.value.startUploadTime = uploadTimeRange.value[0]
+    queryParams.value.endUploadTime = uploadTimeRange.value[1]
+  } else {
+    queryParams.value.startUploadTime = undefined
+    queryParams.value.endUploadTime = undefined
+  }
   await handlePageQuery()
 }
 
@@ -86,6 +107,11 @@ const handleDownload = async (row: SysFileResponse) => {
 }
 
 /**
+ * 是否允许删除（接口约定：已关联业务的文件不允许删除）
+ */
+const canDelete = (row: SysFileResponse) => row.fileStatus !== 2
+
+/**
  * 处理删除文件记录
  */
 const handleDelete = (row: SysFileResponse) => {
@@ -117,7 +143,7 @@ onMounted(async () => {
           </el-form-item>
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
-          <el-button :icon="Search" type="primary" @click="handlePageQuery">查询</el-button>
+          <el-button :icon="Search" type="primary" @click="handleSearch">查询</el-button>
           <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
         </el-col>
       </el-row>
@@ -132,8 +158,42 @@ onMounted(async () => {
             <el-input v-model="queryParams.fileStorageKey" clearable :maxlength="100" show-word-limit placeholder="请输入文件存储key" />
           </el-form-item>
         </el-col>
+        <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
+          <el-form-item label="文件类型" prop="fileType">
+            <el-input v-model="queryParams.fileType" clearable :maxlength="100" show-word-limit placeholder="请输入MIME类型（精确查询）" />
+          </el-form-item>
+        </el-col>
+        <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
+          <el-form-item label="文件状态" prop="fileStatus">
+            <el-select v-model="queryParams.fileStatus" clearable placeholder="请选择文件状态">
+              <el-option v-for="item in fileStatusEnum" :key="item.value" :label="item.label" :value="item.value" />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
+          <el-form-item label="文件用途" prop="fileUsed">
+            <el-input v-model="queryParams.fileUsed" clearable :maxlength="100" show-word-limit placeholder="请输入文件用途" />
+          </el-form-item>
+        </el-col>
+        <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
+          <el-form-item label="上传用户" prop="fileUploadUser">
+            <el-input v-model="queryParams.fileUploadUser" clearable :maxlength="100" show-word-limit placeholder="请输入上传用户" />
+          </el-form-item>
+        </el-col>
+        <el-col :xl="8" :lg="12" :md="16" :sm="24" :xs="24">
+          <el-form-item label="上传时间">
+            <el-date-picker
+              v-model="uploadTimeRange"
+              value-format="YYYY-MM-DD HH:mm:ss"
+              type="datetimerange"
+              range-separator="至"
+              start-placeholder="开始时间"
+              end-placeholder="结束时间"
+            />
+          </el-form-item>
+        </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
-          <el-button :icon="Search" type="primary" @click="handlePageQuery">查询</el-button>
+          <el-button :icon="Search" type="primary" @click="handleSearch">查询</el-button>
           <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
         </el-col>
       </el-row>
@@ -172,10 +232,6 @@ onMounted(async () => {
       <el-table-column v-if="columnOption.fileHash?.visible" label="文件hash" prop="fileHash" width="220" show-overflow-tooltip />
       <el-table-column v-if="columnOption.fileUploadTime?.visible" label="上传时间" prop="fileUploadTime" width="180" />
       <el-table-column v-if="columnOption.fileUploadUser?.visible" label="上传用户" prop="fileUploadUser" width="120" />
-      <el-table-column v-if="columnOption.createBy?.visible" label="创建人" prop="createBy" width="160" />
-      <el-table-column v-if="columnOption.createTime?.visible" label="创建时间" prop="createTime" width="180" />
-      <el-table-column v-if="columnOption.updateBy?.visible" label="更新人" prop="updateBy" width="160" />
-      <el-table-column v-if="columnOption.updateTime?.visible" label="更新时间" prop="updateTime" width="180" />
       <!-- @vue-generic {SysFileResponse} -->
       <el-table-column label="操作" fixed="right" width="260">
         <template #default="{ row }">
@@ -183,7 +239,10 @@ onMounted(async () => {
             <el-button :icon="View" link type="primary" @click="handlePreview(row)">预览</el-button>
             <el-button :icon="Download" link type="primary" @click="handleDownload(row)">下载</el-button>
             <el-button :icon="Document" link type="success" @click="handleDetail(row)">详情</el-button>
-            <el-button :icon="Delete" link type="danger" @click="handleDelete(row)">删除</el-button>
+            <el-tooltip v-if="!canDelete(row)" content="文件已关联业务，无法删除" placement="top">
+              <el-button :icon="Delete" link type="info" disabled>删除</el-button>
+            </el-tooltip>
+            <el-button v-else :icon="Delete" link type="danger" @click="handleDelete(row)">删除</el-button>
           </el-space>
         </template>
       </el-table-column>
@@ -196,7 +255,7 @@ onMounted(async () => {
       @pagination="handlePageQuery"
     />
     <file-upload ref="sysFileUploadRef" @success="handlePageQuery" />
-    <file-preview ref="sysFilePreviewRef" />
+    <xht-file-preview ref="sysFilePreviewRef" />
     <file-detail ref="sysFileDetailRef" />
   </div>
 </template>

@@ -1,2 +1,4 @@
 allowBuilds:
   '@parcel/watcher': false
+# 本机 isolated 布局创建依赖链接会静默失败（顶层缺 vite/eslint 等），固定 hoisted
+nodeLinker: hoisted

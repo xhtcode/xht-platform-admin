@@ -1,6 +1,6 @@
 import request, { requestBlob } from '@/utils/request'
 import type { ApiResponse, AxiosResponse } from 'axios'
-import type { SysFileOperationRequest, SysFileQueryRequest, SysFileResponse } from '@/service/model/system/file.model'
+import type { SysFileChunkMergeRequest, SysFileOperationRequest, SysFileQueryRequest, SysFileResponse } from '@/service/model/system/file.model'
 
 /**
  * 后台管理服务前缀
@@ -14,13 +14,16 @@ enum Api {
   REMOVE = '/sys/files/remove/',
   QUERY_BY_ID = '/sys/files/get/',
   QUERY_PAGE = '/sys/files/page',
-  UPLOAD = '/file/storage/upload',
-  DOWNLOAD = '/file/storage/download/',
-  PREVIEW = '/file/storage/preview/',
+  UPLOAD = '/sys/files/upload',
+  CHUNK_PROGRESS = '/sys/files/chunk/progress/',
+  CHUNK_UPLOAD = '/sys/files/chunk/upload',
+  CHUNK_MERGE = '/sys/files/chunk/merge',
+  DOWNLOAD = '/sys/files/download/',
+  PREVIEW = '/sys/files/preview',
 }
 
 /**
- * 根据主键`fileId`删除系统文件记录（逻辑删除）
+ * 根据主键`fileId`删除系统文件记录（逻辑删除，同步清理物理文件）
  *
  * @param fileId 文件ID
  */
@@ -60,7 +63,7 @@ export const querySysFilePage = (query?: SysFileQueryRequest): Promise<ApiRespon
 }
 
 /**
- * 上传文件
+ * 上传文件（常规整文件上传，适用于小文件；大文件请使用分片上传）
  *
  * @param file 上传文件
  * @param form 文件上传请求参数
@@ -68,12 +71,75 @@ export const querySysFilePage = (query?: SysFileQueryRequest): Promise<ApiRespon
 export const uploadSysFile = (file: File, form?: SysFileOperationRequest): Promise<ApiResponse<SysFileResponse>> => {
   const data = new FormData()
   data.append('file', file)
+  if (form?.fileUsed) {
+    data.append('fileUsed', form.fileUsed)
+  }
   return request<SysFileResponse>({
     url: Api.UPLOAD,
     baseURL,
     method: 'post',
-    params: { fileUsed: form?.fileUsed || undefined, fileDesc: form?.fileDesc || undefined },
     headers: { 'Content-Type': 'multipart/form-data' },
+    data,
+  })
+}
+
+/**
+ * 查询分片上传进度（断点续传，返回已成功上传的分片序号列表）
+ *
+ * @param uploadId 分片上传标识
+ */
+export const querySysFileChunkProgress = (uploadId: string): Promise<ApiResponse<number[]>> => {
+  return request<number[]>({
+    url: Api.CHUNK_PROGRESS + `${uploadId}`,
+    baseURL,
+    method: 'get',
+  })
+}
+
+/**
+ * 分片上传（单分片，分片序号从0开始，重复上传直接覆盖）
+ *
+ * @param chunk 分片文件内容
+ * @param uploadId 分片上传标识
+ * @param chunkIndex 分片序号
+ */
+export const uploadSysFileChunk = (chunk: Blob, uploadId: string, chunkIndex: number): Promise<ApiResponse<void>> => {
+  const data = new FormData()
+  data.append('file', chunk)
+  data.append('uploadId', uploadId)
+  data.append('chunkIndex', `${chunkIndex}`)
+  return request<void>({
+    url: Api.CHUNK_UPLOAD,
+    baseURL,
+    method: 'post',
+    headers: { 'Content-Type': 'multipart/form-data' },
+    data,
+  })
+}
+
+/**
+ * 合并文件分片（校验分片完整性后按序号顺序合并，生成文件记录）
+ *
+ * @param form 分片合并请求参数
+ */
+export const mergeSysFileChunk = (form: SysFileChunkMergeRequest): Promise<ApiResponse<SysFileResponse>> => {
+  const data = new FormData()
+  data.append('uploadId', form.uploadId)
+  data.append('fileName', form.fileName)
+  data.append('chunkTotal', `${form.chunkTotal}`)
+  if (form.fileUsed) {
+    data.append('fileUsed', form.fileUsed)
+  }
+  if (form.fileDesc) {
+    data.append('fileDesc', form.fileDesc)
+  }
+  if (form.fileHash) {
+    data.append('fileHash', form.fileHash)
+  }
+  return request<SysFileResponse>({
+    url: Api.CHUNK_MERGE,
+    baseURL,
+    method: 'post',
     data,
   })
 }
@@ -93,15 +159,16 @@ export const downloadSysFile = (fileStorageKey: string): Promise<AxiosResponse<B
 }
 
 /**
- * 预览文件（浏览器可直接渲染的类型以 inline 方式返回，其余类型由后端降级为附件下载）
+ * 预览文件（支持 HTTP Range 分段请求；不支持的格式由后端返回错误）
  *
  * @param fileStorageKey 文件存储key
  */
 export const previewSysFile = (fileStorageKey: string): Promise<AxiosResponse<Blob>> => {
   return requestBlob({
-    url: Api.PREVIEW + `${fileStorageKey}`,
+    url: Api.PREVIEW,
     baseURL,
     method: 'get',
+    params: { fileStorageKey },
     responseType: 'blob',
   })
 }

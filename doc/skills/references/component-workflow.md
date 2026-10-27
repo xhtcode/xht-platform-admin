@@ -128,7 +128,7 @@ const formatValue = (value?: number): number | undefined => {
 | 插槽 | 超过 2 个插槽时在 `types.ts` 补 `XhtXxxSlots` 说明用途 |
 | 样式 | `<style scoped lang="scss">`；颜色/圆角/边框必须 `var(--xht-*)` / `var(--el-*)`；穿透用 `:deep()` |
 | 尺寸/间距 | 优先 UnoCSS 原子类（`w-full`、`flex-center`、`gap-2`） |
-| 内置提示 | 不在组件内弹 `useMessage()`；把失败/异常通过事件抛给调用方 |
+| 内置提示 | 统一走 `useMessage()`，**按业务归属判断是否该弹**：接口失败/校验失败等跨层结果不弹（拦截器已提示过，重复弹属双重提示），交由调用方处理；组件自闭环的交互反馈（复制成功、预览器内部操作结果）可直接在组件内提示 |
 | 数据来源 | 展示型组件只收 props，不直接调 api/store；确需取字典用 `useDictHooks` |
 
 ## 4. 使用方式

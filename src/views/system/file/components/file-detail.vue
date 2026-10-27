@@ -2,7 +2,7 @@
 import { querySysFileById } from '@/service/api/system/file.api'
 import type { SysFileResponse } from '@/service/model/system/file.model'
 import { fileStatusEnum, fileStorageTypeEnum } from '@/service/enums/system/file.enum'
-import { handleDownloadSysFile } from '@/views/system/file/file.utils'
+import { handleDownloadSysFile } from '@/utils/file'
 import { useMessage } from '@/hooks/use-message'
 import { Download } from '@element-plus/icons-vue'
 
@@ -94,18 +94,9 @@ defineExpose({
         <el-descriptions-item label="文件hash" :span="2">
           <span class="break-all">{{ state.fileInfo.fileHash }}</span>
         </el-descriptions-item>
-        <el-descriptions-item label="预览地址" :span="2">
-          <el-link v-if="state.fileInfo.filePreviewUrl" :href="state.fileInfo.filePreviewUrl" target="_blank" type="primary">
-            {{ state.fileInfo.filePreviewUrl }}
-          </el-link>
-          <span v-else>暂无</span>
-        </el-descriptions-item>
         <el-descriptions-item label="上传时间">{{ state.fileInfo.fileUploadTime }}</el-descriptions-item>
         <el-descriptions-item label="上传用户">{{ state.fileInfo.fileUploadUser }}</el-descriptions-item>
-        <el-descriptions-item label="创建人">{{ state.fileInfo.createBy }}</el-descriptions-item>
-        <el-descriptions-item label="创建时间">{{ state.fileInfo.createTime }}</el-descriptions-item>
-        <el-descriptions-item label="更新人">{{ state.fileInfo.updateBy }}</el-descriptions-item>
-        <el-descriptions-item label="更新时间">{{ state.fileInfo.updateTime }}</el-descriptions-item>
+        <el-descriptions-item label="关联业务时间" :span="2">{{ state.fileInfo.fileAssociateTime || '暂无（未关联业务）' }}</el-descriptions-item>
         <el-descriptions-item label="文件元数据" :span="2">
           <pre class="file-metadata">{{ state.fileInfo.fileMetadata ? JSON.stringify(state.fileInfo.fileMetadata, null, 2) : '暂无' }}</pre>
         </el-descriptions-item>
