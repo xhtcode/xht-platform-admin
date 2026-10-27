@@ -9,10 +9,7 @@ import { Download } from '@element-plus/icons-vue'
 /**
  * 文件预览：按文件类型分发到图片 / PDF / 文本 / JSON / 音视频预览
  */
-defineOptions({ name: 'XhtFilePreview', inheritAttrs: true })
-
-// PDF 预览依赖 pdf.js，体量较大，按需加载
-const XhtPdfPreview = defineAsyncComponent(() => import('@/components/xht-file-preview/xht-pdf-preview/index.vue'))
+defineOptions({ name: "XhtFilePreview", inheritAttrs: true })
 
 const state = reactive({
   visibleStatus: false, // 弹窗可见状态
@@ -114,17 +111,16 @@ defineExpose({
   <el-dialog
     v-model="state.visibleStatus"
     :title="state.fileInfo.fileOriginalName || '文件预览'"
-    width="70%"
-    top="6vh"
     append-to-body
+    fullscreen
     :close-on-click-modal="false"
     :show-close="false"
     :before-close="close"
   >
-    <div v-loading="state.loadingStatus" element-loading-text="拼命加载中" class="h-[72vh] flex-center">
+    <div v-loading="state.loadingStatus" element-loading-text="拼命加载中" class="h-full">
       <template v-if="state.previewUrl">
         <xht-picture-preview v-if="state.previewMode === 'image'" :url="state.previewUrl" />
-        <XhtPdfPreview v-else-if="state.previewMode === 'pdf'" :url="state.previewUrl" />
+        <xht-pdf-preview v-else-if="state.previewMode === 'pdf'" :url="state.previewUrl" />
         <xht-txt-preview v-else-if="state.previewMode === 'text'" :url="state.previewUrl" />
         <xht-json-preview v-else-if="state.previewMode === 'json'" :url="state.previewUrl" />
         <video v-else-if="state.previewMode === 'video'" :src="state.previewUrl" class="max-h-full max-w-full" controls />

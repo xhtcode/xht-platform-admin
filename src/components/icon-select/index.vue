@@ -2,7 +2,7 @@
 import { CircleClose } from '@element-plus/icons-vue'
 import type { IconItemOptions, IconSelectProps } from '@/components/icon-select/types'
 
-defineOptions({ name: 'SelectIcon', inheritAttrs: false })
+defineOptions({ name: 'IconSelect', inheritAttrs: false })
 
 const props = withDefaults(defineProps<IconSelectProps>(), {
   placeholder: '请输入内容搜索图标或者选择图标', // 输入框占位文本
