@@ -2,6 +2,10 @@
  * 文件状态
  */
 export type FileStatus = 1 | 2 | 99
+/**
+ * 文件存储类型
+ */
+export type FileStorageType = 'LOCAL' | 'MINIO' | 'S3' | 'OSS' | 'DATABASE'
 
 /**
  * 系统管理-文件查询请求参数类型

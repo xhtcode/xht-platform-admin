@@ -172,3 +172,15 @@ export const previewSysFile = (fileStorageKey: string): Promise<AxiosResponse<Bl
     responseType: 'blob',
   })
 }
+
+/**
+ * 获取预览文件的直连地址
+ *
+ * 用于 pdf.js 等自身支持 HTTP Range 的消费方：由它按需分段拉取，避免前端先整包下载再渲染。
+ * 鉴权头需调用方自行附带（pdf.js 通过 httpHeaders 传入）。
+ *
+ * @param fileStorageKey 文件存储key
+ */
+export const getSysFilePreviewUrl = (fileStorageKey: string): string => {
+  return `${baseURL}${Api.PREVIEW}?fileStorageKey=${encodeURIComponent(fileStorageKey)}`
+}

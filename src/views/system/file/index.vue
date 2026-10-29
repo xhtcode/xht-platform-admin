@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
+import { useRouter } from 'vue-router'
 import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
 import type { SysFileQueryRequest, SysFileResponse } from '@/service/model/system/file.model'
 import { querySysFilePage, removeSysFileById } from '@/service/api/system/file.api'
@@ -16,8 +17,8 @@ const fileUpload = defineAsyncComponent(() => import('@/views/system/file/compon
 const fileDetail = defineAsyncComponent(() => import('@/views/system/file/components/file-detail.vue'))
 const sysFileUploadRef = useTemplateRef('sysFileUploadRef')
 const sysFileDetailRef = useTemplateRef('sysFileDetailRef')
-const sysFilePreviewRef = useTemplateRef('sysFilePreviewRef')
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
+const router = useRouter()
 
 const state = reactive<TableQueryPageState<SysFileQueryRequest, SysFileResponse>>({
   queryParams: {
@@ -43,6 +44,14 @@ const columnOption = ref<ColumnConfig<SysFileResponse>>({
  * 上传时间范围（仅用于表单，查询时拆分为 startUploadTime / endUploadTime）
  */
 const uploadTimeRange = ref<[string, string] | null>(null)
+
+/**
+ * 预览文件：在新标签页打开独立预览路由（整页承载，替代原来的全屏抽屉）
+ */
+const handlePreview = (row: SysFileResponse) => {
+  const { href } = router.resolve({ name: 'FilePreviewViewIndex', params: { fileId: row.id } })
+  window.open(href, '_blank', 'noopener,noreferrer')
+}
 
 /**
  * 重置查询表单
@@ -75,13 +84,6 @@ const handleSearch = async () => {
  */
 const handleUpload = () => {
   sysFileUploadRef.value?.show()
-}
-
-/**
- * 处理预览文件
- */
-const handlePreview = (row: SysFileResponse) => {
-  sysFilePreviewRef.value?.show(row)
 }
 
 /**
@@ -255,7 +257,6 @@ onMounted(async () => {
       @pagination="handlePageQuery"
     />
     <file-upload ref="sysFileUploadRef" @success="handlePageQuery" />
-    <xht-file-preview ref="sysFilePreviewRef" />
     <file-detail ref="sysFileDetailRef" />
   </div>
 </template>

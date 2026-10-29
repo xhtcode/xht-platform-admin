@@ -1,4 +1,4 @@
-import type { FileStatus } from '@/service/model/system/file.model'
+import type { FileStatus, FileStorageType } from '@/service/model/system/file.model'
 
 /**
  * 文件状态
@@ -24,7 +24,7 @@ export const fileStatusEnum: DictEnum<FileStatus, 'UPLOADED' | 'ASSOCIATED' | 'D
 /**
  * 文件存储类型
  */
-export const fileStorageTypeEnum: DictEnum<string, 'LOCAL' | 'MINIO' | 'S3' | 'OSS' | 'DATABASE'> = {
+export const fileStorageTypeEnum: DictEnum<string, FileStorageType> = {
   LOCAL: {
     label: '本地存储',
     value: 'LOCAL',

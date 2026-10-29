@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import type { App } from 'vue'
 import StaticRouter from '@/router/modules/static'
+import OtherRouter from '@/router/modules/other'
 
 /**
  * 创建路由
@@ -9,7 +10,7 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   // 刷新时，滚动条位置还原
   scrollBehavior: () => ({ left: 0, top: 0 }),
-  routes: [...StaticRouter],
+  routes: [...StaticRouter, ...OtherRouter],
 })
 
 /**

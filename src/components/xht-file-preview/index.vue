@@ -1,141 +1,152 @@
 <script lang="ts" setup>
-import { previewSysFile } from '@/service/api/system/file.api'
-import type { XhtFilePreviewFile, XhtFilePreviewMode } from '@/components/xht-file-preview/types'
+import { previewSysFile, getSysFilePreviewUrl } from '@/service/api/system/file.api'
+import type { XhtFilePreviewProps, XhtFilePreviewRenderMode, XhtFilePreviewState } from '@/components/xht-file-preview/types'
 import { resolvePreviewMode } from '@/components/xht-file-preview/utils'
 import { handleDownloadSysFile, parseFileErrorResponse } from '@/utils/file'
 import { useMessage } from '@/hooks/use-message'
+import { HEADER_AUTHORIZATION } from '@/service/constant'
+import { useUserInfoStore } from '@/store/modules/user.store'
 import { Download } from '@element-plus/icons-vue'
 
 /**
- * 文件预览：按文件类型分发到图片 / PDF / 文本 / JSON / 音视频预览
+ * 文件预览内容区：按文件类型分发到图片 / PDF / 文本 / JSON / 音视频预览
+ *
+ * 不含弹窗，弹窗由调用方承载；本组件只按 file 加载预览数据并渲染内容。
  */
-defineOptions({ name: "XhtFilePreview", inheritAttrs: true })
+defineOptions({ name: 'XhtFilePreview', inheritAttrs: true })
 
-const state = reactive({
-  visibleStatus: false, // 弹窗可见状态
-  loadingStatus: false, // 加载状态
-  fileInfo: {} as XhtFilePreviewFile, // 文件信息
-  previewMode: 'other' as XhtFilePreviewMode, // 预览模式
-  previewUrl: '', // 预览地址（blob）
-})
+const props = withDefaults(defineProps<XhtFilePreviewProps>(), { file: null })
 
 /**
- * 打开显示
+ * 预览器映射
  *
- * @param file 文件信息（业务行数据结构兼容即可）
+ * 全部动态导入：不进主包，只有真正预览对应类型时才加载（pdf.js 尤其重）。
  */
-const show = async (file: XhtFilePreviewFile) => {
-  state.fileInfo = file
-  state.previewMode = resolvePreviewMode(file.fileType, file.fileSuffix)
-  state.visibleStatus = true
-  if (state.previewMode === 'other') {
-    return
+const PreviewComponents: Record<XhtFilePreviewRenderMode, Component> = {
+  image: defineAsyncComponent(() => import('@/components/xht-file-preview/components/xht-picture-preview.vue')),
+  pdf: defineAsyncComponent(() => import('@/components/xht-file-preview/xht-pdf-preview/index.vue')),
+  text: defineAsyncComponent(() => import('@/components/xht-file-preview/components/xht-txt-preview.vue')),
+  json: defineAsyncComponent(() => import('@/components/xht-file-preview/components/xht-json-preview.vue')),
+}
+
+const message = useMessage()
+const userStore = useUserInfoStore()
+
+const state = reactive<XhtFilePreviewState>({
+  loadingStatus: false, // 加载状态
+  previewMode: 'other', // 预览模式
+  previewUrl: '', // 预览地址（blob 地址；PDF 为后端直连地址）
+  previewHeaders: {}, // PDF 直连地址的请求头（鉴权）
+})
+
+// 请求序号：file 快速切换时用于丢弃过期响应
+const loadToken = ref(0)
+
+/**
+ * 当前模式对应的预览器（音视频走原生标签，不需要预览器）
+ */
+const previewComponent = computed<Component | null>(() => PreviewComponents[state.previewMode as XhtFilePreviewRenderMode] ?? null)
+
+/**
+ * 释放预览地址（仅 blob 地址需要回收，后端直连地址直接置空）
+ */
+const revokePreviewUrl = () => {
+  if (state.previewUrl) {
+    if (state.previewUrl.startsWith('blob:')) {
+      window.URL.revokeObjectURL(state.previewUrl)
+    }
+    state.previewUrl = ''
   }
-  try {
-    await loadPreviewUrl()
-  } catch (error) {
-    // 失败提示已由请求拦截器给出，此处只记录日志并复位状态
-    console.error('文件预览加载失败:', error)
-  }
+  state.previewHeaders = {}
 }
 
 /**
  * 加载预览数据
  */
-const loadPreviewUrl = async () => {
-  state.loadingStatus = true
+const loadPreview = async () => {
+  const token = ++loadToken.value
+  const file = props.file
   revokePreviewUrl()
+  state.previewMode = file ? resolvePreviewMode(file.fileType, file.fileSuffix) : 'other'
+  if (!file || state.previewMode === 'other') {
+    state.loadingStatus = false
+    return
+  }
+  // PDF 交给 pdf.js 自带的分段加载：直连后端预览地址 + 鉴权头，服务端支持 Range 时按需拉取
+  if (state.previewMode === 'pdf') {
+    state.previewHeaders = { [HEADER_AUTHORIZATION]: `Bearer ${userStore.getAccessToken}` }
+    state.previewUrl = getSysFilePreviewUrl(file.fileStorageKey)
+    state.loadingStatus = false
+    return
+  }
+  state.loadingStatus = true
   try {
-    const response = await previewSysFile(state.fileInfo.fileStorageKey)
+    const response = await previewSysFile(file.fileStorageKey)
+    if (token !== loadToken.value) return
     const errorMsg = await parseFileErrorResponse(response)
+    if (token !== loadToken.value) return
     if (errorMsg) {
-      useMessage().error(errorMsg)
+      // 业务错误按后端文案原样提示
+      message.error(errorMsg)
       return
     }
-    const contentType: string = (response.headers['content-type'] as string) || state.fileInfo.fileType || 'application/octet-stream'
+    const contentType: string = (response.headers['content-type'] as string) || file.fileType || 'application/octet-stream'
     // 文本、JSON 统一以 text/plain 渲染 blob，避免浏览器按原类型处理导致直接下载
     const isPlainText = state.previewMode === 'text' || state.previewMode === 'json'
     const blobType = isPlainText ? 'text/plain;charset=utf-8' : contentType
     state.previewUrl = window.URL.createObjectURL(new Blob([response.data], { type: blobType }))
+  } catch (error) {
+    // 失败提示已由请求拦截器给出，此处只记录日志并保留加载失败空态
+    console.error('文件预览加载失败:', error)
   } finally {
-    state.loadingStatus = false
+    if (token === loadToken.value) {
+      state.loadingStatus = false
+    }
   }
 }
 
 /**
- * 释放预览地址
- */
-const revokePreviewUrl = () => {
-  if (state.previewUrl) {
-    window.URL.revokeObjectURL(state.previewUrl)
-    state.previewUrl = ''
-  }
-}
-
-/**
- * 下载文件
+ * 下载文件（不支持在线预览或加载失败时的兜底入口）
  */
 const handleDownload = async () => {
+  if (!props.file) return
   state.loadingStatus = true
   try {
-    const successStatus = await handleDownloadSysFile(state.fileInfo.fileStorageKey)
+    const successStatus = await handleDownloadSysFile(props.file.fileStorageKey)
     if (successStatus) {
-      useMessage().success('文件下载成功!')
+      message.success('文件下载成功!')
     }
   } finally {
     state.loadingStatus = false
   }
 }
 
-/**
- * 关闭
- */
-const close = () => {
-  if (state.loadingStatus) return
-  revokePreviewUrl()
-  state.fileInfo = {} as XhtFilePreviewFile
-  state.previewMode = 'other'
-  state.visibleStatus = false
-}
+watch(() => props.file, loadPreview, { immediate: true })
 
 onBeforeUnmount(() => {
+  loadToken.value++
   revokePreviewUrl()
-})
-
-defineExpose({
-  show,
 })
 </script>
 
 <template>
-  <el-dialog
-    v-model="state.visibleStatus"
-    :title="state.fileInfo.fileOriginalName || '文件预览'"
-    append-to-body
-    fullscreen
-    :close-on-click-modal="false"
-    :show-close="false"
-    :before-close="close"
-  >
-    <div v-loading="state.loadingStatus" element-loading-text="拼命加载中" class="h-full">
-      <template v-if="state.previewUrl">
-        <xht-picture-preview v-if="state.previewMode === 'image'" :url="state.previewUrl" />
-        <xht-pdf-preview v-else-if="state.previewMode === 'pdf'" :url="state.previewUrl" />
-        <xht-txt-preview v-else-if="state.previewMode === 'text'" :url="state.previewUrl" />
-        <xht-json-preview v-else-if="state.previewMode === 'json'" :url="state.previewUrl" />
-        <video v-else-if="state.previewMode === 'video'" :src="state.previewUrl" class="max-h-full max-w-full" controls />
-        <audio v-else-if="state.previewMode === 'audio'" :src="state.previewUrl" class="w-[60%]" controls />
-      </template>
-      <el-empty
-        v-else-if="!state.loadingStatus"
-        :description="state.previewMode === 'other' ? '该文件类型暂不支持在线预览，请下载后查看' : '文件预览加载失败，请下载后查看'"
-      >
-        <el-button :icon="Download" type="primary" @click="handleDownload">下载文件</el-button>
-      </el-empty>
-    </div>
-    <template #footer>
-      <el-button :disabled="state.loadingStatus" @click="close">关闭</el-button>
-      <el-button :disabled="state.loadingStatus" :icon="Download" type="primary" @click="handleDownload">下载</el-button>
+  <div v-if="props.file" v-loading="state.loadingStatus" element-loading-text="拼命加载中" class="h-full">
+    <template v-if="state.previewUrl">
+      <video v-if="state.previewMode === 'video'" :src="state.previewUrl" class="max-h-full max-w-full" controls />
+      <audio v-else-if="state.previewMode === 'audio'" :src="state.previewUrl" class="w-[60%]" controls />
+      <component
+        :is="previewComponent"
+        v-else
+        :file-name="state.previewMode === 'pdf' ? props.file?.fileOriginalName : undefined"
+        :http-headers="state.previewMode === 'pdf' ? state.previewHeaders : undefined"
+        :url="state.previewUrl"
+      />
     </template>
-  </el-dialog>
+    <el-empty
+      v-else-if="!state.loadingStatus"
+      :description="state.previewMode === 'other' ? '该文件类型暂不支持在线预览，请下载后查看' : '文件预览加载失败，请下载后查看'"
+    >
+      <el-button :icon="Download" type="primary" @click="handleDownload">下载文件</el-button>
+    </el-empty>
+  </div>
 </template>

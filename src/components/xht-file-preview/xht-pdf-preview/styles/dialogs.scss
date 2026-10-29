@@ -1,0 +1,79 @@
+/* 弹窗：快捷键说明 + 文档属性 */
+.xht-pdf-preview {
+  &__shortcut-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+  }
+
+  &__shortcut-label {
+    color: #3f434e;
+    font-size: 13px;
+  }
+
+  &__shortcut-keys {
+    display: inline-flex;
+    flex-shrink: 0;
+    gap: 4px;
+
+    kbd {
+      min-width: 24px;
+      padding: 2px 7px;
+      border: 1px solid #c9ccd3;
+      border-bottom-width: 2px;
+      border-radius: 4px;
+      background-color: #f7f8fa;
+      color: #3f434e;
+      font-family: inherit;
+      font-size: 12px;
+      line-height: 1.5;
+      text-align: center;
+    }
+  }
+
+  &__property-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      display: flex;
+      gap: 24px;
+      align-items: baseline;
+    }
+
+    // 分组分隔线（对齐官方文档属性弹窗的分组留白）
+    li.is-divider {
+      height: 1px;
+      margin: 2px 0;
+      padding: 0;
+      background-color: #e3e5e9;
+    }
+  }
+
+  &__property-label {
+    flex-shrink: 0;
+    width: 150px;
+    color: #7c8089;
+    font-size: 13px;
+  }
+
+  &__property-value {
+    color: #15151a;
+    font-size: 13px;
+    word-break: break-all;
+  }
+}

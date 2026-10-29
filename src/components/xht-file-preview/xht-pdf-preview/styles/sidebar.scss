@@ -1,0 +1,310 @@
+/* 侧栏：目录 / 缩略图 / 附件 / 图层 + 宽度拖拽条 */
+.xht-pdf-preview {
+  &__sidebar {
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: column;
+    background-color: #fbfbfc;
+    border-right: 1px solid #d7d9de;
+  }
+
+  &__tabs {
+    display: flex;
+    flex-shrink: 0;
+    height: 30px;
+    border-bottom: 1px solid #e4e5e9;
+  }
+
+  &__tab {
+    position: relative;
+    flex: 1;
+    border: none;
+    background-color: transparent;
+    color: #5b5f6b;
+    cursor: pointer;
+    font-size: 12px;
+    outline: none;
+    transition:
+      color 0.15s,
+      background-color 0.15s;
+
+    &:hover {
+      background-color: #f0f1f3;
+      color: #15151a;
+    }
+
+    &:disabled {
+      color: #b9bcc4;
+      cursor: not-allowed;
+
+      &:hover {
+        background-color: transparent;
+        color: #b9bcc4;
+      }
+    }
+
+    &.is-active {
+      color: #0b57d0;
+      font-weight: 500;
+
+      &::after {
+        position: absolute;
+        right: 10px;
+        bottom: 0;
+        left: 10px;
+        height: 2px;
+        background-color: #0b57d0;
+        content: '';
+      }
+    }
+  }
+
+  &__outline {
+    flex: 1;
+    min-height: 0;
+    padding: 6px 0 12px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border: 2px solid transparent;
+      border-radius: 6px;
+      background-color: #c9ccd3;
+      background-clip: content-box;
+    }
+  }
+
+  &__outline-tip {
+    padding: 16px 12px;
+    color: #8f939c;
+    font-size: 12px;
+    line-height: 1.6;
+    text-align: center;
+  }
+
+  &__outline-item {
+    display: flex;
+    width: 100%;
+    min-height: 26px;
+    align-items: center;
+    gap: 2px;
+    padding-right: 8px;
+    border: none;
+    background-color: transparent;
+    color: #33363d;
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 26px;
+    outline: none;
+    text-align: left;
+    transition: background-color 0.12s;
+
+    &:hover {
+      background-color: #f0f1f3;
+      color: #15151a;
+    }
+
+    &.is-current {
+      color: #0b57d0;
+      font-weight: 600;
+    }
+  }
+
+  &__outline-toggle {
+    display: inline-flex;
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    border-radius: 2px;
+    color: #6b6f78;
+    transition: transform 0.15s;
+
+    &.is-open {
+      transform: rotate(90deg);
+    }
+
+    &.is-empty {
+      visibility: hidden;
+    }
+  }
+
+  &__outline-title {
+    overflow: hidden;
+    flex: 1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__attach,
+  &__layer {
+    flex: 1;
+    min-height: 0;
+    padding: 6px 0 12px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border: 2px solid transparent;
+      border-radius: 6px;
+      background-color: #c9ccd3;
+      background-clip: content-box;
+    }
+  }
+
+  &__attach-item,
+  &__layer-item {
+    display: flex;
+    width: 100%;
+    min-height: 28px;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border: none;
+    background-color: transparent;
+    color: #33363d;
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 1.5;
+    outline: none;
+    text-align: left;
+    transition: background-color 0.12s;
+
+    &:hover {
+      background-color: #f0f1f3;
+      color: #15151a;
+    }
+  }
+
+  &__attach-icon {
+    flex-shrink: 0;
+    color: #5b5f6b;
+  }
+
+  &__attach-name,
+  &__layer-name {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__attach-size {
+    flex-shrink: 0;
+    color: #8f939c;
+    font-size: 11px;
+  }
+
+  &__layer-box {
+    display: inline-flex;
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #b6b9c2;
+    border-radius: 2px;
+    background-color: #fff;
+    color: #fff;
+    transition:
+      background-color 0.12s,
+      border-color 0.12s;
+
+    &.is-checked {
+      border-color: #0b57d0;
+      background-color: #0b57d0;
+    }
+  }
+
+  &__thumb-list {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px 16px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border: 2px solid transparent;
+      border-radius: 6px;
+      background-color: #c9ccd3;
+      background-clip: content-box;
+    }
+  }
+
+  &__thumb {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 0;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    outline: none;
+    font-size: 11px;
+  }
+
+  &__thumb-paper {
+    display: block;
+    /* 占缩略图列的 80%，保留呼吸感的同时仍随侧栏宽度自适应 */
+    width: 80%;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgb(0 0 0 / 18%);
+    outline: 1px solid transparent;
+    outline-offset: -1px;
+    transition: outline-color 0.15s;
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  &__thumb-no {
+    color: #6b6f78;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__thumb.is-active {
+    .xht-pdf-preview__thumb-paper {
+      outline: 2px solid #0b57d0;
+      outline-offset: -2px;
+    }
+
+    .xht-pdf-preview__thumb-no {
+      color: #0b57d0;
+      font-weight: 600;
+    }
+  }
+
+  &__resize-bar {
+    width: 6px;
+    flex-shrink: 0;
+    margin: 0 -3px;
+    z-index: 5;
+    cursor: col-resize;
+    background-color: transparent;
+    transition: background-color 0.15s;
+
+    &:hover {
+      background-color: rgb(11 87 208 / 24%);
+    }
+  }
+}

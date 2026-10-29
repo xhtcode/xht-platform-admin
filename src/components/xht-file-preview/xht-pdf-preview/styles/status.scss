@@ -1,0 +1,107 @@
+/* 根容器 + 加载/失败状态页 + 通用旋转动画 */
+.xht-pdf-preview {
+  position: relative;
+  display: flex;
+  height: 100%;
+  min-width: 0;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: #f1f2f4;
+  color: #15151a;
+  font-size: 12px;
+
+  &__status {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 32px 24px;
+    background-color: #f9f9fb;
+  }
+
+  &__status-card {
+    display: flex;
+    width: 320px;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 28px 24px;
+    border: 1px solid #d7d9de;
+    border-radius: 8px;
+    background-color: #fff;
+  }
+
+  &__status-title {
+    max-width: 90%;
+    color: #15151a;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.4;
+    text-align: center;
+  }
+
+  &__status-desc {
+    color: #8f939c;
+    font-size: 12px;
+    line-height: 1.6;
+    text-align: center;
+  }
+
+  &__status-bar {
+    width: 180px;
+  }
+
+  &__status-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  &__action {
+    display: inline-flex;
+    height: 28px;
+    align-items: center;
+    gap: 4px;
+    padding: 0 12px;
+    border: 1px solid #c9cbd1;
+    border-radius: 4px;
+    background-color: #fff;
+    color: #5b5f6b;
+    cursor: pointer;
+    font-size: 12px;
+    outline: none;
+    transition:
+      background-color 0.15s,
+      border-color 0.15s;
+
+    &:hover {
+      border-color: #a6a9b1;
+      background-color: #f0f1f3;
+      color: #15151a;
+    }
+
+    &.is-primary {
+      border-color: #0b57d0;
+      background-color: #0b57d0;
+      color: #fff;
+
+      &:hover {
+        border-color: #0948ab;
+        background-color: #0948ab;
+      }
+    }
+  }
+
+  &__spin {
+    color: #8f939c;
+    animation: xht-pdf-rotate 1s linear infinite;
+  }
+}
+
+@keyframes xht-pdf-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
