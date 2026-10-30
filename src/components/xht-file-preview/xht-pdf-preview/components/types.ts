@@ -45,8 +45,6 @@ export interface PdfSidebarProps {
   layers: LayersFeature
   /** 回填缩略图列表容器（缩略图懒渲染观察器由主组件持有） */
   setListRef: (el: HTMLDivElement | null) => void
-  /** 回填目录列表容器（目录滚动同步由主组件持有） */
-  setOutlineListRef: (el: HTMLDivElement | null) => void
 }
 
 /**

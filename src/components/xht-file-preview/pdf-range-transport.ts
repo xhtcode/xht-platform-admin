@@ -40,7 +40,7 @@ class XhtPdfRangeTransport extends PDFDataRangeTransport {
     initialData: Uint8Array,
     url: string,
     headers: Record<string, string>,
-    onProgress?: (loaded: number, total: number) => void,
+    onProgress?: (loaded: number, total: number) => void
   ) {
     super(length, initialData, false)
     this.url = url
@@ -99,7 +99,7 @@ export const createPdfRangeSource = async (
   url: string,
   httpHeaders: Record<string, string>,
   chunkSize: number,
-  onProgress?: (loaded: number, total: number) => void,
+  onProgress?: (loaded: number, total: number) => void
 ): Promise<XhtPdfRangeSource> => {
   const response = await fetch(url, {
     headers: { ...httpHeaders, Range: `bytes=0-${chunkSize - 1}` },
@@ -108,8 +108,7 @@ export const createPdfRangeSource = async (
   if (!response.ok) {
     throw new Error(`预览请求失败（HTTP ${response.status}）`)
   }
-  const total =
-    response.status === 206 ? parseTotalLength(response.headers.get('Content-Range')) : 0
+  const total = response.status === 206 ? parseTotalLength(response.headers.get('Content-Range')) : 0
   if (total) {
     const initialData = new Uint8Array(await response.arrayBuffer())
     onProgress?.(initialData.byteLength, total)

@@ -121,13 +121,7 @@ watch(fileId, loadFile, { immediate: true })
       </div>
       <div class="xht-file-preview-view__actions">
         <el-tooltip v-if="state.file" content="下载" placement="bottom">
-          <button
-            type="button"
-            class="xht-file-preview-view__btn"
-            aria-label="下载文件"
-            :disabled="state.downloadingStatus"
-            @click="handleDownload"
-          >
+          <button type="button" class="xht-file-preview-view__btn" aria-label="下载文件" :disabled="state.downloadingStatus" @click="handleDownload">
             <el-icon :size="15" :class="state.downloadingStatus ? 'xht-file-preview-view__spin' : ''">
               <Loading v-if="state.downloadingStatus" />
               <Download v-else />

@@ -92,12 +92,9 @@ export interface OutlineFeature {
   outlineLoaded: Ref<boolean>
   outlineLoading: Ref<boolean>
   visibleOutline: ComputedRef<OutlineNode[]>
-  outlineActiveId: ComputedRef<string>
   toggleOutline: (node: OutlineNode) => void
   handleOutlineClick: (node: OutlineNode) => Promise<void>
   loadOutline: (doc: PDFDocumentProxy) => Promise<void>
-  /** 离开点击目标页后解除锁定（由当前页码 watcher 调用） */
-  checkPinRelease: (current: number) => void
   /** 文档销毁时清空目录数据 */
   reset: () => void
 }
@@ -108,7 +105,7 @@ export interface OutlineFeature {
  * @param ctx 核心上下文
  */
 export const createOutlineFeature = (ctx: PdfCoreContext): OutlineFeature => {
-  const { state, scrollToPage, getDoc, isCurrentDoc } = ctx
+  const { scrollToPage, getDoc, isCurrentDoc } = ctx
 
   const outlineNodes = ref<OutlineNode[]>([])
   const outlineLoaded = ref(false)
@@ -128,31 +125,6 @@ export const createOutlineFeature = (ctx: PdfCoreContext): OutlineFeature => {
     walk(outlineNodes.value)
     return rows
   })
-
-  /**
-   * 当前章节：全书签（文档顺序）中最后一个起始页 ≤ 当前页的节点。
-   * 多个章节起始页相同时只取最后一个，避免同时高亮一串。
-   */
-  const currentOutlineId = computed(() => {
-    let id = ''
-    for (const node of visibleOutline.value) {
-      if (node.page !== null && node.page <= state.current) {
-        id = node.id
-      }
-    }
-    return id
-  })
-
-  /**
-   * 点击目录后临时锁定的节点与页码：停留在目标页期间保持该节点高亮
-   */
-  const pinnedOutlineId = ref('')
-  const pinnedOutlinePage = ref(0)
-
-  /**
-   * 目录高亮节点：优先取点击锁定的节点，否则按当前页推导章节
-   */
-  const outlineActiveId = computed(() => pinnedOutlineId.value || currentOutlineId.value)
 
   /**
    * 展开/收起目录节点
@@ -209,9 +181,6 @@ export const createOutlineFeature = (ctx: PdfCoreContext): OutlineFeature => {
    */
   const handleOutlineClick = async (node: OutlineNode) => {
     if (node.page) {
-      // 锁定高亮为点击项：多个章节同页起始时不能被推导逻辑覆盖
-      pinnedOutlineId.value = node.id
-      pinnedOutlinePage.value = node.page
       // 优先按标题文本定位，让章节标题落在视口顶部；失败时回退书签坐标 / 页首
       const doc = getDoc()
       let offset = node.offset
@@ -229,20 +198,10 @@ export const createOutlineFeature = (ctx: PdfCoreContext): OutlineFeature => {
     if (node.children.length) toggleOutline(node)
   }
 
-  const checkPinRelease = (current: number) => {
-    // 离开点击时的目标页后解除锁定，恢复按当前页推导章节高亮
-    if (pinnedOutlineId.value && current !== pinnedOutlinePage.value) {
-      pinnedOutlineId.value = ''
-      pinnedOutlinePage.value = 0
-    }
-  }
-
   const reset = () => {
     outlineNodes.value = []
     outlineLoaded.value = false
     outlineLoading.value = false
-    pinnedOutlineId.value = ''
-    pinnedOutlinePage.value = 0
   }
 
   return {
@@ -250,11 +209,9 @@ export const createOutlineFeature = (ctx: PdfCoreContext): OutlineFeature => {
     outlineLoaded,
     outlineLoading,
     visibleOutline,
-    outlineActiveId,
     toggleOutline,
     handleOutlineClick,
     loadOutline,
-    checkPinRelease,
     reset,
   }
 }

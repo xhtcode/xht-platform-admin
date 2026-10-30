@@ -82,8 +82,6 @@ const containerRef = useTemplateRef<HTMLDivElement>('containerRef')
 const childRefs = {
   /** 缩略图列表容器（侧栏子组件回填） */
   thumbList: ref<HTMLDivElement | null>(null),
-  /** 目录列表容器（侧栏子组件回填） */
-  outlineList: ref<HTMLDivElement | null>(null),
   /** 搜索输入框（搜索栏子组件回填） */
   searchInput: ref<HTMLInputElement | null>(null),
 }
@@ -95,15 +93,6 @@ const childRefs = {
  */
 const setThumbListEl = (el: HTMLDivElement | null) => {
   childRefs.thumbList.value = el
-}
-
-/**
- * 回填目录列表容器（侧栏子组件回调）
- *
- * @param el 容器元素
- */
-const setOutlineListEl = (el: HTMLDivElement | null) => {
-  childRefs.outlineList.value = el
 }
 
 /**
@@ -958,59 +947,29 @@ watch(
 )
 
 /**
- * 将列表内的元素滚动到可视范围（只滚动列表自身，不波及外层滚动容器；已可见则不动）
- *
- * @param list 列表容器
- * @param item 目标元素
- */
-const scrollListItemVisible = (list: HTMLElement, item: HTMLElement) => {
-  const listRect = list.getBoundingClientRect()
-  const rect = item.getBoundingClientRect()
-  if (rect.top >= listRect.top && rect.bottom <= listRect.bottom) return
-  list.scrollTop += rect.top - listRect.top - 12
-}
-
-/**
- * 将缩略图列表滚动到当前页
+ * 将缩略图列表滚动到当前页：当前页缩略图贴列表底部，视口内始终呈现「上一页 + 当前页」，
+ * 页码每 +1 列表即精确跟进一张（只滚动列表自身，不波及外层滚动容器）
  */
 const syncThumbScroll = () => {
   const list = childRefs.thumbList.value
   const wrapper = thumbsApi.thumbWrappers.get(state.current)
   if (!list || !wrapper || !sidebarVisible.value || sidebarTab.value !== 'thumb') return
-  scrollListItemVisible(list, wrapper)
-}
-
-/**
- * 将目录列表滚动到当前高亮章节（无书签文档没有高亮节点，静默跳过）
- */
-const syncOutlineScroll = () => {
-  const list = childRefs.outlineList.value
-  if (!list || !sidebarVisible.value || sidebarTab.value !== 'outline') return
-  const active = list.querySelector<HTMLElement>('.is-current')
-  if (active) scrollListItemVisible(list, active)
+  const listRect = list.getBoundingClientRect()
+  const rect = wrapper.getBoundingClientRect()
+  list.scrollTop += rect.bottom - listRect.bottom
 }
 
 watch(
   () => state.current,
-  (current) => {
-    outlineApi.checkPinRelease(current)
-    // 侧栏展开时让当前页缩略图 / 目录章节保持可见
+  () => {
+    // 侧栏展开时让当前页缩略图立即跟进（缩略图元素几何位置不随页码变化，无需等 DOM patch）
     syncThumbScroll()
-    syncOutlineScroll()
-  },
-  // 必须等 DOM patch 完成再同步：目录滚动靠 querySelector 找 .is-current 高亮节点，
-  // pre 时机拿到的是上一次渲染的旧高亮（滞后一页且常被"已可见"guard 跳过）
-  { flush: 'post' }
+  }
 )
 
 // 侧栏收起期间发生的滚动不会触发上面的同步（面板隐藏时无法定位），
-// 展开侧栏或切换页签后需主动补一次滚动，否则列表仍停在旧位置
-watch([sidebarVisible, sidebarTab], () =>
-  nextTick(() => {
-    syncThumbScroll()
-    syncOutlineScroll()
-  })
-)
+// 展开侧栏或切回缩略图页后需主动补一次滚动，否则列表仍停在旧位置
+watch([sidebarVisible, sidebarTab], () => nextTick(syncThumbScroll))
 
 useResizeObserver(containerRef, () => handleResize())
 
@@ -1080,7 +1039,6 @@ onBeforeUnmount(() => {
           :attachments="attachmentsApi"
           :layers="layersApi"
           :set-list-ref="setThumbListEl"
-          :set-outline-list-ref="setOutlineListEl"
           @go-page="scrollToPage"
         />
 

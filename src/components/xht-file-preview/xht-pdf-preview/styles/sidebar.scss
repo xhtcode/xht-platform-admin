@@ -107,11 +107,6 @@
       background-color: var(--xht-hover-bg-color);
       color: var(--xht-text-color);
     }
-
-    &.is-current {
-      color: var(--el-color-primary);
-      font-weight: 600;
-    }
   }
 
   &__outline-toggle {

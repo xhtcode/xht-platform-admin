@@ -21,7 +21,7 @@ const emits = defineEmits<PdfSidebarEmits>()
 const tab = defineModel<SidebarTab>('tab', { required: true })
 
 // 功能模块内的 ref 与方法是稳定引用，解构后仍保持响应式
-const { outlineLoading, outlineLoaded, visibleOutline, outlineActiveId, handleOutlineClick, toggleOutline } = props.outline
+const { outlineLoading, outlineLoaded, visibleOutline, handleOutlineClick, toggleOutline } = props.outline
 const { setThumbWrapper } = props.thumbs
 const { attachmentsLoading, attachments: attachmentItems, handleAttachmentClick } = props.attachments
 const { layersLoading, layers: layerItems, toggleLayer } = props.layers
@@ -33,15 +33,6 @@ const { layersLoading, layers: layerItems, toggleLayer } = props.layers
  */
 const handleListRef = (el: unknown) => {
   props.setListRef(el instanceof HTMLDivElement ? el : null)
-}
-
-/**
- * 回填目录列表容器给主组件（目录滚动同步定位用）
- *
- * @param el ref 元素
- */
-const handleOutlineListRef = (el: unknown) => {
-  props.setOutlineListRef(el instanceof HTMLDivElement ? el : null)
 }
 </script>
 
@@ -75,7 +66,7 @@ const handleOutlineListRef = (el: unknown) => {
       </button>
     </div>
 
-    <div v-show="tab === 'outline'" :ref="handleOutlineListRef" class="xht-pdf-preview__outline">
+    <div v-show="tab === 'outline'" class="xht-pdf-preview__outline">
       <p v-if="outlineLoading" class="xht-pdf-preview__outline-tip">正在读取目录…</p>
       <p v-else-if="outlineLoaded && !visibleOutline.length" class="xht-pdf-preview__outline-tip">此文档没有目录</p>
       <button
@@ -83,7 +74,6 @@ const handleOutlineListRef = (el: unknown) => {
         :key="node.id"
         type="button"
         class="xht-pdf-preview__outline-item"
-        :class="{ 'is-current': node.id === outlineActiveId }"
         :style="{ paddingLeft: `${8 + node.level * 12}px` }"
         :title="node.title"
         @click="handleOutlineClick(node)"

@@ -66,7 +66,9 @@ const handleSelectionChange = () => {
   if (nativeFixed) return
   // 旧内核：把 endOfContent 移动到选择锚点旁，撑满整层以约束选择边界
   const range = selection.getRangeAt(0)
-  const modifyStart = !!prevRange && (range.compareBoundaryPoints(Range.END_TO_END, prevRange) === 0 || range.compareBoundaryPoints(Range.START_TO_END, prevRange) === 0)
+  const modifyStart =
+    !!prevRange &&
+    (range.compareBoundaryPoints(Range.END_TO_END, prevRange) === 0 || range.compareBoundaryPoints(Range.START_TO_END, prevRange) === 0)
   let anchor: Node = modifyStart ? range.startContainer : range.endContainer
   if (anchor.nodeType === Node.TEXT_NODE) anchor = anchor.parentNode as Node
   if (!modifyStart && range.endOffset === 0) {
@@ -102,30 +104,42 @@ export const attachTextLayerSelection = (div: HTMLDivElement): void => {
     () => {
       div.classList.add('selecting')
     },
-    { signal: layerController.signal },
+    { signal: layerController.signal }
   )
   boundLayers.set(div, { end, abort: () => layerController.abort() })
   if (!controller) {
     controller = new AbortController()
     const { signal } = controller
-    document.addEventListener('pointerdown', () => {
-      pointerDown = true
-    }, { signal })
+    document.addEventListener(
+      'pointerdown',
+      () => {
+        pointerDown = true
+      },
+      { signal }
+    )
     document.addEventListener(
       'pointerup',
       () => {
         pointerDown = false
         resetAll()
       },
-      { signal },
+      { signal }
     )
-    window.addEventListener('blur', () => {
-      pointerDown = false
-      resetAll()
-    }, { signal })
-    document.addEventListener('keyup', () => {
-      if (!pointerDown) resetAll()
-    }, { signal })
+    window.addEventListener(
+      'blur',
+      () => {
+        pointerDown = false
+        resetAll()
+      },
+      { signal }
+    )
+    document.addEventListener(
+      'keyup',
+      () => {
+        if (!pointerDown) resetAll()
+      },
+      { signal }
+    )
     document.addEventListener('selectionchange', handleSelectionChange, { signal })
   }
 }
