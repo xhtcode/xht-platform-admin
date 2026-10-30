@@ -45,6 +45,8 @@ export interface PdfSidebarProps {
   layers: LayersFeature
   /** 回填缩略图列表容器（缩略图懒渲染观察器由主组件持有） */
   setListRef: (el: HTMLDivElement | null) => void
+  /** 回填目录列表容器（目录滚动同步由主组件持有） */
+  setOutlineListRef: (el: HTMLDivElement | null) => void
 }
 
 /**
@@ -63,6 +65,8 @@ export interface PdfPagesProps {
   /** 单页纸面尺寸样式（按缩放/旋转计算） */
   paperStyle: (no: number) => CSSProperties
   search: SearchFeature
+  /** 页面位图是否已渲染完成（未完成时纸面展示加载占位） */
+  isPageRendered: (no: number) => boolean
   /** 收集画布 ref（渲染管线由主组件持有） */
   setPageCanvas: (no: number, el: unknown) => void
   /** 收集文本层容器 ref */

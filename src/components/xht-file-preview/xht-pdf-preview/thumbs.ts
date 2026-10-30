@@ -1,4 +1,3 @@
-import { nextTick, reactive, watch } from 'vue'
 import type { Ref } from 'vue'
 import type { RenderTask } from 'pdfjs-dist'
 import type { PdfCoreContext } from './types'
@@ -27,7 +26,11 @@ export interface ThumbsFeature {
  * @param thumbListRef 缩略图列表容器模板 ref
  * @param sidebarTab   侧栏标签页状态
  */
-export const createThumbsFeature = (ctx: PdfCoreContext, thumbListRef: { readonly value: HTMLDivElement | null }, sidebarTab: Ref<SidebarTab>): ThumbsFeature => {
+export const createThumbsFeature = (
+  ctx: PdfCoreContext,
+  thumbListRef: { readonly value: HTMLDivElement | null },
+  sidebarTab: Ref<SidebarTab>
+): ThumbsFeature => {
   // 注意：图层配置读取器在模块装配后才补齐，必须通过 ctx 现取，不能在创建时解构
   const { state, sidebarVisible, getDoc, isCurrentDoc } = ctx
 

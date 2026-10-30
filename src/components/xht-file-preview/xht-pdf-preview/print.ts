@@ -24,6 +24,7 @@ const buildPrintHtml = (title: string, images: string[]) => `<!DOCTYPE html>
     <title>${escapeHtml(title)}</title>
     <style>
       @page { margin: 0; }
+      /* 独立打印窗口 HTML，不参与暗黑模式，故不使用变量 */
       html, body { margin: 0; padding: 0; background: #fff; }
       img { display: block; width: 100%; page-break-after: always; break-after: page; }
       img:last-child { page-break-after: auto; break-after: auto; }

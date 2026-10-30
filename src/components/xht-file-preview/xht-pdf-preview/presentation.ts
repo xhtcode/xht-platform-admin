@@ -1,4 +1,3 @@
-import { nextTick } from 'vue'
 import type { PdfCoreContext } from './types'
 
 /**

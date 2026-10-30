@@ -1,4 +1,3 @@
-import { ref } from 'vue'
 import type { Ref } from 'vue'
 import * as pdfjsLib from 'pdfjs-dist'
 import type { PdfCoreContext, PropertyRow } from './types'
@@ -77,7 +76,10 @@ export const createPropertiesFeature = (ctx: PdfCoreContext, displayName: () => 
     const size = pageSizeAt(state.current)
     const rows: PropertyRow[] = [
       { label: '文件名', value: displayName() },
-      { label: '文件大小', value: pdfFileSize.value ? `${formatBytes(pdfFileSize.value)}（${pdfFileSize.value.toLocaleString('en-US')} 字节）` : '—' },
+      {
+        label: '文件大小',
+        value: pdfFileSize.value ? `${formatBytes(pdfFileSize.value)}（${pdfFileSize.value.toLocaleString('en-US')} 字节）` : '—',
+      },
       { label: '', value: '', divider: true },
       { label: '标题', value: '—' },
       { label: '作者', value: '—' },

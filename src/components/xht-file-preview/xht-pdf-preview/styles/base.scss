@@ -1,12 +1,24 @@
 /* 根容器：撑满父级并纵向排布工具栏 / 内容区 */
+/* 注意：本分片由 index.vue 的 scoped 块引入，选择器命中其根元素；
+   模块级局部 CSS 变量必须定义在此处，才能随根元素向所有后代级联
+   （挂在子组件分片内会因 scoped 属性选择器不匹配而失效） */
 .xht-pdf-preview {
+  // 搜索高亮 / 文本选区色：刻意对齐 pdf.js 官方 viewer 视觉，不随主题语义变量联动。
+  // 半透明叠加在纸面上，浅色/暗色下均保持一致观感。
+  --xht-pdf-selection: rgb(0 0 255 / 25%);
+  --xht-pdf-search-hit: rgb(255 196 0 / 50%);
+  --xht-pdf-search-hit-current: rgb(255 106 0 / 55%);
+  --xht-pdf-search-hit-current-outline: #e25822;
+  // 纸面恒白：canvas 由 pdf.js 填充白色，纸面属"物理纸张"不随暗黑模式变色
+  --xht-pdf-paper: #fff;
+
   position: relative;
   display: flex;
   height: 100%;
   min-width: 0;
   flex-direction: column;
   overflow: hidden;
-  background-color: #f1f2f4;
-  color: #15151a;
+  background-color: var(--xht-page-bg-color);
+  color: var(--xht-text-color);
   font-size: 12px;
 }

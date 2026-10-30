@@ -1,4 +1,3 @@
-import { ref } from 'vue'
 import type { Ref } from 'vue'
 import type { PDFDocumentProxy } from 'pdfjs-dist'
 import type { LayerItem, OptionalContentConfig, PdfCoreContext } from './types'

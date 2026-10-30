@@ -10,7 +10,13 @@
     transition: background-color 0.15s;
 
     &:hover {
+      // 回退：不支持 color-mix 的旧浏览器用静态色（浅色主题近似值）。
+      // 用 @supports 包裹而非同规则重复声明，否则 CSS 压缩会删除前一行回退
       background-color: rgb(11 87 208 / 24%);
+
+      @supports (color: color-mix(in srgb, red, blue)) {
+        background-color: color-mix(in srgb, var(--el-color-primary) 24%, transparent);
+      }
     }
   }
 }

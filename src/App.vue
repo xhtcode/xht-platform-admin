@@ -37,7 +37,9 @@ const messageConfig: MessageConfigContext = {
     :value-on-clear="null"
     :empty-values="[undefined, null]"
   >
-    <router-view />
+    <el-watermark content="小糊涂后台管理系统" class="wh-full">
+      <router-view />
+    </el-watermark>
   </el-config-provider>
 </template>
 

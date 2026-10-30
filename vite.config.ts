@@ -7,6 +7,7 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import { viteStaticCopy } from 'vite-plugin-static-copy'
 import pkg from './package.json' with { type: 'json' }
 import xhtStartLogPlugin from './plugins/vite-plugin-log.ts'
 import viteConfigServer from './plugins/vite-config-server.ts'
@@ -71,6 +72,15 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
         dts: path.resolve(pathSrc, 'typings', 'components.d.ts'),
       }),
       xhtStartLogPlugin(env),
+      // pdf.js 运行时静态资源（wasm 解码器 / cMaps 字符映射 / 标准字体），
+      // 构建与 dev 时自动从 pdfjs-dist 拷贝，升级 pdfjs-dist 后资源自动跟随，无需手动同步
+      viteStaticCopy({
+        targets: [
+          { src: 'node_modules/pdfjs-dist/wasm', dest: 'pdfjs/wasm', rename: { stripBase: true } },
+          { src: 'node_modules/pdfjs-dist/cmaps', dest: 'pdfjs/cmaps', rename: { stripBase: true } },
+          { src: 'node_modules/pdfjs-dist/standard_fonts', dest: 'pdfjs/standard_fonts', rename: { stripBase: true } },
+        ],
+      }),
     ],
     /**
      * 路径解析配置

@@ -1,4 +1,3 @@
-import { ref } from 'vue'
 import type { Ref } from 'vue'
 import type { PDFDocumentProxy } from 'pdfjs-dist'
 import type { AttachmentItem, PdfCoreContext } from './types'
@@ -64,8 +63,8 @@ export const createAttachmentsFeature = (ctx: PdfCoreContext): AttachmentsFeatur
         message.error('附件内容为空，无法下载')
         return
       }
-      // pdf.js 返回的字节视图底层是普通 ArrayBuffer，转为 BlobPart 需绕开 SharedArrayBuffer 的宽泛类型
-      const blob = new Blob([content as unknown as BlobPart], { type: 'application/octet-stream' })
+      // pdf.js 返回的是 ArrayBuffer/TypedArray 视图，经 Uint8Array 归一为合法 BlobPart（无需断言）
+      const blob = new Blob([new Uint8Array(content)], { type: 'application/octet-stream' })
       const url = window.URL.createObjectURL(blob)
       triggerDownload(url, item.filename)
       // 下载已触发，稍后再释放地址，避免部分浏览器尚未开始读取

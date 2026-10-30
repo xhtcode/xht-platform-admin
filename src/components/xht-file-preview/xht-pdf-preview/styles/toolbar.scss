@@ -9,8 +9,8 @@
     justify-content: space-between;
     height: 40px;
     padding: 0 8px;
-    background-color: #f9f9fb;
-    border-bottom: 1px solid #d7d9de;
+    background-color: var(--xht-bg-color);
+    border-bottom: 1px solid var(--xht-border-color);
   }
 
   &__filename {
@@ -19,7 +19,7 @@
     max-width: 40%;
     overflow: hidden;
     transform: translateX(-50%);
-    color: #5b5f6b;
+    color: var(--el-text-color-regular);
     font-size: 12px;
     pointer-events: none;
     text-align: center;
@@ -49,26 +49,33 @@
     align-items: center;
     justify-content: center;
     border: none;
-    border-radius: 4px;
+    border-radius: var(--xht-border-radius-base);
     background-color: transparent;
-    color: #5b5f6b;
+    color: var(--el-text-color-regular);
     cursor: pointer;
     outline: none;
     transition: background-color 0.15s;
 
     &:hover:not(:disabled) {
-      background-color: #e8e9ed;
-      color: #15151a;
+      background-color: var(--xht-hover-bg-color);
+      color: var(--xht-text-color);
     }
 
     &:disabled {
-      color: #c6c8ce;
+      color: var(--el-text-color-placeholder);
       cursor: not-allowed;
     }
 
     &.is-active {
-      background-color: #e0e1e6;
-      color: #15151a;
+      // 回退：不支持 color-mix 的旧浏览器用静态色（浅色主题近似值）。
+      // 用 @supports 包裹而非同规则重复声明，否则 CSS 压缩会删除前一行回退
+      background-color: rgb(224 225 230);
+
+      @supports (color: color-mix(in srgb, red, blue)) {
+        background-color: color-mix(in srgb, var(--xht-text-color) 8%, var(--xht-hover-bg-color));
+      }
+
+      color: var(--xht-text-color);
     }
   }
 
@@ -79,16 +86,16 @@
     gap: 4px;
     margin: 0 3px;
     padding: 0 6px;
-    border: 1px solid #c9cbd1;
-    border-radius: 2px;
-    background-color: #fff;
+    border: 1px solid var(--xht-border-color);
+    border-radius: var(--xht-border-radius-small);
+    background-color: var(--xht-bg-color);
   }
 
   &__page-input {
     width: 28px;
     border: none;
     background: transparent;
-    color: #15151a;
+    color: var(--xht-text-color);
     font-size: 12px;
     font-variant-numeric: tabular-nums;
     outline: none;
@@ -96,7 +103,7 @@
   }
 
   &__page-total {
-    color: #8f939c;
+    color: var(--el-text-color-secondary);
     font-size: 12px;
     font-variant-numeric: tabular-nums;
   }
@@ -105,7 +112,7 @@
     width: 1px;
     height: 16px;
     margin: 0 6px;
-    background-color: #d7d9de;
+    background-color: var(--xht-border-color);
   }
 
   &__zoom {
@@ -119,21 +126,21 @@
     align-items: center;
     gap: 5px;
     padding: 0 8px;
-    border: 1px solid #c9cbd1;
-    border-radius: 2px;
-    background-color: #fff;
-    color: #15151a;
+    border: 1px solid var(--xht-border-color);
+    border-radius: var(--xht-border-radius-small);
+    background-color: var(--xht-bg-color);
+    color: var(--xht-text-color);
     cursor: pointer;
     font-size: 12px;
     outline: none;
     transition: background-color 0.15s;
 
     &:hover {
-      background-color: #f2f3f5;
+      background-color: var(--xht-hover-bg-color);
     }
 
     &.is-open {
-      background-color: #e8e9ed;
+      background-color: var(--xht-hover-bg-color);
     }
   }
 
@@ -144,9 +151,9 @@
     z-index: 31;
     min-width: 132px;
     padding: 4px;
-    border: 1px solid #d7d9de;
-    border-radius: 4px;
-    background-color: #fff;
+    border: 1px solid var(--xht-border-color);
+    border-radius: var(--xht-border-radius-base);
+    background-color: var(--xht-bg-color);
     box-shadow: 0 4px 14px rgb(0 0 0 / 12%);
   }
 
@@ -156,9 +163,9 @@
     align-items: center;
     padding: 0 6px;
     border: none;
-    border-radius: 3px;
+    border-radius: var(--xht-border-radius-small);
     background-color: transparent;
-    color: #33363d;
+    color: var(--xht-text-color);
     cursor: pointer;
     font-size: 12px;
     line-height: 26px;
@@ -167,7 +174,7 @@
     transition: background-color 0.12s;
 
     &:hover {
-      background-color: #f0f1f3;
+      background-color: var(--xht-hover-bg-color);
     }
   }
 
@@ -176,13 +183,13 @@
     width: 16px;
     flex-shrink: 0;
     justify-content: center;
-    color: #15151a;
+    color: var(--xht-text-color);
   }
 
   &__zoom-sep {
     height: 1px;
     margin: 4px 2px;
-    background-color: #e4e5e9;
+    background-color: var(--xht-border-color);
   }
 
   // 更多功能菜单：贴右侧弹出
@@ -198,17 +205,17 @@
   }
 
   &__zoom-item:disabled {
-    color: #b9bcc4;
+    color: var(--el-text-color-placeholder);
     cursor: not-allowed;
 
     &:hover {
       background-color: transparent;
-      color: #b9bcc4;
+      color: var(--el-text-color-placeholder);
     }
   }
 
   &__zoom-item.is-on {
-    background-color: #eef3fd;
-    color: #0b57d0;
+    background-color: var(--el-color-primary-light-9);
+    color: var(--el-color-primary);
   }
 }

@@ -1,5 +1,3 @@
-import { computed, nextTick, ref, watch } from 'vue'
-import { useDebounceFn } from '@vueuse/core'
 import type { ComputedRef, Ref } from 'vue'
 import type { PDFDocumentProxy } from 'pdfjs-dist'
 import * as pdfjsLib from 'pdfjs-dist'
@@ -102,7 +100,11 @@ export const buildSearchMatch = (page: number, pageText: PageTextIndex, start: n
  * @param isCurrent  文档代际校验（提取等待期间文档可能已切换）
  * @param no         页码（从 1 开始）
  */
-export const extractPageText = async (doc: PDFDocumentProxy, isCurrent: (doc: PDFDocumentProxy) => boolean, no: number): Promise<PageTextIndex | null> => {
+export const extractPageText = async (
+  doc: PDFDocumentProxy,
+  isCurrent: (doc: PDFDocumentProxy) => boolean,
+  no: number
+): Promise<PageTextIndex | null> => {
   try {
     const page = await doc.getPage(no)
     if (!isCurrent(doc)) return null

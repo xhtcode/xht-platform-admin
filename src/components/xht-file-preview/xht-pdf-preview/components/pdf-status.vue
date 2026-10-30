@@ -23,7 +23,7 @@ defineEmits<PdfStatusEmits>()
       :percentage="progress"
       :stroke-width="4"
       :show-text="false"
-      color="#0b57d0"
+      color="var(--el-color-primary)"
     />
     <p class="xht-pdf-preview__status-desc">正在解析文档，请稍候…</p>
   </div>
@@ -31,7 +31,7 @@ defineEmits<PdfStatusEmits>()
   <!-- 文档加载失败 -->
   <div v-else class="xht-pdf-preview__status">
     <div class="xht-pdf-preview__status-card">
-      <el-icon :size="26" color="#faad14"><WarningFilled /></el-icon>
+      <el-icon :size="26" color="var(--el-color-warning)"><WarningFilled /></el-icon>
       <p class="xht-pdf-preview__status-title">文档加载失败</p>
       <p class="xht-pdf-preview__status-desc">文件可能已损坏或已被释放，可重新加载或下载后查看</p>
       <div class="xht-pdf-preview__status-actions">

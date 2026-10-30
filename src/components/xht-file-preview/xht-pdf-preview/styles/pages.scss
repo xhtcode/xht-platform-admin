@@ -1,18 +1,38 @@
 /* 页面列表：纸面 / 画布 / 文本层（文本选择） / 搜索高亮 / 渲染中提示 */
+/* 搜索高亮 / 文本选区 / 纸面等局部变量统一定义在 base.scss 的根容器上（本分片
+   由子组件 scoped 引入，选择器无法命中根元素，定义在此会零匹配失效） */
 .xht-pdf-preview {
   &__paper {
     position: relative;
     width: max-content;
     margin: 0 auto 12px;
     overflow: hidden;
-    background-color: #fff;
+    background-color: var(--xht-pdf-paper);
     box-shadow: 0 1px 4px rgb(0 0 0 / 16%);
 
     canvas {
+      // 相对定位使画布与加载占位同为定位元素，按 DOM 序覆盖（画布在后）
+      position: relative;
       display: block;
       width: 100%;
       height: 100%;
+
+      // 渲染中/已卸载的画布整块隐藏（占位尺寸由纸面承担，白底代替黑帧）：
+      // [hidden] 的 UA 样式优先级低于本文件的 display:block，需显式覆盖
+      &[hidden] {
+        display: none;
+      }
     }
+  }
+
+  // 页面加载占位：画布渲染完成前在纸面中心展示轻量 spinner，
+  // 画布绘制完成后被其内容自然覆盖（占位位于画布之前的 DOM 序）
+  &__page-loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   // 文本层：pdf.js TextLayer 输出的透明文本，供文本选择工具选中/复制
@@ -73,7 +93,7 @@
 
     // 选中反馈：官方同款半透明蓝
     ::selection {
-      background-color: rgb(0 0 255 / 25%);
+      background-color: var(--xht-pdf-selection);
       color: transparent;
     }
 
@@ -103,33 +123,16 @@
 
   &__search-hit {
     position: absolute;
-    background-color: rgb(255 196 0 / 50%);
-    border-radius: 1px;
+    background-color: var(--xht-pdf-search-hit);
+    border-radius: var(--xht-border-radius-small);
     pointer-events: none;
 
     // 当前项：同色系但明显更深，并加描边突出
     &.is-current {
       z-index: 1;
-      background-color: rgb(255 106 0 / 55%);
-      outline: 2px solid #e25822;
+      background-color: var(--xht-pdf-search-hit-current);
+      outline: 2px solid var(--xht-pdf-search-hit-current-outline);
       outline-offset: -1px;
     }
-  }
-
-  &__rendering {
-    position: fixed;
-    top: 50px;
-    left: 50%;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    padding: 3px 10px;
-    transform: translateX(-50%);
-    border: 1px solid #d7d9de;
-    border-radius: 999px;
-    background-color: #fff;
-    color: #6b6f78;
-    font-size: 12px;
-    pointer-events: none;
   }
 }

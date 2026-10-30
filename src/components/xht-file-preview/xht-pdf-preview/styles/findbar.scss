@@ -10,9 +10,9 @@
     gap: 6px;
     max-width: calc(100% - 16px);
     padding: 6px 8px;
-    border: 1px solid #d7d9de;
-    border-radius: 6px;
-    background-color: #fff;
+    border: 1px solid var(--xht-border-color);
+    border-radius: var(--xht-border-radius-base);
+    background-color: var(--xht-bg-color);
     box-shadow: 0 2px 8px rgb(0 0 0 / 14%);
   }
 
@@ -20,14 +20,14 @@
     width: 170px;
     height: 26px;
     padding: 0 8px;
-    border: 1px solid #d7d9de;
-    border-radius: 4px;
-    color: #15151a;
+    border: 1px solid var(--xht-border-color);
+    border-radius: var(--xht-border-radius-base);
+    color: var(--xht-text-color);
     font-size: 12px;
     outline: none;
 
     &:focus {
-      border-color: #0b57d0;
+      border-color: var(--el-color-primary);
     }
   }
 
@@ -39,41 +39,41 @@
     align-items: center;
     justify-content: center;
     border: none;
-    border-radius: 4px;
+    border-radius: var(--xht-border-radius-base);
     background-color: transparent;
-    color: #5b5f6b;
+    color: var(--el-text-color-regular);
     cursor: pointer;
     outline: none;
 
     &:hover:not(:disabled) {
-      background-color: #f0f1f3;
-      color: #15151a;
+      background-color: var(--xht-hover-bg-color);
+      color: var(--xht-text-color);
     }
 
     &:disabled {
-      color: #b9bcc4;
+      color: var(--el-text-color-placeholder);
       cursor: not-allowed;
     }
 
     // 上/下跳转按钮：描边实底样式，避免与纯图标混淆
     &.is-nav {
-      border: 1px solid #c3c7cf;
-      background-color: #fff;
-      color: #3f434e;
+      border: 1px solid var(--xht-border-color);
+      background-color: var(--xht-bg-color);
+      color: var(--xht-text-color);
       box-shadow: 0 1px 1px rgb(0 0 0 / 8%);
 
       &:hover:not(:disabled) {
-        border-color: #0b57d0;
-        background-color: #f2f6ff;
-        color: #0b57d0;
+        border-color: var(--el-color-primary);
+        background-color: var(--el-color-primary-light-9);
+        color: var(--el-color-primary);
       }
 
       &:active:not(:disabled) {
-        background-color: #e3edff;
+        background-color: var(--el-color-primary-light-8);
       }
 
       &:disabled {
-        background-color: #f5f6f8;
+        background-color: var(--el-fill-color-light);
         box-shadow: none;
       }
     }
@@ -84,20 +84,20 @@
     flex-shrink: 0;
     align-items: center;
     gap: 4px;
-    color: #5b5f6b;
+    color: var(--el-text-color-regular);
     cursor: pointer;
     user-select: none;
     white-space: nowrap;
 
     input {
       margin: 0;
-      accent-color: #0b57d0;
+      accent-color: var(--el-color-primary);
     }
   }
 
   &__find-count {
     flex-shrink: 0;
-    color: #5b5f6b;
+    color: var(--el-text-color-regular);
     white-space: nowrap;
   }
 }

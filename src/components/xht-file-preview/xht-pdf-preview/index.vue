@@ -59,11 +59,6 @@ const message = useMessage()
 // Worker 以独立资源引入，由 Vite 处理打包与 URL 解析
 pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl
 
-/**
- * pdf.js 版本号，用于拼接 CDN 的 cMap / 标准字体资源地址（中日韩等非拉丁文档渲染需要）
- */
-const PDFJS_VERSION = pdfjsLib.version
-
 const state = reactive<PdfPreviewState>({
   loadingStatus: true,
   total: 0,
@@ -87,6 +82,8 @@ const containerRef = useTemplateRef<HTMLDivElement>('containerRef')
 const childRefs = {
   /** 缩略图列表容器（侧栏子组件回填） */
   thumbList: ref<HTMLDivElement | null>(null),
+  /** 目录列表容器（侧栏子组件回填） */
+  outlineList: ref<HTMLDivElement | null>(null),
   /** 搜索输入框（搜索栏子组件回填） */
   searchInput: ref<HTMLInputElement | null>(null),
 }
@@ -98,6 +95,15 @@ const childRefs = {
  */
 const setThumbListEl = (el: HTMLDivElement | null) => {
   childRefs.thumbList.value = el
+}
+
+/**
+ * 回填目录列表容器（侧栏子组件回调）
+ *
+ * @param el 容器元素
+ */
+const setOutlineListEl = (el: HTMLDivElement | null) => {
+  childRefs.outlineList.value = el
 }
 
 /**
@@ -194,6 +200,13 @@ const paperStyle = (no: number) => {
   const size = pageSizeAt(no)
   return { width: `${Math.floor(size.width * state.scale)}px`, height: `${Math.floor(size.height * state.scale)}px` }
 }
+
+/**
+ * 页面位图是否已渲染完成（供页面列表展示加载占位）
+ *
+ * @param no 页码
+ */
+const isPageRendered = (no: number) => renderedPages.has(no)
 
 /**
  * 收集 v-for 内的画布引用
@@ -352,6 +365,10 @@ const renderPage = async (no: number) => {
   const viewport = page.getViewport({ scale: state.scale * PDF_TO_CSS_UNITS, rotation: (page.rotate + state.rotation) % 360 })
   // 位图总放大倍数（scale × PDF_TO_CSS_UNITS × devicePixelRatio）封顶，兼顾清晰度与内存
   const ratio = Math.min(window.devicePixelRatio || 1, Math.max(1, MAX_PIXEL_RATIO / (state.scale * PDF_TO_CSS_UNITS)))
+  // 渲染期间隐藏可见画布：canvas 重设尺寸会清空加速位图，未绘制的位图被 GPU 合成时
+  // 显示为整页黑帧（快速滚动时多页同时进入该窗口尤为明显）。隐藏后由纸面白底占位，
+  // 绘制完成后才取消隐藏，未绘制内容永远不被合成
+  canvas.hidden = true
   canvas.width = Math.max(1, Math.floor(viewport.width * ratio))
   canvas.height = Math.max(1, Math.floor(viewport.height * ratio))
   const task = page.render({
@@ -369,6 +386,10 @@ const renderPage = async (no: number) => {
   state.rendering = true
   try {
     await task.promise
+    // 绘制完成期间文档可能已被销毁
+    if (pdfDoc !== doc) return
+    // 内容已绘制到位，取消隐藏展示（与隐藏不隔 await，中间无合成帧）
+    canvas.hidden = false
   } catch {
     // 渲染被取消（切页/缩放/销毁）属正常流程，静默忽略
   } finally {
@@ -381,8 +402,8 @@ const renderPage = async (no: number) => {
       renderingCount = 0
       state.rendering = false
     }
-    // 渲染期间画布被清空（如缩放重绘）：撤销"已渲染"标记，待下次可见时重新绘制
-    if (canvas.width === 0) {
+    // 渲染期间画布被卸载（位图清零或处于隐藏占位）：撤销"已渲染"标记，待下次可见时重新绘制
+    if (canvas.width === 0 || canvas.hidden) {
       renderedPages.delete(no)
     }
   }
@@ -391,8 +412,8 @@ const renderPage = async (no: number) => {
 /**
  * 卸载当前缩放比例下已渲染的页面（缩放后需要全部重绘）
  *
- * 注意：位图清零的页面必须同时移除"已渲染"标记，否则 renderPage 会跳过它们，
- * 留下永不重绘的空白画布（GPU 合成下显示为整页黑屏）。
+ * 注意：卸载的画布需隐藏并清零位图，同时移除"已渲染"标记，否则 renderPage 会跳过它们；
+ * 隐藏是为了避免清零后的加速位图被 GPU 合成显示为整页黑帧
  */
 const clearRendered = () => {
   for (const task of renderTasks.values()) {
@@ -407,6 +428,7 @@ const clearRendered = () => {
   // 文本层与画布共用视口口径，位图清零后需一并重建
   destroyTextLayers()
   for (const canvas of canvasMap.values()) {
+    canvas.hidden = true
     canvas.width = 0
     canvas.height = 0
   }
@@ -430,6 +452,8 @@ const unrenderFarPages = (firstVisible: number, lastVisible: number) => {
     renderedPages.delete(no)
     const canvas = canvasMap.get(no)
     if (canvas) {
+      // 隐藏后再清零位图：清零的加速位图被合成会显示为黑帧，隐藏后由纸面白底占位
+      canvas.hidden = true
       canvas.width = 0
       canvas.height = 0
     }
@@ -501,7 +525,7 @@ const findPageAtTop = (scrollTop: number) => {
  * 缩放刷新/缩略图/图层配置等字段随模块装配经 Object.assign 逐步补齐
  * （装配完成前不会有任何模块调用它们，均为事件回调/异步流程中的运行时调用）。
  */
-const ctx: PdfCoreContext = {
+const ctxBase = {
   props,
   state,
   message,
@@ -521,7 +545,10 @@ const ctx: PdfCoreContext = {
   scaleForMode,
   triggerDownload,
   refreshAfterScaleChange,
-} as unknown as PdfCoreContext
+} as Partial<PdfCoreContext>
+// 分阶段装配：缩略图/图层相关字段需待对应功能模块创建后经 Object.assign 补齐，
+// 故基础字段先以 Partial 收集，再整体断言一次为完整类型（避免 as unknown 双重断言）
+const ctx = ctxBase as PdfCoreContext
 
 const searchApi = createSearchFeature(ctx, childRefs.searchInput)
 const outlineApi = createOutlineFeature(ctx)
@@ -635,6 +662,15 @@ const loadDocument = async () => {
   state.progress = 0
   state.total = 0
   state.current = 1
+  // 换文档时复位视图状态：旋转/手形均针对旧文档，不随新文档延续
+  state.rotation = 0
+  state.handTool = false
+  // 演示模式复位统一走 presentation 模块的 exitPresentation（同步 zoom/scale 并重绘），
+  // 全屏退出交由浏览器 fullscreenchange 回调同步，避免「state 已非演示但容器仍全屏」半状态
+  if (state.presenting) {
+    if (document.fullscreenElement) document.exitFullscreen().catch(() => {})
+    presentationApi.exitPresentation()
+  }
   state.zoomMode = 'auto'
   try {
     await destroyDocument()
@@ -648,9 +684,10 @@ const loadDocument = async () => {
     propertiesApi.pdfLinearized.value = !!source.head && new TextDecoder('latin1').decode(source.head.subarray(0, 1024)).includes('/Linearized')
     const params: Parameters<typeof pdfjsLib.getDocument>[0] = {
       rangeChunkSize: PDF_RANGE_CHUNK_SIZE,
-      cMapUrl: `https://unpkg.com/pdfjs-dist@${PDFJS_VERSION}/cmaps/`,
+      // cMap / 标准字体 / wasm 资源已复制到 public/pdfjs/（随仓库静态托管），避免依赖外网 CDN 导致内网环境渲染失败
+      cMapUrl: `${import.meta.env.BASE_URL}pdfjs/cmaps/`,
       cMapPacked: true,
-      standardFontDataUrl: `https://unpkg.com/pdfjs-dist@${PDFJS_VERSION}/standard_fonts/`,
+      standardFontDataUrl: `${import.meta.env.BASE_URL}pdfjs/standard_fonts/`,
       // v6 起 CCITT/JBIG2（扫描件常用）与 JPEG2000 解码依赖 wasm，未提供时解码失败整页会被画成黑色
       wasmUrl: `${import.meta.env.BASE_URL}pdfjs/wasm/`,
     }
@@ -895,13 +932,20 @@ const handleGlobalKeydown = (event: KeyboardEvent) => {
 
 /**
  * 滚动同步：渲染新进入可视区的页面并更新当前页码
+ *
+ * trailing 必须为 true：滚动停止时的最后一次事件落在节流窗口内会被丢弃，
+ * 导致当前页码/缩略图高亮停在旧页（useThrottleFn 默认 trailing=false）
  */
-const handleScroll = useThrottleFn(() => {
-  const container = containerRef.value
-  if (!container || !pageTops.value.length) return
-  renderVisiblePages()
-  state.current = findPageAtTop(container.scrollTop)
-}, 80)
+const handleScroll = useThrottleFn(
+  () => {
+    const container = containerRef.value
+    if (!container || !pageTops.value.length) return
+    renderVisiblePages()
+    state.current = findPageAtTop(container.scrollTop)
+  },
+  80,
+  true
+)
 
 watch(
   () => props.url,
@@ -913,15 +957,59 @@ watch(
   { immediate: true }
 )
 
+/**
+ * 将列表内的元素滚动到可视范围（只滚动列表自身，不波及外层滚动容器；已可见则不动）
+ *
+ * @param list 列表容器
+ * @param item 目标元素
+ */
+const scrollListItemVisible = (list: HTMLElement, item: HTMLElement) => {
+  const listRect = list.getBoundingClientRect()
+  const rect = item.getBoundingClientRect()
+  if (rect.top >= listRect.top && rect.bottom <= listRect.bottom) return
+  list.scrollTop += rect.top - listRect.top - 12
+}
+
+/**
+ * 将缩略图列表滚动到当前页
+ */
+const syncThumbScroll = () => {
+  const list = childRefs.thumbList.value
+  const wrapper = thumbsApi.thumbWrappers.get(state.current)
+  if (!list || !wrapper || !sidebarVisible.value || sidebarTab.value !== 'thumb') return
+  scrollListItemVisible(list, wrapper)
+}
+
+/**
+ * 将目录列表滚动到当前高亮章节（无书签文档没有高亮节点，静默跳过）
+ */
+const syncOutlineScroll = () => {
+  const list = childRefs.outlineList.value
+  if (!list || !sidebarVisible.value || sidebarTab.value !== 'outline') return
+  const active = list.querySelector<HTMLElement>('.is-current')
+  if (active) scrollListItemVisible(list, active)
+}
+
 watch(
   () => state.current,
   (current) => {
     outlineApi.checkPinRelease(current)
-    // 侧栏展开时让当前页缩略图保持可见
-    if (sidebarVisible.value) {
-      thumbsApi.thumbWrappers.get(current)?.scrollIntoView({ block: 'nearest' })
-    }
-  }
+    // 侧栏展开时让当前页缩略图 / 目录章节保持可见
+    syncThumbScroll()
+    syncOutlineScroll()
+  },
+  // 必须等 DOM patch 完成再同步：目录滚动靠 querySelector 找 .is-current 高亮节点，
+  // pre 时机拿到的是上一次渲染的旧高亮（滞后一页且常被"已可见"guard 跳过）
+  { flush: 'post' }
+)
+
+// 侧栏收起期间发生的滚动不会触发上面的同步（面板隐藏时无法定位），
+// 展开侧栏或切换页签后需主动补一次滚动，否则列表仍停在旧位置
+watch([sidebarVisible, sidebarTab], () =>
+  nextTick(() => {
+    syncThumbScroll()
+    syncOutlineScroll()
+  })
 )
 
 useResizeObserver(containerRef, () => handleResize())
@@ -992,6 +1080,7 @@ onBeforeUnmount(() => {
           :attachments="attachmentsApi"
           :layers="layersApi"
           :set-list-ref="setThumbListEl"
+          :set-outline-list-ref="setOutlineListEl"
           @go-page="scrollToPage"
         />
 
@@ -1010,10 +1099,16 @@ onBeforeUnmount(() => {
             :state="state"
             :paper-style="paperStyle"
             :search="searchApi"
+            :is-page-rendered="isPageRendered"
             :set-page-canvas="setPageCanvas"
             :set-page-text-layer="setPageTextLayer"
           />
         </div>
+
+        <!-- 渲染进度条：页面位图渲染期间在内容区顶部展示 -->
+        <transition name="el-fade-in">
+          <div v-if="state.rendering" class="xht-pdf-preview__rendering-bar" />
+        </transition>
       </div>
     </template>
   </div>

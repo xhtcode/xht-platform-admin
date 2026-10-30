@@ -17,7 +17,7 @@
   }
 
   &__shortcut-label {
-    color: #3f434e;
+    color: var(--xht-text-color);
     font-size: 13px;
   }
 
@@ -29,11 +29,11 @@
     kbd {
       min-width: 24px;
       padding: 2px 7px;
-      border: 1px solid #c9ccd3;
+      border: 1px solid var(--xht-border-color);
       border-bottom-width: 2px;
-      border-radius: 4px;
-      background-color: #f7f8fa;
-      color: #3f434e;
+      border-radius: var(--xht-border-radius-base);
+      background-color: var(--xht-hover-bg-color);
+      color: var(--xht-text-color);
       font-family: inherit;
       font-size: 12px;
       line-height: 1.5;

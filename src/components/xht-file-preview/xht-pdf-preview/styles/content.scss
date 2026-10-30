@@ -1,9 +1,34 @@
 /* 内容区：主布局 + 可滚动画布容器（纸面/文本层/高亮见 pages.scss） */
 .xht-pdf-preview {
   &__main {
+    position: relative;
     display: flex;
     flex: 1;
     min-height: 0;
+  }
+
+  // 渲染进度条：页面位图渲染期间在内容区顶部展示的不定进度扫光
+  &__rendering-bar {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 5;
+    height: 2px;
+    overflow: hidden;
+    pointer-events: none;
+
+    &::after {
+      position: absolute;
+      top: 0;
+      left: -40%;
+      width: 40%;
+      height: 100%;
+      border-radius: var(--xht-border-radius-round);
+      background: linear-gradient(90deg, transparent, var(--el-color-primary), transparent);
+      animation: xht-pdf-rendering-slide 1.1s ease-in-out infinite;
+      content: '';
+    }
   }
 
   &__canvas {
@@ -14,9 +39,9 @@
     overflow: auto;
     overscroll-behavior: contain;
 
-    // 演示模式：全屏黑底突出页面
+    // 演示模式：全屏黑底突出页面（刻意纯黑，不随主题变化）
     &:fullscreen {
-      background-color: #000;
+      background-color: black;
       padding: 0 0 24px;
     }
 
@@ -27,8 +52,8 @@
 
     &::-webkit-scrollbar-thumb {
       border: 2px solid transparent;
-      border-radius: 6px;
-      background-color: #c9ccd3;
+      border-radius: var(--xht-border-radius-base);
+      background-color: var(--el-border-color-darker);
       background-clip: content-box;
     }
 
@@ -45,5 +70,11 @@
     :deep(.xht-pdf-preview__text-layer) {
       pointer-events: none;
     }
+  }
+}
+
+@keyframes xht-pdf-rendering-slide {
+  to {
+    left: 100%;
   }
 }

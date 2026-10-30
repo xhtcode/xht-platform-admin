@@ -1,4 +1,3 @@
-import { computed, ref } from 'vue'
 import type { ComputedRef, Ref } from 'vue'
 import type { PDFDocumentProxy } from 'pdfjs-dist'
 import { PDF_TO_CSS_UNITS, TITLE_TOP_MARGIN } from './constants'

@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import {
   ArrowDown,
   ArrowLeft,

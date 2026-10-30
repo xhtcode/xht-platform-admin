@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { ArrowRight, Check, Paperclip } from '@element-plus/icons-vue'
+import type { ComponentPublicInstance } from 'vue'
 import type { SidebarTab } from '../thumbs'
 import { formatBytes } from '../utils'
 import type { PdfSidebarEmits, PdfSidebarProps } from './types'
@@ -33,6 +34,15 @@ const { layersLoading, layers: layerItems, toggleLayer } = props.layers
 const handleListRef = (el: unknown) => {
   props.setListRef(el instanceof HTMLDivElement ? el : null)
 }
+
+/**
+ * 回填目录列表容器给主组件（目录滚动同步定位用）
+ *
+ * @param el ref 元素
+ */
+const handleOutlineListRef = (el: unknown) => {
+  props.setOutlineListRef(el instanceof HTMLDivElement ? el : null)
+}
 </script>
 
 <template>
@@ -65,7 +75,7 @@ const handleListRef = (el: unknown) => {
       </button>
     </div>
 
-    <div v-show="tab === 'outline'" class="xht-pdf-preview__outline">
+    <div v-show="tab === 'outline'" :ref="handleOutlineListRef" class="xht-pdf-preview__outline">
       <p v-if="outlineLoading" class="xht-pdf-preview__outline-tip">正在读取目录…</p>
       <p v-else-if="outlineLoaded && !visibleOutline.length" class="xht-pdf-preview__outline-tip">此文档没有目录</p>
       <button
@@ -97,7 +107,7 @@ const handleListRef = (el: unknown) => {
         class="xht-pdf-preview__thumb"
         :class="{ 'is-active': no === state.current }"
         :data-page="no"
-        :ref="(el: any) => setThumbWrapper(no, el)"
+        :ref="(el: Element | ComponentPublicInstance | null) => setThumbWrapper(no, el)"
         @click="emits('goPage', no)"
       >
         <span class="xht-pdf-preview__thumb-paper"><canvas /></span>

@@ -19,19 +19,19 @@
       height: 1px;
       margin: 2px 0;
       padding: 0;
-      background-color: #e3e5e9;
+      background-color: var(--xht-border-color);
     }
   }
 
   &__property-label {
     flex-shrink: 0;
     width: 150px;
-    color: #7c8089;
+    color: var(--el-text-color-secondary);
     font-size: 13px;
   }
 
   &__property-value {
-    color: #15151a;
+    color: var(--xht-text-color);
     font-size: 13px;
     word-break: break-all;
   }
