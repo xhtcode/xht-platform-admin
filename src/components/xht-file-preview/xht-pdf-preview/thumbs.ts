@@ -58,6 +58,18 @@ export const createThumbsFeature = (ctx: PdfCoreContext, thumbListRef: { readonl
    * @param no 页码
    */
   const renderThumb = async (no: number) => {
+    try {
+      await renderThumbInner(no)
+    } catch (error) {
+      // 渲染取消属正常流程；其余失败不能静默（否则缩略图空白且无任何排查线索）
+      if (!/cancel|abort/i.test(String(error))) {
+        console.error(`PDF缩略图渲染失败(第${no}页):`, error)
+        renderedThumbs.delete(no)
+      }
+    }
+  }
+
+  const renderThumbInner = async (no: number) => {
     const doc = getDoc()
     const wrapper = thumbWrappers.get(no)
     if (!doc || !wrapper || renderedThumbs.has(no)) return

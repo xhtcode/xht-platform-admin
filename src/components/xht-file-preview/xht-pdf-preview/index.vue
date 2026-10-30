@@ -6,8 +6,14 @@ import type { XhtPdfPreviewProps } from '@/components/xht-file-preview/component
 import { createPdfRangeSource } from '@/components/xht-file-preview/pdf-range-transport'
 import { attachTextLayerSelection, detachTextLayerSelection } from '@/components/xht-file-preview/pdf-text-selection'
 import { useMessage } from '@/hooks/use-message'
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Check, Close, DArrowLeft, DArrowRight, Download, Grid, InfoFilled, Loading, Minus, MoreFilled, Paperclip, Plus, Printer, QuestionFilled, Refresh, RefreshLeft, RefreshRight, Search, WarningFilled } from '@element-plus/icons-vue'
 import { createAttachmentsFeature } from './attachments'
+import PdfFindBar from './components/pdf-find-bar.vue'
+import PdfPages from './components/pdf-pages.vue'
+import PdfPropertiesDialog from './components/pdf-properties-dialog.vue'
+import PdfShortcutsDialog from './components/pdf-shortcuts-dialog.vue'
+import PdfSidebar from './components/pdf-sidebar.vue'
+import PdfStatus from './components/pdf-status.vue'
+import PdfToolbar from './components/pdf-toolbar.vue'
 import {
   CONTENT_PADDING,
   DEFAULT_SCALE,
@@ -20,11 +26,9 @@ import {
   PDF_RANGE_CHUNK_SIZE,
   PDF_TO_CSS_UNITS,
   SEARCH_SCROLL_MARGIN,
-  SHORTCUT_ITEMS,
   SIDEBAR_MAX_WIDTH,
   SIDEBAR_MIN_WIDTH,
   SIDEBAR_WIDTH,
-  ZOOM_PERCENTS,
 } from './constants'
 import { createLayersFeature } from './layers'
 import { createOutlineFeature } from './outline'
@@ -34,12 +38,17 @@ import { createPropertiesFeature } from './properties'
 import { createSearchFeature } from './search'
 import { createThumbsFeature } from './thumbs'
 import type { OptionalContentConfig, PageSize, PdfCoreContext, PdfPreviewState, ZoomOption } from './types'
-import { formatBytes, triggerDownload } from './utils'
+import { triggerDownload } from './utils'
 
 /**
  * PDF 预览：基于 pdf.js 连续滚动渲染，支持滚动翻页、页码跳转、缩放、下载与打印。
  * 功能按模块拆分（search/outline/attachments/layers/thumbs/properties/print/presentation），
+ * 视图按区域拆分为子组件（toolbar/sidebar/pages/find-bar/shortcuts-dialog/properties-dialog/status），
  * 本文件只保留核心渲染管线、缩放定位与各模块的装配编排。
+ *
+ * 样式说明：样式按区块拆为 SCSS 分片，各子组件在自己 scoped 块内 @use 对应分片。
+ * 分片内的选择器均为 `xht-pdf-preview__*` 绝对选择器（BEM 拼接不保留外层类名），
+ * 因此可直接在子组件作用域内命中子组件自己的元素；跨组件命中的规则用 :deep 穿透。
  */
 defineOptions({ name: 'XhtPdfPreview', inheritAttrs: true })
 
@@ -70,7 +79,35 @@ const state = reactive<PdfPreviewState>({
 })
 
 const containerRef = useTemplateRef<HTMLDivElement>('containerRef')
-const thumbListRef = useTemplateRef<HTMLDivElement>('thumbListRef')
+
+/**
+ * 子组件回填的模板 ref。
+ * 注意：模板里直接引用 ref 变量会被自动解包成元素值，故包一层对象再传给子组件。
+ */
+const childRefs = {
+  /** 缩略图列表容器（侧栏子组件回填） */
+  thumbList: ref<HTMLDivElement | null>(null),
+  /** 搜索输入框（搜索栏子组件回填） */
+  searchInput: ref<HTMLInputElement | null>(null),
+}
+
+/**
+ * 回填缩略图列表容器（侧栏子组件回调）
+ *
+ * @param el 容器元素
+ */
+const setThumbListEl = (el: HTMLDivElement | null) => {
+  childRefs.thumbList.value = el
+}
+
+/**
+ * 回填搜索输入框（搜索栏子组件回调）
+ *
+ * @param el 输入框元素
+ */
+const setSearchInputEl = (el: HTMLInputElement | null) => {
+  childRefs.searchInput.value = el
+}
 
 /**
  * 缩略图侧栏显示状态：宽屏默认展开，窄屏收起
@@ -88,38 +125,6 @@ const sidebarTab = ref<'thumb' | 'outline' | 'attach' | 'layer'>('outline')
 const sidebarWidth = ref(SIDEBAR_WIDTH)
 
 /**
- * 缩放模式下拉菜单展开状态
- */
-const zoomMenuVisible = ref(false)
-
-/**
- * 更多功能菜单（首末页/旋转/手形工具/演示模式/文档属性）
- */
-const moreMenuVisible = ref(false)
-
-// 两个菜单的触发器容器 ref：用于判断 mousedown 是否发生在菜单区域内
-const zoomWrapRef = ref<HTMLElement>()
-const moreWrapRef = ref<HTMLElement>()
-
-/**
- * 菜单外 mousedown 即关闭。用 mousedown 而非遮罩层 + click：
- * 1) 在页面上拖拽选字不产生 click，遮罩层方案收不到关闭时机；
- * 2) 不用遮罩层拦截事件，mousedown 仍能到达页面元素，拖拽选择不受影响。
- *
- * @param event 全局 mousedown 事件
- */
-const handleGlobalMousedown = (event: MouseEvent) => {
-  const target = event.target
-  if (!(target instanceof Node)) return
-  if (zoomMenuVisible.value && !zoomWrapRef.value?.contains(target)) {
-    zoomMenuVisible.value = false
-  }
-  if (moreMenuVisible.value && !moreWrapRef.value?.contains(target)) {
-    moreMenuVisible.value = false
-  }
-}
-
-/**
  * 快捷键说明弹窗
  */
 const shortcutsVisible = ref(false)
@@ -135,9 +140,6 @@ const renderTasks = new Map<number, RenderTask>()
 const renderedPages = reactive(new Set<number>())
 let renderingCount = 0
 
-// 页码输入框：与 state.current 双向同步，输入非法值时回填当前页
-const pageInput = ref('1')
-
 let loadingTask: PDFDocumentLoadingTask | null = null
 let pdfDoc: PDFDocumentProxy | null = null
 
@@ -146,8 +148,6 @@ const pageSizes = ref<(PageSize | null)[]>([])
 const displayName = computed(() => props.fileName || '未命名文档')
 
 const downloadName = computed(() => (/\.pdf$/i.test(props.fileName) ? props.fileName : `${props.fileName || 'document'}.pdf`))
-
-const scalePercent = computed(() => `${Math.round(state.scale * 100)}%`)
 
 /**
  * 页面未旋转时的原始尺寸（CSS px 口径）；用户旋转不改变该坐标系
@@ -184,30 +184,6 @@ const pageTops = computed(() => {
   })
   return tops
 })
-
-/**
- * 缩放下拉按钮文案（对齐 pdf.js：自动缩放 / 适合页面 / 适合页宽 / 实际大小 / 百分比）
- */
-const zoomLabel = computed(() => {
-  if (state.zoomMode === 'auto') return '自动缩放'
-  if (state.zoomMode === 'page-fit') return '适合页面'
-  if (state.zoomMode === 'page-width') return '适合页宽'
-  if (state.zoomMode === 'page-actual') return '实际大小'
-  return scalePercent.value
-})
-
-/**
- * 缩放菜单项是否为当前选项：按模式精确匹配，不从 scale 反推（避免多项同时打勾）
- *
- * @param option 菜单项
- */
-const isZoomCurrent = (option: ZoomOption) => {
-  if (option === 'auto' || option === 'page-fit' || option === 'page-width' || option === 'page-actual') {
-    return state.zoomMode === option
-  }
-  // 百分比档位：仅手动指定（custom）且比例吻合时勾选
-  return state.zoomMode === 'custom' && Math.round(state.scale * 100) === option
-}
 
 /**
  * 页面纸面尺寸样式
@@ -343,12 +319,11 @@ const scaleForMode = (mode: PdfPreviewState['zoomMode']): number => {
     case 'page-actual':
       // 实际大小：scale=1 原始尺寸
       return DEFAULT_SCALE
-    default:
+    default: {
       // auto：竖页按宽适配，横页宽高取小，且最大只放大到 125%（MAX_AUTO_SCALE）
-      {
-        const horizontal = size.width <= size.height ? widthScale : Math.min(widthScale, heightScale)
-        return clamp(Math.min(MAX_AUTO_SCALE, horizontal))
-      }
+      const horizontal = size.width <= size.height ? widthScale : Math.min(widthScale, heightScale)
+      return clamp(Math.min(MAX_AUTO_SCALE, horizontal))
+    }
   }
 }
 
@@ -526,7 +501,7 @@ const findPageAtTop = (scrollTop: number) => {
  * 缩放刷新/缩略图/图层配置等字段随模块装配经 Object.assign 逐步补齐
  * （装配完成前不会有任何模块调用它们，均为事件回调/异步流程中的运行时调用）。
  */
-const ctx:PdfCoreContext = {
+const ctx: PdfCoreContext = {
   props,
   state,
   message,
@@ -548,14 +523,13 @@ const ctx:PdfCoreContext = {
   refreshAfterScaleChange,
 } as unknown as PdfCoreContext
 
-const searchInputRef = useTemplateRef<HTMLInputElement>('searchInputRef')
-const searchApi = createSearchFeature(ctx, searchInputRef)
+const searchApi = createSearchFeature(ctx, childRefs.searchInput)
 const outlineApi = createOutlineFeature(ctx)
 const attachmentsApi = createAttachmentsFeature(ctx)
 const layersApi = createLayersFeature(ctx)
 // 渲染管线接入图层配置
 getRenderOcConfig = layersApi.getOcConfigPromise
-const thumbsApi = createThumbsFeature(ctx, thumbListRef, sidebarTab)
+const thumbsApi = createThumbsFeature(ctx, childRefs.thumbList, sidebarTab)
 Object.assign(ctx, {
   refreshAfterScaleChange,
   invalidateThumbs: thumbsApi.invalidateThumbs,
@@ -756,27 +730,6 @@ const startResize = (event: MouseEvent) => {
 }
 
 /**
- * 翻页
- *
- * @param offset 页码偏移量
- */
-const handlePageChange = (offset: number) => {
-  scrollToPage(state.current + offset)
-}
-
-/**
- * 跳转到输入页码
- */
-const handleJump = () => {
-  const target = Number.parseInt(pageInput.value, 10)
-  if (!Number.isFinite(target)) {
-    pageInput.value = String(state.current)
-    return
-  }
-  scrollToPage(target)
-}
-
-/**
  * 旋转页面：宽高互换后适配模式需重算，渲染位图全部重绘
  *
  * @param delta 旋转增量（90 或 -90）
@@ -854,7 +807,6 @@ const handleZoomMode = async (mode: 'auto' | 'page-fit' | 'page-width' | 'page-a
  * @param option 菜单项（模式或百分比）
  */
 const selectZoom = async (option: ZoomOption) => {
-  zoomMenuVisible.value = false
   if (option === 'auto' || option === 'page-fit' || option === 'page-width' || option === 'page-actual') {
     await handleZoomMode(option)
     return
@@ -865,13 +817,6 @@ const selectZoom = async (option: ZoomOption) => {
   state.scale = option / 100
   await ctx.refreshAfterScaleChange(anchor)
 }
-
-/**
- * 应用精确缩放比例（对齐 pdf.js 的百分比档位）
- *
- * @param percent 目标百分比
- */
-const handleZoomPercent = (percent: number) => selectZoom(percent)
 
 /**
  * 下载当前文档
@@ -971,7 +916,6 @@ watch(
 watch(
   () => state.current,
   (current) => {
-    pageInput.value = String(current)
     outlineApi.checkPinRelease(current)
     // 侧栏展开时让当前页缩略图保持可见
     if (sidebarVisible.value) {
@@ -985,13 +929,11 @@ useResizeObserver(containerRef, () => handleResize())
 onMounted(() => {
   window.addEventListener('keydown', handleGlobalKeydown)
   document.addEventListener('fullscreenchange', presentationApi.handleFullscreenChange)
-  document.addEventListener('mousedown', handleGlobalMousedown, true)
 })
 
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', handleGlobalKeydown)
   document.removeEventListener('fullscreenchange', presentationApi.handleFullscreenChange)
-  document.removeEventListener('mousedown', handleGlobalMousedown, true)
   printApi.closeWindow()
   destroyDocument()
 })
@@ -999,465 +941,78 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="xht-pdf-preview">
-    <!-- 文档加载中 -->
-    <div v-if="state.loadingStatus" class="xht-pdf-preview__status">
-      <el-icon class="xht-pdf-preview__spin" :size="22"><Loading /></el-icon>
-      <p class="xht-pdf-preview__status-title text-overflow">{{ displayName }}</p>
-      <el-progress
-        v-if="state.progress > 0"
-        class="xht-pdf-preview__status-bar"
-        :percentage="state.progress"
-        :stroke-width="4"
-        :show-text="false"
-        color="#0b57d0"
-      />
-      <p class="xht-pdf-preview__status-desc">正在解析文档，请稍候…</p>
-    </div>
-
-    <!-- 文档加载失败 -->
-    <div v-else-if="!state.total" class="xht-pdf-preview__status">
-      <div class="xht-pdf-preview__status-card">
-        <el-icon :size="26" color="#faad14"><WarningFilled /></el-icon>
-        <p class="xht-pdf-preview__status-title">文档加载失败</p>
-        <p class="xht-pdf-preview__status-desc">文件可能已损坏或已被释放，可重新加载或下载后查看</p>
-        <div class="xht-pdf-preview__status-actions">
-          <button type="button" class="xht-pdf-preview__action" @click="loadDocument">
-            <el-icon :size="14"><RefreshLeft /></el-icon>
-            重新加载
-          </button>
-          <button type="button" class="xht-pdf-preview__action is-primary" @click="handleDownload">
-            <el-icon :size="14"><Download /></el-icon>
-            下载文件
-          </button>
-        </div>
-      </div>
-    </div>
+    <!-- 文档加载中 / 加载失败 -->
+    <PdfStatus
+      v-if="state.loadingStatus || !state.total"
+      :loading="state.loadingStatus"
+      :progress="state.progress"
+      :display-name="displayName"
+      @reload="loadDocument"
+      @download="handleDownload"
+    />
 
     <template v-else>
       <!-- 单行工具栏（pdf.js 官方风格） -->
-      <header class="xht-pdf-preview__toolbar">
-        <div class="xht-pdf-preview__cluster">
-          <el-tooltip content="页面缩略图" placement="bottom">
-            <button
-              type="button"
-              class="xht-pdf-preview__btn"
-              :class="{ 'is-active': sidebarVisible }"
-              aria-label="切换缩略图侧栏"
-              @click="sidebarVisible = !sidebarVisible"
-            >
-              <el-icon :size="15"><Grid /></el-icon>
-            </button>
-          </el-tooltip>
-
-          <span class="xht-pdf-preview__divider" />
-
-          <button type="button" class="xht-pdf-preview__btn" aria-label="上一页" :disabled="state.current <= 1" @click="handlePageChange(-1)">
-            <el-icon :size="14"><ArrowLeft /></el-icon>
-          </button>
-          <div class="xht-pdf-preview__page-box">
-            <input v-model="pageInput" class="xht-pdf-preview__page-input" inputmode="numeric" @change="handleJump" @keyup.enter="handleJump" />
-            <span class="xht-pdf-preview__page-total">/ {{ state.total }}</span>
-          </div>
-          <button
-            type="button"
-            class="xht-pdf-preview__btn"
-            aria-label="下一页"
-            :disabled="state.current >= state.total"
-            @click="handlePageChange(1)"
-          >
-            <el-icon :size="14"><ArrowRight /></el-icon>
-          </button>
-
-          <el-tooltip content="搜索（Ctrl+F）" placement="bottom">
-            <button
-              type="button"
-              class="xht-pdf-preview__btn"
-              :class="{ 'is-active': searchApi.searchOpen.value }"
-              aria-label="搜索"
-              @click="searchApi.toggleSearch()"
-            >
-              <el-icon :size="15"><Search /></el-icon>
-            </button>
-          </el-tooltip>
-
-          <span class="xht-pdf-preview__divider" />
-
-          <button type="button" class="xht-pdf-preview__btn" aria-label="缩小" :disabled="state.scale <= MIN_SCALE" @click="handleZoom(-0.1)">
-            <el-icon :size="14"><Minus /></el-icon>
-          </button>
-
-          <div ref="zoomWrapRef" class="xht-pdf-preview__zoom">
-            <button
-              type="button"
-              class="xht-pdf-preview__zoom-trigger"
-              :class="{ 'is-open': zoomMenuVisible }"
-              aria-label="选择缩放比例"
-              @click="zoomMenuVisible = !zoomMenuVisible"
-            >
-              {{ zoomLabel }}
-              <el-icon :size="11"><ArrowDown /></el-icon>
-            </button>
-            <div v-if="zoomMenuVisible" class="xht-pdf-preview__zoom-menu" role="menu">
-              <button type="button" class="xht-pdf-preview__zoom-item" role="menuitem" @click="selectZoom('auto')">
-                <span class="xht-pdf-preview__zoom-check">
-                  <el-icon v-if="isZoomCurrent('auto')" :size="12"><Check /></el-icon>
-                </span>
-                自动缩放
-              </button>
-              <button type="button" class="xht-pdf-preview__zoom-item" role="menuitem" @click="selectZoom('page-actual')">
-                <span class="xht-pdf-preview__zoom-check">
-                  <el-icon v-if="isZoomCurrent('page-actual')" :size="12"><Check /></el-icon>
-                </span>
-                实际大小
-              </button>
-              <button type="button" class="xht-pdf-preview__zoom-item" role="menuitem" @click="selectZoom('page-fit')">
-                <span class="xht-pdf-preview__zoom-check">
-                  <el-icon v-if="isZoomCurrent('page-fit')" :size="12"><Check /></el-icon>
-                </span>
-                适合页面
-              </button>
-              <button type="button" class="xht-pdf-preview__zoom-item" role="menuitem" @click="selectZoom('page-width')">
-                <span class="xht-pdf-preview__zoom-check">
-                  <el-icon v-if="isZoomCurrent('page-width')" :size="12"><Check /></el-icon>
-                </span>
-                适合页宽
-              </button>
-              <div class="xht-pdf-preview__zoom-sep" />
-              <button
-                v-for="percent in ZOOM_PERCENTS"
-                :key="percent"
-                type="button"
-                class="xht-pdf-preview__zoom-item"
-                role="menuitem"
-                @click="handleZoomPercent(percent)"
-              >
-                <span class="xht-pdf-preview__zoom-check">
-                  <el-icon v-if="isZoomCurrent(percent)" :size="12"><Check /></el-icon>
-                </span>
-                {{ percent }}%
-              </button>
-            </div>
-          </div>
-
-          <button type="button" class="xht-pdf-preview__btn" aria-label="放大" :disabled="state.scale >= MAX_SCALE" @click="handleZoom(0.1)">
-            <el-icon :size="14"><Plus /></el-icon>
-          </button>
-        </div>
-
-        <!-- 文件名：合并自原页面顶部信息栏，单行工具栏居中展示 -->
-        <div v-if="displayName" class="xht-pdf-preview__filename" :title="displayName">
-          {{ displayName }}
-        </div>
-
-        <div class="xht-pdf-preview__cluster is-right">
-          <el-tooltip content="快捷键" placement="bottom">
-            <button type="button" class="xht-pdf-preview__btn" aria-label="查看快捷键" @click="shortcutsVisible = true">
-              <el-icon :size="15"><QuestionFilled /></el-icon>
-            </button>
-          </el-tooltip>
-          <el-tooltip content="下载" placement="bottom">
-            <button type="button" class="xht-pdf-preview__btn" aria-label="下载文件" @click="handleDownload">
-              <el-icon :size="15"><Download /></el-icon>
-            </button>
-          </el-tooltip>
-          <el-tooltip content="打印" placement="bottom">
-            <button type="button" class="xht-pdf-preview__btn" aria-label="打印" :disabled="state.printing" @click="printApi.handlePrint()">
-              <el-icon :size="15" :class="state.printing ? 'xht-pdf-preview__spin' : ''">
-                <Loading v-if="state.printing" />
-                <Printer v-else />
-              </el-icon>
-            </button>
-          </el-tooltip>
-
-          <!-- 更多功能：首末页 / 旋转 / 手形工具 / 演示模式 / 文档属性 -->
-          <div ref="moreWrapRef" class="xht-pdf-preview__more">
-            <el-tooltip content="更多功能" placement="bottom">
-              <button
-                type="button"
-                class="xht-pdf-preview__btn"
-                :class="{ 'is-active': moreMenuVisible }"
-                aria-label="更多功能"
-                @click="moreMenuVisible = !moreMenuVisible"
-              >
-                <el-icon :size="15"><MoreFilled /></el-icon>
-              </button>
-            </el-tooltip>
-            <div v-if="moreMenuVisible" class="xht-pdf-preview__zoom-menu is-right" role="menu">
-              <button
-                type="button"
-                class="xht-pdf-preview__zoom-item"
-                :class="{ 'is-on': !state.handTool }"
-                role="menuitem"
-                @click="state.handTool = false"
-              >
-                <span class="xht-pdf-preview__zoom-check"><el-icon v-if="!state.handTool" :size="12"><Check /></el-icon></span>
-                文本选择工具
-              </button>
-              <button
-                type="button"
-                class="xht-pdf-preview__zoom-item"
-                :class="{ 'is-on': state.handTool }"
-                role="menuitem"
-                @click="state.handTool = true"
-              >
-                <span class="xht-pdf-preview__zoom-check"><el-icon v-if="state.handTool" :size="12"><Check /></el-icon></span>
-                手形工具
-              </button>
-              <div class="xht-pdf-preview__zoom-sep" />
-              <button type="button" class="xht-pdf-preview__zoom-item" role="menuitem" :disabled="state.current <= 1" @click="scrollToPage(1)">
-                <span class="xht-pdf-preview__zoom-check"><el-icon :size="12"><DArrowLeft /></el-icon></span>
-                转到第一页
-              </button>
-              <button type="button" class="xht-pdf-preview__zoom-item" role="menuitem" :disabled="state.current >= state.total" @click="scrollToPage(state.total)">
-                <span class="xht-pdf-preview__zoom-check"><el-icon :size="12"><DArrowRight /></el-icon></span>
-                转到最后一页
-              </button>
-              <div class="xht-pdf-preview__zoom-sep" />
-              <button type="button" class="xht-pdf-preview__zoom-item" role="menuitem" @click="handleRotate(-90)">
-                <span class="xht-pdf-preview__zoom-check"><el-icon :size="12"><RefreshLeft /></el-icon></span>
-                逆时针旋转
-              </button>
-              <button type="button" class="xht-pdf-preview__zoom-item" role="menuitem" :disabled="state.rotation === 0" @click="handleRotate(-state.rotation)">
-                <span class="xht-pdf-preview__zoom-check"><el-icon :size="12"><Refresh /></el-icon></span>
-                重置旋转
-              </button>
-              <button type="button" class="xht-pdf-preview__zoom-item" role="menuitem" @click="handleRotate(90)">
-                <span class="xht-pdf-preview__zoom-check"><el-icon :size="12"><RefreshRight /></el-icon></span>
-                顺时针旋转
-              </button>
-              <div class="xht-pdf-preview__zoom-sep" />
-              <button type="button" class="xht-pdf-preview__zoom-item" :class="{ 'is-on': state.presenting }" role="menuitem" @click="presentationApi.togglePresentation()">
-                <span class="xht-pdf-preview__zoom-check"><el-icon v-if="state.presenting" :size="12"><Check /></el-icon></span>
-                演示模式
-              </button>
-              <div class="xht-pdf-preview__zoom-sep" />
-              <button type="button" class="xht-pdf-preview__zoom-item" role="menuitem" @click="propertiesApi.loadProperties()">
-                <span class="xht-pdf-preview__zoom-check"><el-icon :size="12"><InfoFilled /></el-icon></span>
-                文档属性…
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
+      <PdfToolbar
+        :state="state"
+        :display-name="displayName"
+        :sidebar-visible="sidebarVisible"
+        @toggle-sidebar="sidebarVisible = !sidebarVisible"
+        @go-page="scrollToPage"
+        @toggle-search="searchApi.toggleSearch()"
+        @zoom="handleZoom"
+        @select-zoom="selectZoom"
+        @download="handleDownload"
+        @print="printApi.handlePrint()"
+        @rotate="handleRotate"
+        @set-hand-tool="state.handTool = $event"
+        @toggle-presentation="presentationApi.togglePresentation()"
+        @open-properties="propertiesApi.loadProperties()"
+        @open-shortcuts="shortcutsVisible = true"
+      />
 
       <!-- 快捷键说明弹窗 -->
-      <el-dialog v-model="shortcutsVisible" title="快捷键" width="560px" append-to-body>
-        <ul class="xht-pdf-preview__shortcut-list">
-          <li v-for="item in SHORTCUT_ITEMS" :key="item.label">
-            <span class="xht-pdf-preview__shortcut-label">{{ item.label }}</span>
-            <span class="xht-pdf-preview__shortcut-keys">
-              <kbd v-for="key in item.keys" :key="key">{{ key }}</kbd>
-            </span>
-          </li>
-        </ul>
-      </el-dialog>
+      <PdfShortcutsDialog v-model:visible="shortcutsVisible" />
 
       <!-- 文档属性弹窗 -->
-      <el-dialog v-model="propertiesApi.propertiesVisible.value" title="文档属性" width="640px" append-to-body>
-        <ul class="xht-pdf-preview__property-list">
-          <li v-for="(row, index) in propertiesApi.docProperties.value" :key="index" :class="{ 'is-divider': row.divider }">
-            <span class="xht-pdf-preview__property-label">{{ row.label }}</span>
-            <span class="xht-pdf-preview__property-value">{{ row.value }}</span>
-          </li>
-        </ul>
-      </el-dialog>
+      <PdfPropertiesDialog :properties="propertiesApi" />
 
       <!-- 搜索栏：浮于内容区左上，仿官方 viewer findbar -->
-      <div v-if="searchApi.searchOpen.value" class="xht-pdf-preview__findbar">
-        <input
-          ref="searchInputRef"
-          v-model="searchApi.searchInput.value"
-          type="text"
-          class="xht-pdf-preview__find-input"
-          placeholder="在文档中搜索"
-          @keydown="searchApi.handleSearchKeydown"
-        />
-        <button type="button" class="xht-pdf-preview__find-btn is-nav" aria-label="上一个" title="上一个" :disabled="!searchApi.searchMatches.value.length" @click="searchApi.handleSearchPrev()">
-          <el-icon :size="13"><ArrowUp /></el-icon>
-        </button>
-        <button type="button" class="xht-pdf-preview__find-btn is-nav" aria-label="下一个" title="下一个" :disabled="!searchApi.searchMatches.value.length" @click="searchApi.handleSearchNext()">
-          <el-icon :size="13"><ArrowDown /></el-icon>
-        </button>
-        <label class="xht-pdf-preview__find-option">
-          <input v-model="searchApi.searchHighlightAll.value" type="checkbox" />
-          <span>全部高亮显示</span>
-        </label>
-        <label class="xht-pdf-preview__find-option">
-          <input v-model="searchApi.searchCaseSensitive.value" type="checkbox" />
-          <span>区分大小写</span>
-        </label>
-        <label class="xht-pdf-preview__find-option">
-          <input v-model="searchApi.searchWholeWord.value" type="checkbox" />
-          <span>全词匹配</span>
-        </label>
-        <label class="xht-pdf-preview__find-option">
-          <input v-model="searchApi.searchDiacritics.value" type="checkbox" />
-          <span>匹配变音符号</span>
-        </label>
-        <span class="xht-pdf-preview__find-count">
-          <template v-if="searchApi.searchExtracting.value">搜索中…</template>
-          <template v-else-if="searchApi.searchMatches.value.length">{{ searchApi.searchCurrentLabel.value }}/{{ searchApi.searchMatches.value.length }}</template>
-          <template v-else>无匹配结果</template>
-        </span>
-        <button type="button" class="xht-pdf-preview__find-btn" aria-label="关闭搜索" @click="searchApi.closeSearch()">
-          <el-icon :size="13"><Close /></el-icon>
-        </button>
-      </div>
+      <PdfFindBar v-if="searchApi.searchOpen.value" :search="searchApi" :set-input-ref="setSearchInputEl" />
 
       <div class="xht-pdf-preview__main">
         <!-- 侧栏：目录 / 缩略图 / 附件 / 图层 -->
-        <aside v-show="sidebarVisible" class="xht-pdf-preview__sidebar" :style="{ width: `${sidebarWidth}px` }">
-          <div class="xht-pdf-preview__tabs" role="tablist">
-            <button
-              type="button"
-              class="xht-pdf-preview__tab"
-              :class="{ 'is-active': sidebarTab === 'outline' }"
-              role="tab"
-              @click="sidebarTab = 'outline'"
-            >
-              目录
-            </button>
-            <button
-              type="button"
-              class="xht-pdf-preview__tab"
-              :class="{ 'is-active': sidebarTab === 'thumb' }"
-              role="tab"
-              @click="sidebarTab = 'thumb'"
-            >
-              缩略图
-            </button>
-            <!-- 附件、图层始终显示；文档没有对应内容时置灰禁用 -->
-            <button
-              type="button"
-              class="xht-pdf-preview__tab"
-              :class="{ 'is-active': sidebarTab === 'attach' }"
-              role="tab"
-              :disabled="!attachmentsApi.attachmentsLoading.value && !attachmentsApi.attachments.value.length"
-              title="此文档没有附件"
-              @click="sidebarTab = 'attach'"
-            >
-              附件
-            </button>
-            <button
-              type="button"
-              class="xht-pdf-preview__tab"
-              :class="{ 'is-active': sidebarTab === 'layer' }"
-              role="tab"
-              :disabled="!layersApi.layersLoading.value && !layersApi.layers.value.length"
-              title="此文档没有图层"
-              @click="sidebarTab = 'layer'"
-            >
-              图层
-            </button>
-          </div>
-
-          <div v-show="sidebarTab === 'outline'" class="xht-pdf-preview__outline">
-            <p v-if="outlineApi.outlineLoading.value" class="xht-pdf-preview__outline-tip">正在读取目录…</p>
-            <p v-else-if="outlineApi.outlineLoaded.value && !outlineApi.visibleOutline.value.length" class="xht-pdf-preview__outline-tip">此文档没有目录</p>
-            <button
-              v-for="node in outlineApi.visibleOutline.value"
-              :key="node.id"
-              type="button"
-              class="xht-pdf-preview__outline-item"
-              :class="{ 'is-current': node.id === outlineApi.outlineActiveId.value }"
-              :style="{ paddingLeft: `${8 + node.level * 12}px` }"
-              :title="node.title"
-              @click="outlineApi.handleOutlineClick(node)"
-            >
-              <span
-                class="xht-pdf-preview__outline-toggle"
-                :class="{ 'is-open': node.open, 'is-empty': !node.children.length }"
-                @click.stop="node.children.length && outlineApi.toggleOutline(node)"
-              >
-                <el-icon v-if="node.children.length" :size="10"><ArrowRight /></el-icon>
-              </span>
-              <span class="xht-pdf-preview__outline-title">{{ node.title }}</span>
-            </button>
-          </div>
-
-          <div v-show="sidebarTab === 'thumb'" ref="thumbListRef" class="xht-pdf-preview__thumb-list">
-            <button
-              v-for="no in state.total"
-              :key="no"
-              type="button"
-              class="xht-pdf-preview__thumb"
-              :class="{ 'is-active': no === state.current }"
-              :data-page="no"
-              :ref="(el: any) => thumbsApi.setThumbWrapper(no, el)"
-              @click="scrollToPage(no)"
-            >
-              <span class="xht-pdf-preview__thumb-paper"><canvas /></span>
-              <span class="xht-pdf-preview__thumb-no">{{ no }}</span>
-            </button>
-          </div>
-
-          <div v-show="sidebarTab === 'attach'" class="xht-pdf-preview__attach">
-            <p v-if="attachmentsApi.attachmentsLoading.value" class="xht-pdf-preview__outline-tip">正在读取附件…</p>
-            <p v-else-if="!attachmentsApi.attachments.value.length" class="xht-pdf-preview__outline-tip">此文档没有附件</p>
-            <button
-              v-for="item in attachmentsApi.attachments.value"
-              :key="item.id"
-              type="button"
-              class="xht-pdf-preview__attach-item"
-              :title="item.description || item.filename"
-              @click="attachmentsApi.handleAttachmentClick(item)"
-            >
-              <el-icon :size="14" class="xht-pdf-preview__attach-icon"><Paperclip /></el-icon>
-              <span class="xht-pdf-preview__attach-name text-overflow">{{ item.filename }}</span>
-              <span v-if="item.size" class="xht-pdf-preview__attach-size">{{ formatBytes(item.size) }}</span>
-            </button>
-          </div>
-
-          <div v-show="sidebarTab === 'layer'" class="xht-pdf-preview__layer">
-            <p v-if="layersApi.layersLoading.value" class="xht-pdf-preview__outline-tip">正在读取图层…</p>
-            <p v-else-if="!layersApi.layers.value.length" class="xht-pdf-preview__outline-tip">此文档没有图层</p>
-            <button
-              v-for="item in layersApi.layers.value"
-              :key="item.id"
-              type="button"
-              class="xht-pdf-preview__layer-item"
-              :title="item.name"
-              @click="layersApi.toggleLayer(item)"
-            >
-              <span class="xht-pdf-preview__layer-box" :class="{ 'is-checked': item.visible }">
-                <el-icon v-if="item.visible" :size="10"><Check /></el-icon>
-              </span>
-              <span class="xht-pdf-preview__layer-name text-overflow">{{ item.name }}</span>
-            </button>
-          </div>
-        </aside>
+        <PdfSidebar
+          v-show="sidebarVisible"
+          v-model:tab="sidebarTab"
+          :style="{ width: `${sidebarWidth}px` }"
+          :state="state"
+          :outline="outlineApi"
+          :thumbs="thumbsApi"
+          :attachments="attachmentsApi"
+          :layers="layersApi"
+          :set-list-ref="setThumbListEl"
+          @go-page="scrollToPage"
+        />
 
         <!-- 侧栏宽度拖拽条 -->
         <div v-show="sidebarVisible" class="xht-pdf-preview__resize-bar" @mousedown.prevent="startResize" />
 
         <!-- 文件内容：全部页面按序排列，滚动即翻页 -->
-        <div ref="containerRef" class="xht-pdf-preview__canvas" :class="{ 'is-hand': state.handTool }" @scroll.passive="handleScroll" @mousedown="handleContainerMousedown">
-          <div v-for="no in state.total" :key="no" class="xht-pdf-preview__paper" :style="paperStyle(no)">
-            <canvas :ref="(el: any) => setPageCanvas(no, el)" />
-            <!-- 文本层：透明文本叠放于画布上，提供文本选择与复制能力 -->
-            <div
-              :ref="(el: any) => setPageTextLayer(no, el)"
-              class="xht-pdf-preview__text-layer"
-              :style="{ '--total-scale-factor': state.scale * PDF_TO_CSS_UNITS }"
-            />
-            <!-- 搜索高亮：叠加在文本层之上（不拦截选择事件）；坐标基于未旋转页面，旋转时容器整体旋转对位 -->
-            <div v-if="searchApi.searchOpen.value" class="xht-pdf-preview__hit-layer" :style="searchApi.hitLayerStyle(no)">
-              <span
-                v-for="(rect, rectIndex) in searchApi.pageHitRects(no)"
-                v-show="searchApi.searchHighlightAll.value || rect.matchNo === searchApi.searchCurrentLabel.value"
-                :key="`${rect.matchNo}-${rectIndex}`"
-                class="xht-pdf-preview__search-hit"
-                :class="{ 'is-current': rect.matchNo === searchApi.searchCurrentLabel.value }"
-                :style="searchApi.hitStyle(rect)"
-              />
-            </div>
-          </div>
-          <transition name="el-fade-in">
-            <div v-if="state.rendering" class="xht-pdf-preview__rendering">
-              <el-icon class="xht-pdf-preview__spin" :size="13"><Loading /></el-icon>
-              <span>渲染中</span>
-            </div>
-          </transition>
+        <div
+          ref="containerRef"
+          class="xht-pdf-preview__canvas"
+          :class="{ 'is-hand': state.handTool }"
+          @scroll.passive="handleScroll"
+          @mousedown="handleContainerMousedown"
+        >
+          <PdfPages
+            :state="state"
+            :paper-style="paperStyle"
+            :search="searchApi"
+            :set-page-canvas="setPageCanvas"
+            :set-page-text-layer="setPageTextLayer"
+          />
         </div>
       </div>
     </template>
@@ -1465,11 +1020,9 @@ onBeforeUnmount(() => {
 </template>
 
 <style lang="scss" scoped>
-/* 样式按区块拆分为 SCSS 分片：工具栏 / 侧栏 / 内容区 / 搜索栏 / 弹窗 / 状态页 */
-@use './styles/toolbar.scss';
-@use './styles/sidebar.scss';
+/* 样式按区块拆分：根容器 / 内容区 / 拖拽条在本组件，
+   工具栏 / 侧栏 / 页面列表 / 搜索栏 / 弹窗 / 状态页由对应子组件各自 @use 同名分片 */
+@use './styles/base.scss';
 @use './styles/content.scss';
-@use './styles/findbar.scss';
-@use './styles/dialogs.scss';
-@use './styles/status.scss';
+@use './styles/resize.scss';
 </style>

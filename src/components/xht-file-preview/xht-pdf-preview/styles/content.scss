@@ -1,4 +1,4 @@
-/* 内容区：主布局 + 纸面/画布 + 文本层（文本选择） + 搜索高亮 + 渲染中提示 */
+/* 内容区：主布局 + 可滚动画布容器（纸面/文本层/高亮见 pages.scss） */
 .xht-pdf-preview {
   &__main {
     display: flex;
@@ -38,144 +38,12 @@
   }
 
   // 手形工具：抓手光标；同时禁用文本层选择，保证拖拽平移
+  // 文本层在页面列表子组件内渲染，需 :deep 穿透子组件作用域
   &__canvas.is-hand {
     cursor: grab;
 
-    .xht-pdf-preview__text-layer {
+    :deep(.xht-pdf-preview__text-layer) {
       pointer-events: none;
     }
-  }
-
-  &__paper {
-    position: relative;
-    width: max-content;
-    margin: 0 auto 12px;
-    overflow: hidden;
-    background-color: #fff;
-    box-shadow: 0 1px 4px rgb(0 0 0 / 16%);
-
-    canvas {
-      display: block;
-      width: 100%;
-      height: 100%;
-    }
-  }
-
-  // 文本层：pdf.js TextLayer 输出的透明文本，供文本选择工具选中/复制
-  &__text-layer {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    overflow: clip;
-    line-height: 1;
-    text-align: initial;
-    transform-origin: 0 0;
-    forced-color-adjust: none;
-
-    // TextLayer 依赖的 CSS 变量：--total-scale-factor 由模板按当前缩放绑定
-    --scale-round-x: 1px;
-    --scale-round-y: 1px;
-    --min-font-size: 1;
-    --text-scale-factor: calc(var(--total-scale-factor) * var(--min-font-size));
-    --min-font-size-inv: calc(1 / var(--min-font-size));
-
-    // 旋转后文本层容器仍按未旋转尺寸输出，按官方 viewer 规则旋转并平移回纸面
-    &[data-main-rotation='90'] {
-      transform: rotate(90deg) translateY(-100%);
-    }
-
-    &[data-main-rotation='180'] {
-      transform: rotate(180deg) translate(-100%, -100%);
-    }
-
-    &[data-main-rotation='270'] {
-      transform: rotate(270deg) translateX(-100%);
-    }
-
-    :deep(:is(span, br)) {
-      position: absolute;
-      color: transparent;
-      cursor: text;
-      white-space: pre;
-      transform-origin: 0 0;
-      user-select: text;
-    }
-
-    // 字号与横向拉伸由 TextLayer 通过 --font-height / --scale-x / --rotate 注入
-    :deep(span:not(.markedContent)) {
-      z-index: 1;
-
-      --font-height: 0;
-      font-size: calc(var(--text-scale-factor) * var(--font-height));
-
-      --scale-x: 1;
-      --rotate: 0deg;
-      transform: rotate(var(--rotate)) scaleX(var(--scale-x)) scale(var(--min-font-size-inv));
-    }
-
-    :deep(.markedContent) {
-      display: contents;
-    }
-
-    // 选中反馈：官方同款半透明蓝
-    ::selection {
-      background-color: rgb(0 0 255 / 25%);
-      color: transparent;
-    }
-
-    // 选择边界修正占位元素（官方 endOfContent）：默认位于层外底部，
-    // mousedown 后（selecting 状态）盖住整层，空白处拖拽不再误锚定远处文本
-    :deep(.endOfContent) {
-      display: block;
-      position: absolute;
-      inset: 100% 0 0;
-      z-index: 0;
-      cursor: default;
-      user-select: none;
-    }
-
-    &.selecting :deep(.endOfContent) {
-      top: 0;
-    }
-  }
-
-  // 搜索高亮容器：矩形坐标基于未旋转页面，旋转时整体旋转与画布对位
-  &__hit-layer {
-    position: absolute;
-    z-index: 2;
-    pointer-events: none;
-    transform-origin: center;
-  }
-
-  &__search-hit {
-    position: absolute;
-    background-color: rgb(255 196 0 / 50%);
-    border-radius: 1px;
-    pointer-events: none;
-
-    // 当前项：同色系但明显更深，并加描边突出
-    &.is-current {
-      z-index: 1;
-      background-color: rgb(255 106 0 / 55%);
-      outline: 2px solid #e25822;
-      outline-offset: -1px;
-    }
-  }
-
-  &__rendering {
-    position: fixed;
-    top: 50px;
-    left: 50%;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    padding: 3px 10px;
-    transform: translateX(-50%);
-    border: 1px solid #d7d9de;
-    border-radius: 999px;
-    background-color: #fff;
-    color: #6b6f78;
-    font-size: 12px;
-    pointer-events: none;
   }
 }

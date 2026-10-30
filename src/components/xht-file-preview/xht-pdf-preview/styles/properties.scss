@@ -1,0 +1,38 @@
+/* 文档属性弹窗 */
+.xht-pdf-preview {
+  &__property-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      display: flex;
+      gap: 24px;
+      align-items: baseline;
+    }
+
+    // 分组分隔线（对齐官方文档属性弹窗的分组留白）
+    li.is-divider {
+      height: 1px;
+      margin: 2px 0;
+      padding: 0;
+      background-color: #e3e5e9;
+    }
+  }
+
+  &__property-label {
+    flex-shrink: 0;
+    width: 150px;
+    color: #7c8089;
+    font-size: 13px;
+  }
+
+  &__property-value {
+    color: #15151a;
+    font-size: 13px;
+    word-break: break-all;
+  }
+}

@@ -1,0 +1,11 @@
+/* 通用旋转动画（加载图标）：状态页 / 工具栏打印按钮 / 渲染中提示共用，各子组件分别 @use */
+.xht-pdf-preview__spin {
+  color: #8f939c;
+  animation: xht-pdf-rotate 1s linear infinite;
+}
+
+@keyframes xht-pdf-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
