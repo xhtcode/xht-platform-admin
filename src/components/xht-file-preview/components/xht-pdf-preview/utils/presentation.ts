@@ -1,4 +1,4 @@
-import type { PdfCoreContext } from './types'
+import type { PdfCoreContext } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/types'
 
 /**
  * 演示模式模块返回值

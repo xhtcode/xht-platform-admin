@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { Download, Loading, RefreshLeft, WarningFilled } from '@element-plus/icons-vue'
-import type { PdfStatusEmits, PdfStatusProps } from './types'
+import type { PdfStatusEmits, PdfStatusProps } from '@/components/xht-file-preview/components/xht-pdf-preview/components/types'
 
 /**
  * PDF 状态页：文档加载中（带进度）与加载失败（重新加载 / 下载）。
@@ -50,6 +50,6 @@ defineEmits<PdfStatusEmits>()
 
 <style lang="scss" scoped>
 /* 状态页样式：类名为 xht-pdf-preview__* 全局唯一，分片在子组件内 scoped 生效 */
-@use '../styles/status.scss';
-@use '../styles/spin.scss';
+@use '@/components/xht-file-preview/components/xht-pdf-preview/styles/status.scss';
+@use '@/components/xht-file-preview/components/xht-pdf-preview/styles/spin.scss';
 </style>

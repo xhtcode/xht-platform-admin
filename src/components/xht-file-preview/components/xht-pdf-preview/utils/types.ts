@@ -2,7 +2,7 @@ import type { ComputedRef, Ref } from 'vue'
 import type { PDFDocumentProxy } from 'pdfjs-dist'
 import type { XhtPdfPreviewProps } from '@/components/xht-file-preview/components/types'
 import type { useMessage } from '@/hooks/use-message'
-import type { ZOOM_PERCENTS } from './constants'
+import type { ZOOM_PERCENTS } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/constants'
 
 /**
  * 页面原始尺寸（scale=1）

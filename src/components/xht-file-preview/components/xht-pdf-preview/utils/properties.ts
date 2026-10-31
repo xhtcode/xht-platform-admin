@@ -1,7 +1,7 @@
 import type { Ref } from 'vue'
 import * as pdfjsLib from 'pdfjs-dist'
-import type { PdfCoreContext, PropertyRow } from './types'
-import { formatBytes } from './utils'
+import type { PdfCoreContext, PropertyRow } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/types'
+import { formatBytes } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/utils'
 
 /**
  * 文档属性模块返回值

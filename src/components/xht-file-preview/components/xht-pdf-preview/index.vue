@@ -6,14 +6,14 @@ import type { XhtPdfPreviewProps } from '@/components/xht-file-preview/component
 import { createPdfRangeSource } from '@/components/xht-file-preview/pdf-range-transport'
 import { attachTextLayerSelection, detachTextLayerSelection } from '@/components/xht-file-preview/pdf-text-selection'
 import { useMessage } from '@/hooks/use-message'
-import { createAttachmentsFeature } from './attachments'
-import PdfFindBar from './components/pdf-find-bar.vue'
-import PdfPages from './components/pdf-pages.vue'
-import PdfPropertiesDialog from './components/pdf-properties-dialog.vue'
-import PdfShortcutsDialog from './components/pdf-shortcuts-dialog.vue'
-import PdfSidebar from './components/pdf-sidebar.vue'
-import PdfStatus from './components/pdf-status.vue'
-import PdfToolbar from './components/pdf-toolbar.vue'
+import { createAttachmentsFeature } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/attachments'
+import PdfFindBar from '@/components/xht-file-preview/components/xht-pdf-preview/components/pdf-find-bar.vue'
+import PdfPages from '@/components/xht-file-preview/components/xht-pdf-preview/components/pdf-pages.vue'
+import PdfPropertiesDialog from '@/components/xht-file-preview/components/xht-pdf-preview/components/pdf-properties-dialog.vue'
+import PdfShortcutsDialog from '@/components/xht-file-preview/components/xht-pdf-preview/components/pdf-shortcuts-dialog.vue'
+import PdfSidebar from '@/components/xht-file-preview/components/xht-pdf-preview/components/pdf-sidebar.vue'
+import PdfStatus from '@/components/xht-file-preview/components/xht-pdf-preview/components/pdf-status.vue'
+import PdfToolbar from '@/components/xht-file-preview/components/xht-pdf-preview/components/pdf-toolbar.vue'
 import {
   CONTENT_PADDING,
   DEFAULT_SCALE,
@@ -29,16 +29,17 @@ import {
   SIDEBAR_MAX_WIDTH,
   SIDEBAR_MIN_WIDTH,
   SIDEBAR_WIDTH,
-} from './constants'
-import { createLayersFeature } from './layers'
-import { createOutlineFeature } from './outline'
-import { createPresentationFeature } from './presentation'
-import { createPrintFeature } from './print'
-import { createPropertiesFeature } from './properties'
-import { createSearchFeature } from './search'
-import { createThumbsFeature } from './thumbs'
-import type { OptionalContentConfig, PageSize, PdfCoreContext, PdfPreviewState, ZoomOption } from './types'
-import { triggerDownload } from './utils'
+} from '@/components/xht-file-preview/components/xht-pdf-preview/utils/constants'
+import { createLayersFeature } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/layers'
+import { createOutlineFeature } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/outline'
+import { createPresentationFeature } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/presentation'
+import { createPrintFeature } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/print'
+import { createPropertiesFeature } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/properties'
+import { createSearchFeature } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/search'
+import { createThumbsFeature } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/thumbs'
+import { handleDownloadSysFile } from '@/utils/file'
+import type { OptionalContentConfig, PageSize, PdfCoreContext, PdfPreviewState, ZoomOption } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/types'
+import { triggerDownload } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/utils'
 
 /**
  * PDF 预览：基于 pdf.js 连续滚动渲染，支持滚动翻页、页码跳转、缩放、下载与打印。
@@ -141,8 +142,6 @@ let pdfDoc: PDFDocumentProxy | null = null
 const pageSizes = ref<(PageSize | null)[]>([])
 
 const displayName = computed(() => props.fileName || '未命名文档')
-
-const downloadName = computed(() => (/\.pdf$/i.test(props.fileName) ? props.fileName : `${props.fileName || 'document'}.pdf`))
 
 /**
  * 页面未旋转时的原始尺寸（CSS px 口径）；用户旋转不改变该坐标系
@@ -847,24 +846,20 @@ const selectZoom = async (option: ZoomOption) => {
 /**
  * 下载当前文档
  *
- * blob 地址可直接触发下载；后端直连地址受鉴权保护，需带请求头取回文件后再保存
+ * 走系统标准下载接口（业务异常按后端文案透传、按 xht-download-filename 响应头命名）
  */
 const handleDownload = async () => {
-  if (!props.url) return
-  if (props.url.startsWith('blob:')) {
-    triggerDownload(props.url, downloadName.value)
+  if (!props.fileStorageKey) {
+    message.warning('缺少文件下载凭证，无法下载')
     return
   }
   try {
-    const response = await fetch(props.url, { headers: props.httpHeaders, credentials: 'include' })
-    if (!response.ok) throw new Error(`HTTP ${response.status}`)
-    const href = window.URL.createObjectURL(await response.blob())
-    triggerDownload(href, downloadName.value)
-    // 下载触发后即可回收，留出浏览器读取的时间
-    setTimeout(() => window.URL.revokeObjectURL(href), 10_000)
+    // 失败提示（业务异常/请求错误）由 handleDownloadSysFile 与请求拦截器给出，此处只记录日志
+    if (await handleDownloadSysFile(props.fileStorageKey)) {
+      message.success('文件下载成功!')
+    }
   } catch (error) {
     console.error('PDF下载失败:', error)
-    message.error('文件下载失败，请稍后重试')
   }
 }
 
@@ -1075,7 +1070,7 @@ onBeforeUnmount(() => {
 <style lang="scss" scoped>
 /* 样式按区块拆分：根容器 / 内容区 / 拖拽条在本组件，
    工具栏 / 侧栏 / 页面列表 / 搜索栏 / 弹窗 / 状态页由对应子组件各自 @use 同名分片 */
-@use './styles/base.scss';
-@use './styles/content.scss';
-@use './styles/resize.scss';
+@use '@/components/xht-file-preview/components/xht-pdf-preview/styles/base.scss';
+@use '@/components/xht-file-preview/components/xht-pdf-preview/styles/content.scss';
+@use '@/components/xht-file-preview/components/xht-pdf-preview/styles/resize.scss';
 </style>

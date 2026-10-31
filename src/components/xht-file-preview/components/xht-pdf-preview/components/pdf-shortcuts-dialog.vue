@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { SHORTCUT_ITEMS } from '../constants'
+import { SHORTCUT_ITEMS } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/constants'
 
 /**
  * 快捷键说明弹窗：纯静态内容，只负责展示与开合。
@@ -27,5 +27,5 @@ const visible = defineModel<boolean>('visible', { required: true })
 
 <style lang="scss" scoped>
 /* 快捷键弹窗样式：类名为 xht-pdf-preview__* 全局唯一，分片在子组件内 scoped 生效 */
-@use '../styles/shortcuts.scss';
+@use '@/components/xht-file-preview/components/xht-pdf-preview/styles/shortcuts.scss';
 </style>

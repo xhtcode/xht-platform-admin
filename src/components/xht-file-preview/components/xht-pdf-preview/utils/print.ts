@@ -1,6 +1,6 @@
-import { PDF_TO_CSS_UNITS, PREPARING_HTML, PRINT_SCALE } from './constants'
-import type { PdfCoreContext } from './types'
-import { escapeHtml } from './utils'
+import { PDF_TO_CSS_UNITS, PREPARING_HTML, PRINT_SCALE } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/constants'
+import type { PdfCoreContext } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/types'
+import { escapeHtml } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/utils'
 
 /**
  * 打印模块返回值

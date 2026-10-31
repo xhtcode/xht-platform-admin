@@ -4,7 +4,7 @@ import { ArrowRight, Delete, DocumentCopy, Download, Refresh } from '@element-pl
 import type { CodeViewState } from '@/service/model/generate/table.model'
 import { useMessage } from '@/hooks/use-message'
 import { ElDrawer } from 'element-plus'
-import { handleDownloadFile } from '@/utils'
+import { handleDownloadFile } from '@/utils/file'
 
 defineOptions({
   name: 'CodeView',

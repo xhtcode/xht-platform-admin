@@ -1,4 +1,4 @@
-import { HTML_ESCAPES } from './constants'
+import { HTML_ESCAPES } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/constants'
 
 /**
  * 附件体积展示（B / KB / MB）

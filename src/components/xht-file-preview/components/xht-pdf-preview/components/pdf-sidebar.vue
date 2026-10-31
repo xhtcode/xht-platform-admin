@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { ArrowRight, Check, Paperclip } from '@element-plus/icons-vue'
 import type { ComponentPublicInstance } from 'vue'
-import type { SidebarTab } from '../thumbs'
-import { formatBytes } from '../utils'
-import type { PdfSidebarEmits, PdfSidebarProps } from './types'
+import type { SidebarTab } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/thumbs'
+import { formatBytes } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/utils'
+import type { PdfSidebarEmits, PdfSidebarProps } from '@/components/xht-file-preview/components/xht-pdf-preview/components/types'
 
 /**
  * PDF 侧栏：目录 / 缩略图 / 附件 / 图层 四个面板。
@@ -144,5 +144,5 @@ const handleListRef = (el: unknown) => {
 
 <style lang="scss" scoped>
 /* 侧栏样式：类名为 xht-pdf-preview__* 全局唯一，分片在子组件内 scoped 生效 */
-@use '../styles/sidebar.scss';
+@use '@/components/xht-file-preview/components/xht-pdf-preview/styles/sidebar.scss';
 </style>

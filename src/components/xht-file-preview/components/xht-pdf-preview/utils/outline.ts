@@ -1,7 +1,7 @@
 import type { ComputedRef, Ref } from 'vue'
 import type { PDFDocumentProxy } from 'pdfjs-dist'
-import { PDF_TO_CSS_UNITS, TITLE_TOP_MARGIN } from './constants'
-import type { DestTarget, OutlineNode, PdfCoreContext, RawOutlineItem } from './types'
+import { PDF_TO_CSS_UNITS, TITLE_TOP_MARGIN } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/constants'
+import type { DestTarget, OutlineNode, PdfCoreContext, RawOutlineItem } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/types'
 
 /**
  * 解析书签目标对应的页码与页内位置

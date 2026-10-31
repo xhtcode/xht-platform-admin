@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { Loading } from '@element-plus/icons-vue'
 import type { ComponentPublicInstance } from 'vue'
-import { PDF_TO_CSS_UNITS } from '../constants'
-import type { PdfPagesProps } from './types'
+import { PDF_TO_CSS_UNITS } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/constants'
+import type { PdfPagesProps } from '@/components/xht-file-preview/components/xht-pdf-preview/components/types'
 
 /**
  * PDF 页面列表：逐页纸面 + 画布 + 透明文本层（文本选择）+ 搜索高亮 + 渲染中提示。
@@ -47,6 +47,6 @@ const { searchOpen, searchHighlightAll, searchCurrentLabel, pageHitRects, hitLay
 
 <style lang="scss" scoped>
 /* 页面列表样式：类名为 xht-pdf-preview__* 全局唯一，分片在子组件内 scoped 生效 */
-@use '../styles/pages.scss';
-@use '../styles/spin.scss';
+@use '@/components/xht-file-preview/components/xht-pdf-preview/styles/pages.scss';
+@use '@/components/xht-file-preview/components/xht-pdf-preview/styles/spin.scss';
 </style>

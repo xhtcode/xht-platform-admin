@@ -1,6 +1,6 @@
 import type { Ref } from 'vue'
 import type { RenderTask } from 'pdfjs-dist'
-import type { PdfCoreContext } from './types'
+import type { PdfCoreContext } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/types'
 
 /** 侧栏标签页类型（缩略图懒渲染只关心 thumb 页） */
 export type SidebarTab = 'thumb' | 'outline' | 'attach' | 'layer'

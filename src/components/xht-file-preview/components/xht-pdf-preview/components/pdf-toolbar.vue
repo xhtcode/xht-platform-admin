@@ -20,9 +20,9 @@ import {
   RefreshRight,
   Search,
 } from '@element-plus/icons-vue'
-import { MAX_SCALE, MIN_SCALE, ZOOM_PERCENTS } from '../constants'
-import type { ZoomOption } from '../types'
-import type { PdfToolbarEmits, PdfToolbarProps } from './types'
+import { MAX_SCALE, MIN_SCALE, ZOOM_PERCENTS } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/constants'
+import type { ZoomOption } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/types'
+import type { PdfToolbarEmits, PdfToolbarProps } from '@/components/xht-file-preview/components/xht-pdf-preview/components/types'
 
 /**
  * PDF 工具栏（pdf.js 官方风格）：单行布局 + 页码框 + 缩放下拉 + 更多功能菜单。
@@ -381,6 +381,6 @@ onBeforeUnmount(() => {
 
 <style lang="scss" scoped>
 /* 工具栏样式：类名为 xht-pdf-preview__* 全局唯一，分片在子组件内 scoped 生效 */
-@use '../styles/toolbar.scss';
-@use '../styles/spin.scss';
+@use '@/components/xht-file-preview/components/xht-pdf-preview/styles/toolbar.scss';
+@use '@/components/xht-file-preview/components/xht-pdf-preview/styles/spin.scss';
 </style>

@@ -1,6 +1,6 @@
 import type { Ref } from 'vue'
 import type { PDFDocumentProxy } from 'pdfjs-dist'
-import type { AttachmentItem, PdfCoreContext } from './types'
+import type { AttachmentItem, PdfCoreContext } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/types'
 
 /**
  * 附件模块返回值

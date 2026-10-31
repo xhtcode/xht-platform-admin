@@ -2,7 +2,7 @@
 import { previewSysFile, getSysFilePreviewUrl } from '@/service/api/system/file.api'
 import type { XhtFilePreviewProps, XhtFilePreviewRenderMode, XhtFilePreviewState } from '@/components/xht-file-preview/types'
 import { resolvePreviewMode } from '@/components/xht-file-preview/utils'
-import { handleDownloadSysFile, parseFileErrorResponse } from '@/utils/file'
+import { handleDownloadSysFile } from '@/utils/file'
 import { useMessage } from '@/hooks/use-message'
 import { HEADER_AUTHORIZATION } from '@/service/constant'
 import { useUserInfoStore } from '@/store/modules/user.store'
@@ -24,7 +24,7 @@ const props = withDefaults(defineProps<XhtFilePreviewProps>(), { file: null })
  */
 const PreviewComponents: Record<XhtFilePreviewRenderMode, Component> = {
   image: defineAsyncComponent(() => import('@/components/xht-file-preview/components/xht-picture-preview.vue')),
-  pdf: defineAsyncComponent(() => import('@/components/xht-file-preview/xht-pdf-preview/index.vue')),
+  pdf: defineAsyncComponent(() => import('@/components/xht-file-preview/components/xht-pdf-preview/index.vue')),
   text: defineAsyncComponent(() => import('@/components/xht-file-preview/components/xht-txt-preview.vue')),
   json: defineAsyncComponent(() => import('@/components/xht-file-preview/components/xht-json-preview.vue')),
 }
@@ -83,13 +83,6 @@ const loadPreview = async () => {
   try {
     const response = await previewSysFile(file.fileStorageKey)
     if (token !== loadToken.value) return
-    const errorMsg = await parseFileErrorResponse(response)
-    if (token !== loadToken.value) return
-    if (errorMsg) {
-      // 业务错误按后端文案原样提示
-      message.error(errorMsg)
-      return
-    }
     const contentType: string = (response.headers['content-type'] as string) || file.fileType || 'application/octet-stream'
     // 文本、JSON 统一以 text/plain 渲染 blob，避免浏览器按原类型处理导致直接下载
     const isPlainText = state.previewMode === 'text' || state.previewMode === 'json'
@@ -138,6 +131,7 @@ onBeforeUnmount(() => {
         :is="previewComponent"
         v-else
         :file-name="state.previewMode === 'pdf' ? props.file?.fileOriginalName : undefined"
+        :file-storage-key="state.previewMode === 'pdf' ? props.file?.fileStorageKey : undefined"
         :http-headers="state.previewMode === 'pdf' ? state.previewHeaders : undefined"
         :url="state.previewUrl"
       />

@@ -45,6 +45,8 @@
     text-align: initial;
     transform-origin: 0 0;
     forced-color-adjust: none;
+    // 根容器整体禁用了文字选中（防止选区溢出到 UI），仅纸面文本层重新开启
+    user-select: text;
 
     // TextLayer 依赖的 CSS 变量：--total-scale-factor 由模板按当前缩放绑定
     --scale-round-x: 1px;

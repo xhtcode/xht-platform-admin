@@ -37,6 +37,15 @@ const { handlePageQuery, handleCurrentChange } = useTableQueryPageHooks<GenTempl
 
 const { queryParams } = toRefs(state)
 
+/**
+ * 表格当前行切换（el-table 的 current-change 回调签名，行可能为 null）
+ *
+ * @param row 当前选中行
+ */
+const handleCurrentRowChange = (row: GenTemplateGroupResponse | null) => {
+  handleCurrentChange(row)
+}
+
 const columnOption = ref<ColumnConfig<GenTemplateGroupResponse>>({
   ...genTemplateGroupOperationOption,
 })
@@ -119,7 +128,7 @@ onMounted(async () => {
       empty-text="暂无匹配数据 🔍 试试调整筛选条件吧！"
       highlight-current-row
       border
-      @current-change="(currentRow, _) => handleCurrentChange(currentRow!)"
+      @current-change="handleCurrentRowChange"
     >
       <xht-column-index :current="queryParams.current" :size="queryParams.size" />
       <el-table-column v-if="columnOption.groupName?.visible" label="分组名称" min-width="200" prop="groupName" />

@@ -1,11 +1,11 @@
 import type { CSSProperties } from 'vue'
-import type { AttachmentsFeature } from '../attachments'
-import type { LayersFeature } from '../layers'
-import type { OutlineFeature } from '../outline'
-import type { PropertiesFeature } from '../properties'
-import type { SearchFeature } from '../search'
-import type { ThumbsFeature, SidebarTab } from '../thumbs'
-import type { PdfPreviewState, ZoomOption } from '../types'
+import type { AttachmentsFeature } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/attachments'
+import type { LayersFeature } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/layers'
+import type { OutlineFeature } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/outline'
+import type { PropertiesFeature } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/properties'
+import type { SearchFeature } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/search'
+import type { ThumbsFeature, SidebarTab } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/thumbs'
+import type { PdfPreviewState, ZoomOption } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/types'
 
 /**
  * 工具栏属性：展示状态 + 交互结果全部经事件回传主组件处理

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ArrowDown, ArrowUp, Close } from '@element-plus/icons-vue'
-import type { PdfFindBarProps } from './types'
+import type { PdfFindBarProps } from '@/components/xht-file-preview/components/xht-pdf-preview/components/types'
 
 /**
  * PDF 搜索栏（仿官方 viewer findbar）：输入框 + 上下跳转 + 匹配选项 + 命中计数。
@@ -95,5 +95,5 @@ const handleInputRef = (el: unknown) => {
 
 <style lang="scss" scoped>
 /* 搜索栏样式：类名为 xht-pdf-preview__* 全局唯一，分片在子组件内 scoped 生效 */
-@use '../styles/findbar.scss';
+@use '@/components/xht-file-preview/components/xht-pdf-preview/styles/findbar.scss';
 </style>

@@ -1,6 +1,6 @@
 import type { Ref } from 'vue'
 import type { PDFDocumentProxy } from 'pdfjs-dist'
-import type { LayerItem, OptionalContentConfig, PdfCoreContext } from './types'
+import type { LayerItem, OptionalContentConfig, PdfCoreContext } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/types'
 
 /**
  * 图层模块返回值

@@ -1,8 +1,8 @@
 import type { ComputedRef, Ref } from 'vue'
 import type { PDFDocumentProxy } from 'pdfjs-dist'
 import * as pdfjsLib from 'pdfjs-dist'
-import { CONTENT_PADDING, PDF_TO_CSS_UNITS, SEARCH_SCROLL_MARGIN } from './constants'
-import type { PageTextIndex, PdfCoreContext, SearchHitRect, SearchMatch } from './types'
+import { CONTENT_PADDING, PDF_TO_CSS_UNITS, SEARCH_SCROLL_MARGIN } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/constants'
+import type { PageTextIndex, PdfCoreContext, SearchHitRect, SearchMatch } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/types'
 
 /**
  * 变音符号折叠：NFD 分解后去除组合附加符号（é→e），用于忽略变音符号的匹配

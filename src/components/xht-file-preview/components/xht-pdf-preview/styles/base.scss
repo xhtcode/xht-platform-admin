@@ -21,4 +21,8 @@
   background-color: var(--xht-page-bg-color);
   color: var(--xht-text-color);
   font-size: 12px;
+  // 组件 UI（工具栏/侧栏/状态栏等）不允许选中文字：
+  // 否则从纸面文本层拖选时选区会溢出反蓝工具栏标题与目录项。
+  // 仅文本层在 pages.scss 中重新开启 user-select: text
+  user-select: none;
 }

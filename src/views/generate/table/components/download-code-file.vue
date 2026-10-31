@@ -3,7 +3,7 @@ import type { FormInstance, FormRules } from 'element-plus'
 import type { GenTableInfoResponse } from '@/service/model/generate/table.model'
 import { downloadFileApi } from '@/service/api/generate/table.api'
 import { useMessage } from '@/hooks/use-message'
-import { handleDownloadFile } from '@/utils'
+import { handleDownloadFile } from '@/utils/file'
 
 interface CrudOption {
   visibleStatus: boolean
