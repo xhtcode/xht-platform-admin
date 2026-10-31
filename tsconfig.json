@@ -48,7 +48,5 @@
     "src/**/__tests__/*",
     "node_modules",
     "dist",
-    // 插件自动生成（vite.config.ts 的 Components dts），不参与类型检查
-    "src/typings/components.d.ts"
   ]
 }

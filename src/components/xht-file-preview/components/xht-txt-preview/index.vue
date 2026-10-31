@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { XhtTxtPreviewProps } from '@/components/xht-file-preview/components/types'
+import type { XhtTxtPreviewProps } from '@/components/xht-file-preview/components/xht-txt-preview/types'
 
 /**
  * 文本预览：以 iframe 直接渲染 text/plain 数据流，保留浏览器原生的换行与编码处理

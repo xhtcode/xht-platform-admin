@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { XhtJsonPreviewProps } from '@/components/xht-file-preview/components/types'
+import type { XhtJsonPreviewProps } from '@/components/xht-file-preview/components/xht-json-preview/types'
 import { useMessage } from '@/hooks/use-message'
 import { readFileText } from '@/utils/file'
 import { DocumentCopy } from '@element-plus/icons-vue'

@@ -8,7 +8,7 @@ import type { RouteRecordRaw } from 'vue-router'
  */
 const OtherRouter: RouteRecordRaw[] = [
   {
-    path: '/file-preview/:fileId',
+    path: '/file-preview/:fileStorageKey',
     name: 'FilePreviewViewIndex',
     component: () => import('@/views/other/file-preview/index.vue'),
     meta: {

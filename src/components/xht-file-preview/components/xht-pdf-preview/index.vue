@@ -2,13 +2,14 @@
 import * as pdfjsLib from 'pdfjs-dist'
 import type { PDFDocumentLoadingTask, PDFDocumentProxy, RenderTask } from 'pdfjs-dist'
 import workerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url'
-import type { XhtPdfPreviewProps } from '@/components/xht-file-preview/components/types'
-import { createPdfRangeSource } from '@/components/xht-file-preview/pdf-range-transport'
-import { attachTextLayerSelection, detachTextLayerSelection } from '@/components/xht-file-preview/pdf-text-selection'
+import type { XhtPdfPreviewProps } from '@/components/xht-file-preview/components/xht-pdf-preview/types'
+import { createPdfRangeSource } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/pdf-range-transport'
+import { attachTextLayerSelection, detachTextLayerSelection } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/pdf-text-selection'
 import { useMessage } from '@/hooks/use-message'
 import { createAttachmentsFeature } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/attachments'
 import PdfFindBar from '@/components/xht-file-preview/components/xht-pdf-preview/components/pdf-find-bar.vue'
 import PdfPages from '@/components/xht-file-preview/components/xht-pdf-preview/components/pdf-pages.vue'
+import PdfPrintOverlay from '@/components/xht-file-preview/components/xht-pdf-preview/components/pdf-print-overlay.vue'
 import PdfPropertiesDialog from '@/components/xht-file-preview/components/xht-pdf-preview/components/pdf-properties-dialog.vue'
 import PdfShortcutsDialog from '@/components/xht-file-preview/components/xht-pdf-preview/components/pdf-shortcuts-dialog.vue'
 import PdfSidebar from '@/components/xht-file-preview/components/xht-pdf-preview/components/pdf-sidebar.vue'
@@ -38,7 +39,13 @@ import { createPropertiesFeature } from '@/components/xht-file-preview/component
 import { createSearchFeature } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/search'
 import { createThumbsFeature } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/thumbs'
 import { handleDownloadSysFile } from '@/utils/file'
-import type { OptionalContentConfig, PageSize, PdfCoreContext, PdfPreviewState, ZoomOption } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/types'
+import type {
+  OptionalContentConfig,
+  PageSize,
+  PdfCoreContext,
+  PdfPreviewState,
+  ZoomOption,
+} from '@/components/xht-file-preview/components/xht-pdf-preview/utils/types'
 import { triggerDownload } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/utils'
 
 /**
@@ -68,6 +75,7 @@ const state = reactive<PdfPreviewState>({
   progress: 0,
   rendering: false,
   printing: false,
+  printProgress: 0,
   zoomMode: 'auto',
   rotation: 0,
   handTool: false,
@@ -1064,6 +1072,9 @@ onBeforeUnmount(() => {
         </transition>
       </div>
     </template>
+
+    <!-- 打印等待遮罩：大文档逐页转图片期间展示进度并锁定交互 -->
+    <PdfPrintOverlay :visible="state.printing" :progress="state.printProgress" :total="state.total" />
   </div>
 </template>
 

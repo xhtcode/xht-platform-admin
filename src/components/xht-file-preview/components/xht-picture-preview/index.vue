@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { XhtPicturePreviewProps } from '@/components/xht-file-preview/components/types'
+import type { XhtPicturePreviewProps } from '@/components/xht-file-preview/components/xht-picture-preview/types'
 
 /**
  * 图片预览：点击可放大查看（支持滚轮缩放、拖拽）

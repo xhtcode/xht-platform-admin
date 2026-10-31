@@ -109,8 +109,11 @@ declare module 'vue' {
     XhtEnumSelect: typeof import('./../components/enums/xht-enum-select/index.vue')['default']
     XhtEnumTag: typeof import('./../components/enums/xht-enum-tag/index.vue')['default']
     XhtFilePreview: typeof import('./../components/xht-file-preview/index.vue')['default']
+    XhtJsonPreview: typeof import('./../components/xht-file-preview/components/xht-json-preview/index.vue')['default']
     XhtPagination: typeof import('./../components/element-plus/xht-pagination/index.vue')['default']
     XhtPdfPreview: typeof import('./../components/xht-file-preview/components/xht-pdf-preview/index.vue')['default']
+    XhtPicturePreview: typeof import('./../components/xht-file-preview/components/xht-picture-preview/index.vue')['default']
+    XhtTxtPreview: typeof import('./../components/xht-file-preview/components/xht-txt-preview/index.vue')['default']
   }
   export interface GlobalDirectives {
     vLoading: typeof import('element-plus/es')['ElLoadingDirective']
@@ -216,6 +219,9 @@ declare global {
   const XhtEnumSelect: typeof import('./../components/enums/xht-enum-select/index.vue')['default']
   const XhtEnumTag: typeof import('./../components/enums/xht-enum-tag/index.vue')['default']
   const XhtFilePreview: typeof import('./../components/xht-file-preview/index.vue')['default']
+  const XhtJsonPreview: typeof import('./../components/xht-file-preview/components/xht-json-preview/index.vue')['default']
   const XhtPagination: typeof import('./../components/element-plus/xht-pagination/index.vue')['default']
   const XhtPdfPreview: typeof import('./../components/xht-file-preview/components/xht-pdf-preview/index.vue')['default']
+  const XhtPicturePreview: typeof import('./../components/xht-file-preview/components/xht-picture-preview/index.vue')['default']
+  const XhtTxtPreview: typeof import('./../components/xht-file-preview/components/xht-txt-preview/index.vue')['default']
 }

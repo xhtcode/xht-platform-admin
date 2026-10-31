@@ -1,0 +1,43 @@
+/* 打印等待遮罩（根容器见 base.scss，通用动画见 spin.scss） */
+.xht-pdf-preview {
+  &__print-mask {
+    position: absolute;
+    z-index: 80; // 高于工具栏（40）与搜索栏（60），生成期间整块预览区不可交互
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--el-mask-color);
+    inset: 0;
+  }
+
+  &__print-box {
+    display: flex;
+    width: 260px;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 24px 20px;
+    border: 1px solid var(--xht-border-color);
+    border-radius: var(--xht-border-radius-base);
+    background-color: var(--xht-bg-color);
+    box-shadow: var(--el-box-shadow-light);
+  }
+
+  &__print-title {
+    color: var(--xht-text-color);
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  &__print-bar {
+    width: 100%;
+  }
+
+  &__print-desc {
+    color: var(--el-text-color-secondary);
+    font-size: 12px;
+    line-height: 1.6;
+    text-align: center;
+  }
+}

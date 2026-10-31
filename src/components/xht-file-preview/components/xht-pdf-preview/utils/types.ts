@@ -1,6 +1,6 @@
 import type { ComputedRef, Ref } from 'vue'
 import type { PDFDocumentProxy } from 'pdfjs-dist'
-import type { XhtPdfPreviewProps } from '@/components/xht-file-preview/components/types'
+import type { XhtPdfPreviewProps } from '@/components/xht-file-preview/components/xht-pdf-preview/types'
 import type { useMessage } from '@/hooks/use-message'
 import type { ZOOM_PERCENTS } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/constants'
 
@@ -33,6 +33,7 @@ export interface PdfPreviewState {
   progress: number // 文档加载进度（0-100）
   rendering: boolean // 是否存在进行中的页面渲染
   printing: boolean // 打印内容生成状态
+  printProgress: number // 打印内容生成进度（0-100，按已转换页数推进）
   zoomMode: ZoomMode // 缩放模式
   rotation: number // 用户旋转偏移（0/90/180/270），叠加在页面自身旋转之上
   handTool: boolean // 手形工具：按住拖拽平移内容区

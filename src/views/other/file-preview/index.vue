@@ -1,81 +1,95 @@
 <script lang="ts" setup>
 import { useRoute, useRouter } from 'vue-router'
 import { Download, Loading, RefreshLeft, WarningFilled } from '@element-plus/icons-vue'
-import type { SysFileResponse } from '@/service/model/system/file.model'
-import { querySysFileById } from '@/service/api/system/file.api'
+import type { SysFilePreviewResponse } from '@/service/model/system/file.model'
+import type { XhtFilePreviewFile } from '@/components/xht-file-preview/types'
+import { initSysFilePreview } from '@/service/api/system/file.api'
 import { handleDownloadSysFile } from '@/utils/file'
-import { useMessage } from '@/hooks/use-message'
 import { HOME_PAGE_PATH } from '@/service/constant'
 
 /**
  * 文件预览页（独立全屏页）
  *
- * 路由：/file-preview/:fileId
- * 按路由参数查询文件信息后交给 xht-file-preview 渲染，预览内容本身不带"返回"入口，
- * 返回、文件名、下载等页面级操作统一收敛在顶部信息栏。
+ * 路由：/file-preview/:fileStorageKey
+ * 按路由参数调用预览初始化接口（服务端在此校验访问权限）拿到文件名、类型、大小，
+ * 再交给 xht-file-preview 渲染；预览内容本身不带"返回"入口，返回、文件名、下载等页面级操作统一收敛在顶部信息栏。
  */
 defineOptions({ name: 'FilePreviewViewIndex' })
 
 const route = useRoute()
 const router = useRouter()
-const message = useMessage()
 
 const state = reactive({
-  loadingStatus: true, // 文件信息加载状态
-  errorStatus: false, // 文件信息加载失败
+  loadingStatus: true, // 预览信息加载状态
+  errorStatus: false, // 预览信息加载失败
   downloadingStatus: false, // 下载状态
-  file: null as SysFileResponse | null, // 当前预览文件
+  fileInfo: null as SysFilePreviewResponse | null, // 当前预览文件信息
 })
 
 /**
- * 路由中的文件ID
+ * 路由中的文件存储key
  */
-const fileId = computed(() => (route.params.fileId ? String(route.params.fileId) : ''))
+const fileStorageKey = computed(() => (route.params.fileStorageKey ? String(route.params.fileStorageKey) : ''))
 
-const displayName = computed(() => state.file?.fileOriginalName || '文件预览')
+/**
+ * 传给预览组件的文件信息（初始化响应不含存储key，用路由参数补齐）
+ */
+const previewFile = computed<XhtFilePreviewFile | null>(() => {
+  if (!state.fileInfo) return null
+  return {
+    fileStorageKey: fileStorageKey.value,
+    fileOriginalName: state.fileInfo.fullOriginalFilename,
+    fileType: state.fileInfo.fileType,
+    fileSuffix: state.fileInfo.fileSuffix,
+  }
+})
+
+const displayName = computed(() => state.fileInfo?.fullOriginalFilename || '文件预览')
 
 /**
  * 文件元信息：后缀 · 大小
  */
 const displayMeta = computed(() => {
-  if (!state.file) return ''
-  const suffix = state.file.fileSuffix ? state.file.fileSuffix.toUpperCase() : ''
-  return [suffix, state.file.fileSizeInfo].filter(Boolean).join(' · ')
+  if (!state.fileInfo) return ''
+  const suffix = state.fileInfo.fileSuffix ? state.fileInfo.fileSuffix.toUpperCase() : ''
+  return [suffix, state.fileInfo.fileSizeInfo].filter(Boolean).join(' · ')
 })
 
 /**
- * 加载文件信息
+ * 加载预览信息
  */
-const loadFile = async () => {
-  const id = fileId.value
-  if (!id) {
+const loadFile = () => {
+  const key = fileStorageKey.value
+  if (!key) {
     state.loadingStatus = false
     state.errorStatus = true
     return
   }
   state.loadingStatus = true
   state.errorStatus = false
-  try {
-    const { data } = await querySysFileById(id)
-    state.file = data ?? null
-    state.errorStatus = !data
-  } catch (error) {
-    // 错误提示已由请求拦截器统一给出，此处只记录日志并切到失败态
-    console.error('文件信息加载失败:', error)
-    state.file = null
-    state.errorStatus = true
-  } finally {
-    state.loadingStatus = false
-  }
+  initSysFilePreview(key)
+    .then(({ data }) => {
+      state.fileInfo = data ?? null
+      state.errorStatus = !data
+    })
+    .catch((error) => {
+      // 错误提示已由请求拦截器统一给出，此处只记录日志并切到失败态
+      console.error('文件预览信息加载失败:', error)
+      state.fileInfo = null
+      state.errorStatus = true
+    })
+    .finally(() => {
+      state.loadingStatus = false
+    })
 }
 
 /**
  * 是否 PDF 预览：PDF 组件工具栏已带文件名与下载，页面级信息栏不再展示（合并为单行）
  */
 const isPdf = computed(() => {
-  const file = state.file
-  if (!file) return false
-  return file.fileSuffix?.toLowerCase() === 'pdf' || /\.pdf$/i.test(file.fileOriginalName || '')
+  const info = state.fileInfo
+  if (!info) return false
+  return info.fileSuffix?.toLowerCase() === 'pdf' || /\.pdf$/i.test(info.fullOriginalFilename || '')
 })
 
 /**
@@ -95,32 +109,32 @@ const handleBack = () => {
 /**
  * 下载当前文件
  */
-const handleDownload = async () => {
-  if (!state.file || state.downloadingStatus) return
+const handleDownload = () => {
+  if (!state.fileInfo || state.downloadingStatus) return
   state.downloadingStatus = true
-  try {
-    const successStatus = await handleDownloadSysFile(state.file.fileStorageKey)
-    if (successStatus) {
-      message.success('文件下载成功!')
-    }
-  } finally {
-    state.downloadingStatus = false
-  }
+  handleDownloadSysFile(fileStorageKey.value)
+    .catch((error) => {
+      // 失败提示已由请求拦截器给出，此处只记录日志
+      console.error('文件下载失败:', error)
+    })
+    .finally(() => {
+      state.downloadingStatus = false
+    })
 }
 
-watch(fileId, loadFile, { immediate: true })
+watch(fileStorageKey, loadFile, { immediate: true })
 </script>
 
 <template>
   <div class="xht-file-preview-view">
     <!-- 顶部信息栏：仅非 PDF 类型展示（PDF 由组件工具栏承载文件名与下载，合并为单行） -->
     <header v-if="!isPdf" class="xht-file-preview-view__header">
-      <div v-if="state.file" class="xht-file-preview-view__title">
+      <div v-if="state.fileInfo" class="xht-file-preview-view__title">
         <span class="xht-file-preview-view__name text-overflow" :title="displayName">{{ displayName }}</span>
         <span v-if="displayMeta" class="xht-file-preview-view__meta">{{ displayMeta }}</span>
       </div>
       <div class="xht-file-preview-view__actions">
-        <el-tooltip v-if="state.file" content="下载" placement="bottom">
+        <el-tooltip v-if="state.fileInfo" content="下载" placement="bottom">
           <button type="button" class="xht-file-preview-view__btn" aria-label="下载文件" :disabled="state.downloadingStatus" @click="handleDownload">
             <el-icon :size="15" :class="state.downloadingStatus ? 'xht-file-preview-view__spin' : ''">
               <Loading v-if="state.downloadingStatus" />
@@ -139,7 +153,7 @@ watch(fileId, loadFile, { immediate: true })
       </div>
 
       <!-- 文件信息加载失败 -->
-      <div v-else-if="state.errorStatus || !state.file" class="xht-file-preview-view__status">
+      <div v-else-if="state.errorStatus || !state.fileInfo" class="xht-file-preview-view__status">
         <div class="xht-file-preview-view__card">
           <el-icon :size="26" color="#faad14"><WarningFilled /></el-icon>
           <p class="xht-file-preview-view__status-title">文件信息加载失败</p>
@@ -154,7 +168,7 @@ watch(fileId, loadFile, { immediate: true })
         </div>
       </div>
 
-      <xht-file-preview v-else :file="state.file" />
+      <xht-file-preview v-else :file="previewFile" />
     </div>
   </div>
 </template>

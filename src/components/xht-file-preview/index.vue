@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { previewSysFile, getSysFilePreviewUrl } from '@/service/api/system/file.api'
+import { initSysFilePreview, previewSysFile, toSysFileAbsoluteUrl } from '@/service/api/system/file.api'
 import type { XhtFilePreviewProps, XhtFilePreviewRenderMode, XhtFilePreviewState } from '@/components/xht-file-preview/types'
 import { resolvePreviewMode } from '@/components/xht-file-preview/utils'
 import { handleDownloadSysFile } from '@/utils/file'
@@ -21,12 +21,13 @@ const props = withDefaults(defineProps<XhtFilePreviewProps>(), { file: null })
  * 预览器映射
  *
  * 全部动态导入：不进主包，只有真正预览对应类型时才加载（pdf.js 尤其重）。
+ * 每个预览器一个目录、入口统一为 `index.vue`（与 `xht-pdf-preview` 一致）。
  */
 const PreviewComponents: Record<XhtFilePreviewRenderMode, Component> = {
-  image: defineAsyncComponent(() => import('@/components/xht-file-preview/components/xht-picture-preview.vue')),
+  image: defineAsyncComponent(() => import('@/components/xht-file-preview/components/xht-picture-preview/index.vue')),
   pdf: defineAsyncComponent(() => import('@/components/xht-file-preview/components/xht-pdf-preview/index.vue')),
-  text: defineAsyncComponent(() => import('@/components/xht-file-preview/components/xht-txt-preview.vue')),
-  json: defineAsyncComponent(() => import('@/components/xht-file-preview/components/xht-json-preview.vue')),
+  text: defineAsyncComponent(() => import('@/components/xht-file-preview/components/xht-txt-preview/index.vue')),
+  json: defineAsyncComponent(() => import('@/components/xht-file-preview/components/xht-json-preview/index.vue')),
 }
 
 const message = useMessage()
@@ -37,6 +38,7 @@ const state = reactive<XhtFilePreviewState>({
   previewMode: 'other', // 预览模式
   previewUrl: '', // 预览地址（blob 地址；PDF 为后端直连地址）
   previewHeaders: {}, // PDF 直连地址的请求头（鉴权）
+  fileInfo: null, // 服务端返回的预览信息
 })
 
 // 请求序号：file 快速切换时用于丢弃过期响应
@@ -62,28 +64,38 @@ const revokePreviewUrl = () => {
 
 /**
  * 加载预览数据
+ *
+ * 流程按接口文档约定：先调 `/sys/files/preview/init` 完成权限校验并拿到服务端判定的文件类型与预览地址，
+ * 再按类型选择渲染方式；本地后缀判断只用于提前挡掉明确不支持的类型，避免无谓请求。
  */
 const loadPreview = async () => {
   const token = ++loadToken.value
   const file = props.file
   revokePreviewUrl()
+  state.fileInfo = null
   state.previewMode = file ? resolvePreviewMode(file.fileType, file.fileSuffix) : 'other'
   if (!file || state.previewMode === 'other') {
     state.loadingStatus = false
     return
   }
-  // PDF 交给 pdf.js 自带的分段加载：直连后端预览地址 + 鉴权头，服务端支持 Range 时按需拉取
-  if (state.previewMode === 'pdf') {
-    state.previewHeaders = { [HEADER_AUTHORIZATION]: `Bearer ${userStore.getAccessToken}` }
-    state.previewUrl = getSysFilePreviewUrl(file.fileStorageKey)
-    state.loadingStatus = false
-    return
-  }
   state.loadingStatus = true
   try {
+    const { data } = await initSysFilePreview(file.fileStorageKey)
+    if (token !== loadToken.value) return
+    if (!data) return
+    state.fileInfo = data
+    // 预览类型以服务端判定为准（后端预览白名单是最终依据）
+    state.previewMode = resolvePreviewMode(data.fileType, data.fileSuffix)
+    if (state.previewMode === 'other' || !data.previewUrl) return
+    // PDF 交给 pdf.js 自带的分段加载：直连后端预览地址 + 鉴权头，服务端支持 Range 时按需拉取
+    if (state.previewMode === 'pdf') {
+      state.previewHeaders = { [HEADER_AUTHORIZATION]: `Bearer ${userStore.getAccessToken}` }
+      state.previewUrl = toSysFileAbsoluteUrl(data.previewUrl)
+      return
+    }
     const response = await previewSysFile(file.fileStorageKey)
     if (token !== loadToken.value) return
-    const contentType: string = (response.headers['content-type'] as string) || file.fileType || 'application/octet-stream'
+    const contentType: string = (response.headers['content-type'] as string) || data.fileType || 'application/octet-stream'
     // 文本、JSON 统一以 text/plain 渲染 blob，避免浏览器按原类型处理导致直接下载
     const isPlainText = state.previewMode === 'text' || state.previewMode === 'json'
     const blobType = isPlainText ? 'text/plain;charset=utf-8' : contentType
@@ -130,7 +142,7 @@ onBeforeUnmount(() => {
       <component
         :is="previewComponent"
         v-else
-        :file-name="state.previewMode === 'pdf' ? props.file?.fileOriginalName : undefined"
+        :file-name="state.previewMode === 'pdf' ? state.fileInfo?.fullOriginalFilename || props.file?.fileOriginalName : undefined"
         :file-storage-key="state.previewMode === 'pdf' ? props.file?.fileStorageKey : undefined"
         :http-headers="state.previewMode === 'pdf' ? state.previewHeaders : undefined"
         :url="state.previewUrl"

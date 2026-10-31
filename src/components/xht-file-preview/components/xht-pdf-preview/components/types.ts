@@ -97,6 +97,15 @@ export interface PdfStatusProps {
 }
 
 /**
+ * 打印等待遮罩属性：大文档逐页转图片期间展示进度
+ */
+export interface PdfPrintOverlayProps {
+  visible: boolean
+  progress: number
+  total: number
+}
+
+/**
  * 状态页 emit
  */
 export interface PdfStatusEmits {

@@ -66,13 +66,7 @@ export const TITLE_TOP_MARGIN = 8
 export const SEARCH_SCROLL_MARGIN = 110
 
 /**
- * 打印窗口占位内容：生成打印图片期间展示，避免用户看到空白窗口
- */
-// 独立打印窗口 HTML，不参与暗黑模式，故不使用变量（color:#606266）
-export const PREPARING_HTML = `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8" /><title>正在准备打印</title></head><body style="display:flex;height:100vh;margin:0;align-items:center;justify-content:center;font:14px/1.6 sans-serif;color:#606266">正在准备打印内容，请稍候…</body></html>`
-
-/**
- * HTML 转义映射：打印窗口标题来自文件名，需转义后写入
+ * HTML 转义映射：打印文档标题来自文件名，需转义后写入
  */
 export const HTML_ESCAPES: Record<string, string> = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }
 

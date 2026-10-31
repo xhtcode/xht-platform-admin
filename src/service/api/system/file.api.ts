@@ -1,6 +1,12 @@
 import request, { requestBlob } from '@/utils/request'
 import type { ApiResponse, AxiosResponse } from 'axios'
-import type { SysFileChunkMergeRequest, SysFileOperationRequest, SysFileQueryRequest, SysFileResponse } from '@/service/model/system/file.model'
+import type {
+  SysFileChunkMergeRequest,
+  SysFileOperationRequest,
+  SysFilePreviewResponse,
+  SysFileQueryRequest,
+  SysFileResponse,
+} from '@/service/model/system/file.model'
 
 /**
  * 后台管理服务前缀
@@ -20,6 +26,7 @@ enum Api {
   CHUNK_MERGE = '/sys/files/chunk/merge',
   DOWNLOAD = '/sys/files/download/',
   PREVIEW = '/sys/files/preview',
+  PREVIEW_INIT = '/sys/files/preview/init',
 }
 
 /**
@@ -174,13 +181,29 @@ export const previewSysFile = (fileStorageKey: string): Promise<AxiosResponse<Bl
 }
 
 /**
- * 获取预览文件的直连地址
+ * 初始化预览信息
  *
- * 用于 pdf.js 等自身支持 HTTP Range 的消费方：由它按需分段拉取，避免前端先整包下载再渲染。
- * 鉴权头需调用方自行附带（pdf.js 通过 httpHeaders 传入）。
+ * 打开预览前调用：服务端在此完成文件存在性与访问权限校验，并返回文件基本信息与预览/下载地址。
  *
  * @param fileStorageKey 文件存储key
  */
-export const getSysFilePreviewUrl = (fileStorageKey: string): string => {
-  return `${baseURL}${Api.PREVIEW}?fileStorageKey=${encodeURIComponent(fileStorageKey)}`
+export const initSysFilePreview = (fileStorageKey: string): Promise<ApiResponse<SysFilePreviewResponse>> => {
+  return request<SysFilePreviewResponse>({
+    url: Api.PREVIEW_INIT,
+    baseURL,
+    method: 'post',
+    params: { fileStorageKey },
+  })
+}
+
+/**
+ * 拼接可直连访问的绝对地址
+ *
+ * 预览初始化返回的 `previewUrl` / `downloadUrl` 为相对服务根路径，需补上网关前缀。
+ *
+ * @param url 相对服务根路径的地址（已是 http/https 时原样返回）
+ */
+export const toSysFileAbsoluteUrl = (url: string): string => {
+  if (!url) return ''
+  return /^https?:\/\//i.test(url) ? url : `${baseURL}${url}`
 }

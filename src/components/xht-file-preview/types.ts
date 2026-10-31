@@ -1,3 +1,5 @@
+import type { SysFilePreviewResponse } from '@/service/model/system/file.model'
+
 /**
  * 文件预览模式
  */
@@ -37,4 +39,5 @@ export interface XhtFilePreviewState {
   previewMode: XhtFilePreviewMode // 预览模式
   previewUrl: string // 预览地址（blob 地址，PDF 为后端直连地址）
   previewHeaders: Record<string, string> // 直连预览地址所需的请求头（PDF 分段拉取时附带鉴权）
+  fileInfo: SysFilePreviewResponse | null // 服务端返回的预览信息（完整文件名、大小、类型、地址）
 }
