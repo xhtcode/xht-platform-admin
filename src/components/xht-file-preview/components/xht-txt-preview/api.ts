@@ -23,7 +23,7 @@ enum Api {
  * @param fileStorageKey 文件存储key
  * @returns 文件文本内容
  */
-export const previewTextFile = (fileStorageKey: string): Promise<string> => {
+export const previewTextFile = (fileStorageKey: string): Promise<any> => {
   return requestRaw<string>({
     url: Api.PREVIEW,
     baseURL,

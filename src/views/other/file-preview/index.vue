@@ -10,6 +10,7 @@ import PageFullScreen from '@/layout/components/page-full-screen/index.vue'
 import FilePreviewLoading from '@/views/other/file-preview/components/file-preview-loading.vue'
 import FilePreviewError from '@/views/other/file-preview/components/file-preview-error.vue'
 import type { SysFilePreviewResponse } from '@/service/model/system/file.model'
+import LayoutFooter from '@/layout/components/layout-footer/index.vue'
 
 defineOptions({ name: 'FilePreviewViewIndex' })
 
@@ -117,6 +118,7 @@ onMounted(async () => {
         :preview-mode="state.fileInfo?.previewMode ?? 'other'"
       />
     </el-main>
+    <layout-footer/>
   </el-container>
 </template>
 
@@ -137,7 +139,7 @@ onMounted(async () => {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  background-color: var(--el-bg-color);
+  background-color: var(--xht-main-bg-color);
   border-bottom: 1px solid var(--el-border-color-light);
   user-select: none;
 }
@@ -174,11 +176,9 @@ onMounted(async () => {
   display: flex;
   flex-direction: column;
   min-height: 0;
-  margin: 10px;
-  padding: 10px;
   overflow: hidden;
-  background-color: var(--el-bg-color);
-  border: 1px solid var(--el-border-color-light);
-  border-radius: 6px;
+  background-color: var(--xht-bg-color);
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
 }
 </style>
