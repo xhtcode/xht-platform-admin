@@ -32,7 +32,7 @@
 /* 明亮 -> 暗黑：旧快照置于顶层并收缩，逐步露出暗黑主题 */
 html[data-theme-transition='to-dark']::view-transition-old(root) {
   z-index: 2147483646;
-  animation: theme-transition-clip 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+  animation: theme-transition-clip 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
 html[data-theme-transition='to-dark']::view-transition-new(root) {
@@ -46,7 +46,7 @@ html[data-theme-transition='to-light']::view-transition-old(root) {
 
 html[data-theme-transition='to-light']::view-transition-new(root) {
   z-index: 2147483646;
-  animation: theme-transition-clip 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+  animation: theme-transition-clip 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
   animation-direction: reverse;
 }
 

@@ -14,6 +14,7 @@ const OtherRouter: RouteRecordRaw[] = [
     meta: {
       title: '文件预览',
       hiddenStatus: true,
+      ignoreAuth: true,
     },
   },
 ]

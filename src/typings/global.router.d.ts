@@ -15,6 +15,7 @@ declare module 'vue-router' {
     rank?: number // 路由排序
     menuType?: MenuType // 菜单类型
     roles?: string[] //权限标识
+    ignoreAuth?: boolean // 是否忽略权限校验 true 是
     [index: string]: any
   }
 

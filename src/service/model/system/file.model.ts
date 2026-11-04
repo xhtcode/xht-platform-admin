@@ -1,3 +1,5 @@
+import { XhtFilePreviewMode } from '@/components/xht-file-preview/types.ts'
+
 /**
  * 文件状态
  */
@@ -61,14 +63,14 @@ export interface SysFileResponse {
  * 对应接口：POST /sys/files/preview/init（入参仅 fileStorageKey，服务端在此完成权限校验）
  */
 export interface SysFilePreviewResponse {
-  fullOriginalFilename: string // 文件完整原始名称（含后缀，不受入库截断影响）
+  fileStorageKey: string // 文件存储key
+  fileName: string // 文件完整原始名称（含后缀，优先取元数据，不受入库截断影响）
+  fullOriginalFileName: string // 文件完整原始名称（含后缀，优先取元数据，不受入库截断影响）
   fileSize: number // 文件大小（单位：字节）
   fileSizeInfo: string // 文件大小信息
-  fileType: string // 文件类型（MIME）
-  fileSuffix: string // 文件后缀（小写）
-  fileStorageName: string // 物理存储名（存储key + 后缀）
-  previewUrl: string // 预览地址（相对服务根路径，支持 Range）
-  downloadUrl: string // 下载地址（相对服务根路径）
+  fileSuffix: string // 文件后缀
+  previewMode: XhtFilePreviewMode // 文件预览模式
+  previewModeValue?: string // 预览模式名称（服务端判定的中文名，如「文本」）
 }
 
 /**

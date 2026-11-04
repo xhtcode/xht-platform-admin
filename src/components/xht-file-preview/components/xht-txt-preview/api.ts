@@ -1,5 +1,4 @@
-import { requestBlob } from '@/utils/request'
-import type { AxiosResponse } from 'axios'
+import { requestRaw } from '@/utils/request'
 
 /**
  * 后台管理服务前缀
@@ -16,17 +15,19 @@ enum Api {
 }
 
 /**
- * 预览文本文件（拉取文本二进制内容）
+ * 预览文本文件
+ *
+ * 该接口直接返回文件文本内容（无 code/msg 业务信封），故走 `requestRaw`：
+ * 成败仅由 HTTP 状态码判定，失败提示由请求拦截器统一弹出。
  *
  * @param fileStorageKey 文件存储key
- * @param urlParams 浏览地址栏透传参数（后端可能要求携带，如路由查询参数）
+ * @returns 文件文本内容
  */
-export const previewTextFile = (fileStorageKey: string, urlParams?: Record<string, string>): Promise<AxiosResponse<Blob>> => {
-  return requestBlob({
+export const previewTextFile = (fileStorageKey: string): Promise<string> => {
+  return requestRaw<string>({
     url: Api.PREVIEW,
     baseURL,
     method: 'get',
-    params: { fileStorageKey, ...urlParams },
-    responseType: 'blob',
+    params: { fileStorageKey },
   })
 }

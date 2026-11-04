@@ -144,8 +144,11 @@ const showErrorMessage = (message?: string) => {
  */
 service.interceptors.response.use(
   async (response: AxiosResponse<ApiResponse>) => {
-    const { responseType } = response.config
-    if (responseType === 'blob' || responseType === 'arraybuffer') {
+    const { responseType, skipEnvelope } = response.config
+    // 无需解包信封的响应直接放行：
+    // - blob/arraybuffer：二进制内容不存在 code/msg 字段
+    // - skipEnvelope：后端未按统一信封返回（无 code），判定业务码只会误判为失败
+    if (skipEnvelope || responseType === 'blob' || responseType === 'arraybuffer') {
       return response
     }
     const { code, msg, dataType, data } = response.data
@@ -188,11 +191,34 @@ service.interceptors.response.use(
  * 响应拦截器保持 axios 原生返回，业务信封（ApiResponse）的解包在此统一完成，
  * 使调用方拿到的类型与实际运行时结构完全一致。
  *
+ * 注意：后端未按统一信封返回（无 code 字段）的接口不可用本方法，否则必然被判定为业务失败，
+ * 请改用 `requestRaw()`。
+ *
  * @param config 请求配置
  * @returns 业务信封 Promise
  */
 export async function request<T = unknown>(config: AxiosRequestConfig): Promise<ApiResponse<T>> {
   const response = await service.request<ApiResponse<T>>(config)
+  return response.data
+}
+
+/**
+ * 原始响应请求
+ *
+ * 用于后端未使用统一业务信封（响应体没有 code 字段）的接口。
+ * 此类接口无法按业务码判定成败，因此不做任何判定，直接把响应体交给调用方，
+ * 失败仅由 HTTP 状态码体现（由拦截器的错误分支统一提示）。
+ *
+ * ```ts
+ * // 后端直接返回 { name: 'x' }，没有 code/msg
+ * const data = await requestRaw<{ name: string }>({ url: '/xxx', method: 'get' })
+ * ```
+ *
+ * @param config 请求配置（内部强制 skipEnvelope，调用方无需重复声明）
+ * @returns 响应体本身
+ */
+export async function requestRaw<T = unknown>(config: AxiosRequestConfig): Promise<T> {
+  const response = await service.request<T>({ ...config, skipEnvelope: true })
   return response.data
 }
 

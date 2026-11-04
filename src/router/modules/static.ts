@@ -8,7 +8,7 @@ const StaticRouter: RouteRecordRaw[] = [
     path: '/login',
     name: 'LoginViewIndex',
     component: () => import('@/views/login/index.vue'),
-    meta: { title: '登录', hiddenStatus: true, authStatus: true },
+    meta: { title: '登录', hiddenStatus: true, ignoreAuth: true },
   },
   {
     path: '/oauth2',
@@ -18,14 +18,14 @@ const StaticRouter: RouteRecordRaw[] = [
       title: 'oauth2登录',
       breadCrumbStatus: true,
       hiddenStatus: true,
-      authStatus: true,
+      ignoreAuth: true,
     },
   },
   {
     path: '/redirect/:path(.*)',
     name: 'RedirectViewIndex',
     component: () => import('@/views/other/redirect.vue'),
-    meta: { title: '用于同路由刷新', breadCrumbStatus: true, hiddenStatus: true },
+    meta: { title: '用于同路由刷新', breadCrumbStatus: true, hiddenStatus: true, ignoreAuth: true },
   },
   {
     path: '/:path(.*)*',
@@ -34,7 +34,6 @@ const StaticRouter: RouteRecordRaw[] = [
     meta: {
       breadCrumbStatus: true,
       hiddenStatus: true,
-      authStatus: true,
     },
   },
 ]

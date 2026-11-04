@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { XhtFilePreviewMode, XhtFilePreviewRenderMode, XhtFilePreviewState } from '@/components/xht-file-preview/types.ts'
+import { XhtFilePreviewMode, XhtFilePreviewRenderMode } from '@/components/xht-file-preview/types.ts'
 defineOptions({ name: 'XhtFilePreview' })
 
 const props = withDefaults(
   defineProps<{
     fileStorageKey: string // 文件存储key（预览/下载接口使用）
     previewMode: XhtFilePreviewMode // 预览模式
+    fileName?: string // 文件显示名称（PDF 工具栏等位置展示，缺省回退为存储key）
   }>(),
-  {}
+  { fileName: '' }
 )
 /**
  * 预览器映射
@@ -28,13 +29,18 @@ const previewComponent = computed<Component | null>(() => PreviewComponents[prop
 </script>
 
 <template>
-  <div class="wh-full">
+  <div class="wh-full overflow-hidden">
     <component
       :is="previewComponent"
-      :file-name="props.fileStorageKey"
+      v-if="previewComponent"
+      :file-name="props.fileName || props.fileStorageKey"
       :file-storage-key="props.fileStorageKey"
       :url="`/api/admin/sys/files/preview?fileStorageKey=${props.fileStorageKey}`"
     />
+    <!-- 音视频等没有内联预览器的类型：给出兜底提示，避免整片空白 -->
+    <div v-else class="wh-full flex-center">
+      <el-empty description="该文件类型暂不支持在线预览，请下载后查看" />
+    </div>
   </div>
 </template>
 

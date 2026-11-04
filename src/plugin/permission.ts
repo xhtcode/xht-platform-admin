@@ -12,10 +12,6 @@ const { setTitle } = useTitle()
  * 进度条配置
  */
 NProgress.configure({ showSpinner: false })
-/**
- * 白名单路由
- */
-const whiteList = ['/login', '/oauth2', '/process']
 
 export function setupPermission() {
   router.beforeEach(async (to, _from) => {
@@ -56,7 +52,7 @@ export function setupPermission() {
         }
       }
     } else {
-      if (whiteList.includes(to.path)) {
+      if (to.meta?.ignoreAuth) {
         return
       } else {
         // 重定向登录页

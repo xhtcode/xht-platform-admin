@@ -8,7 +8,6 @@ import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { sysFileColumnOption } from '@/views/system/file/file.data'
 import { handleDownloadSysFile } from '@/utils/file'
-import { resolvePreviewMode } from '@/components/xht-file-preview/utils'
 import { filePreviewTypeEnum, fileStatusEnum, fileStorageTypeEnum } from '@/service/enums/system/file.enum'
 import { Delete, Document, Download, Refresh, Search, Upload, View } from '@element-plus/icons-vue'
 
@@ -16,10 +15,8 @@ defineOptions({ name: 'SysFileViewIndex' })
 
 const fileUpload = defineAsyncComponent(() => import('@/views/system/file/components/file-upload.vue'))
 const fileDetail = defineAsyncComponent(() => import('@/views/system/file/components/file-detail.vue'))
-const filePreviewDialog = defineAsyncComponent(() => import('@/views/system/file/components/file-preview-dialog.vue'))
 const sysFileUploadRef = useTemplateRef('sysFileUploadRef')
 const sysFileDetailRef = useTemplateRef('sysFileDetailRef')
-const sysFilePreviewRef = useTemplateRef('sysFilePreviewRef')
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 const router = useRouter()
 
@@ -56,13 +53,8 @@ const uploadTimeRange = ref<[string, string] | null>(null)
  */
 const handlePreview = (row: SysFileResponse) => {
   // 预览类型以服务端判定为准（按文件后缀匹配文件类型配置），未匹配到配置时按 MIME / 后缀本地兜底
-  const previewMode = row.filePreviewType ?? resolvePreviewMode(row.fileType, row.fileSuffix)
-  if (previewMode === 'pdf' || previewMode === 'json') {
-    const { href } = router.resolve({ name: 'FilePreviewViewIndex', params: { fileStorageKey: row.fileStorageKey } })
-    window.open(href, '_blank', 'noopener,noreferrer')
-    return
-  }
-  sysFilePreviewRef.value?.show(row)
+  const { href } = router.resolve({ name: 'FilePreviewViewIndex', params: { fileStorageKey: row.fileStorageKey } })
+  window.open(href, '_blank', 'noopener,noreferrer')
 }
 
 /**
@@ -276,7 +268,6 @@ onMounted(async () => {
     />
     <file-upload ref="sysFileUploadRef" @success="handlePageQuery" />
     <file-detail ref="sysFileDetailRef" />
-    <file-preview-dialog ref="sysFilePreviewRef" />
   </div>
 </template>
 
