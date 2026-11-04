@@ -39,6 +39,8 @@ import { createPropertiesFeature } from '@/components/xht-file-preview/component
 import { createSearchFeature } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/search'
 import { createThumbsFeature } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/thumbs'
 import { handleDownloadSysFile } from '@/utils/file'
+import { HEADER_AUTHORIZATION } from '@/service/constant'
+import { useUserInfoStore } from '@/store/modules/user.store'
 import type {
   OptionalContentConfig,
   PageSize,
@@ -63,6 +65,16 @@ defineOptions({ name: 'XhtPdfPreview', inheritAttrs: true })
 const props = withDefaults(defineProps<XhtPdfPreviewProps>(), { fileName: '' })
 
 const message = useMessage()
+const userStore = useUserInfoStore()
+
+/**
+ * 直连预览地址所需的请求头：由组件自身维护，调用方无需关心鉴权
+ *
+ * 取 computed 实时值，登录态变化（重新登录/换 token）后分段拉取自动使用最新凭证。
+ */
+const httpHeaders = computed<Record<string, string>>(() => ({
+  [HEADER_AUTHORIZATION]: `Bearer ${userStore.getAccessToken}`,
+}))
 
 // Worker 以独立资源引入，由 Vite 处理打包与 URL 解析
 pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl
@@ -377,7 +389,7 @@ const renderPage = async (no: number) => {
   renderTasks.set(no, task)
   renderedPages.add(no)
   // 画布渲染的同时叠放透明文本层（文本选择工具的数据基础）
-  renderTextLayer(no)
+  await renderTextLayer(no)
   renderingCount++
   state.rendering = true
   try {
@@ -436,7 +448,7 @@ const clearRendered = () => {
  * @param firstVisible 可视区首个页码
  * @param lastVisible 可视区末个页码
  */
-const unrenderFarPages = (firstVisible: number, lastVisible: number) => {
+const uninstallFarPages = (firstVisible: number, lastVisible: number) => {
   for (const no of renderedPages) {
     if (no >= firstVisible - KEEP_PAGES && no <= lastVisible + KEEP_PAGES) continue
     try {
@@ -477,7 +489,7 @@ const renderVisiblePages = () => {
     renderPage(no)
   }
   if (firstVisible <= lastVisible) {
-    unrenderFarPages(firstVisible, lastVisible)
+    uninstallFarPages(firstVisible, lastVisible)
   }
 }
 
@@ -569,24 +581,23 @@ const presentationApi = createPresentationFeature(ctx, searchApi.closeSearch)
  *
  * @param anchor 锚定页码
  */
-function refreshAfterScaleChange(anchor: number) {
+async function refreshAfterScaleChange(anchor: number) {
   clearRendered()
-  return nextTick().then(async () => {
-    const container = containerRef.value
-    const match = searchApi.searchMatches.value[searchApi.searchCurrentLabel.value - 1]
-    if (container) {
-      // 存在当前搜索命中时锚定到命中处（预留顶部空间），缩放后保持上下文可见
-      if (match) {
-        const maxTop = Math.max(0, container.scrollHeight - container.clientHeight)
-        const target = CONTENT_PADDING + (pageTops.value[match.page - 1] ?? 0) + searchApi.rotatedMatchOffset(match)
-        container.scrollTop = Math.min(maxTop, Math.max(0, target - SEARCH_SCROLL_MARGIN))
-      } else {
-        container.scrollTop = CONTENT_PADDING + (pageTops.value[anchor - 1] ?? 0)
-      }
+  await nextTick()
+  const container = containerRef.value
+  const match = searchApi.searchMatches.value[searchApi.searchCurrentLabel.value - 1]
+  if (container) {
+    // 存在当前搜索命中时锚定到命中处（预留顶部空间），缩放后保持上下文可见
+    if (match) {
+      const maxTop = Math.max(0, container.scrollHeight - container.clientHeight)
+      const target = CONTENT_PADDING + (pageTops.value[match.page - 1] ?? 0) + searchApi.rotatedMatchOffset(match)
+      container.scrollTop = Math.min(maxTop, Math.max(0, target - SEARCH_SCROLL_MARGIN))
+    } else {
+      container.scrollTop = CONTENT_PADDING + (pageTops.value[anchor - 1] ?? 0)
     }
-    state.current = match?.page ?? anchor
-    renderVisiblePages()
-  })
+  }
+  state.current = match?.page ?? anchor
+  renderVisiblePages()
 }
 
 // ==================== 文档加载与销毁 ====================
@@ -672,12 +683,12 @@ const loadDocument = async () => {
     await destroyDocument()
     // 接管取流：首块带 Range 探测（服务端支持时返回 206 并给出总长度），此后按 pdf.js 需要的区间逐段拉取。
     // pdf.js 自带的 url 取流首个请求必然不带 Range，会先整包下载一遍，故不使用。
-    const source = await createPdfRangeSource(props.url, props.httpHeaders ?? {}, PDF_RANGE_CHUNK_SIZE, (loaded, total) => {
+    const source = await createPdfRangeSource(props.url, httpHeaders.value, PDF_RANGE_CHUNK_SIZE, (loaded, total) => {
       if (total > 0) state.progress = Math.min(99, Math.round((loaded / total) * 100))
     })
     // 记录文件大小与线性化特征（文档属性弹窗展示用）
     propertiesApi.pdfFileSize.value = source.range ? source.range.length : (source.data?.byteLength ?? 0)
-    propertiesApi.pdfLinearized.value = !!source.head && new TextDecoder('latin1').decode(source.head.subarray(0, 1024)).includes('/Linearized')
+    propertiesApi.pdfLinearized.value = !!source.head && new TextDecoder('Latin1').decode(source.head.subarray(0, 1024)).includes('/Linearized')
     const params: Parameters<typeof pdfjsLib.getDocument>[0] = {
       rangeChunkSize: PDF_RANGE_CHUNK_SIZE,
       // cMap / 标准字体 / wasm 资源已复制到 public/pdfjs/（随仓库静态托管），避免依赖外网 CDN 导致内网环境渲染失败
@@ -716,10 +727,10 @@ const loadDocument = async () => {
     await nextTick()
     renderVisiblePages()
     thumbsApi.setupThumbObserver()
-    outlineApi.loadOutline(doc)
-    attachmentsApi.loadAttachments(doc)
-    layersApi.loadLayers(doc)
-    loadPageSizesInBackground(doc)
+    await outlineApi.loadOutline(doc)
+    await attachmentsApi.loadAttachments(doc)
+    await layersApi.loadLayers(doc)
+    await loadPageSizesInBackground(doc)
   } catch (error) {
     // 文档加载失败（如 blob 已释放、格式损坏）：不弹全局提示，由父级降级展示
     console.error('PDF文档加载失败:', error)
@@ -775,7 +786,7 @@ const handleRotate = async (delta: number) => {
     state.scale = scaleForMode(state.zoomMode)
   }
   await nextTick()
-  ctx.refreshAfterScaleChange(state.current)
+  await ctx.refreshAfterScaleChange(state.current)
 }
 
 /**
@@ -1027,7 +1038,7 @@ onBeforeUnmount(() => {
       <!-- 文档属性弹窗 -->
       <PdfPropertiesDialog :properties="propertiesApi" />
 
-      <!-- 搜索栏：浮于内容区左上，仿官方 viewer findbar -->
+      <!-- 搜索栏：浮于内容区左上，仿官方 viewer  -->
       <PdfFindBar v-if="searchApi.searchOpen.value" :search="searchApi" :set-input-ref="setSearchInputEl" />
 
       <div class="xht-pdf-preview__main">

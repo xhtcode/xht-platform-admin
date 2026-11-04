@@ -9,7 +9,7 @@ import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { sysFileColumnOption } from '@/views/system/file/file.data'
 import { handleDownloadSysFile } from '@/utils/file'
 import { resolvePreviewMode } from '@/components/xht-file-preview/utils'
-import { fileStatusEnum, fileStorageTypeEnum } from '@/service/enums/system/file.enum'
+import { filePreviewTypeEnum, fileStatusEnum, fileStorageTypeEnum } from '@/service/enums/system/file.enum'
 import { Delete, Document, Download, Refresh, Search, Upload, View } from '@element-plus/icons-vue'
 
 defineOptions({ name: 'SysFileViewIndex' })
@@ -55,7 +55,8 @@ const uploadTimeRange = ref<[string, string] | null>(null)
  * 其余类型统一用弹窗查看，不再单独打开页面。
  */
 const handlePreview = (row: SysFileResponse) => {
-  const previewMode = resolvePreviewMode(row.fileType, row.fileSuffix)
+  // 预览类型以服务端判定为准（按文件后缀匹配文件类型配置），未匹配到配置时按 MIME / 后缀本地兜底
+  const previewMode = row.filePreviewType ?? resolvePreviewMode(row.fileType, row.fileSuffix)
   if (previewMode === 'pdf' || previewMode === 'json') {
     const { href } = router.resolve({ name: 'FilePreviewViewIndex', params: { fileStorageKey: row.fileStorageKey } })
     window.open(href, '_blank', 'noopener,noreferrer')
@@ -227,6 +228,12 @@ onMounted(async () => {
       <el-table-column v-if="columnOption.fileDesc?.visible" label="文件描述" prop="fileDesc" width="240" show-overflow-tooltip />
       <el-table-column v-if="columnOption.fileType?.visible" label="文件类型" prop="fileType" width="160" show-overflow-tooltip />
       <el-table-column v-if="columnOption.fileSuffix?.visible" label="文件后缀" prop="fileSuffix" width="100" />
+      <el-table-column v-if="columnOption.filePreviewType?.visible" label="预览类型" prop="filePreviewType" width="110">
+        <template #default="{ row }">
+          <xht-enum-tag v-if="row.filePreviewType" :filter-label="row.filePreviewType" :data="filePreviewTypeEnum" />
+          <span v-else>未识别</span>
+        </template>
+      </el-table-column>
       <el-table-column v-if="columnOption.fileSizeInfo?.visible" label="文件大小" prop="fileSizeInfo" width="120" />
       <el-table-column v-if="columnOption.fileStatus?.visible" label="文件状态" prop="fileStatus" width="120">
         <template #default="{ row }">

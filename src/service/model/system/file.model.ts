@@ -6,6 +6,13 @@ export type FileStatus = 1 | 2 | 99
  * 文件存储类型
  */
 export type FileStorageType = 'LOCAL' | 'MINIO' | 'S3' | 'OSS' | 'DATABASE'
+/**
+ * 文件预览类型
+ *
+ * 与后端 `PreviewTypeEnum` 编码一致，由服务端按文件后缀匹配文件类型配置判定；
+ * 未匹配到配置的文件该字段为空，前端需自行兜底。
+ */
+export type FilePreviewType = 'image' | 'pdf' | 'video' | 'audio' | 'text' | 'json' | 'other'
 
 /**
  * 系统管理-文件查询请求参数类型
@@ -35,6 +42,7 @@ export interface SysFileResponse {
   fileHash: string // 文件hash
   fileType: string // 文件类型（MIME）
   fileSuffix: string // 文件后缀
+  filePreviewType?: FilePreviewType // 文件预览类型（服务端按后缀判定，未匹配到文件类型配置时为空）
   fileStatus: FileStatus // 文件状态
   fileUsed?: string // 文件用途
   fileStorageType: string // 文件存储类型

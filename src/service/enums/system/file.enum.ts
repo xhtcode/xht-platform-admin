@@ -1,4 +1,4 @@
-import type { FileStatus, FileStorageType } from '@/service/model/system/file.model'
+import type { FilePreviewType, FileStatus, FileStorageType } from '@/service/model/system/file.model'
 
 /**
  * 文件状态
@@ -18,6 +18,47 @@ export const fileStatusEnum: DictEnum<FileStatus, 'UPLOADED' | 'ASSOCIATED' | 'D
     label: '已删除',
     value: 99,
     type: 'danger',
+  },
+}
+
+/**
+ * 文件预览类型
+ */
+export const filePreviewTypeEnum: DictEnum<FilePreviewType, 'IMAGE' | 'PDF' | 'VIDEO' | 'AUDIO' | 'TEXT' | 'JSON' | 'OTHER'> = {
+  IMAGE: {
+    label: '图片',
+    value: 'image',
+    type: 'success',
+  },
+  PDF: {
+    label: 'PDF',
+    value: 'pdf',
+    type: 'danger',
+  },
+  VIDEO: {
+    label: '视频',
+    value: 'video',
+    type: 'warning',
+  },
+  AUDIO: {
+    label: '音频',
+    value: 'audio',
+    type: 'warning',
+  },
+  TEXT: {
+    label: '文本',
+    value: 'text',
+    type: 'info',
+  },
+  JSON: {
+    label: 'JSON',
+    value: 'json',
+    type: 'primary',
+  },
+  OTHER: {
+    label: '其他',
+    value: 'other',
+    type: 'info',
   },
 }
 

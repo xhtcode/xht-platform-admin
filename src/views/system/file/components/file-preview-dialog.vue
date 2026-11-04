@@ -67,7 +67,8 @@ defineExpose({
       <el-text size="small" class="ml-5!">{{ state?.file?.fileSizeInfo }}</el-text>
     </template>
     <div class="h-full">
-      <xht-file-preview v-if="state.file" :file="state.file" />
+      {{ state.file }}
+      <xht-file-preview v-if="state.file" :file-storage-key="state.file.fileStorageKey" :preview-mode="state.file.filePreviewType ?? 'other'" />
     </div>
     <template #footer>
       <el-button :disabled="state.downloadingStatus" @click="state.visibleStatus = false">关闭</el-button>

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { querySysFileById } from '@/service/api/system/file.api'
 import type { SysFileResponse } from '@/service/model/system/file.model'
-import { fileStatusEnum, fileStorageTypeEnum } from '@/service/enums/system/file.enum'
+import { filePreviewTypeEnum, fileStatusEnum, fileStorageTypeEnum } from '@/service/enums/system/file.enum'
 import { handleDownloadSysFile } from '@/utils/file'
 import { useMessage } from '@/hooks/use-message'
 import { Download } from '@element-plus/icons-vue'
@@ -80,6 +80,10 @@ defineExpose({
         <el-descriptions-item label="文件描述" :span="2">{{ state.fileInfo.fileDesc || '暂无' }}</el-descriptions-item>
         <el-descriptions-item label="文件类型">{{ state.fileInfo.fileType }}</el-descriptions-item>
         <el-descriptions-item label="文件后缀">{{ state.fileInfo.fileSuffix }}</el-descriptions-item>
+        <el-descriptions-item label="预览类型" :span="2">
+          <xht-enum-tag v-if="state.fileInfo.filePreviewType" :filter-label="state.fileInfo.filePreviewType" :data="filePreviewTypeEnum" />
+          <span v-else>未识别</span>
+        </el-descriptions-item>
         <el-descriptions-item label="文件大小">
           {{ state.fileInfo.fileSizeInfo }}
           <span v-if="state.fileInfo.fileSize">（{{ state.fileInfo.fileSize }} 字节）</span>

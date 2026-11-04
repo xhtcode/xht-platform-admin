@@ -9,6 +9,7 @@ export const sysFileColumnOption: ColumnConfig<SysFileResponse> = {
   fileDesc: { desc: '文件描述', visible: true, disabled: false },
   fileType: { desc: '文件类型', visible: true, disabled: false },
   fileSuffix: { desc: '文件后缀', visible: true, disabled: false },
+  filePreviewType: { desc: '预览类型', visible: false, disabled: false },
   fileSizeInfo: { desc: '文件大小', visible: true, disabled: false },
   fileStatus: { desc: '文件状态', visible: true, disabled: true },
   fileUsed: { desc: '文件用途', visible: true, disabled: false },
