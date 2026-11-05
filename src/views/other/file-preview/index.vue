@@ -118,7 +118,7 @@ onMounted(async () => {
         :preview-mode="state.fileInfo?.previewMode ?? 'other'"
       />
     </el-main>
-    <layout-footer/>
+    <layout-footer />
   </el-container>
 </template>
 
@@ -177,7 +177,7 @@ onMounted(async () => {
   flex-direction: column;
   min-height: 0;
   overflow: hidden;
-  background-color: var(--xht-bg-color);
+  background-color: var(--xht-page-bg-color);
   padding-top: 0 !important;
   padding-bottom: 0 !important;
 }

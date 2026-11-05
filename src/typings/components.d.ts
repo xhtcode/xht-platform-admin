@@ -63,7 +63,6 @@ declare module 'vue' {
     ElRow: typeof import('element-plus/es')['ElRow']
     ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
     ElSelect: typeof import('element-plus/es')['ElSelect']
-    ElSkeleton: typeof import('element-plus/es')['ElSkeleton']
     ElSpace: typeof import('element-plus/es')['ElSpace']
     ElSplitter: typeof import('element-plus/es')['ElSplitter']
     ElSplitterPanel: typeof import('element-plus/es')['ElSplitterPanel']
@@ -114,7 +113,7 @@ declare module 'vue' {
     XhtPagination: typeof import('./../components/element-plus/xht-pagination/index.vue')['default']
     XhtPdfPreview: typeof import('./../components/xht-file-preview/components/xht-pdf-preview/index.vue')['default']
     XhtPicturePreview: typeof import('./../components/xht-file-preview/components/xht-picture-preview/index.vue')['default']
-    XhtTxtPreview: typeof import('./../components/xht-file-preview/components/xht-txt-preview/index.vue')['default']
+    XhtTextPreview: typeof import('./../components/xht-file-preview/components/xht-text-preview/index.vue')['default']
   }
   export interface GlobalDirectives {
     vLoading: typeof import('element-plus/es')['ElLoadingDirective']
@@ -174,7 +173,6 @@ declare global {
   const ElRow: typeof import('element-plus/es')['ElRow']
   const ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
   const ElSelect: typeof import('element-plus/es')['ElSelect']
-  const ElSkeleton: typeof import('element-plus/es')['ElSkeleton']
   const ElSpace: typeof import('element-plus/es')['ElSpace']
   const ElSplitter: typeof import('element-plus/es')['ElSplitter']
   const ElSplitterPanel: typeof import('element-plus/es')['ElSplitterPanel']
@@ -225,5 +223,5 @@ declare global {
   const XhtPagination: typeof import('./../components/element-plus/xht-pagination/index.vue')['default']
   const XhtPdfPreview: typeof import('./../components/xht-file-preview/components/xht-pdf-preview/index.vue')['default']
   const XhtPicturePreview: typeof import('./../components/xht-file-preview/components/xht-picture-preview/index.vue')['default']
-  const XhtTxtPreview: typeof import('./../components/xht-file-preview/components/xht-txt-preview/index.vue')['default']
+  const XhtTextPreview: typeof import('./../components/xht-file-preview/components/xht-text-preview/index.vue')['default']
 }

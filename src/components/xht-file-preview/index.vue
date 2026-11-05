@@ -19,7 +19,7 @@ const props = withDefaults(
 const PreviewComponents: Record<XhtFilePreviewRenderMode, Component> = {
   image: defineAsyncComponent(() => import('@/components/xht-file-preview/components/xht-picture-preview/index.vue')),
   pdf: defineAsyncComponent(() => import('@/components/xht-file-preview/components/xht-pdf-preview/index.vue')),
-  text: defineAsyncComponent(() => import('@/components/xht-file-preview/components/xht-txt-preview/index.vue')),
+  text: defineAsyncComponent(() => import('@/components/xht-file-preview/components/xht-text-preview/index.vue')),
   json: defineAsyncComponent(() => import('@/components/xht-file-preview/components/xht-json-preview/index.vue')),
 }
 /**
@@ -29,7 +29,7 @@ const previewComponent = computed<Component | null>(() => PreviewComponents[prop
 </script>
 
 <template>
-  <div class="wh-full overflow-hidden">
+  <div class="wh-full overflow-hidden" style="background: var(--xht-bg-color)">
     <component
       :is="previewComponent"
       v-if="previewComponent"
