@@ -13,7 +13,10 @@ defineOptions({ name: 'XhtTextPreview', inheritAttrs: true })
 const props = withDefaults(defineProps<XhtTextPreviewProps>(), {})
 
 /**
- * 单次最多读取的页数
+ * 单批最多读取的页数
+ *
+ * 只约束「一次触发的连续请求数」，不是整份文件的请求总量：
+ * 一批读完若内容仍不足一屏，底部哨兵会继续触发下一批，直到撑满视口或读完全文。
  */
 const MAX_PAGES_PER_BATCH = 1
 
@@ -24,6 +27,15 @@ const MAX_PAGES_PER_BATCH = 1
  * 几十万行的文件也不会在滚动时整段重排。
  */
 const CHUNK_LINES = 200
+
+/**
+ * 单个渲染块的字符兜底上限
+ *
+ * 换行极少的文件（压缩后的 JSON、单行日志）按行数是攒不满一块的：
+ * 整份文件读完之前一个块都产不出来，预览区一直空白，底部哨兵始终可见，
+ * 于是无论单批读多少页都会被续读拖到文件末尾。这里按字符兜底切块。
+ */
+const CHUNK_CHARS = 8 * 1024
 
 const sentinelRef = ref<HTMLElement>()
 
@@ -50,6 +62,15 @@ const appendText = (text: string) => {
   pending = lines.pop() ?? ''
   for (let i = 0; i < lines.length; i += CHUNK_LINES) {
     state.chunks.push(lines.slice(i, i + CHUNK_LINES).join('\n'))
+  }
+  // 尾部超长单行：攒够一块字符就先落块，保证边读边显示（切分点落在行内，pre-wrap 下视觉连续）
+  let offset = 0
+  while (pending.length - offset >= CHUNK_CHARS) {
+    state.chunks.push(pending.slice(offset, offset + CHUNK_CHARS))
+    offset += CHUNK_CHARS
+  }
+  if (offset > 0) {
+    pending = pending.slice(offset)
   }
 }
 

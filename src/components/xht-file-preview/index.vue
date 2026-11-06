@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { XhtFilePreviewMode, XhtFilePreviewRenderMode } from '@/components/xht-file-preview/types.ts'
+import type { XhtFilePreviewMode, XhtFilePreviewRenderMode } from '@/components/xht-file-preview/types.ts'
+
 defineOptions({ name: 'XhtFilePreview' })
 
 const props = withDefaults(
@@ -21,27 +22,61 @@ const PreviewComponents: Record<XhtFilePreviewRenderMode, Component> = {
   pdf: defineAsyncComponent(() => import('@/components/xht-file-preview/components/xht-pdf-preview/index.vue')),
   text: defineAsyncComponent(() => import('@/components/xht-file-preview/components/xht-text-preview/index.vue')),
   json: defineAsyncComponent(() => import('@/components/xht-file-preview/components/xht-json-preview/index.vue')),
+  other: defineAsyncComponent(() => import('@/components/xht-file-preview/components/xht-other-preview/index.vue')),
 }
 /**
  * 当前模式对应的预览器（音视频走原生标签，不需要预览器）
  */
 const previewComponent = computed<Component | null>(() => PreviewComponents[props.previewMode as XhtFilePreviewRenderMode] ?? null)
+/**
+ * 文件预览地址
+ *
+ * 网关直连地址，由浏览器原生容器（img/video/audio）直接加载，鉴权依赖同源 Cookie；
+ * 存储key中可能含 `/`、`+` 等字符，必须编码后再拼接查询串，否则会被截断或转义成空格。
+ */
+const previewUrl = computed(() => {
+  return `${import.meta.env.VITE_ADMIN_API_PREFIX}/sys/files/preview?fileStorageKey=${encodeURIComponent(props.fileStorageKey)}`
+})
+/**
+ * 预览器地址
+ *
+ * 下载型预览器（other）不加载文件内容，无需预览地址（传 undefined 不会渲染为属性）。
+ */
+const previewerUrl = computed(() => (props.previewMode === 'other' ? undefined : previewUrl.value))
 </script>
 
 <template>
-  <div class="wh-full overflow-hidden" style="background: var(--xht-bg-color)">
+  <div class="xht-file-preview wh-full overflow-hidden">
     <component
       :is="previewComponent"
       v-if="previewComponent"
       :file-name="props.fileName || props.fileStorageKey"
       :file-storage-key="props.fileStorageKey"
-      :url="`/api/admin/sys/files/preview?fileStorageKey=${props.fileStorageKey}`"
+      :url="previewerUrl"
     />
-    <!-- 音视频等没有内联预览器的类型：给出兜底提示，避免整片空白 -->
-    <div v-else class="wh-full flex-center">
-      <el-empty description="该文件类型暂不支持在线预览，请下载后查看" />
+    <!-- 音视频交给浏览器原生容器解码播放：不引入预览器，也不额外占用包体 -->
+    <div v-else-if="props.previewMode === 'video'" class="wh-full flex-center">
+      <video class="xht-file-preview__video" :src="previewUrl" controls playsinline preload="metadata" />
+    </div>
+    <div v-else-if="props.previewMode === 'audio'" class="wh-full flex-center">
+      <audio class="xht-file-preview__audio" :src="previewUrl" controls preload="metadata" />
     </div>
   </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.xht-file-preview {
+  background-color: var(--xht-bg-color);
+}
+
+.xht-file-preview__video {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.xht-file-preview__audio {
+  width: 100%;
+  max-width: 640px;
+}
+</style>
