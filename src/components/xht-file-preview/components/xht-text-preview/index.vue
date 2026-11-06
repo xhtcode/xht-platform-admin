@@ -232,7 +232,6 @@ onBeforeUnmount(() => {
   font-family: Consolas, Monaco, 'Courier New', monospace;
   font-size: 16px;
   line-height: 1.7;
-  background-color: var(--el-fill-color-lighter);
   border-radius: 6px;
 }
 

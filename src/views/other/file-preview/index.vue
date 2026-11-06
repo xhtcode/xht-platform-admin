@@ -130,7 +130,7 @@ onMounted(async () => {
   height: 100%;
   overflow: hidden;
   color: var(--el-text-color-primary);
-  background-color: var(--el-bg-color-page);
+  background-color: var(--xht-main-bg-color);
 }
 
 /* 顶部信息栏（el-header 自带 flex-shrink: 0 与 height: 40px） */
@@ -139,7 +139,6 @@ onMounted(async () => {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  background-color: var(--xht-main-bg-color);
   border-bottom: 1px solid var(--el-border-color-light);
   user-select: none;
 }
@@ -177,7 +176,6 @@ onMounted(async () => {
   flex-direction: column;
   min-height: 0;
   overflow: hidden;
-  background-color: var(--xht-page-bg-color);
   padding-top: 0 !important;
   padding-bottom: 0 !important;
 }

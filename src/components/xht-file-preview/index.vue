@@ -67,6 +67,9 @@ const previewerUrl = computed(() => (props.previewMode === 'other' ? undefined :
 <style scoped lang="scss">
 .xht-file-preview {
   background-color: var(--xht-bg-color);
+  border: 1px solid var(--xht-border-color);
+  border-radius: 6px;
+  box-shadow: 0 0 12px var(--xht-shadow-color-lightest);
 }
 
 .xht-file-preview__video {
