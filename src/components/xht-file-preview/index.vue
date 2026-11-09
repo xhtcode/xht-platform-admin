@@ -18,16 +18,24 @@ const props = withDefaults(
  * 每个预览器一个目录、入口统一为 `index.vue`（与 `xht-pdf-preview` 一致）。
  */
 const PreviewComponents: Record<XhtFilePreviewRenderMode, Component> = {
-  image: defineAsyncComponent(() => import('@/components/xht-file-preview/components/xht-picture-preview/index.vue')),
+  image: defineAsyncComponent(() => import('@/components/xht-file-preview/components/xht-image-preview/index.vue')),
   pdf: defineAsyncComponent(() => import('@/components/xht-file-preview/components/xht-pdf-preview/index.vue')),
   text: defineAsyncComponent(() => import('@/components/xht-file-preview/components/xht-text-preview/index.vue')),
   json: defineAsyncComponent(() => import('@/components/xht-file-preview/components/xht-json-preview/index.vue')),
+  audio: defineAsyncComponent(() => import('@/components/xht-file-preview/components/xht-audio-preview/index.vue')),
+  video: defineAsyncComponent(() => import('@/components/xht-file-preview/components/xht-video-preview/index.vue')),
   other: defineAsyncComponent(() => import('@/components/xht-file-preview/components/xht-other-preview/index.vue')),
 }
 /**
- * 当前模式对应的预览器（音视频走原生标签，不需要预览器）
+ * 当前模式对应的预览器
+ *
+ * 后端只会下发约定的 7 种模式；万一出现未知值，兜底为下载型预览器，避免整片空白。
  */
-const previewComponent = computed<Component | null>(() => PreviewComponents[props.previewMode as XhtFilePreviewRenderMode] ?? null)
+const previewComponent = computed<Component>(() => PreviewComponents[props.previewMode as XhtFilePreviewRenderMode] ?? PreviewComponents.other)
+/**
+ * 是否为下载型预览器（other，或未知模式兜底到 other）
+ */
+const isDownloadMode = computed(() => props.previewMode === 'other' || !(props.previewMode in PreviewComponents))
 /**
  * 文件预览地址
  *
@@ -40,27 +48,19 @@ const previewUrl = computed(() => {
 /**
  * 预览器地址
  *
- * 下载型预览器（other）不加载文件内容，无需预览地址（传 undefined 不会渲染为属性）。
+ * 下载型预览器不加载文件内容，无需预览地址（传 undefined 不会渲染为属性）。
  */
-const previewerUrl = computed(() => (props.previewMode === 'other' ? undefined : previewUrl.value))
+const previewerUrl = computed(() => (isDownloadMode.value ? undefined : previewUrl.value))
 </script>
 
 <template>
   <div class="xht-file-preview wh-full overflow-hidden">
     <component
       :is="previewComponent"
-      v-if="previewComponent"
       :file-name="props.fileName || props.fileStorageKey"
       :file-storage-key="props.fileStorageKey"
       :url="previewerUrl"
     />
-    <!-- 音视频交给浏览器原生容器解码播放：不引入预览器，也不额外占用包体 -->
-    <div v-else-if="props.previewMode === 'video'" class="wh-full flex-center">
-      <video class="xht-file-preview__video" :src="previewUrl" controls playsinline preload="metadata" />
-    </div>
-    <div v-else-if="props.previewMode === 'audio'" class="wh-full flex-center">
-      <audio class="xht-file-preview__audio" :src="previewUrl" controls preload="metadata" />
-    </div>
   </div>
 </template>
 
@@ -70,16 +70,5 @@ const previewerUrl = computed(() => (props.previewMode === 'other' ? undefined :
   border: 1px solid var(--xht-border-color);
   border-radius: 6px;
   box-shadow: 0 0 12px var(--xht-shadow-color-lightest);
-}
-
-.xht-file-preview__video {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-}
-
-.xht-file-preview__audio {
-  width: 100%;
-  max-width: 640px;
 }
 </style>

@@ -6,7 +6,8 @@ export type XhtFilePreviewMode = 'image' | 'pdf' | 'video' | 'audio' | 'text' | 
 /**
  * 需要独立预览器渲染的模式
  *
- * 音视频由原生 `video` / `audio` 标签直接播放，不需要单独的预览器组件；
- * `other` 走下载型预览器，为无法内联预览的文件提供统一下载入口。
+ * 每种模式对应 `components/` 下一个预览器目录（入口统一 `index.vue`）。
+ * 音视频也在其列：内容用浏览器原生 `video` / `audio` 控件播放，但同样收进独立目录，
+ * 各自的加载失败提示与样式由预览器自己维护；`other` 是下载型预览器。
  */
-export type XhtFilePreviewRenderMode = 'image' | 'pdf' | 'text' | 'json' | 'other'
+export type XhtFilePreviewRenderMode = 'image' | 'pdf' | 'text' | 'json' | 'audio' | 'video' | 'other'
