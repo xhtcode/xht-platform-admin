@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 import type { ApiResponse } from 'axios'
-import type { SysFileUsedOperationRequest, SysFileUsedResponse } from '@/service/model/system/file-used.model'
+import type { SysFileUsedOperationRequest, SysFileUsedQueryRequest, SysFileUsedResponse } from '@/service/model/system/file-used.model'
 
 /**
  * 后台管理服务前缀
@@ -12,7 +12,8 @@ const baseURL: string = import.meta.env.VITE_ADMIN_API_PREFIX
  */
 enum Api {
   LIST = '/sys/files/used/list',
-  LIST_ALL = '/sys/files/used/list-all',
+  QUERY_PAGE = '/sys/files/used/page',
+  QUERY_BY_ID = '/sys/files/used/get/',
   CREATE = '/sys/files/used/create',
   UPDATE = '/sys/files/used/update/',
   DISABLE = '/sys/files/used/disable/',
@@ -31,11 +32,27 @@ export const querySysFileUsedList = (): Promise<ApiResponse<SysFileUsedResponse[
 }
 
 /**
- * 查询全部文件用途（含停用，管理员）
+ * 分页查询文件用途（含停用，管理员）
+ *
+ * @param query 用途分页查询参数（未传字段不参与过滤，按 sort、id 升序）
  */
-export const querySysFileUsedListAll = (): Promise<ApiResponse<SysFileUsedResponse[]>> => {
-  return request<SysFileUsedResponse[]>({
-    url: Api.LIST_ALL,
+export const querySysFileUsedPage = (query?: SysFileUsedQueryRequest): Promise<ApiResponse<PageResponse<SysFileUsedResponse>>> => {
+  return request<PageResponse<SysFileUsedResponse>>({
+    url: Api.QUERY_PAGE,
+    baseURL,
+    method: 'post',
+    data: query,
+  })
+}
+
+/**
+ * 根据ID查询文件用途详情（编辑回显用）
+ *
+ * @param id 用途ID
+ */
+export const querySysFileUsedById = (id: ModeIdType): Promise<ApiResponse<SysFileUsedResponse>> => {
+  return request<SysFileUsedResponse>({
+    url: Api.QUERY_BY_ID + `${id}`,
     baseURL,
     method: 'get',
   })

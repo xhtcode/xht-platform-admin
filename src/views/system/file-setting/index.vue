@@ -163,7 +163,6 @@ onMounted(async () => {
               <el-input-number
                 v-else-if="item.valueType === 'int'"
                 :model-value="draft[item.settingKey] === '' ? undefined : Number(draft[item.settingKey])"
-                :controls="false"
                 :max="item.maxValue ? Number(item.maxValue) : undefined"
                 :min="item.minValue ? Number(item.minValue) : undefined"
                 class="setting-number"

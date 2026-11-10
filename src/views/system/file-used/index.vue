@@ -1,66 +1,52 @@
 <script lang="ts" setup>
-import { Delete, Edit, Plus, Refresh, VideoPause } from '@element-plus/icons-vue'
+import type { FormInstance } from 'element-plus'
+import { Delete, Edit, Plus, Refresh, Search, VideoPause } from '@element-plus/icons-vue'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
+import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import { disableSysFileUsed, querySysFileUsedListAll, removeSysFileUsed } from '@/service/api/system/file-used.api'
+import { disableSysFileUsed, querySysFileUsedPage, removeSysFileUsed } from '@/service/api/system/file-used.api'
 import { fileAccessScopeEnum, fileWatermarkLevelEnum } from '@/service/enums/system/file.enum'
-import { fileGateEnum, fileUsedEnabledEnum } from '@/service/enums/system/file-used.enum'
-import type { SysFileUsedResponse } from '@/service/model/system/file-used.model'
+import { fileGateEnum, fileUsedBuiltInEnum, fileUsedEnabledEnum } from '@/service/enums/system/file-used.enum'
+import type { SysFileUsedQueryRequest, SysFileUsedResponse } from '@/service/model/system/file-used.model'
 import { sysFileUsedColumnOption } from '@/views/system/file-used/file-used.data'
 
 defineOptions({ name: 'FileUsedViewIndex' })
 
 const fileUsedForm = defineAsyncComponent(() => import('@/views/system/file-used/components/file-used-form.vue'))
 const fileUsedFormRef = useTemplateRef('fileUsedFormRef')
+const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 const message = useMessage()
 
-const state = reactive({
-  loadingStatus: false,
+const state = reactive<TableQueryPageState<SysFileUsedQueryRequest, SysFileUsedResponse>>({
+  queryParams: {}, // 查询参数（服务端固定按 sort、id 升序）
+  total: 0, // 总条目数
+  pages: 0, // 总页数
   searchStatus: false, // 是否显示搜索区域
-  tableList: [] as SysFileUsedResponse[],
-  keyword: '', // 本地关键字（名称 / 编码）
+  tableList: [], // 表格数据列表
+  selectedRows: [], // 选中行数据
+  loadingStatus: false, // 加载状态
+  singleStatus: true, // 单个操作禁用状态
+  multipleStatus: true, // 多个操作禁用状态
 })
+const { handlePageQuery, handleSelectionChange } = useTableQueryPageHooks<SysFileUsedQueryRequest, SysFileUsedResponse>(state, querySysFileUsedPage)
+const { queryParams } = toRefs(state)
 
 const columnOption = ref<ColumnConfig<SysFileUsedResponse>>({ ...sysFileUsedColumnOption })
 
 /**
- * 按关键字本地筛选（用途列表数据量小，接口未提供查询参数）
- */
-const filteredList = computed(() => {
-  const keyword = state.keyword.trim().toLowerCase()
-  if (!keyword) return state.tableList
-  return state.tableList.filter((item) => item.usedCode.toLowerCase().includes(keyword) || item.usedName.toLowerCase().includes(keyword))
-})
-
-/**
- * 查询全部用途
- */
-const handleQuery = async () => {
-  state.loadingStatus = true
-  try {
-    const { data } = await querySysFileUsedListAll()
-    state.tableList = data
-  } catch (error) {
-    // 失败提示由请求拦截器给出，保留上一次结果便于重试
-    console.error('文件用途查询失败:', error)
-  } finally {
-    state.loadingStatus = false
-  }
-}
-
-/**
- * 重置筛选
+ * 重置查询表单
  */
 const resetQuery = async () => {
-  state.keyword = ''
-  await handleQuery()
+  queryFormRef.value?.resetFields()
+  queryParams.value = {}
+  await handlePageQuery()
 }
 
 /**
  * 新增用途
  */
 const handleAdd = () => {
-  fileUsedFormRef.value?.show('create')
+  fileUsedFormRef.value?.show('create', null)
 }
 
 /**
@@ -69,7 +55,7 @@ const handleAdd = () => {
  * @param row 用途记录
  */
 const handleEdit = (row: SysFileUsedResponse) => {
-  fileUsedFormRef.value?.show('update', row)
+  fileUsedFormRef.value?.show('update', row.id)
 }
 
 /**
@@ -83,7 +69,7 @@ const handleDisable = (row: SysFileUsedResponse) => {
     .confirm(`停用后「${row.usedName}」将不能再被选用于新上传, 是否继续?`)
     .then(async () => {
       await disableSysFileUsed(row.id)
-      await handleQuery()
+      await handlePageQuery()
       message.success('用途已停用')
     })
     .catch(() => {
@@ -105,7 +91,7 @@ const handleDelete = (row: SysFileUsedResponse) => {
     .confirm(`此操作将删除用途「${row.usedName}」, 是否继续?`)
     .then(async () => {
       await removeSysFileUsed(row.id)
-      await handleQuery()
+      await handlePageQuery()
       message.success('删除文件用途成功')
     })
     .catch(() => {
@@ -117,38 +103,65 @@ const handleDelete = (row: SysFileUsedResponse) => {
 }
 
 onMounted(async () => {
-  await handleQuery()
+  await handlePageQuery()
 })
 </script>
 
 <template>
   <div class="xht-view-container">
-    <el-form v-if="!state.searchStatus" :disabled="state.loadingStatus" class="user-select-none" label-width="100px">
+    <el-form ref="queryFormRef" :disabled="state.loadingStatus" :model="queryParams" class="user-select-none" label-width="100px">
       <el-row>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
-          <el-form-item label="关键字">
-            <el-input v-model="state.keyword" clearable :maxlength="50" placeholder="按编码 / 名称筛选" show-word-limit />
+          <el-form-item label="用途编码" prop="usedCode">
+            <el-input v-model="queryParams.usedCode" :maxlength="32" clearable placeholder="请输入编码（模糊）" show-word-limit />
+          </el-form-item>
+        </el-col>
+        <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
+          <el-form-item label="用途名称" prop="usedName">
+            <el-input v-model="queryParams.usedName" :maxlength="30" clearable placeholder="请输入名称（模糊）" show-word-limit />
+          </el-form-item>
+        </el-col>
+        <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
+          <el-form-item label="状态" prop="enabled">
+            <xht-enum-select v-model="queryParams.enabled" :data="fileUsedEnabledEnum" clearable placeholder="请选择状态" />
+          </el-form-item>
+        </el-col>
+        <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
+          <el-form-item label="内置" prop="builtIn">
+            <xht-enum-select v-model="queryParams.builtIn" :data="fileUsedBuiltInEnum" clearable placeholder="请选择内置标记" />
           </el-form-item>
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
+          <el-button :icon="Search" type="primary" @click="handlePageQuery">查询</el-button>
           <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
         </el-col>
       </el-row>
     </el-form>
 
-    <table-tool-bar
-      v-model:column-data="columnOption"
-      v-model:show-search="state.searchStatus"
-      column-status
-      refresh-status
-      search-status
-      @refresh="resetQuery"
-    >
+    <table-tool-bar v-model:column-data="columnOption" v-model:show-search="state.searchStatus" column-status refresh-status @refresh="resetQuery">
       <el-button v-authorization="['sys:file:used:create']" :icon="Plus" size="small" type="primary" @click="handleAdd">新增</el-button>
+      <el-button
+        v-authorization="['sys:file:used:update']"
+        :disabled="state.singleStatus"
+        :icon="Edit"
+        size="small"
+        type="success"
+        @click="handleEdit(state.selectedRows[0])"
+      >
+        修改
+      </el-button>
     </table-tool-bar>
 
-    <el-table v-loading="state.loadingStatus" :data="filteredList" border row-key="id" empty-text="暂无文件用途配置">
-      <xht-column-index />
+    <el-table
+      v-loading="state.loadingStatus"
+      :data="state.tableList"
+      border
+      empty-text="暂无文件用途配置"
+      row-key="id"
+      @selection-change="handleSelectionChange"
+    >
+      <el-table-column align="center" fixed="left" type="selection" width="55" />
+      <xht-column-index :current="queryParams.current" :size="queryParams.size" fixed="left" />
       <el-table-column v-if="columnOption.usedCode?.visible" label="用途编码" min-width="150" prop="usedCode" show-overflow-tooltip />
       <el-table-column v-if="columnOption.usedName?.visible" label="用途名称" min-width="150" prop="usedName" show-overflow-tooltip />
       <el-table-column v-if="columnOption.enabled?.visible" label="状态" prop="enabled" width="100">
@@ -184,7 +197,7 @@ onMounted(async () => {
       <el-table-column v-if="columnOption.fileCount?.visible" label="引用文件数" prop="fileCount" width="120" />
       <el-table-column v-if="columnOption.builtIn?.visible" label="内置" prop="builtIn" width="90">
         <template #default="{ row }">
-          <el-tag :type="row.builtIn === 1 ? 'warning' : 'info'" size="small">{{ row.builtIn === 1 ? '内置' : '自定义' }}</el-tag>
+          <xht-enum-tag :data="fileUsedBuiltInEnum" :filter-label="row.builtIn" />
         </template>
       </el-table-column>
       <el-table-column v-if="columnOption.sort?.visible" label="排序" prop="sort" width="90" />
@@ -213,7 +226,14 @@ onMounted(async () => {
       </el-table-column>
     </el-table>
 
-    <file-used-form ref="fileUsedFormRef" @success="handleQuery" />
+    <xht-pagination
+      v-model:current-page="state.queryParams.current"
+      v-model:page-size="state.queryParams.size"
+      :page-count="state.pages"
+      :total="state.total"
+      @pagination="handlePageQuery"
+    />
+    <file-used-form ref="fileUsedFormRef" @success="handlePageQuery" />
   </div>
 </template>
 

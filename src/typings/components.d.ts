@@ -118,6 +118,7 @@ declare module 'vue' {
     XhtOtherPreview: typeof import('./../components/xht-file-preview/components/xht-other-preview/index.vue')['default']
     XhtPagination: typeof import('./../components/element-plus/xht-pagination/index.vue')['default']
     XhtPdfPreview: typeof import('./../components/xht-file-preview/components/xht-pdf-preview/index.vue')['default']
+    XhtPreviewLayout: typeof import('./../components/xht-file-preview/components/xht-preview-layout/index.vue')['default']
     XhtTextPreview: typeof import('./../components/xht-file-preview/components/xht-text-preview/index.vue')['default']
     XhtVideoPreview: typeof import('./../components/xht-file-preview/components/xht-video-preview/index.vue')['default']
   }
@@ -234,6 +235,7 @@ declare global {
   const XhtOtherPreview: typeof import('./../components/xht-file-preview/components/xht-other-preview/index.vue')['default']
   const XhtPagination: typeof import('./../components/element-plus/xht-pagination/index.vue')['default']
   const XhtPdfPreview: typeof import('./../components/xht-file-preview/components/xht-pdf-preview/index.vue')['default']
+  const XhtPreviewLayout: typeof import('./../components/xht-file-preview/components/xht-preview-layout/index.vue')['default']
   const XhtTextPreview: typeof import('./../components/xht-file-preview/components/xht-text-preview/index.vue')['default']
   const XhtVideoPreview: typeof import('./../components/xht-file-preview/components/xht-video-preview/index.vue')['default']
 }

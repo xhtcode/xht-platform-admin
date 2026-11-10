@@ -5,7 +5,7 @@ export type FileStatus = 1 | 2 | 99
 /**
  * 文件存储类型
  */
-export type FileStorageType = 'LOCAL' | 'MINIO' | 'S3' | 'OSS' | 'DATABASE'
+export type FileStorageType = 'LOCAL' | 'MINIO'
 /**
  * 文件预览类型
  *

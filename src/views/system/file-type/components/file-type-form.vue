@@ -242,7 +242,6 @@ defineExpose({
       <el-form-item label="排序">
         <el-input-number
           :model-value="addUpdateForm.sort ?? undefined"
-          :controls="false"
           :min="0"
           :max="9999"
           @update:model-value="addUpdateForm.sort = $event ?? null"

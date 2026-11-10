@@ -356,7 +356,7 @@ defineExpose({ show })
 
       <el-form-item label="有效期" prop="expireDays">
         <div class="expire-field">
-          <el-input-number v-model="form.expireDays" :min="1" :max="3650" :controls="false" class="expire-input" />
+          <el-input-number v-model="form.expireDays" :min="1" :max="3650" class="expire-input" />
           <span class="expire-unit">天</span>
           <el-button
             v-for="day in EXPIRE_PRESETS"
@@ -383,7 +383,7 @@ defineExpose({ show })
       </el-form-item>
 
       <el-form-item v-if="form.shareMode === 'LINK'" label="访问上限">
-        <el-input-number v-model="form.maxAccessCount" :min="0" :max="999999" :controls="false" />
+        <el-input-number v-model="form.maxAccessCount" :min="0" :max="999999" />
         <span class="form-suffix">次（0 表示不限）</span>
       </el-form-item>
 

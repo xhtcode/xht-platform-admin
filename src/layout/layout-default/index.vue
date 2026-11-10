@@ -41,10 +41,10 @@ function handleCloseSidebar() {
           <bread-crumb />
         </div>
         <div class="xht-header-item">
-          <switch-dark />
-          <page-full-screen />
-          <menu-search />
-          <app-setting />
+          <switch-dark class="header-tool-item" />
+          <page-full-screen class="header-tool-item" />
+          <menu-search class="header-tool-item" />
+          <app-setting class="header-tool-item" />
           <user-avatar />
         </div>
       </el-header>

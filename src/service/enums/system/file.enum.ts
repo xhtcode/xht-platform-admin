@@ -246,26 +246,11 @@ export const fileStorageTypeEnum: DictEnum<string, FileStorageType> = {
   LOCAL: {
     label: '本地存储',
     value: 'LOCAL',
-    type: 'info',
+    type: 'primary',
   },
   MINIO: {
     label: 'MinIO存储',
     value: 'MINIO',
-    type: 'primary',
-  },
-  S3: {
-    label: 'S3存储',
-    value: 'S3',
     type: 'success',
-  },
-  OSS: {
-    label: 'OSS存储',
-    value: 'OSS',
-    type: 'warning',
-  },
-  DATABASE: {
-    label: '数据库存储',
-    value: 'DATABASE',
-    type: 'danger',
   },
 }

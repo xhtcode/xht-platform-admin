@@ -15,6 +15,24 @@ export const fileUsedEnabledEnum: DictEnum<number, 'ENABLED' | 'DISABLED'> = {
 }
 
 /**
+ * 文件用途内置标记
+ *
+ * 1 内置（不允许删除）/ 0 自定义
+ */
+export const fileUsedBuiltInEnum: DictEnum<number, 'BUILT_IN' | 'CUSTOM'> = {
+  BUILT_IN: {
+    label: '内置',
+    value: 1,
+    type: 'warning',
+  },
+  CUSTOM: {
+    label: '自定义',
+    value: 0,
+    type: 'info',
+  },
+}
+
+/**
  * 文件用途闸门（下载 / 打印 / 分享）
  *
  * 1 允许 / 0 禁止，三项共用同一套文案。

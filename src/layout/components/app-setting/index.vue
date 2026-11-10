@@ -77,7 +77,7 @@ const resetSetting = () => {
 </script>
 
 <template>
-  <div class="header-tool-item" @click="state.visibleStatus = true">
+  <div @click="state.visibleStatus = true">
     <el-icon :size="18">
       <setting />
     </el-icon>

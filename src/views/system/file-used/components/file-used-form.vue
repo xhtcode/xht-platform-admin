@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
-import { saveSysFileUsed, updateSysFileUsed } from '@/service/api/system/file-used.api'
+import { querySysFileUsedById, saveSysFileUsed, updateSysFileUsed } from '@/service/api/system/file-used.api'
 import { fileAccessScopeEnum, fileImageModeEnum, fileWatermarkLevelEnum } from '@/service/enums/system/file.enum'
-import type { SysFileUsedOperationRequest, SysFileUsedResponse } from '@/service/model/system/file-used.model'
+import type { SysFileUsedOperationRequest } from '@/service/model/system/file-used.model'
 import { sysFileUsedOperationForm, sysFileUsedOperationRules } from '@/views/system/file-used/file-used.data'
 
 defineOptions({ name: 'SysFileUsedForm' })
@@ -29,32 +29,44 @@ const editingId = ref<ModeIdType>('')
 /**
  * 打开弹窗
  *
+ * 修改时按 ID 拉取详情回显，保证字段与库中一致（分页行数据可能来自旧查询）
+ *
  * @param type 操作类型
- * @param row 用途记录（修改时必传；列表接口已返回全部字段，无需再查详情）
+ * @param id 用途ID（修改时必传）
  */
-const show = (type: 'create' | 'update', row?: SysFileUsedResponse) => {
+const show = async (type: 'create' | 'update', id: ModeIdType | null) => {
   state.operationStatus = type
   state.title = type === 'create' ? '新增文件用途' : '修改文件用途'
   state.addUpdateForm = { ...sysFileUsedOperationForm }
   editingId.value = ''
-  if (type === 'update' && row) {
-    editingId.value = row.id
-    // 只回填表单字段，忽略 builtIn / fileCount / updateTime 等只读字段
-    state.addUpdateForm = {
-      usedCode: row.usedCode,
-      usedName: row.usedName,
-      description: row.description ?? '',
-      enabled: row.enabled,
-      sort: row.sort,
-      accessScope: row.accessScope,
-      publicAllowed: row.publicAllowed,
-      downloadAllowed: row.downloadAllowed,
-      printAllowed: row.printAllowed,
-      shareAllowed: row.shareAllowed,
-      shareExpireDays: row.shareExpireDays ?? null,
-      shareMaxAccessCount: row.shareMaxAccessCount ?? null,
-      watermarkLevel: row.watermarkLevel,
-      imageMode: row.imageMode ?? null,
+  if (type === 'update' && id) {
+    editingId.value = id
+    state.loadingStatus = true
+    try {
+      const { data } = await querySysFileUsedById(id)
+      // 只回填表单字段，忽略 builtIn / fileCount / updateTime 等只读字段
+      state.addUpdateForm = {
+        usedCode: data.usedCode,
+        usedName: data.usedName,
+        description: data.description ?? '',
+        enabled: data.enabled,
+        sort: data.sort,
+        accessScope: data.accessScope,
+        publicAllowed: data.publicAllowed,
+        downloadAllowed: data.downloadAllowed,
+        printAllowed: data.printAllowed,
+        shareAllowed: data.shareAllowed,
+        shareExpireDays: data.shareExpireDays ?? null,
+        shareMaxAccessCount: data.shareMaxAccessCount ?? null,
+        watermarkLevel: data.watermarkLevel,
+        imageMode: data.imageMode ?? null,
+      }
+    } catch (error) {
+      // 失败提示由请求拦截器给出，直接放弃本次编辑
+      console.error('文件用途详情查询失败:', error)
+      return
+    } finally {
+      state.loadingStatus = false
     }
   }
   state.visibleStatus = true
@@ -149,6 +161,7 @@ defineExpose({ show })
               :disabled="state.operationStatus === 'update'"
               :maxlength="32"
               placeholder="如 contract，创建后不可修改"
+              show-word-limit
             />
           </el-form-item>
         </el-col>
@@ -160,7 +173,15 @@ defineExpose({ show })
       </el-row>
 
       <el-form-item label="说明" prop="description">
-        <el-input v-model="addUpdateForm.description" :maxlength="200" placeholder="用途说明" show-word-limit type="textarea" />
+        <el-input
+          v-model="addUpdateForm.description"
+          :maxlength="200"
+          :rows="5"
+          placeholder="用途说明"
+          resize="none"
+          show-word-limit
+          type="textarea"
+        />
       </el-form-item>
 
       <el-row :gutter="16">
@@ -171,7 +192,7 @@ defineExpose({ show })
         </el-col>
         <el-col :span="12">
           <el-form-item label="排序" prop="sort">
-            <el-input-number v-model="addUpdateForm.sort" :controls="false" :min="0" :max="9999" />
+            <el-input-number v-model="addUpdateForm.sort" :min="0" :max="9999" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -223,12 +244,12 @@ defineExpose({ show })
       <el-row :gutter="16">
         <el-col :span="12">
           <el-form-item label="默认分享天数">
-            <el-input-number v-model="addUpdateForm.shareExpireDays" :controls="false" :min="1" :max="3650" placeholder="留空继承全局" />
+            <el-input-number v-model="addUpdateForm.shareExpireDays" :min="1" :max="3650" placeholder="留空继承全局" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="分享访问上限">
-            <el-input-number v-model="addUpdateForm.shareMaxAccessCount" :controls="false" :min="0" :max="999999" placeholder="留空继承全局" />
+            <el-input-number v-model="addUpdateForm.shareMaxAccessCount" :min="0" :max="999999" placeholder="留空继承全局" />
           </el-form-item>
         </el-col>
       </el-row>

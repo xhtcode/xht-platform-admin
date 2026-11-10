@@ -1,6 +1,18 @@
 import type { FileAccessScope, FileImageMode, FileWatermarkLevel } from '@/service/model/system/file.model'
 
 /**
+ * 系统管理-文件用途分页查询参数（SysFileUsedQuery）
+ *
+ * 未传参的字段不参与过滤；服务端固定按 sort、id 升序返回。
+ */
+export interface SysFileUsedQueryRequest extends PageQueryRequest {
+  usedCode?: string // 用途编码（模糊）
+  usedName?: string // 用途名称（模糊）
+  enabled?: number // 启用状态：1 启用 / 0 停用（精确）
+  builtIn?: number // 是否内置：1 内置 / 0 自定义（精确）
+}
+
+/**
  * 系统管理-文件用途配置响应类型（SysFileUsedResponse）
  *
  * 用途是文件策略的第一层：上传时选定用途后，该文件的可下载/可打印/可分享/水印等级
