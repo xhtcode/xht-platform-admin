@@ -5,7 +5,7 @@ import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { querySysFileTypePage, removeSysFileTypeById } from '@/service/api/system/file-type.api'
-import { filePreviewTypeEnum } from '@/service/enums/system/file.enum'
+import { filePreviewSourceEnum, filePreviewTypeEnum } from '@/service/enums/system/file.enum'
 import type { SysFileTypeQueryRequest, SysFileTypeResponse } from '@/service/model/system/file-type.model'
 import { sysFileTypeColumnOption } from '@/views/system/file-type/file-type.data'
 
@@ -133,6 +133,20 @@ onMounted(async () => {
           {{ row.fileSuffix || '未配置' }}
         </template>
       </el-table-column>
+      <el-table-column v-if="columnOption.previewSource?.visible" label="预览来源" prop="previewSource" width="120">
+        <template #default="{ row }">
+          <xht-enum-tag :data="filePreviewSourceEnum" :filter-label="row.previewSource || 'original'" />
+        </template>
+      </el-table-column>
+      <el-table-column v-if="columnOption.convertTarget?.visible" label="转换目标" prop="convertTarget" width="110">
+        <template #default="{ row }">{{ row.convertTarget || '—' }}</template>
+      </el-table-column>
+      <el-table-column v-if="columnOption.enabled?.visible" label="状态" prop="enabled" width="100">
+        <template #default="{ row }">
+          <el-tag :type="row.enabled === 0 ? 'info' : 'success'" size="small">{{ row.enabled === 0 ? '停用' : '启用' }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column v-if="columnOption.sort?.visible" label="排序" prop="sort" width="90" />
       <el-table-column v-if="columnOption.createBy?.visible" label="创建人" prop="createBy" width="140" />
       <el-table-column v-if="columnOption.createTime?.visible" label="创建时间" prop="createTime" width="180" />
       <el-table-column v-if="columnOption.updateBy?.visible" label="更新人" prop="updateBy" width="140" />

@@ -39,7 +39,7 @@ defineEmits<PdfStatusEmits>()
           <el-icon :size="14"><RefreshLeft /></el-icon>
           重新加载
         </button>
-        <button type="button" class="xht-pdf-preview__action is-primary" @click="$emit('download')">
+        <button v-if="downloadable" type="button" class="xht-pdf-preview__action is-primary" @click="$emit('download')">
           <el-icon :size="14"><Download /></el-icon>
           下载文件
         </button>

@@ -1,4 +1,25 @@
 import { PDFDataRangeTransport } from 'pdfjs-dist'
+import { PreviewApiError } from '@/utils/file-preview'
+
+/**
+ * 识别业务错误响应
+ *
+ * 预览内容接口出错时仍以 HTTP 200 返回统一业务信封（JSON），
+ * 若直接把信封当 PDF 字节解析，pdf.js 只会报「文件损坏」，用户看不出真实原因。
+ *
+ * @param response 取流响应
+ */
+const assertNotBusinessError = async (response: Response): Promise<void> => {
+  if (!response.headers.get('content-type')?.includes('json')) return
+  try {
+    const body = (await response.clone().json()) as { code?: number; msg?: string }
+    if (typeof body.code === 'number') {
+      throw new PreviewApiError(body.code, body.msg ?? '预览内容读取失败')
+    }
+  } catch (error) {
+    if (error instanceof PreviewApiError) throw error
+  }
+}
 
 /**
  * PDF 取流结果
@@ -62,6 +83,7 @@ class XhtPdfRangeTransport extends PDFDataRangeTransport {
         credentials: 'include',
         signal: this.controller.signal,
       })
+      await assertNotBusinessError(response)
       if (!response.ok) {
         throw new Error(`分段请求失败（HTTP ${response.status}）`)
       }
@@ -105,6 +127,7 @@ export const createPdfRangeSource = async (
     headers: { ...httpHeaders, Range: `bytes=0-${chunkSize - 1}` },
     credentials: 'include',
   })
+  await assertNotBusinessError(response)
   if (!response.ok) {
     throw new Error(`预览请求失败（HTTP ${response.status}）`)
   }
@@ -116,6 +139,7 @@ export const createPdfRangeSource = async (
   }
   // 服务端不支持分段（或跨域下 Content-Range 不可读）：首块只是残缺数据，必须整包重取
   const full = await fetch(url, { headers: httpHeaders, credentials: 'include' })
+  await assertNotBusinessError(full)
   if (!full.ok) {
     throw new Error(`预览请求失败（HTTP ${full.status}）`)
   }

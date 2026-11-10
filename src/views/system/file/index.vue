@@ -3,11 +3,12 @@ import type { FormInstance } from 'element-plus'
 import { useRouter } from 'vue-router'
 import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
 import type { SysFileQueryRequest, SysFileResponse } from '@/service/model/system/file.model'
-import { querySysFilePage, removeSysFileById } from '@/service/api/system/file.api'
+import { initSysFilePreview, querySysFilePage, removeSysFileById } from '@/service/api/system/file.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { sysFileColumnOption } from '@/views/system/file/file.data'
-import { handleDownloadSysFile } from '@/utils/file'
+import { handleDownloadPreviewFile } from '@/utils/file'
+import { PreviewApiError } from '@/utils/file-preview'
 import { filePreviewTypeEnum, fileStatusEnum, fileStorageTypeEnum } from '@/service/enums/system/file.enum'
 import { Delete, Document, Download, Refresh, Search, Upload, View } from '@element-plus/icons-vue'
 
@@ -99,13 +100,24 @@ const handleDetail = (row: SysFileResponse) => {
 
 /**
  * 处理下载文件
+ *
+ * 下载凭证是预览会话（previewId），因此需先 init：服务端在 init 阶段按用途策略判定是否允许下载，
+ * 不允许时返回业务错误而不是给出一个必然失败的下载地址。
+ *
+ * @param row 文件记录
  */
 const handleDownload = async (row: SysFileResponse) => {
   state.loadingStatus = true
   try {
-    const successStatus = await handleDownloadSysFile(row.fileStorageKey)
-    if (successStatus) {
+    const { data } = await initSysFilePreview({ fileId: row.id, fileStorageKey: row.fileStorageKey })
+    if (await handleDownloadPreviewFile(data.previewId)) {
       useMessage().success('文件下载成功!')
+    }
+  } catch (error) {
+    console.error('文件下载失败:', error)
+    // 二进制接口的业务错误绕过拦截器，需补一次提示
+    if (error instanceof PreviewApiError) {
+      useMessage().error(error.message || '文件下载失败')
     }
   } finally {
     state.loadingStatus = false

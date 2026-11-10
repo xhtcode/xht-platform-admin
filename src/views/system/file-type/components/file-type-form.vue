@@ -2,14 +2,14 @@
 import type { FormInstance, FormRules } from 'element-plus'
 import { useMessage } from '@/hooks/use-message'
 import { querySysFileTypeById, saveSysFileType, updateSysFileType } from '@/service/api/system/file-type.api'
-import { filePreviewTypeEnum } from '@/service/enums/system/file.enum'
+import { filePreviewSourceEnum, filePreviewTypeEnum } from '@/service/enums/system/file.enum'
 import type { SysFileTypeOperationRequest } from '@/service/model/system/file-type.model'
 import { sysFileTypeOperationForm, sysFileTypeOperationRules } from '@/views/system/file-type/file-type.data'
 
 defineOptions({ name: 'SysFileTypeForm' })
 
 const emits = defineEmits(['success'])
-const rules: FormRules<Required<SysFileTypeOperationRequest>> = sysFileTypeOperationRules
+
 const state = reactive<AddUpdateOption<SysFileTypeOperationRequest>>({
   title: '新增预览类型配置',
   visibleStatus: false,
@@ -19,6 +19,31 @@ const state = reactive<AddUpdateOption<SysFileTypeOperationRequest>>({
 })
 const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
 const { addUpdateForm } = toRefs(state)
+
+/**
+ * 表单校验规则
+ *
+ * `convertTarget` 的必填判定依赖当前预览来源，必须在组件内追加动态规则才能读到最新表单值。
+ */
+const rules = computed<FormRules>(() => ({
+  ...sysFileTypeOperationRules,
+  convertTarget: [
+    {
+      validator: (_rule, value, callback) => {
+        if (addUpdateForm.value.previewSource !== 'convert') {
+          callback()
+          return
+        }
+        if (!value) {
+          callback(new Error('预览来源为转换产物时必须填写转换目标格式'))
+          return
+        }
+        callback()
+      },
+      trigger: 'change',
+    },
+  ],
+}))
 
 /**
  * 预览类型编码对应的默认名称
@@ -39,6 +64,15 @@ const handlePreviewTypeChange = (value?: string | string[]) => {
   if (previewName && !defaultNames.includes(previewName)) return
   const nextPreviewName = getPreviewNameByType(value)
   if (nextPreviewName) addUpdateForm.value.previewName = nextPreviewName
+}
+
+/**
+ * 预览来源变更：切回「原文件」时清空转换目标，避免残留无效配置
+ */
+const handlePreviewSourceChange = () => {
+  if (addUpdateForm.value.previewSource !== 'convert') {
+    addUpdateForm.value.convertTarget = null
+  }
 }
 
 /**
@@ -66,7 +100,16 @@ const show = async (type: 'create' | 'update', id: ModeIdType) => {
     state.title = type === 'create' ? '新增预览类型配置' : '修改预览类型配置'
     if (type === 'update') {
       const { data } = await querySysFileTypeById(id)
-      addUpdateForm.value = { ...data }
+      addUpdateForm.value = {
+        id: data.id,
+        previewType: data.previewType,
+        previewName: data.previewName,
+        fileSuffix: data.fileSuffix ?? null,
+        previewSource: data.previewSource ?? 'original',
+        convertTarget: data.convertTarget ?? null,
+        enabled: data.enabled ?? 1,
+        sort: data.sort ?? 1,
+      }
     }
   } catch (error) {
     // 详情查询失败提示已由请求拦截器给出；关闭抽屉，避免在拿不到主键的情况下误提交更新
@@ -100,10 +143,11 @@ const submitForm = () => {
       return
     }
     try {
-      // 后缀整体覆盖语义：空值传 null，避免写入空串
+      // 后缀整体覆盖语义：空值传 null，避免写入空串；转换目标同理
       const form: SysFileTypeOperationRequest = {
         ...addUpdateForm.value,
         fileSuffix: addUpdateForm.value.fileSuffix?.trim() || null,
+        convertTarget: addUpdateForm.value.previewSource === 'convert' ? addUpdateForm.value.convertTarget || null : null,
       }
       if (state.operationStatus === 'create') {
         await saveSysFileType(form)
@@ -145,7 +189,7 @@ defineExpose({
       :model="addUpdateForm"
       :rules="rules"
       inline-message
-      label-width="100px"
+      label-width="110px"
       scroll-to-error
     >
       <el-form-item label="预览类型" prop="previewType">
@@ -169,6 +213,44 @@ defineExpose({
         />
         <div class="form-tip">单个后缀且不带点；留空即创建该预览类型的默认名称配置，同一后缀只能属于一种预览类型。</div>
       </el-form-item>
+      <el-form-item label="预览来源" prop="previewSource">
+        <xht-enum-select
+          v-model="addUpdateForm.previewSource"
+          :data="filePreviewSourceEnum"
+          placeholder="请选择预览来源"
+          @change="handlePreviewSourceChange"
+        />
+      </el-form-item>
+      <el-form-item label="转换目标" prop="convertTarget">
+        <el-input
+          :model-value="addUpdateForm.convertTarget ?? ''"
+          :disabled="addUpdateForm.previewSource !== 'convert'"
+          :maxlength="20"
+          placeholder="目前仅支持 pdf"
+          @update:model-value="addUpdateForm.convertTarget = $event ? String($event) : null"
+        />
+        <div class="form-tip">仅「转换产物」来源需要填写，目前后端只支持转换为 pdf。</div>
+      </el-form-item>
+      <el-form-item label="状态">
+        <el-switch
+          :model-value="addUpdateForm.enabled ?? 0"
+          :active-value="1"
+          :inactive-value="0"
+          @update:model-value="addUpdateForm.enabled = Number($event)"
+        />
+      </el-form-item>
+      <el-form-item label="排序">
+        <el-input-number
+          :model-value="addUpdateForm.sort ?? undefined"
+          :controls="false"
+          :min="0"
+          :max="9999"
+          @update:model-value="addUpdateForm.sort = $event ?? null"
+        />
+      </el-form-item>
+      <el-form-item v-if="addUpdateForm.previewType === 'image'" label="图片模式">
+        <span class="form-tip is-inline">图片处理模式（原图 / WebP / PDF）由文件用途配置决定，不在该表维护。</span>
+      </el-form-item>
     </el-form>
     <template #footer>
       <el-button :disabled="state.loadingStatus" @click="close">取 消</el-button>
@@ -184,5 +266,9 @@ defineExpose({
   color: var(--el-text-color-secondary);
   font-size: 12px;
   line-height: 1.5;
+}
+
+.form-tip.is-inline {
+  margin-top: 0;
 }
 </style>

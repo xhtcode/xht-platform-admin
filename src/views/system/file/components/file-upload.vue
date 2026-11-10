@@ -2,6 +2,8 @@
 import type { UploadInstance, UploadRawFile, UploadUserFile } from 'element-plus'
 import { genFileId } from 'element-plus'
 import { mergeSysFileChunk, querySysFileChunkProgress, uploadSysFile, uploadSysFileChunk } from '@/service/api/system/file.api'
+import { querySysFileUsedList } from '@/service/api/system/file-used.api'
+import type { SysFileUsedResponse } from '@/service/model/system/file-used.model'
 import { useMessage } from '@/hooks/use-message'
 import { generateUUID } from '@/utils/index'
 import { UploadFilled, Upload } from '@element-plus/icons-vue'
@@ -19,7 +21,8 @@ const uploadRef = useTemplateRef<UploadInstance>('uploadRef')
 const state = reactive({
   visibleStatus: false, // 弹窗可见状态
   loadingStatus: false, // 加载状态
-  fileUsed: '', // 文件用途
+  fileUsed: '', // 文件用途（用途决定下载/打印/分享闸门与水印等级）
+  fileUsedOptions: [] as SysFileUsedResponse[], // 可选用途（仅启用中的）
   fileList: [] as UploadUserFile[], // 待上传文件列表（仅允许单个文件）
   chunkStatus: false, // 是否走分片上传
   chunkTotal: 0, // 分片总数
@@ -40,11 +43,27 @@ const resetState = () => {
 }
 
 /**
+ * 加载启用中的文件用途
+ *
+ * 用途在服务端决定该文件的可下载/可打印/可分享与水印等级，上传时必须让用户显式选择。
+ */
+const loadFileUsedOptions = async () => {
+  try {
+    const { data } = await querySysFileUsedList()
+    state.fileUsedOptions = data
+  } catch (error) {
+    // 失败提示由请求拦截器给出，下拉留空时仍可上传（走用途默认值）
+    console.error('文件用途查询失败:', error)
+  }
+}
+
+/**
  * 打开显示
  */
-const show = () => {
+const show = async () => {
   state.visibleStatus = true
   resetState()
+  await loadFileUsedOptions()
 }
 
 /**
@@ -156,7 +175,9 @@ defineExpose({
   >
     <el-form v-loading="state.loadingStatus" element-loading-text="拼命上传中" label-width="80px">
       <el-form-item label="文件用途">
-        <el-input v-model="state.fileUsed" clearable :maxlength="100" placeholder="请输入文件用途（可选）" show-word-limit />
+        <el-select v-model="state.fileUsed" clearable filterable placeholder="请选择文件用途（决定下载/打印/分享与水印策略）">
+          <el-option v-for="item in state.fileUsedOptions" :key="item.usedCode" :label="item.usedName" :value="item.usedCode" />
+        </el-select>
       </el-form-item>
       <el-form-item label="选择文件">
         <el-upload ref="uploadRef" v-model:file-list="state.fileList" drag :auto-upload="false" :limit="1" :on-exceed="handleExceed">

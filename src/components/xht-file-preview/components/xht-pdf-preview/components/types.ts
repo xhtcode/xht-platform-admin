@@ -14,6 +14,8 @@ export interface PdfToolbarProps {
   state: PdfPreviewState
   displayName: string
   sidebarVisible: boolean
+  downloadable: boolean
+  printable: boolean
 }
 
 /**
@@ -94,6 +96,7 @@ export interface PdfStatusProps {
   loading: boolean
   progress: number
   displayName: string
+  downloadable: boolean
 }
 
 /**

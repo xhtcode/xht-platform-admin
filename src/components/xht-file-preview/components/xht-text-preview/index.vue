@@ -1,6 +1,8 @@
 <script lang="ts" setup>
-import { previewTextFile } from '@/components/xht-file-preview/components/xht-text-preview/api'
 import type { XhtTextPreviewProps } from '@/components/xht-file-preview/components/xht-text-preview/types'
+import { FILE_PREVIEW_REFRESH_KEY } from '@/components/xht-file-preview/types'
+import { querySysFileTextPreview } from '@/service/api/system/file.api'
+import { isPreviewSessionExpired } from '@/utils/file-preview'
 
 /**
  * 文本预览：进入后从第一页开始连续拉取，拼成完整内容后渲染
@@ -8,9 +10,14 @@ import type { XhtTextPreviewProps } from '@/components/xht-file-preview/componen
  * 后端按字节分页，`offset` 为下一页游标；单次最多读取 10 页，
  * 滚动到底部自动加载下一批，避免超大文件一次拉取过多请求与内存。
  */
-defineOptions({ name: 'XhtTextPreview', inheritAttrs: true })
+defineOptions({ name: 'XhtTextPreview', inheritAttrs: false })
 
 const props = withDefaults(defineProps<XhtTextPreviewProps>(), {})
+
+/**
+ * 会话重建能力（预览会话 TTL 到期后由宿主组件重新 init）
+ */
+const refreshSession = inject(FILE_PREVIEW_REFRESH_KEY, null)
 
 /**
  * 单批最多读取的页数
@@ -115,8 +122,7 @@ const loadBatch = async (options: { reset?: boolean } = {}) => {
     let loadedPages = 0
     let hasMore = true
     while (hasMore && loadedPages < MAX_PAGES_PER_BATCH) {
-      const page = await previewTextFile({
-        fileStorageKey: props.fileStorageKey,
+      const page = await querySysFileTextPreview(props.previewId, {
         offset: cursor,
         charset,
         signal: currentController.signal,
@@ -138,6 +144,11 @@ const loadBatch = async (options: { reset?: boolean } = {}) => {
     // 被新任务取代或主动中断：不覆盖当前状态
     if (seq !== requestSeq) return
     appendText(text)
+    // 会话过期：交宿主重建会话，重建后 previewId 变化会触发本组件整体重载
+    if (isPreviewSessionExpired(error)) {
+      await refreshSession?.()
+      return
+    }
     console.error('文本文件读取失败:', error)
     state.errorMessage = (error as Error).message
   } finally {
@@ -191,7 +202,7 @@ const handleRetry = () => {
 }
 
 watch(
-  () => props.fileStorageKey,
+  () => props.previewId,
   () => loadBatch({ reset: true }),
   { immediate: true }
 )

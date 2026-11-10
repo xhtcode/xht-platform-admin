@@ -257,12 +257,12 @@ onBeforeUnmount(() => {
           <el-icon :size="15"><QuestionFilled /></el-icon>
         </button>
       </el-tooltip>
-      <el-tooltip content="下载" placement="bottom">
+      <el-tooltip v-if="downloadable" content="下载" placement="bottom">
         <button type="button" class="xht-pdf-preview__btn" aria-label="下载文件" @click="emits('download')">
           <el-icon :size="15"><Download /></el-icon>
         </button>
       </el-tooltip>
-      <el-tooltip content="打印" placement="bottom">
+      <el-tooltip v-if="printable" content="打印" placement="bottom">
         <button type="button" class="xht-pdf-preview__btn" aria-label="打印" :disabled="state.printing" @click="emits('print')">
           <el-icon :size="15" :class="state.printing ? 'xht-pdf-preview__spin' : ''">
             <Loading v-if="state.printing" />

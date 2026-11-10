@@ -1,15 +1,21 @@
 <script lang="ts" setup>
 import type { XhtJsonPreviewProps } from '@/components/xht-file-preview/components/xht-json-preview/types'
+import { FILE_PREVIEW_REFRESH_KEY } from '@/components/xht-file-preview/types'
 import { useMessage } from '@/hooks/use-message'
-import { readFileText } from '@/utils/file'
+import { isPreviewSessionExpired, readPreviewText } from '@/utils/file-preview'
 import { DocumentCopy } from '@element-plus/icons-vue'
 
 /**
  * JSON 预览：读取文本后格式化为 2 空格缩进展示；解析失败时回退为原文展示
  */
-defineOptions({ name: 'XhtJsonPreview', inheritAttrs: true })
+defineOptions({ name: 'XhtJsonPreview', inheritAttrs: false })
 
 const props = withDefaults(defineProps<XhtJsonPreviewProps>(), {})
+
+/**
+ * 会话重建能力（预览会话 TTL 到期后由宿主组件重新 init）
+ */
+const refreshSession = inject(FILE_PREVIEW_REFRESH_KEY, null)
 
 const message = useMessage()
 // legacy: true —— 内网 http 环境下 navigator.clipboard 不可用时回退到 execCommand('copy')
@@ -27,7 +33,7 @@ const state = reactive({
 const loadJson = async () => {
   state.loadingStatus = true
   try {
-    const raw = await readFileText(props.url)
+    const raw = await readPreviewText(props.url)
     try {
       state.text = JSON.stringify(JSON.parse(raw), null, 2)
       state.formattedStatus = true
@@ -37,6 +43,11 @@ const loadJson = async () => {
       state.formattedStatus = false
     }
   } catch (error) {
+    // 会话过期：交宿主重建会话，重建后 url 变化会触发本组件整体重载
+    if (isPreviewSessionExpired(error)) {
+      await refreshSession?.()
+      return
+    }
     console.error('JSON文件读取失败:', error)
     state.text = ''
   } finally {

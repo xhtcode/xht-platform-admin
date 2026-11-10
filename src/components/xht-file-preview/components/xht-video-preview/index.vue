@@ -7,7 +7,7 @@ import type { XhtVideoPreviewProps } from '@/components/xht-file-preview/compone
  * `preload="metadata"` 只先取时长与首帧，配合后端 HTTP Range 分段加载，
  * 打开预览不会把整段视频拉下来；拖进度条时浏览器按需请求对应分段。
  */
-defineOptions({ name: 'XhtVideoPreview', inheritAttrs: true })
+defineOptions({ name: 'XhtVideoPreview', inheritAttrs: false })
 
 const props = withDefaults(defineProps<XhtVideoPreviewProps>(), {})
 

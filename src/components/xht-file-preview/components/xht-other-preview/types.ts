@@ -5,6 +5,7 @@
  * 因此只收下载与展示所需的最小信息，不接收预览地址。
  */
 export interface XhtOtherPreviewProps {
-  fileStorageKey: string // 文件存储key（下载接口使用）
-  fileName?: string // 文件名称（缺省回退为存储key）
+  previewId: string // 预览ID（下载凭证）
+  fileName?: string // 文件名称
+  downloadable: boolean // 是否允许下载（分享「仅查看」时为 false）
 }

@@ -1,4 +1,4 @@
-import type { FilePreviewType } from '@/service/model/system/file.model'
+import type { FilePreviewSource, FilePreviewType } from '@/service/model/system/file.model'
 
 /**
  * 系统管理-文件预览类型配置查询请求参数类型
@@ -19,6 +19,10 @@ export interface SysFileTypeResponse extends MetaResponse {
   previewType: FilePreviewType // 预览类型编码
   previewName: string // 预览类型名称
   fileSuffix?: string | null // 文件后缀；为 null 表示该预览类型的默认名称配置
+  previewSource?: FilePreviewSource | null // 预览来源：original 原文件 / convert 转换产物（空按原始文件处理）
+  convertTarget?: string | null // 转换目标格式，目前仅支持 pdf
+  enabled?: number | null // 是否启用：1 启用 0 停用
+  sort?: number | null // 排序
 }
 
 /**

@@ -7,7 +7,7 @@ import type { XhtImagePreviewProps } from '@/components/xht-file-preview/compone
  * 直接用服务端直连地址，由浏览器原生解码，不再额外拉一次 blob。
  * 加载失败（无权限 / 文件损坏 / 非图片）时给出明确提示，避免只剩一个碎图图标。
  */
-defineOptions({ name: 'XhtImagePreview', inheritAttrs: true })
+defineOptions({ name: 'XhtImagePreview', inheritAttrs: false })
 
 const props = withDefaults(defineProps<XhtImagePreviewProps>(), {})
 

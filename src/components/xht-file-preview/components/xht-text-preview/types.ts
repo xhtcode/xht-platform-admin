@@ -1,8 +1,10 @@
 /**
  * 文本预览属性
+ *
+ * 文本内容走 `/sys/files/preview/content` 的 JSON 分页接口，凭证是预览ID（不是文件地址）。
  */
 export interface XhtTextPreviewProps {
-  fileStorageKey: string // 文件存储key
+  previewId: string // 预览ID
 }
 
 /**
@@ -19,15 +21,4 @@ export interface TextPreviewPage {
   total: number // 文件总字节数
   hasMore: boolean // 是否还有下一页
   charset?: string // 服务端探测到的字符编码（空文件 / 已读到末尾时后端不返回）
-}
-
-/**
- * 文本预览请求参数
- */
-export interface TextPreviewQuery {
-  fileStorageKey: string // 文件存储key
-  offset?: number // 上一页返回的游标，续读时必须原样回传
-  size?: number // 单页字节数（后端限制 4096~262144，缺省 65536）
-  charset?: string // 首屏之后回传服务端探测的编码，可省一次 8KB 采样读
-  signal?: AbortSignal // 取消信号（切文件 / 卸载时中断在途请求）
 }

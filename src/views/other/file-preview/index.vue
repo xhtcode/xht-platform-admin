@@ -1,124 +1,75 @@
 <script lang="ts" setup>
-import { Download } from '@element-plus/icons-vue'
 import { useRoute } from 'vue-router'
-import { initSysFilePreview } from '@/service/api/system/file.api'
-import { handleDownloadSysFile } from '@/utils/file'
-import { useMessage } from '@/hooks/use-message'
 import { useTitle } from '@/hooks/use-title'
 import SwitchDark from '@/layout/components/switch-dark/index.vue'
 import PageFullScreen from '@/layout/components/page-full-screen/index.vue'
-import FilePreviewLoading from '@/views/other/file-preview/components/file-preview-loading.vue'
-import FilePreviewError from '@/views/other/file-preview/components/file-preview-error.vue'
-import type { SysFilePreviewResponse } from '@/service/model/system/file.model'
 import LayoutFooter from '@/layout/components/layout-footer/index.vue'
+import type { SysFilePreviewInitResponse } from '@/service/model/system/file.model'
+import FileShareCreate from '@/views/system/file-share/components/file-share-create.vue'
 
 defineOptions({ name: 'FilePreviewViewIndex' })
 
 const route = useRoute()
-const message = useMessage()
 const { setTitle } = useTitle()
 
-const state = reactive({
-  loadingStatus: true, // 初始化加载状态
-  errorStatus: false, // 初始化失败状态
-  downloadingStatus: false, // 下载中状态
-  fileInfo: null as SysFilePreviewResponse | null, // 服务端返回的预览信息
-})
+const fileShareCreateRef = useTemplateRef('fileShareCreateRef')
 
 /**
- * 路由中的文件存储key（一个标签页只预览一个文件，取一次即可）
+ * 路由中的文件存储key（兼容老地址：一个标签页只预览一个文件，取一次即可）
  */
-const fileStorageKey = route.params.fileStorageKey ? String(route.params.fileStorageKey) : ''
+const fileStorageKey = computed(() => (route.params.fileStorageKey ? String(route.params.fileStorageKey) : ''))
 
 /**
- * 加载预览信息
+ * 预览会话（由预览组件初始化后回传，用于页面标题与分享）
  */
-const loadFile = async () => {
-  if (!fileStorageKey) {
-    state.loadingStatus = false
-    state.errorStatus = true
-    return
-  }
-  state.loadingStatus = true
-  state.errorStatus = false
-  try {
-    const { data } = await initSysFilePreview(fileStorageKey)
-    state.fileInfo = data
-    // 标签页标题用文件名，比固定的"文件预览"更容易在多标签间辨认
-    if (data.fileName) {
-      setTitle(data.fileName)
-    }
-  } catch (error) {
-    // 失败提示由请求拦截器统一弹出，这里只负责页面状态复位
-    console.error('文件预览初始化失败:', error)
-    state.fileInfo = null
-    state.errorStatus = true
-  } finally {
-    state.loadingStatus = false
+const session = ref<SysFilePreviewInitResponse | null>(null)
+
+/**
+ * 预览会话就绪：用文件名做标签页标题，多标签时更容易辨认
+ *
+ * @param value 预览会话
+ */
+const handleReady = (value: SysFilePreviewInitResponse) => {
+  session.value = value
+  if (value.fileName) {
+    setTitle(value.fileName)
   }
 }
 
 /**
- * 下载当前文件
+ * 打开创建分享弹窗（分享入口由预览组件按能力位控制显隐）
+ *
+ * @param value 预览会话
  */
-const handleDownload = async () => {
-  // 预览信息未拿到（初始化中 / 无权限）时不发起下载，避免必然失败的请求
-  if (!state.fileInfo || state.downloadingStatus) return
-  state.downloadingStatus = true
-  try {
-    await handleDownloadSysFile(fileStorageKey)
-    message.success('文件下载成功!')
-  } catch (error) {
-    console.error('文件下载失败:', error)
-  } finally {
-    state.downloadingStatus = false
-  }
+const handleShare = (value: SysFilePreviewInitResponse) => {
+  fileShareCreateRef.value?.show(value)
 }
-
-onMounted(async () => {
-  await nextTick()
-  await loadFile()
-})
 </script>
 
 <template>
   <el-container class="xht-file-preview-page">
-    <!-- 顶部信息栏：文件名 / 元信息 / 页面级操作 -->
     <el-header class="xht-file-preview-page-header" height="40px">
       <div class="min-w-0 flex flex-1 flex-col justify-center">
-        <h1 :title="state.fileInfo?.fileName" class="text-overflow text-sm text-[var(--el-text-color-primary)] font-semibold leading-5">
-          {{ state.fileInfo?.fileName }}
+        <h1 :title="session?.fileName" class="text-overflow text-sm text-[var(--el-text-color-primary)] font-semibold leading-5">
+          {{ session?.fileName || '文件预览' }}
         </h1>
-        <div v-if="state.fileInfo" class="text-overflow text-xs text-[var(--el-text-color-secondary)] leading-4">
-          {{ state.fileInfo.previewModeValue }} · {{ state.fileInfo.fileSizeInfo }}
+        <div v-if="session" class="text-overflow text-xs text-[var(--el-text-color-secondary)] leading-4">
+          {{ session.fileSuffix?.toUpperCase() || '未知类型' }} · {{ session.fileSizeInfo }}
         </div>
       </div>
       <div class="xht-file-preview-page-tools">
-        <div
-          v-loading="state.downloadingStatus"
-          class="header-tool-item"
-          element-loading-background="transparent"
-          title="下载"
-          @click="handleDownload"
-        >
-          <el-icon :size="18"><Download /></el-icon>
-        </div>
         <switch-dark />
         <page-full-screen />
       </div>
     </el-header>
 
     <el-main class="xht-file-preview-page-main">
-      <file-preview-loading v-if="state.loadingStatus" />
-      <file-preview-error v-else-if="state.errorStatus" @retry="loadFile" />
-      <xht-file-preview
-        v-else
-        :file-name="state.fileInfo?.fileName"
-        :file-storage-key="fileStorageKey"
-        :preview-mode="state.fileInfo?.previewMode ?? 'other'"
-      />
+      <xht-file-preview v-if="fileStorageKey" :file-storage-key="fileStorageKey" @ready="handleReady" @share="handleShare" />
+      <el-result v-else icon="warning" title="文件地址无效" sub-title="缺少文件标识，请从文件列表重新打开预览" />
     </el-main>
+
     <layout-footer />
+    <file-share-create ref="fileShareCreateRef" />
   </el-container>
 </template>
 
@@ -143,8 +94,7 @@ onMounted(async () => {
   user-select: none;
 }
 
-/* switch-dark / page-full-screen 的根节点自带 header-tool-item 类（自身无样式），
-   下载项复用同一个类，三者统一在这里定义 */
+/* switch-dark / page-full-screen 的根节点自带 header-tool-item 类（自身无样式），统一在这里定义 */
 .xht-file-preview-page-tools {
   display: flex;
   flex-shrink: 0;

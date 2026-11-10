@@ -8,7 +8,7 @@ import { Headset } from '@element-plus/icons-vue'
  * 不引第三方播放器：预览只要求「能听」，原生控件在无障碍与快捷键上反而更完整；
  * 播放失败（编码不支持 / 文件损坏）时给明确提示，避免只剩一个禁用状态的控件。
  */
-defineOptions({ name: 'XhtAudioPreview', inheritAttrs: true })
+defineOptions({ name: 'XhtAudioPreview', inheritAttrs: false })
 
 const props = withDefaults(defineProps<XhtAudioPreviewProps>(), { fileName: '' })
 

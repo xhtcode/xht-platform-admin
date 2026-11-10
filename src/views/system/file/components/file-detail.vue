@@ -1,8 +1,9 @@
 <script lang="ts" setup>
-import { querySysFileById } from '@/service/api/system/file.api'
+import { initSysFilePreview, querySysFileById } from '@/service/api/system/file.api'
 import type { SysFileResponse } from '@/service/model/system/file.model'
 import { filePreviewTypeEnum, fileStatusEnum, fileStorageTypeEnum } from '@/service/enums/system/file.enum'
-import { handleDownloadSysFile } from '@/utils/file'
+import { handleDownloadPreviewFile } from '@/utils/file'
+import { PreviewApiError } from '@/utils/file-preview'
 import { useMessage } from '@/hooks/use-message'
 import { Download } from '@element-plus/icons-vue'
 
@@ -33,13 +34,21 @@ const show = async (row: SysFileResponse) => {
 
 /**
  * 下载文件
+ *
+ * 下载凭证是预览会话（previewId），需先 init：服务端在 init 阶段按用途策略判定是否允许下载。
  */
 const handleDownload = async () => {
   state.loadingStatus = true
   try {
-    const successStatus = await handleDownloadSysFile(state.fileInfo.fileStorageKey)
-    if (successStatus) {
+    const { data } = await initSysFilePreview({ fileId: state.fileInfo.id, fileStorageKey: state.fileInfo.fileStorageKey })
+    if (await handleDownloadPreviewFile(data.previewId)) {
       useMessage().success('文件下载成功!')
+    }
+  } catch (error) {
+    console.error('文件下载失败:', error)
+    // 二进制接口的业务错误绕过拦截器，需补一次提示
+    if (error instanceof PreviewApiError) {
+      useMessage().error(error.message || '文件下载失败')
     }
   } finally {
     state.loadingStatus = false

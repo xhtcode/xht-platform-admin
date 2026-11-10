@@ -38,7 +38,9 @@ import { createPrintFeature } from '@/components/xht-file-preview/components/xht
 import { createPropertiesFeature } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/properties'
 import { createSearchFeature } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/search'
 import { createThumbsFeature } from '@/components/xht-file-preview/components/xht-pdf-preview/utils/thumbs'
-import { handleDownloadSysFile } from '@/utils/file'
+import { handleDownloadPreviewFile } from '@/utils/file'
+import { PreviewApiError, isPreviewSessionExpired } from '@/utils/file-preview'
+import { FILE_PREVIEW_REFRESH_KEY } from '@/components/xht-file-preview/types'
 import { HEADER_AUTHORIZATION } from '@/service/constant'
 import { useUserInfoStore } from '@/store/modules/user.store'
 import type {
@@ -60,11 +62,15 @@ import { triggerDownload } from '@/components/xht-file-preview/components/xht-pd
  * 分片内的选择器均为 `xht-pdf-preview__*` 绝对选择器（BEM 拼接不保留外层类名），
  * 因此可直接在子组件作用域内命中子组件自己的元素；跨组件命中的规则用 :deep 穿透。
  */
-defineOptions({ name: 'XhtPdfPreview', inheritAttrs: true })
+defineOptions({ name: 'XhtPdfPreview', inheritAttrs: false })
 
-const props = withDefaults(defineProps<XhtPdfPreviewProps>(), { fileName: '' })
+const props = withDefaults(defineProps<XhtPdfPreviewProps>(), { fileName: '', previewId: '', downloadable: true, printable: true })
 
 const message = useMessage()
+/**
+ * 会话重建能力（预览会话 TTL 到期后由宿主组件重新 init）
+ */
+const refreshSession = inject(FILE_PREVIEW_REFRESH_KEY, null)
 const userStore = useUserInfoStore()
 
 /**
@@ -736,6 +742,10 @@ const loadDocument = async () => {
     console.error('PDF文档加载失败:', error)
     pdfDoc = null
     state.loadingStatus = false
+    // 会话过期：交宿主重建会话，重建后 url 变化会触发本组件整体重载
+    if (isPreviewSessionExpired(error)) {
+      await refreshSession?.()
+    }
   }
 }
 
@@ -868,17 +878,21 @@ const selectZoom = async (option: ZoomOption) => {
  * 走系统标准下载接口（业务异常按后端文案透传、按 xht-download-filename 响应头命名）
  */
 const handleDownload = async () => {
-  if (!props.fileStorageKey) {
+  if (!props.downloadable) return
+  if (!props.previewId) {
     message.warning('缺少文件下载凭证，无法下载')
     return
   }
   try {
-    // 失败提示（业务异常/请求错误）由 handleDownloadSysFile 与请求拦截器给出，此处只记录日志
-    if (await handleDownloadSysFile(props.fileStorageKey)) {
+    if (await handleDownloadPreviewFile(props.previewId)) {
       message.success('文件下载成功!')
     }
   } catch (error) {
     console.error('PDF下载失败:', error)
+    // 二进制接口的业务错误绕过拦截器，需在此补一次提示
+    if (error instanceof PreviewApiError) {
+      message.error(error.message || '文件下载失败')
+    }
   }
 }
 
@@ -1008,6 +1022,7 @@ onBeforeUnmount(() => {
       :loading="state.loadingStatus"
       :progress="state.progress"
       :display-name="displayName"
+      :downloadable="props.downloadable"
       @reload="loadDocument"
       @download="handleDownload"
     />
@@ -1018,6 +1033,8 @@ onBeforeUnmount(() => {
         :state="state"
         :display-name="displayName"
         :sidebar-visible="sidebarVisible"
+        :downloadable="props.downloadable"
+        :printable="props.printable"
         @toggle-sidebar="sidebarVisible = !sidebarVisible"
         @go-page="scrollToPage"
         @toggle-search="searchApi.toggleSearch()"

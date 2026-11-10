@@ -5,18 +5,24 @@ import type { SysFileTypeOperationRequest, SysFileTypeResponse } from '@/service
 /**
  * 文件预览类型配置 表单初始值
  *
- * 新增时默认落在「图片」，预览类型变更后会自动同步默认名称。
+ * 新增时默认落在「图片 / 原文件」，预览类型变更后会自动同步默认名称。
  */
 export const sysFileTypeOperationForm: SysFileTypeOperationRequest = {
   previewType: 'image',
   previewName: '图片',
   fileSuffix: undefined,
+  previewSource: 'original',
+  convertTarget: null,
+  enabled: 1,
+  sort: 1,
 }
 
 /**
  * 文件预览类型配置 表单校验规则
+ *
+ * `convertTarget` 的必填判定依赖当前 previewSource，由表单组件追加动态规则。
  */
-export const sysFileTypeOperationRules: FormRules<Required<SysFileTypeOperationRequest>> = {
+export const sysFileTypeOperationRules: FormRules = {
   previewType: [{ required: true, message: '请选择预览类型', trigger: 'change' }],
   previewName: [
     { required: true, message: '请输入预览类型名称', trigger: 'blur' },
@@ -50,6 +56,10 @@ export const sysFileTypeColumnOption: ColumnConfig<SysFileTypeResponse> = {
   previewType: { desc: '预览类型', visible: true, disabled: true },
   previewName: { desc: '预览类型名称', visible: true, disabled: false },
   fileSuffix: { desc: '文件后缀', visible: true, disabled: false },
+  previewSource: { desc: '预览来源', visible: true, disabled: false },
+  convertTarget: { desc: '转换目标', visible: true, disabled: false },
+  enabled: { desc: '状态', visible: true, disabled: false },
+  sort: { desc: '排序', visible: true, disabled: false },
   createBy: { desc: '创建人', visible: false, disabled: false },
   createTime: { desc: '创建时间', visible: true, disabled: false },
   updateBy: { desc: '更新人', visible: false, disabled: false },

@@ -1,11 +1,15 @@
-import request, { requestBlob } from '@/utils/request'
+import request, { requestBlob, requestRaw } from '@/utils/request'
 import type { ApiResponse, AxiosResponse } from 'axios'
+import { BusinessError } from '@/utils/business-error'
 import type {
   SysFileChunkMergeRequest,
   SysFileOperationRequest,
-  SysFilePreviewResponse,
+  SysFilePreviewInitRequest,
+  SysFilePreviewInitResponse,
+  SysFilePreviewStatusResponse,
   SysFileQueryRequest,
   SysFileResponse,
+  TextPreviewChunk,
 } from '@/service/model/system/file.model'
 
 /**
@@ -24,9 +28,10 @@ enum Api {
   CHUNK_PROGRESS = '/sys/files/chunk/progress/',
   CHUNK_UPLOAD = '/sys/files/chunk/upload',
   CHUNK_MERGE = '/sys/files/chunk/merge',
-  DOWNLOAD = '/sys/files/download/',
-  PREVIEW = '/sys/files/preview',
   PREVIEW_INIT = '/sys/files/preview/init',
+  PREVIEW_STATUS = '/sys/files/preview/status',
+  PREVIEW_CONTENT = '/sys/files/preview/content',
+  PREVIEW_DOWNLOAD = '/sys/files/preview/download',
 }
 
 /**
@@ -152,54 +157,112 @@ export const mergeSysFileChunk = (form: SysFileChunkMergeRequest): Promise<ApiRe
 }
 
 /**
- * 下载文件
+ * 初始化预览会话
  *
- * @param fileStorageKey 文件存储key
+ * 打开预览前必须先调用：服务端在此完成文件存在性与访问权限校验（含用途策略），
+ * 并下发 `previewId`、能力清单、转换状态、水印信息与访问地址。
+ * `fileId` 与 `fileStorageKey` 二选一（优先 fileId）；分享访问时传 `shareTicket`，此时忽略文件定位参数。
+ *
+ * @param form 预览初始化请求参数
  */
-export const downloadSysFile = (fileStorageKey: string): Promise<AxiosResponse<Blob>> => {
-  return requestBlob({
-    url: Api.DOWNLOAD + `${fileStorageKey}`,
-    baseURL,
-    method: 'get',
-    responseType: 'blob',
-  })
-}
-
-/**
- * 预览文件（支持 HTTP Range 分段请求；不支持的格式由后端返回错误）
- *
- * @param fileStorageKey 文件存储key
- */
-export const previewSysFile = (fileStorageKey: string): Promise<AxiosResponse<Blob>> => {
-  return requestBlob({
-    url: Api.PREVIEW,
-    baseURL,
-    method: 'get',
-    params: { fileStorageKey },
-    responseType: 'blob',
-  })
-}
-
-/**
- * 初始化预览信息
- *
- * 打开预览前调用：服务端在此完成文件存在性与访问权限校验，并返回文件基本信息与预览/下载地址。
- *
- * @param fileStorageKey 文件存储key
- */
-export const initSysFilePreview = (fileStorageKey: string): Promise<ApiResponse<SysFilePreviewResponse>> => {
-  return request<SysFilePreviewResponse>({
+export const initSysFilePreview = (form: SysFilePreviewInitRequest): Promise<ApiResponse<SysFilePreviewInitResponse>> => {
+  return request<SysFilePreviewInitResponse>({
     url: Api.PREVIEW_INIT,
     baseURL,
     method: 'post',
-    params: { fileStorageKey },
+    data: form,
+  })
+}
+
+/**
+ * 查询预览会话状态（转换轮询用）
+ *
+ * @param previewId 预览ID
+ */
+export const querySysFilePreviewStatus = (previewId: string): Promise<ApiResponse<SysFilePreviewStatusResponse>> => {
+  return request<SysFilePreviewStatusResponse>({
+    url: Api.PREVIEW_STATUS,
+    baseURL,
+    method: 'get',
+    params: { previewId },
+  })
+}
+
+/**
+ * 失败响应（统一 R 结构）
+ *
+ * 预览内容接口成功时按 `previewMode` 直接返回裸数据（文本为 JSON、其它为二进制流），
+ * 失败时仍以 HTTP 200 返回 R 结构。因此只能按响应体是否带 code 判定成败。
+ */
+interface PreviewFailureBody {
+  code?: number
+  msg?: string
+}
+
+/**
+ * 分页读取文本预览内容
+ *
+ * 该接口没有统一业务信封，故走 `requestRaw`；又因失败体同样以 HTTP 200 返回，
+ * 拦截器会按成功放行，这里必须自行识别并抛出，否则调用方会把错误体当成内容渲染。
+ * 按项目约定 api 层不弹提示：错误文案随 `BusinessError.message` 交给调用方内联展示。
+ *
+ * @param previewId 预览ID
+ * @param params 分页参数（续读时原样回传上一页的 offset）
+ * @returns 文本分页数据
+ */
+export const querySysFileTextPreview = async (
+  previewId: string,
+  params: { offset?: number; pageNo?: number; size?: number; charset?: string; signal?: AbortSignal } = {}
+): Promise<TextPreviewChunk> => {
+  const { offset, pageNo, size, charset, signal } = params
+  const body = await requestRaw<TextPreviewChunk & PreviewFailureBody>({
+    url: Api.PREVIEW_CONTENT,
+    baseURL,
+    method: 'get',
+    // 值为 undefined 的参数由 axios 自动丢弃，无需手工拼接查询串
+    params: { previewId, offset, pageNo, size, charset },
+    signal,
+  })
+  if (typeof body?.code === 'number') {
+    throw new BusinessError(body.code, body.msg ?? '')
+  }
+  return body
+}
+
+/**
+ * 拉取预览内容（二进制：image / pdf / video / audio / json）
+ *
+ * @param previewUrl 服务端下发的站内相对地址（`urls.previewUrl`，已含 previewId）
+ */
+export const fetchSysFilePreviewContent = (previewUrl: string): Promise<AxiosResponse<Blob>> => {
+  return requestBlob({
+    url: previewUrl,
+    baseURL,
+    method: 'get',
+    responseType: 'blob',
+  })
+}
+
+/**
+ * 下载预览文件（返回原始文件，非转换产物）
+ *
+ * @param previewId 预览ID
+ */
+export const downloadSysFilePreview = (previewId: string): Promise<AxiosResponse<Blob>> => {
+  return requestBlob({
+    url: Api.PREVIEW_DOWNLOAD,
+    baseURL,
+    method: 'get',
+    params: { previewId },
+    responseType: 'blob',
   })
 }
 
 /**
  * 拼接可直连访问的绝对地址
  *
- * 预览初始化返回的 `previewUrl` / `downloadUrl` 为相对服务根路径，需补上网关前缀。
+ * 服务端下发的 `urls.*` 是站内相对路径（以 `/sys` 开头），
+ * 而 `<img>` / `<video>` / `fetch` 等浏览器原生请求不走 axios 的 baseURL，需要自行补上网关前缀。
  *
  * @param url 相对服务根路径的地址（已是 http/https 时原样返回）
  */
