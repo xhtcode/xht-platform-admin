@@ -335,24 +335,6 @@ defineExpose({
 
 <template>
   <div class="xht-file-preview" :class="{ 'is-no-print': !printableStatus }">
-    <div v-if="props.showHeader" class="xht-file-preview-header">
-      <div class="xht-file-preview-title">
-        <span :title="displayName" class="xht-file-preview-name">{{ displayName }}</span>
-        <span v-if="state.session" class="xht-file-preview-meta">
-          {{ state.session.fileSizeInfo }}
-          <template v-if="state.session.previewSource === 'convert'">· 转换预览</template>
-        </span>
-      </div>
-      <div class="xht-file-preview-tools">
-        <el-tooltip v-if="downloadableStatus" content="下载" placement="bottom">
-          <el-button :icon="Download" :loading="state.downloadingStatus" link type="primary" size="small" @click="handleDownload">下载</el-button>
-        </el-tooltip>
-        <el-tooltip v-if="shareableStatus" content="分享" placement="bottom">
-          <el-button :icon="Share" link type="primary" size="small" @click="handleShare">分享</el-button>
-        </el-tooltip>
-      </div>
-    </div>
-
     <div class="xht-file-preview-body">
       <!-- 初始化中 -->
       <div v-if="state.loadingStatus" v-loading="true" class="xht-file-preview-loading" element-loading-text="正在准备预览" />
@@ -400,6 +382,8 @@ defineExpose({
         :file-name="displayName"
         :downloadable="downloadableStatus"
         :printable="printableStatus"
+        :fileStorageKey="state.session?.previewId"
+        :previewInit="state.session"
       />
 
       <!-- L1 水印层：不参与交互，不遮挡滚动 -->

@@ -1,18 +1,12 @@
 <script lang="ts" setup>
 import { useRoute } from 'vue-router'
 import { useTitle } from '@/hooks/use-title'
-import SwitchDark from '@/layout/components/switch-dark/index.vue'
-import PageFullScreen from '@/layout/components/page-full-screen/index.vue'
-import LayoutFooter from '@/layout/components/layout-footer/index.vue'
 import type { SysFilePreviewInitResponse } from '@/service/model/system/file.model'
-import FileShareCreate from '@/views/system/file-share/components/file-share-create.vue'
 
 defineOptions({ name: 'FilePreviewViewIndex' })
 
 const route = useRoute()
 const { setTitle } = useTitle()
-
-const fileShareCreateRef = useTemplateRef('fileShareCreateRef')
 
 /**
  * 路由中的文件存储key（兼容老地址：一个标签页只预览一个文件，取一次即可）
@@ -35,42 +29,10 @@ const handleReady = (value: SysFilePreviewInitResponse) => {
     setTitle(value.fileName)
   }
 }
-
-/**
- * 打开创建分享弹窗（分享入口由预览组件按能力位控制显隐）
- *
- * @param value 预览会话
- */
-const handleShare = (value: SysFilePreviewInitResponse) => {
-  fileShareCreateRef.value?.show(value)
-}
 </script>
 
 <template>
-  <el-container class="xht-file-preview-page">
-    <el-header class="xht-file-preview-page-header" height="40px">
-      <div class="min-w-0 flex flex-1 flex-col justify-center">
-        <h1 :title="session?.fileName" class="text-overflow text-sm text-[var(--el-text-color-primary)] font-semibold leading-5">
-          {{ session?.fileName || '文件预览' }}
-        </h1>
-        <div v-if="session" class="text-overflow text-xs text-[var(--el-text-color-secondary)] leading-4">
-          {{ session.fileSuffix?.toUpperCase() || '未知类型' }} · {{ session.fileSizeInfo }}
-        </div>
-      </div>
-      <div class="xht-file-preview-page-tools">
-        <switch-dark />
-        <page-full-screen />
-      </div>
-    </el-header>
-
-    <el-main class="xht-file-preview-page-main">
-      <xht-file-preview v-if="fileStorageKey" :file-storage-key="fileStorageKey" @ready="handleReady" @share="handleShare" />
-      <el-result v-else icon="warning" title="文件地址无效" sub-title="缺少文件标识，请从文件列表重新打开预览" />
-    </el-main>
-
-    <layout-footer />
-    <file-share-create ref="fileShareCreateRef" />
-  </el-container>
+  <xht-file-preview v-if="fileStorageKey" :file-storage-key="fileStorageKey" @ready="handleReady" />
 </template>
 
 <style scoped lang="scss">

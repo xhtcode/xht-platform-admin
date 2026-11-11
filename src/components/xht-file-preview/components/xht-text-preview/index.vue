@@ -220,16 +220,22 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div v-loading="state.loadingStatus && !state.chunks.length" class="xht-text-preview" element-loading-text="正在加载文本内容">
-    <div v-for="(chunk, index) in state.chunks" :key="index" class="xht-text-preview-chunk">{{ chunk }}</div>
-    <div v-if="state.errorMessage" class="xht-text-preview-hint is-error" @click="handleRetry">
-      加载失败{{ state.errorMessage ? `：${state.errorMessage}` : '' }}（点击重试）
+  <xht-preview-layout :file-storage-key="props.previewId" :previewInit="props.previewInit">
+    <template #tools>
+      <xht-file-download :file-storage-key="props.previewId" class="xht-file-preview-header-tools-item" />
+      <xht-file-share class="xht-file-preview-header-tools-item" />
+    </template>
+    <div v-loading="state.loadingStatus && !state.chunks.length" class="xht-text-preview" element-loading-text="正在加载文本内容">
+      <div v-for="(chunk, index) in state.chunks" :key="index" class="xht-text-preview-chunk">{{ chunk }}</div>
+      <div v-if="state.errorMessage" class="xht-text-preview-hint is-error" @click="handleRetry">
+        加载失败{{ state.errorMessage ? `：${state.errorMessage}` : '' }}（点击重试）
+      </div>
+      <div v-else-if="state.loadingStatus && state.chunks.length" class="xht-text-preview-hint">正在加载…</div>
+      <el-empty v-else-if="!state.loadingStatus && !state.chunks.length" description="文件内容为空" />
+      <!-- 底部哨兵：进入视口即加载下一批 -->
+      <div ref="sentinelRef" class="xht-text-preview-sentinel" aria-hidden="true" />
     </div>
-    <div v-else-if="state.loadingStatus && state.chunks.length" class="xht-text-preview-hint">正在加载…</div>
-    <el-empty v-else-if="!state.loadingStatus && !state.chunks.length" description="文件内容为空" />
-    <!-- 底部哨兵：进入视口即加载下一批 -->
-    <div ref="sentinelRef" class="xht-text-preview-sentinel" aria-hidden="true" />
-  </div>
+  </xht-preview-layout>
 </template>
 
 <style scoped lang="scss">

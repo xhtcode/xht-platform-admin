@@ -6,15 +6,16 @@ import SwitchDark from '@/layout/components/switch-dark/index.vue'
 defineOptions({
   name: 'XhtPreviewLayout',
 })
-withDefaults(defineProps<XhtPreviewLayoutProps>(), {})
+const props = withDefaults(defineProps<XhtPreviewLayoutProps>(), {})
+const previewInit = computed(() => props.previewInit)
 </script>
 
 <template>
   <el-container class="xht-file-preview-page">
     <el-header class="xht-file-preview-page-header">
       <el-space class="user-select-none">
-        <el-text size="default" tag="b">{{ fileName || '文件预览' }}</el-text>
-        <el-text size="small" type="info">{{ fileSuffix || '未知类型' }} · {{ fileSizeInfo || '未知大小' }}</el-text>
+        <el-text size="default" tag="h1" style="color: var(--xht-text-color)">{{ previewInit?.fileName || '文件预览' }}</el-text>
+        <el-text size="small" type="info">{{ previewInit?.fileSuffix || '未知类型' }} · {{ previewInit?.fileSizeInfo || '未知大小' }}</el-text>
       </el-space>
       <div class="xht-file-preview-header-tools user-select-none">
         <slot name="tools" />
@@ -23,8 +24,7 @@ withDefaults(defineProps<XhtPreviewLayoutProps>(), {})
       </div>
     </el-header>
     <el-main class="xht-file-preview-page-main">
-      <slot v-if="fileStorageKey" :response="previewInit" />
-      <el-result v-else icon="warning" title="文件地址无效" sub-title="缺少文件标识，请从文件列表重新打开预览" />
+      <slot />
     </el-main>
   </el-container>
 </template>
@@ -73,6 +73,7 @@ withDefaults(defineProps<XhtPreviewLayoutProps>(), {})
   }
   .xht-file-preview-page-main {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     overflow: hidden;

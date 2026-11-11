@@ -1,3 +1,5 @@
+import type { SysFilePreviewInitResponse } from '@/service/model/system/file.model.ts'
+
 /**
  * 文本预览属性
  *
@@ -5,6 +7,7 @@
  */
 export interface XhtTextPreviewProps {
   previewId: string // 预览ID
+  previewInit: SysFilePreviewInitResponse
 }
 
 /**
