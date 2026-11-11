@@ -409,39 +409,6 @@ defineExpose({
   box-shadow: 0 0 12px var(--xht-shadow-color-lightest);
 }
 
-.xht-file-preview-header {
-  display: flex;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 6px 12px;
-  border-bottom: 1px solid var(--xht-border-color);
-  user-select: none;
-}
-
-.xht-file-preview-title {
-  display: flex;
-  min-width: 0;
-  flex-direction: column;
-  justify-content: center;
-  line-height: 1.4;
-}
-
-.xht-file-preview-name {
-  overflow: hidden;
-  color: var(--el-text-color-primary);
-  font-weight: 600;
-  font-size: 14px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.xht-file-preview-meta {
-  color: var(--el-text-color-secondary);
-  font-size: 12px;
-}
-
 .xht-file-preview-tools {
   display: flex;
   flex-shrink: 0;

@@ -154,7 +154,7 @@ const loadBatch = async (options: { reset?: boolean } = {}) => {
   } finally {
     if (seq === requestSeq) {
       state.loadingStatus = false
-      refreshSentinel()
+      await refreshSentinel()
     }
   }
 }
@@ -270,6 +270,7 @@ onBeforeUnmount(() => {
 .xht-text-preview-hint {
   padding: 10px;
   color: var(--el-text-color-secondary);
+  background: var(--xht-main-bg-color);
   font-size: 12px;
   text-align: center;
 }
