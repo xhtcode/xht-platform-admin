@@ -13,8 +13,8 @@ const previewInit = computed(() => props.previewInit)
 <template>
   <el-container class="xht-file-preview-page">
     <el-header class="xht-file-preview-page-header">
-      <el-space class="user-select-none">
-        <el-text size="default" tag="h1" style="color: var(--xht-text-color)">{{ previewInit?.fileName || '文件预览' }}</el-text>
+      <el-space class="user-select-none" alignment="center">
+        <el-text size="large" tag="h1" style="color: var(--xht-text-color)">{{ previewInit?.fileName || '文件预览' }}</el-text>
         <el-text size="small" type="info">{{ previewInit?.fileSuffix || '未知类型' }} · {{ previewInit?.fileSizeInfo || '未知大小' }}</el-text>
       </el-space>
       <div class="xht-file-preview-header-tools user-select-none">
@@ -23,7 +23,7 @@ const previewInit = computed(() => props.previewInit)
         <page-full-screen class="xht-file-preview-header-tools-item" />
       </div>
     </el-header>
-    <el-main class="xht-file-preview-page-main">
+    <el-main class="xht-file-preview-page-main" :class="props.bodyClass">
       <slot />
     </el-main>
   </el-container>
@@ -77,7 +77,7 @@ const previewInit = computed(() => props.previewInit)
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    padding: 0 !important;
+    padding: 0;
   }
 }
 </style>

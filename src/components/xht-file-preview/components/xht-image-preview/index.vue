@@ -1,76 +1,60 @@
 <script lang="ts" setup>
 import type { XhtImagePreviewProps } from '@/components/xht-file-preview/components/xht-image-preview/types'
+import { toSysFileAbsoluteUrl } from '@/service/api/system/file.api.ts'
 
-/**
- * 图片预览：自适应容器（contain），点击进入大图查看（滚轮缩放、拖拽、Esc 关闭）
- *
- * 直接用服务端直连地址，由浏览器原生解码，不再额外拉一次 blob。
- * 加载失败（无权限 / 文件损坏 / 非图片）时给出明确提示，避免只剩一个碎图图标。
- */
 defineOptions({ name: 'XhtImagePreview', inheritAttrs: false })
 
 const props = withDefaults(defineProps<XhtImagePreviewProps>(), {})
 
-const state = reactive({
-  loadingStatus: true, // 图片解码中
-  errorStatus: false, // 图片加载失败
-})
-
+const url = computed<string>(() => toSysFileAbsoluteUrl(props.previewInit.urls.previewUrl))
 /**
  * 大图查看地址列表（el-image 的放大查看需要数组）
  */
-const previewSrcList = computed(() => (props.url ? [props.url] : []))
-
-/**
- * 切文件时复位状态（同一实例复用时不会残留上一张图的失败态）
- */
-watch(
-  () => props.url,
-  () => {
-    state.loadingStatus = true
-    state.errorStatus = false
-  }
-)
-
-const handleLoad = () => {
-  state.loadingStatus = false
-  state.errorStatus = false
-}
-
-const handleError = () => {
-  state.loadingStatus = false
-  state.errorStatus = true
+const previewSrcList = computed<string[]>(() => [url.value])
+const imageRef = ref()
+const handleClick = () => {
+  imageRef.value.showPreview()
 }
 </script>
 
 <template>
-  <div v-loading="state.loadingStatus" class="xht-image-preview wh-full" element-loading-text="正在加载图片">
-    <el-image
-      v-if="!state.errorStatus"
-      :src="props.url"
-      :preview-src-list="previewSrcList"
-      fit="contain"
-      hide-on-click-modal
-      preview-teleported
-      class="wh-full cursor-zoom-in"
-      @load="handleLoad"
-      @error="handleError"
-    />
-    <div v-else class="xht-image-preview-error">
-      <el-empty description="图片加载失败，请下载后查看" />
+  <xht-preview-layout :file-storage-key="props.previewId" :previewInit="props.previewInit">
+    <template #tools>
+      <xht-file-download :file-storage-key="props.previewId" class="xht-file-preview-header-tools-item" />
+      <xht-file-share class="xht-file-preview-header-tools-item" />
+    </template>
+    <div class="xht-image-preview" @click="handleClick">
+      <el-image
+        class="xht-image-preview-image"
+        ref="imageRef"
+        :src="url"
+        :scale="0.8"
+        fit="cover"
+        :preview-src-list="previewSrcList"
+        preview-teleported
+      />
     </div>
-  </div>
+  </xht-preview-layout>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 .xht-image-preview {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: auto;
-}
-
-.xht-image-preview-error {
+  padding: 16px;
+  cursor: pointer;
   width: 100%;
+  height: 100%;
+
+  .xht-image-preview-image {
+    user-select: none;
+    width: 100%;
+    height: 100%;
+    padding: 8px;
+    background: var(--xht-bg-color);
+    border-radius: var(--xht-border-radius-base);
+    box-shadow: 2px 0 4px var(--xht-aside-shadow-color);
+    img {
+      border-radius: var(--xht-border-radius-base);
+    }
+  }
 }
 </style>

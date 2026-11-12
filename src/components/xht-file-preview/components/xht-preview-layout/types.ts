@@ -6,4 +6,5 @@ import type { SysFilePreviewInitResponse } from '@/service/model/system/file.mod
 export interface XhtPreviewLayoutProps {
   fileStorageKey: string
   previewInit?: SysFilePreviewInitResponse
+  bodyClass?: string
 }
