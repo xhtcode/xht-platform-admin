@@ -6,7 +6,6 @@ import {
   Check,
   DArrowLeft,
   DArrowRight,
-  Download,
   Grid,
   InfoFilled,
   Loading,
@@ -246,20 +245,12 @@ onBeforeUnmount(() => {
       </button>
     </div>
 
-    <!-- 文件名：单行工具栏居中展示 -->
-    <div v-if="displayName" class="xht-pdf-preview__filename" :title="displayName">
-      {{ displayName }}
-    </div>
+    <!-- 文件名：由预览布局头部展示，工具栏不再重复 -->
 
     <div class="xht-pdf-preview__cluster is-right">
       <el-tooltip content="快捷键" placement="bottom">
         <button type="button" class="xht-pdf-preview__btn" aria-label="查看快捷键" @click="emits('openShortcuts')">
           <el-icon :size="15"><QuestionFilled /></el-icon>
-        </button>
-      </el-tooltip>
-      <el-tooltip v-if="downloadable" content="下载" placement="bottom">
-        <button type="button" class="xht-pdf-preview__btn" aria-label="下载文件" @click="emits('download')">
-          <el-icon :size="15"><Download /></el-icon>
         </button>
       </el-tooltip>
       <el-tooltip v-if="printable" content="打印" placement="bottom">

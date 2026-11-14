@@ -1,7 +1,9 @@
+import type { SysFilePreviewInitResponse } from '@/service/model/system/file.model.ts'
+
 /**
  * 音频预览属性
  */
 export interface XhtAudioPreviewProps {
-  url: string // 音频地址（服务端直连预览地址）
-  fileName?: string // 文件名称（卡片标题，缺省显示「音频文件」）
+  previewId: string // 预览ID
+  previewInit: SysFilePreviewInitResponse
 }

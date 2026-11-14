@@ -12,9 +12,7 @@ import type { PdfPreviewState, ZoomOption } from '@/components/xht-file-preview/
  */
 export interface PdfToolbarProps {
   state: PdfPreviewState
-  displayName: string
   sidebarVisible: boolean
-  downloadable: boolean
   printable: boolean
 }
 
@@ -27,7 +25,6 @@ export interface PdfToolbarEmits {
   (e: 'toggleSearch'): void
   (e: 'zoom', delta: number): void
   (e: 'selectZoom', option: ZoomOption): void
-  (e: 'download'): void
   (e: 'print'): void
   (e: 'rotate', delta: number): void
   (e: 'setHandTool', value: boolean): void

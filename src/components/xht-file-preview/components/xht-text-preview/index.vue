@@ -223,7 +223,6 @@ onBeforeUnmount(() => {
   <xht-preview-layout :file-storage-key="props.previewId" :previewInit="props.previewInit">
     <template #tools>
       <xht-file-download :file-storage-key="props.previewId" class="xht-file-preview-header-tools-item" />
-      <xht-file-share class="xht-file-preview-header-tools-item" />
     </template>
     <div v-loading="state.loadingStatus && !state.chunks.length" class="xht-text-preview" element-loading-text="正在加载文本内容">
       <div v-for="(chunk, index) in state.chunks" :key="index" class="xht-text-preview-chunk">{{ chunk }}</div>

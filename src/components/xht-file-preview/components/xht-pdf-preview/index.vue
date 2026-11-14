@@ -41,6 +41,7 @@ import { createThumbsFeature } from '@/components/xht-file-preview/components/xh
 import { handleDownloadPreviewFile } from '@/utils/file'
 import { PreviewApiError, isPreviewSessionExpired } from '@/utils/file-preview'
 import { FILE_PREVIEW_REFRESH_KEY } from '@/components/xht-file-preview/types'
+import { toSysFileAbsoluteUrl } from '@/service/api/system/file.api'
 import { HEADER_AUTHORIZATION } from '@/service/constant'
 import { useUserInfoStore } from '@/store/modules/user.store'
 import type {
@@ -64,7 +65,7 @@ import { triggerDownload } from '@/components/xht-file-preview/components/xht-pd
  */
 defineOptions({ name: 'XhtPdfPreview', inheritAttrs: false })
 
-const props = withDefaults(defineProps<XhtPdfPreviewProps>(), { fileName: '', previewId: '', downloadable: true, printable: true })
+const props = withDefaults(defineProps<XhtPdfPreviewProps>(), {})
 
 const message = useMessage()
 /**
@@ -72,6 +73,22 @@ const message = useMessage()
  */
 const refreshSession = inject(FILE_PREVIEW_REFRESH_KEY, null)
 const userStore = useUserInfoStore()
+
+/**
+ * PDF 内容地址：服务端下发的预览地址（已含 previewId），
+ * pdf.js 的分段请求不走 axios 的 baseURL，需补上网关前缀
+ */
+const url = computed<string>(() => toSysFileAbsoluteUrl(`/sys/files/preview/content?previewId=${props.previewId}`))
+
+/**
+ * 是否允许下载
+ */
+const downloadableStatus = computed(() => !!props.previewInit.capabilities.download)
+
+/**
+ * 是否允许打印（不允许时整个预览区加 no-print，打印时直接隐藏）
+ */
+const printableStatus = computed(() => props.previewInit.capabilities.print !== false)
 
 /**
  * 直连预览地址所需的请求头：由组件自身维护，调用方无需关心鉴权
@@ -167,7 +184,10 @@ let pdfDoc: PDFDocumentProxy | null = null
 
 const pageSizes = ref<(PageSize | null)[]>([])
 
-const displayName = computed(() => props.fileName || '未命名文档')
+/**
+ * 展示用文件名（工具栏展示及下载/打印命名）
+ */
+const displayName = computed(() => props.previewInit.fileOriginalName || props.previewInit.fileName || '未命名文档')
 
 /**
  * 页面未旋转时的原始尺寸（CSS px 口径）；用户旋转不改变该坐标系
@@ -689,7 +709,7 @@ const loadDocument = async () => {
     await destroyDocument()
     // 接管取流：首块带 Range 探测（服务端支持时返回 206 并给出总长度），此后按 pdf.js 需要的区间逐段拉取。
     // pdf.js 自带的 url 取流首个请求必然不带 Range，会先整包下载一遍，故不使用。
-    const source = await createPdfRangeSource(props.url, httpHeaders.value, PDF_RANGE_CHUNK_SIZE, (loaded, total) => {
+    const source = await createPdfRangeSource(url.value, httpHeaders.value, PDF_RANGE_CHUNK_SIZE, (loaded, total) => {
       if (total > 0) state.progress = Math.min(99, Math.round((loaded / total) * 100))
     })
     // 记录文件大小与线性化特征（文档属性弹窗展示用）
@@ -878,7 +898,7 @@ const selectZoom = async (option: ZoomOption) => {
  * 走系统标准下载接口（业务异常按后端文案透传、按 xht-download-filename 响应头命名）
  */
 const handleDownload = async () => {
-  if (!props.downloadable) return
+  if (!downloadableStatus.value) return
   if (!props.previewId) {
     message.warning('缺少文件下载凭证，无法下载')
     return
@@ -965,9 +985,9 @@ const handleScroll = useThrottleFn(
 )
 
 watch(
-  () => props.url,
-  (url) => {
-    if (url) {
+  url,
+  (value) => {
+    if (value) {
       loadDocument()
     }
   },
@@ -1015,95 +1035,97 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="xht-pdf-preview">
-    <!-- 文档加载中 / 加载失败 -->
-    <PdfStatus
-      v-if="state.loadingStatus || !state.total"
-      :loading="state.loadingStatus"
-      :progress="state.progress"
-      :display-name="displayName"
-      :downloadable="props.downloadable"
-      @reload="loadDocument"
-      @download="handleDownload"
-    />
-
-    <template v-else>
-      <!-- 单行工具栏（pdf.js 官方风格） -->
-      <PdfToolbar
-        :state="state"
+  <xht-preview-layout :file-storage-key="props.previewId" :previewInit="props.previewInit">
+    <template #tools>
+      <xht-file-download :file-storage-key="props.previewId" class="xht-file-preview-header-tools-item" />
+    </template>
+    <div class="xht-pdf-preview w-full">
+      <!-- 文档加载中 / 加载失败 -->
+      <PdfStatus
+        v-if="state.loadingStatus || !state.total"
+        :loading="state.loadingStatus"
+        :progress="state.progress"
         :display-name="displayName"
-        :sidebar-visible="sidebarVisible"
-        :downloadable="props.downloadable"
-        :printable="props.printable"
-        @toggle-sidebar="sidebarVisible = !sidebarVisible"
-        @go-page="scrollToPage"
-        @toggle-search="searchApi.toggleSearch()"
-        @zoom="handleZoom"
-        @select-zoom="selectZoom"
+        :downloadable="downloadableStatus"
+        @reload="loadDocument"
         @download="handleDownload"
-        @print="printApi.handlePrint()"
-        @rotate="handleRotate"
-        @set-hand-tool="state.handTool = $event"
-        @toggle-presentation="presentationApi.togglePresentation()"
-        @open-properties="propertiesApi.loadProperties()"
-        @open-shortcuts="shortcutsVisible = true"
       />
 
-      <!-- 快捷键说明弹窗 -->
-      <PdfShortcutsDialog v-model:visible="shortcutsVisible" />
-
-      <!-- 文档属性弹窗 -->
-      <PdfPropertiesDialog :properties="propertiesApi" />
-
-      <!-- 搜索栏：浮于内容区左上，仿官方 viewer  -->
-      <PdfFindBar v-if="searchApi.searchOpen.value" :search="searchApi" :set-input-ref="setSearchInputEl" />
-
-      <div class="xht-pdf-preview__main">
-        <!-- 侧栏：目录 / 缩略图 / 附件 / 图层 -->
-        <PdfSidebar
-          v-show="sidebarVisible"
-          v-model:tab="sidebarTab"
-          :style="{ width: `${sidebarWidth}px` }"
+      <template v-else>
+        <!-- 单行工具栏（pdf.js 官方风格） -->
+        <PdfToolbar
           :state="state"
-          :outline="outlineApi"
-          :thumbs="thumbsApi"
-          :attachments="attachmentsApi"
-          :layers="layersApi"
-          :set-list-ref="setThumbListEl"
+          :sidebar-visible="sidebarVisible"
+          :printable="printableStatus"
+          @toggle-sidebar="sidebarVisible = !sidebarVisible"
           @go-page="scrollToPage"
+          @toggle-search="searchApi.toggleSearch()"
+          @zoom="handleZoom"
+          @select-zoom="selectZoom"
+          @print="printApi.handlePrint()"
+          @rotate="handleRotate"
+          @set-hand-tool="state.handTool = $event"
+          @toggle-presentation="presentationApi.togglePresentation()"
+          @open-properties="propertiesApi.loadProperties()"
+          @open-shortcuts="shortcutsVisible = true"
         />
 
-        <!-- 侧栏宽度拖拽条 -->
-        <div v-show="sidebarVisible" class="xht-pdf-preview__resize-bar" @mousedown.prevent="startResize" />
+        <!-- 快捷键说明弹窗 -->
+        <PdfShortcutsDialog v-model:visible="shortcutsVisible" />
 
-        <!-- 文件内容：全部页面按序排列，滚动即翻页 -->
-        <div
-          ref="containerRef"
-          class="xht-pdf-preview__canvas"
-          :class="{ 'is-hand': state.handTool }"
-          @scroll.passive="handleScroll"
-          @mousedown="handleContainerMousedown"
-        >
-          <PdfPages
+        <!-- 文档属性弹窗 -->
+        <PdfPropertiesDialog :properties="propertiesApi" />
+
+        <!-- 搜索栏：浮于内容区左上，仿官方 viewer  -->
+        <PdfFindBar v-if="searchApi.searchOpen.value" :search="searchApi" :set-input-ref="setSearchInputEl" />
+
+        <div class="xht-pdf-preview__main">
+          <!-- 侧栏：目录 / 缩略图 / 附件 / 图层 -->
+          <PdfSidebar
+            v-show="sidebarVisible"
+            v-model:tab="sidebarTab"
+            :style="{ width: `${sidebarWidth}px` }"
             :state="state"
-            :paper-style="paperStyle"
-            :search="searchApi"
-            :is-page-rendered="isPageRendered"
-            :set-page-canvas="setPageCanvas"
-            :set-page-text-layer="setPageTextLayer"
+            :outline="outlineApi"
+            :thumbs="thumbsApi"
+            :attachments="attachmentsApi"
+            :layers="layersApi"
+            :set-list-ref="setThumbListEl"
+            @go-page="scrollToPage"
           />
+
+          <!-- 侧栏宽度拖拽条 -->
+          <div v-show="sidebarVisible" class="xht-pdf-preview__resize-bar" @mousedown.prevent="startResize" />
+
+          <!-- 文件内容：全部页面按序排列，滚动即翻页 -->
+          <div
+            ref="containerRef"
+            class="xht-pdf-preview__canvas"
+            :class="{ 'is-hand': state.handTool }"
+            @scroll.passive="handleScroll"
+            @mousedown="handleContainerMousedown"
+          >
+            <PdfPages
+              :state="state"
+              :paper-style="paperStyle"
+              :search="searchApi"
+              :is-page-rendered="isPageRendered"
+              :set-page-canvas="setPageCanvas"
+              :set-page-text-layer="setPageTextLayer"
+            />
+          </div>
+
+          <!-- 渲染进度条：页面位图渲染期间在内容区顶部展示 -->
+          <transition name="el-fade-in">
+            <div v-if="state.rendering" class="xht-pdf-preview__rendering-bar" />
+          </transition>
         </div>
+      </template>
 
-        <!-- 渲染进度条：页面位图渲染期间在内容区顶部展示 -->
-        <transition name="el-fade-in">
-          <div v-if="state.rendering" class="xht-pdf-preview__rendering-bar" />
-        </transition>
-      </div>
-    </template>
-
-    <!-- 打印等待遮罩：大文档逐页转图片期间展示进度并锁定交互 -->
-    <PdfPrintOverlay :visible="state.printing" :progress="state.printProgress" :total="state.total" />
-  </div>
+      <!-- 打印等待遮罩：大文档逐页转图片期间展示进度并锁定交互 -->
+      <PdfPrintOverlay :visible="state.printing" :progress="state.printProgress" :total="state.total" />
+    </div>
+  </xht-preview-layout>
 </template>
 
 <style lang="scss" scoped>

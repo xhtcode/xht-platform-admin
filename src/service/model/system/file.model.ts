@@ -94,7 +94,6 @@ export interface SysFileCapabilities {
   preview: boolean // 允许预览
   download: boolean // 允许下载
   print: boolean // 允许打印
-  share: boolean // 允许分享
 }
 
 /**
@@ -135,7 +134,6 @@ export interface SysFilePreviewUrls {
 export interface SysFilePreviewInitRequest {
   fileId?: string // 文件ID
   fileStorageKey?: string // 文件存储Key
-  shareTicket?: string // 分享访问票据
 }
 
 /**

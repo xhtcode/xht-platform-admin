@@ -6,7 +6,7 @@ defineOptions({ name: 'XhtImagePreview', inheritAttrs: false })
 
 const props = withDefaults(defineProps<XhtImagePreviewProps>(), {})
 
-const url = computed<string>(() => toSysFileAbsoluteUrl(props.previewInit.urls.previewUrl))
+const url = computed<string>(() => toSysFileAbsoluteUrl(`/sys/files/preview/content?previewId=${props.previewId}`))
 /**
  * 大图查看地址列表（el-image 的放大查看需要数组）
  */
@@ -21,7 +21,6 @@ const handleClick = () => {
   <xht-preview-layout :file-storage-key="props.previewId" :previewInit="props.previewInit">
     <template #tools>
       <xht-file-download :file-storage-key="props.previewId" class="xht-file-preview-header-tools-item" />
-      <xht-file-share class="xht-file-preview-header-tools-item" />
     </template>
     <div class="xht-image-preview" @click="handleClick">
       <el-image

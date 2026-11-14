@@ -14,7 +14,7 @@ const { setTitle } = useTitle()
 const fileStorageKey = computed(() => (route.params.fileStorageKey ? String(route.params.fileStorageKey) : ''))
 
 /**
- * 预览会话（由预览组件初始化后回传，用于页面标题与分享）
+ * 预览会话（由预览组件初始化后回传，用于页面标题）
  */
 const session = ref<SysFilePreviewInitResponse | null>(null)
 

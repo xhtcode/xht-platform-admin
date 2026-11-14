@@ -8,7 +8,6 @@ import type {
   FileStorageType,
   FileWatermarkLevel,
 } from '@/service/model/system/file.model'
-import type { FileShareMode, FileSharePermission, FileShareStatus } from '@/service/model/system/file-share.model'
 
 /**
  * 文件状态
@@ -175,66 +174,6 @@ export const fileImageModeEnum: DictEnum<FileImageMode, 'ORIGINAL' | 'WEBP' | 'P
   PDF: {
     label: 'PDF',
     value: 'pdf',
-    type: 'danger',
-  },
-}
-
-/**
- * 分享方式
- */
-export const fileShareModeEnum: DictEnum<FileShareMode, 'LINK' | 'USER'> = {
-  LINK: {
-    label: '链接分享',
-    value: 'LINK',
-    type: 'primary',
-  },
-  USER: {
-    label: '指定用户',
-    value: 'USER',
-    type: 'success',
-  },
-}
-
-/**
- * 分享权限
- */
-export const fileSharePermissionEnum: DictEnum<FileSharePermission, 'VIEW' | 'VIEW_DOWNLOAD' | 'DOWNLOAD'> = {
-  VIEW: {
-    label: '仅查看',
-    value: 'VIEW',
-    type: 'info',
-  },
-  VIEW_DOWNLOAD: {
-    label: '查看+下载',
-    value: 'VIEW_DOWNLOAD',
-    type: 'primary',
-  },
-  DOWNLOAD: {
-    label: '仅下载',
-    value: 'DOWNLOAD',
-    type: 'warning',
-  },
-}
-
-/**
- * 分享状态
- *
- * 1 正常 / 0 已撤销 / 2 已失效
- */
-export const fileShareStatusEnum: DictEnum<FileShareStatus, 'NORMAL' | 'REVOKED' | 'INVALID'> = {
-  NORMAL: {
-    label: '正常',
-    value: 1,
-    type: 'success',
-  },
-  REVOKED: {
-    label: '已撤销',
-    value: 0,
-    type: 'info',
-  },
-  INVALID: {
-    label: '已失效',
-    value: 2,
     type: 'danger',
   },
 }

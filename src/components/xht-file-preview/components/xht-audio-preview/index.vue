@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { XhtAudioPreviewProps } from '@/components/xht-file-preview/components/xht-audio-preview/types'
+import { toSysFileAbsoluteUrl } from '@/service/api/system/file.api.ts'
 import { Headset } from '@element-plus/icons-vue'
 
 /**
@@ -10,46 +11,38 @@ import { Headset } from '@element-plus/icons-vue'
  */
 defineOptions({ name: 'XhtAudioPreview', inheritAttrs: false })
 
-const props = withDefaults(defineProps<XhtAudioPreviewProps>(), { fileName: '' })
+const props = withDefaults(defineProps<XhtAudioPreviewProps>(), {})
+
+const url = computed<string>(() => toSysFileAbsoluteUrl(`/sys/files/preview/content?previewId=${props.previewId}`))
 
 const state = reactive({
   errorStatus: false, // 音频加载失败
 })
 
 /**
- * 卡片标题：优先文件名，缺失时给通用文案（不回落存储key，避免长串乱码占满一行）
- */
-const displayName = computed(() => props.fileName || '音频文件')
-
-/**
  * 切文件时复位失败态
  */
-watch(
-  () => props.url,
-  () => {
-    state.errorStatus = false
-  }
-)
+watch(url, () => {
+  state.errorStatus = false
+})
 </script>
 
 <template>
-  <div class="wh-full flex-center">
-    <div class="xht-audio-preview">
-      <el-icon :size="56" class="xht-audio-preview-icon">
-        <Headset />
-      </el-icon>
-      <p :title="displayName" class="xht-audio-preview-name">{{ displayName }}</p>
-      <audio
-        v-if="!state.errorStatus"
-        :src="props.url"
-        controls
-        preload="metadata"
-        class="xht-audio-preview-player"
-        @error="state.errorStatus = true"
-      />
-      <p v-else class="xht-audio-preview-tip">音频加载失败，请下载后查看</p>
+  <xht-preview-layout :file-storage-key="props.previewId" :previewInit="props.previewInit">
+    <template #tools>
+      <xht-file-download :file-storage-key="props.previewId" class="xht-file-preview-header-tools-item" />
+    </template>
+    <div class="wh-full flex-center">
+      <div class="xht-audio-preview">
+        <el-icon :size="56" class="xht-audio-preview-icon">
+          <Headset />
+        </el-icon>
+        <p :title="props.previewInit.fileName" class="xht-audio-preview-name">{{ props.previewInit.fileName }}</p>
+        <audio v-if="!state.errorStatus" :src="url" controls preload="metadata" class="xht-audio-preview-player" @error="state.errorStatus = true" />
+        <p v-else class="xht-audio-preview-tip">音频加载失败，请下载后查看</p>
+      </div>
     </div>
-  </div>
+  </xht-preview-layout>
 </template>
 
 <style scoped lang="scss">

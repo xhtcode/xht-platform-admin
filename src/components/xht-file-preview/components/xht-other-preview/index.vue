@@ -14,7 +14,7 @@ import { Document, Download } from '@element-plus/icons-vue'
  */
 defineOptions({ name: 'XhtOtherPreview', inheritAttrs: false })
 
-const props = withDefaults(defineProps<XhtOtherPreviewProps>(), { fileName: '', downloadable: true })
+const props = withDefaults(defineProps<XhtOtherPreviewProps>(), {})
 
 const message = useMessage()
 
@@ -23,15 +23,15 @@ const state = reactive({
 })
 
 /**
- * 展示名称：优先文件名，缺失时给通用文案，避免标题空白
+ * 是否允许下载（用途策略禁止下载时为 false）
  */
-const displayName = computed(() => props.fileName || '文件')
+const downloadableStatus = computed(() => !!props.previewInit.capabilities.download)
 
 /**
  * 下载文件
  */
 const handleDownload = async () => {
-  if (!props.previewId || !props.downloadable || state.downloadingStatus) return
+  if (!props.previewId || !downloadableStatus.value || state.downloadingStatus) return
   state.downloadingStatus = true
   try {
     if (await handleDownloadPreviewFile(props.previewId)) {
@@ -49,26 +49,31 @@ const handleDownload = async () => {
 </script>
 
 <template>
-  <div class="wh-full flex-center">
-    <div class="xht-other-preview">
-      <el-icon :size="64" class="xht-other-preview-icon">
-        <Document />
-      </el-icon>
-      <p :title="displayName" class="xht-other-preview-name">{{ displayName }}</p>
-      <p class="xht-other-preview-tip">该文件类型暂不支持在线预览，请下载后查看</p>
-      <el-button
-        v-if="props.downloadable"
-        type="primary"
-        :icon="Download"
-        :disabled="!props.previewId"
-        :loading="state.downloadingStatus"
-        @click="handleDownload"
-      >
-        {{ state.downloadingStatus ? '正在下载' : '下载文件' }}
-      </el-button>
-      <p v-else class="xht-other-preview-tip">当前分享未授予下载权限</p>
+  <xht-preview-layout :file-storage-key="props.previewId" :previewInit="props.previewInit">
+    <template #tools>
+      <xht-file-download :file-storage-key="props.previewId" class="xht-file-preview-header-tools-item" />
+    </template>
+    <div class="wh-full flex-center">
+      <div class="xht-other-preview">
+        <el-icon :size="64" class="xht-other-preview-icon">
+          <Document />
+        </el-icon>
+        <p :title="props.previewInit.fileName" class="xht-other-preview-name">{{ props.previewInit.fileName }}</p>
+        <p class="xht-other-preview-tip">该文件类型暂不支持在线预览，请下载后查看</p>
+        <el-button
+          v-if="downloadableStatus"
+          type="primary"
+          :icon="Download"
+          :disabled="!props.previewId"
+          :loading="state.downloadingStatus"
+          @click="handleDownload"
+        >
+          {{ state.downloadingStatus ? '正在下载' : '下载文件' }}
+        </el-button>
+        <p v-else class="xht-other-preview-tip">当前文件未授予下载权限</p>
+      </div>
     </div>
-  </div>
+  </xht-preview-layout>
 </template>
 
 <style lang="scss" scoped>

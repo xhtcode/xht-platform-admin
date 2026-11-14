@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import type { XhtJsonPreviewProps } from '@/components/xht-file-preview/components/xht-json-preview/types'
 import { FILE_PREVIEW_REFRESH_KEY } from '@/components/xht-file-preview/types'
+import { toSysFileAbsoluteUrl } from '@/service/api/system/file.api.ts'
 import { useMessage } from '@/hooks/use-message'
 import { isPreviewSessionExpired, readPreviewText } from '@/utils/file-preview'
 import { DocumentCopy } from '@element-plus/icons-vue'
@@ -16,6 +17,8 @@ const props = withDefaults(defineProps<XhtJsonPreviewProps>(), {})
  * 会话重建能力（预览会话 TTL 到期后由宿主组件重新 init）
  */
 const refreshSession = inject(FILE_PREVIEW_REFRESH_KEY, null)
+
+const url = computed<string>(() => toSysFileAbsoluteUrl(`/sys/files/preview/content?previewId=${props.previewId}`))
 
 const message = useMessage()
 // legacy: true —— 内网 http 环境下 navigator.clipboard 不可用时回退到 execCommand('copy')
@@ -33,7 +36,7 @@ const state = reactive({
 const loadJson = async () => {
   state.loadingStatus = true
   try {
-    const raw = await readPreviewText(props.url)
+    const raw = await readPreviewText(url.value)
     try {
       state.text = JSON.stringify(JSON.parse(raw), null, 2)
       state.formattedStatus = true
@@ -43,7 +46,7 @@ const loadJson = async () => {
       state.formattedStatus = false
     }
   } catch (error) {
-    // 会话过期：交宿主重建会话，重建后 url 变化会触发本组件整体重载
+    // 会话过期：交宿主重建会话，重建后 previewId 变化会触发本组件整体重载
     if (isPreviewSessionExpired(error)) {
       await refreshSession?.()
       return
@@ -79,9 +82,9 @@ const handleCopy = async () => {
 }
 
 watch(
-  () => props.url,
-  (url) => {
-    if (url) {
+  url,
+  (value) => {
+    if (value) {
       loadJson()
     }
   },
@@ -90,20 +93,25 @@ watch(
 </script>
 
 <template>
-  <div v-loading="state.loadingStatus" element-loading-text="拼命加载中" class="h-full flex flex-col">
-    <div
-      v-if="!state.loadingStatus && state.text"
-      class="flex-x-between gap-2 border-b border-[var(--el-border-color-lighter)] border-b-solid px-3 py-2"
-    >
-      <el-tag v-if="!state.formattedStatus" type="warning" size="small">内容不是合法 JSON，已展示原文</el-tag>
-      <el-text v-else size="small" type="info">{{ state.text.length }} 个字符</el-text>
-      <el-button :icon="DocumentCopy" :type="copied ? 'success' : 'primary'" plain size="small" @click="handleCopy">
-        {{ copied ? '已复制' : '复制' }}
-      </el-button>
+  <xht-preview-layout :file-storage-key="props.previewId" :previewInit="props.previewInit">
+    <template #tools>
+      <xht-file-download :file-storage-key="props.previewId" class="xht-file-preview-header-tools-item" />
+    </template>
+    <div v-loading="state.loadingStatus" element-loading-text="拼命加载中" class="h-full w-full flex flex-col">
+      <div
+        v-if="!state.loadingStatus && state.text"
+        class="flex-x-between gap-2 border-b border-[var(--el-border-color-lighter)] border-b-solid px-3 py-2"
+      >
+        <el-tag v-if="!state.formattedStatus" type="warning" size="small">内容不是合法 JSON，已展示原文</el-tag>
+        <el-text v-else size="small" type="info">{{ state.text.length }} 个字符</el-text>
+        <el-button :icon="DocumentCopy" :type="copied ? 'success' : 'primary'" plain size="small" @click="handleCopy">
+          {{ copied ? '已复制' : '复制' }}
+        </el-button>
+      </div>
+      <pre v-if="state.text" class="json-content m-0 flex-1 overflow-auto p-3">{{ state.text }}</pre>
+      <el-empty v-else-if="!state.loadingStatus" description="JSON内容为空或读取失败，请下载后查看" />
     </div>
-    <pre v-if="state.text" class="json-content m-0 flex-1 overflow-auto p-3">{{ state.text }}</pre>
-    <el-empty v-else-if="!state.loadingStatus" description="JSON内容为空或读取失败，请下载后查看" />
-  </div>
+  </xht-preview-layout>
 </template>
 
 <style lang="scss" scoped>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { Download, Share } from '@element-plus/icons-vue'
+import { Download } from '@element-plus/icons-vue'
 import { useMessage } from '@/hooks/use-message'
-import { initSysFilePreview, querySysFilePreviewStatus, toSysFileAbsoluteUrl } from '@/service/api/system/file.api'
+import { initSysFilePreview, querySysFilePreviewStatus } from '@/service/api/system/file.api'
 import type { SysFilePreviewInitResponse } from '@/service/model/system/file.model'
 import type { XhtFilePreviewMode, XhtFilePreviewRenderMode } from '@/components/xht-file-preview/types.ts'
 import { FILE_PREVIEW_REFRESH_KEY } from '@/components/xht-file-preview/types.ts'
@@ -14,16 +14,12 @@ const props = withDefaults(
   defineProps<{
     fileId?: string // 文件ID（与 fileStorageKey 二选一，优先 fileId）
     fileStorageKey?: string // 文件存储Key（兼容老数据）
-    shareTicket?: string // 分享访问票据（存在时按分享权限执行）
-    fileName?: string // 文件显示名称（缺省取服务端返回的文件名）
-    showHeader?: boolean // 是否展示内置顶栏（文件名 + 下载/分享操作）
   }>(),
-  { fileId: '', fileStorageKey: '', shareTicket: '', fileName: '', showHeader: true }
+  { fileId: '', fileStorageKey: '' }
 )
 
 const emit = defineEmits<{
   ready: [session: SysFilePreviewInitResponse] // 会话就绪 / 转换完成，父级可据此展示额外操作
-  share: [session: SysFilePreviewInitResponse] // 请求分享，父级弹出创建分享弹窗
 }>()
 
 const message = useMessage()
@@ -76,14 +72,6 @@ const previewMode = computed<XhtFilePreviewMode>(() => state.session?.previewMod
 const previewComponent = computed<Component>(() => PreviewComponents[previewMode.value as XhtFilePreviewRenderMode] ?? PreviewComponents.other)
 
 /**
- * 预览内容地址
- *
- * 浏览器原生容器（img/video/audio）与 pdf.js 的 fetch 都不走 axios 的 baseURL，
- * 必须补上网关前缀；服务端下发的地址已带 previewId，无需前端拼接。
- */
-const contentUrl = computed(() => (state.session?.urls?.previewUrl ? toSysFileAbsoluteUrl(state.session.urls.previewUrl) : ''))
-
-/**
  * 是否允许在线预览（转换中仍需等待，不渲染预览器）
  */
 const previewableStatus = computed(() => !!state.session && state.session.capabilities.preview && state.session.initStatus === 0)
@@ -94,19 +82,9 @@ const previewableStatus = computed(() => !!state.session && state.session.capabi
 const downloadableStatus = computed(() => !!state.session?.capabilities.download)
 
 /**
- * 是否允许分享
- */
-const shareableStatus = computed(() => !!state.session?.capabilities.share)
-
-/**
  * 是否允许打印（不允许时整个预览区加 no-print，打印时直接隐藏）
  */
 const printableStatus = computed(() => state.session?.capabilities.print !== false)
-
-/**
- * 展示用文件名：外部传入优先，其次服务端完整原始名
- */
-const displayName = computed(() => props.fileName || state.session?.fileOriginalName || state.session?.fileName || '文件预览')
 
 /**
  * 水印图层背景图（仅 L1 需要前端渲染；L2 已烧录在文件字节里，不能重复叠加）
@@ -203,7 +181,7 @@ const pollStatus = async () => {
 /**
  * 初始化预览会话
  *
- * `previewId` 是后续内容 / 下载 / 创建分享的唯一凭证，必须落本地状态，不要自行拼接。
+ * `previewId` 是后续内容 / 下载的唯一凭证，必须落本地状态，不要自行拼接。
  */
 const initSession = async () => {
   const seq = ++requestSeq
@@ -212,7 +190,7 @@ const initSession = async () => {
   state.errorMessage = ''
   state.pollTimeoutStatus = false
   state.session = null
-  if (!props.fileId && !props.fileStorageKey && !props.shareTicket) {
+  if (!props.fileId && !props.fileStorageKey) {
     state.loadingStatus = false
     state.errorMessage = '缺少文件定位参数，无法打开预览'
     return
@@ -221,7 +199,6 @@ const initSession = async () => {
     const { data } = await initSysFilePreview({
       fileId: props.fileId || undefined,
       fileStorageKey: props.fileStorageKey || undefined,
-      shareTicket: props.shareTicket || undefined,
     })
     if (seq !== requestSeq) return
     state.session = data
@@ -265,15 +242,6 @@ const handleDownload = async () => {
 }
 
 /**
- * 触发分享
- */
-const handleShare = () => {
-  const session = state.session
-  if (!session || !shareableStatus.value) return
-  emit('share', session)
-}
-
-/**
  * 页面可见性变化：可见时立即补查一次转换状态
  */
 const handleVisibilityChange = () => {
@@ -312,7 +280,7 @@ const statusTip = computed(() => {
   }
 })
 
-watch(() => [props.fileId, props.fileStorageKey, props.shareTicket], initSession, { immediate: true })
+watch(() => [props.fileId, props.fileStorageKey], initSession, { immediate: true })
 
 onMounted(() => {
   document.addEventListener('visibilitychange', handleVisibilityChange)
@@ -361,7 +329,7 @@ defineExpose({
                 {{ state.pollTimeoutStatus ? '转换超时，请稍后重试或下载查看' : '转换完成后将自动展示' }}
               </span>
             </div>
-            <span v-else-if="state.session?.fileSizeInfo">文件大小：{{ state.session.fileSizeInfo }}</span>
+            <span v-else-if="state.session?.fileSizeInfo">文件大小：{{ state.session }}</span>
           </template>
           <div class="xht-file-preview-status-actions">
             <el-button v-if="state.session?.initStatus === 1 && state.pollTimeoutStatus" @click="initSession">重新加载</el-button>
@@ -373,18 +341,7 @@ defineExpose({
       </div>
 
       <!-- 正常预览 -->
-      <component
-        :is="previewComponent"
-        v-else
-        :key="state.session?.previewId"
-        :url="contentUrl"
-        :preview-id="state.session?.previewId"
-        :file-name="displayName"
-        :downloadable="downloadableStatus"
-        :printable="printableStatus"
-        :fileStorageKey="state.session?.previewId"
-        :previewInit="state.session"
-      />
+      <component :is="previewComponent" v-else :key="state.session?.previewId" :preview-id="state.session?.previewId" :previewInit="state.session" />
 
       <!-- L1 水印层：不参与交互，不遮挡滚动 -->
       <div

@@ -161,7 +161,7 @@ export const mergeSysFileChunk = (form: SysFileChunkMergeRequest): Promise<ApiRe
  *
  * 打开预览前必须先调用：服务端在此完成文件存在性与访问权限校验（含用途策略），
  * 并下发 `previewId`、能力清单、转换状态、水印信息与访问地址。
- * `fileId` 与 `fileStorageKey` 二选一（优先 fileId）；分享访问时传 `shareTicket`，此时忽略文件定位参数。
+ * `fileId` 与 `fileStorageKey` 二选一（优先 fileId）。
  *
  * @param form 预览初始化请求参数
  */
