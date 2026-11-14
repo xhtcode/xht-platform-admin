@@ -1,27 +1,20 @@
 import type { FormRules } from 'element-plus'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import type { SysFileUsedOperationRequest, SysFileUsedResponse } from '@/service/model/system/file-used.model'
+import { fileUsedEnabledEnum } from '@/service/enums/system/file-used.enum.ts'
 
 /**
  * 文件用途表单初始值
  *
- * 默认按「私有 + 无特殊限制 + 无水印」起步，管理员按需收紧。
+ * 默认启用、排序从 1 起，管理员按需调整。
  */
 export const sysFileUsedOperationForm: SysFileUsedOperationRequest = {
+  id: '',
   usedCode: '',
   usedName: '',
-  description: '',
-  enabled: 1,
-  sort: 1,
-  accessScope: 'private',
-  publicAllowed: 0,
-  downloadAllowed: 1,
-  printAllowed: 1,
-  shareAllowed: 1,
-  shareExpireDays: null,
-  shareMaxAccessCount: null,
-  watermarkLevel: 'off',
-  imageMode: null,
+  usedDesc: '',
+  usedEnabled: fileUsedEnabledEnum.ENABLED.value,
+  usedSort: 1,
 }
 
 /**
@@ -41,9 +34,9 @@ export const sysFileUsedOperationRules: FormRules = {
     { whitespace: true, message: '用途名称不能全为空格', trigger: 'blur' },
     { max: 30, message: '用途名称长度不能超过 30 个字符', trigger: 'blur' },
   ],
-  description: [{ max: 200, message: '说明长度不能超过 200 个字符', trigger: 'blur' }],
-  sort: [{ required: true, message: '请输入排序值', trigger: 'blur' }],
-  watermarkLevel: [{ required: true, message: '请选择水印等级', trigger: 'change' }],
+  usedDesc: [{ max: 200, message: '用途说明长度不能超过 200 个字符', trigger: 'blur' }],
+  usedEnabled: [{ required: true, message: '请选择用途状态', trigger: 'blur' }],
+  usedSort: [{ required: true, message: '请输入用途排序值', trigger: 'blur' }],
 }
 
 /**
@@ -52,14 +45,10 @@ export const sysFileUsedOperationRules: FormRules = {
 export const sysFileUsedColumnOption: ColumnConfig<SysFileUsedResponse> = {
   usedCode: { desc: '用途编码', visible: true, disabled: true },
   usedName: { desc: '用途名称', visible: true, disabled: true },
-  enabled: { desc: '状态', visible: true, disabled: false },
-  accessScope: { desc: '访问范围', visible: true, disabled: false },
-  downloadAllowed: { desc: '可下载', visible: true, disabled: false },
-  printAllowed: { desc: '可打印', visible: false, disabled: false },
-  shareAllowed: { desc: '可分享', visible: true, disabled: false },
-  watermarkLevel: { desc: '水印等级', visible: true, disabled: false },
-  fileCount: { desc: '引用文件数', visible: true, disabled: false },
-  builtIn: { desc: '内置', visible: false, disabled: false },
-  sort: { desc: '排序', visible: true, disabled: false },
-  updateTime: { desc: '更新时间', visible: false, disabled: false },
+  usedEnabled: { desc: '用途状态', visible: true, disabled: false },
+  usedSort: { desc: '用途排序', visible: true, disabled: false },
+  createBy: { desc: '创建人', visible: false, disabled: false },
+  createTime: { desc: '创建时间', visible: true, disabled: false },
+  updateBy: { desc: '更新人', visible: false, disabled: false },
+  updateTime: { desc: '更新时间', visible: true, disabled: false },
 }

@@ -1,7 +1,7 @@
 /**
  * 部门状态
  */
-export type SysAreaHashChildType = 0 | 1
+export type SysAreaHashChild = 0 | 1
 
 /**
  * 系统管理-行政区划查询请求参数类型
@@ -49,7 +49,7 @@ export interface SysAreaResponse extends MetaResponse {
   /**
    * 是否存在下级
    */
-  hasChild: SysAreaHashChildType
+  hasChild: SysAreaHashChild
 }
 
 /**

@@ -8,7 +8,7 @@ import defaultSetting from '@/service/constant/default-setting'
  */
 export const useThemeStore = defineStore(
   'theme',
-  (): ThemeStoreType => {
+  (): ThemeStore => {
     /**
      * 布局类型
      */

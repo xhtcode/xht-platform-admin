@@ -1,7 +1,7 @@
 /**
  * 跳转类型
  */
-export type NoticeJumpType = 0 | 1 | 2
+export type NoticeJumpKind = 0 | 1 | 2
 /**
  * 是否定时发布
  */
@@ -45,7 +45,7 @@ export interface SysNoticeResponse extends MetaResponse {
   noticePublishTime: string // 发布时间
   noticeExpireTime: string // 过期时间
   noticeOfflineTime: string // 下架时间
-  noticeJumpType: NoticeJumpType // 跳转类型
+  noticeJumpType: NoticeJumpKind // 跳转类型
   noticeJumpUrl: string // 跳转地址
   noticeReadCount: number // 已读人数
   noticeClickCount: number // 点击次数

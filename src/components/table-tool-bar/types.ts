@@ -1,7 +1,7 @@
 /**
  * 右边工作区props类型
  */
-export interface RightToolbarPropsType {
+export interface RightToolbarProps {
   searchStatus?: boolean // 搜索切换
   refreshStatus?: boolean // 是否显示刷新
   importStatus?: boolean // 是否导入
@@ -30,7 +30,7 @@ export type ColumnConfig<Response extends BasicResponse> = {
 /**
  * emit 类型
  */
-export interface EmitsType {
+export interface TableToolBarEmits {
   (e: 'import'): void
 
   (e: 'export'): void

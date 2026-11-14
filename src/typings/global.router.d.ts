@@ -1,5 +1,5 @@
 import type { _RouteLocationBase } from 'vue-router'
-import type { MenuType } from '@/service/model/system/menu.model'
+import type { MenuKind } from '@/service/model/system/menu.model'
 
 declare module 'vue-router' {
   interface RouteMeta extends Record<string | number | symbol, unknown> {
@@ -13,7 +13,7 @@ declare module 'vue-router' {
     keepAliveStatus?: boolean //是否缓存
     backstage?: boolean // 标识此路由为后端返回路由
     rank?: number // 路由排序
-    menuType?: MenuType // 菜单类型
+    menuType?: MenuKind // 菜单类型
     roles?: string[] //权限标识
     ignoreAuth?: boolean // 是否忽略权限校验 true 是
     [index: string]: any

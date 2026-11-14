@@ -1,4 +1,4 @@
-export interface ColumnFormSelectOptionType {
+export interface ColumnFormSelectOption {
   label: string
   value: string
 }

@@ -11,12 +11,12 @@ defineOptions({
   name: 'AppSetting',
 })
 
-interface StateType {
+interface AppSettingState {
   visibleStatus: boolean
   loadingStatus: boolean
 }
 
-const state = reactive<StateType>({
+const state = reactive<AppSettingState>({
   visibleStatus: false,
   loadingStatus: false,
 })

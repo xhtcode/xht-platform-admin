@@ -1,9 +1,9 @@
-import type { MessageStar, MessageStatus, MessageTop, MessageType } from '@/service/model/system/message.model'
+import type { MessageStar, MessageStatus, MessageTop, MessageKind } from '@/service/model/system/message.model'
 
 /**
  * 信息类型
  */
-export const messageTypeEnum: DictEnum<MessageType, 'SYSTEM' | 'BUSINESS'> = {
+export const messageTypeEnum: DictEnum<MessageKind, 'SYSTEM' | 'BUSINESS'> = {
   SYSTEM: {
     label: '系统通知',
     value: 1,

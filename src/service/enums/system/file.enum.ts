@@ -3,9 +3,9 @@ import type {
   FileImageMode,
   FileInitStatus,
   FilePreviewSource,
-  FilePreviewType,
+  FilePreview,
   FileStatus,
-  FileStorageType,
+  FileStorage,
   FileWatermarkLevel,
 } from '@/service/model/system/file.model'
 
@@ -33,7 +33,7 @@ export const fileStatusEnum: DictEnum<FileStatus, 'UPLOADED' | 'ASSOCIATED' | 'D
 /**
  * 文件预览类型
  */
-export const filePreviewTypeEnum: DictEnum<FilePreviewType, 'IMAGE' | 'PDF' | 'VIDEO' | 'AUDIO' | 'TEXT' | 'JSON' | 'OTHER'> = {
+export const filePreviewTypeEnum: DictEnum<FilePreview, 'IMAGE' | 'PDF' | 'VIDEO' | 'AUDIO' | 'TEXT' | 'JSON' | 'OTHER'> = {
   IMAGE: {
     label: '图片',
     value: 'image',
@@ -181,7 +181,7 @@ export const fileImageModeEnum: DictEnum<FileImageMode, 'ORIGINAL' | 'WEBP' | 'P
 /**
  * 文件存储类型
  */
-export const fileStorageTypeEnum: DictEnum<string, FileStorageType> = {
+export const fileStorageTypeEnum: DictEnum<string, FileStorage> = {
   LOCAL: {
     label: '本地存储',
     value: 'LOCAL',

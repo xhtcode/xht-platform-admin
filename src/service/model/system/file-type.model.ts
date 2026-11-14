@@ -1,4 +1,4 @@
-import type { FilePreviewSource, FilePreviewType } from '@/service/model/system/file.model'
+import type { FilePreviewSource, FilePreview } from '@/service/model/system/file.model'
 
 /**
  * 系统管理-文件预览类型配置查询请求参数类型
@@ -6,7 +6,7 @@ import type { FilePreviewSource, FilePreviewType } from '@/service/model/system/
  * 对应接口：POST /sys/files/type/page（未传字段不参与过滤，结果默认按 id 升序）
  */
 export interface SysFileTypeQueryRequest extends PageQueryRequest {
-  previewType?: FilePreviewType // 预览类型编码（精确）
+  previewType?: FilePreview // 预览类型编码（精确）
   previewName?: string // 预览类型名称（模糊）
   fileSuffix?: string // 文件后缀（精确）
 }
@@ -16,7 +16,7 @@ export interface SysFileTypeQueryRequest extends PageQueryRequest {
  */
 export interface SysFileTypeResponse extends MetaResponse {
   id: ModeIdType // 配置ID
-  previewType: FilePreviewType // 预览类型编码
+  previewType: FilePreview // 预览类型编码
   previewName: string // 预览类型名称
   fileSuffix?: string | null // 文件后缀；为 null 表示该预览类型的默认名称配置
   previewSource?: FilePreviewSource | null // 预览来源：original 原文件 / convert 转换产物（空按原始文件处理）

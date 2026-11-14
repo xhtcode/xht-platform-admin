@@ -65,7 +65,7 @@ const handleEdit = (row: GenDataSourceResponse) => {
  */
 const handleDelete = (row?: GenDataSourceResponse) => {
   state.loadingStatus = true
-  let ids: ModeIdArrayType = []
+  let ids: ModeIdArray = []
   if (row) {
     ids = [row.id]
   } else {

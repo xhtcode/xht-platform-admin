@@ -1,21 +1,21 @@
 /**
  * 用户类型
  */
-export type UserType = 1 | 2 | 3
+export type UserKind = 1 | 2 | 3
 
 /**
  * 用户状态
  */
-export type UserStatusType = 0 | 1 | 2 | 3 | 4
+export type UserStatus = 0 | 1 | 2 | 3 | 4
 
 /**
  * 查询请求类型
  */
 export interface SysUserQueryRequest extends PageQueryRequest {
-  userType?: UserType // 用户类型
+  userType?: UserKind // 用户类型
   userName?: string // 用户账号
   nickName?: string // 用户昵称
-  userStatus?: UserStatusType // 账号状态
+  userStatus?: UserStatus // 账号状态
   userPhone?: string // 手机号码
   deptId?: number // 部门ID
 }
@@ -43,10 +43,10 @@ export interface SysUserProfileResponse extends BasicResponse {
  */
 export interface SysUserResponse extends MetaResponse {
   id: ModeIdType // 用户ID
-  userType: UserType // 用户类型
+  userType: UserKind // 用户类型
   userName: string // 用户名
   nickName: string // 用户昵称
-  userStatus: UserStatusType // 用户状态
+  userStatus: UserStatus // 用户状态
   userPhone: string //手机号码
   userAvatar: string // 头像
   deptId: ModeIdType // 部门ID
@@ -69,7 +69,7 @@ export interface UserSimpleVo {
   userName: string // 用户名
   nickName: string // 昵称
   avatarUrl: string // 头像地址
-  userStatus: UserStatusType // 账号状态
+  userStatus: UserStatus // 账号状态
 }
 
 /**

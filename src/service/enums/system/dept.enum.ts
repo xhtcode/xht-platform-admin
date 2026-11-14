@@ -1,9 +1,9 @@
-import type { DeptStatusType } from '@/service/model/system/dept.model'
+import type { DeptStatus } from '@/service/model/system/dept.model'
 
 /**
  * 部门状态枚举
  */
-export const deptStatusEnum: DictEnum<DeptStatusType, 'NORMAL' | 'DISABLE'> = {
+export const deptStatusEnum: DictEnum<DeptStatus, 'NORMAL' | 'DISABLE'> = {
   NORMAL: {
     label: '正常',
     value: 0,

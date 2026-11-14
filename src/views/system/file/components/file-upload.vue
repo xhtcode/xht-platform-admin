@@ -21,7 +21,7 @@ const uploadRef = useTemplateRef<UploadInstance>('uploadRef')
 const state = reactive({
   visibleStatus: false, // 弹窗可见状态
   loadingStatus: false, // 加载状态
-  fileUsed: '', // 文件用途（用途决定下载/打印/分享闸门与水印等级）
+  fileUsed: '', // 文件用途（取用途编码 usedCode）
   fileUsedOptions: [] as SysFileUsedResponse[], // 可选用途（仅启用中的）
   fileList: [] as UploadUserFile[], // 待上传文件列表（仅允许单个文件）
   chunkStatus: false, // 是否走分片上传
@@ -175,7 +175,7 @@ defineExpose({
   >
     <el-form v-loading="state.loadingStatus" element-loading-text="拼命上传中" label-width="80px">
       <el-form-item label="文件用途">
-        <el-select v-model="state.fileUsed" clearable filterable placeholder="请选择文件用途（决定下载/打印/分享与水印策略）">
+        <el-select v-model="state.fileUsed" clearable filterable placeholder="请选择文件用途">
           <el-option v-for="item in state.fileUsedOptions" :key="item.usedCode" :label="item.usedName" :value="item.usedCode" />
         </el-select>
       </el-form-item>

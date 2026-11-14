@@ -1,5 +1,5 @@
 import type { NoticeTypeStatus } from '@/service/model/system/notice.type.model'
-import type { NoticeJumpType, NoticeStatus, NoticeTimedPublish, NoticeTop } from '@/service/model/system/notice.model'
+import type { NoticeJumpKind, NoticeStatus, NoticeTimedPublish, NoticeTop } from '@/service/model/system/notice.model'
 
 /**
  * 通知类型状态枚举
@@ -20,7 +20,7 @@ export const noticeTypeStatusEnum: DictEnum<NoticeTypeStatus, 'NOT_ENABLE' | 'EN
 /**
  * 跳转类型
  */
-export const noticeJumpTypeEnum: DictEnum<NoticeJumpType, 'NO_JUMP' | 'INNER_PAGE' | 'OUTER_LINK'> = {
+export const noticeJumpTypeEnum: DictEnum<NoticeJumpKind, 'NO_JUMP' | 'INNER_PAGE' | 'OUTER_LINK'> = {
   NO_JUMP: {
     label: '无跳转',
     value: 0,

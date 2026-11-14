@@ -1,4 +1,4 @@
-export interface RegularType {
+export interface RegularRule {
   label: string
   value: string
   regular: RegExp
@@ -9,7 +9,7 @@ export interface RegularType {
  */
 
 class RegularUtils {
-  public regularConstant: RegularType[] = [
+  public regularConstant: RegularRule[] = [
     { label: '数字', value: 'number', regular: /^-?\d+(\.\d+)?$/ },
     { label: '字母', value: 'letter', regular: /^[A-Za-z]+$/ },
     { label: '数字字母', value: 'letterAndNumber', regular: /^[A-Za-z0-9]+$/ },
@@ -32,7 +32,7 @@ class RegularUtils {
    * 获取正则
    * @param value
    */
-  public getRefExp(value: string): RegularType | null {
+  public getRefExp(value: string): RegularRule | null {
     const resultArray = this.regularConstant.filter((item) => item.value === value)
     return resultArray && resultArray.length > 0 ? resultArray[0] : null
   }

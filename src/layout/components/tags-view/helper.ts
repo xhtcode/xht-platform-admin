@@ -20,15 +20,15 @@ const resolveMeta = (routeView: RouteLocationNormalized | RouteRecordRaw): Route
  * @param routes 路由记录列表
  * @returns 固定页签列表
  */
-export const filterAffixTagsView = (routes: RouteRecordRaw[]): TagsViewType[] => {
-  let tagsResult: TagsViewType[] = []
+export const filterAffixTagsView = (routes: RouteRecordRaw[]): TagsView[] => {
+  let tagsResult: TagsView[] = []
   routes.forEach((route) => {
     const meta = route.meta ?? {}
     if (meta.affixStatus && !meta.breadCrumbStatus) {
       tagsResult.push(formatRoute(route))
     }
     if (route.children) {
-      const tempTags: TagsViewType[] = filterAffixTagsView(route.children as RouteRecordRaw[])
+      const tempTags: TagsView[] = filterAffixTagsView(route.children as RouteRecordRaw[])
       if (tempTags.length >= 1) {
         tagsResult = [...tagsResult, ...tempTags]
       }
@@ -41,7 +41,7 @@ export const filterAffixTagsView = (routes: RouteRecordRaw[]): TagsViewType[] =>
  * 格式化路由为页签数据
  * @param routeView 路由对象或路由记录
  */
-export const formatRoute = (routeView: RouteLocationNormalized | RouteRecordRaw): TagsViewType => {
+export const formatRoute = (routeView: RouteLocationNormalized | RouteRecordRaw): TagsView => {
   const meta = resolveMeta(routeView)
   const fullPath = 'fullPath' in routeView ? routeView.fullPath : undefined
   const query = 'query' in routeView ? routeView.query : undefined

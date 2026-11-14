@@ -88,21 +88,6 @@ export const updateSysFileUsed = (id: ModeIdType, data: SysFileUsedOperationRequ
 }
 
 /**
- * 停用文件用途
- *
- * 有引用的用途不允许删除，只能停用（停用后不可再被选用于新上传）。
- *
- * @param id 用途ID
- */
-export const disableSysFileUsed = (id: ModeIdType): Promise<ApiResponse<void>> => {
-  return request<void>({
-    url: Api.DISABLE + `${id}`,
-    baseURL,
-    method: 'post',
-  })
-}
-
-/**
  * 删除文件用途（仅内置=0 且无引用时可删）
  *
  * @param id 用途ID

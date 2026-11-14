@@ -13,16 +13,16 @@ const leftSide = defineAsyncComponent(() => import('@/views/login/components/lef
 const switchDark = defineAsyncComponent(() => import('@/layout/components/switch-dark/index.vue'))
 
 // 当前激活的登录方式
-type LoginType = 'password' | 'qrcode' | 'phone' | 'wechat' | 'qq' | 'dinging'
+type LoginMode = 'password' | 'qrcode' | 'phone' | 'wechat' | 'qq' | 'dinging'
 
 // 第三方登录
-const activeLoginType = ref<LoginType>('password')
+const activeLoginType = ref<LoginMode>('password')
 
 /**
  * 切换登录方式
  * @param type 登录方式
  */
-const handleChangeLoginType = (type: LoginType) => {
+const handleChangeLoginType = (type: LoginMode) => {
   if (type === 'password' || type === 'phone' || type === 'qrcode') {
     activeLoginType.value = type
   } else {

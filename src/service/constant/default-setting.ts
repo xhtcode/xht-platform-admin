@@ -1,7 +1,7 @@
 import { AppLanguageEnum, ComponentSizeEnum, DeviceEnum } from '@/service/enums'
 import { DefaultThemeColor } from '@/service/constant/index'
 
-const defaultSetting: ThemeDefaultSettingType = {
+const defaultSetting: ThemeDefaultSetting = {
   layoutType: 'default', // 布局类型
   device: DeviceEnum.DESKTOP, // 设备类型
   sidebarStatus: false, // 侧边栏状态

@@ -10,7 +10,7 @@ declare global {
   /**
    * 公共modelId数组类型
    */
-  export type ModeIdArrayType = ModeIdType[]
+  export type ModeIdArray = ModeIdType[]
 
   /**
    * 增删改查操作类型

@@ -4,12 +4,12 @@ defineOptions({
 })
 import type { TimelineItemProps } from 'element-plus'
 
-interface ActivityType extends Partial<TimelineItemProps> {
+interface LoginLogActivity extends Partial<TimelineItemProps> {
   content: string
   ip: string
 }
 
-const activities: ActivityType[] = [
+const activities: LoginLogActivity[] = [
   {
     content: '登录成功',
     ip: '192.168.1.1',

@@ -2,7 +2,7 @@
 import { filterAffixTagsView, formatRoute } from './helper'
 import { useRouteStore } from '@/store/modules/routes.store'
 import useTagsStore from '@/store/modules/tags.store'
-import type { ContextMenuSchemaType } from '@/layout/components/tags-view/types'
+import type { ContextMenuSchema } from '@/layout/components/tags-view/types'
 import { useMessage } from '@/hooks/use-message'
 import type { TabPaneName } from 'element-plus'
 import useRouterLoadingHooks from '@/hooks/use-router-loading'
@@ -26,10 +26,10 @@ const { activeName } = storeToRefs(tagsViewPlusStore)
 const contextMenuRef = useTemplateRef('contextMenuRef')
 
 // 响应式数据
-const affixTagArr = ref<TagsViewType[]>([]) // 固定标签数组
+const affixTagArr = ref<TagsView[]>([]) // 固定标签数组
 const visitedViews = computed(() => tagsViewPlusStore.visitedViews) // 已访问视图列表
-const menuList = shallowRef<ContextMenuSchemaType[]>([]) // 右键菜单列表
-const activeTab = computed<TagsViewType | undefined>(() => {
+const menuList = shallowRef<ContextMenuSchema[]>([]) // 右键菜单列表
+const activeTab = computed<TagsView | undefined>(() => {
   return tagsViewPlusStore.visitedViews.find((item) => item.path === unref(router.currentRoute).fullPath)
 })
 const { loadingStatus, refreshRouter } = useRouterLoadingHooks()

@@ -4,14 +4,14 @@ import { generateCaptcha } from '@/service/api/login/login.api'
 import { useMessage } from '@/hooks/use-message'
 import { useUserInfoStore } from '@/store/modules/user.store'
 import { useRoute, useRouter } from 'vue-router'
-import type { LoginRequestType } from '@/service/model/login/login.model'
+import type { LoginRequest } from '@/service/model/login/login.model'
 import { resolveLoginRedirect } from '@/views/login/login-redirect'
 import { Lock, User } from '@element-plus/icons-vue'
 
 defineOptions({ name: 'PasswordForm' })
 
 // 账号密码登录表单（默认值仅在开发环境填充，避免演示账号进入生产构建）
-const loginForm = reactive<LoginRequestType>({
+const loginForm = reactive<LoginRequest>({
   username: import.meta.env.DEV ? 'admin' : '',
   password: import.meta.env.DEV ? '123456' : '',
   captcha_code: '',

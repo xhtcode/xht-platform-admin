@@ -13,8 +13,8 @@ enum Api {
 /**
  * 获取当前登录用户信息
  */
-export const getUserInfo = (): Promise<ApiResponse<UserInfoType>> => {
-  return request<UserInfoType>({
+export const getUserInfo = (): Promise<ApiResponse<UserInfo>> => {
+  return request<UserInfo>({
     url: Api.QUERY_USER_PROFILE,
     baseURL,
     method: 'get',

@@ -2,12 +2,12 @@
 import { convertRouteToMenu } from '@/layout/components/helper'
 import { useRouteStore } from '@/store/modules/routes.store'
 import { RouteRecordRaw, useRoute, useRouter } from 'vue-router'
-import type { EmitsType } from '@/layout/components/menu-split/types'
+import type { MenuSplitEmits } from '@/layout/components/menu-split/types'
 
 defineOptions({
   name: 'MenuSplit',
 })
-const emits = defineEmits<EmitsType>()
+const emits = defineEmits<MenuSplitEmits>()
 const route = useRoute()
 const router = useRouter()
 const routeStore = useRouteStore()

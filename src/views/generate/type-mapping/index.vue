@@ -78,7 +78,7 @@ const handleEdit = (row: GenTypeMappingResponse) => {
  */
 const handleDelete = (row?: GenTypeMappingResponse) => {
   state.loadingStatus = true
-  let ids: ModeIdArrayType = []
+  let ids: ModeIdArray = []
   if (row) {
     ids = [row.id]
   } else {

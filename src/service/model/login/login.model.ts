@@ -1,7 +1,7 @@
 /**
  * 验证码返回类型
  */
-export interface CaptchaResponseType {
+export interface CaptchaResponse {
   key: string
   code: string
 }
@@ -9,7 +9,7 @@ export interface CaptchaResponseType {
 /**
  * 账号密码登录参数类型
  */
-export interface LoginRequestType {
+export interface LoginRequest {
   username: string
   password: string
   captcha_code: string
@@ -19,7 +19,7 @@ export interface LoginRequestType {
 /**
  * 手机号验证码登录参数类型
  */
-export interface PhoneLoginFormType {
+export interface PhoneLoginForm {
   /**
    * 手机号
    */

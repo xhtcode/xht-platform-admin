@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { LoginRequestType, PhoneLoginFormType } from '@/service/model/login/login.model'
+import type { LoginRequest, PhoneLoginForm } from '@/service/model/login/login.model'
 import { loginInPassWord, loginInPhone, logoutToken } from '@/service/api/login/login.api'
 import type { ApiResponse } from 'axios'
 import pInIaPersistConfig, { clearSessionPersist } from '@/store/pinia-persist'
@@ -11,11 +11,11 @@ import { userTypeEnum } from '@/service/enums/system/user.enum'
  */
 export const useUserInfoStore = defineStore(
   'user_info',
-  (): UserStoreType => {
+  (): UserStore => {
     /**
      * 用户信息状态
      */
-    const userInfo = ref<UserInfoType>({
+    const userInfo = ref<UserInfo>({
       roleCodes: [],
       menuButtonCodes: [],
     })
@@ -23,7 +23,7 @@ export const useUserInfoStore = defineStore(
     /**
      * 认证令牌状态
      */
-    const token = ref<TokenInfoType>({
+    const token = ref<TokenInfo>({
       scope: [],
       additional_parameters: {},
     })
@@ -61,7 +61,7 @@ export const useUserInfoStore = defineStore(
      *
      * @param data 令牌字段
      */
-    function applyToken(data: Partial<TokenInfoType>) {
+    function applyToken(data: Partial<TokenInfo>) {
       token.value = {
         access_token: data.access_token ?? token.value.access_token,
         refresh_token: data.refresh_token ?? token.value.refresh_token,
@@ -78,10 +78,10 @@ export const useUserInfoStore = defineStore(
      * @param data 登录请求数据
      * @returns Promise<void>
      */
-    async function login(data: LoginRequestType): Promise<void> {
+    async function login(data: LoginRequest): Promise<void> {
       return new Promise((resolve, reject) => {
         loginInPassWord(data)
-          .then((res: ApiResponse<TokenInfoType>) => {
+          .then((res: ApiResponse<TokenInfo>) => {
             applyToken(res.data)
             resolve()
           })
@@ -99,7 +99,7 @@ export const useUserInfoStore = defineStore(
      * @param data 手机号与验证码
      * @returns Promise<void>
      */
-    async function loginByPhone(data: PhoneLoginFormType): Promise<void> {
+    async function loginByPhone(data: PhoneLoginForm): Promise<void> {
       const res = await loginInPhone(data)
       applyToken(res.data)
     }
@@ -153,7 +153,7 @@ export const useUserInfoStore = defineStore(
     function getUserInfos(): Promise<void> {
       return new Promise((resolve, reject) => {
         getUserInfo()
-          .then((res: ApiResponse<UserInfoType>) => {
+          .then((res: ApiResponse<UserInfo>) => {
             userInfo.value = res.data
             resolve()
           })

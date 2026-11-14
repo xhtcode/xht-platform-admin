@@ -5,14 +5,14 @@ export type FileStatus = 1 | 2 | 99
 /**
  * 文件存储类型
  */
-export type FileStorageType = 'LOCAL' | 'MINIO'
+export type FileStorage = 'LOCAL' | 'MINIO'
 /**
  * 文件预览类型
  *
  * 与后端 `PreviewTypeEnum` 编码一致，由服务端按文件后缀匹配文件类型配置判定；
  * 未匹配到配置的文件该字段为空，前端需自行兜底。
  */
-export type FilePreviewType = 'image' | 'pdf' | 'video' | 'audio' | 'text' | 'json' | 'other'
+export type FilePreview = 'image' | 'pdf' | 'video' | 'audio' | 'text' | 'json' | 'other'
 
 /**
  * 预览初始化状态
@@ -74,7 +74,7 @@ export interface SysFileResponse {
   fileHash: string // 文件hash
   fileType: string // 文件类型（MIME）
   fileSuffix: string // 文件后缀
-  filePreviewType?: FilePreviewType | null // 文件预览类型（服务端按后缀判定，未匹配到文件类型配置时为空）
+  filePreviewType?: FilePreview | null // 文件预览类型（服务端按后缀判定，未匹配到文件类型配置时为空）
   fileStatus: FileStatus // 文件状态
   fileUsed?: string // 文件用途
   fileStorageType: string // 文件存储类型
@@ -149,7 +149,7 @@ export interface SysFilePreviewInitResponse {
   fileSuffix: string // 文件后缀
   fileType: string // 文件 MIME 类型
   accessScope: FileAccessScope // 访问范围
-  previewMode: FilePreviewType // 预览模式
+  previewMode: FilePreview // 预览模式
   previewSource: FilePreviewSource // 预览来源
   capabilities: SysFileCapabilities // 能力清单
   conversion: SysFileConversion // 转换状态
@@ -164,7 +164,7 @@ export interface SysFilePreviewInitResponse {
 export interface SysFilePreviewStatusResponse {
   previewId: string // 预览ID
   initStatus: FileInitStatus // 初始化状态
-  previewMode: FilePreviewType // 预览模式
+  previewMode: FilePreview // 预览模式
   previewSource: FilePreviewSource // 预览来源
   capabilities: SysFileCapabilities // 能力清单
   conversion: SysFileConversion // 转换状态

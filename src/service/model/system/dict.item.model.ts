@@ -1,4 +1,4 @@
-import type { DictStatusType } from '@/service/model/system/dict.model'
+import type { DictStatus } from '@/service/model/system/dict.model'
 
 /**
  * 查询请求类型
@@ -8,7 +8,7 @@ export interface SysDictItemQueryRequest extends PageQueryRequest {
   dictCode?: string // 字典编码
   itemLabel?: string // 字典项名称
   itemValue?: string // 字典项编码
-  status?: DictStatusType //状态(1:启用 0:禁用)
+  status?: DictStatus //状态(1:启用 0:禁用)
 }
 
 /**
@@ -23,7 +23,7 @@ export interface SysDictItemResponse extends MetaResponse {
   itemColor: string // 显示颜色
   sortOrder: number // 排序序号
   remark: string // 字典项描述
-  status: DictStatusType //状态(1:启用 0:禁用)
+  status: DictStatus //状态(1:启用 0:禁用)
 }
 
 /**

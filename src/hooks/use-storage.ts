@@ -1,6 +1,6 @@
 import type { UnwrapRef } from 'vue'
 
-interface StorageType<T> {
+interface LocalStorageSchema<T> {
   value: UnwrapRef<T>
   setItem: (newValue: any) => void
 }
@@ -12,7 +12,7 @@ interface StorageType<T> {
  * @param key string
  * @param type 'session' | 'local'
  */
-export const useStorage = <T>(key: string, type: 'session' | 'local' = 'local'): StorageType<T> => {
+export const useStorage = <T>(key: string, type: 'session' | 'local' = 'local'): LocalStorageSchema<T> => {
   let storage: any = null
   switch (type) {
     case 'session':

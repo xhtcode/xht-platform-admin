@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import type { ColumnConfig, ColumnOption, EmitsType, RightToolbarPropsType } from '@/components/table-tool-bar/types'
+import type { ColumnConfig, ColumnOption, TableToolBarEmits, RightToolbarProps } from '@/components/table-tool-bar/types'
 import { Download, Menu, Refresh, Switch, Upload } from '@element-plus/icons-vue'
 
 defineOptions({ name: 'TableToolbar' })
-const props = withDefaults(defineProps<RightToolbarPropsType>(), {
+const props = withDefaults(defineProps<RightToolbarProps>(), {
   searchStatus: false, // 是否显示搜索框
   refreshStatus: false, // 是否显示刷新
   importStatus: false, // 是否导入
@@ -11,7 +11,7 @@ const props = withDefaults(defineProps<RightToolbarPropsType>(), {
   columnStatus: false, // 显隐列
   gutter: 0, // 列表项之间的间距
 })
-const emits = defineEmits<EmitsType>()
+const emits = defineEmits<TableToolBarEmits>()
 const showSearch = defineModel<boolean>('showSearch', {
   required: false,
   default: false,

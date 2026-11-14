@@ -3,7 +3,7 @@ export type Theme = 'vs' | 'hc-black' | 'vs-dark'
 /**
  * 语言类型枚举
  */
-export type LanguageType =
+export type EditorLanguage =
   | undefined
   | null
   | string

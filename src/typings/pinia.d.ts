@@ -1,6 +1,6 @@
 import { AppLanguageEnum, ComponentSizeEnum } from '@/service/enums'
-import type { UserStatusType } from '@/service/model/system/user.model'
-import type { LoginRequestType, PhoneLoginFormType } from '@/service/model/login/login.model'
+import type { UserStatus } from '@/service/model/system/user.model'
+import type { LoginRequest, PhoneLoginForm } from '@/service/model/login/login.model'
 import type { UnwrapRef } from 'vue'
 
 /**
@@ -11,7 +11,7 @@ declare global {
    * Token信息类型
    * 用于定义用户认证token的相关信息
    */
-  interface TokenInfoType {
+  interface TokenInfo {
     /**
      * 访问令牌
      */
@@ -42,7 +42,7 @@ declare global {
    * 主题pina
    * 存储应用的主题相关配置状态
    */
-  interface ThemeStoreType {
+  interface ThemeStore {
     /**
      * 布局类型
      */
@@ -103,27 +103,27 @@ declare global {
 
   /**
    * 主题默认配置类型
-   * 由ThemeStoreType提取去除响应式包装的类型，用于定义主题默认设置
+   * 由ThemeStore提取去除响应式包装的类型，用于定义主题默认设置
    */
-  type ThemeDefaultSettingType = {
-    [K in keyof ThemeStoreType]: UnwrapRef<ThemeStoreType[K]>
+  type ThemeDefaultSetting = {
+    [K in keyof ThemeStore]: UnwrapRef<ThemeStore[K]>
   }
 
   /**
    * 用户信息store
    * 存储当前登录用户的信息
    */
-  interface UserStoreType {
+  interface UserStore {
     /**
      * 用户信息状态
      * 包含用户的基本信息、角色和权限
      */
-    userInfo: Ref<UserInfoType>
+    userInfo: Ref<UserInfo>
     /**
      * 认证令牌状态
      * 包含访问令牌、刷新令牌等认证信息
      */
-    token: Ref<TokenInfoType>
+    token: Ref<TokenInfo>
     /**
      * 是否为管理员的计算属性
      * 检查用户是否拥有admin角色
@@ -152,12 +152,12 @@ declare global {
      * 用户登录方法
      * 通过用户名密码进行登录，获取认证令牌
      */
-    login: (data: LoginRequestType) => Promise<void>
+    login: (data: LoginRequest) => Promise<void>
     /**
      * 手机号验证码登录方法
      * 通过手机号与短信验证码登录，获取认证令牌
      */
-    loginByPhone: (data: PhoneLoginFormType) => Promise<void>
+    loginByPhone: (data: PhoneLoginForm) => Promise<void>
     /**
      * 用户登出方法
      * 注销服务端令牌并清除用户认证信息、重置路由
@@ -173,7 +173,7 @@ declare global {
      * 合并写入认证令牌方法
      * 用于登录与令牌刷新场景，未提供的字段沿用原值
      */
-    applyToken: (data: Partial<TokenInfoType>) => void
+    applyToken: (data: Partial<TokenInfo>) => void
     /**
      * 设置访问令牌方法
      * 设置当前访问令牌
@@ -181,7 +181,7 @@ declare global {
     setAccessToken: (access_token: string) => void
   }
 
-  interface UserInfoType {
+  interface UserInfo {
     /**
      * 用户ID
      */
@@ -201,7 +201,7 @@ declare global {
     /**
      * 账号状态(0-正常,1-未激活,2-禁用,3-锁定,4-过期)
      */
-    userStatus?: UserStatusType
+    userStatus?: UserStatus
     /**
      * 手机号
      */
@@ -240,7 +240,7 @@ declare global {
    * 标签页store类型
    * 管理浏览器标签页的状态
    */
-  interface TagsStoreType {
+  interface TagsStore {
     /**
      * 当前激活的标签页
      */
@@ -248,7 +248,7 @@ declare global {
     /**
      * 访问过的路由
      */
-    visitedViews: Ref<TagsViewType[]>
+    visitedViews: Ref<TagsView[]>
     /**
      * 缓存的路由
      */
@@ -256,11 +256,11 @@ declare global {
     /**
      * 添加访问过的路由
      */
-    addVisitedViews: (view: TagsViewType) => void
+    addVisitedViews: (view: TagsView) => void
     /**
      * 删除访问过路由
      */
-    removeVisitedView: (view: TagsViewType) => void
+    removeVisitedView: (view: TagsView) => void
     /**
      * 删除所有访问过路由
      */
@@ -268,22 +268,22 @@ declare global {
     /**
      * 删除左侧访问过路由
      */
-    removeLeftVisitedViews: (view: TagsViewType) => void
+    removeLeftVisitedViews: (view: TagsView) => void
     /**
      * 删除右侧访问过路由
      */
-    removeRightVisitedViews: (view: TagsViewType) => void
+    removeRightVisitedViews: (view: TagsView) => void
     /**
      * 删除其他访问过路由
      */
-    removeOtherVisitedViews: (view: TagsViewType) => void
+    removeOtherVisitedViews: (view: TagsView) => void
   }
 
   /**
    * 标签页视图类型
    * 定义标签页中每个路由视图的属性
    */
-  interface TagsViewType {
+  interface TagsView {
     /**
      * 路由路径
      */

@@ -1,4 +1,4 @@
-import type { MenuCommon, MenuStatus, MenuType } from '@/service/model/system/menu.model'
+import type { MenuCommon, MenuStatus, MenuKind } from '@/service/model/system/menu.model'
 
 /**
  * 定义菜单状态枚举类型
@@ -17,7 +17,7 @@ export const menuStatusEnum: DictEnum<MenuStatus, 'NORMAL' | 'DISABLE'> = {
 /**
  * 菜单类型枚举
  */
-export const menuTypeEnum: DictEnum<MenuType, 'M' | 'C' | 'B'> = {
+export const menuTypeEnum: DictEnum<MenuKind, 'M' | 'C' | 'B'> = {
   M: {
     label: '目录',
     value: 'M',

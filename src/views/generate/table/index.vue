@@ -84,7 +84,7 @@ const handleSync = async (row: GenTableInfoResponse) => {
  */
 const handleDownload = async (row?: GenTableInfoResponse) => {
   state.loadingStatus = true
-  let dataArray: ModeIdArrayType
+  let dataArray: ModeIdArray
   if (row) {
     dataArray = [row]
   } else {
@@ -119,7 +119,7 @@ const handleDelete = (row: GenTableInfoResponse) => {
  * 处理查看代码
  */
 const handleCodeView = (row?: GenTableInfoResponse) => {
-  let ids: ModeIdArrayType
+  let ids: ModeIdArray
   if (row) {
     ids = [row.id]
   } else {

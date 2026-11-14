@@ -4,7 +4,7 @@ import { useMessage } from '@/hooks/use-message'
 import { useUserInfoStore } from '@/store/modules/user.store'
 import { generatePhoneSmsCode } from '@/service/api/login/login.api'
 import { SMS_RESEND_INTERVAL } from '@/service/constant'
-import type { PhoneLoginFormType } from '@/service/model/login/login.model'
+import type { PhoneLoginForm } from '@/service/model/login/login.model'
 import { resolveLoginRedirect } from '@/views/login/login-redirect'
 import { useRoute, useRouter } from 'vue-router'
 import { Phone } from '@element-plus/icons-vue'
@@ -24,7 +24,7 @@ const userInfoStore = useUserInfoStore()
 const phoneFormRef = useTemplateRef<FormInstance>('phoneFormRef')
 
 // 手机号登录表单
-const phoneForm = reactive<PhoneLoginFormType>({
+const phoneForm = reactive<PhoneLoginForm>({
   phone: '',
   phoneCode: '',
 })

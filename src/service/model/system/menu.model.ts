@@ -5,7 +5,7 @@ export type MenuStatus = 0 | 1
 /**
  * 菜单类型
  */
-export type MenuType = 'M' | 'C' | 'B'
+export type MenuKind = 'M' | 'C' | 'B'
 /**
  * 菜单公共属性
  */
@@ -15,7 +15,7 @@ export type MenuCommon = 0 | 1
  * 菜单查询请求类型
  */
 export interface SysMenuQueryRequest extends PageQueryRequest {
-  menuType?: MenuType // 菜单类型
+  menuType?: MenuKind // 菜单类型
   menuName?: string // 菜单名称
   menuStatus?: MenuStatus // 菜单状态
 }
@@ -26,7 +26,7 @@ export interface SysMenuQueryRequest extends PageQueryRequest {
 export interface SysMenuResponse extends MetaResponse {
   id: ModeIdType // 菜单ID
   parentId: ModeIdType // 父菜单ID
-  menuType?: MenuType // 类型
+  menuType?: MenuKind // 类型
   menuName?: string // 菜单名称
   menuIcon?: string // 菜单图标
   menuPath?: string // 路由地址

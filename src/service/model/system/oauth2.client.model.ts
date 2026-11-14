@@ -1,7 +1,7 @@
 /**
  * 客户端授权类型
  */
-export type AuthorizationGrantTypes = 'refresh_token' | 'password' | 'client_credentials' | 'phone' | 'authorization_code'
+export type AuthorizationGrant = 'refresh_token' | 'password' | 'client_credentials' | 'phone' | 'authorization_code'
 
 /**
  * 客户认证方式
@@ -34,7 +34,7 @@ export interface SysOauth2ClientResponse extends MetaResponse {
   clientSecretExpiresAt: string // 客户端过期时间
   clientName: string // 客户端名称
   clientAuthenticationMethods: ClientAuthenticationMethods[] // 客户认证方式
-  authorizationGrantTypes: AuthorizationGrantTypes[] // 客户端授权类型
+  authorizationGrantTypes: AuthorizationGrant[] // 客户端授权类型
   redirectUris: string[] // 授权后重定向URI
   postLogoutRedirectUris: string[] // 登出后重定向URI
   scopes: string[] // 客户端作用域

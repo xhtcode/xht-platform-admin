@@ -6,6 +6,6 @@ import type { RouteRecordRaw } from 'vue-router'
  * @param menuList - 点击后传递的菜单列表数据
  * @param linkStatus - 是否跳转 true 跳转 false 不跳转
  */
-export interface EmitsType {
+export interface MenuSplitEmits {
   (e: 'change', menuList: RouteRecordRaw[], linkStatus: boolean): void
 }

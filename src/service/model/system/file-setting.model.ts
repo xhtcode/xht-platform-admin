@@ -3,7 +3,7 @@
  *
  * 决定前端渲染的控件：bool → Switch，int → InputNumber，string → Input。
  */
-export type FileSettingValueType = 'bool' | 'int' | 'string'
+export type FileSettingValue = 'bool' | 'int' | 'string'
 
 /**
  * 配置覆盖方向
@@ -18,7 +18,7 @@ export type FileSettingOverrideDirection = 'LOCKED' | 'TIGHTEN_ONLY' | 'FREE'
 export interface SysFileSettingResponse {
   settingKey: string // 配置键
   settingValue: string // 当前值（统一按字符串下发，按 valueType 解析）
-  valueType: FileSettingValueType // 值类型
+  valueType: FileSettingValue // 值类型
   settingGroup: string // 分组：download/print/share/watermark/convert/session/image/file
   settingName: string // 配置名称
   description?: string | null // 说明

@@ -6,7 +6,7 @@ import pInIaPersistConfig from '@/store/pinia-persist'
  */
 const useTagsStore = defineStore(
   'tags',
-  (): TagsStoreType => {
+  (): TagsStore => {
     /**
      * 当前激活的视图名称
      */
@@ -15,7 +15,7 @@ const useTagsStore = defineStore(
     /**
      * 已访问视图列表
      */
-    const visitedViews = ref<TagsViewType[]>([])
+    const visitedViews = ref<TagsView[]>([])
     /**
      * 缓存视图列表
      */
@@ -23,7 +23,7 @@ const useTagsStore = defineStore(
     /**
      * 添加已访问视图到已访问视图列表中
      */
-    const addVisitedViews = (view: TagsViewType) => {
+    const addVisitedViews = (view: TagsView) => {
       if (!view) return
       if (visitedViews.value.some((v) => v.path === view.path)) return
       visitedViews.value.push(view)
@@ -32,7 +32,7 @@ const useTagsStore = defineStore(
     /**
      * 从已访问视图列表中删除指定的视图（删除数据不包括固定的）
      */
-    const removeVisitedView = (view: TagsViewType) => {
+    const removeVisitedView = (view: TagsView) => {
       if (view.affixStatus) return
       for (const [i, v] of visitedViews.value.entries()) {
         // 找到与指定视图路径匹配的视图，在已访问视图列表中删除该视图
@@ -55,7 +55,7 @@ const useTagsStore = defineStore(
     /**
      * 从已访问视图列表中删除其他的视图（删除数据不包括固定的）
      */
-    const removeOtherVisitedViews = (view: TagsViewType) => {
+    const removeOtherVisitedViews = (view: TagsView) => {
       visitedViews.value = visitedViews.value.filter((v) => {
         return v.affixStatus || v.path === view.path
       })
@@ -64,7 +64,7 @@ const useTagsStore = defineStore(
     /**
      * 从已访问视图列表中删除它左侧的视图（删除数据不包括固定的）
      */
-    const removeLeftVisitedViews = (view: TagsViewType) => {
+    const removeLeftVisitedViews = (view: TagsView) => {
       const currIndex = visitedViews.value.findIndex((v) => v.path === view.path)
       if (currIndex === -1) {
         return
@@ -75,7 +75,7 @@ const useTagsStore = defineStore(
     /**
      * 从已访问视图列表中删除它右侧的视图（删除数据不包括固定的）
      */
-    const removeRightVisitedViews = (view: TagsViewType) => {
+    const removeRightVisitedViews = (view: TagsView) => {
       const currIndex = visitedViews.value.findIndex((v) => v.path === view.path)
       if (currIndex === -1) {
         return

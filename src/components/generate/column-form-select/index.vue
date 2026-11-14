@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ColumnFormSelectOptionType } from '@/components/generate/column-form-select/types'
+import type { ColumnFormSelectOption } from '@/components/generate/column-form-select/types'
 import { commonOptions, dictOptions } from '@/components/generate/column-form-select/data'
 
 defineOptions({
@@ -21,7 +21,7 @@ const dictCode = defineModel<any>('dictCode', {
 /**
  * 表单列表
  */
-const selectData = computed<ColumnFormSelectOptionType[]>(() => {
+const selectData = computed<ColumnFormSelectOption[]>(() => {
   return dictCode.value ? dictOptions : commonOptions
 })
 </script>

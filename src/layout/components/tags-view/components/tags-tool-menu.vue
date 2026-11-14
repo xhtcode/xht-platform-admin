@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import type { ContextMenuSchemaType, PropsTypes } from '@/layout/components/tags-view/types'
+import type { ContextMenuSchema, TagsToolMenuProps } from '@/layout/components/tags-view/types'
 
 defineOptions({ name: 'TagsContextMenu' })
 
 // 定义组件props，默认值设置
-const props = withDefaults(defineProps<PropsTypes>(), {
+const props = withDefaults(defineProps<TagsToolMenuProps>(), {
   trigger: 'contextmenu', // 触发方式，默认右键菜单
   disabled: false, // 是否禁用，默认不禁用
 })
@@ -26,7 +26,7 @@ const triggerRef = ref<any>({
 })
 
 // 菜单列表数据，通过v-model绑定
-const menuList = defineModel<ContextMenuSchemaType[]>('menuList', {
+const menuList = defineModel<ContextMenuSchema[]>('menuList', {
   required: true,
   default: () => [],
 })
@@ -35,7 +35,7 @@ const menuCloseStatus = ref<boolean>(false)
 const itemData = shallowRef<any>()
 
 // 菜单项点击处理函数
-const commandTrigger = (menuItem: ContextMenuSchemaType) => {
+const commandTrigger = (menuItem: ContextMenuSchema) => {
   emits('change', menuItem.command as string)
 }
 
