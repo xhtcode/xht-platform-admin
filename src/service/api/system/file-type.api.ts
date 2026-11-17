@@ -33,7 +33,7 @@ export const saveSysFileType = (data: SysFileTypeOperationRequest): Promise<ApiR
 }
 
 /**
- * 修改文件预览类型配置（三个业务字段整体覆盖，不传后缀即清除后缀）
+ * 修改文件预览类型配置（业务字段整体覆盖，不传后缀即清除后缀）
  *
  * @param data 预览类型配置表单（需携带 id）
  */

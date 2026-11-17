@@ -5,7 +5,7 @@ import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import { querySysFileTypePage, removeSysFileTypeById } from '@/service/api/system/file-type.api'
-import { filePreviewSourceEnum, filePreviewTypeEnum } from '@/service/enums/system/file.enum'
+import { filePreviewTypeEnum } from '@/service/enums/system/file.enum'
 import type { SysFileTypeQueryRequest, SysFileTypeResponse } from '@/service/model/system/file-type.model'
 import { sysFileTypeColumnOption } from '@/views/system/file-type/file-type.data'
 
@@ -91,11 +91,6 @@ onMounted(async () => {
           </el-form-item>
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
-          <el-form-item label="预览类型名称" prop="previewName">
-            <el-input v-model="queryParams.previewName" :maxlength="30" clearable placeholder="请输入名称（模糊）" show-word-limit />
-          </el-form-item>
-        </el-col>
-        <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
           <el-form-item label="文件后缀" prop="fileSuffix">
             <el-input v-model="queryParams.fileSuffix" :maxlength="30" clearable placeholder="请输入后缀（精确）" show-word-limit />
           </el-form-item>
@@ -122,35 +117,18 @@ onMounted(async () => {
     >
       <el-table-column align="center" fixed="left" type="selection" width="55" />
       <xht-column-index :current="queryParams.current" :size="queryParams.size" fixed="left" />
-      <el-table-column v-if="columnOption.previewType?.visible" label="预览类型" prop="previewType" width="120">
+      <el-table-column v-if="columnOption.previewType?.visible" label="预览类型" prop="previewType">
         <template #default="{ row }">
           <xht-enum-tag :data="filePreviewTypeEnum" :filter-label="row.previewType" />
         </template>
       </el-table-column>
-      <el-table-column v-if="columnOption.previewName?.visible" label="预览类型名称" min-width="180" prop="previewName" show-overflow-tooltip />
-      <el-table-column v-if="columnOption.fileSuffix?.visible" label="文件后缀" prop="fileSuffix" width="140">
+      <el-table-column v-if="columnOption.previewName?.visible" label="预览类型名称" prop="previewName" show-overflow-tooltip />
+      <el-table-column v-if="columnOption.fileSuffix?.visible" label="文件后缀" prop="fileSuffix">
         <template #default="{ row }">
           {{ row.fileSuffix || '未配置' }}
         </template>
       </el-table-column>
-      <el-table-column v-if="columnOption.previewSource?.visible" label="预览来源" prop="previewSource" width="120">
-        <template #default="{ row }">
-          <xht-enum-tag :data="filePreviewSourceEnum" :filter-label="row.previewSource || 'original'" />
-        </template>
-      </el-table-column>
-      <el-table-column v-if="columnOption.convertTarget?.visible" label="转换目标" prop="convertTarget" width="110">
-        <template #default="{ row }">{{ row.convertTarget || '—' }}</template>
-      </el-table-column>
-      <el-table-column v-if="columnOption.enabled?.visible" label="状态" prop="enabled" width="100">
-        <template #default="{ row }">
-          <el-tag :type="row.enabled === 0 ? 'info' : 'success'" size="small">{{ row.enabled === 0 ? '停用' : '启用' }}</el-tag>
-        </template>
-      </el-table-column>
       <el-table-column v-if="columnOption.sort?.visible" label="排序" prop="sort" width="90" />
-      <el-table-column v-if="columnOption.createBy?.visible" label="创建人" prop="createBy" width="140" />
-      <el-table-column v-if="columnOption.createTime?.visible" label="创建时间" prop="createTime" width="180" />
-      <el-table-column v-if="columnOption.updateBy?.visible" label="更新人" prop="updateBy" width="140" />
-      <el-table-column v-if="columnOption.updateTime?.visible" label="更新时间" prop="updateTime" width="180" />
       <!-- @vue-generic {SysFileTypeResponse} -->
       <el-table-column fixed="right" label="操作" width="160">
         <template #default="{ row }">

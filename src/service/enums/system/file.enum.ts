@@ -2,7 +2,6 @@ import type {
   FileAccessScope,
   FileImageMode,
   FileInitStatus,
-  FilePreviewSource,
   FilePreview,
   FileStatus,
   FileStorage,
@@ -101,22 +100,6 @@ export const fileInitStatusEnum: DictEnum<FileInitStatus, 'SUCCESS' | 'CONVERTIN
     label: '仅支持下载',
     value: 4,
     type: 'info',
-  },
-}
-
-/**
- * 预览来源
- */
-export const filePreviewSourceEnum: DictEnum<FilePreviewSource, 'ORIGINAL' | 'CONVERT'> = {
-  ORIGINAL: {
-    label: '原文件',
-    value: 'original',
-    type: 'primary',
-  },
-  CONVERT: {
-    label: '转换产物',
-    value: 'convert',
-    type: 'success',
   },
 }
 

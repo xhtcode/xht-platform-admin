@@ -4,7 +4,7 @@ import type { ContextMenuSchema, TagsToolMenuProps } from '@/layout/components/t
 defineOptions({ name: 'TagsContextMenu' })
 
 // 定义组件props，默认值设置
-const props = withDefaults(defineProps<TagsToolMenuProps>(), {
+withDefaults(defineProps<TagsToolMenuProps>(), {
   trigger: 'contextmenu', // 触发方式，默认右键菜单
   disabled: false, // 是否禁用，默认不禁用
 })

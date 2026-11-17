@@ -4,6 +4,29 @@ import { downloadSysFilePreview } from '@/service/api/system/file.api'
 import { parsePreviewBusinessError } from '@/utils/file-preview'
 
 /**
+ * 格式化文件大小（和后端对齐，优先向上换算单位）
+ *
+ * 截断到 2 位小数（不四舍五入，避免虚报大小）：5240000 → 4.99 MB，5241860 → 4.99 MB
+ *
+ * @param bytes 字节数
+ */
+export function formatFileSize(bytes: number | undefined | null): string {
+  if (!bytes || isNaN(bytes)) return '0.00 B'
+  const units = ['B', 'KB', 'MB', 'GB', 'TB']
+  let size = Number(bytes)
+  let unitIndex = 0
+  const base = 1024
+
+  while (size >= base && unitIndex < units.length - 1) {
+    size /= base
+    unitIndex++
+  }
+  // 先乘100向下取整，再除以100，解决toFixed浮点坑
+  const fixedNum = Math.floor(size * 100) / 100
+  return fixedNum.toFixed(2) + ' ' + units[unitIndex]
+}
+
+/**
  * blob 文件流处理
  *
  * @param response axios 请求返回的响应

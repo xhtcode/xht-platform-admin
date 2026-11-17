@@ -34,6 +34,9 @@
   .el-dialog__body {
     height: calc(100vh - var(--xht-drawer-footer-height) - var(--xht-body-height));
     border-bottom: 1px solid var(--el-border-color);
+    display: flex;
+    flex-direction: column;
+    padding: var(--el-dialog-padding-primary);
   }
 
   .el-dialog__footer {

@@ -10,13 +10,11 @@ import { sysFileColumnOption } from '@/views/system/file/file.data'
 import { handleDownloadPreviewFile } from '@/utils/file'
 import { PreviewApiError } from '@/utils/file-preview'
 import { filePreviewTypeEnum, fileStatusEnum, fileStorageTypeEnum } from '@/service/enums/system/file.enum'
-import { Delete, Document, Download, Refresh, Search, Upload, View } from '@element-plus/icons-vue'
+import { Delete, Document, Download, Refresh, Search, View } from '@element-plus/icons-vue'
 
 defineOptions({ name: 'SysFileViewIndex' })
 
-const fileUpload = defineAsyncComponent(() => import('@/views/system/file/components/file-upload.vue'))
 const fileDetail = defineAsyncComponent(() => import('@/views/system/file/components/file-detail.vue'))
-const sysFileUploadRef = useTemplateRef('sysFileUploadRef')
 const sysFileDetailRef = useTemplateRef('sysFileDetailRef')
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 const router = useRouter()
@@ -82,13 +80,6 @@ const handleSearch = async () => {
     queryParams.value.endUploadTime = undefined
   }
   await handlePageQuery()
-}
-
-/**
- * 处理上传文件
- */
-const handleUpload = () => {
-  sysFileUploadRef.value?.show()
 }
 
 /**
@@ -177,37 +168,10 @@ onMounted(async () => {
           </el-form-item>
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
-          <el-form-item label="文件类型" prop="fileType">
-            <el-input v-model="queryParams.fileType" clearable :maxlength="100" show-word-limit placeholder="请输入MIME类型（精确查询）" />
-          </el-form-item>
-        </el-col>
-        <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
           <el-form-item label="文件状态" prop="fileStatus">
             <el-select v-model="queryParams.fileStatus" clearable placeholder="请选择文件状态">
               <el-option v-for="item in fileStatusEnum" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
-          <el-form-item label="文件用途" prop="fileUsed">
-            <el-input v-model="queryParams.fileUsed" clearable :maxlength="100" show-word-limit placeholder="请输入文件用途" />
-          </el-form-item>
-        </el-col>
-        <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
-          <el-form-item label="上传用户" prop="fileUploadUser">
-            <el-input v-model="queryParams.fileUploadUser" clearable :maxlength="100" show-word-limit placeholder="请输入上传用户" />
-          </el-form-item>
-        </el-col>
-        <el-col :xl="8" :lg="12" :md="16" :sm="24" :xs="24">
-          <el-form-item label="上传时间">
-            <el-date-picker
-              v-model="uploadTimeRange"
-              value-format="YYYY-MM-DD HH:mm:ss"
-              type="datetimerange"
-              range-separator="至"
-              start-placeholder="开始时间"
-              end-placeholder="结束时间"
-            />
           </el-form-item>
         </el-col>
         <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
@@ -223,13 +187,10 @@ onMounted(async () => {
       refresh-status
       search-status
       @refresh="resetQuery"
-    >
-      <el-button :icon="Upload" size="small" type="primary" @click="handleUpload">上传文件</el-button>
-    </table-tool-bar>
+    ></table-tool-bar>
     <el-table v-loading="state.loadingStatus" :data="state.tableList" border row-key="id" empty-text="暂无匹配数据 🔍 试试调整筛选条件吧">
       <xht-column-index fixed="left" :current="queryParams.current" :size="queryParams.size" />
       <el-table-column v-if="columnOption.fileOriginalName?.visible" label="文件原始名称" prop="fileOriginalName" width="260" show-overflow-tooltip />
-      <el-table-column v-if="columnOption.fileDesc?.visible" label="文件描述" prop="fileDesc" width="240" show-overflow-tooltip />
       <el-table-column v-if="columnOption.fileType?.visible" label="文件类型" prop="fileType" width="160" show-overflow-tooltip />
       <el-table-column v-if="columnOption.fileSuffix?.visible" label="文件后缀" prop="fileSuffix" width="100" />
       <el-table-column v-if="columnOption.filePreviewType?.visible" label="预览类型" prop="filePreviewType" width="110">
@@ -256,6 +217,7 @@ onMounted(async () => {
       <el-table-column v-if="columnOption.fileHash?.visible" label="文件hash" prop="fileHash" width="220" show-overflow-tooltip />
       <el-table-column v-if="columnOption.fileUploadTime?.visible" label="上传时间" prop="fileUploadTime" width="180" />
       <el-table-column v-if="columnOption.fileUploadUser?.visible" label="上传用户" prop="fileUploadUser" width="120" />
+      <el-table-column v-if="columnOption.fileDesc?.visible" label="文件描述" prop="fileDesc" width="240" show-overflow-tooltip />
       <!-- @vue-generic {SysFileResponse} -->
       <el-table-column label="操作" fixed="right" width="260">
         <template #default="{ row }">
@@ -278,7 +240,6 @@ onMounted(async () => {
       :total="state.total"
       @pagination="handlePageQuery"
     />
-    <file-upload ref="sysFileUploadRef" @success="handlePageQuery" />
     <file-detail ref="sysFileDetailRef" />
   </div>
 </template>
