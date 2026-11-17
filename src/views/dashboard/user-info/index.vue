@@ -1,34 +1,52 @@
 <script setup lang="ts">
-import { userStatusEnum } from '@/service/enums/system/user.enum'
+import { Calendar, OfficeBuilding, Postcard } from '@element-plus/icons-vue'
+import { storeToRefs } from 'pinia'
+import { userStatusEnum, userTypeEnum } from '@/service/enums/system/user.enum'
+import { useUserInfoStore } from '@/store/modules/user.store'
+import { useMessage } from '@/hooks/use-message'
+import { resolveAvatarUrl } from '@/utils/file'
 
 defineOptions({
   name: 'UserInfo',
 })
-import { useMessage } from '@/hooks/use-message.ts'
-// 模拟用户数据
-const userData = reactive({
-  userId: 1,
-  userName: 'admin',
-  nickName: '管理员',
-  userPhone: '13800138000',
-  userAvatar: '',
-  userStatus: userStatusEnum.NORMAL.value,
-  registerDate: '2024-01-01',
-  dataScope: 1,
-  userType: '1',
-})
 
-// 是否处于编辑模式
+/**
+ * 当前登录用户信息（与顶栏头像同源）
+ */
+const { userInfo } = storeToRefs(useUserInfoStore())
+
+/**
+ * 头像可访问地址（store 中通常是相对路径，需补网关前缀）
+ */
+const avatarSrc = computed<string>(() => resolveAvatarUrl(userInfo.value.userAvatar))
+
+/**
+ * 展示名称（昵称为空时回退用户名）
+ */
+const displayName = computed<string>(() => userInfo.value.nickName || userInfo.value.userName || '未知用户')
+
+/**
+ * 头像无图时展示的首字符
+ */
+const avatarFallback = computed<string>(() => (userInfo.value.nickName || userInfo.value.userName || 'U').charAt(0))
+
+/**
+ * 是否处于编辑模式
+ */
 const isEditMode = ref(false)
 
-// 编辑表单数据
+/**
+ * 编辑表单数据
+ */
 const editForm = reactive({
-  nickName: userData.nickName,
-  userPhone: userData.userPhone,
-  userAvatar: userData.userAvatar,
+  nickName: userInfo.value.nickName,
+  userPhone: userInfo.value.userPhone,
+  userAvatar: userInfo.value.userAvatar,
 })
 
-// 数据范围映射
+/**
+ * 数据范围映射
+ */
 const dataScopeMap: Record<number, string> = {
   1: '全部数据权限',
   2: '自定数据权限',
@@ -37,30 +55,30 @@ const dataScopeMap: Record<number, string> = {
   5: '仅本人数据权限',
 }
 
-// 进入编辑模式
+/**
+ * 进入编辑模式（以 store 最新值初始化表单）
+ */
 const enterEditMode = () => {
-  // 初始化编辑表单数据
-  editForm.nickName = userData.nickName
-  editForm.userPhone = userData.userPhone
-  editForm.userAvatar = userData.userAvatar
+  editForm.nickName = userInfo.value.nickName
+  editForm.userPhone = userInfo.value.userPhone
+  editForm.userAvatar = userInfo.value.userAvatar
   isEditMode.value = true
 }
 
-// 保存编辑
+/**
+ * 保存编辑（个人资料保存接口待接入，暂写回 store 保证页面与顶栏头像一致）
+ */
 const saveEdit = () => {
-  // 模拟保存操作
-  userData.nickName = editForm.nickName
-  userData.userPhone = editForm.userPhone
-  userData.userAvatar = editForm.userAvatar
-
-  // 显示保存成功消息
+  userInfo.value.nickName = editForm.nickName
+  userInfo.value.userPhone = editForm.userPhone
+  userInfo.value.userAvatar = editForm.userAvatar
   useMessage().success('保存成功')
-
-  // 退出编辑模式
   isEditMode.value = false
 }
 
-// 取消编辑
+/**
+ * 取消编辑
+ */
 const cancelEdit = () => {
   isEditMode.value = false
 }
@@ -68,73 +86,214 @@ const cancelEdit = () => {
 
 <template>
   <div class="xht-view-container user-select-none">
-    <!-- 用户详细信息标题 -->
-    <el-divider content-position="left">
-      <h3 class="font-bold">用户详细信息</h3>
-    </el-divider>
-    <!-- 个人信息卡片 -->
-    <div class="rounded-lg">
-      <!-- 头部信息 -->
-      <div class="flex items-center p-[10px]">
-        <div class="flex-center flex-[1]">
-          <el-avatar :size="120" :src="userData.userAvatar">
-            {{ userData.nickName?.charAt(0) || 'U' }}
-          </el-avatar>
-        </div>
-        <div class="flex-[3]">
-          <div class="mb-2 flex items-center justify-between">
-            <h2 class="m-0 text-2xl text-gray-800 font-bold">{{ userData.nickName || userData.userName || '未知用户' }}</h2>
-            <div class="flex gap-2">
-              <el-button v-if="!isEditMode" type="primary" size="small" @click="enterEditMode">编辑</el-button>
-              <template v-else>
-                <el-button type="success" size="small" @click="saveEdit">保存</el-button>
-                <el-button size="small" @click="cancelEdit">取消</el-button>
-              </template>
+    <div class="user-info-layout">
+      <!-- 左侧：个人名片 -->
+      <xht-card class="profile-card">
+        <div class="profile-body">
+          <!-- 头像区：编辑态点击头像打开裁剪弹窗，展示态仅预览 -->
+          <div class="profile-head">
+            <xht-avatar-upload v-if="isEditMode" v-model="editForm.userAvatar" :size="120" />
+            <el-avatar v-else :size="120" :src="avatarSrc">{{ avatarFallback }}</el-avatar>
+            <h2 class="profile-name">{{ displayName }}</h2>
+            <p class="profile-account">{{ userInfo.userName ? `@${userInfo.userName}` : '-' }}</p>
+            <div class="profile-tags">
+              <xht-enum-tag :filter-label="userInfo.userStatus" :data="userStatusEnum" />
+              <xht-enum-tag :filter-label="userInfo.userType" :data="userTypeEnum" />
             </div>
           </div>
-          <p class="m-0 mb-3 text-sm text-gray-600">账号：{{ userData.userName }}</p>
-          <div class="flex flex-wrap items-center gap-4">
-            <xht-enum-tag :filter-label="userData.userStatus" :data="userStatusEnum" />
-            <span class="text-xs text-gray-500">注册日期：{{ userData.registerDate || '未知' }}</span>
-          </div>
-        </div>
-      </div>
 
-      <!-- 用户详细信息内容 -->
-      <div class="grid grid-cols-3 gap-x-5 gap-y-1">
-        <div class="h-10 min-h-[40px] flex items-center gap-4">
-          <div class="w-20 text-right text-gray-600 font-bold">手机号</div>
-          <div class="flex-1">
-            <template v-if="!isEditMode">
-              <div class="h-full flex items-center">{{ userData.userPhone || '-' }}</div>
-            </template>
+          <el-divider class="my-5!" />
+
+          <!-- 概要信息 -->
+          <ul class="profile-meta">
+            <li>
+              <el-icon :size="14"><OfficeBuilding /></el-icon>
+              <span class="profile-meta-label">所属部门</span>
+              <span class="profile-meta-value">{{ userInfo.deptName || '-' }}</span>
+            </li>
+            <li>
+              <el-icon :size="14"><Calendar /></el-icon>
+              <span class="profile-meta-label">注册日期</span>
+              <span class="profile-meta-value">{{ userInfo.registerDate || '-' }}</span>
+            </li>
+            <li>
+              <el-icon :size="14"><Postcard /></el-icon>
+              <span class="profile-meta-label">用户编号</span>
+              <span class="profile-meta-value">{{ userInfo.userId ?? '-' }}</span>
+            </li>
+          </ul>
+
+          <!-- 操作区 -->
+          <div class="profile-actions">
+            <el-button v-if="!isEditMode" type="primary" class="w-full" @click="enterEditMode">编辑资料</el-button>
             <template v-else>
-              <el-input v-model="editForm.userPhone" placeholder="请输入手机号" size="small" class="h-9"></el-input>
+              <el-button type="primary" class="flex-1" @click="saveEdit">保存</el-button>
+              <el-button class="flex-1" @click="cancelEdit">取消</el-button>
             </template>
           </div>
         </div>
-        <div class="h-10 min-h-[40px] flex items-center gap-4">
-          <div class="w-20 text-right text-gray-600 font-bold">数据范围</div>
-          <div class="flex flex-1 items-center">{{ dataScopeMap[userData.dataScope as number] || '-' }}</div>
-        </div>
-        <div class="h-10 min-h-[40px] flex items-center gap-4">
-          <div class="w-20 text-right text-gray-600 font-bold">用户类型</div>
-          <div class="flex flex-1 items-center">{{ userData.userType || '-' }}</div>
-        </div>
-        <div class="h-10 min-h-[40px] flex items-center gap-4">
-          <div class="w-20 text-right text-gray-600 font-bold">昵称</div>
-          <div class="flex-1">
-            <template v-if="!isEditMode">
-              <div class="h-full flex items-center">{{ userData.nickName || '-' }}</div>
-            </template>
-            <template v-else>
-              <el-input v-model="editForm.nickName" placeholder="请输入昵称" size="small" class="h-9"></el-input>
-            </template>
+      </xht-card>
+
+      <!-- 右侧：基本资料 -->
+      <xht-card class="detail-card">
+        <div class="detail-body">
+          <div class="detail-head">
+            <span class="detail-title">基本资料</span>
           </div>
+          <el-descriptions border :column="2" label-width="100px" class="detail-desc">
+            <el-descriptions-item label="用户昵称">
+              <el-input v-if="isEditMode" v-model="editForm.nickName" size="small" placeholder="请输入昵称" />
+              <span v-else>{{ userInfo.nickName || '-' }}</span>
+            </el-descriptions-item>
+            <el-descriptions-item label="手机号码">
+              <el-input v-if="isEditMode" v-model="editForm.userPhone" size="small" placeholder="请输入手机号" />
+              <span v-else>{{ userInfo.userPhone || '-' }}</span>
+            </el-descriptions-item>
+            <el-descriptions-item label="用户类型">
+              <xht-enum-tag :filter-label="userInfo.userType" :data="userTypeEnum" />
+            </el-descriptions-item>
+            <el-descriptions-item label="数据范围">
+              {{ dataScopeMap[userInfo.dataScope as number] || '-' }}
+            </el-descriptions-item>
+            <el-descriptions-item label="账号状态">
+              <xht-enum-tag :filter-label="userInfo.userStatus" :data="userStatusEnum" />
+            </el-descriptions-item>
+            <el-descriptions-item label="注册日期">{{ userInfo.registerDate || '-' }}</el-descriptions-item>
+            <el-descriptions-item label="所属部门" :span="2">{{ userInfo.deptName || '-' }}</el-descriptions-item>
+          </el-descriptions>
         </div>
-      </div>
+      </xht-card>
     </div>
   </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.user-info-layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: stretch;
+}
+
+.profile-card {
+  flex: 0 0 320px;
+  max-width: 100%;
+}
+
+.detail-card {
+  flex: 1 1 480px;
+  min-width: 0;
+}
+
+.profile-body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 24px 20px 20px;
+}
+
+.profile-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-name {
+  margin: 12px 0 0;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--el-text-color-primary);
+  text-align: center;
+}
+
+.profile-account {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--el-text-color-secondary);
+}
+
+.profile-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+.profile-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--el-text-color-regular);
+  }
+}
+
+.profile-meta-label {
+  color: var(--el-text-color-secondary);
+}
+
+.profile-meta-value {
+  margin-left: auto;
+  color: var(--el-text-color-primary);
+  text-align: right;
+  word-break: break-all;
+}
+
+.profile-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 24px;
+}
+
+.detail-body {
+  height: 100%;
+  padding: 20px;
+}
+
+.detail-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.detail-title {
+  position: relative;
+  padding-left: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--el-text-color-primary);
+
+  &::before {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 3px;
+    height: 14px;
+    content: '';
+    background-color: var(--el-color-primary);
+    border-radius: 2px;
+    transform: translateY(-50%);
+  }
+}
+
+.detail-desc {
+  // 固定单元格高度：编辑态 small 输入框（24px + 上下 8px 内边距）与展示态文字行高一致，切换不跳动
+  :deep(.el-descriptions__cell) {
+    height: 40px;
+  }
+}
+</style>

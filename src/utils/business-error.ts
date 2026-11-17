@@ -28,9 +28,3 @@ export class BusinessError extends Error {
     this.data = data
   }
 }
-
-/**
- * 判断是否为业务异常
- * @param error 捕获到的任意异常
- */
-export const isBusinessError = (error: unknown): error is BusinessError => error instanceof BusinessError

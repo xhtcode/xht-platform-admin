@@ -83,12 +83,12 @@ const url = computed<string>(() => toSysFileAbsoluteUrl(`/sys/files/preview/cont
 /**
  * 是否允许下载
  */
-const downloadableStatus = computed(() => !!props.previewInit.capabilities.download)
+const downloadableStatus = computed(() => props.previewInit.capabilities.download)
 
 /**
  * 是否允许打印（不允许时整个预览区加 no-print，打印时直接隐藏）
  */
-const printableStatus = computed(() => props.previewInit.capabilities.print !== false)
+const printableStatus = computed(() => props.previewInit.capabilities.print)
 
 /**
  * 直连预览地址所需的请求头：由组件自身维护，调用方无需关心鉴权

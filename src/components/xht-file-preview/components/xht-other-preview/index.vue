@@ -25,7 +25,7 @@ const state = reactive({
 /**
  * 是否允许下载（用途策略禁止下载时为 false）
  */
-const downloadableStatus = computed(() => !!props.previewInit.capabilities.download)
+const downloadableStatus = computed(() => props.previewInit.capabilities.download)
 
 /**
  * 下载文件

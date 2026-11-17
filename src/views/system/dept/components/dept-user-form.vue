@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { DeptUserProps, UserSimpleVo } from '@/service/model/system/user.model'
+import type { UserSimpleVo } from '@/service/model/system/user.model'
 import { useMessage } from '@/hooks/use-message'
 import { userStatusEnum } from '@/service/enums/system/user.enum'
 
@@ -8,8 +8,6 @@ defineOptions({ name: 'DeptUserForm' })
 const emits = defineEmits<{
   (e: 'change', user: UserSimpleVo): void
 }>()
-
-const modelValue = defineModel<ModeIdType>('modelValue')
 
 const tableRef = useTemplateRef<any>('tableRef')
 const state = reactive<{

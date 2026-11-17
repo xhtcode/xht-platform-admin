@@ -23,6 +23,7 @@ enum Api {
   RESET_PASSWORD = `/sys/user/reset/`,
   UPDATE_PASSWORD = `/sys/user/update/pwd`,
   BIND_USER_ROLE = '/sys/user/role/bind',
+  UPLOAD_AVATAR = '/sys/user/upload/avatar',
 }
 
 /**
@@ -106,6 +107,24 @@ export const updatePassword = (passWordInfo: UpdatePwdFrom): Promise<ApiResponse
     baseURL,
     method: 'post',
     data: passWordInfo,
+  })
+}
+
+/**
+ * 上传用户头像
+ *
+ * form-data 字段名固定为 `avatar`，成功返回头像值（写入 userAvatar 的内容）
+ * @param file 头像文件
+ */
+export const uploadSysUserAvatar = (file: File): Promise<ApiResponse<string>> => {
+  const data = new FormData()
+  data.append('avatar', file)
+  return request<string>({
+    url: Api.UPLOAD_AVATAR,
+    baseURL,
+    method: 'post',
+    headers: { 'Content-Type': 'multipart/form-data' },
+    data,
   })
 }
 

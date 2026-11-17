@@ -123,13 +123,11 @@ defineExpose({
     >
       <el-divider>基础信息</el-divider>
       <div class="flex">
-        <!-- 头像上传 -->
+        <!-- 头像上传（点击头像弹出裁剪弹窗，走 /sys/files/upload 统一上传） -->
         <div class="flex-1">
           <el-form-item label="用户头像" prop="userAvatar">
             <div class="w-full flex flex-center">
-              <el-upload :show-file-list="false" accept="image/*" action="/api/upload/avatar">
-                <el-image :src="addUpdateForm.userAvatar" style="width: 100px; height: 100px; border-radius: 50%" />
-              </el-upload>
+              <xht-avatar-upload v-model="addUpdateForm.userAvatar" :size="100" />
             </div>
           </el-form-item>
         </div>

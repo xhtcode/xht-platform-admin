@@ -3,7 +3,7 @@ import type { RouteRecordRaw } from 'vue-router'
 import { getRouters } from '@/service/api/permission/router.api'
 import { cloneDeep } from 'lodash'
 import DynamicRouter from '@/router/modules/dynamic'
-import { removeDynamicRoutes } from '@/router/index'
+import { removeDynamicRoutes } from '@/router'
 import { menuTypeEnum } from '@/service/enums/system/menu.enum'
 
 const viewsModules: any = import.meta.glob('../../views/**/*.{vue,tsx}')

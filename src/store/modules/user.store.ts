@@ -6,6 +6,8 @@ import pInIaPersistConfig, { clearSessionPersist } from '@/store/pinia-persist'
 import { getUserInfo } from '@/service/api/permission/user.profile.api'
 import { userTypeEnum } from '@/service/enums/system/user.enum'
 
+const baseURL: string = import.meta.env.VITE_ADMIN_API_PREFIX
+
 /**
  * 用户信息store
  */
@@ -54,6 +56,15 @@ export const useUserInfoStore = defineStore(
      */
     const getUserInfoPage = computed<string>(() => (isAdmin.value ? '/home/user/admin' : '/home/user'))
 
+    /**
+     * 获取用户头像预览地址
+     */
+    const getUserAvatar = computed<string>(() => {
+      if (userInfo.value.userAvatar) {
+        return baseURL + userInfo.value.userAvatar
+      }
+      return new URL('../../assets/images/avatar.png', import.meta.url).href
+    })
     /**
      * 合并写入认证令牌
      *
@@ -178,6 +189,7 @@ export const useUserInfoStore = defineStore(
       hasRoles,
       getAccessToken,
       getUserInfoPage,
+      getUserAvatar,
       login,
       loginByPhone,
       logout,

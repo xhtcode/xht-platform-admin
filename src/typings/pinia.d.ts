@@ -149,6 +149,10 @@ declare global {
      */
     getUserInfoPage: ComputedRef<string>
     /**
+     * 获取用户头像的计算属性
+     */
+    getUserAvatar: ComputedRef<string>
+    /**
      * 用户登录方法
      * 通过用户名密码进行登录，获取认证令牌
      */

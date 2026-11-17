@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { CaretBottom, List, Lock, Message, SwitchButton, UserFilled } from '@element-plus/icons-vue'
+import { List, Lock, Message, SwitchButton, UserFilled } from '@element-plus/icons-vue'
 import { useUserInfoStore } from '@/store/modules/user.store'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
@@ -9,7 +9,7 @@ defineOptions({ name: 'UserAvatar' })
 
 const router = useRouter()
 const permissions = useUserInfoStore()
-const { userInfo } = storeToRefs(permissions)
+const { userInfo, getUserAvatar } = storeToRefs(permissions)
 
 /**
  * 打开操作
@@ -42,7 +42,7 @@ const openDialog = (type: 'userInfo' | 'userSafety' | 'userMessage' | 'loginLog'
       break
   }
 }
-
+const baseURL: string = import.meta.env.VITE_ADMIN_API_PREFIX
 /**
  * 路由跳转
  * @param path 路由地址
@@ -59,7 +59,7 @@ const routerPath = (path: string) => {
     <el-dropdown trigger="click" size="default" @command="openDialog" placement="bottom-end">
       <div class="avatar-container flex-center">
         <div class="flex-center">
-          <el-avatar alt="avatar" class="avatar-image user-select-none" :src="userInfo.userAvatar" />
+          <el-avatar alt="avatar" class="avatar-image user-select-none" :src="getUserAvatar" />
         </div>
         <div class="user-select-none">
           <span class="text-[14px]!">{{ userInfo?.nickName }}</span>

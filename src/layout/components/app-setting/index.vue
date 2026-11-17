@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useThemeStore } from '@/store'
-import { AppLanguageEnum, ComponentSizeEnum } from '@/service/enums'
+import { ComponentSizeEnum } from '@/service/enums'
 import { storeToRefs } from 'pinia'
 import useThemeColorHooks from '@/hooks/use-theme-hooks'
 import defaultSetting from '@/service/constant/default-setting'

@@ -26,13 +26,6 @@ const useDeptUserDialog = useTemplateRef('deptUserDialog')
 const currentUser = ref<UserSimpleVo>()
 
 /**
- * 打开部门主管选择
- */
-const showDeptUser = () => {
-  useDeptUserDialog.value?.show(addUpdateForm.value.id)
-}
-
-/**
  * 部门主管选择
  * @param user 用户信息
  */

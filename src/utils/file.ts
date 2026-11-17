@@ -27,6 +27,21 @@ export function formatFileSize(bytes: number | undefined | null): string {
 }
 
 /**
+ * 拼接头像可访问地址
+ *
+ * 头像值通常是相对路径（如 `files/avatar/xxx.png`），需补上网关前缀才能被 `<img>`
+ * 或 canvas 等浏览器原生请求访问；http(s)、协议相对、data、blob 地址原样返回。
+ *
+ * @param value 头像值
+ */
+export const resolveAvatarUrl = (value?: string): string => {
+  if (!value) return ''
+  if (/^(https?:)?\/\//i.test(value) || value.startsWith('data:') || value.startsWith('blob:')) return value
+  const baseURL: string = import.meta.env.VITE_ADMIN_API_PREFIX
+  return `${baseURL}${value.startsWith('/') ? '' : '/'}${value}`
+}
+
+/**
  * blob 文件流处理
  *
  * @param response axios 请求返回的响应

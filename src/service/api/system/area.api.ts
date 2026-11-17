@@ -14,7 +14,6 @@ enum Api {
   CREATE = '/sys/area/create',
   UPDATE = '/sys/area/update/',
   REMOVE = '/sys/area/remove/',
-  REMOVE_BATCH = '/sys/area/remove',
   QUERY_BY_ID = '/sys/area/get/',
   QUERY_LIST = '/sys/area/list/',
 }
@@ -57,20 +56,6 @@ export const removeSysAreaById = (id: ModeIdType): Promise<ApiResponse<void>> =>
     url: Api.REMOVE + `${id}`,
     baseURL,
     method: 'post',
-  })
-}
-
-/**
- * 根据主键`id`删除系统管理-行政区划
- *
- * @param ids 系统管理-行政区划主键
- */
-export const removeSysAreaByIdBatch = (ids: string[]): Promise<ApiResponse<void>> => {
-  return request<void>({
-    url: Api.REMOVE_BATCH,
-    baseURL,
-    method: 'post',
-    data: ids,
   })
 }
 

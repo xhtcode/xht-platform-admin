@@ -39,24 +39,6 @@ const requestParamEntries = computed<Record<any, any> | null>(() => {
 })
 
 /**
- * 调用参数降级文本：有内容但无法按标准结构解析时，展示原始/美化文本
- */
-const requestParamFallbackText = computed<string>(() => {
-  const raw = state.logInfo.requestParams
-  if (!raw) return ''
-  const parsed = requestParamEntries.value
-  if (parsed && typeof parsed === 'object' && Object.keys(parsed).length > 0) return ''
-  try {
-    let data = JSON.parse(raw)
-    if (typeof data === 'string') data = JSON.parse(data)
-    if (data && typeof data === 'object') return JSON.stringify(data, null, 2)
-    return String(data)
-  } catch {
-    return raw
-  }
-})
-
-/**
  * 提取单个参数的类型与格式化值，兼容参数值不是 {type, value} 结构的情况
  */
 const getParamInfo = (param: any): { type: string; valueText: string } => {
