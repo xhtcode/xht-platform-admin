@@ -146,7 +146,7 @@ defineExpose({
             <el-input
               v-model="addUpdateForm.remark"
               :maxlength="500"
-              :rows="5"
+              :rows="10"
               placeholder="请输入字典描述"
               resize="none"
               show-word-limit

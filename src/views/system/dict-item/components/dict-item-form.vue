@@ -157,7 +157,7 @@ defineExpose({
         </el-col>
         <el-col :span="24">
           <el-form-item label="字典项描述" prop="remark">
-            <el-input v-model="addUpdateForm.remark" :maxlength="200" :rows="5" placeholder="请输入" resize="none" show-word-limit type="textarea" />
+            <el-input v-model="addUpdateForm.remark" :maxlength="200" :rows="10" placeholder="请输入" resize="none" show-word-limit type="textarea" />
           </el-form-item>
         </el-col>
       </el-row>

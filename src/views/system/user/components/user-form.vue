@@ -222,7 +222,7 @@ defineExpose({
         <!-- 民族（关联profile） -->
         <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="用户民族" prop="profile.nation">
-            <el-input v-model="addUpdateForm.profile.nation" :maxlength="20" placeholder="请输入民族" show-word-limit />
+            <xht-dict-select v-model="addUpdateForm.profile.nation" dict-code="nation" placeholder="请输入民族" />
           </el-form-item>
         </el-col>
       </el-row>

@@ -160,8 +160,8 @@ onMounted(async () => {
       <el-table-column align="center" type="selection" width="55" />
       <xht-column-index :current="queryParams.current" :size="queryParams.size" />
       <el-table-column v-if="columnOption.dictCode?.visible" label="字典编码" prop="dictCode" min-width="160" />
-      <el-table-column v-if="columnOption.itemLabel?.visible" label="字典项名称" prop="itemLabel" min-width="160" />
       <el-table-column v-if="columnOption.itemValue?.visible" label="字典项编码" prop="itemValue" min-width="160" />
+      <el-table-column v-if="columnOption.itemLabel?.visible" label="字典项名称" prop="itemLabel" min-width="160" />
       <el-table-column v-if="columnOption.itemColor?.visible" label="显示颜色" prop="itemColor" width="100">
         <template #default="{ row }">
           <div
@@ -170,13 +170,13 @@ onMounted(async () => {
           />
         </template>
       </el-table-column>
-      <el-table-column v-if="columnOption.sortOrder?.visible" label="排序" prop="sortOrder" width="100" />
-      <el-table-column v-if="columnOption.remark?.visible" label="描述" prop="remark" show-overflow-tooltip width="220" />
       <el-table-column v-if="columnOption.status?.visible" label="状态" prop="status" width="100">
         <template #default="{ row }">
           <xht-enum-tag :filter-label="row.status" :data="sysDictStatusEnum" />
         </template>
       </el-table-column>
+      <el-table-column v-if="columnOption.sortOrder?.visible" label="排序" prop="sortOrder" width="100" />
+      <el-table-column v-if="columnOption.remark?.visible" label="描述" prop="remark" show-overflow-tooltip width="220" />
       <el-table-column v-if="columnOption.createBy?.visible" label="创建人" prop="createBy" width="160" />
       <el-table-column v-if="columnOption.createTime?.visible" label="创建时间" prop="createTime" width="180" />
       <el-table-column v-if="columnOption.updateBy?.visible" label="更新人" prop="updateBy" width="160" />

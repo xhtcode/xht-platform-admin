@@ -45,15 +45,15 @@ export const sysDictItemOperationRules: FormRules<Required<SysDictItemOperationR
  * 列表显示配置
  */
 export const sysDictItemColumnOption: ColumnConfig<SysDictItemResponse> = {
-  dictCode: { desc: '字典编码', visible: true, disabled: true },
-  itemLabel: { desc: '字典项名称', visible: true, disabled: true },
+  dictCode: { desc: '字典编码', visible: false, disabled: true },
   itemValue: { desc: '字典项编码', visible: true, disabled: true },
-  itemColor: { desc: '显示颜色', visible: true, disabled: false },
+  itemLabel: { desc: '字典项名称', visible: true, disabled: true },
+  itemColor: { desc: '显示颜色', visible: false, disabled: false },
+  status: { desc: '状态', visible: true, disabled: false },
   sortOrder: { desc: '排序', visible: true, disabled: false },
   remark: { desc: '描述', visible: false, disabled: false },
-  status: { desc: '状态', visible: true, disabled: false },
   createBy: { desc: '创建人', visible: false, disabled: false },
-  createTime: { desc: '创建时间', visible: false, disabled: false },
+  createTime: { desc: '创建时间', visible: true, disabled: false },
   updateBy: { desc: '更新人', visible: false, disabled: false },
-  updateTime: { desc: '更新时间', visible: false, disabled: false },
+  updateTime: { desc: '更新时间', visible: true, disabled: false },
 }
