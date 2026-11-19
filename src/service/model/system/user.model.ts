@@ -73,13 +73,6 @@ export interface UserSimpleVo {
 }
 
 /**
- * 部门用户props
- */
-export interface DeptUserProps {
-  modelValue?: ModeIdType
-}
-
-/**
  * 操作类型
  */
 export interface SysUserOperationRequest extends SysUserVo, BasicFormRequest {}

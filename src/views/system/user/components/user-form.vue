@@ -3,7 +3,7 @@ import type { FormInstance, FormRules } from 'element-plus'
 import { querySysUserById, saveSysUser, updateSysUser } from '@/service/api/system/user.api'
 import { useMessage } from '@/hooks/use-message'
 import { sysUserOperationForm, sysUserOperationRules } from '@/views/system/user/user.data'
-import { SysUserOperationRequest } from '@/service/model/system/user.model'
+import { SysUserOperationRequest, type UserKind } from '@/service/model/system/user.model'
 import type { SysDeptResponse } from '@/service/model/system/dept.model'
 import { userStatusEnum, userTypeEnum } from '@/service/enums/system/user.enum'
 
@@ -22,6 +22,19 @@ const state = reactive<AddUpdateOption<SysUserOperationRequest>>({
 })
 const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
 const { addUpdateForm } = toRefs(state)
+
+/**
+ * 用户类型下拉数据
+ * 新增时不显示「管理员」；修改时仅被编辑用户本身是管理员才显示「管理员」选项
+ */
+const userTypeEnumSelect = computed<DictEnum<UserKind>>(() => {
+  if (state.operationStatus === 'update' && addUpdateForm.value.userType === userTypeEnum.ADMIN.value) {
+    return { ...userTypeEnum }
+  }
+  const { ADMIN: _admin, ...rest } = userTypeEnum
+  return rest
+})
+
 /**
  * 打开显示
  */
@@ -122,16 +135,16 @@ defineExpose({
       scroll-to-error
     >
       <el-divider>基础信息</el-divider>
-      <div class="flex">
-        <!-- 头像上传（点击头像弹出裁剪弹窗，走 /sys/files/upload 统一上传） -->
-        <div class="flex-1">
-          <el-form-item label="用户头像" prop="userAvatar">
+      <el-row>
+        <!-- 头像仅展示（后端不再支持修改上传，仅修改用户时显示） -->
+        <el-col v-if="state.operationStatus === 'update'" :lg="12" :sm="24" :xs="24">
+          <el-form-item label="用户头像">
             <div class="w-full flex flex-center">
-              <xht-avatar-upload v-model="addUpdateForm.userAvatar" :size="100" />
+              <xht-avatar-upload v-model="addUpdateForm.userAvatar" :size="100" disabled />
             </div>
           </el-form-item>
-        </div>
-        <div class="flex-1">
+        </el-col>
+        <el-col :lg="state.operationStatus === 'update' ? 12 : 24" :sm="24" :xs="24">
           <el-form-item label="登录账号" prop="userName">
             <el-input v-model="addUpdateForm.userName" :maxlength="50" placeholder="请输入用户账号" show-word-limit />
           </el-form-item>
@@ -139,10 +152,10 @@ defineExpose({
             <el-input v-model="addUpdateForm.nickName" :maxlength="15" placeholder="请输入用户昵称" show-word-limit />
           </el-form-item>
           <el-form-item label="用户类型" prop="userType">
-            <xht-enum-select v-model="addUpdateForm.userType" :data="userTypeEnum" clearable placeholder="请选择用户类型" />
+            <xht-enum-select v-model="addUpdateForm.userType" :data="userTypeEnumSelect" clearable placeholder="请选择用户类型" />
           </el-form-item>
-        </div>
-      </div>
+        </el-col>
+      </el-row>
       <el-row>
         <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="用户状态" prop="userStatus">

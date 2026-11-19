@@ -10,7 +10,6 @@ export const sysUserOperationForm: SysUserOperationRequest = {
   userType: userTypeEnum.USER.value,
   userStatus: userStatusEnum.UNACTIVATED.value,
   profile: {},
-  postInfos: [],
 }
 
 /**
