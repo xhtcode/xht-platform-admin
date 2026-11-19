@@ -26,7 +26,7 @@ const menuLists = computed<any>(() => {
 const handleClickMenu = (subItem: RouteRecordRaw) => {
   if (subItem.meta?.linkStatus) {
     if (RegularUtil.isExternal(subItem.path)) {
-      return
+      return window.open(subItem.path, '_blank')
     }
     const href = router.resolve({
       path: subItem.path,

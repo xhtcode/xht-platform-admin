@@ -3,7 +3,7 @@ import type { LoginRequest, PhoneLoginForm } from '@/service/model/login/login.m
 import { loginInPassWord, loginInPhone, logoutToken } from '@/service/api/login/login.api'
 import type { ApiResponse } from 'axios'
 import pInIaPersistConfig, { clearSessionPersist } from '@/store/pinia-persist'
-import { getUserInfo } from '@/service/api/permission/user.profile.api'
+import { getUserProfileInfo } from '@/service/api/dashboard/user.profile.api'
 import { userTypeEnum } from '@/service/enums/system/user.enum'
 
 const baseURL: string = import.meta.env.VITE_ADMIN_API_PREFIX
@@ -163,7 +163,7 @@ export const useUserInfoStore = defineStore(
      */
     function getUserInfos(): Promise<void> {
       return new Promise((resolve, reject) => {
-        getUserInfo()
+        getUserProfileInfo()
           .then((res: ApiResponse<UserInfo>) => {
             userInfo.value = res.data
             resolve()

@@ -5,9 +5,9 @@ import { Plus, Refresh, RefreshLeft, RefreshRight, ZoomIn, ZoomOut } from '@elem
 import 'vue-cropper/dist/index.css'
 import { VueCropper } from 'vue-cropper/dist/vue-cropper.es.js'
 import type { XhtAvatarCropperMethods, XhtAvatarUploadEmits, XhtAvatarUploadProps } from '@/components/system/xht-avatar-upload/types'
-import { uploadSysUserAvatar } from '@/service/api/system/user.api'
 import { useMessage } from '@/hooks/use-message'
 import { resolveAvatarUrl } from '@/utils/file'
+import { uploadUserAvatar } from '@/service/api/dashboard/user.profile.api.ts'
 
 defineOptions({
   name: 'XhtAvatarUpload',
@@ -227,7 +227,7 @@ const handleSubmit = async (): Promise<void> => {
     })
     const croppedFile = new File([blob], `avatar.${props.outputType}`, { type: blob.type })
     // 专属头像上传接口：/sys/user/upload/avatar，form-data 字段名固定为 avatar
-    const { data } = await uploadSysUserAvatar(croppedFile)
+    const { data } = await uploadUserAvatar(croppedFile)
     clearLocalPreview()
     localPreviewSrc.value = URL.createObjectURL(blob)
     modelValue.value = data

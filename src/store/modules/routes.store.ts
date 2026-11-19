@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia'
 import type { RouteRecordRaw } from 'vue-router'
-import { getRouters } from '@/service/api/permission/router.api'
 import { cloneDeep } from 'lodash'
 import DynamicRouter from '@/router/modules/dynamic'
 import { removeDynamicRoutes } from '@/router'
 import { menuTypeEnum } from '@/service/enums/system/menu.enum'
+import { getUserProfileRouters } from '@/service/api/dashboard/user.profile.api.ts'
 
 const viewsModules: any = import.meta.glob('../../views/**/*.{vue,tsx}')
 const dynamicViewsModules: Record<string, Function> = Object.assign({}, { ...viewsModules })
@@ -71,7 +71,7 @@ export const useRouteStore = defineStore('router', () => {
    */
   const generateRoutesAtBack = async () => {
     // 获取路由菜单数据-
-    await getRouters()
+    await getUserProfileRouters()
       .then((res) => {
         // 设置 routes 数据
         routesRaw.value = formatBackRoutes(res.data)
