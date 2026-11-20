@@ -24,7 +24,6 @@ export interface XhtAvatarUploadProps {
   accept?: string // 可选择的文件类型
   maxSizeMb?: number // 允许选择的原图最大体积（MB）
   disabled?: boolean // 是否禁用
-  dialogTitle?: string // 裁剪弹窗标题
   cropSize?: number // 裁剪框宽高（px，正方形）
   outputType?: XhtAvatarUploadOutputType // 裁剪结果输出图片类型
 }
@@ -33,6 +32,5 @@ export interface XhtAvatarUploadProps {
  * 头像上传组件 emit
  */
 export interface XhtAvatarUploadEmits {
-  (e: 'change', value?: string): void
   (e: 'upload-success', value: string): void
 }

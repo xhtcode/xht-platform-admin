@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { UploadFile, UploadRawFile } from 'element-plus'
-import { Plus, Refresh, RefreshLeft, RefreshRight, ZoomIn, ZoomOut } from '@element-plus/icons-vue'
+import { Plus, RefreshLeft, RefreshRight, ZoomIn, ZoomOut } from '@element-plus/icons-vue'
 // vue-cropper 1.1.x 的根路径 typings 有缺陷（见 src/typings/vue-cropper.d.ts 说明），故深导入 dist 产物；样式为独立 CSS 需单独引入
 import 'vue-cropper/dist/index.css'
 import { VueCropper } from 'vue-cropper/dist/vue-cropper.es.js'
@@ -20,9 +20,8 @@ const props = withDefaults(defineProps<XhtAvatarUploadProps>(), {
   accept: 'image/*', // 可选择的文件类型
   maxSizeMb: 5, // 原图最大体积（MB）
   disabled: false, // 是否禁用
-  dialogTitle: '修改头像', // 裁剪弹窗标题
   cropSize: 200, // 裁剪框宽高（px）
-  outputType: 'png', // 裁剪输出图片类型
+  outputType: 'jpeg', // 裁剪输出图片类型
 })
 
 const emits = defineEmits<XhtAvatarUploadEmits>()
@@ -203,17 +202,6 @@ const handleScale = (num: number): void => {
 }
 
 /**
- * 重置裁剪（重新加载原图，回到初始缩放/旋转/位置）
- */
-const handleReset = (): void => {
-  if (originalFile.value) {
-    loadOriginalFile(originalFile.value)
-  } else if (originalUrl.value) {
-    loadOriginalUrl(originalUrl.value)
-  }
-}
-
-/**
  * 提交裁剪结果：导出裁剪图并走头像上传接口
  */
 const handleSubmit = async (): Promise<void> => {
@@ -233,7 +221,6 @@ const handleSubmit = async (): Promise<void> => {
     modelValue.value = data
     useMessage().success('头像修改成功')
     emits('upload-success', data)
-    emits('change', modelValue.value)
     dialogVisible.value = false
   } catch (error) {
     console.error('头像上传失败:', error)
@@ -255,7 +242,7 @@ const handleSubmit = async (): Promise<void> => {
 
     <el-dialog
       v-model="dialogVisible"
-      :title="props.dialogTitle"
+      title="头像修改"
       width="780px"
       append-to-body
       :close-on-click-modal="false"
@@ -322,9 +309,6 @@ const handleSubmit = async (): Promise<void> => {
             </el-button>
             <el-button :disabled="!cropperImg || uploadingStatus" circle title="右旋转" @click="cropperRef?.rotateRight()">
               <el-icon><RefreshRight /></el-icon>
-            </el-button>
-            <el-button :disabled="!cropperImg || uploadingStatus" circle title="重置" @click="handleReset">
-              <el-icon><Refresh /></el-icon>
             </el-button>
           </div>
           <el-button :disabled="!cropperImg" :loading="uploadingStatus" type="primary" @click="handleSubmit">提 交</el-button>

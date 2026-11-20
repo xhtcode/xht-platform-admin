@@ -13,6 +13,7 @@ enum Api {
   REMOVE = '/sys/dict/types/remove/',
   QUERY_BY_ID = '/sys/dict/types/get/',
   QUERY_LIST = '/sys/dict/types/page',
+  CLEAR_CACHE = '/sys/dict/types/clearCache/',
 }
 
 /**
@@ -60,6 +61,18 @@ export const querySysDictById = (id: ModeIdType): Promise<ApiResponse<SysDictRes
     url: Api.QUERY_BY_ID + `${id}`,
     baseURL,
     method: 'get',
+  })
+}
+
+/**
+ * 根据字典编码清除缓存
+ * @param dictCode 字典编码
+ */
+export const clearSysDictCacheByCode = (dictCode: string): Promise<ApiResponse<void>> => {
+  return request<void>({
+    url: Api.CLEAR_CACHE + `${dictCode}`,
+    baseURL,
+    method: 'post',
   })
 }
 

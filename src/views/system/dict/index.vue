@@ -2,11 +2,12 @@
 import type { FormInstance } from 'element-plus'
 import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
 import type { SysDictQueryRequest, SysDictResponse } from '@/service/model/system/dict.model'
-import { querySysDictPage, removeSysDictByIds } from '@/service/api/system/dict.api'
+import { clearSysDictCacheByCode, querySysDictPage, removeSysDictByIds } from '@/service/api/system/dict.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
+import { useDictStore } from '@/store/modules/dict.store'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { sysDictColumnOption } from '@/views/system/dict/dict.data'
-import { Delete, Edit, Plus, Refresh, Search } from '@element-plus/icons-vue'
+import { Delete, DeleteFilled, Edit, Plus, Refresh, Search } from '@element-plus/icons-vue'
 import { sysDictStatusEnum } from '@/service/enums/system/dict.enum'
 
 defineOptions({ name: 'SysDictViewIndex' })
@@ -75,6 +76,23 @@ const handleDelete = (row: SysDictResponse) => {
     })
 }
 
+/**
+ * 处理清除缓存
+ */
+const handleClearCache = (row: SysDictResponse) => {
+  state.loadingStatus = true
+  useMessageBox()
+    .confirm(`此操作将清除字典 [${row.dictCode}] 的缓存, 是否继续?`)
+    .then(async () => {
+      await clearSysDictCacheByCode(row.dictCode)
+      useDictStore().removeDict(row.dictCode)
+      useMessage().success('清除字典缓存成功!')
+    })
+    .finally(() => {
+      state.loadingStatus = false
+    })
+}
+
 onMounted(async () => {
   await handlePageQuery()
 })
@@ -135,6 +153,9 @@ onMounted(async () => {
       >
         修改
       </el-button>
+      <el-button :icon="DeleteFilled" size="small" type="warning" :disabled="state.singleStatus" @click="handleClearCache(state.selectedRows[0])">
+        删除缓存
+      </el-button>
     </table-tool-bar>
     <el-table
       v-loading="state.loadingStatus"
@@ -166,11 +187,12 @@ onMounted(async () => {
       <el-table-column v-if="columnOption.updateBy?.visible" label="更新人" prop="updateBy" width="160" />
       <el-table-column v-if="columnOption.updateTime?.visible" label="更新时间" prop="updateTime" width="180" />
       <!-- @vue-generic {SysDictResponse} -->
-      <el-table-column label="操作" fixed="right" width="220">
+      <el-table-column label="操作" fixed="right" width="260">
         <template #default="{ row }">
           <el-space wrap class="flex-center">
             <el-button :icon="Edit" link type="success" @click="handleEdit(row)">修改</el-button>
             <el-button :icon="Delete" link type="danger" @click="handleDelete(row)">删除</el-button>
+            <el-button :icon="DeleteFilled" link type="warning" @click="handleClearCache(row)">删除缓存</el-button>
           </el-space>
         </template>
       </el-table-column>
