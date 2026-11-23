@@ -13,7 +13,7 @@ const { propertiesVisible, docProperties } = props.properties
 </script>
 
 <template>
-  <el-dialog v-model="propertiesVisible" title="文档属性" width="640px" append-to-body>
+  <el-dialog v-model="propertiesVisible" title="文档属性" width="640px" append-to-body class="xht-dialog">
     <ul class="xht-pdf-preview__property-list">
       <li v-for="(row, index) in docProperties" :key="index" :class="{ 'is-divider': row.divider }">
         <span class="xht-pdf-preview__property-label">{{ row.label }}</span>

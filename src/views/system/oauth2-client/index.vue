@@ -279,7 +279,7 @@ onMounted(async () => {
       :total="state.total"
       @pagination="handlePageQuery"
     />
-    <el-dialog v-model="updateStatus" title="密钥修改" width="45%" :before-close="closePwdDialog" draggable>
+    <el-dialog v-model="updateStatus" title="密钥修改" width="45%" :before-close="closePwdDialog" draggable class="xht-dialog">
       <el-form
         ref="addUpdateFormRef"
         v-loading="state.loadingStatus"

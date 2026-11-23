@@ -91,6 +91,7 @@ defineExpose({
     :close-on-click-modal="false"
     :show-close="!state.loadingStatus"
     :before-close="close"
+    class="xht-dialog"
   >
     <template #header>
       <div class="flex items-center justify-between">

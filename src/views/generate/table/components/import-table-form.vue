@@ -91,6 +91,7 @@ defineExpose({
     :close-on-click-modal="false"
     :show-close="!addUpdatePageInit.loadingStatus"
     :before-close="close"
+    class="xht-dialog"
   >
     <el-form
       ref="addUpdateFormRef"

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { CheckboxValueType } from 'element-plus'
-import type { SysMenuResponse } from '@/service/model/system/menu.model'
+import type { SysMenuTreeResponse } from '@/service/model/system/menu.model'
 import type { SysRoleMenuBindForm } from '@/service/model/system/role.model'
 import { roleMenuBind, selectMenuIdByRoleId } from '@/service/api/system/role.api'
 import { useMessage } from '@/hooks/use-message'
@@ -22,32 +22,56 @@ const state = reactive<AddUpdateOption<SysRoleMenuBindForm>>({
   checkAllStatus: false,
   treeData: [],
   checkedKeys: [],
+  menuTotal: 0,
 })
 
 const { expandStatus, checkAllStatus, treeData, checkedKeys, addUpdateForm } = toRefs(state)
 const indeterminateStatus = ref<boolean>(false)
 
 /**
- * 显示角色权限分配弹窗
- * @param roleId - 角色ID，用于获取该角色已有的菜单权限并加载菜单树
+ * 统计菜单树节点总数（含父级目录）
  */
-const show = async (roleId: ModeIdType) => {
+const countTreeNodes = (list: SysMenuTreeResponse[]): number => {
+  return list.reduce((total, item) => total + 1 + countTreeNodes(item.children || []), 0)
+}
+
+/**
+ * 同步全选/半选状态
+ *
+ * 以树上实际勾选结果为准：前端不再依赖后端 menuTotal 判断全选，
+ * 同时自动忽略历史越界（树上不存在的）菜单ID，避免原样提交后被后端拒绝
+ */
+const syncCheckStatus = () => {
+  const halfCheckedKeys = menuTree.value?.getHalfCheckedKeys() || []
+  checkedKeys.value = menuTree.value?.getCheckedKeys() || []
+  indeterminateStatus.value = halfCheckedKeys.length > 0
+  checkAllStatus.value = state.menuTotal > 0 && checkedKeys.value.length === state.menuTotal
+}
+
+/**
+ * 显示角色权限分配弹窗
+ * @param roleId - 角色ID，用于获取该角色可分配的菜单树
+ * @param roleName - 角色名称，用于弹窗标题
+ */
+const show = async (roleId: ModeIdType, roleName?: string) => {
+  state.visibleStatus = true
+  state.title = roleName ? `分配权限：${roleName}` : '分配权限'
+  addUpdateForm.value = {
+    roleId,
+    menuIds: [],
+  }
+  state.loadingStatus = true
   try {
-    state.visibleStatus = true
-    addUpdateForm.value = {
-      roleId,
-      menuIds: [],
-    }
-    state.loadingStatus = true
-    await selectMenuIdByRoleId(roleId).then((res) => {
-      const { menuTotal, checkedMenuIds = [], menuList = [] } = res.data
-      const empStatus = checkedMenuIds.length === menuTotal
-      checkAllStatus.value = empStatus
-      menuTree.value?.setCheckedKeys(checkedMenuIds)
-      treeData.value = menuList
-      checkedKeys.value = checkedMenuIds
-      indeterminateStatus.value = checkedMenuIds.length > 0 && !empStatus
-    })
+    const { data } = await selectMenuIdByRoleId(roleId)
+    const { checkedMenuIds = [], menuList = [] } = data
+    treeData.value = menuList
+    state.menuTotal = countTreeNodes(menuList)
+    // 等树渲染完成再回显，避免 setCheckedKeys 作用在旧数据上
+    await nextTick()
+    menuTree.value?.setCheckedKeys(checkedMenuIds)
+    syncCheckStatus()
+  } catch (error) {
+    console.error('查询角色可分配菜单失败:', error)
   } finally {
     state.loadingStatus = false
   }
@@ -58,7 +82,6 @@ const show = async (roleId: ModeIdType) => {
  * @param check - 布尔值，true表示展开所有节点，false表示收起所有节点
  */
 const handleExpand = (check: CheckboxValueType) => {
-  state.loadingStatus = true
   expandStatus.value = check as boolean
   const nodes = menuTree.value?.store._getAllNodes()
   if (nodes) {
@@ -66,7 +89,6 @@ const handleExpand = (check: CheckboxValueType) => {
       nodes[i].expanded = check as boolean
     }
   }
-  state.loadingStatus = false
 }
 
 /**
@@ -74,27 +96,27 @@ const handleExpand = (check: CheckboxValueType) => {
  * @param check - 布尔值，true表示选中所有节点，false表示取消选中所有节点
  */
 const handleSelectAll = (check: CheckboxValueType) => {
-  state.loadingStatus = true
   if (check) {
-    // 选中所有菜单项
-    menuTree.value?.setCheckedKeys(treeData.value.map((item: SysMenuResponse) => item.id))
+    menuTree.value?.setCheckedKeys(treeData.value.map((item: SysMenuTreeResponse) => item.id))
   } else {
-    // 取消选中所有菜单项
     menuTree.value?.setCheckedKeys([])
   }
-  state.loadingStatus = false
+  syncCheckStatus()
 }
 
 /**
  * 提交角色菜单权限绑定
  */
-const submitForm = async () => {
+const submitForm = () => {
   state.loadingStatus = true
   addUpdateForm.value.menuIds = checkedKeys.value
-  roleMenuBind(addUpdateForm.value!)
+  roleMenuBind(addUpdateForm.value)
     .then(() => {
       useMessage().success('当前角色分配菜单权限成功')
       close()
+    })
+    .catch((error) => {
+      console.error('角色分配菜单权限失败:', error)
     })
     .finally(() => {
       state.loadingStatus = false
@@ -102,28 +124,20 @@ const submitForm = async () => {
 }
 
 /**
- * 处理当前节点选中状态变化
- */
-const handleCurrentChange = () => {
-  checkedKeys.value = menuTree.value?.getCheckedKeys() || []
-  const halfCheckedKeys = menuTree.value?.getHalfCheckedKeys() || []
-  indeterminateStatus.value = halfCheckedKeys.length > 0 && checkedKeys.value.length > 0
-  checkAllStatus.value = checkedKeys.value.length > 0 && halfCheckedKeys.length === 0
-}
-
-/**
  * 关闭角色权限分配弹窗
  */
 const close = () => {
   addUpdateForm.value = {
-    roleId: [],
+    roleId: null,
     menuIds: [],
   }
   state.visibleStatus = false
   state.operationStatus = 'create'
   checkAllStatus.value = false
+  indeterminateStatus.value = false
   checkedKeys.value = []
   treeData.value = []
+  state.menuTotal = 0
 }
 
 defineExpose({
@@ -134,23 +148,32 @@ defineExpose({
 <template>
   <el-dialog
     v-model="state.visibleStatus"
-    title="分配权限"
+    :title="state.title"
     width="45%"
     append-to-body
     :close-on-click-modal="false"
     :show-close="!state.loadingStatus"
     :before-close="close"
+    class="xht-dialog"
   >
     <template #header>
       <div class="menu-role-dialog-title">
-        <div>分配权限</div>
-        <div class="mr-16 flex">
+        <div>{{ state.title }}</div>
+        <div v-if="treeData.length > 0" class="mr-16 flex">
           <el-checkbox v-model="expandStatus" :label="expandStatus ? '收起所有节点' : '展开所有节点'" @change="handleExpand" />
           <el-checkbox v-model="checkAllStatus" label="全选" :indeterminate="indeterminateStatus" @change="handleSelectAll" />
         </div>
       </div>
     </template>
     <el-scrollbar class="menu-role-dialog-body">
+      <el-alert
+        v-if="!state.loadingStatus && treeData.length === 0"
+        class="mb-12"
+        title="请先为该角色绑定角色类型"
+        type="warning"
+        :closable="false"
+        show-icon
+      />
       <el-tree
         ref="menuTree"
         v-loading="state.loadingStatus"
@@ -160,7 +183,7 @@ defineExpose({
         highlight-current
         node-key="id"
         show-checkbox
-        @check-change="handleCurrentChange"
+        @check="syncCheckStatus"
       >
         <template #default="{ data }">
           <div>{{ data.menuName }}</div>
@@ -169,7 +192,7 @@ defineExpose({
     </el-scrollbar>
     <template #footer>
       <el-button :disabled="state.loadingStatus" @click="close">取 消</el-button>
-      <el-button :disabled="state.loadingStatus" type="primary" @click="submitForm">提交</el-button>
+      <el-button :disabled="state.loadingStatus || treeData.length === 0" type="primary" @click="submitForm">提交</el-button>
     </template>
   </el-dialog>
 </template>

@@ -17,8 +17,16 @@ const state = reactive<AddUpdateOption<SysRoleOperationRequest>>({
   addUpdateForm: { ...sysRoleOperationForm },
 })
 const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
+const roleTypeSelectRef = useTemplateRef<any>('roleTypeSelectRef')
 const { addUpdateForm } = toRefs(state)
 const rules: FormRules<Required<SysRoleOperationRequest>> = sysRoleOperationRules
+
+/**
+ * 抽屉打开时刷新角色类型下拉，避免新增类型后回到本页拿到的仍是旧列表
+ */
+const handleOpen = () => {
+  nextTick(() => roleTypeSelectRef.value?.refresh())
+}
 
 /**
  * 打开显示
@@ -101,6 +109,7 @@ defineExpose({
     :close-on-click-modal="false"
     :show-close="!state.loadingStatus"
     :before-close="close"
+    @open="handleOpen"
   >
     <el-form
       ref="addUpdateFormRef"
@@ -126,10 +135,22 @@ defineExpose({
       </el-row>
       <el-row>
         <el-col :lg="12" :sm="24" :xs="24">
+          <el-form-item label="角色类型" prop="roleTypeId">
+            <role-type-select
+              ref="roleTypeSelectRef"
+              v-model="addUpdateForm.roleTypeId"
+              :fallback-label="addUpdateForm.roleTypeName || ''"
+              placeholder="请选择角色类型"
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="角色状态" prop="roleStatus">
             <xht-enum-select v-model="addUpdateForm.roleStatus" :data="roleStatusEnum" clearable placeholder="请选择角色状态" />
           </el-form-item>
         </el-col>
+      </el-row>
+      <el-row>
         <el-col :lg="12" :sm="24" :xs="24">
           <el-form-item label="角色排序" prop="roleSort">
             <el-input-number v-model="addUpdateForm.roleSort" :max="999" :min="0" class="w-full!" value-on-clear="min" placeholder="请输入角色排序" />

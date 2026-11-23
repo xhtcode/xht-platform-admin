@@ -31,7 +31,8 @@ const modelValue = defineModel<any | any[]>('modelValue', {
  * @param value 值
  */
 const filterMethod = (value: any) => {
-  return Object.values(props.data).filter((item) => item.label.includes(value) || item.value.includes(value))
+  const keyword = String(value)
+  return Object.values(props.data).filter((item) => item.label.includes(keyword) || String(item.value).includes(keyword))
 }
 
 /**

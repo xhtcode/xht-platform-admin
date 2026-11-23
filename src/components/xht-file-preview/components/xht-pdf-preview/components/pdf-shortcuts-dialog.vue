@@ -13,7 +13,7 @@ const visible = defineModel<boolean>('visible', { required: true })
 </script>
 
 <template>
-  <el-dialog v-model="visible" title="快捷键" width="560px" append-to-body>
+  <el-dialog v-model="visible" title="快捷键" width="560px" append-to-body class="xht-dialog">
     <ul class="xht-pdf-preview__shortcut-list">
       <li v-for="item in SHORTCUT_ITEMS" :key="item.label">
         <span class="xht-pdf-preview__shortcut-label">{{ item.label }}</span>

@@ -88,6 +88,7 @@ defineExpose({
     :close-on-click-modal="false"
     :show-close="!loadingStatus"
     :before-close="close"
+    class="xht-dialog"
   >
     <el-transfer
       v-model="checkedKeys"

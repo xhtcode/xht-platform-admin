@@ -248,6 +248,7 @@ const handleSubmit = async (): Promise<void> => {
       :close-on-click-modal="false"
       :show-close="!uploadingStatus"
       @closed="handleDialogClosed"
+      class="xht-dialog"
     >
       <div class="crop-layout">
         <div class="crop-area">

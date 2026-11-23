@@ -5,7 +5,7 @@ import type { SysRoleQueryRequest, SysRoleResponse } from '@/service/model/syste
 import { querySysRolePage, removeSysRoleById, removeSysRoleByIds } from '@/service/api/system/role.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
-import { roleStatusEnum } from '@/service/enums/system/role.enum'
+import { roleDataScopeEnum, roleStatusEnum } from '@/service/enums/system/role.enum'
 import { sysRoleColumnOption } from '@/views/system/role/role.data'
 import { Delete, Edit, Plus, Refresh, Search } from '@element-plus/icons-vue'
 
@@ -100,7 +100,7 @@ const handleBatchDelete = () => {
  * 处理分配权限
  */
 const handleAuth = (row: SysRoleResponse) => {
-  menuRoleFormRef.value?.show(row.id)
+  menuRoleFormRef.value?.show(row.id, row.roleName)
 }
 
 onMounted(async () => {
@@ -186,21 +186,20 @@ onMounted(async () => {
       <xht-column-index :current="queryParams.current" :size="queryParams.size" />
       <el-table-column v-if="columnOption.roleName?.visible" label="角色名称" min-width="120" prop="roleName" />
       <el-table-column v-if="columnOption.roleCode?.visible" label="角色编码" min-width="160" prop="roleCode" />
+      <el-table-column v-if="columnOption.roleTypeName?.visible" label="角色类型" min-width="120" prop="roleTypeName">
+        <template #default="{ row }">
+          <el-tag v-if="row.roleTypeName" type="primary" effect="dark">{{ row.roleTypeName }}</el-tag>
+          <el-tag v-else type="danger" effect="dark">未绑定</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column v-if="columnOption.roleStatus?.visible" label="角色状态" prop="roleStatus" width="100">
         <template #default="{ row }">
-          <el-tag :type="row.roleStatus === 0 ? 'success' : 'danger'">
-            {{ row.roleStatus === 0 ? '正常' : '停用' }}
-          </el-tag>
+          <xht-enum-tag :data="roleStatusEnum" :filter-label="row.roleStatus" />
         </template>
       </el-table-column>
       <el-table-column v-if="columnOption.dataScope?.visible" label="数据范围" prop="dataScope" width="160">
         <template #default="{ row }">
-          <el-tag v-if="row.dataScope === 1" effect="dark" type="primary">全部数据权限</el-tag>
-          <el-tag v-if="row.dataScope === 2" effect="dark" type="success">自定数据权限</el-tag>
-          <el-tag v-if="row.dataScope === 3" effect="dark" type="info">本部门数据权限</el-tag>
-          <el-tag v-if="row.dataScope === 4" effect="dark" type="warning">本部门及以下数据权限</el-tag>
-          <el-tag v-if="row.dataScope === 5" effect="dark" type="danger">本部门数据权限</el-tag>
-          <el-tag v-if="row.dataScope === 6" color="#F2F6FC" effect="dark">仅本人数据权限</el-tag>
+          <xht-enum-tag :data="roleDataScopeEnum" :filter-label="row.dataScope" />
         </template>
       </el-table-column>
       <el-table-column v-if="columnOption.roleSort?.visible" label="显示顺序" prop="roleSort" width="120" />
@@ -209,7 +208,7 @@ onMounted(async () => {
       <el-table-column v-if="columnOption.updateBy?.visible" label="更新人" prop="updateBy" width="160" />
       <el-table-column v-if="columnOption.updateTime?.visible" label="更新时间" prop="updateTime" width="180" />
       <!-- @vue-generic {SysRoleResponse} -->
-      <el-table-column label="操作" fixed="right" width="220">
+      <el-table-column label="操作" fixed="right" width="240">
         <template #default="{ row }">
           <el-space wrap class="flex-center">
             <el-button icon="Edit" link type="success" @click="handleEdit(row)" v-authorization="['sys:role:update']">修改</el-button>

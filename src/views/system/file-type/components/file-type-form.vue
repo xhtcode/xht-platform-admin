@@ -133,6 +133,7 @@ defineExpose({
     :show-close="!state.loadingStatus"
     :title="state.title"
     append-to-body
+    class="xht-dialog"
   >
     <el-form
       ref="addUpdateFormRef"
