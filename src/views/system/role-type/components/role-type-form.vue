@@ -51,13 +51,10 @@ const submitForm = () => {
       request(addUpdateForm.value)
         .then(() => {
           emits('success')
-          useMessage().success(`${state.operationStatus === 'create' ? '新增' : '修改'}角色类型成功`)
-          state.loadingStatus = false
+          useMessage().success(`${state.title}成功`)
           close()
         })
-        .catch((error) => {
-          console.error('提交角色类型失败:', error)
-        })
+        .catch((error) => console.error('提交角色类型失败:', error))
         .finally(() => {
           state.loadingStatus = false
         })

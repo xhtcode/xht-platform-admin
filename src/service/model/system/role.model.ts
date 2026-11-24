@@ -7,7 +7,7 @@ export type RoleStatus = 0 | 1
 /**
  * 角色类型
  */
-export type DataScope = 1 | 2 | 3 | 4 | 5 | 6
+export type DataScope = 1 | 2 | 3 | 4 | 5
 /**
  * 查询请求类型
  */
@@ -21,7 +21,7 @@ export interface SysRoleResponse extends MetaResponse {
   roleCode: string //角色编码
   roleName: string //角色名称
   remark: string //角色描述
-  dataScope: number //数据范围（1全部数据权限 2自定数据权限 3本部门数据权限 4本部门及以下数据权限 5本部门数据权限  6仅本人数据权限）
+  dataScope: number //数据范围（1全部数据权限 2自定数据权限 3本部门数据权限 4本部门及以下数据权限  5仅本人数据权限）
   roleStatus: RoleStatus //状态（0正常 1停用）,可用值:0,1
   roleSort: number //显示顺序
   roleTypeId?: ModeIdType // 角色类型ID

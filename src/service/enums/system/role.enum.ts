@@ -1,4 +1,4 @@
-import { DataScope, RoleStatus } from '@/service/model/system/role.model'
+import type { DataScope, RoleStatus } from '@/service/model/system/role.model'
 
 /**
  * 角色状态枚举
@@ -17,7 +17,7 @@ export const roleStatusEnum: DictEnum<RoleStatus, 'NORMAL' | 'DISABLE'> = {
 }
 
 /**
- * 数据范围（1全部数据权限 2自定数据权限 3本部门数据权限 4本部门及以下数据权限 5本部门数据权限  6仅本人数据权限）
+ * 数据范围（1全部数据权限 2自定数据权限 3本部门数据权限 4本部门及以下数据权限  5仅本人数据权限）
  */
 export const roleDataScopeEnum: DictEnum<DataScope> = {
   ALL: {
@@ -36,12 +36,8 @@ export const roleDataScopeEnum: DictEnum<DataScope> = {
     label: '本部门及以下数据权限',
     value: 4,
   },
-  ORG: {
-    label: '本部门数据权限',
-    value: 5,
-  },
   SELF: {
     label: '仅本人数据权限',
-    value: 6,
+    value: 5,
   },
 }
