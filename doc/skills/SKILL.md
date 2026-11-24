@@ -27,7 +27,7 @@ description: 用于在 xht-platform-admin 后台（Vue 3 + TypeScript + Element 
 ## 二、动手前必读三份现有实现
 
 1. `src/views/system/user/index.vue`（列表页骨架：state + hooks + 查询区 + 工具栏 + 表格 + 分页 + 弹窗挂载）
-2. `src/views/system/user/components/user-form.vue`（弹窗骨架：`AddUpdateOption` + `show()` + `emits('success')` + `el-drawer`）
+2. `src/views/system/user/components/user-form.vue`（弹窗骨架：`AddUpdateOption` + `show()` + `emits('success')` + `el-drawer` + 三元选函数提交）
 3. `src/components/dict/xht-dict-select/`（通用组件骨架：`index.vue` + `types.ts` + `withDefaults` + 泛型 emits + `defineModel`）
 
 ## 三、流程 A：新增业务页面
@@ -62,6 +62,8 @@ description: 用于在 xht-platform-admin 后台（Vue 3 + TypeScript + Element 
 | 不写显式 vue 导入 | `ref/reactive/computed/onMounted/useTemplateRef` 等由 auto-import 提供；只允许 `import type { ... } from 'vue'` |
 | 不改请求内核 | `src/utils/request.ts` 的拦截器契约不可动；`request<T>` 返回业务信封，调用方取 `.data` |
 | 不重复弹错误 | 错误提示由拦截器统一给；`catch` 只 `console.error` + 状态复位 |
+| 请求链带 catch | `.then().finally()` 一律补 `.catch((error) => console.error('xxx失败:', error))`；confirm 取消（reject `'cancel'`）不做特判 |
+| 表单提交三元写法 | `const request = state.operationStatus === 'create' ? saveXxx : updateXxx`；`.then` 内 `close()` 前必须先复位 `loadingStatus`（close 有守卫）；title 统一「新增X / 修改X」，提示统一 `` `${state.title}成功` `` |
 | 颜色用变量 | 禁止字面量色值（含 UnoCSS `color-#xxxxxx`），否则暗黑模式失效 |
 | 组件名必填 | `defineOptions({ name })`，eslint `vue/require-name-property` 强制 |
 | 块顺序 | `script → template → style`，块之间空行（eslint 强制） |
@@ -99,3 +101,5 @@ pnpm dev
 8. 组件放在 `src/components/xxx/yyy.vue`（不是 `index.vue`）→ 不会自动注册。
 9. 菜单按钮权限串与 `v-authorization` 不一致 → 按钮永久隐藏（超管除外）。
 10. 用 `el-dialog` 写复杂表单导致内部滚动错乱 → 改用 `el-drawer`。
+11. `.then` 里直接 `close()` 没先复位 `loadingStatus` → `close()` 守卫早退，提交成功后弹窗关不掉。
+12. `.then().finally()` 链没补 `.catch` → 失败时产生 `Uncaught (in promise)`，错误监控里只剩裸异常没有业务上下文。

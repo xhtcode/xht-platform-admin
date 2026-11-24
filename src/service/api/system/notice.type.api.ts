@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 import type { ApiResponse } from 'axios'
 import type { SysNoticeTypeOperationRequest, SysNoticeTypeQueryRequest, SysNoticeTypeResponse } from '@/service/model/system/notice.type.model'
-import { LabelValue } from '@/service/model/base.model'
+import type { LabelValue } from '@/service/model/base.model'
 
 /**
  * 后台管理服务前缀

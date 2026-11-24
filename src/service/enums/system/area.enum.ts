@@ -1,4 +1,4 @@
-import { SysAreaHashChild } from '@/service/model/system/area.model'
+import type { SysAreaHashChild } from '@/service/model/system/area.model'
 
 /**
  * 部门状态枚举

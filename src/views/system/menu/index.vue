@@ -65,6 +65,7 @@ const handleDelete = (row: any) => {
       useMessage().success('删除菜单成功!')
       await handleListQuery()
     })
+    .catch((error) => console.error('删除菜单失败:', error))
     .finally(() => {
       state.loadingStatus = false
     })

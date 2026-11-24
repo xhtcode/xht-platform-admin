@@ -118,6 +118,7 @@ const handleDownload = () => {
     .then((response) => {
       handleDownloadFile(response)
     })
+    .catch((error) => console.error('下载代码失败:', error))
     .finally(() => {
       state.loadingStatus = false
     })

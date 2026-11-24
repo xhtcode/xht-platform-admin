@@ -69,11 +69,14 @@ const handleSync = async (row: GenTableInfoResponse) => {
   await useMessageBox()
     .confirm(`是否要同步${row.tableName}的信息,此操作会更改已有的配置，是否继续！`)
     .then(() => {
-      syncTableApi(row!.id).then(async () => {
-        useMessage().success(`${row.tableName}表信息成功!`)
-        await handlePageQuery()
-      })
+      syncTableApi(row!.id)
+        .then(async () => {
+          useMessage().success(`${row.tableName}表信息成功!`)
+          await handlePageQuery()
+        })
+        .catch((error) => console.error('同步表信息失败:', error))
     })
+    .catch((error) => console.error('同步表信息失败:', error))
     .finally(() => {
       state.loadingStatus = false
     })
@@ -110,6 +113,7 @@ const handleDelete = (row: GenTableInfoResponse) => {
       await handlePageQuery()
       useMessage().success('删除表信息成功!')
     })
+    .catch((error) => console.error('删除表信息失败:', error))
     .finally(() => {
       state.loadingStatus = false
     })

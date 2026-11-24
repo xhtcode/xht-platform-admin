@@ -82,6 +82,7 @@ const handleDelete = (row?: GenDataSourceResponse) => {
       await handleListQuery()
       useMessage().success('删除数据源配置成功!')
     })
+    .catch((error) => console.error('删除数据源配置失败:', error))
     .finally(() => {
       state.loadingStatus = false
     })

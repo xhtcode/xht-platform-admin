@@ -9,7 +9,7 @@ import { DataBaseTypeEnum } from '@/service/enums/generate/generate.enum'
 defineOptions({ name: 'GenTypeMappingAddOrUpdate' })
 const emits = defineEmits(['success'])
 const state = reactive<AddUpdateOption<GenTypeMappingOperationRequest>>({
-  title: '增加字段类型映射',
+  title: '新增字段类型映射',
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,
@@ -44,29 +44,18 @@ const submitForm = () => {
   state.loadingStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      if (state.operationStatus === 'create') {
-        saveGenTypeMapping(addUpdateForm.value)
-          .then(() => {
-            emits('success')
-            useMessage().success('新增类型映射成功')
-            state.loadingStatus = false
-            close()
-          })
-          .finally(() => {
-            state.loadingStatus = false
-          })
-      } else {
-        updateGenTypeMapping({ ...addUpdateForm.value })
-          .then(() => {
-            emits('success')
-            useMessage().success('修改类型映射成功')
-            state.loadingStatus = false
-            close()
-          })
-          .finally(() => {
-            state.loadingStatus = false
-          })
-      }
+      const request = state.operationStatus === 'create' ? saveGenTypeMapping : updateGenTypeMapping
+      request(addUpdateForm.value)
+        .then(() => {
+          emits('success')
+          useMessage().success(`${state.title}成功`)
+          state.loadingStatus = false
+          close()
+        })
+        .catch((error) => console.error('提交字段类型映射失败:', error))
+        .finally(() => {
+          state.loadingStatus = false
+        })
     } else {
       state.loadingStatus = false
       useMessage().error('表单校验未通过，请重新检查提交内容')

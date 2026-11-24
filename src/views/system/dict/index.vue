@@ -71,6 +71,7 @@ const handleDelete = (row: SysDictResponse) => {
       useMessage().success('删除字典成功!')
       await handlePageQuery()
     })
+    .catch((error) => console.error('删除字典失败:', error))
     .finally(() => {
       state.loadingStatus = false
     })
@@ -88,6 +89,7 @@ const handleClearCache = (row: SysDictResponse) => {
       useDictStore().removeDict(row.dictCode)
       useMessage().success('清除字典缓存成功!')
     })
+    .catch((error) => console.error('清除字典缓存失败:', error))
     .finally(() => {
       state.loadingStatus = false
     })

@@ -10,7 +10,7 @@ defineOptions({ name: 'SysNoticeTypeAddOrUpdate' })
 
 const emits = defineEmits(['success'])
 const state = reactive<AddUpdateOption<SysNoticeTypeOperationRequest>>({
-  title: '增加通知类型',
+  title: '新增通知类型',
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,
@@ -46,29 +46,18 @@ const submitForm = () => {
   state.loadingStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      if (state.operationStatus === 'create') {
-        saveSysNoticeType(addUpdateForm.value)
-          .then(() => {
-            emits('success')
-            useMessage().success(`新增系统管理-通知类型成功`)
-            state.loadingStatus = false
-            close()
-          })
-          .finally(() => {
-            state.loadingStatus = false
-          })
-      } else {
-        updateSysNoticeType(addUpdateForm.value)
-          .then(() => {
-            emits('success')
-            useMessage().success(`修改系统管理-通知类型成功`)
-            state.loadingStatus = false
-            close()
-          })
-          .finally(() => {
-            state.loadingStatus = false
-          })
-      }
+      const request = state.operationStatus === 'create' ? saveSysNoticeType : updateSysNoticeType
+      request(addUpdateForm.value)
+        .then(() => {
+          emits('success')
+          useMessage().success(`${state.title}成功`)
+          state.loadingStatus = false
+          close()
+        })
+        .catch((error) => console.error('提交通知类型失败:', error))
+        .finally(() => {
+          state.loadingStatus = false
+        })
     } else {
       state.loadingStatus = false
       useMessage().error('表单校验未通过，请重新检查提交内容')

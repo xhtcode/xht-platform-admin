@@ -10,7 +10,7 @@ defineOptions({ name: 'SysOauth2ClientAddOrUpdate' })
 
 const emits = defineEmits(['success'])
 const state = reactive<AddUpdateOption<SysOauth2ClientOperationRequest>>({
-  title: '增加客户端',
+  title: '新增客户端',
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,
@@ -50,29 +50,18 @@ const submitForm = () => {
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
       addUpdateForm.value = { ...addUpdateForm.value }
-      if (state.operationStatus === 'create') {
-        saveSysOauth2Client(addUpdateForm.value)
-          .then(() => {
-            emits('success')
-            useMessage().success(`新增客户端成功`)
-            state.loadingStatus = false
-            close()
-          })
-          .finally(() => {
-            state.loadingStatus = false
-          })
-      } else {
-        updateSysOauth2Client(addUpdateForm.value)
-          .then(() => {
-            emits('success')
-            useMessage().success(`修改客户端成功`)
-            state.loadingStatus = false
-            close()
-          })
-          .finally(() => {
-            state.loadingStatus = false
-          })
-      }
+      const request = state.operationStatus === 'create' ? saveSysOauth2Client : updateSysOauth2Client
+      request(addUpdateForm.value)
+        .then(() => {
+          emits('success')
+          useMessage().success(`${state.title}成功`)
+          state.loadingStatus = false
+          close()
+        })
+        .catch((error) => console.error('提交客户端失败:', error))
+        .finally(() => {
+          state.loadingStatus = false
+        })
     } else {
       state.loadingStatus = false
       useMessage().error('表单校验未通过，请重新检查提交内容')

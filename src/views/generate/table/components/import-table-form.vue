@@ -50,10 +50,11 @@ const submitForm = () => {
       })
         .then(() => {
           emit('success')
-          useMessage().success('修改数据成功55555555555555555555555')
+          useMessage().success('导入表信息成功')
           addUpdatePageInit.value.loadingStatus = false
           close()
         })
+        .catch((error) => console.error('导入表信息失败:', error))
         .finally(() => {
           addUpdatePageInit.value.loadingStatus = false
         })

@@ -101,13 +101,9 @@ const submitForm = () => {
         ...addUpdateForm.value,
         fileSuffix: addUpdateForm.value.fileSuffix?.trim() || null,
       }
-      if (state.operationStatus === 'create') {
-        await saveSysFileType(form)
-        useMessage().success('新增预览类型配置成功')
-      } else {
-        await updateSysFileType(form)
-        useMessage().success('修改预览类型配置成功')
-      }
+      const request = state.operationStatus === 'create' ? saveSysFileType : updateSysFileType
+      await request(form)
+      useMessage().success(`${state.title}成功`)
       state.loadingStatus = false
       emits('success')
       close()

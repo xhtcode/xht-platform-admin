@@ -62,6 +62,7 @@ const handleDelete = (row: any) => {
       useMessage().success('删除部门成功!')
       await handleListQuery()
     })
+    .catch((error) => console.error('删除部门失败:', error))
     .finally(() => {
       state.loadingStatus = false
     })

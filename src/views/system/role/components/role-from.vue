@@ -10,7 +10,7 @@ defineOptions({ name: 'SysRoleAddOrUpdate' })
 
 const emits = defineEmits(['success'])
 const state = reactive<AddUpdateOption<SysRoleOperationRequest>>({
-  title: '增加角色',
+  title: '新增角色',
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,
@@ -54,29 +54,18 @@ const submitForm = () => {
   state.loadingStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      if (state.operationStatus === 'create') {
-        saveSysRole(addUpdateForm.value)
-          .then(() => {
-            emits('success')
-            useMessage().success(`新增角色：${addUpdateForm.value.roleName}成功`)
-            state.loadingStatus = false
-            close()
-          })
-          .finally(() => {
-            state.loadingStatus = false
-          })
-      } else {
-        updateSysRole(addUpdateForm.value)
-          .then(() => {
-            emits('success')
-            useMessage().success(`修改角色：${addUpdateForm.value.roleName}成功`)
-            state.loadingStatus = false
-            close()
-          })
-          .finally(() => {
-            state.loadingStatus = false
-          })
-      }
+      const request = state.operationStatus === 'create' ? saveSysRole : updateSysRole
+      request(addUpdateForm.value)
+        .then(() => {
+          emits('success')
+          useMessage().success(`${state.title}成功`)
+          state.loadingStatus = false
+          close()
+        })
+        .catch((error) => console.error('提交角色失败:', error))
+        .finally(() => {
+          state.loadingStatus = false
+        })
     } else {
       state.loadingStatus = false
       useMessage().error('表单校验未通过，请重新检查提交内容')

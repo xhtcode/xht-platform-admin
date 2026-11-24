@@ -68,6 +68,7 @@ const handleSubmit = () => {
           useMessage().success('修改密码成功')
           formRef.value?.resetFields()
         })
+        .catch((error) => console.error('修改密码失败:', error))
         .finally(() => {
           state.loadingStatus = false
         })

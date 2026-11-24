@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
-import { SysMessageInfoResponse } from '@/service/model/system/message.info.model'
-import { SysMessageQueryRequest, SysMessageResponse } from '@/service/model/system/message.model'
+import type { SysMessageInfoResponse } from '@/service/model/system/message.info.model'
+import type { SysMessageQueryRequest, SysMessageResponse } from '@/service/model/system/message.model'
 import { queryAdminSendPage, updateCancelSingle } from '@/service/api/system/message.api'
 import { Operation, Refresh, RefreshLeft, Search } from '@element-plus/icons-vue'
 import type { FormInstance } from 'element-plus'
@@ -85,6 +85,7 @@ const handleCancel = (row: SysMessageInfoResponse) => {
       await handlePageQuery()
       useMessage().success('撤回站内信成功!')
     })
+    .catch((error) => console.error('撤回站内信失败:', error))
     .finally(() => {
       state.loadingStatus = false
     })

@@ -84,6 +84,7 @@ const handleDelete = (row?: SysOauth2ClientResponse) => {
       await handlePageQuery()
       useMessage().success('删除客户端管理成功!')
     })
+    .catch((error) => console.error('删除客户端失败:', error))
     .finally(() => {
       state.loadingStatus = false
     })
@@ -110,6 +111,7 @@ const submitPwdDialog = () => {
           useMessage().success(`客户端密钥修改成功`)
           closePwdDialog()
         })
+        .catch((error) => console.error('修改客户端密钥失败:', error))
         .finally(() => {
           state.loadingStatus = false
         })

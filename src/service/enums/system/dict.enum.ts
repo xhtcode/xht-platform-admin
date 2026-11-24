@@ -1,4 +1,4 @@
-import { DictStatus, ShowDisabled } from '@/service/model/system/dict.model'
+import type { DictStatus, ShowDisabled } from '@/service/model/system/dict.model'
 
 /**
  * 字典状态枚举

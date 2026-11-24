@@ -83,6 +83,7 @@ const handleDelete = (row: SysDictItemResponse) => {
       useMessage().success('删除字典项成功!')
       await handlePageQuery()
     })
+    .catch((error) => console.error('删除字典项失败:', error))
     .finally(() => {
       state.loadingStatus = false
     })

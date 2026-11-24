@@ -64,6 +64,7 @@ const handleDelete = (row: SysNoticeTypeResponse) => {
       await handleListQuery()
       useMessage().success('删除系统管理-通知类型成功!')
     })
+    .catch((error) => console.error('删除通知类型失败:', error))
     .finally(() => {
       state.loadingStatus = false
     })
@@ -85,6 +86,7 @@ const handleBatchDelete = () => {
       await handleListQuery()
       useMessage().success('批量删除系统管理-通知类型成功!')
     })
+    .catch((error) => console.error('批量删除通知类型失败:', error))
     .finally(() => {
       state.loadingStatus = false
     })

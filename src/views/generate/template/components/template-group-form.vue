@@ -9,7 +9,7 @@ defineOptions({ name: 'TemplateGroupForm' })
 
 const emits = defineEmits(['success'])
 const state = reactive<AddUpdateOption<GenTemplateGroupOperationRequest>>({
-  title: '增加模板分组',
+  title: '新增模板分组',
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,
@@ -44,29 +44,18 @@ const submitForm = () => {
   state.loadingStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      if (state.operationStatus === 'create') {
-        saveGenTemplateGroup(addUpdateForm.value)
-          .then(() => {
-            emits('success')
-            useMessage().success('新增模板分组成功')
-            state.loadingStatus = false
-            close()
-          })
-          .finally(() => {
-            state.loadingStatus = false
-          })
-      } else {
-        updateGenTemplateGroup(addUpdateForm.value)
-          .then(() => {
-            emits('success')
-            useMessage().success('修改模板分组成功')
-            state.loadingStatus = false
-            close()
-          })
-          .finally(() => {
-            state.loadingStatus = false
-          })
-      }
+      const request = state.operationStatus === 'create' ? saveGenTemplateGroup : updateGenTemplateGroup
+      request(addUpdateForm.value)
+        .then(() => {
+          emits('success')
+          useMessage().success(`${state.title}成功`)
+          state.loadingStatus = false
+          close()
+        })
+        .catch((error) => console.error('提交模板分组失败:', error))
+        .finally(() => {
+          state.loadingStatus = false
+        })
     } else {
       state.loadingStatus = false
       useMessage().error('表单校验未通过，请重新检查提交内容')

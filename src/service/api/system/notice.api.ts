@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 import type { ApiResponse } from 'axios'
-import { NoticeTop, NoticeVo, SysNoticeOperationRequest, SysNoticeQueryRequest, SysNoticeResponse } from '@/service/model/system/notice.model'
+import type { NoticeTop, NoticeVo, SysNoticeOperationRequest, SysNoticeQueryRequest, SysNoticeResponse } from '@/service/model/system/notice.model'
 
 /**
  * 后台管理服务前缀

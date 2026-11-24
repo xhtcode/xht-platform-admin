@@ -3,7 +3,7 @@ import type { FormInstance, FormRules } from 'element-plus'
 import { querySysUserById, saveSysUser, updateSysUser } from '@/service/api/system/user.api'
 import { useMessage } from '@/hooks/use-message'
 import { sysUserOperationForm, sysUserOperationRules } from '@/views/system/user/user.data'
-import { SysUserOperationRequest, type UserKind } from '@/service/model/system/user.model'
+import type { SysUserOperationRequest, UserKind } from '@/service/model/system/user.model'
 import type { SysDeptResponse } from '@/service/model/system/dept.model'
 import { userStatusEnum, userTypeEnum } from '@/service/enums/system/user.enum'
 
@@ -14,7 +14,7 @@ defineOptions({
 const emits = defineEmits(['success'])
 const rules: FormRules<Required<SysUserOperationRequest>> = sysUserOperationRules
 const state = reactive<AddUpdateOption<SysUserOperationRequest>>({
-  title: '增加用户信息',
+  title: '新增用户',
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,
@@ -44,7 +44,7 @@ const show = async (type: 'create' | 'update', id: ModeIdType) => {
     state.operationStatus = type
     state.loadingStatus = true
     if (type === 'update') {
-      state.title = '修改用户信息'
+      state.title = '修改用户'
       const { data } = await querySysUserById(id)
       addUpdateForm.value = { ...data }
     }
@@ -60,29 +60,18 @@ const submitForm = () => {
   state.loadingStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      if (state.operationStatus === 'create') {
-        saveSysUser(addUpdateForm.value)
-          .then(() => {
-            emits('success')
-            useMessage().success('新增用户成功')
-            state.loadingStatus = false
-            close()
-          })
-          .finally(() => {
-            state.loadingStatus = false
-          })
-      } else {
-        updateSysUser(addUpdateForm.value)
-          .then(() => {
-            emits('success')
-            useMessage().success('修改用户成功')
-            state.loadingStatus = false
-            close()
-          })
-          .finally(() => {
-            state.loadingStatus = false
-          })
-      }
+      const request = state.operationStatus === 'create' ? saveSysUser : updateSysUser
+      request(addUpdateForm.value)
+        .then(() => {
+          emits('success')
+          useMessage().success(`${state.title}成功`)
+          state.loadingStatus = false
+          close()
+        })
+        .catch((error) => console.error('提交用户失败:', error))
+        .finally(() => {
+          state.loadingStatus = false
+        })
     } else {
       state.loadingStatus = false
       useMessage().error('表单校验未通过，请重新检查提交内容')

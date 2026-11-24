@@ -60,6 +60,7 @@ const submitForm = () => {
           state.loadingStatus = false
           close()
         })
+        .catch((error) => console.error('修改表信息失败:', error))
         .finally(() => {
           state.loadingStatus = false
         })

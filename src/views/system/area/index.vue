@@ -54,6 +54,7 @@ const loadTreeData = (rootNode: Node, loadedCallback: (data: TreeData) => void) 
     .then((res) => {
       loadedCallback(res.data)
     })
+    .catch((error) => console.error('加载行政区划数据失败:', error))
     .finally(() => {
       state.loadingStatus = false
     })
@@ -142,27 +143,17 @@ const submitForm = (operationStatus: 'create' | 'update') => {
   state.loadingStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      if (operationStatus === 'create') {
-        saveSysArea(addUpdateForm.value)
-          .then(() => {
-            useMessage().success(`新增系统管理-行政区划成功`)
-            state.loadingStatus = false
-            return refreshLoad()
-          })
-          .finally(() => {
-            state.loadingStatus = false
-          })
-      } else {
-        updateSysArea(addUpdateForm.value)
-          .then(() => {
-            useMessage().success(`修改系统管理-行政区划成功`)
-            state.loadingStatus = false
-            return refreshLoad()
-          })
-          .finally(() => {
-            state.loadingStatus = false
-          })
-      }
+      const request = operationStatus === 'create' ? saveSysArea : updateSysArea
+      request(addUpdateForm.value)
+        .then(() => {
+          useMessage().success(`${operationStatus === 'create' ? '新增' : '修改'}行政区划成功`)
+          state.loadingStatus = false
+          return refreshLoad()
+        })
+        .catch((error) => console.error('提交行政区划失败:', error))
+        .finally(() => {
+          state.loadingStatus = false
+        })
     } else {
       state.loadingStatus = false
       useMessage().error('表单校验未通过，请重新检查提交内容')
@@ -182,6 +173,7 @@ const handleDelete = () => {
       await refreshLoad()
       useMessage().success('删除系统管理-行政区划成功!')
     })
+    .catch((error) => console.error('删除行政区划失败:', error))
     .finally(() => {
       state.loadingStatus = false
     })

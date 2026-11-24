@@ -72,9 +72,7 @@ const handleDelete = (row: SysRoleTypeResponse) => {
       await handlePageQuery()
       useMessage().success('删除角色类型成功!')
     })
-    .catch((error) => {
-      if (error !== 'cancel') console.error('删除角色类型失败:', error)
-    })
+    .catch((error) => console.error('删除角色类型失败:', error))
     .finally(() => {
       state.loadingStatus = false
     })

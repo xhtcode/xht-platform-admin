@@ -10,7 +10,7 @@ defineOptions({ name: 'SysDictAddOrUpdate' })
 
 const emits = defineEmits(['success'])
 const state = reactive<AddUpdateOption<SysDictOperationRequest>>({
-  title: '增加字典',
+  title: '新增字典',
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,
@@ -45,29 +45,18 @@ const submitForm = () => {
   state.loadingStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      if (state.operationStatus === 'create') {
-        saveSysDict(addUpdateForm.value)
-          .then(() => {
-            emits('success')
-            useMessage().success('新增字典成功')
-            state.loadingStatus = false
-            close()
-          })
-          .finally(() => {
-            state.loadingStatus = false
-          })
-      } else {
-        updateSysDict({ ...addUpdateForm.value })
-          .then(() => {
-            emits('success')
-            useMessage().success('修改字典成功')
-            state.loadingStatus = false
-            close()
-          })
-          .finally(() => {
-            state.loadingStatus = false
-          })
-      }
+      const request = state.operationStatus === 'create' ? saveSysDict : updateSysDict
+      request(addUpdateForm.value)
+        .then(() => {
+          emits('success')
+          useMessage().success(`${state.title}成功`)
+          state.loadingStatus = false
+          close()
+        })
+        .catch((error) => console.error('提交字典失败:', error))
+        .finally(() => {
+          state.loadingStatus = false
+        })
     } else {
       state.loadingStatus = false
       useMessage().error('表单校验未通过，请重新检查提交内容')

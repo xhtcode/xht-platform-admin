@@ -87,6 +87,7 @@ const handleRemove = async (targetId: ModeIdType) => {
         useMessage().success('删除模板信息成功!')
       }
     })
+    .catch((error) => console.error('删除模板信息失败:', error))
     .finally(() => {
       state.loadingStatus = false
     })

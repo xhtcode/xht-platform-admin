@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import { CaptchaResponse, LoginRequest, PhoneLoginForm } from '@/service/model/login/login.model'
+import type { CaptchaResponse, LoginRequest, PhoneLoginForm } from '@/service/model/login/login.model'
 import type { ApiResponse } from 'axios'
 
 const baseAdminURL = import.meta.env.VITE_ADMIN_API_PREFIX

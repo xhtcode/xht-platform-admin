@@ -14,7 +14,7 @@ const emit = defineEmits(['success'])
 const addUpdateFormRef = useTemplateRef<FormInstance>('addUpdateFormRef')
 const rules: FormRules<Required<SysMenuOperationRequest>> = sysMenuOperationRules
 const state = reactive<AddUpdateOption<SysMenuOperationRequest>>({
-  title: '增加菜单',
+  title: '新增菜单',
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,
@@ -51,29 +51,18 @@ const submitForm = () => {
   state.loadingStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      if (state.operationStatus === 'create') {
-        saveSysMenu(addUpdateForm.value)
-          .then(() => {
-            emit('success')
-            useMessage().success('新增数据成功')
-            state.loadingStatus = false
-            close()
-          })
-          .finally(() => {
-            state.loadingStatus = false
-          })
-      } else {
-        updateSysMenu(addUpdateForm.value)
-          .then(() => {
-            emit('success')
-            useMessage().success('修改数据成功')
-            state.loadingStatus = false
-            close()
-          })
-          .finally(() => {
-            state.loadingStatus = false
-          })
-      }
+      const request = state.operationStatus === 'create' ? saveSysMenu : updateSysMenu
+      request(addUpdateForm.value)
+        .then(() => {
+          emit('success')
+          useMessage().success(`${state.title}成功`)
+          state.loadingStatus = false
+          close()
+        })
+        .catch((error) => console.error('提交菜单失败:', error))
+        .finally(() => {
+          state.loadingStatus = false
+        })
     } else {
       state.loadingStatus = false
       useMessage().error('表单校验未通过，请重新检查提交内容')

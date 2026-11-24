@@ -70,6 +70,7 @@ const handleDelete = (row: SysRoleResponse) => {
       await handlePageQuery()
       useMessage().success('删除角色成功!')
     })
+    .catch((error) => console.error('删除角色失败:', error))
     .finally(() => {
       state.loadingStatus = false
     })
@@ -91,6 +92,7 @@ const handleBatchDelete = () => {
       await handlePageQuery()
       useMessage().success('批量删除角色成功!')
     })
+    .catch((error) => console.error('批量删除角色失败:', error))
     .finally(() => {
       state.loadingStatus = false
     })

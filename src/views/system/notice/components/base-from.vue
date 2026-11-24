@@ -16,7 +16,7 @@ defineOptions({ name: 'SysNoticeAddOrUpdate' })
 
 const emits = defineEmits(['success'])
 const state = reactive<AddUpdateOption<SysNoticeOperationRequest>>({
-  title: '增加通知',
+  title: '新增通知',
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,
@@ -56,29 +56,18 @@ const submitForm = () => {
   state.loadingStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      if (state.operationStatus === 'create') {
-        saveSysNotice(addUpdateForm.value)
-          .then(() => {
-            emits('success')
-            useMessage().success(`新增通知成功`)
-            state.loadingStatus = false
-            close()
-          })
-          .finally(() => {
-            state.loadingStatus = false
-          })
-      } else {
-        updateSysNotice(addUpdateForm.value)
-          .then(() => {
-            emits('success')
-            useMessage().success(`修改通知成功`)
-            state.loadingStatus = false
-            close()
-          })
-          .finally(() => {
-            state.loadingStatus = false
-          })
-      }
+      const request = state.operationStatus === 'create' ? saveSysNotice : updateSysNotice
+      request(addUpdateForm.value)
+        .then(() => {
+          emits('success')
+          useMessage().success(`${state.title}成功`)
+          state.loadingStatus = false
+          close()
+        })
+        .catch((error) => console.error('提交通知失败:', error))
+        .finally(() => {
+          state.loadingStatus = false
+        })
     } else {
       state.loadingStatus = false
       useMessage().error('表单校验未通过，请重新检查提交内容')
@@ -98,6 +87,7 @@ const handleSysNoticePublish = () => {
         await updateSysNoticePublish(addUpdateForm.value.id)
         useMessage().success('通知发布成功!')
       })
+      .catch((error) => console.error('发布通知失败:', error))
       .finally(() => {
         state.loadingStatus = false
       })
@@ -116,6 +106,7 @@ const handleSysNoticeUnderShelve = () => {
         await updateSysNoticeUnderShelve(addUpdateForm.value.id)
         useMessage().success('通知下架成功!')
       })
+      .catch((error) => console.error('下架通知失败:', error))
       .finally(() => {
         state.loadingStatus = false
       })

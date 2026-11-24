@@ -77,6 +77,7 @@ const handleDelete = (row: SysUserResponse) => {
       await handlePageQuery()
       useMessage().success('删除用户成功!')
     })
+    .catch((error) => console.error('删除用户失败:', error))
     .finally(() => {
       state.loadingStatus = false
     })
@@ -94,6 +95,7 @@ const handleResetPwd = (row: SysUserResponse) => {
       useMessage().success(`${row.userName}用户密码重置成功!`)
       await handlePageQuery()
     })
+    .catch((error) => console.error('重置用户密码失败:', error))
     .finally(() => {
       state.loadingStatus = false
     })

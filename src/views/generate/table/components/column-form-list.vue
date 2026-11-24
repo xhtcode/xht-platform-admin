@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { GenColumnInfoOperationRequest, GenColumnInfoResponse, GenStatusEnum } from '@/service/model/generate/column.model'
+import type { GenColumnInfoOperationRequest, GenColumnInfoResponse } from '@/service/model/generate/column.model'
+import { GenStatusEnum } from '@/service/model/generate/column.model'
 
 /**
  * 列信息模型，用于双向绑定列数据

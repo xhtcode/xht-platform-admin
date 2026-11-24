@@ -95,6 +95,7 @@ const handleDelete = (row?: GenTypeMappingResponse) => {
       await handlePageQuery()
       useMessage().success('删除字段类型映射成功!')
     })
+    .catch((error) => console.error('删除字段类型映射失败:', error))
     .finally(() => {
       state.loadingStatus = false
     })

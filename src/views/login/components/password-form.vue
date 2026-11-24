@@ -42,6 +42,7 @@ const refreshCaptcha = () => {
       captchaUrl.value = `data:image/png;base64,${res.data.code}`
       loginForm.captcha_key = res.data.key
     })
+    .catch((error) => console.error('刷新验证码失败:', error))
     .finally(() => {
       loading.value = false
     })

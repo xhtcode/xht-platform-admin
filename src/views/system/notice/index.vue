@@ -76,6 +76,7 @@ const handleDelete = (row: SysNoticeResponse) => {
       await handlePageQuery()
       useMessage().success('删除通知成功!')
     })
+    .catch((error) => console.error('删除通知失败:', error))
     .finally(() => {
       state.loadingStatus = false
     })
@@ -93,6 +94,7 @@ const handleSysNoticePublish = (row: SysNoticeResponse) => {
         await updateSysNoticePublish(row.id)
         useMessage().success('通知发布成功!')
       })
+      .catch((error) => console.error('发布通知失败:', error))
       .finally(() => {
         state.loadingStatus = false
       })
@@ -111,6 +113,7 @@ const handleSysNoticeUnderShelve = (row: SysNoticeResponse) => {
         await updateSysNoticeUnderShelve(row.id)
         useMessage().success('通知下架成功!')
       })
+      .catch((error) => console.error('下架通知失败:', error))
       .finally(() => {
         state.loadingStatus = false
       })
@@ -130,6 +133,7 @@ const handleSysNoticeTop = (row: SysNoticeResponse) => {
         await updateSysNoticeTop(row.id, row.noticeTop)
         useMessage().success(`通知${noticeTop}成功!`)
       })
+      .catch((error) => console.error(`通知${noticeTop}失败:`, error))
       .finally(() => {
         state.loadingStatus = false
       })

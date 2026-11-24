@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { GenColumnInfoResponse } from '@/service/model/generate/column.model'
+import type { GenColumnInfoResponse } from '@/service/model/generate/column.model'
 import type { TableInstance } from 'element-plus'
 
 const columnInfo = defineModel<GenColumnInfoResponse[]>('columnInfo', {

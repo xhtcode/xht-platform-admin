@@ -59,6 +59,7 @@ const handleQuery = () => {
         .then((response) => {
           state.tableList = response.data || []
         })
+        .catch((error) => console.error('查询可导入表失败:', error))
         .finally(() => {
           state.loadingStatus = false
         })

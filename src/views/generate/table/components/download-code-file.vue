@@ -50,6 +50,7 @@ const submitForm = () => {
         .then((response) => {
           handleDownloadFile(response)
         })
+        .catch((error) => console.error('下载代码文件失败:', error))
         .finally(() => {
           state.loadingStatus = false
         })

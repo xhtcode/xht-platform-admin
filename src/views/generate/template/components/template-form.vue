@@ -46,6 +46,7 @@ const submitForm = () => {
             emits('success', data)
             useMessage().success('保存模板成功')
           })
+          .catch((error) => console.error('保存模板失败:', error))
           .finally(() => {
             loadingStatus.value = false
           })
@@ -54,6 +55,7 @@ const submitForm = () => {
           .then(() => {
             useMessage().success('修改模板成功')
           })
+          .catch((error) => console.error('修改模板失败:', error))
           .finally(() => {
             loadingStatus.value = false
           })

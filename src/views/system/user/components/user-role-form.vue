@@ -2,8 +2,8 @@
 import { roleRoleByUserId } from '@/service/api/system/role.api'
 import { useMessage } from '@/hooks/use-message'
 import { UserRoleBind } from '@/service/api/system/user.api'
-import { UserRoleBindOperationRequest } from '@/service/model/system/user.model'
-import { SysRoleResponse } from '@/service/model/system/role.model'
+import type { UserRoleBindOperationRequest } from '@/service/model/system/user.model'
+import type { SysRoleResponse } from '@/service/model/system/role.model'
 
 defineOptions({ name: 'UserRoleForm' })
 
@@ -69,6 +69,7 @@ const submitForm = async () => {
       useMessage().success('当前用户分配角色成功')
       close()
     })
+    .catch((error) => console.error('用户分配角色失败:', error))
     .finally(() => {
       loadingStatus.value = false
     })

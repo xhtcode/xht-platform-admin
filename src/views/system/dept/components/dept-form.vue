@@ -13,7 +13,7 @@ defineOptions({ name: 'SysDeptAddOrUpdate' })
 const emits = defineEmits(['success'])
 
 const state = reactive<AddUpdateOption<SysDeptOperationRequest>>({
-  title: '增加部门',
+  title: '新增部门',
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,
@@ -44,7 +44,7 @@ const show = async (type: 'create' | 'update', id: ModeIdType) => {
     state.operationStatus = type
     state.loadingStatus = true
     if (type === 'update') {
-      state.title = '修改系统部门'
+      state.title = '修改部门'
       const { data } = await querySysDeptById(id)
       addUpdateForm.value = data
     }
@@ -60,29 +60,18 @@ const submitForm = () => {
   state.loadingStatus = true
   addUpdateFormRef.value?.validate(async (valid) => {
     if (valid) {
-      if (state.operationStatus === 'create') {
-        saveSysDept(addUpdateForm.value)
-          .then(() => {
-            emits('success')
-            useMessage().success(`新增部门:${addUpdateForm.value.deptName}成功`)
-            state.loadingStatus = false
-            close()
-          })
-          .finally(() => {
-            state.loadingStatus = false
-          })
-      } else {
-        updateSysDept(addUpdateForm.value)
-          .then(() => {
-            emits('success')
-            useMessage().success(`修改部门:${addUpdateForm.value.deptName}成功`)
-            state.loadingStatus = false
-            close()
-          })
-          .finally(() => {
-            state.loadingStatus = false
-          })
-      }
+      const request = state.operationStatus === 'create' ? saveSysDept : updateSysDept
+      request(addUpdateForm.value)
+        .then(() => {
+          emits('success')
+          useMessage().success(`${state.title}成功`)
+          state.loadingStatus = false
+          close()
+        })
+        .catch((error) => console.error('提交部门失败:', error))
+        .finally(() => {
+          state.loadingStatus = false
+        })
     } else {
       state.loadingStatus = false
       useMessage().error('表单校验未通过，请重新检查提交内容')

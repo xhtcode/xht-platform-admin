@@ -61,6 +61,7 @@ const handleCancel = (row: SysMessageResponse) => {
       await handlePageQuery()
       useMessage().success('撤回站内信成功!')
     })
+    .catch((error) => console.error('撤回站内信失败:', error))
     .finally(() => {
       state.loadingStatus = false
     })

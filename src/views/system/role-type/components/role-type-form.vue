@@ -52,6 +52,7 @@ const submitForm = () => {
         .then(() => {
           emits('success')
           useMessage().success(`${state.title}成功`)
+          state.loadingStatus = false
           close()
         })
         .catch((error) => console.error('提交角色类型失败:', error))

@@ -244,9 +244,7 @@ const handleDelete = (row: SysExampleResponse) => {
       await handlePageQuery()
       useMessage().success('删除成功!')
     })
-    .catch(() => {
-      // 取消删除，不做处理
-    })
+    .catch((error) => console.error('删除示例失败:', error))
 }
 
 onMounted(async () => {
@@ -381,7 +379,7 @@ defineOptions({ name: 'ExampleForm' })
 const emits = defineEmits(['success'])
 const rules: FormRules<Required<SysExampleOperationRequest>> = sysExampleOperationRules
 const state = reactive<AddUpdateOption<SysExampleOperationRequest>>({
-  title: '增加示例信息',
+  title: '新增示例信息',
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,
@@ -430,19 +428,18 @@ const submitForm = () => {
       useMessage().error('表单校验未通过，请重新检查提交内容')
       return
     }
-    try {
-      if (state.operationStatus === 'create') {
-        await saveSysExample(addUpdateForm.value)
-        useMessage().success('新增成功')
-      } else {
-        await updateSysExample(addUpdateForm.value)
-        useMessage().success('修改成功')
-      }
-      emits('success')
-      close()
-    } finally {
-      state.loadingStatus = false
-    }
+    const request = state.operationStatus === 'create' ? saveSysExample : updateSysExample
+    request(addUpdateForm.value)
+      .then(() => {
+        emits('success')
+        useMessage().success(`${state.title}成功`)
+        state.loadingStatus = false // 必须在 close() 之前：close 有 if (loadingStatus) return 守卫
+        close()
+      })
+      .catch((error) => console.error('提交示例失败:', error))
+      .finally(() => {
+        state.loadingStatus = false
+      })
   })
 }
 
@@ -494,7 +491,7 @@ defineExpose({
 - `defineExpose({ show })` 必须写，否则父页 `ref.value?.show()` 无效。
 - 成功后 `emits('success')`，父页靠它刷新列表。
 - 不要 import `ref/reactive/toRefs`，auto-import 已提供。
-- 提交失败不要重复弹错（拦截器已提示），`finally` 只负责复位 loading。
+- 提交统一三元选函数写法（见 `doc/开发文档.md` §6.5）：`.then` 内 `close()` 前先复位 `loadingStatus`；失败不要重复弹错（拦截器已提示），catch 只 `console.error('提交示例失败:', error)`。
 
 ## 7. 路由与菜单对齐
 
