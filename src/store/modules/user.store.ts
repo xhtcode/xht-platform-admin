@@ -5,6 +5,8 @@ import type { ApiResponse } from 'axios'
 import pInIaPersistConfig, { clearSessionPersist } from '@/store/pinia-persist'
 import { getUserProfileInfo } from '@/service/api/dashboard/user.profile.api'
 import { userTypeEnum } from '@/service/enums/system/user.enum'
+import { useRouteStore } from '@/store/modules/routes.store'
+import useTagsStore from '@/store/modules/tags.store'
 
 const baseURL: string = import.meta.env.VITE_ADMIN_API_PREFIX
 
@@ -118,14 +120,14 @@ export const useUserInfoStore = defineStore(
     /**
      * 用户登出方法
      *
-     * 先请求服务端注销令牌（失败不阻断），再清除本地认证信息、动态路由与页签数据。
+     * 只要本地仍有访问令牌，就先请求服务端注销令牌（失败不阻断），
+     * 再清除本地认证信息、动态路由与页签数据。
      *
-     * @param revokeRemote 是否请求服务端注销令牌；令牌已失效时传 false，避免无效请求
      * @returns Promise<void>
      */
-    async function logout(revokeRemote = true): Promise<void> {
+    async function logout(): Promise<void> {
       // 注销接口依赖请求头中的访问令牌，必须在清理本地令牌之前调用
-      if (revokeRemote && token.value.access_token) {
+      if (token.value.access_token) {
         try {
           await logoutToken()
         } catch (error) {
@@ -133,11 +135,6 @@ export const useUserInfoStore = defineStore(
           console.warn('注销令牌失败，继续清理本地会话:', error)
         }
       }
-      // 动态导入：避免 user.store -> routes.store -> api -> request -> user.store 的静态循环依赖
-      const [{ useRouteStore }, { default: useTagsStore }] = await Promise.all([
-        import('@/store/modules/routes.store'),
-        import('@/store/modules/tags.store'),
-      ])
       // 先移除动态路由并复位生成标记，否则重新登录后不会重新生成菜单
       useRouteStore().resetRoutes()
       // 页签指向的路由已被移除，同步清空，避免残留失效链接

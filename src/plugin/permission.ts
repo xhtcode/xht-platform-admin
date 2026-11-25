@@ -42,8 +42,8 @@ export function setupPermission() {
           }
         } catch (e) {
           console.error('路由错误', e)
-          // 令牌已失效，无需再请求服务端注销接口
-          await userInfoStore.logout(false)
+          // 本地仍有令牌时登出会先请求服务端注销（失败不阻断），再清理本地会话
+          await userInfoStore.logout()
           // 保留原地址，重新登录后可回到该页面
           return {
             path: PAGE_PATH_LOGIN,

@@ -1,4 +1,4 @@
-import { ApiResponse, AxiosError, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios'
+import { ApiResponse, AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 import axios from 'axios'
 import { useMessage } from '@/hooks/use-message'
 import qs from 'qs'
@@ -21,218 +21,263 @@ const defaultConfig: AxiosRequestConfig = {
 }
 
 /**
- * 创建Axios实例
+ * 统一 HTTP 请求客户端
+ *
+ * 以类封装 axios 实例与拦截器，对外仅暴露 request / requestRaw / requestBlob 三个入口。
+ * 响应拦截器保持 axios 原生返回契约（始终返回 AxiosResponse），业务信封的解包由各入口方法统一完成。
  */
-const service = axios.create(defaultConfig)
+class XhtHttpRequest {
+  private readonly _config: AxiosRequestConfig
+  private readonly axiosInstance: AxiosInstance
 
-/**
- * 清理会话并跳转登录页
- *
- * 仅在用户明确选择「前往登录」后调用：先清理认证信息与动态路由，再跳转登录页并携带原地址，
- * 避免遗留 token、菜单或页签导致重新登录后状态异常。
- *
- * 该函数保证不抛错（内部已兜底）。
- */
-const redirectToLogin = async (): Promise<void> => {
-  const { path, fullPath } = router.currentRoute.value
-  // 记录原地址，重新登录后可回到该页面
-  const redirectQuery = fullPath && fullPath !== path && path !== PAGE_PATH_LOGIN ? { redirect: fullPath } : undefined
-  try {
-    try {
-      // 令牌已失效，无需再请求注销接口，仅清理本地会话
-      await useUserInfoStore().logout(false)
-    } catch (error) {
-      // 清理失败不阻断后续跳转，否则会滞留在失效会话中
-      console.error('会话清理失败:', error)
-    }
-    if (path !== PAGE_PATH_LOGIN) {
-      await router.replace({ path: PAGE_PATH_LOGIN, query: redirectQuery })
-    }
-  } catch (error) {
-    // 兜底：SPA 路由不可用时整页跳转，并保留 redirect 信息
-    console.error('登录页跳转失败，改用整页跳转:', error)
-    const search = redirectQuery?.redirect ? `?redirect=${encodeURIComponent(redirectQuery.redirect)}` : ''
-    window.location.replace(`${PAGE_PATH_LOGIN}${search}`)
+  constructor(configInfo: AxiosRequestConfig) {
+    this._config = configInfo
+    this.axiosInstance = axios.create(configInfo)
+    this.initRequest()
+    this.initResponse()
   }
-}
 
-/**
- * 统一处理登录态失效
- *
- * 不自动跳转登录页，而是明确告知用户「登录状态已失效」，并提供两个选择：
- * - 前往登录：清理本地会话并跳转登录页（携带 redirect，登录后可回到当前页面）；
- * - 暂不跳转：保留当前会话与页面，由用户自行决定何时登录。
- *
- * 该函数保证不抛错，调用方应等待用户选择完成后再向上抛出请求异常。
- *
- * @returns 提示与后续处理完成的 Promise
- */
-const handleSessionExpired = async (): Promise<void> => {
-  // 应用初始化阶段（刷新后动态路由尚未生成）页面没有可停留的内容，直接清理并跳转，不再询问
-  // 动态导入：避免 request → routes.store → api → request 的静态循环依赖
-  const { useRouteStore } = await import('@/store/modules/routes.store')
-  if (!useRouteStore().isGenerate) {
-    await redirectToLogin()
-    return
+  get config(): AxiosRequestConfig {
+    return this._config
   }
-  await ElMessageBox.confirm('登录状态已失效，请重新登录后继续操作。', '登录状态已失效', {
-    confirmButtonText: '前往登录',
-    cancelButtonText: '暂不跳转',
-    type: 'warning',
-    // 避免误触遮罩关闭弹窗，必须显式选择
-    closeOnClickModal: false,
-  })
-    .then(() => redirectToLogin())
-    .catch(() => {
-      // 取消、关闭（X / ESC）均视为「暂不跳转」：保留当前会话与页面，不做任何处理
+
+  /**
+   * 初始化请求拦截器：处理请求头、认证信息等
+   * @private
+   */
+  private initRequest() {
+    this.axiosInstance.interceptors.request.use(
+      (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
+        const userStore = useUserInfoStore()
+        const { userInfo, hasToken, getAccessToken } = storeToRefs(userStore)
+        // 设置认证信息（登录、验证码等公开接口通过 skipToken 跳过）
+        if (!config.skipToken && hasToken.value) {
+          config.headers.set(HEADER_AUTHORIZATION, `Bearer ${getAccessToken.value}`)
+        }
+        // 设置链路追踪ID
+        config.headers.set(HEADER_TRACE_ID, generateUUID())
+        // 设置用户上下文头
+        if (userInfo.value?.userId) {
+          config.headers.set(HEADER_USER_ID, userInfo.value.userId)
+        }
+        if (userInfo.value?.userName) {
+          config.headers.set(HEADER_USER_ACCOUNT, userInfo.value.userName)
+        }
+        // GET 请求追加时间戳，避免浏览器缓存
+        if (config.method?.toLowerCase() === 'get') {
+          config.params = { ...config.params, _t: Date.now() }
+        }
+        return config
+      },
+      (error: AxiosError): Promise<never> => {
+        // 请求未能发出（配置异常等），此处不补充文案，交由调用方与日志定位
+        console.error('请求拦截器错误:', error)
+        return Promise.reject(error)
+      }
+    )
+  }
+
+  /**
+   * 初始化响应拦截器
+   *
+   * 保持 axios 原生返回契约（始终返回 AxiosResponse），
+   * 业务信封的解包由 request<T>() 统一完成，避免类型系统与运行时脱节。
+   * 业务失败统一抛出 BusinessError，携带 code 与 data，便于调用方分支处理。
+   * @private
+   */
+  private initResponse() {
+    this.axiosInstance.interceptors.response.use(
+      async (response: AxiosResponse<ApiResponse>): Promise<AxiosResponse> => {
+        const { responseType, rawResponse } = response.config
+        // 无需解包信封的响应直接放行：
+        // - blob/arraybuffer：二进制内容不存在 code/msg 字段
+        // - rawResponse：后端未按统一信封返回（无 code），判定业务码只会误判为失败
+        if (rawResponse || responseType === 'blob' || responseType === 'arraybuffer') {
+          return response
+        }
+        const { code, msg, dataType, data } = response.data
+        // 如果是加密数据
+        if (dataType === 1) {
+          useMessage().error('加密暂未实现')
+        }
+        if (code === 200) {
+          return response
+        }
+        if (code === 424 && !response.config.skipToken) {
+          // 令牌失效：提示用户「登录状态已失效」，由用户决定是否前往登录
+          await this.handleSessionExpired()
+          throw new BusinessError(code, msg ?? '', data)
+        }
+        this.showErrorMessage(msg)
+        throw new BusinessError(code, msg ?? '', data)
+      },
+      async (error: AxiosError<ApiResponse>): Promise<AxiosResponse> => {
+        const status = error.response?.status
+        const config = error.config
+        // 已登录状态下返回 401，按登录态失效处理（公开接口不触发）
+        if (status === 401 && config && !config.skipToken && useUserInfoStore().hasToken) {
+          const message = error.response?.data?.msg
+          // 提示用户自行决定是否前往登录，不自动跳转
+          await this.handleSessionExpired()
+          throw new BusinessError(401, message ?? '', error.response?.data?.data)
+        }
+        // 有响应时透传后端 msg；无响应（网络中断/超时）时透传 axios 原始错误信息
+        const message = error.response ? error.response.data?.msg : error.message
+        this.showErrorMessage(message)
+        console.error('响应拦截器错误:', error)
+        throw new BusinessError(status ?? 0, message ?? '', error.response?.data?.data)
+      }
+    )
+  }
+
+  /**
+   * 提示错误信息
+   *
+   * 约定：后端仅 200 为成功，其余状态码一律视为失败，错误文案完全透传后端 msg，
+   * 不改写、不映射、不补充兜底文案；msg 为空时不展示提示。
+   * @private
+   */
+  private showErrorMessage(message?: string) {
+    if (message) {
+      useMessage().error(message)
+    }
+  }
+
+  /**
+   * 统一处理登录态失效
+   *
+   * 不自动跳转登录页，而是明确告知用户「登录状态已失效」，并提供两个选择：
+   * - 前往登录：清理本地会话并跳转登录页（携带 redirect，登录后可回到当前页面）；
+   * - 暂不跳转：保留当前会话与页面，由用户自行决定何时登录。
+   *
+   * 该方法保证不抛错，调用方应等待用户选择完成后再向上抛出请求异常。
+   * @private
+   */
+  private async handleSessionExpired(): Promise<void> {
+    // 应用初始化阶段（刷新后动态路由尚未生成）页面没有可停留的内容，直接清理并跳转，不再询问
+    // 动态导入：避免 request → routes.store → api → request 的静态循环依赖
+    const { useRouteStore } = await import('@/store/modules/routes.store')
+    if (!useRouteStore().isGenerate) {
+      await this.redirectToLogin()
+      return
+    }
+    await ElMessageBox.confirm('登录状态已失效，请重新登录后继续操作。', '登录状态已失效', {
+      confirmButtonText: '前往登录',
+      cancelButtonText: '暂不跳转',
+      type: 'warning',
+      // 避免误触遮罩关闭弹窗，必须显式选择
+      closeOnClickModal: false,
     })
+      .then(() => this.redirectToLogin())
+      .catch(() => {
+        // 取消、关闭（X / ESC）均视为「暂不跳转」：保留当前会话与页面，不做任何处理
+      })
+  }
+
+  /**
+   * 清理会话并跳转登录页
+   *
+   * 仅在用户明确选择「前往登录」后调用：先清理认证信息与动态路由，再跳转登录页并携带原地址，
+   * 避免遗留 token、菜单或页签导致重新登录后状态异常。
+   *
+   * 该方法保证不抛错（内部已兜底）。
+   * @private
+   */
+  private async redirectToLogin(): Promise<void> {
+    const { path, fullPath } = router.currentRoute.value
+    // 记录原地址，重新登录后可回到该页面
+    const redirectQuery = fullPath && fullPath !== path && path !== PAGE_PATH_LOGIN ? { redirect: fullPath } : undefined
+    try {
+      try {
+        // 本地仍有令牌时登出会先请求服务端注销（失败不阻断），再清理本地会话
+        await useUserInfoStore().logout()
+      } catch (error) {
+        // 清理失败不阻断后续跳转，否则会滞留在失效会话中
+        console.error('会话清理失败:', error)
+      }
+      if (path !== PAGE_PATH_LOGIN) {
+        await router.replace({ path: PAGE_PATH_LOGIN, query: redirectQuery })
+      }
+    } catch (error) {
+      // 兜底：SPA 路由不可用时整页跳转，并保留 redirect 信息
+      console.error('登录页跳转失败，改用整页跳转:', error)
+      const search = redirectQuery?.redirect ? `?redirect=${encodeURIComponent(redirectQuery.redirect)}` : ''
+      window.location.replace(`${PAGE_PATH_LOGIN}${search}`)
+    }
+  }
+
+  /**
+   * 统一业务请求
+   *
+   * 响应拦截器保持 axios 原生返回，业务信封（ApiResponse）的解包在此统一完成，
+   * 使调用方拿到的类型与实际运行时结构完全一致。
+   *
+   * 注意：后端未按统一信封返回（无 code 字段）的接口不可用本方法，否则必然被判定为业务失败，
+   * 请改用 `requestRaw()`。
+   *
+   * @param config 请求配置
+   * @returns 业务信封 Promise
+   */
+  public async request<T = unknown>(config: AxiosRequestConfig): Promise<ApiResponse<T>> {
+    const response = await this.axiosInstance.request<ApiResponse<T>>(config)
+    return response.data
+  }
+
+  /**
+   * 原始响应请求
+   *
+   * 用于后端未使用统一业务信封（响应体没有 code 字段）的接口。
+   * 此类接口无法按业务码判定成败，因此不做任何判定，直接把响应体交给调用方，
+   * 失败仅由 HTTP 状态码体现（由拦截器的错误分支统一提示）。
+   *
+   * ```ts
+   * // 后端直接返回 { name: 'x' }，没有 code/msg
+   * const data = await requestRaw<{ name: string }>({ url: '/xxx', method: 'get' })
+   * ```
+   *
+   * @param config 请求配置（内部强制 rawResponse，调用方无需重复声明）
+   * @returns 响应体本身
+   */
+  public async requestRaw<T = unknown>(config: AxiosRequestConfig): Promise<T> {
+    const response = await this.axiosInstance.request<T>({ ...config, rawResponse: true })
+    return response.data
+  }
+
+  /**
+   * 文件流请求
+   *
+   * blob/arraybuffer 响应不经过业务信封解包，直接返回原始响应对象，
+   * 调用方可读取响应头与二进制 data。
+   *
+   * @param config 请求配置（内部强制 responseType: 'blob'）
+   * @returns 原始响应 Promise；使用 arraybuffer 时请显式指定泛型 `requestBlob<ArrayBuffer>`
+   */
+  public async requestBlob<T = Blob>(config: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+    return this.axiosInstance.request<T>({ ...config, responseType: 'blob' })
+  }
 }
 
-/**
- * 请求拦截器：处理请求头、认证信息等
- */
-service.interceptors.request.use(
-  (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
-    const userStore = useUserInfoStore()
-    const { userInfo, hasToken, getAccessToken } = storeToRefs(userStore)
-    // 设置认证信息（登录、验证码等公开接口通过 skipToken 跳过）
-    if (!config.skipToken && hasToken.value) {
-      config.headers.set(HEADER_AUTHORIZATION, `Bearer ${getAccessToken.value}`)
-    }
-    // 设置链路追踪ID
-    config.headers.set(HEADER_TRACE_ID, generateUUID())
-    // 设置用户上下文头
-    if (userInfo.value?.userId) {
-      config.headers.set(HEADER_USER_ID, userInfo.value.userId)
-    }
-    if (userInfo.value?.userName) {
-      config.headers.set(HEADER_USER_ACCOUNT, userInfo.value.userName)
-    }
-    // GET 请求追加时间戳，避免浏览器缓存
-    if (config.method?.toLowerCase() === 'get') {
-      config.params = { ...config.params, _t: Date.now() }
-    }
-    return config
-  },
-  async (error: AxiosError): Promise<never> => {
-    // 请求未能发出（配置异常等），此处不补充文案，交由调用方与日志定位
-    console.error('请求拦截器错误:', error)
-    return Promise.reject(error)
-  }
-)
+const httpRequest = new XhtHttpRequest(defaultConfig)
 
 /**
- * 提示错误信息
- *
- * 约定：后端仅 200 为成功，其余状态码一律视为失败，错误文案完全透传后端 msg，
- * 不改写、不映射、不补充兜底文案；msg 为空时不展示提示。
- *
- * @param message 后端返回的错误信息
- */
-const showErrorMessage = (message?: string) => {
-  if (message) {
-    useMessage().error(message)
-  }
-}
-
-/**
- * 响应拦截器：处理响应数据、错误状态码等
- *
- * 保持 axios 原生返回契约（始终返回 AxiosResponse），
- * 业务信封的解包由下方 request<T>() 统一完成，避免类型系统与运行时脱节。
- * 业务失败统一抛出 BusinessError，携带 code 与 data，便于调用方分支处理。
- */
-service.interceptors.response.use(
-  async (response: AxiosResponse<ApiResponse>) => {
-    const { responseType, skipEnvelope } = response.config
-    // 无需解包信封的响应直接放行：
-    // - blob/arraybuffer：二进制内容不存在 code/msg 字段
-    // - skipEnvelope：后端未按统一信封返回（无 code），判定业务码只会误判为失败
-    if (skipEnvelope || responseType === 'blob' || responseType === 'arraybuffer') {
-      return response
-    }
-    const { code, msg, dataType, data } = response.data
-    // 如果是加密数据
-    if (dataType === 1) {
-      useMessage().error('加密暂未实现')
-    }
-    if (code === 200) {
-      return response
-    }
-    if (code === 424 && !response.config.skipToken) {
-      // 令牌失效：提示用户「登录状态已失效」，由用户决定是否前往登录
-      await handleSessionExpired()
-      throw new BusinessError(code, msg ?? '', data)
-    }
-    showErrorMessage(msg)
-    throw new BusinessError(code, msg ?? '', data)
-  },
-  async (error: AxiosError<ApiResponse>): Promise<AxiosResponse> => {
-    const status = error.response?.status
-    const config = error.config
-    // 已登录状态下返回 401，按登录态失效处理（公开接口不触发）
-    if (status === 401 && config && !config.skipToken && useUserInfoStore().hasToken) {
-      const message = error.response?.data?.msg
-      // 提示用户自行决定是否前往登录，不自动跳转
-      await handleSessionExpired()
-      throw new BusinessError(401, message ?? '', error.response?.data?.data)
-    }
-    // 有响应时透传后端 msg；无响应（网络中断/超时）时透传 axios 原始错误信息
-    const message = error.response ? error.response.data?.msg : error.message
-    showErrorMessage(message)
-    console.error('响应拦截器错误:', error)
-    throw new BusinessError(status ?? 0, message ?? '', error.response?.data?.data)
-  }
-)
-
-/**
- * 统一业务请求
- *
- * 响应拦截器保持 axios 原生返回，业务信封（ApiResponse）的解包在此统一完成，
- * 使调用方拿到的类型与实际运行时结构完全一致。
- *
- * 注意：后端未按统一信封返回（无 code 字段）的接口不可用本方法，否则必然被判定为业务失败，
- * 请改用 `requestRaw()`。
- *
- * @param config 请求配置
- * @returns 业务信封 Promise
+ * 统一业务请求，详见 `XhtHttpRequest.request()`
  */
 export async function request<T = unknown>(config: AxiosRequestConfig): Promise<ApiResponse<T>> {
-  const response = await service.request<ApiResponse<T>>(config)
-  return response.data
+  return httpRequest.request<T>(config)
 }
 
 /**
- * 原始响应请求
- *
- * 用于后端未使用统一业务信封（响应体没有 code 字段）的接口。
- * 此类接口无法按业务码判定成败，因此不做任何判定，直接把响应体交给调用方，
- * 失败仅由 HTTP 状态码体现（由拦截器的错误分支统一提示）。
- *
- * ```ts
- * // 后端直接返回 { name: 'x' }，没有 code/msg
- * const data = await requestRaw<{ name: string }>({ url: '/xxx', method: 'get' })
- * ```
- *
- * @param config 请求配置（内部强制 skipEnvelope，调用方无需重复声明）
- * @returns 响应体本身
+ * 原始响应请求，详见 `XhtHttpRequest.requestRaw()`
  */
 export async function requestRaw<T = unknown>(config: AxiosRequestConfig): Promise<T> {
-  const response = await service.request<T>({ ...config, skipEnvelope: true })
-  return response.data
+  return httpRequest.requestRaw<T>(config)
 }
 
 /**
- * 文件流请求
- *
- * blob/arraybuffer 响应不经过业务信封解包，直接返回原始响应对象，
- * 调用方可读取响应头与二进制 data。
- *
- * @param config 请求配置（需将 responseType 设置为 blob 或 arraybuffer）
- * @returns 原始响应 Promise；使用 arraybuffer 时请显式指定泛型 `requestBlob<ArrayBuffer>`
+ * 文件流请求，详见 `XhtHttpRequest.requestBlob()`
  */
 export async function requestBlob<T = Blob>(config: AxiosRequestConfig): Promise<AxiosResponse<T>> {
-  return service.request<T>(config)
+  return httpRequest.requestBlob<T>(config)
 }
 
 export default request
