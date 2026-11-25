@@ -169,7 +169,7 @@ defineExpose({
       <el-alert
         v-if="!state.loadingStatus && treeData.length === 0"
         class="mb-12"
-        title="请先为该角色绑定角色类型"
+        title="请先为该角色绑定角色分类"
         type="warning"
         :closable="false"
         show-icon

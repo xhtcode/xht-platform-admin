@@ -46,9 +46,9 @@ const syncCheckStatus = () => {
 }
 
 /**
- * 显示角色类型菜单绑定弹窗
- * @param roleTypeId - 角色类型ID，用于获取已绑定菜单并加载全量菜单树
- * @param typeName - 角色类型名称，用于弹窗标题
+ * 显示角色分类菜单绑定弹窗
+ * @param roleTypeId - 角色分类ID，用于获取已绑定菜单并加载全量菜单树
+ * @param typeName - 角色分类名称，用于弹窗标题
  */
 const show = async (roleTypeId: ModeIdType, typeName?: string) => {
   state.visibleStatus = true
@@ -69,7 +69,7 @@ const show = async (roleTypeId: ModeIdType, typeName?: string) => {
     // 以树上实际勾选结果为准，自动忽略历史越界（树上不存在的）菜单ID
     syncCheckStatus()
   } catch (error) {
-    console.error('查询角色类型菜单失败:', error)
+    console.error('查询角色分类菜单失败:', error)
   } finally {
     state.loadingStatus = false
   }
@@ -103,18 +103,18 @@ const handleSelectAll = (check: CheckboxValueType) => {
 }
 
 /**
- * 提交角色类型菜单绑定
+ * 提交角色分类菜单绑定
  */
 const submitForm = () => {
   state.loadingStatus = true
   addUpdateForm.value.menuIds = checkedKeys.value
   roleTypeMenuBind(addUpdateForm.value)
     .then(() => {
-      useMessage().success('角色类型绑定菜单成功')
+      useMessage().success('角色分类绑定菜单成功')
       close()
     })
     .catch((error) => {
-      console.error('角色类型绑定菜单失败:', error)
+      console.error('角色分类绑定菜单失败:', error)
     })
     .finally(() => {
       state.loadingStatus = false

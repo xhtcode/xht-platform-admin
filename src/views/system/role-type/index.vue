@@ -66,13 +66,13 @@ const handleEdit = (row: SysRoleTypeResponse) => {
 const handleDelete = (row: SysRoleTypeResponse) => {
   state.loadingStatus = true
   useMessageBox()
-    .confirm('此操作将永久删除该角色类型, 是否继续?')
+    .confirm('此操作将永久删除该角色分类, 是否继续?')
     .then(async () => {
       await removeSysRoleTypeById(row.id)
       await handlePageQuery()
-      useMessage().success('删除角色类型成功!')
+      useMessage().success('删除角色分类成功!')
     })
-    .catch((error) => console.error('删除角色类型失败:', error))
+    .catch((error) => console.error('删除角色分类失败:', error))
     .finally(() => {
       state.loadingStatus = false
     })

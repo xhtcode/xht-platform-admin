@@ -29,10 +29,8 @@ export function setupPermission() {
         }
       } else {
         try {
-          // 获取用户权限
-          await userInfoStore.getUserInfos()
-          // 生成并注册动态路由（登出时可被精确移除）
-          await routeStore.generateRoutesAtBack()
+          // 用户信息与后端菜单相互独立，并行请求以缩短登录/刷新后的跳转等待
+          await Promise.all([userInfoStore.getUserInfos(), routeStore.generateRoutesAtBack()])
           addDynamicRoutes(routeStore.formatRoutes)
           // 动态路由生成并注册后，重新进入当前路由
           return {

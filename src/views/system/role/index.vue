@@ -188,7 +188,7 @@ onMounted(async () => {
       <xht-column-index :current="queryParams.current" :size="queryParams.size" />
       <el-table-column v-if="columnOption.roleName?.visible" label="角色名称" min-width="120" prop="roleName" />
       <el-table-column v-if="columnOption.roleCode?.visible" label="角色编码" min-width="160" prop="roleCode" />
-      <el-table-column v-if="columnOption.roleTypeName?.visible" label="角色类型" min-width="120" prop="roleTypeName">
+      <el-table-column v-if="columnOption.roleTypeName?.visible" label="角色分类" min-width="120" prop="roleTypeName">
         <template #default="{ row }">
           <el-tag v-if="row.roleTypeName" type="primary" effect="dark">{{ row.roleTypeName }}</el-tag>
           <el-tag v-else type="danger" effect="dark">未绑定</el-tag>

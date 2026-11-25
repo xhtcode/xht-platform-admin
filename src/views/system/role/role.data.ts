@@ -19,7 +19,7 @@ export const sysRoleOperationForm: Partial<SysRoleOperationRequest> = {
 export const sysRoleOperationRules: FormRules<Required<SysRoleOperationRequest>> = {
   roleCode: [{ required: true, message: '请输入角色编码', trigger: ['blur', 'change'] }],
   roleName: [{ required: true, message: '请输入角色名称', trigger: ['blur', 'change'] }],
-  roleTypeId: [{ required: true, message: '请选择角色类型', trigger: ['blur', 'change'] }],
+  roleTypeId: [{ required: true, message: '请选择角色分类', trigger: ['blur', 'change'] }],
   roleSort: [{ required: true, message: '请输入显示顺序', trigger: ['blur', 'change'] }],
   roleStatus: [{ required: true, message: '请选择状态', trigger: ['blur', 'change'] }],
   dataScope: [{ required: true, message: '请选择数据范围', trigger: ['blur', 'change'] }],
@@ -36,7 +36,7 @@ export const sysRoleColumnOption: ColumnConfig<SysRoleResponse> = {
     disabled: false,
   },
   roleCode: { desc: '角色编码', visible: true, disabled: false },
-  roleTypeName: { desc: '角色类型', visible: true, disabled: false },
+  roleTypeName: { desc: '角色分类', visible: true, disabled: false },
   roleStatus: { desc: '角色状态', visible: true, disabled: false },
   dataScope: { desc: '数据范围', visible: false, disabled: false },
   roleSort: { desc: '显示顺序', visible: true, disabled: false },

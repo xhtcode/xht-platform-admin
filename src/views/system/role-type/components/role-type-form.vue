@@ -10,7 +10,7 @@ defineOptions({ name: 'SysRoleTypeAddOrUpdate' })
 
 const emits = defineEmits(['success'])
 const state = reactive<AddUpdateOption<SysRoleTypeOperationRequest>>({
-  title: '新增角色类型',
+  title: '新增角色分类',
   visibleStatus: false,
   operationStatus: 'create',
   loadingStatus: false,
@@ -27,7 +27,7 @@ const show = async (type: 'create' | 'update', id: ModeIdType) => {
   try {
     state.visibleStatus = true
     state.operationStatus = type
-    state.title = type === 'create' ? '新增角色类型' : '修改角色类型'
+    state.title = type === 'create' ? '新增角色分类' : '修改角色分类'
     state.loadingStatus = true
     if (type === 'update') {
       const { data } = await querySysRoleTypeById(id)
@@ -36,7 +36,7 @@ const show = async (type: 'create' | 'update', id: ModeIdType) => {
     state.loadingStatus = false
   } catch (error) {
     state.loadingStatus = false
-    console.error('查询角色类型详情失败:', error)
+    console.error('查询角色分类详情失败:', error)
   }
 }
 
@@ -55,7 +55,7 @@ const submitForm = () => {
           state.loadingStatus = false
           close()
         })
-        .catch((error) => console.error('提交角色类型失败:', error))
+        .catch((error) => console.error('提交角色分类失败:', error))
         .finally(() => {
           state.loadingStatus = false
         })

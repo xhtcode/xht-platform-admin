@@ -6,9 +6,9 @@ import { querySysRoleTypeList } from '@/service/api/system/role-type.api'
 defineOptions({ name: 'RoleTypeSelect' })
 
 const props = withDefaults(defineProps<RoleTypeSelectProps>(), {
-  clearable: false, // 默认不可清空：角色类型为必填项
+  clearable: false, // 默认不可清空：角色分类为必填项
   disabled: false, // 是否禁用
-  placeholder: '请选择角色类型',
+  placeholder: '请选择角色分类',
   fallbackLabel: '',
 })
 
@@ -25,7 +25,7 @@ const selectOptions = computed<SysRoleTypeOption[]>(() => {
 })
 
 /**
- * 查询角色类型列表（仅正常状态）
+ * 查询角色分类列表（仅正常状态）
  */
 const handleQuery = () => {
   querySysRoleTypeList()
@@ -33,7 +33,7 @@ const handleQuery = () => {
       options.value = res.data || []
     })
     .catch((error) => {
-      console.error('角色类型列表查询失败:', error)
+      console.error('角色分类列表查询失败:', error)
     })
 }
 
@@ -52,7 +52,7 @@ defineExpose({
       <span>{{ item.typeName }}</span>
       <span v-if="item.typeCode" class="role-type-code">{{ item.typeCode }}</span>
     </el-option>
-    <template #empty>暂无可选角色类型，请先到角色类型管理中新增</template>
+    <template #empty>暂无可选角色分类，请先到角色分类管理中新增</template>
   </el-select>
 </template>
 

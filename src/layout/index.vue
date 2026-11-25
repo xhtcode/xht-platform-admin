@@ -1,11 +1,27 @@
 <script setup lang="ts">
 import { useThemeStore } from '@/store'
 import { storeToRefs } from 'pinia'
+import LayoutLoading from '@/layout/components/layout-loading/index.vue'
 
 defineOptions({ name: 'LayoutIndex' })
-const LayoutComponents: Record<any, Component> = {
-  default: defineAsyncComponent(() => import('@/layout/layout-default/index.vue')),
-  columns: defineAsyncComponent(() => import('@/layout/layout-columns/index.vue')),
+/**
+ * 布局壳按需异步加载（保留代码分割）
+ *
+ * vue-router 导航确认只等待路由壳 chunk，不等待嵌套异步组件，
+ * 因此用 loadingComponent 在布局 chunk 加载期间展示加载动画，
+ * 避免登录跳转、刷新时出现整页白屏闪断；delay 取 0 保证首帧即有占位。
+ */
+const LayoutComponents: Record<string, Component> = {
+  default: defineAsyncComponent({
+    loader: () => import('@/layout/layout-default/index.vue'),
+    loadingComponent: LayoutLoading,
+    delay: 0,
+  }),
+  columns: defineAsyncComponent({
+    loader: () => import('@/layout/layout-columns/index.vue'),
+    loadingComponent: LayoutLoading,
+    delay: 0,
+  }),
 }
 const themeStore = useThemeStore()
 const { layoutType } = storeToRefs(themeStore)

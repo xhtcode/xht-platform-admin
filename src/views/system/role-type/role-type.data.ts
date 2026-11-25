@@ -4,7 +4,7 @@ import type { ColumnConfig } from '@/components/table-tool-bar/types'
 import { roleTypeStatusEnum } from '@/service/enums/system/role-type.enum'
 
 /**
- * 角色类型 增改弹窗 表单默认值
+ * 角色分类 增改弹窗 表单默认值
  */
 export const sysRoleTypeOperationForm: Partial<SysRoleTypeOperationRequest> = {
   typeStatus: roleTypeStatusEnum.NORMAL.value, // 状态（0正常 1停用）
@@ -13,7 +13,7 @@ export const sysRoleTypeOperationForm: Partial<SysRoleTypeOperationRequest> = {
 }
 
 /**
- * 角色类型 增改弹窗 表单校验
+ * 角色分类 增改弹窗 表单校验
  */
 export const sysRoleTypeOperationRules: FormRules<Required<SysRoleTypeOperationRequest>> = {
   typeCode: [{ required: true, message: '请输入类型编码', trigger: ['blur', 'change'] }],
@@ -23,7 +23,7 @@ export const sysRoleTypeOperationRules: FormRules<Required<SysRoleTypeOperationR
 }
 
 /**
- * 角色类型 列表显示配置
+ * 角色分类 列表显示配置
  */
 export const sysRoleTypeColumnOption: ColumnConfig<SysRoleTypeResponse> = {
   typeCode: { desc: '类型编码', visible: true, disabled: false },

@@ -1,12 +1,12 @@
 import type { SysMenuTreeResponse } from '@/service/model/system/menu.model'
 
 /**
- * 角色类型状态
+ * 角色分类状态
  */
 export type RoleTypeStatus = 0 | 1
 
 /**
- * 角色类型查询请求类型
+ * 角色分类查询请求类型
  */
 export interface SysRoleTypeQueryRequest extends PageQueryRequest {
   typeCode?: string // 类型编码（模糊）
@@ -15,10 +15,10 @@ export interface SysRoleTypeQueryRequest extends PageQueryRequest {
 }
 
 /**
- * 角色类型响应类型
+ * 角色分类响应类型
  */
 export interface SysRoleTypeResponse extends MetaResponse {
-  id: ModeIdType // 角色类型ID
+  id: ModeIdType // 角色分类ID
   typeCode: string // 类型编码
   typeName: string // 类型名称
   typeStatus: RoleTypeStatus // 状态（0正常 1停用）
@@ -27,21 +27,21 @@ export interface SysRoleTypeResponse extends MetaResponse {
 }
 
 /**
- * 角色类型表单请求类型
+ * 角色分类表单请求类型
  */
 export interface SysRoleTypeOperationRequest extends Partial<SysRoleTypeResponse>, BasicFormRequest {}
 
 /**
- * 角色类型下拉选项（/sys/roleType/list 仅返回正常状态）
+ * 角色分类下拉选项（/sys/roleType/list 仅返回正常状态）
  */
 export interface SysRoleTypeOption {
-  id: ModeIdType // 角色类型ID
+  id: ModeIdType // 角色分类ID
   typeCode: string // 类型编码
   typeName: string // 类型名称
 }
 
 /**
- * 角色类型已选菜单响应类型
+ * 角色分类已选菜单响应类型
  */
 export interface RoleTypeSelectedMenuResponse {
   checkedMenuIds: ModeIdType[] // 已绑定的菜单ID（仅正常状态菜单）
@@ -50,9 +50,9 @@ export interface RoleTypeSelectedMenuResponse {
 }
 
 /**
- * 角色类型菜单绑定请求类型
+ * 角色分类菜单绑定请求类型
  */
 export interface SysRoleTypeMenuBindForm extends BasicFormRequest {
-  roleTypeId: ModeIdType // 角色类型ID
+  roleTypeId: ModeIdType // 角色分类ID
   menuIds: ModeIdType[] // 全量勾选的菜单ID（先删后插）
 }

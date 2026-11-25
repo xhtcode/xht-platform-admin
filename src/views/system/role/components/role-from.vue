@@ -22,7 +22,7 @@ const { addUpdateForm } = toRefs(state)
 const rules: FormRules<Required<SysRoleOperationRequest>> = sysRoleOperationRules
 
 /**
- * 抽屉打开时刷新角色类型下拉，避免新增类型后回到本页拿到的仍是旧列表
+ * 抽屉打开时刷新角色分类下拉，避免新增类型后回到本页拿到的仍是旧列表
  */
 const handleOpen = () => {
   nextTick(() => roleTypeSelectRef.value?.refresh())
@@ -111,36 +111,32 @@ defineExpose({
       scroll-to-error
     >
       <el-row>
-        <el-col :lg="12" :sm="24" :xs="24">
+        <el-col :span="24">
           <el-form-item label="角色名称" prop="roleName">
             <el-input v-model="addUpdateForm.roleName" placeholder="请输入角色名称" />
           </el-form-item>
         </el-col>
-        <el-col :lg="12" :sm="24" :xs="24">
+        <el-col :span="24">
           <el-form-item label="角色编码" prop="roleCode">
             <el-input v-model="addUpdateForm.roleCode" placeholder="请输入角色编码" />
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row>
-        <el-col :lg="12" :sm="24" :xs="24">
-          <el-form-item label="角色类型" prop="roleTypeId">
+        <el-col :span="24">
+          <el-form-item label="角色分类" prop="roleTypeId">
             <role-type-select
               ref="roleTypeSelectRef"
               v-model="addUpdateForm.roleTypeId"
               :fallback-label="addUpdateForm.roleTypeName || ''"
-              placeholder="请选择角色类型"
+              placeholder="请选择角色分类"
             />
           </el-form-item>
         </el-col>
-        <el-col :lg="12" :sm="24" :xs="24">
+        <el-col :span="24">
           <el-form-item label="角色状态" prop="roleStatus">
             <xht-enum-select v-model="addUpdateForm.roleStatus" :data="roleStatusEnum" clearable placeholder="请选择角色状态" />
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row>
-        <el-col :lg="12" :sm="24" :xs="24">
+        <el-col :span="24">
           <el-form-item label="角色排序" prop="roleSort">
             <el-input-number v-model="addUpdateForm.roleSort" :max="999" :min="0" class="w-full!" value-on-clear="min" placeholder="请输入角色排序" />
           </el-form-item>

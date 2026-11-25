@@ -18,20 +18,20 @@ const baseURL: string = import.meta.env.VITE_ADMIN_API_PREFIX
  * api定义
  */
 enum Api {
-  CREATE = '/sys/roleType/create', // 创建角色类型
-  REMOVE = '/sys/roleType/remove/', // 根据主键`id`删除角色类型
-  UPDATE = '/sys/roleType/update/', // 根据主键`id`更新角色类型
-  QUERY_BY_ID = '/sys/roleType/get/', // 根据主键`id`查询角色类型
-  QUERY_PAGE = '/sys/roleType/page', // 分页查询角色类型
-  QUERY_LIST = '/sys/roleType/list', // 查询全部正常状态角色类型
-  BIND_MENU = '/sys/roleType/menu/bind', // 角色类型绑定菜单
-  SELECT_MENU = '/sys/roleType/select/menu/', // 查询角色类型已选菜单
+  CREATE = '/sys/roleType/create', // 创建角色分类
+  REMOVE = '/sys/roleType/remove/', // 根据主键`id`删除角色分类
+  UPDATE = '/sys/roleType/update/', // 根据主键`id`更新角色分类
+  QUERY_BY_ID = '/sys/roleType/get/', // 根据主键`id`查询角色分类
+  QUERY_PAGE = '/sys/roleType/page', // 分页查询角色分类
+  QUERY_LIST = '/sys/roleType/list', // 查询全部正常状态角色分类
+  BIND_MENU = '/sys/roleType/menu/bind', // 角色分类绑定菜单
+  SELECT_MENU = '/sys/roleType/select/menu/', // 查询角色分类已选菜单
 }
 
 /**
- * 创建角色类型
+ * 创建角色分类
  *
- * @param data 角色类型表单请求参数
+ * @param data 角色分类表单请求参数
  */
 export const saveSysRoleType = (data: SysRoleTypeOperationRequest): Promise<ApiResponse<void>> => {
   return request<void>({
@@ -43,9 +43,9 @@ export const saveSysRoleType = (data: SysRoleTypeOperationRequest): Promise<ApiR
 }
 
 /**
- * 删除角色类型
+ * 删除角色分类
  *
- * @param id 角色类型主键
+ * @param id 角色分类主键
  */
 export const removeSysRoleTypeById = (id: ModeIdType): Promise<ApiResponse<void>> => {
   return request<void>({
@@ -56,9 +56,9 @@ export const removeSysRoleTypeById = (id: ModeIdType): Promise<ApiResponse<void>
 }
 
 /**
- * 更新角色类型
+ * 更新角色分类
  *
- * @param data 角色类型表单请求参数
+ * @param data 角色分类表单请求参数
  */
 export const updateSysRoleType = (data: SysRoleTypeOperationRequest): Promise<ApiResponse<void>> => {
   return request<void>({
@@ -70,9 +70,9 @@ export const updateSysRoleType = (data: SysRoleTypeOperationRequest): Promise<Ap
 }
 
 /**
- * 查询单个角色类型
+ * 查询单个角色分类
  *
- * @param id 角色类型主键
+ * @param id 角色分类主键
  */
 export const querySysRoleTypeById = (id: ModeIdType): Promise<ApiResponse<SysRoleTypeResponse>> => {
   return request<SysRoleTypeResponse>({
@@ -83,9 +83,9 @@ export const querySysRoleTypeById = (id: ModeIdType): Promise<ApiResponse<SysRol
 }
 
 /**
- * 分页查询角色类型
+ * 分页查询角色分类
  *
- * @param data 角色类型查询请求参数
+ * @param data 角色分类查询请求参数
  */
 export const querySysRoleTypePage = (data?: SysRoleTypeQueryRequest): Promise<ApiResponse<PageResponse<SysRoleTypeResponse>>> => {
   return request<PageResponse<SysRoleTypeResponse>>({
@@ -97,7 +97,7 @@ export const querySysRoleTypePage = (data?: SysRoleTypeQueryRequest): Promise<Ap
 }
 
 /**
- * 查询全部角色类型（仅正常状态，按 typeSort 倒序，供下拉框使用）
+ * 查询全部角色分类（仅正常状态，按 typeSort 倒序，供下拉框使用）
  */
 export const querySysRoleTypeList = (): Promise<ApiResponse<SysRoleTypeOption[]>> => {
   return request<SysRoleTypeOption[]>({
@@ -108,9 +108,9 @@ export const querySysRoleTypeList = (): Promise<ApiResponse<SysRoleTypeOption[]>
 }
 
 /**
- * 角色类型绑定菜单
+ * 角色分类绑定菜单
  *
- * @param data 角色类型绑定菜单数据
+ * @param data 角色分类绑定菜单数据
  */
 export const roleTypeMenuBind = (data: SysRoleTypeMenuBindForm): Promise<ApiResponse<void>> => {
   return request<void>({
@@ -122,9 +122,9 @@ export const roleTypeMenuBind = (data: SysRoleTypeMenuBindForm): Promise<ApiResp
 }
 
 /**
- * 查询角色类型的已选菜单（绑定弹窗回显）
+ * 查询角色分类的已选菜单（绑定弹窗回显）
  *
- * @param roleTypeId 角色类型主键
+ * @param roleTypeId 角色分类主键
  */
 export const selectMenuIdByRoleTypeId = (roleTypeId: ModeIdType): Promise<ApiResponse<RoleTypeSelectedMenuResponse>> => {
   return request<RoleTypeSelectedMenuResponse>({

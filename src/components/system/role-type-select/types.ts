@@ -1,5 +1,5 @@
 /**
- * 角色类型下拉组件 props 属性
+ * 角色分类下拉组件 props 属性
  */
 export interface RoleTypeSelectProps {
   placeholder?: string // 提示语
