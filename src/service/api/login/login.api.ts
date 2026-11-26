@@ -13,7 +13,7 @@ export const generateCaptcha = (captchaKey: string): Promise<ApiResponse<Captcha
     url: '/oauth2/login/captcha',
     baseURL: baseAuthURL,
     method: 'post',
-    // 公开接口：不携带访问令牌，也不参与 424/401 的会话失效流程
+    // 公开接口：不携带访问令牌，也不参与 401 的会话失效流程
     skipToken: true,
     params: {
       captcha_key: captchaKey,

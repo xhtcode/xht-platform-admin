@@ -32,15 +32,6 @@ export interface SysRoleTypeResponse extends MetaResponse {
 export interface SysRoleTypeOperationRequest extends Partial<SysRoleTypeResponse>, BasicFormRequest {}
 
 /**
- * 角色分类下拉选项（/sys/roleType/list 仅返回正常状态）
- */
-export interface SysRoleTypeOption {
-  id: ModeIdType // 角色分类ID
-  typeCode: string // 类型编码
-  typeName: string // 类型名称
-}
-
-/**
  * 角色分类已选菜单响应类型
  */
 export interface RoleTypeSelectedMenuResponse {

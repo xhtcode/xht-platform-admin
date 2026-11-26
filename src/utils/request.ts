@@ -4,10 +4,11 @@ import { useMessage } from '@/hooks/use-message'
 import qs from 'qs'
 import { useUserInfoStore } from '@/store/modules/user.store'
 import { HEADER_AUTHORIZATION, HEADER_TRACE_ID, HEADER_USER_ACCOUNT, HEADER_USER_ID, PAGE_PATH_LOGIN } from '@/service/constant'
-import { BusinessError } from '@/utils/business-error'
 import { generateUUID } from '@/utils/index'
 import router from '@/router/index'
 import { storeToRefs } from 'pinia'
+import useLogoutStore from '@/hooks/use-logout-store.ts'
+import { useRoute } from 'vue-router'
 
 // 默认配置
 const defaultConfig: AxiosRequestConfig = {
@@ -50,6 +51,7 @@ class XhtHttpRequest {
       (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
         const userStore = useUserInfoStore()
         const { userInfo, hasToken, getAccessToken } = storeToRefs(userStore)
+        console.log('userStore', userStore.userInfo, hasToken)
         // 设置认证信息（登录、验证码等公开接口通过 skipToken 跳过）
         if (!config.skipToken && hasToken.value) {
           config.headers.set(HEADER_AUTHORIZATION, `Bearer ${getAccessToken.value}`)
@@ -89,13 +91,12 @@ class XhtHttpRequest {
     this.axiosInstance.interceptors.response.use(
       async (response: AxiosResponse<ApiResponse>): Promise<AxiosResponse> => {
         const { responseType, rawResponse } = response.config
-        // 无需解包信封的响应直接放行：
         // - blob/arraybuffer：二进制内容不存在 code/msg 字段
         // - rawResponse：后端未按统一信封返回（无 code），判定业务码只会误判为失败
         if (rawResponse || responseType === 'blob' || responseType === 'arraybuffer') {
           return response
         }
-        const { code, msg, dataType, data } = response.data
+        const { code, msg, dataType } = response.data
         // 如果是加密数据
         if (dataType === 1) {
           useMessage().error('加密暂未实现')
@@ -103,107 +104,47 @@ class XhtHttpRequest {
         if (code === 200) {
           return response
         }
-        if (code === 424 && !response.config.skipToken) {
-          // 令牌失效：提示用户「登录状态已失效」，由用户决定是否前往登录
-          await this.handleSessionExpired()
-          throw new BusinessError(code, msg ?? '', data)
-        }
-        this.showErrorMessage(msg)
-        throw new BusinessError(code, msg ?? '', data)
+        useMessage().error(msg)
+        throw response
       },
-      async (error: AxiosError<ApiResponse>): Promise<AxiosResponse> => {
-        const status = error.response?.status
-        const config = error.config
-        // 已登录状态下返回 401，按登录态失效处理（公开接口不触发）
-        if (status === 401 && config && !config.skipToken && useUserInfoStore().hasToken) {
-          const message = error.response?.data?.msg
-          // 提示用户自行决定是否前往登录，不自动跳转
-          await this.handleSessionExpired()
-          throw new BusinessError(401, message ?? '', error.response?.data?.data)
+      async (error: AxiosError<ApiResponse>): Promise<any> => {
+        const response = error.response
+        if (response) {
+          const { status, data, config } = response
+          // 401 统一在此收口，不再向下走通用错误提示，避免"未登录"提示重复弹
+          console.log('response', config.skipTip, !config.skipTip)
+          if (status === 401) {
+            if (!config.skipTip) {
+              ElMessageBox.confirm('令牌状态已过期，请点击重新登录', '登录已失效', {
+                confirmButtonText: '重新登录',
+                cancelButtonText: '取消',
+                type: 'warning',
+                closeOnClickModal: false,
+              }).then(() => {
+                useLogoutStore().resetAllStores()
+                router.replace(PAGE_PATH_LOGIN)
+                return
+              })
+            }
+            return Promise.reject(response)
+          }
+          if (data) {
+            useMessage().error(data.msg)
+            return Promise.reject(data)
+          }
         }
-        // 有响应时透传后端 msg；无响应（网络中断/超时）时透传 axios 原始错误信息
-        const message = error.response ? error.response.data?.msg : error.message
-        this.showErrorMessage(message)
-        console.error('响应拦截器错误:', error)
-        throw new BusinessError(status ?? 0, message ?? '', error.response?.data?.data)
+        if (error.message?.indexOf('timeout') !== -1) {
+          useMessage().error('服务器正在伸懒腰，请稍后再来~')
+        } else if (error.message === 'Network Error') {
+          useMessage().error('请求传递过程中超时了，就像寄快递路上堵车了~')
+        } else if (error.message?.indexOf('Request') !== -1) {
+          useMessage().error('网络连接异常，请求未成功发送，请检查网络后重试~')
+        } else {
+          useMessage().error(error.message)
+        }
+        return Promise.reject(error.response)
       }
     )
-  }
-
-  /**
-   * 提示错误信息
-   *
-   * 约定：后端仅 200 为成功，其余状态码一律视为失败，错误文案完全透传后端 msg，
-   * 不改写、不映射、不补充兜底文案；msg 为空时不展示提示。
-   * @private
-   */
-  private showErrorMessage(message?: string) {
-    if (message) {
-      useMessage().error(message)
-    }
-  }
-
-  /**
-   * 统一处理登录态失效
-   *
-   * 不自动跳转登录页，而是明确告知用户「登录状态已失效」，并提供两个选择：
-   * - 前往登录：清理本地会话并跳转登录页（携带 redirect，登录后可回到当前页面）；
-   * - 暂不跳转：保留当前会话与页面，由用户自行决定何时登录。
-   *
-   * 该方法保证不抛错，调用方应等待用户选择完成后再向上抛出请求异常。
-   * @private
-   */
-  private async handleSessionExpired(): Promise<void> {
-    // 应用初始化阶段（刷新后动态路由尚未生成）页面没有可停留的内容，直接清理并跳转，不再询问
-    // 动态导入：避免 request → routes.store → api → request 的静态循环依赖
-    const { useRouteStore } = await import('@/store/modules/routes.store')
-    if (!useRouteStore().isGenerate) {
-      await this.redirectToLogin()
-      return
-    }
-    await ElMessageBox.confirm('登录状态已失效，请重新登录后继续操作。', '登录状态已失效', {
-      confirmButtonText: '前往登录',
-      cancelButtonText: '暂不跳转',
-      type: 'warning',
-      // 避免误触遮罩关闭弹窗，必须显式选择
-      closeOnClickModal: false,
-    })
-      .then(() => this.redirectToLogin())
-      .catch(() => {
-        // 取消、关闭（X / ESC）均视为「暂不跳转」：保留当前会话与页面，不做任何处理
-      })
-  }
-
-  /**
-   * 清理会话并跳转登录页
-   *
-   * 仅在用户明确选择「前往登录」后调用：先清理认证信息与动态路由，再跳转登录页并携带原地址，
-   * 避免遗留 token、菜单或页签导致重新登录后状态异常。
-   *
-   * 该方法保证不抛错（内部已兜底）。
-   * @private
-   */
-  private async redirectToLogin(): Promise<void> {
-    const { path, fullPath } = router.currentRoute.value
-    // 记录原地址，重新登录后可回到该页面
-    const redirectQuery = fullPath && fullPath !== path && path !== PAGE_PATH_LOGIN ? { redirect: fullPath } : undefined
-    try {
-      try {
-        // 本地仍有令牌时登出会先请求服务端注销（失败不阻断），再清理本地会话
-        await useUserInfoStore().logout()
-      } catch (error) {
-        // 清理失败不阻断后续跳转，否则会滞留在失效会话中
-        console.error('会话清理失败:', error)
-      }
-      if (path !== PAGE_PATH_LOGIN) {
-        await router.replace({ path: PAGE_PATH_LOGIN, query: redirectQuery })
-      }
-    } catch (error) {
-      // 兜底：SPA 路由不可用时整页跳转，并保留 redirect 信息
-      console.error('登录页跳转失败，改用整页跳转:', error)
-      const search = redirectQuery?.redirect ? `?redirect=${encodeURIComponent(redirectQuery.redirect)}` : ''
-      window.location.replace(`${PAGE_PATH_LOGIN}${search}`)
-    }
   }
 
   /**

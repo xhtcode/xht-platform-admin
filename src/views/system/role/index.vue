@@ -2,6 +2,7 @@
 import type { FormInstance } from 'element-plus'
 import { useTableQueryPageHooks } from '@/hooks/use-crud-hooks'
 import type { SysRoleQueryRequest, SysRoleResponse } from '@/service/model/system/role.model'
+import type { SysRoleTypeResponse } from '@/service/model/system/role-type.model'
 import { querySysRolePage, removeSysRoleById, removeSysRoleByIds } from '@/service/api/system/role.api'
 import { useMessage, useMessageBox } from '@/hooks/use-message'
 import type { ColumnConfig } from '@/components/table-tool-bar/types'
@@ -13,8 +14,10 @@ defineOptions({ name: 'SysRoleViewIndex' })
 
 const roleFrom = defineAsyncComponent(() => import('@/views/system/role/components/role-from.vue'))
 const menuRoleForm = defineAsyncComponent(() => import('@/views/system/role/components/menu-role-form.vue'))
+const roleTypeTree = defineAsyncComponent(() => import('@/views/system/role/components/role-type-tree.vue'))
 const roleFormRef = useTemplateRef('roleFormRef')
 const menuRoleFormRef = useTemplateRef('menuRoleFormRef')
+const roleTypeTreeRef = useTemplateRef('roleTypeTreeRef')
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 
 const state = reactive<TableQueryPageState<SysRoleQueryRequest, SysRoleResponse>>({
@@ -40,6 +43,7 @@ const columnOption = ref<ColumnConfig<SysRoleResponse>>({
  */
 const resetQuery = async () => {
   queryFormRef.value?.resetFields()
+  roleTypeTreeRef.value?.resetCurrent()
   queryParams.value = {}
   await handlePageQuery()
 }
@@ -105,128 +109,142 @@ const handleAuth = (row: SysRoleResponse) => {
   menuRoleFormRef.value?.show(row.id, row.roleName)
 }
 
+/**
+ * 角色分类点击事件：按分类过滤角色列表
+ * @param type 选中的分类，null 表示取消过滤
+ */
+const handleRoleTypeSelect = async (type: SysRoleTypeResponse | null) => {
+  queryParams.value.roleTypeId = type ? type.id : undefined
+  await handlePageQuery()
+}
+
 onMounted(async () => {
   await handlePageQuery()
 })
 </script>
 
 <template>
-  <div class="xht-view-container">
-    <el-form ref="queryFormRef" :disabled="state.loadingStatus" :model="queryParams" class="user-select-none" label-width="80px">
-      <el-row v-if="!state.searchStatus">
-        <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
-          <el-form-item label="关键字" prop="keyWord">
-            <el-input v-model="queryParams.keyWord" :maxlength="100" placeholder="请输入关键字" show-word-limit />
-          </el-form-item>
-        </el-col>
-        <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
-          <el-button :icon="Search" type="primary" @click="handlePageQuery">查询</el-button>
-          <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
-        </el-col>
-      </el-row>
-      <el-row v-else>
-        <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
-          <el-form-item label="角色名称" prop="roleName">
-            <el-input v-model="queryParams.roleName" placeholder="请输入角色名称" />
-          </el-form-item>
-        </el-col>
-        <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
-          <el-form-item label="角色编码" prop="roleCode">
-            <el-input v-model="queryParams.roleCode" placeholder="请输入角色编码" />
-          </el-form-item>
-        </el-col>
-        <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
-          <el-form-item label="角色状态" prop="roleStatus">
-            <xht-enum-select v-model="queryParams.roleStatus" :data="roleStatusEnum" clearable placeholder="请选择角色状态" />
-          </el-form-item>
-        </el-col>
-        <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
-          <el-button :icon="Search" type="primary" @click="handlePageQuery">查询</el-button>
-          <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
-        </el-col>
-      </el-row>
-    </el-form>
-    <table-tool-bar
-      v-model:column-data="columnOption"
-      v-model:show-search="state.searchStatus"
-      column-status
-      refresh-status
-      search-status
-      @refresh="resetQuery"
-    >
-      <el-button :icon="Plus" size="small" type="primary" @click="handleAdd" v-authorization="['sys:role:create']">新增</el-button>
-      <el-button
-        :icon="Edit"
-        size="small"
-        type="success"
-        :disabled="state.singleStatus"
-        @click="handleEdit(state.selectedRows[0])"
-        v-authorization="['sys:role:update']"
+  <div class="h-full flex gap-1">
+    <div class="xht-view-container-none w-[260px]">
+      <role-type-tree ref="roleTypeTreeRef" @select="handleRoleTypeSelect" />
+    </div>
+    <div class="xht-view-container flex-1">
+      <el-form ref="queryFormRef" :disabled="state.loadingStatus" :model="queryParams" class="user-select-none" label-width="80px">
+        <el-row v-if="!state.searchStatus">
+          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
+            <el-form-item label="关键字" prop="keyWord">
+              <el-input v-model="queryParams.keyWord" :maxlength="100" placeholder="请输入关键字" show-word-limit />
+            </el-form-item>
+          </el-col>
+          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
+            <el-button :icon="Search" type="primary" @click="handlePageQuery">查询</el-button>
+            <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
+          </el-col>
+        </el-row>
+        <el-row v-else>
+          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
+            <el-form-item label="角色名称" prop="roleName">
+              <el-input v-model="queryParams.roleName" placeholder="请输入角色名称" />
+            </el-form-item>
+          </el-col>
+          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
+            <el-form-item label="角色编码" prop="roleCode">
+              <el-input v-model="queryParams.roleCode" placeholder="请输入角色编码" />
+            </el-form-item>
+          </el-col>
+          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24">
+            <el-form-item label="角色状态" prop="roleStatus">
+              <xht-enum-select v-model="queryParams.roleStatus" :data="roleStatusEnum" clearable placeholder="请选择角色状态" />
+            </el-form-item>
+          </el-col>
+          <el-col :xl="4" :lg="6" :md="8" :sm="12" :xs="24" class="text-center">
+            <el-button :icon="Search" type="primary" @click="handlePageQuery">查询</el-button>
+            <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
+          </el-col>
+        </el-row>
+      </el-form>
+      <table-tool-bar
+        v-model:column-data="columnOption"
+        v-model:show-search="state.searchStatus"
+        column-status
+        refresh-status
+        search-status
+        @refresh="resetQuery"
       >
-        修改
-      </el-button>
-      <el-button
-        :icon="Delete"
-        size="small"
-        type="danger"
-        :disabled="state.multipleStatus"
-        @click="handleBatchDelete"
-        v-authorization="['sys:role:remove']"
+        <el-button :icon="Plus" size="small" type="primary" @click="handleAdd" v-authorization="['sys:role:create']">新增</el-button>
+        <el-button
+          :icon="Edit"
+          size="small"
+          type="success"
+          :disabled="state.singleStatus"
+          @click="handleEdit(state.selectedRows[0])"
+          v-authorization="['sys:role:update']"
+        >
+          修改
+        </el-button>
+        <el-button
+          :icon="Delete"
+          size="small"
+          type="danger"
+          :disabled="state.multipleStatus"
+          @click="handleBatchDelete"
+          v-authorization="['sys:role:remove']"
+        >
+          批量删除
+        </el-button>
+      </table-tool-bar>
+      <el-table
+        v-loading="state.loadingStatus"
+        :data="state.tableList"
+        border
+        row-key="id"
+        :empty-text="queryParams.roleTypeId ? '该分类下未添加角色信息 🔍 试试调整筛选条件吧！' : '暂无匹配数据 🔍 试试调整筛选条件吧！'"
+        @selection-change="handleSelectionChange"
       >
-        批量删除
-      </el-button>
-    </table-tool-bar>
-    <el-table
-      v-loading="state.loadingStatus"
-      :data="state.tableList"
-      border
-      row-key="id"
-      empty-text="暂无匹配数据 🔍 试试调整筛选条件吧！"
-      @selection-change="handleSelectionChange"
-    >
-      <el-table-column align="center" type="selection" width="55" />
-      <xht-column-index :current="queryParams.current" :size="queryParams.size" />
-      <el-table-column v-if="columnOption.roleName?.visible" label="角色名称" min-width="120" prop="roleName" />
-      <el-table-column v-if="columnOption.roleCode?.visible" label="角色编码" min-width="160" prop="roleCode" />
-      <el-table-column v-if="columnOption.roleTypeName?.visible" label="角色分类" min-width="120" prop="roleTypeName">
-        <template #default="{ row }">
-          <el-tag v-if="row.roleTypeName" type="primary" effect="dark">{{ row.roleTypeName }}</el-tag>
-          <el-tag v-else type="danger" effect="dark">未绑定</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column v-if="columnOption.roleStatus?.visible" label="角色状态" prop="roleStatus" width="100">
-        <template #default="{ row }">
-          <xht-enum-tag :data="roleStatusEnum" :filter-label="row.roleStatus" />
-        </template>
-      </el-table-column>
-      <el-table-column v-if="columnOption.dataScope?.visible" label="数据范围" prop="dataScope" width="160">
-        <template #default="{ row }">
-          <xht-enum-tag :data="roleDataScopeEnum" :filter-label="row.dataScope" />
-        </template>
-      </el-table-column>
-      <el-table-column v-if="columnOption.roleSort?.visible" label="显示顺序" prop="roleSort" width="120" />
-      <el-table-column v-if="columnOption.createBy?.visible" label="创建人" prop="createBy" width="160" />
-      <el-table-column v-if="columnOption.createTime?.visible" label="创建时间" prop="createTime" width="180" />
-      <el-table-column v-if="columnOption.updateBy?.visible" label="更新人" prop="updateBy" width="160" />
-      <el-table-column v-if="columnOption.updateTime?.visible" label="更新时间" prop="updateTime" width="180" />
-      <!-- @vue-generic {SysRoleResponse} -->
-      <el-table-column label="操作" fixed="right" width="240">
-        <template #default="{ row }">
-          <el-space wrap class="flex-center">
-            <el-button icon="Edit" link type="success" @click="handleEdit(row)" v-authorization="['sys:role:update']">修改</el-button>
-            <el-button icon="Delete" link type="danger" @click="handleDelete(row)" v-authorization="['sys:role:remove']">删除</el-button>
-            <el-button icon="setting" link type="warning" @click="handleAuth(row)" v-authorization="['sys:role:menu:bind']">分配权限</el-button>
-          </el-space>
-        </template>
-      </el-table-column>
-    </el-table>
-    <xht-pagination
-      v-model:current-page="state.queryParams.current"
-      v-model:page-size="state.queryParams.size"
-      :page-count="state.pages"
-      :total="state.total"
-      @pagination="handlePageQuery"
-    />
+        <el-table-column align="center" type="selection" width="55" />
+        <xht-column-index :current="queryParams.current" :size="queryParams.size" />
+        <el-table-column v-if="columnOption.roleName?.visible" label="角色名称" min-width="120" prop="roleName" />
+        <el-table-column v-if="columnOption.roleCode?.visible" label="角色编码" min-width="160" prop="roleCode" />
+        <el-table-column v-if="columnOption.roleTypeName?.visible" label="角色分类" min-width="120" prop="roleTypeName">
+          <template #default="{ row }">
+            <el-tag v-if="row.roleTypeName" type="primary" effect="dark">{{ row.roleTypeName }}</el-tag>
+            <el-tag v-else type="danger" effect="dark">未绑定</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column v-if="columnOption.roleStatus?.visible" label="角色状态" prop="roleStatus" width="100">
+          <template #default="{ row }">
+            <xht-enum-tag :data="roleStatusEnum" :filter-label="row.roleStatus" />
+          </template>
+        </el-table-column>
+        <el-table-column v-if="columnOption.dataScope?.visible" label="数据范围" prop="dataScope" width="160">
+          <template #default="{ row }">
+            <xht-enum-tag :data="roleDataScopeEnum" :filter-label="row.dataScope" />
+          </template>
+        </el-table-column>
+        <el-table-column v-if="columnOption.roleSort?.visible" label="显示顺序" prop="roleSort" width="120" />
+        <el-table-column v-if="columnOption.createBy?.visible" label="创建人" prop="createBy" width="160" />
+        <el-table-column v-if="columnOption.createTime?.visible" label="创建时间" prop="createTime" width="180" />
+        <el-table-column v-if="columnOption.updateBy?.visible" label="更新人" prop="updateBy" width="160" />
+        <el-table-column v-if="columnOption.updateTime?.visible" label="更新时间" prop="updateTime" width="180" />
+        <!-- @vue-generic {SysRoleResponse} -->
+        <el-table-column label="操作" fixed="right" width="240">
+          <template #default="{ row }">
+            <el-space wrap class="flex-center">
+              <el-button icon="Edit" link type="success" @click="handleEdit(row)" v-authorization="['sys:role:update']">修改</el-button>
+              <el-button icon="Delete" link type="danger" @click="handleDelete(row)" v-authorization="['sys:role:remove']">删除</el-button>
+              <el-button icon="setting" link type="warning" @click="handleAuth(row)" v-authorization="['sys:role:menu:bind']">分配权限</el-button>
+            </el-space>
+          </template>
+        </el-table-column>
+      </el-table>
+      <xht-pagination
+        v-model:current-page="state.queryParams.current"
+        v-model:page-size="state.queryParams.size"
+        :page-count="state.pages"
+        :total="state.total"
+        @pagination="handlePageQuery"
+      />
+    </div>
     <role-from ref="roleFormRef" @success="handlePageQuery" />
     <menu-role-form ref="menuRoleFormRef" />
   </div>

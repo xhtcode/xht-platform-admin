@@ -83,6 +83,14 @@ const useTagsStore = defineStore(
       visitedViews.value = visitedViews.value.filter((item, index) => !!(index <= currIndex || item?.affixStatus))
     }
 
+    /**
+     * 重置标签视图
+     */
+    const resetTagsView = () => {
+      activeName.value = null
+      visitedViews.value = []
+    }
+
     return {
       activeName,
       visitedViews,
@@ -93,6 +101,7 @@ const useTagsStore = defineStore(
       removeLeftVisitedViews,
       removeRightVisitedViews,
       removeOtherVisitedViews,
+      resetTagsView,
     }
   },
   { persist: pInIaPersistConfig('tags', ['activeName', 'visitedViews']) }

@@ -26,11 +26,11 @@ export const sysRoleTypeOperationRules: FormRules<Required<SysRoleTypeOperationR
  * 角色分类 列表显示配置
  */
 export const sysRoleTypeColumnOption: ColumnConfig<SysRoleTypeResponse> = {
-  typeCode: { desc: '类型编码', visible: true, disabled: false },
-  typeName: { desc: '类型名称', visible: true, disabled: false },
-  typeSort: { desc: '显示顺序', visible: true, disabled: false },
-  typeStatus: { desc: '类型状态', visible: true, disabled: false },
-  remark: { desc: '类型备注', visible: false, disabled: false },
+  typeCode: { desc: '类型编码', visible: true, disabled: true },
+  typeName: { desc: '类型名称', visible: true, disabled: true },
+  typeSort: { desc: '显示顺序', visible: true, disabled: true },
+  typeStatus: { desc: '类型状态', visible: true, disabled: true },
+  remark: { desc: '类型备注', visible: true, disabled: false },
   createBy: { desc: '创建人', visible: false, disabled: false },
   createTime: { desc: '创建时间', visible: false, disabled: false },
   updateBy: { desc: '更新人', visible: false, disabled: false },

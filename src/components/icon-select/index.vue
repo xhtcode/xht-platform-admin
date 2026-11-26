@@ -87,7 +87,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="icon-select-container w100">
+  <div class="icon-select-container w-full">
     <el-input v-model="modelValue" :placeholder="props.placeholder" class="icon-select-input" readonly @click="openDialog">
       <template #prepend>
         <div :class="`${modelValue}`" @click="openDialog()" />
@@ -104,7 +104,6 @@ onMounted(() => {
       :before-close="closeDialog"
       :title="props.title"
       modal-class="icon-select-modal"
-      align-center
       class="xht-dialog"
     >
       <el-input

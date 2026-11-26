@@ -11,7 +11,9 @@ export type DataScope = 1 | 2 | 3 | 4 | 5
 /**
  * 查询请求类型
  */
-export interface SysRoleQueryRequest extends PageQueryRequest {}
+export interface SysRoleQueryRequest extends PageQueryRequest {
+  roleTypeId?: ModeIdType // 角色分类ID（按分类过滤角色列表）
+}
 
 /**
  * 响应类型

@@ -21,20 +21,8 @@ const state = reactive<AppSettingState>({
   loadingStatus: false,
 })
 const themeStore = useThemeStore()
-const {
-  layoutType,
-  darkStatus,
-  menuStatus,
-  breadcrumb,
-  tagsViewStatus,
-  footerStatus,
-  watermarkContent,
-  languageType,
-  sizeType,
-  colorType,
-  mournModeStatus,
-  colorWeaknessModeStatus,
-} = storeToRefs(themeStore)
+const { layoutType, breadcrumb, tagsViewStatus, footerStatus, watermarkContent, sizeType, colorType, mournModeStatus, colorWeaknessModeStatus } =
+  storeToRefs(themeStore)
 const { changeThemeColor } = useThemeColorHooks()
 const predefineColors = ref(['#409EFF', '#67C23A', '#E6A23C', '#F56C6C', '#909399', '#90ee90', '#00ced1'])
 
@@ -61,18 +49,7 @@ const changeLayoutType = (args: 'default' | 'columns') => {
  * 恢复默认配置
  */
 const resetSetting = () => {
-  layoutType.value = defaultSetting.layoutType
-  darkStatus.value = defaultSetting.darkStatus
-  breadcrumb.value = defaultSetting.breadcrumb
-  tagsViewStatus.value = defaultSetting.tagsViewStatus
-  footerStatus.value = defaultSetting.footerStatus
-  languageType.value = defaultSetting.languageType
-  sizeType.value = defaultSetting.sizeType
-  colorType.value = defaultSetting.colorType
-  mournModeStatus.value = defaultSetting.mournModeStatus
-  colorWeaknessModeStatus.value = defaultSetting.colorWeaknessModeStatus
-  menuStatus.value = defaultSetting.menuStatus
-  watermarkContent.value = defaultSetting.watermarkContent
+  themeStore.resetTheme()
 }
 </script>
 

@@ -75,6 +75,24 @@ export const useThemeStore = defineStore(
      */
     const colorWeaknessModeStatus = ref<boolean>(defaultSetting.colorWeaknessModeStatus)
 
+    /**
+     * 重置主题
+     */
+    const resetTheme = () => {
+      layoutType.value = defaultSetting.layoutType
+      darkStatus.value = defaultSetting.darkStatus
+      breadcrumb.value = defaultSetting.breadcrumb
+      tagsViewStatus.value = defaultSetting.tagsViewStatus
+      footerStatus.value = defaultSetting.footerStatus
+      languageType.value = defaultSetting.languageType
+      sizeType.value = defaultSetting.sizeType
+      colorType.value = defaultSetting.colorType
+      mournModeStatus.value = defaultSetting.mournModeStatus
+      colorWeaknessModeStatus.value = defaultSetting.colorWeaknessModeStatus
+      menuStatus.value = defaultSetting.menuStatus
+      watermarkContent.value = defaultSetting.watermarkContent
+    }
+
     return {
       layoutType,
       device,
@@ -90,6 +108,7 @@ export const useThemeStore = defineStore(
       colorType,
       mournModeStatus,
       colorWeaknessModeStatus,
+      resetTheme,
     }
   },
   {

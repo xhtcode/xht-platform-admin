@@ -120,7 +120,7 @@ const initRestaurants = (data: RouteRecordRaw[]) => {
           ref="filterRef"
           v-model="state.search"
           size="large"
-          class="w100"
+          class="w-full"
           :fetch-suggestions="querySearch"
           placeholder="菜单搜索：支持菜单名称、路由路径"
           :fit-input-width="true"

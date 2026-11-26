@@ -4,7 +4,6 @@ import type {
   RoleTypeSelectedMenuResponse,
   SysRoleTypeMenuBindForm,
   SysRoleTypeOperationRequest,
-  SysRoleTypeOption,
   SysRoleTypeQueryRequest,
   SysRoleTypeResponse,
 } from '@/service/model/system/role-type.model'
@@ -97,10 +96,10 @@ export const querySysRoleTypePage = (data?: SysRoleTypeQueryRequest): Promise<Ap
 }
 
 /**
- * 查询全部角色分类（仅正常状态，按 typeSort 倒序，供下拉框使用）
+ * 查询全部角色分类（仅正常状态，按 typeSort 倒序，返回完整角色分类响应）
  */
-export const querySysRoleTypeList = (): Promise<ApiResponse<SysRoleTypeOption[]>> => {
-  return request<SysRoleTypeOption[]>({
+export const querySysRoleTypeList = (): Promise<ApiResponse<SysRoleTypeResponse[]>> => {
+  return request<SysRoleTypeResponse[]>({
     url: Api.QUERY_LIST,
     baseURL,
     method: 'get',

@@ -22,6 +22,8 @@ const dialogConfig: DialogConfigContext = {}
 const messageConfig: MessageConfigContext = {
   max: 5,
   duration: 5000,
+  grouping: true,
+  showClose: true,
 }
 </script>
 

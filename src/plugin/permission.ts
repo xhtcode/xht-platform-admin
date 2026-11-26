@@ -6,6 +6,9 @@ import { useRouteStore } from '@/store/modules/routes.store'
 import type { RouteLocationNormalized } from 'vue-router'
 import { useTitle } from '@/hooks/use-title'
 import { HOME_PAGE_PATH, PAGE_PATH_LOGIN } from '@/service/constant'
+import { useMessage } from '@/hooks/use-message.ts'
+import useLogoutStore from '@/hooks/use-logout-store.ts'
+import { storeToRefs } from 'pinia'
 
 const { setTitle } = useTitle()
 /**
@@ -17,8 +20,9 @@ export function setupPermission() {
   router.beforeEach(async (to, _from) => {
     NProgress.start()
     const userInfoStore = useUserInfoStore()
+    const { hasToken } = storeToRefs(userInfoStore)
     const routeStore = useRouteStore()
-    if (userInfoStore.hasToken) {
+    if (hasToken.value) {
       if (routeStore.isGenerate) {
         if (to.path === PAGE_PATH_LOGIN) {
           // 已登录访问登录页：直接回首页，具体落地页由后端下发的菜单决定
@@ -30,7 +34,9 @@ export function setupPermission() {
       } else {
         try {
           // 用户信息与后端菜单相互独立，并行请求以缩短登录/刷新后的跳转等待
-          await Promise.all([userInfoStore.getUserInfos(), routeStore.generateRoutesAtBack()])
+          await userInfoStore.getUserInfos()
+          // 生成并注册动态路由（登出时可被精确移除）
+          await routeStore.generateRoutesAtBack()
           addDynamicRoutes(routeStore.formatRoutes)
           // 动态路由生成并注册后，重新进入当前路由
           return {
@@ -38,10 +44,9 @@ export function setupPermission() {
             query: to.query,
             replace: true,
           }
-        } catch (e) {
-          console.error('路由错误', e)
-          // 本地仍有令牌时登出会先请求服务端注销（失败不阻断），再清理本地会话
-          await userInfoStore.logout()
+        } catch {
+          useMessage().error('获取用户信息失败，请重新登录！')
+          useLogoutStore().resetAllStores()
           // 保留原地址，重新登录后可回到该页面
           return {
             path: PAGE_PATH_LOGIN,

@@ -99,6 +99,10 @@ declare global {
      * 色弱模式
      */
     colorWeaknessModeStatus: Ref<boolean>
+    /**
+     * 重置主题
+     */
+    resetTheme: () => void
   }
 
   /**
@@ -165,9 +169,14 @@ declare global {
     /**
      * 用户登出方法
      * 注销服务端令牌并清除用户认证信息、重置路由
-     * @param revokeRemote 是否请求服务端注销令牌，默认 true
      */
-    logout: (revokeRemote?: boolean) => Promise<void>
+    logout: () => Promise<void>
+    /**
+     * 仅清理本地会话方法
+     * 不请求服务端，用于令牌已失效（401）场景：
+     * 移除动态路由、清空页签、复位全部 store 并清理持久化缓存
+     */
+    clearSession: () => void
     /**
      * 获取用户信息方法
      * 从服务端获取当前登录用户的信息
@@ -281,6 +290,10 @@ declare global {
      * 删除其他访问过路由
      */
     removeOtherVisitedViews: (view: TagsView) => void
+    /**
+     * 重置标签页状态
+     */
+    resetTagsView: () => void
   }
 
   /**

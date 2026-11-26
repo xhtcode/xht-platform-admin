@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { RoleTypeSelectProps } from '@/components/system/role-type-select/types'
-import type { SysRoleTypeOption } from '@/service/model/system/role-type.model'
+import type { SysRoleTypeResponse } from '@/service/model/system/role-type.model'
 import { querySysRoleTypeList } from '@/service/api/system/role-type.api'
 
 defineOptions({ name: 'RoleTypeSelect' })
@@ -13,15 +13,16 @@ const props = withDefaults(defineProps<RoleTypeSelectProps>(), {
 })
 
 const modelValue = defineModel<ModeIdType>('modelValue')
-const options = ref<SysRoleTypeOption[]>([])
+const options = ref<SysRoleTypeResponse[]>([])
 
 /**
  * 下拉数据，兼容"已绑定类型被停用后不在正常列表"的场景，避免编辑时回显为空
  */
-const selectOptions = computed<SysRoleTypeOption[]>(() => {
+const selectOptions = computed<SysRoleTypeResponse[]>(() => {
   if (!modelValue.value || !props.fallbackLabel) return options.value
   if (options.value.some((item) => item.id === modelValue.value)) return options.value
-  return [{ id: modelValue.value, typeCode: '', typeName: props.fallbackLabel }, ...options.value]
+  const fallbackOption = { id: modelValue.value, typeCode: '', typeName: props.fallbackLabel } as SysRoleTypeResponse
+  return [fallbackOption, ...options.value]
 })
 
 /**

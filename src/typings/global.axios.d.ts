@@ -39,6 +39,10 @@ declare module 'axios' {
      * 通常无需手动声明，直接使用 `requestRaw()` 即可。
      */
     rawResponse?: boolean
+    /**
+     * 跳过错误提示
+     */
+    skipTip?: boolean
   }
 }
 

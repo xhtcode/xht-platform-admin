@@ -2,11 +2,9 @@ import { defineStore } from 'pinia'
 import type { LoginRequest, PhoneLoginForm } from '@/service/model/login/login.model'
 import { loginInPassWord, loginInPhone, logoutToken } from '@/service/api/login/login.api'
 import type { ApiResponse } from 'axios'
-import pInIaPersistConfig, { clearSessionPersist } from '@/store/pinia-persist'
+import pInIaPersistConfig from '@/store/pinia-persist'
 import { getUserProfileInfo } from '@/service/api/dashboard/user.profile.api'
 import { userTypeEnum } from '@/service/enums/system/user.enum'
-import { useRouteStore } from '@/store/modules/routes.store'
-import useTagsStore from '@/store/modules/tags.store'
 
 const baseURL: string = import.meta.env.VITE_ADMIN_API_PREFIX
 
@@ -118,6 +116,23 @@ export const useUserInfoStore = defineStore(
     }
 
     /**
+     * 仅清理本地会话（不发请求，可重复调用）
+     *
+     * 用于令牌已失效的场景（401）：此时再调用注销接口只会再吃一次 401，
+     * 因此只做本地收尾——移除动态路由、清空页签、复位全部 store、清理持久化缓存。
+     */
+    function clearSession(): void {
+      userInfo.value = {
+        roleCodes: [],
+        menuButtonCodes: [],
+      }
+      token.value = {
+        scope: [],
+        additional_parameters: {},
+      }
+    }
+
+    /**
      * 用户登出方法
      *
      * 只要本地仍有访问令牌，就先请求服务端注销令牌（失败不阻断），
@@ -135,22 +150,7 @@ export const useUserInfoStore = defineStore(
           console.warn('注销令牌失败，继续清理本地会话:', error)
         }
       }
-      // 先移除动态路由并复位生成标记，否则重新登录后不会重新生成菜单
-      useRouteStore().resetRoutes()
-      // 页签指向的路由已被移除，同步清空，避免残留失效链接
-      const tagsStore = useTagsStore()
-      tagsStore.activeName = null
-      tagsStore.visitedViews = []
-      userInfo.value = {
-        roleCodes: [],
-        menuButtonCodes: [],
-      }
-      token.value = {
-        scope: [],
-        additional_parameters: {},
-      }
-      // 仅清理登录态相关的持久化数据，保留主题、布局等偏好
-      clearSessionPersist()
+      clearSession()
     }
 
     /**
@@ -190,6 +190,7 @@ export const useUserInfoStore = defineStore(
       login,
       loginByPhone,
       logout,
+      clearSession,
       getUserInfos,
       applyToken,
       setAccessToken,

@@ -116,7 +116,7 @@ defineExpose({
             <el-color-picker
               v-model="addUpdateForm.itemColor"
               :predefine="predefineColors"
-              class="w100!"
+              class="w-full!"
               color-format="hex"
               placeholder="请输入显示颜色"
             />

@@ -98,7 +98,7 @@ defineExpose({
       </el-input>
     </div>
     <div class="dept-tree-container-tree">
-      <el-scrollbar class="w100">
+      <el-scrollbar class="w-full">
         <el-tree
           ref="treeRef"
           v-loading="loading"
@@ -109,6 +109,7 @@ defineExpose({
           :filter-node-method="filterNode"
           :props="defaultProps"
           highlight-current
+          :empty-text="`暂无部门数据`"
           node-key="id"
           :default-expand-all="expandAll"
           @node-click="handleNodeClick"

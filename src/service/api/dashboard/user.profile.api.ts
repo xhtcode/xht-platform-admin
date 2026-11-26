@@ -39,6 +39,7 @@ export const getUserProfileInfo = (): Promise<ApiResponse<UserInfo>> => {
     url: Api.USER_PROFILE_INFO,
     baseURL,
     method: 'get',
+    skipTip: true,
   })
 }
 
@@ -50,5 +51,6 @@ export const getUserProfileRouters = (): Promise<ApiResponse<RouteRecordRaw[]>> 
     url: Api.USER_PROFILE_ROUTER,
     baseURL,
     method: 'get',
+    skipTip: true,
   })
 }
