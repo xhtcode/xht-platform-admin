@@ -124,7 +124,7 @@ defineExpose({
               v-model="addUpdateForm.typeSort"
               class="w-full!"
               :max="999"
-              :min="0"
+              :min="1"
               placeholder="请输入类型显示顺序"
               value-on-clear="min"
             />

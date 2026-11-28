@@ -115,6 +115,8 @@ class XhtHttpRequest {
           console.log('response', config.skipTip, !config.skipTip)
           if (status === 401) {
             if (!config.skipTip) {
+              const current = router.currentRoute.value
+              console.log(current)
               ElMessageBox.confirm('令牌状态已过期，请点击重新登录', '登录已失效', {
                 confirmButtonText: '重新登录',
                 cancelButtonText: '取消',
@@ -122,7 +124,10 @@ class XhtHttpRequest {
                 closeOnClickModal: false,
               }).then(() => {
                 useLogoutStore().resetAllStores()
-                router.replace(PAGE_PATH_LOGIN)
+                router.replace({
+                  path: PAGE_PATH_LOGIN,
+                  query: { redirect: current.fullPath },
+                })
                 return
               })
             }

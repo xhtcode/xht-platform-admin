@@ -18,7 +18,9 @@ const menuRoleTypeFormRef = useTemplateRef('menuRoleTypeFormRef')
 const queryFormRef = useTemplateRef<FormInstance>('queryFormRef')
 
 const state = reactive<TableQueryPageState<SysRoleTypeQueryRequest, SysRoleTypeResponse>>({
-  queryParams: {}, // 查询参数
+  queryParams: {
+    descName: 'typeSort',
+  }, // 查询参数
   total: 0, // 总条目数
   pages: 0, // 总页数
   searchStatus: false, // 是否显示搜索区域
@@ -40,7 +42,7 @@ const columnOption = ref<ColumnConfig<SysRoleTypeResponse>>({
  */
 const resetQuery = async () => {
   queryFormRef.value?.resetFields()
-  queryParams.value = {}
+  queryParams.value = { descName: 'typeSort' }
   await handlePageQuery()
 }
 
@@ -141,24 +143,26 @@ onMounted(async () => {
       :data="state.tableList"
       border
       row-key="id"
+      :default-sort="{ prop: 'typeSort', order: 'descending' }"
       empty-text="暂无匹配数据 🔍 试试调整筛选条件吧！"
       @selection-change="handleSelectionChange"
+      @sort-change="handlePageQuery()"
     >
       <el-table-column align="center" type="selection" width="55" />
       <xht-column-index :current="queryParams.current" :size="queryParams.size" />
       <el-table-column v-if="columnOption.typeCode?.visible" label="类型编码" min-width="160" prop="typeCode" />
       <el-table-column v-if="columnOption.typeName?.visible" label="类型名称" min-width="140" prop="typeName" />
-      <el-table-column v-if="columnOption.typeStatus?.visible" align="center" label="类型状态" prop="typeStatus" width="100">
+      <el-table-column v-if="columnOption.typeStatus?.visible" align="center" label="类型状态" prop="typeStatus" width="100" sortable>
         <template #default="{ row }">
           <xht-enum-tag :filter-label="row.typeStatus" :data="roleTypeStatusEnum" />
         </template>
       </el-table-column>
-      <el-table-column v-if="columnOption.typeSort?.visible" label="显示顺序" prop="typeSort" width="100" />
+      <el-table-column v-if="columnOption.typeSort?.visible" label="显示顺序" prop="typeSort" width="100" sortable />
       <el-table-column v-if="columnOption.remark?.visible" label="类型备注" min-width="180" prop="remark" show-overflow-tooltip />
       <el-table-column v-if="columnOption.createBy?.visible" label="创建人" prop="createBy" width="160" />
-      <el-table-column v-if="columnOption.createTime?.visible" label="创建时间" prop="createTime" width="180" />
+      <el-table-column v-if="columnOption.createTime?.visible" label="创建时间" prop="createTime" width="180" sortable />
       <el-table-column v-if="columnOption.updateBy?.visible" label="更新人" prop="updateBy" width="160" />
-      <el-table-column v-if="columnOption.updateTime?.visible" label="更新时间" prop="updateTime" width="180" />
+      <el-table-column v-if="columnOption.updateTime?.visible" label="更新时间" prop="updateTime" width="180" sortable />
       <!-- @vue-generic {SysRoleTypeResponse} -->
       <el-table-column label="操作" fixed="right" width="240">
         <template #default="{ row }">

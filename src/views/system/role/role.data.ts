@@ -10,7 +10,7 @@ export const sysRoleOperationForm: Partial<SysRoleOperationRequest> = {
   remark: '暂无', //角色描述
   dataScope: 0, //数据范围（1全部数据权限 2自定数据权限 3本部门数据权限 4本部门及以下数据权限  5仅本人数据权限）
   roleStatus: roleStatusEnum.NORMAL.value, //状态（0正常 1停用）,可用值:0,1
-  roleSort: 0, //显示顺序
+  roleSort: 999, //显示顺序
 }
 
 /**

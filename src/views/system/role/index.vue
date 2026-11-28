@@ -231,8 +231,8 @@ onMounted(async () => {
           <template #default="{ row }">
             <el-space wrap class="flex-center">
               <el-button icon="Edit" link type="success" @click="handleEdit(row)" v-authorization="['sys:role:update']">修改</el-button>
-              <el-button icon="Delete" link type="danger" @click="handleDelete(row)" v-authorization="['sys:role:remove']">删除</el-button>
               <el-button icon="setting" link type="warning" @click="handleAuth(row)" v-authorization="['sys:role:menu:bind']">分配权限</el-button>
+              <el-button icon="Delete" link type="danger" @click="handleDelete(row)" v-authorization="['sys:role:remove']">删除</el-button>
             </el-space>
           </template>
         </el-table-column>
